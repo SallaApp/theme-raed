@@ -1,0 +1,83 @@
+{% extends "layouts.master" %}
+{% block content %}
+    <!-- Start Product Details -->
+    <div class="brands pt-4 pt-xl-5 pb-md-4">
+        <div class="container">
+            {% if brands|length %}
+                <div class="brands__nav">
+                    <ul id="brands_index" class="list list-- list--auto-width">
+                        {% for key,brandGroup in brands.items %}
+                            <li><a href="#brand_{{ brandGroup.first.id }}">{{ key }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div id="brands_list">
+                    {% for key,brandGroup in brands %}
+                        <section id="brand_{{ brandGroup.first.id }}" class="brand-section">
+                            <h2 class="brand-section__title">
+                                <b class="center">{{ key }}</b>
+                            </h2>
+                            <div class="brand-section__content">
+                                <ul class="list brands-list">
+                                    {% for brand in brandGroup %}
+                                        <li>
+                                            <a href="{{ brand.url }}">
+                                                <img class="lazy-load" data-src="{{ brand.logo }}"
+                                                     alt="{{ brand.name }}"/>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </section>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="brands-placeholder">
+                    <img class="lazy-load" data-src="{{ asset('images/brand-ph.svg') }}" alt="Brand Not Found"/>
+                    <h1>{{ trans('pages.brands.non_brands') }}</h1>
+                    <p>{{ trans('pages.brands.try_again') }}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block scripts%}
+    <script>
+        document.addEventListener( 'DOMContentLoaded', function () {
+            // Brands List ---
+            var handleBrands = function () {
+                if ($('#brands_list').length) {
+                    var brandsIndex = $('#brands_index'),
+                        brandsList = $('#brands_list'),
+                        alphaIndex = [
+                            {% for ar_char,brandsGroup in brands %}
+                            {id:'{{brandsGroup.first().id}}', index:'{{ar_char}}'},
+                            {% endfor %}
+                        ];
+                    alphaIndex.forEach(function (alpha) {
+                        brandsIndex.append('<li><a href="#brand_' + alpha.id + '">' + alpha.index + '</a> </li>')
+                    })
+                    brandsIndex.find('li').each(function () {
+                        var $this = $(this),
+                            index = $this.find('a');
+                        index.on('click', function (e) {
+                            var targetSection = $(this).attr('href');
+                            $this.addClass('active').siblings().removeClass('active');
+                            brandsList.find('.brand-section').removeClass('active');
+                            $(targetSection).addClass('active');
+                            $('html, body').animate({
+                                scrollTop: $($.attr(this, 'href')).offset().top - ($('.site-header').outerHeight())
+                            }, {
+                                duration: 850,
+                            });
+                            e.preventDefault();
+                        })
+                    })
+                }
+            }
+            handleBrands();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% if stars and not editable %}
+    {% for star in 1..5 %}
+        <button class="btn btn--transparent btn--star {{ large?'large':'' }} {{ star<=stars?'selected':'' }}" disabled>
+            <i class="sicon-star2"></i>
+        </button>
+    {% endfor %}
+{% else %}
+    <input type="hidden" class="rating_hidden_input" name="{{ rating_name?rating_name:'rating' }}" value="{{ stars?stars:'' }}">
+    {% for star in 1..5 %}
+        <button type="submit" class="btn btn--transparent btn--star {{ large?'large':'' }} {{ star<=stars?'selected':'' }}"
+                data-star="{{ star }}"
+                data-text="{{ trans('pages.rating.'~star~'_stars') }}">
+            <i class="sicon-star2"></i>
+        </button>
+    {% endfor %}
+{% endif %}

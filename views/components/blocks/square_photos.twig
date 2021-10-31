@@ -1,0 +1,32 @@
+<section class="home-block home-block--square-images">
+    <div class="container">
+        {% if title %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="title title--primary title--x-large title--has-dash mb-30">
+                        {{ title }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            {% for item in items %}
+                <div class="col-md-4 col-sm-12">
+                    <a href="{{ item.url }}"
+                       class="banner banner--square {% if item.text is not empty %}has-title{% endif %} {% if loop.last%}last{% endif %}"
+                       {% if item.link_type == 'external_link' %}target="_blank"{% endif %}
+                       aria-label="Banner {{ item.text }}">
+                        <figure class="banner-effect-1">
+                            <img class="lazy-load" data-src="{{ item.image.url }}" alt="{{ item.text }}">
+                            {% if item.text is not empty %}
+                            <figcaption>
+                                <h2>{{ item.text }}</h2>
+                            </figcaption>
+                            {% endif %}
+                        </figure>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

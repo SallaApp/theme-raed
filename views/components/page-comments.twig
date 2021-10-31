@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="comments comments--page mt-50 mb-0">
+            {% if can_comment %}
+                <div class="form form--add-comment" salla-form-data>
+                    {% honeypot %}
+                    <div class="comment-field-wrapper">
+                        <div class="avatar-wrapper avatar-wrapper--small avatar-wrapper--circular avatar-wrapper--bordered mr-4">
+                            <img class="lazy-load" data-src="{{ user.avatar?:asset('images/avatar_male.png') }}" alt="user avarar">
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
+                                          class="form-control"
+                                          name="ask_textarea"
+                                          maxlength="500"></textarea>
+                            </div>
+                            <div class="form-group mb-0">
+                                <a class="btn btn--oval btn--wide btn--padded btn--large btn--primary"
+                                        data-on-click="comment-page-add"
+                                        data-id="{{ id }}"
+                                        href="#">
+                                    {{ trans('blocks.comments.submit') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if comments is not empty %}
+                <div class="view-comment comments-container">
+                    <div class="comments-title">{{ pluralize('blocks.comments.comment', total_comments)|raw }} </div>
+                    {% for comment in comments %}
+                        {% include 'pages.partials.single-comment' %}
+                    {% endfor %}
+                </div>
+                {% include 'pages.partials.loader-status' with {'nextPageUrl':comments.nextPageUrl} %}
+            {% endif %}
+        </div>
+    </div>
+</div>

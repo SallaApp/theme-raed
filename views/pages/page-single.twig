@@ -1,0 +1,32 @@
+{% extends "layouts.master" %}
+
+{% block content %}
+    <section class="page-wrapper page--single bg-grey">
+        <div class="container">
+            <div class="bg-white padded-50 b-radius">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="title title--xx-large mb-30">{{ item.title }}</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <article class="article articel--main">
+                            {{ item.content|raw }}
+                        </article>
+                    </div>
+                </div>
+                {% component 'page-comments' with {'comments':comments, 'id': item.id} %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            salla.infiniteScroll.initiate('.comments-container', '.comment-block', {
+                history        : false,
+                scrollThreshold: false
+            })
+        });
+    </script>
+{% endblock %}

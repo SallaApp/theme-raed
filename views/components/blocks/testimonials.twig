@@ -1,0 +1,46 @@
+<section class="home-block home-block--bg home-block--testimonials {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title title--primary title--x-large title--has-dash mb-30">{{ trans('blocks.home.testimonials') }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="splide splide--testimonials">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            {% for item in items %}
+                                <li class="splide__slide">
+                                    <div class="testimonial-entry">
+                                        <div class="testimonial-entry__info">
+                                            <div class="avatar-wrapper avatar-wrapper--circular avatar-wrapper--small">
+                                                <img src="{{ item.customer.avatar }}" alt="{{ item.customer.full_name }}"/>
+                                            </div>
+                                            <div class="title title--primary title--small">
+                                                {{ item.customer.full_name }}
+                                                <small>{{ item.customer.city }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="testimonial-entry__excerpt">
+                                            <p>{{ item.text }}</p>
+                                        </div>
+                                        {%  if item.stars %}
+                                        <div class="testimonial-entry__rate">
+                                            <span class="btn btn--transparent btn--star small selected"><i class="sicon-star2"></i></span>
+                                            <span class="btn btn--transparent btn--star small {{ item.stars>=2?'selected':'' }}"><i class="sicon-star2"></i></span>
+                                            <span class="btn btn--transparent btn--star small {{ item.stars>=3?'selected':'' }}"><i class="sicon-star2"></i></span>
+                                            <span class="btn btn--transparent btn--star small {{ item.stars>=4?'selected':'' }}"><i class="sicon-star2"></i></span>
+                                            <span class="btn btn--transparent btn--star small {{ item.stars==5?'selected':'' }}"><i class="sicon-star2"></i></span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

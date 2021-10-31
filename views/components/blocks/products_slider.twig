@@ -1,0 +1,35 @@
+{#@jamal add the class show-all if show all button option is enabled#}
+<section class="home-block home-block--bg home-block--slide-products home-block--products-slider show-all {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="container">
+        {% if title %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title title--primary title--x-large title--has-dash mb-30">
+                    {{ title }}
+                    {% if display_all_url %}
+                        <a href="{{ display_all_url }}"
+                           class="btn btn--oval btn--padded narrow btn--primary outlined font-base">
+                            {{ trans('blocks.home.display_all') }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="splide splide-products splide--products-slider">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            {% for product in products %}
+                                <li class="splide__slide">
+                                    {% include 'pages.partials.product.card' %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

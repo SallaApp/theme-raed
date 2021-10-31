@@ -1,0 +1,29 @@
+
+<div id="currency_switcher" class="dropdonw-menu-wrap switcher-toggler currency-switcher mr-3">
+    <button class="btn btn--oval btn--grey btn--dropdown-toggle dropdown-trigger grey no-p">
+        {# <i class="flag currency-flag currency-flag-{{ currentCurrency.code|lower }} mr-2"></i> #}
+        <span class="btn-label d-none">
+          <span class="icon sicon-full-wallet"></span>
+          <span>{{ trans('common.titles.currency') }}</span>
+        </span>
+
+        <div class="flag iti__flag iti__{{ currentCurrency.code|lower| slice(0, -1) }} mr-2"></div>
+        <span class="btn-value"> {{ currentCurrency.symbol }}</span>
+    </button>
+    <div class="dropdown-menu limited-height">
+        <ul>
+            {% for currency in currencies %}
+                <li>
+                    <a href="#"
+                       class="{{currentCurrency.code == currency.code ? 'is-active' : ''}}"
+                       data-on-click="currency-change"
+                       data-code="{{ currency.code }}">
+                        {# <i class="flag currency-flag currency-flag-{{ currency.code|lower }}"></i> #}
+                        <i class="flag iti__flag iti__{{ currency.code|lower| slice(0, -1) }}"></i>
+                        <span>{{ currency.name }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+{% extends "pages.customer.layout" %}
+{% block tab_content %}
+    <div class="tabs active" data-profile-content id="wishlist">
+        {% if wishlist is not empty %}
+            <div class="grid-block products-list-container">
+                {% for item in wishlist %}
+                    {% include 'pages.partials.product.card' with {product:item.product, show_wishlist:true} %}
+                {% endfor %}
+            </div>
+            {% include 'pages.partials.loader-status' with {'nextPageUrl':wishlist.nextPageUrl} %}
+        {% else %}
+            <div class="placeholder-block placeholder-block--no-wishlist">
+                <i class="sicon-heart"></i>
+                <p>
+                    <span>{{ trans('pages.profile.wishlist_placeholder') }}</span>
+                    {{ page_title }}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+      document.addEventListener( 'DOMContentLoaded', function () {
+        salla.wishlist.event.onRemoved((response, prodId) => {
+            document.querySelector('#wishlist #product_' + prodId).remove();
+            if (!document.querySelector('#wishlist .products-list-container>*')) {
+                window.location.reload();
+            }
+        });
+      })
+    </script>
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "layouts.master" %}
+{% block content %}
+    {% set witoutFilters = is_link('latest-products') %}
+    {#{% set withoutFilters = true %}#}
+    <section class="page-wrapper page--category {{ store.settings.category.show_testimonial ? 'pb-0' : '' }}">
+        <div class="container">
+            <div class="row">
+{#                {% if not witoutFilters %}#}
+{#                    <div class="col-md-3">#}
+{#                        <aside class="filters side-panel" id="filters-panel">#}
+{#                            <div class="filters__content side-panel__content">#}
+{#                                <div class="filters__top mb-30">#}
+{#                                    <h5 class="title title--small">{{ trans('pages.categories.filters') }}</h5>#}
+{#                                    <button class="btn btn--padded btn--oval btn--secondary btn-start-filter">{{ trans('pages.categories.filters_reset') }}</button>#}
+{#                                </div>#}
+{#                                <div class="accordion">#}
+{#                                    <div class="accordion__panel">#}
+{#                                        <a class="accordion__title"#}
+{#                                           data-accordion-target="#collapse_one">المقاسات</a>#}
+{#                                        <div class="accordion__body" id="collapse_one">#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="small">#}
+{#                                                <label for="small">صغير</label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="medium">#}
+{#                                                <label for="medium">وسط</label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="large">#}
+{#                                                <label for="large">كبير</label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="extra_large">#}
+{#                                                <label for="extra_large">كبير جدا</label>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="accordion__panel">#}
+{#                                        <a class="accordion__title collapsed"#}
+{#                                           data-accordion-target="#collapse_two">{{ trans('pages.categories.filter_rating') }}</a>#}
+{#                                        <div class="accordion__body collapsed" id="collapse_two">#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" class="rate" id="one_star">#}
+{#                                                <label for="one_star">#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                </label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="two_star">#}
+{#                                                <label for="two_star">#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                </label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="three_star">#}
+{#                                                <label for="three_star">#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                </label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="four_star">#}
+{#                                                <label for="four_star">#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                </label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
+{#                                                <input type="checkbox" id="five_star">#}
+{#                                                <label for="five_star">#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                    <i class="sicon-star"></i>#}
+{#                                                </label>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="accordion__panel">#}
+{#                                        <a class="accordion__title collapsed"#}
+{#                                           data-accordion-target="#collapse_three">{{ trans('pages.categories.filter_price') }}</a>#}
+{#                                        <div class="accordion__body collapsed" id="collapse_three">#}
+{#                                            <div class="filters-price">#}
+{#                                                <div>#}
+{#                                                    <input type="text" class="form-control" placeholder="من">#}
+{#                                                    <span>ر.س</span>#}
+{#                                                </div>#}
+{#                                                -#}
+{#                                                <div>#}
+{#                                                    <input type="text" class="form-control" placeholder="الى">#}
+{#                                                    <span>ر.س</span>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="accordion__panel">#}
+{#                                        <a class="accordion__title collapsed"#}
+{#                                           data-accordion-target="#collapse_four">الالوان</a>#}
+{#                                        <div class="accordion__body collapsed" id="collapse_four">#}
+{#                                            <ul class="colors pl-3">#}
+{#                                                <li class="blue"></li>#}
+{#                                                <li class="yellow"></li>#}
+{#                                                <li class="purple"></li>#}
+{#                                                <li class="red"></li>#}
+{#                                                <li class="black"></li>#}
+{#                                                <li class="grey"></li>#}
+{#                                            </ul>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="accordion__panel">#}
+{#                                        <a class="accordion__title collapsed"#}
+{#                                           data-accordion-target="#collapse_five">اختيارات</a>#}
+{#                                        <div class="accordion__body collapsed" id="collapse_five"></div>#}
+{#                                    </div>#}
+{#                                    <div class="accordion__panel">#}
+{#                                        <a class="accordion__title collapsed" data-accordion-target="#collapse_six">خيارات</a>#}
+{#                                        <div class="accordion__body collapsed" id="collapse_six">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </aside>#}
+{#                    </div>#}
+{#                {% endif %}#}
+
+                {#@jamal - set col-md-12 to col-md-9#}
+                <div class="{{ withoutFilters? 'col-md-12' : 'col-md-12' }}">
+                    <div class="category-title mb-30 {{ withoutFilters?'':'category-title--sortable' }}">
+                        <h4 class="title title--primary title--has-dash">{{ page_title }}</h4>
+                        {% if not withoutFilters %}
+                            {% include 'pages.partials.sorting-list' %}
+                        {% endif %}
+                    </div>
+                    {% if products is not empty %}
+                        <div class="grid-block products-list-container">
+                            {% for product in products %}
+                                {% include 'pages.partials.product.card' %}
+                            {% endfor %}
+                        </div>
+                        {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
+                    {% else %}
+                        <div class="placeholder-block placeholder-block--no-category">
+                            <i class="sicon-inbox"></i>
+                            <p>
+                                <span>{{trans('pages.categories.no_products')}}</span>
+                                {{ page_title }}
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if store.settings.category.show_testimonial %}
+            {% component 'blocks.random_testimonials' %}
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+      salla.infiniteScroll.initiate('.products-list-container', '.product-block')
+    })
+    </script>
+{% endblock %}

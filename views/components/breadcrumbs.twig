@@ -1,0 +1,21 @@
+<section class="breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                {% if breadcrumbs is not empty %}
+                    {% for breadcrumb in breadcrumbs %}
+                        {% if loop.first %}
+                            <a href="{{ breadcrumb.url }}" aria-label="Home Page"><i class="sicon-home"></i> </a>
+                            <span class="separate">/</span>
+                        {% elseif loop.last %}
+                            <span>{{ breadcrumb.title }}</span>
+                        {% else %}
+                            <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+                            <span class="separate">/</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>

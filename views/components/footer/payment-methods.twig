@@ -1,0 +1,14 @@
+<ul class="footer-list footer-list--row footer-list--payment-methods">
+    {% for method in payment_methods %}
+        <li><img width="45" height="60" src="{{ asset('images/payment/'~ method ~'_mini.png') }}" alt="{{ method }}" /></li>
+    {% endfor %}
+    {% if store.social.maroof %}
+        <li>
+            <a href="{{ store.social.maroof }}" target="_blank" rel="noreferrer">
+                <img width="50" height="25" src="{{ asset('images/maroof-footer.png') }}"
+                     style="max-width: 50px;margin: 0 3px;"
+                     alt="maroof" />
+            </a>
+        </li>
+    {% endif %}
+</ul>

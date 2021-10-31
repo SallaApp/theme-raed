@@ -1,0 +1,17 @@
+<section class="home-block home-block--parallax {{ with_opacity }} {{ is_repeated?'repeated-block pt-0':'' }}" >
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="parallax-wrapper">
+                    {% if title is not empty %}
+                        <h1 class="title title--white title--xxx-large {{ url is empty or link_text is empty ? 'no-m' : '' }}">{{ title }}</h1>
+                    {% endif %}
+                    {% if url is not empty and link_text is not empty %}
+                        <a href="{{ url }}" class="btn btn--rounded btn--outlined white b-2x">{{ link_text }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-holder lazy-background" data-src="{{ image.url }}"></div>
+</section>

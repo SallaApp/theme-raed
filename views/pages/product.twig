@@ -1,0 +1,284 @@
+{% extends "layouts.master" %}
+{% block content %}
+    <!-- Start Product Details -->
+    <section class="page-wrapper page--product-details"
+             data-product-id="{{ product.product_id }}"
+             id="product_{{ product.product_id }}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-md-12" style="direction: ltr">
+                    <div class="product-details__slider {{ product.images|length < 2 ? 'singleton' : '' }}">
+                        {% if product.promotion_title %}
+                            <span class="badge badge--ribbon reverse font-base badge--primary z-7">{{ product
+                                .promotion_title }}</span>
+                        {% endif %}
+                        <div class="splide-images-wrapper">
+                            <div class="splide splide--images" id="product_main_slider">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        {% for image in product.images %}
+                                            <li class="splide__slide {{ image.video_url?'video-entry':'' }}"
+                                                data-img-id="{{ image.id }}"
+                                                data-slid-index="{{ loop.index-1 }}"
+                                                    {% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}>
+                                                <a data-fancybox="product-details" data-caption="{{ image.alt }}" data-infinite="false" data-type="{{ image.video_url?'youtube':'image' }}" href="{{ image.video_url?image.video_url:image.url }}" aria-label="{{
+                                                product.name }}">
+                                                    <img data-splide-lazy="{{ image.url }}" alt="{{ image.alt }}"/>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="splide-thumbs-wrapper">
+                            <div class="splide splide--thumbs" id="product_thumbs_slider">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        {% for image in product.images %}
+                                            <li class="splide__slide {{ image.video_url?'video-entry':'' }} lazy-background"
+                                                data-src="{{ image.url }}"
+                                                title="{{ image.alt }}"></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-12">
+                    <div class="product-details__info">
+                        <form class="form form--product-optins product-details__options ajax"
+                              data-filter-before-submit="append_image"
+                              data-on-change="product-price"
+                              enctype="multipart/form-data"
+                              action="{{ link('cart/item/%s/add'|format(product.id)) }}"
+                              data-on-success="itemAdded"
+                              data-on-fail="itemFailedTobeAdded"
+                        >
+                            <input type="hidden" name="id" value="{{ product.id }}">
+                            <div class="product-details__title">
+                                <div class="title-wrapper">
+                                    {% component 'product.brand' with {'product': product} %}
+                                    <h1 class="title title--xx-large {% if product.subtitle %} mb-0 {% else %} mb-10 {% endif %}">{{ product.name }}</h1>
+                                    {% if product.subtitle %}
+                                        <h2 class="title title--small color-grey mb-10">{{ product.subtitle }}</h2>
+                                    {% endif %}
+                                    <div class="price-wrapper-info price-wrapper--large">
+                                        {% if product.on_sale %}
+                                            <span class="color-danger">{{ product.sale_price }}</span>
+                                            <span class="price-wrapper">
+                                              <small>{{ product.regular_price }}</small>
+                                            </span>
+                                        {% else %}
+                                            <span>{{ product.price }}</span>
+                                        {% endif %}
+                                    </div>
+                                    {% component 'product.tax-label' with {'product': product} %}
+                                </div>
+                                <div class="share-like-wrapper">
+                                    <div class="share-like">
+                                        <button type="button" aria-label="Wishlist"
+                                            {% if user %}
+                                                data-on-click="{{ in_wishlist?'wishlist-remove':'wishlist-add' }}"
+                                            {% else %}
+                                                onClick="salla.error('{{ trans('common.messages.must_login') }}')"
+                                            {% endif %}
+                                                class="btn btn--circular btn--like {{ in_wishlist?'liked':'' }}">
+                                            <i class="sicon-heart"></i>
+                                        </button>
+                                        <div class="share-wrapper">
+                                            <button type="button" class="btn btn--circular btn--share" aria-label="Share">
+                                                <i class="sicon-share-alt"></i>
+                                            </button>
+                                            <ul class="share-btns-list a2a_kit share">
+                                              <li>
+                                                  <a class="a2a_button_whatsapp" aria-label="Share Via Whatsapp">
+                                                      <i class="sicon-whatsapp"></i>
+                                                  </a>
+                                              </li>
+                                              <li>
+                                                  <a class="a2a_button_facebook" aria-label="Share Via Facebook">
+                                                      <i class="sicon-facebook"></i>
+                                                  </a>
+                                              </li>
+                                              <li>
+                                                  <a class="a2a_button_twitter" aria-label="Share Via Twitter">
+                                                      <i class="sicon-twitter"></i>
+                                                  </a>
+                                              </li>
+                                              <li>
+                                                  <a class="a2a_button_email" aria-label="Share Via Email">
+                                                      <i class="sicon-mail"></i>
+                                                  </a>
+                                              </li>
+                                              <li>
+                                                  <a class="a2a_button_copy_link" aria-label="Copy Product Link">
+                                                      <i class="sicon-link"></i>
+                                                  </a>
+                                              </li>
+                                            </ul>
+                                            <script type="text/javascript">
+                                                var a2a_config = a2a_config || {};
+                                                a2a_config.linkurl = "{{ product.url }}";
+                                                a2a_config.locale = "{{ language.code }}";
+                                            </script>
+                                            <script async src="https://static.addtoany.com/menu/page.js"></script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if product.can_show_total_sold or product.can_show_remained_quantity %}
+                                <div class="d-flex px-3 py-2 bg-grey b-radius mb-30 float-start purchase-hot-wrapper">
+                                    {% if product.can_show_total_sold %}
+                                        <p class="purchase-hot">
+                                            <i class="sicon-fire"></i>
+                                            {{ trans('pages.products.sold') }}
+                                            {{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}
+                                        </p>
+                                    {% endif %}
+                                    {% if product.can_show_remained_quantity %}
+                                    <p class="purchase-hot">
+                                        <i class="sicon-box-bankers"></i>
+                                        {{ trans('pages.products.remained') }}
+                                        <span>{{ product.quantity }}</span>
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            {% if product.can_show_read_more %}
+                                <article class="article article--main article--product-details mb-50 pd-exp"
+                                         data-shrink-height="300"
+                                         style="height: 300px">
+                                    {{ product.description|raw }}
+                                </article>
+                                <div class="pd-expand-wrapper">
+                                    <button class="btn btn--padded less btn--grey bordered btn--oval expand-toggle">
+                                        {{ trans('pages.products.read_more') }}
+                                    </button>
+                                </div>
+                            {% else %}
+                                <article class="article article--main article--product-details mb-50 ">
+                                    {{ product.description|raw }}
+                                </article>
+                            {% endif %}
+                            {% component 'product.quick-access' with {'entity': product} %}
+                            {% component 'product.tags' with {'product': product} %}
+                            <div class="d-flex pay-installment">
+                                {% hook 'product:after-description' %}
+                            </div>
+                            <div class="product-sections-wrapper">
+                                {% include 'pages.partials.product.fields' %}
+                                {% if not product.is_donation %}
+                                    <div class="product-section product-section--has-label product-section--totals">
+                                        <div>
+                                            <label>{{ trans('pages.products.price') }}</label>
+                                        </div>
+                                        <div class="text-left">
+                                            <div class="price-wrapper price-wrapper--large">
+                                                {% if product.on_sale %}
+                                                    <span class="color-danger">{{ product.sale_price }}</span>
+                                                    <small>{{ product.regular_price }}</small>
+                                                {% else %}
+                                                    <span>
+                                                         {% if product.showPriceAsDash() %}
+                                                             —
+                                                        {% elseif ((not hideStartingPric or not hideStartingPrice)
+                                                            and product.price_start_enabled) %}
+                                                                            يبدأ من
+                                                                    {{ product.starting_price }}
+                                                        {% else %}
+                                                                    {{ product.regular_price }}
+                                                         {% endif %}
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="product-section {{ product.is_available or product.is_donation ? 'product-section--quantity' : 'product-section--notify list--spaced' }}  no-p mb-0 no-border">
+                                    {% if product.hide_quantity or not product.is_available %}
+                                        <input type="hidden" value="1" name="quantity"/>
+                                    {% else %}
+                                        <div class="qty-wrapper">
+                                            <div class="qty qty--large qty--circular" data-on-click="product-price">
+                                                <button type="button"
+                                                        aria-label="Increase Quantity"
+                                                        data-qty="add"><i class="sicon-add"></i></button>
+                                                <input id="product-quantity"
+                                                       data-digits="1"
+                                                       name="quantity"
+                                                       type="number"
+                                                       max="{{ product.max_quantity }}"
+                                                       data-max_quantity="{{ product.max_quantity }}"
+                                                       value="1"
+                                                       data-on-keyup="product-price"
+                                                       aria-label="Product Quantity"
+                                                       min="1"/>
+                                                <button type="button"
+                                                        data-qty="sub"
+                                                        aria-label="Decrease Quantity"><i class="sicon-minus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if product.is_available or product.is_donation %}
+                                        <button class="btn btn--wide btn--large btn--oval btn--primary {{ product.is_available ?'':'out-of-stock' }}"
+                                                {% if not product.is_available %} disabled {% endif %}>
+                                            {% if product.is_available %}
+                                                <i class="sicon-shopping-bag"></i>
+                                                {{ trans('pages.cart.add_to_cart') }}
+                                            {% elseif product.is_donation %}
+                                                {{ trans('pages.products.donation_exceed') }}
+                                            {% else %}
+                                                {{ trans('pages.products.out_of_stock') }}
+                                            {% endif %}
+                                        </button>
+                                    {% else %}
+                                        <span class="btn btn--large btn--grey btn--oval btn--padded less color-grey disabled font-sm">{{ trans('pages.products.out_of_stock') }}</span>
+                                        {% component 'product.notify-availability' with {product:product} %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% component 'product.quick-buy' with {product: product} %}
+            {% component 'offer.block' with {product:product} %}
+            {% component 'product.comments' with {comments: comments, 'id': product.product_id} %}
+        </div>
+    </section>
+    {% component 'product.similar-products' %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+      salla.infiniteScroll.initiate('.comments-container', '.comment-block', {history:false, scrollThreshold: false})
+
+      window.append_image = function (form_data, that, event) {
+          let fileInput = window.fileponds ? window.fileponds["attached_file_{{ product.id }}"] : undefined;
+          if (!fileInput) {
+              return form_data;
+          }
+          fileInput.getFiles()
+              .forEach(function (filepondFile) {
+                  form_data.append('file[]', filepondFile.file);
+              })
+          return form_data;
+      };
+
+      window.itemAdded = function (response, data) {
+          salla.cart.event.itemAdded(response, data.id);
+      }
+
+      window.itemFailedTobeAdded = function (error, data) {
+          salla.cart.event.itemAddedFailed(error, data.id);
+      }
+    })
+    </script>
+
+{% endblock %}

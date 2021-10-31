@@ -1,0 +1,20 @@
+<li class="{{ new_notifications_count ? 'has-badge' : '' }}">
+    <a href="{{ link('notifications') }}" class="notifications">
+        <div>
+        <i class="sicon-bell-ring"></i>
+        <span>{{ trans('common.titles.notifications') }}</span>
+        </div>
+        {% if new_notifications_count %}
+            <span id="notificationsCount" class="badge badge--small badge--circular badge--danger">{{ new_notifications_count }}</span>
+        {% endif %}
+    </a>
+</li>
+<li class="pending-orders {{ pending_orders_count ? 'has-badge' : '' }}">
+    <a href="{{ link('pending_orders') }}">
+        <i class="sicon-cart"></i>
+        <span> {{ trans('common.titles.pending_orders') }}</span>
+        {% if pending_orders_count %}
+            <span class="badge badge--small badge--circular badge--danger">{{ pending_orders_count }}</span>
+        {% endif %}
+    </a>
+</li>

@@ -1,0 +1,43 @@
+{% extends "layouts.master" %}
+{% block content %}
+    <section class="page-wrapper page--search-results">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="category-title mb-30 category-title--sortable">
+                        <h5 class="title title--primary title--has-dash">{{ page_title }}</h5>
+                        {% include 'pages.partials.sorting-list' %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {% if products is not empty %}
+                        <div class="grid-block products-list-container">
+                            {% for product in products %}
+                                {% include 'pages.partials.product.card' %}
+                            {% endfor %}
+                        </div>
+                        {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
+                    {% else %}
+                        <div class="placeholder-block placeholder-block--no-category">
+                            <i class="sicon-inbox"></i>
+                            <p>
+                                <span>{{trans('pages.categories.no_products')}}</span>
+                                {{ page_title }}
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+      salla.infiniteScroll.initiate('.products-list-container', '.product-block')
+    })
+    </script>
+{% endblock %}

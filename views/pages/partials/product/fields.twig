@@ -1,0 +1,68 @@
+{% if product.type in ['service', 'food'] %}
+    {% include 'pages.partials.product.options.advanced' %}
+{% elseif product.type == 'donating' %}
+    {% include 'pages.partials.product.options.donation' %}
+{% else %}
+    {% include 'pages.partials.product.options.basic' %}
+{% endif %}
+
+{% if product.can_add_note or product.can_upload_file %}
+    <div class="product-section product-section--has-label product-section--attachments">
+        <div>
+            <label class="font-sm">{{ trans('pages.products.attachments') }}</label>
+        </div>
+        <div>
+            <ul class="list list--horizontal list--spaced">
+                {% if product.can_add_note %}
+                    <li>
+                        <a data-show="#note_{{ product.id }}"
+                           class="btn btn--wide btn--rounded btn--padded less btn--grey bordered nowrap font-sm">
+                            <i class="sicon-journal-pencil mr-2"></i>
+                            {{ trans('pages.products.add_note') }}
+                        </a>
+                    </li>
+                {% endif %}
+                {% if product.can_upload_file %}
+                    <li>
+                        <a data-show="#upload_file_{{ product.id }}"
+                           class="btn btn--wide btn--rounded btn--padded less btn--grey bordered nowrap font-sm">
+                            <i class="sicon-camera mr-2"></i>
+                            {{ trans('pages.products.add_file') }}
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+
+            {% if product.can_add_note %}
+                <div class="form-group {{ product.notes?'':'collapsed' }} textarea-collapsed mt-20" data-show-content
+                     id="note_{{ product.id }}">
+                    <textarea placeholder="{{ trans('pages.products.notes_placeholder') }}"
+                              name="notes"
+                              class="short form-control">{{ product.notes }}</textarea>
+                </div>
+            {% endif %}
+            {% if product.can_upload_file %}
+                <div class="form-group upload-file textarea-collapsed {{ not product.can_add_note ? 'mt-20' : ''}} {{ product.attached_files?'':'collapsed' }}  mb-0"
+                     data-show-content id="upload_file_{{ product.id }}">
+                    <div class="custom-file">
+                        <input type="file"
+                               class="filepond form-control"
+                               id="attached_file_{{ product.id }}"
+                               name="{{ is_cart?'image_file':'file' }}"
+                               multiple
+                                {% if is_cart %}
+                                    {# "product" here is presenter for cart_item, so {product.id} id {cart_item.id} #}
+                                    data-url="{{ link('cart/image') }}"
+                                    data-instant-upload
+                                    data-files="{{ product.attached_files }}"
+                                    data-item-id="{{ product.id }}"
+                                    data-product-id="{{ product.product_id }}"
+                                {% endif %}
+                               data-max-file-size="3MB"
+                        />
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

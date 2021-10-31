@@ -1,0 +1,23 @@
+<section class="home-block home-block--main-slider pb-5 {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="hero pt-0">
+        <div class="container">
+            <div class="hero__content">
+                {% component 'blocks.vertical_cats' as mainMenu with {title:title, icon:icon} %}
+                <div class="splide splide--main-slider splide--radial">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            {% for item in items %}
+                                <li class="splide__slide">
+                                    <a href="{{ item.url }}" aria-label="Banner {{ item.link_type }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
+                                        <img data-splide-lazy="{{ item.image.url }}"
+                                             alt="{{ item.image.alt }}" />
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

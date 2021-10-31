@@ -1,0 +1,145 @@
+{% extends "pages.customer.layout" %}
+{% block tab_content %}
+    <div class="tabs {{ is_link('profile')?'active':'' }}"
+         data-profile-content
+         id="profile_info">
+        <form class="form form--user-profile ajax"
+              method="POST"
+              novalidate
+              action="{{ link('profile') }}"
+              data-filter-before-submit="update_profile_form">
+            {{ csrf_field() }}
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="relaxed form-group">
+                        <label for="first_name">{{ trans('pages.profile.first_name') }}</label>
+                        <input type="text"
+                               name="first_name"
+                               id="first_name"
+                               class="form-control"
+                               placeholder="{{ trans('pages.profile.first_name') }}..."
+                               value="{{ user.first_name }} "/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="relaxed form-group">
+                        <label for="last_name">{{ trans('pages.profile.last_name') }}</label>
+                        <input type="text"
+                               class="form-control"
+                               name="last_name"
+                               id="last_name"
+                               placeholder="{{ trans('pages.profile.last_name') }}..."
+                               value="{{ user.last_name }}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="relaxed form-group">
+                        <label for="gender">{{ trans('pages.profile.gender') }}</label>
+                        <select class="form-control js-choice" name="gender">
+                            <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
+                            <option value="male" {{ user.gender=='male'?'selected':'' }}>
+                                {{ trans('pages.profile.male') }}
+                            </option>
+                            <option value="female" {{ user.gender=='female'?'selected':'' }}>
+                                {{ trans('pages.profile.female') }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="relaxed form-group">
+                        <label for="birthday">{{ trans('pages.profile.birthday') }}</label>
+                        <input type="text"
+                               class="form-control date-element"
+                               name="birthday"
+                               value="{{ user.birthday }}"
+                               placeholder="{{ trans('pages.profile.birthday_placeholder') }}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="relaxed form-group">
+                        <label for="email">{{ trans('common.elements.email') }}</label>
+                        <input type="email"
+                               name="email"
+                               id="email"
+                               class="email form-control"
+                               placeholder="{{ trans('common.elements.email_placeholder') }}..."
+                               value="{{ user.email }}"/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="relaxed form-group">
+                        <label for="mobile">{{ trans('common.elements.mobile') }}</label>
+                        <input placeholder="{{ trans('common.elements.mobile_placeholder') }}"
+                               class="intl-input phone form-control"
+                               name="international_mobile"
+                               data-code="{{ country_code }}"
+                               value="{{ user.mobile }}"
+                               data-digits="true"
+                               type="text"
+                               id="mobile"
+                        />
+                        <input type="hidden" name="_country_iso2" class="country_code" value="{{ country_code }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <button type="submit"
+                          id="btn--update-profile"
+                          class="btn btn--oval btn--large btn--padded btn--primary btn--wide">
+                          <div class="line-scale">
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                          </div>
+
+                          <span class="btn__text">{{ trans('common.elements.edit') }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        window.update_profile_form = function handleFile(form_data, that, event) {          
+          let fileInput = window.fileponds ? window.fileponds.profile_img : undefined;
+          if (!fileInput) {
+              return form_data;
+          }
+          fileInput.getFiles()
+            .forEach(function (filepondFile) {
+                form_data.append('image_file', filepondFile.file);
+            })
+          return form_data;
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            salla.document.event.onKeyup('#verify-mobile-field', function (event) {
+                salla.helpers.digitsOnly('verify-mobile-field');
+                var btn = document.querySelector('#verify-mobile-btn');
+                if (event.target.value.length == 4) {
+                    btn.removeAttribute('disabled');
+                } else {
+                    btn.setAttribute('disabled', '');
+                }
+            });
+            salla.event.on("stores::profile.updated", function () {
+                window.location.reload();
+            }) 
+        }); 
+
+        {# Update profile Validations & Loading #}
+        {# var update_btn = document.getElementById('btn--update-profile');
+        update_btn.addEventListener('click', function(){
+          update_btn.classList.add('btn--has-loading');
+        }) #}
+    </script>
+{% endblock %}

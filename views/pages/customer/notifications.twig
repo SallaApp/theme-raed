@@ -1,0 +1,37 @@
+{% extends "pages.customer.layout" %}
+
+{% block tab_content %}
+    <div class="tabs active" data-profile-content id="notifications">
+        {% if notifications is not empty %}
+            <ul class="list list--table link notifications-list">
+                {% for item in notifications %}
+                    <li class="notification-item {{ item.is_new?'unread':'' }}">
+                        <a href="{{ item.url }}">
+                            <span>
+                                <p>{{ item.title }}</p>
+                                <small class="d-block font-xsm color-muted">{{ item.sub_title }}</small>
+                            </span>
+                            <span>{{ item.date }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% include 'pages.partials.loader-status' with {'nextPageUrl':notifications.nextPageUrl} %}
+        {% else %}
+            <div class="placeholder-block placeholder-block--no-category">
+                <i class="sicon-bell-off"></i>
+                <p>
+                    <span>{{ trans('blocks.header.no_notifications') }}</span>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+      salla.infiniteScroll.initiate('.notifications-list', '.notification-item')
+    })
+    </script>
+{% endblock %}

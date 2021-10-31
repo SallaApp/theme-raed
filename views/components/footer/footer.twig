@@ -1,0 +1,101 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer__top">
+            <div class="row">
+                <div class="col-md-{% if store.description is not empty %}4{% else %}6{% endif %} col-sm-12">
+                    {% component 'footer.pages' %}
+                </div>
+                {% if store.description is not empty %}
+                    <div class="col-md-4 col-sm-12">
+                        <div class="footer__block">
+                            <div class="store-about">
+                                <div class="title title--primary title--has-dash mb-20">{{ trans('blocks.footer.about_us') }}</div>
+                                <p>{{ store.description|raw }}</p>
+                            </div>
+                            {% component 'footer.social' %}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-md-{% if store.description is not empty %}4{% else %}6{% endif %} col-sm-12">
+                    <div class="footer__block">
+                        <div class="store-contact-info">
+                            <div class="title title--primary title--has-dash mb-20">{{ trans('blocks.footer.social') }}</div>
+                            <ul class="footer-list">
+                                {% component 'footer.contacts' with {'only':['phone', 'email']} %}
+                            </ul>
+                        </div>
+                        {% if store.description is empty %}
+                            {% component 'footer.social' %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="container footer__mid">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        {% component 'footer.mobile-apps' %}
+                    </div>
+
+                    <div class="col-md-8 col-sm-12">
+                        <div class="payment-methods-wrap">
+
+                            <div class="store-certificate d-flex">
+                                {% if store.settings.tax.certificate %}
+                                    <a href="#!" class="tax-certificate image popup-trigger"
+                                       data-popup-trigger="tax_certificate_modal">
+                                        <img src="https://assets.salla.cloud/themes/default/assets/images/tax.png?v=v1.4.161"
+                                             alt=" ">
+                                    </a>
+                                {% endif %}
+                                {% if store.settings.tax.number %}
+                                    <span class="d-flex align-items-center store-certificate__text">
+                                        <span>{{ trans('common.elements.tax_number') }}:</span>
+                                        <span class="number">{{ store.tax_number }}</span>
+                                    </span>
+                                {% endif %}
+                            </div>
+                            {% if store.settings.tax.certificate %}
+                            <div class="popup-modal-wrap" data-popup-modal="tax_certificate_modal">
+                                <div class="popup-modal agreement-modal shadow">
+                                    <div class="popup-modal-inner">
+                                        <button class="btn btn--transparent btn--circular btn--modal-close no-p"
+                                                data-close-modal="true">
+                                            <i class="sicon-cancel"></i>
+                                        </button>
+                                        {% if store.settings.tax.number %}
+                                            <header class="popup-modal__header">
+                                                <h2 class="title title--medium title--primary">
+                                                    {{ trans('common.elements.tax_number') }}
+                                                    : {{ store.tax_number }} </h2>
+                                            </header>
+                                        {% endif %}
+                                        <section class="popup-modal__body">
+                                            <img class="w-100 lazy-load"
+                                                 data-src="{{ store.tax_certificate }}"
+                                                 alt="{{ store.tax_number }}">
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% component 'footer.payment-methods' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Bottom Bar -->
+    <div class="footer__bottom">
+        <div class="container">
+            <span>{{ trans('blocks.footer.copyright') }} {{ store.name }} © {{ "now"|date('Y') }}</span>
+            {% component 'footer.copyright' %}
+        </div>
+    </div>
+    <!-- End Bottom Bar -->
+</footer>

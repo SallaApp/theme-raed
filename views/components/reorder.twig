@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="{% if order.can_cancel %}col-md-6 col-sm-12{% else %}col-md-12{% endif %}">
+        {% if order.is_pending_payment %}
+            <a href="{{ order.payment_url }}" class="btn btn--oval btn--padded btn--large btn--primary btn--wide mt-20">
+                {{ trans('pages.orders.finish_payment') }}
+            </a>
+    </div>
+        {% else %}
+            <button class="btn btn--oval btn--padded btn--large btn--primary btn--wide popup-trigger mt-20"
+                    data-popup-trigger="re-order-modal">
+                {{ trans('pages.orders.reorder') }}
+            </button>
+    </div>
+        {% endif %}
+    {% if order.can_cancel %}
+        <div class="col-md-6 col-sm-12">
+            <button class="btn btn--oval btn--padded btn--large btn--grey btn--wide mt-20"
+                    id="button_delete_order">
+                {{ trans('pages.orders.cancel') }}
+            </button>
+        </div>
+    {% endif %}
+</div>
+
+{% if not order.is_pending_payment %}
+    <!-- Reorder Popup -->
+    <div class="popup-modal-wrap popup-modal-wrap--small" data-popup-modal="re-order-modal">
+        <div class="popup-modal shadow">
+            <div class="popup-modal-inner">
+                <button class="btn btn--transparent btn--circular btn--modal-close no-p" data-close-modal="true">
+                    <i class="sicon-cancel"></i>
+                </button>
+                <header class="popup-modal__header center">
+                    <div class="avatar-wrapper avatar-wrapper--medium avatar-wrapper--circular avatar-wrapper--primary">
+                        <i class="sicon-back"></i>
+                    </div>
+                    <h2 class="title title--medium title--primary">{{ trans('pages.orders.reorder') }}</h2>
+                </header>
+                <section class="popup-modal__body">
+                    <article class="article article--main center">
+                        <p>{{ trans('pages.orders.reorder_description')|raw }}</p>
+                    </article>
+                </section>
+                <footer class="popup-modal__footer">
+                    <div>
+                        <a class="btn btn--rounded btn--padded btn--wide btn--primary ajax"
+                           href="{{ order.reorder_url }}"
+                           data-nonconfirm="true"
+                        >{{ trans('common.elements.ok') }}</a>
+                    </div>
+                    <div>
+                        <a href="#!" class="btn btn--rounded btn--padded btn--wide btn--grey"
+                           data-close-modal="true">{{ trans('common.elements.cancel') }}</a>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<!-- End Reorder Popup -->
+{% block scripts %}
+    {% if order.can_cancel %}
+        <script>
+            document.querySelector("#button_delete_order").addEventListener('click', function (e) {
+                Swal.fire({
+                    title             : "{{ trans('common.elements.warning') }}",
+                    text              : '{{ trans('common.elements.confirm') }}',
+                    showCancelButton  : true,
+                    confirmButtonColor: "#2196F3",
+                    confirmButtonText : "{{ trans('common.elements.ok') }}",
+                    cancelButtonText  : "{{ trans('common.elements.cancel') }}"
+                }).then(function (data) {
+                    if (data.isConfirmed) {
+                        salla.order.api
+                            .cancel("{{ order.id }}")
+                            .then(function (response) {
+                                window.location.reload();
+                            });
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

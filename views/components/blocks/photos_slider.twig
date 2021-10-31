@@ -1,0 +1,27 @@
+<section class="home-block home-block--main-slider">
+    <div class="hero no-p">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="hero__content">
+                        <div class="splide splide--main-slider splide--radial">
+                            <div class="splide__track">
+                                <ul class="splide__list">
+                                    {% for item in items %}
+                                        <li class="splide__slide">
+                                            <a href="{{ item.url }}"
+                                               aria-label="Link {{ item.link_type }}"
+                                               {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
+                                                <img alt="Image" data-splide-lazy="{{ item.image.url }}" />
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

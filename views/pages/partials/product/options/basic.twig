@@ -1,0 +1,105 @@
+<form>
+{% for option_index, option in product.options %}
+    {% if option.option_type=='color' %}
+        <div class="product-section product-section--has-label product-section--product-colors">
+            <div>
+                <label class="required">{{ option.name }}</label>
+            </div>
+            <div>
+                <ul class="list list--horizontal wrap list--auto-width color-options">
+                    {% for  detail in  option.details %}
+                        <li class="checkbox checkbox--colors mr-2 mb-2" title="{{ detail.full_name(product) }}">
+                            <input {{ option.is_selected(detail.id)?'checked':'' }}
+                                    {% if not is_cart %}
+                                        data-on-change="product-price" data-allow-default
+                                    {% endif %}
+                                    {{ detail.has_quantity(product) ? '':'disabled' }}
+                                    name="options[{{ option.id }}]"
+                                    value="{{ detail.id }}"
+                                    id="color_option_{{ detail.id }}-{{ product.id }}"
+                                    type="radio"/>
+                            <label for="color_option_{{ detail.id }}-{{ product.id }}" class="top tooltip-toggle" style="background-color: {{ detail.option_value }};">
+                                <span class="tooltip-content xs-visible font-xsm">{{ detail.name }}</span>
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% elseif option.option_type=='image' %}
+        <div class="product-section product-section--has-label">
+            <div>
+                <label class="product-option-name font-sm required">{{ option.name }}</label>
+            </div>
+            <div>
+                <div class="product-option-select div-prod-options-list basic-product-0"
+                     data-productid="0"
+                     data-option_id="0"
+                     data-product-name="0">
+                    <ul class="list list--horizontal wrap list--auto-width thumb-options">
+                        {% for  detail in  option.details %}
+                            <li class="checkbox checkbox--thumbs mr-2 mb-2" title="{{ detail.full_name(product) }}">
+                                <input {{ option.is_selected(detail.id)?'checked':'' }}
+                                        type="radio"
+                                        class="image-option"
+                                        id="option_{{ detail.id }}-{{ product.id }}"
+                                        {{ detail.has_quantity(product)?'':'disabled' }}
+                                        data-productid="1"
+                                        data-itemid="1"
+                                        name="options[{{ option.id }}]"
+                                        data-img-id="{{ detail.option_value }}"
+                                        value="{{ detail.id }}"/>
+                                <label for="option_{{ detail.id }}-{{ product.id }}"
+                                       class="lazy-background top tooltip-toggle"
+                                       data-src="{{ detail.image }}">
+                                    <span class="tooltip-content xs-visible font-xsm">{{ detail.name }}</span>
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="product-section product-section--has-label">
+            <div>
+                <label class="mb-3 mb-xs-0 required">{{ option.name }}</label>
+            </div>
+            <div>
+                {#lets' make it 5 for now - we'll change it if needed#}
+                {% if option.details|length < 5 %}
+                    <ul class="list list--vertical">
+                        {% for detail in option.details %}
+                            <li class="checkbox checkbox--large checkbox--primary mb-20">
+                                <input {{ option.is_selected(detail.id)?'checked':'' }}
+                                        {% if not is_cart %}
+                                        data-on-change="product-price" data-allow-default
+                                        {% endif %}
+                                        {{ detail.has_quantity(product)?'':'disabled' }}
+                                        name="options[{{ option.id }}]"
+                                        id="o_{{ detail.id }}-{{ product.id }}"
+                                        value="{{ detail.id }}"
+                                        type="radio">
+                                <label for="o_{{ detail.id }}-{{ product.id }}">{{ detail.full_name(product) }}</label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="form-group">
+                        <select class="form-control js-choice"
+                                name="options[{{ option.id }}]"
+                                data-option="{{ option.id }}"
+                                {{ attirubtes|raw }}>
+                            {% for key,detail in option.details %}
+                                <option {{ option.is_selected(detail.id) ? "selected" : "" }} value="{{ detail.id }}">
+                                    {{ detail.full_name(option.product) }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+</form>

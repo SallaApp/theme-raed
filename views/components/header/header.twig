@@ -1,0 +1,337 @@
+{% component 'header.theme-preview-bar' %}
+{# Top Block #}
+
+<!-- Start Mobile Nav -->
+	<div class="nav-mobile"> <ul class="main-nav">
+		<li>
+			<a href="{{ link('/') }}">
+				<i class="sicon-home"></i>
+				{{ trans('common.titles.home') }}
+			</a>
+		</li>
+		{% component 'header.main-menu-mobile' as mainMenu %}
+		{% if user %}
+			{% component 'header.notifications' %}
+			<li>
+				<a class="open-account-menu" href="#!" aria-label="{{ trans('common.titles.profile') }}">
+					<i class="sicon-user"></i>
+					{{ trans('common.titles.profile') }}
+				</a>
+				<div class="sub-menu account-menu" id="account">
+					<div class="menu-header">
+						<h6>{{ trans('common.titles.profile') }}</h6>
+						<button class="close-mobile-menu close-account-menu" aria-label="{{ trans('common.titles.profile') }}">
+							<i class="sicon-cancel d-block ty-1d"></i>
+						</button>
+					</div>
+					<ul>
+						<li><a href="{{ link('profile') }}"class="{{ is_link('profile')?'active':'' }}">{{ trans('pages.profile.info') }}</a></li>
+						<li><a href="{{ link('orders') }}"class="{{ is_link('orders')?'active':'' }}">{{ trans('common.titles.orders') }}</a></li>
+						<li><a href="{{ link('wishlist') }}"class="{{ is_link('wishlist')?'active':'' }}">{{ trans('common.titles.wishlist') }}</a></li>
+						<li><a href="{{ link('rating') }}"class="{{ is_link('rating')?'active':'' }}">{{ trans('common.titles.rating') }}</a></li>
+						<li><a href="{{ link('logout') }}" class="color-danger">{{ trans('blocks.header.logout') }}</a></li>
+					</ul>
+				</div>
+			</li>
+		{% else %}
+			<li>
+				<a class="popup-trigger" data-popup-trigger="login-modal">
+					<i class="sicon-user"></i>
+					{{ trans('blocks.header.login') }}
+				</a>
+			</li>
+		{% endif %}
+	</ul>
+</div>
+<!-- End Mobile Nav -->
+
+<div class="top-header">
+	<div class="container">
+		{% component 'header.contacts' as contacts %}
+		<div class="d-flex">
+			{% component 'header.language-switcher' %}
+			{% component 'header.currency-switcher' %}
+			{% component 'header.user-menu' %}
+		</div>
+	</div>
+</div>
+
+
+{# Login Popup #}
+<!-- Login Popup -->
+<div class="popup-modal-wrap popup-modal-wrap--small" data-popup-modal="login-modal">
+	<div class="popup-modal login-modal shadow">
+		<div class="popup-modal-inner">
+			<button class="btn btn--transparent btn--circular btn--modal-close no-p" data-close-modal="true">
+				<i class="sicon-cancel"></i>
+			</button>
+			<button class="btn btn--circular btn--modal-return no-p hidden" data-login="#login-step-0">
+				<i class="sicon-arrow-right"></i>
+			</button>
+			<header class="popup-modal__header center">
+				<div class="avatar-wrapper avatar-wrapper--medium avatar-wrapper--circular avatar-wrapper--primary">
+					<i class="sicon-user"></i>
+				</div>
+				<h2 class="title title--medium title--primary">{{ trans('blocks.header.login') }}</h2>
+			</header>
+			<section
+				class="popup-modal__body">
+				{#Mobile Login ---#}
+				<a href="#" data-login="#reg-new-user" id="btn-reg-new-user" aria-label="Register New Uesr"></a>
+				<div
+					id="form_login_reg" class="form form--lg-fields form--modal form--login-reg">
+					<!-- Step #0 - Choose login Method -->
+					<section class="tabs active" data-login-content id="login-step-0">
+						<div class="login-methods">
+							{% if store.settings.auth.mobile_allowed %}
+								<div class="login-method login-method--phone anime-item">
+									<a href="#" id="login-with-phone" data-login="#login-phone-step-1">
+										<span>
+											<i class="icon sicon-iphone-x"></i>
+											<h6 class="text">{{ trans('common.elements.mobile') }}</h6>
+										</span>
+									</a>
+								</div>
+							{% endif %}
+							{% if store.settings.auth.email_allowed %}
+								<div class="login-method login-method--email anime-item">
+									<a href="#" id="login-with-email" data-login="#login-email-step-1">
+										<span>
+											<i class="icon sicon-mail"></i>
+											<h6 class="text">{{ trans('common.elements.email') }}</h6>
+										</span>
+									</a>
+								</div>
+							{% endif %}
+						</div>
+					</section>
+
+					{% if store.settings.auth.email_allowed %}
+						<!-- Login via Email, Step #1 Enter Email -->
+						<section class="tabs" salla-form-data data-login-content id="login-email-step-1">
+							<div class="required form-group anime-item">
+								<label for="input-email-step-1">{{ trans('common.elements.email') }}</label>
+								<input type="email" class="email form-control" name="email" id="input-email-step-1" placeholder="{{ trans('common.elements.email_placeholder') }}" autofocus="autofocus"/>
+							</div>
+							<div class="form-group mb-4 anime-item">
+								<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-login" data-type="email" id="btn-email-send-code" data-login="#login-email-step-2">
+									{{ trans('blocks.header.enter') }}
+								</button>
+							</div>
+						</section>
+						<!-- Login via Email, Step #2 Verify -->
+						<section class="tabs" salla-form-data data-login-content id="login-email-step-2">
+							<div class="required form-group anime-item">
+								<input type="email" disabled name="email" id="input-email-step-2" class="form-control center large label email"/>
+							</div>
+
+							<div class="required form-group anime-item">
+								<label for="email_verify_code">{{ trans('blocks.header.verify_code') }}</label>
+								<input type="text" maxlength="4" id="email_verify_code" data-digits class="form-control center verify input-verify_code" name="code"/>
+							</div>
+							<div class="form-group mb-0 anime-item">
+								<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-verify" disabled data-type="email">
+									{{ trans('blocks.header.verify') }}
+								</button>
+							</div>
+							<p class="timer-wrap font-xsm center anime-item">
+								{{ trans('blocks.header.resend_after') }}
+								<span class="d-block color-grey mt-5">
+									<span data-countdown-value="30" id="email-timer">30</span>
+									{{ trans('blocks.header.second') }}
+								</span>
+							</p>
+							<div class="resend-btns anime-item">
+								<button class="btn btn--small btn--oval btn--grey nowrap" disabled data-login="#login-phone-step-1">
+									<i class="sicon-iphone-x"></i>
+									{{ trans('blocks.header.sms') }}
+								</button>
+								<button class="btn btn--small btn--oval btn--grey nowrap" data-on-click="auth-login" data-type="email" disabled>
+									<i class="sicon-mail"></i>
+									{{ trans('common.elements.email') }}
+								</button>
+							</div>
+						</section>
+					{% endif %}
+					{% if store.settings.auth.mobile_allowed %}
+						<!-- Phone, Step #1 -->
+						<section class="tabs" salla-form-data data-login-content id="login-phone-step-1">
+							<div class="required form-group z-99 anime-item">
+								<label for="input-mobile-step-1">{{ trans('common.elements.mobile') }}</label>
+								<input type="text" class="form-control intl-input phone" name="phone" id="input-mobile-step-1" data-digits autofocus="autofocus"/>
+								<input type="hidden" name="country_code" class="country_code" value="SA">
+								<input type="hidden" name="country_key" class="country_key" value="+966">
+							</div>
+
+							<div class="form-group mb-4 anime-item">
+								<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-login" data-type="mobile" id="btn-mobile-send-code" data-login="#login-phone-step-2">
+									{{ trans('blocks.header.enter') }}
+								</button>
+							</div>
+						</section>
+						<!-- phone, Step #2 -->
+						<section class="tabs" salla-form-data data-login-content id="login-phone-step-2">
+							<div class="required form-group anime-item">
+								<input type="text" disabled id="input-mobile-step-2-placeholder" class="form-control center large label phone" placeholder="{{ trans('common.elements.mobile_placeholder') }}"/>
+								<input type="hidden" id="input-mobile-step-2" name="phone">
+								<input type="hidden" name="country_code" class="country_code" value="SA">
+								<input type="hidden" id="input-country_key" name="country_key" class="country_key" value="+966">
+							</div>
+
+							<div class="required form-group anime-item">
+								<label for="phone_verify_code">{{ trans('blocks.header.verify_code') }}</label>
+								<input type="text" maxlength="4" id="phone_verify_code" data-digits class="form-control center verify input-verify_code" name="code"/>
+							</div>
+							<div class="form-group anime-item">
+								<button class="btn btn--rounded btn--large btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-verify" disabled data-type="mobile">
+									{{ trans('blocks.header.verify') }}
+								</button>
+							</div>
+							<p class="timer-wrap center font-xsm anime-item">
+								{{ trans('blocks.header.resend_after') }}
+								<span class="d-block color-grey mt-5">
+									<span data-countdown-value="30" id="phone-timer">30</span>
+									{{ trans('blocks.header.second') }}
+								</span>
+							</p>
+							<div class="resend-btns anime-item">
+								<button class="btn btn--small btn--oval btn--grey nowrap" data-on-click="auth-login" data-type="mobile" disabled>
+									<i class="sicon-iphone-x"></i>
+									{{ trans('blocks.header.sms') }}
+								</button>
+								<button class="btn btn--small btn--oval btn--grey nowrap" disabled data-login="#login-email-step-1">
+									<i class="sicon-mail"></i>
+									{{ trans('common.elements.email') }}
+								</button>
+							</div>
+						</section>
+					{% endif %}
+					<!-- Rregister, Step #0 -->
+					<section class="tabs" salla-form-data data-login-content id="reg-new-user">
+						<div class="form-group anime-item">
+							<div class="row">
+								<div class="col-sm-12">
+									<label>{{ trans('blocks.header.your_name') }}</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6 col-sm-12 mb-sm-10">
+									<input type="text" class="form-control" name="first_name" placeholder="{{ trans('pages.profile.first_name') }}"/>
+								</div>
+								<div class="col-md-6 col-sm-12">
+									<input type="text" class="form-control" name="last_name" placeholder="{{ trans('pages.profile.last_name') }}"/>
+								</div>
+							</div>
+						</div>
+						<div class="required form-group anime-item z-99 input-reg-block" id="mobile-reg-block">
+							<label for="input-mobile-step-3">{{ trans('common.elements.mobile') }}</label>
+							<input type="text" class="form-control intl-input" name="phone" id="input-mobile-step-3" placeholder="{{ trans('common.elements.mobile_placeholder') }}"/>
+						</div>
+						<div class="required form-group anime-item input-reg-block" id="email-reg-block">
+							<label for="input-email-step-3">{{ trans('common.elements.email') }}</label>
+							<input type="email" class="email form-control" name="email" id="input-email-step-3" placeholder="{{ trans('common.elements.email_placeholder') }}">
+						</div>
+						<input type="hidden" name="country_code" class="country_code">
+						<input type="hidden" name="country_key" class="country_key">
+						<input type="hidden" name="code" id="reg_code">
+						<input type="hidden" name="verified_by" id="reg_verified_by">
+						<div class="form-group anime-item">
+							<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-register">
+								{{ trans('blocks.header.register') }}
+							</button>
+						</div>
+					</section>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+{#End Login Popup #}
+{#End Top Block #}
+
+
+{#Start main Header #}
+	<header id="site-header-outer"> <div class="site-header">
+		<div class="container">
+			<div class="site-header__wrapper">
+
+				<a href="{{ store.url }}" class="theme-logo">
+					<img width="55" height="55" src="{{ store.logo }}" height="65" alt="main-logo"/>
+					<div>
+						{#                        <h1 class="title title--small">{{ store.name }}</h1>#}
+						{% if store.slogan %}
+							<span>{{ store.slogan }}</span>
+						{% endif %}
+					</div>
+				</a>
+
+				<form id="search_form" class="form form--lg-fields form--oval-fields form--white-fields form--search" action="{{ link('search') }}">
+					<div class="form-group mb-0 search-field">
+						<div class="spinner spinner--small"></div>
+						<input type="text" class="form-control" id="searchbox" data-on-keyup="search-products" name="q" value="{{ searchWord }}" maxlength="100" placeholder="{{ trans('blocks.header.search_placeholder') }}">
+						<ul id="searchbox_results" class="searchbox-results hidden"></ul>
+					</div>
+				</form>
+
+				<div class="flex-shrink-0 main-header-components d-flex">
+					<div class="site-header__cart">
+						{% if user %}
+							<a href="{{ link('wishlist') }}" class="btn favorite-btn d-none d-md-inline-flex" aria-label="Wishlist">
+								<i class="sicon-heart"></i>
+							</a>
+						{% endif %}
+						<a href="{{ link('cart') }}" class="price btn" id="main-cart-btn">
+							<i class="cart-icon sicon-shopping-bag mr-2"></i>
+							<span class="badge badge--small badge--circular badge--danger quantity" data-cart-badge>{{ cart_summary.count }}</span>
+							<b data-cart-total>{{ cart_summary.amount }}</b>
+						</a>
+					</div>
+				</div>
+
+				<a href="#" class="mobile-search-trigger header-side-panel-trigger d-md-none ml-2" aria-label="Search Trigger">
+					<span class="sicon-search icon"></span>
+				</a>
+
+				<a href="#" class="side-panel-trigger header-side-panel-trigger d-md-none ml-2" aria-label="Mobile Side Panel Trigger" data-panel-trigger="header-mobiel-nav">
+					<span class="sicon-ellipsis-vertical icon"></span>
+				</a>
+			</div>
+		</div>
+	</div>
+</header>
+
+{# Slide Mobile Nav #}
+<div class="side-panel mobile-side-panel d-md-none" id="header-mobiel-nav">
+	<div class="side-panel__content">
+
+		<button class="close-mobile-menu close-mobile-side-panel" aria-label="{{ trans('common.titles.profile') }}">
+			<i class="sicon-cancel d-block ty-1d"></i>
+		</button>
+
+		{% if store.description is not empty %}
+			<div class="store-about d-flex mb-40">
+				<img src="{{ store.logo }}" height="65" alt="main-logo"/>
+				<div>
+					{# <h2>{{ store.name }}</h2> #}
+					<p>{{ store.description }}</p>
+				</div>
+			</div>
+		{% endif %}
+
+		{% component 'header.contacts' as contacts %}
+
+		<div class="switchers">
+			{% component 'header.language-switcher' %}
+
+			{% component 'header.currency-switcher' %}
+		</div>
+
+		{% component 'footer.social' %}
+	</div>
+</div>
+
+{# End Main Header Mobile#}
+{% if not is_home or not store.theme.has_side_menu %}
+	{% component 'header.main-menu' %}
+{% endif %}
+

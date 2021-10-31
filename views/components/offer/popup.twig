@@ -1,0 +1,75 @@
+<div class="popup-modal-wrap" data-popup-modal="offers-products-modal">
+    <div class="popup-modal offers-modal shadow">
+        <div class="popup-modal-inner">
+            <header class="popup-modal__header anime-item">
+                <div class="offer__title">
+                    <h2 class="title title--medium mb-5">{{ offer.name }}</h2>
+                    <p class="font-sm color-grey mt-0 mb-0">{{ offer.title|raw }}</p>
+                </div>
+                <span class="offer__icon">
+                    <img class="lazy-load" data-src="{{ asset('images/party-horn.svg') }}" alt="Offer"/>
+                </span>
+            </header>
+
+            <section class="popup-modal__body {{ not offer.is_given_categories ? 'no-p' : '' }} anime-item">
+                <div {{ not offer.is_given_categories ? 'style="padding: 20px 20px 10px;"' : '' }}>
+                    <h2 class="title title--x-small font-regular color-text mb-20">
+                        {{ trans('pages.offer.follow_steps') }}:
+                    </h2>
+                    <ol class="list list--vertical list--numeric">
+                        {% for step in offer.steps(current_quantity) %}
+                            <li class="font-sm {{ not loop.last ? 'mb-10' : '' }} {{ step.is_add_more?'add-more-link':'' }}">
+                                {% if step.is_congrats %}
+                                    <span class="color-primary">
+                                        <i class="sicon-party-bell center-v"></i>
+                                        {{ step.text }}
+                                    </span>
+                                {% elseif step.is_add_more %}
+                                    <a href="#"
+                                       data-on-click="offer-increase"
+                                       data-id="{{ increase_product }}">{{ step.text }}</a>
+                                {% else %}
+                                    {{ step.text|raw }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                {% if offer.is_given_categories %}
+                    <div class="offer-categories" style="padding: 20px">
+                        <ul class="list list--horizontal list--auto-width wrap">
+                            {% for category in offer.given_categories %}
+                                <li>
+                                    <a href="{{ category.url }}"
+                                       class="btn btn--oval btn--grey btn--padded narrow font-sm color-muted">
+                                        <i class="sicon-tag icon center-v"></i>
+                                        {{ category.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="splide splide--products-slider splide--offer-products offers-popup center-arrows">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                {% for product in offer.given_products %}
+                                    <li class="splide__slide">
+                                        {% include 'pages.partials.product.card' with {block_classes:'product-block--small'} %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+            <footer class="popup-modal__footer anime-item">
+                <div>
+                    <button class="btn btn--wide btn--primary btn--oval btn--padded" data-close-modal="true">
+                        {{ trans('pages.offer.continue_shopping') }}
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>

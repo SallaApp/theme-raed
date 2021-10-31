@@ -1,0 +1,14 @@
+<ul class="top-header__info">
+    {% for contact in contacts %}
+        {% if contact.type == 'email' %}
+            <li>
+                <a href="{{ contact.url }}"><i class="sicon-mail"></i> <span>{{ contact.value }}</span></a>
+            </li>
+        {% endif %}
+        {% if contact.type == 'phone' %}
+            <li>
+                <a href="{{ contact.url }}"><i class="sicon-phone-talking"></i> <span class="text-unicode ">{{ contact.value }}</span></a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

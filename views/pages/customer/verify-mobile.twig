@@ -1,0 +1,41 @@
+<div class="panel verify-mobile panel-default panel-new">
+    <div class="panel-heading">
+        <h5 class="panel-title verify-mobile__title">
+            <i class="sicon-key icon"></i>
+            <span>{{ trans('pages.profile.verify_title') }}</span>
+        </h5>
+    </div>
+    <div class="panel-body">
+        <form class="ajax form form--lg-fields"
+              method="POST"
+              action="{{ link('profile/verify-mobile') }}"
+              enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <input type="hidden" name="_country_iso2" value="{{ _country_iso2 }}">
+            <input type="hidden" name="international_mobile" value="{{ international_mobile }}">
+
+            <div class="form-group verify-mobile__message">
+                {{ trans('pages.profile.verify_message')|raw }}
+            </div>
+
+            <div class="form-group">
+                <label for="verify-mobile-field">{{ trans('pages.profile.verify_placeholder') }}</label>
+                <input type="text"
+                       id="verify-mobile-field"
+                       name="code"
+                       maxlength="4"
+                       data-digits
+                       class="form-control center verify input-verify_code"
+                       required
+                >
+            </div>
+            <div class="form-group align-center">
+                <button type="submit" disabled
+                        id="verify-mobile-btn"
+                        class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn">
+                    {{ trans('pages.profile.verify') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

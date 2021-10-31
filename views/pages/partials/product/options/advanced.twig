@@ -1,0 +1,23 @@
+{% for key, option in product.options %}
+    {% if option.type == "splitter" %}
+        <div class="product-section splitter"></div>
+    {% else %}
+        <div class="product-section product-section--has-label {{ option.visibility_condition?'hidden':'' }}"
+                {% if option.visibility_condition %}
+            data-visibility-option="{{ option.visibility_condition.option }}"
+            data-visibility-operator="{{ option.visibility_condition.operator }}"
+            data-visibility-value="{{ option.visibility_condition.value }}"
+            data-key-prefix="{{ key_prefix }}"
+                {% endif %}>
+            <div>
+                <label class="font-sm text-wrap {{ option.required ? 'required' : '' }}">{{ option.name }}</label>
+                <small>{{ option.placeholder }}</small>
+            </div>
+            <div>
+                <div class="form-group">
+                    {{ option.draw_field(product, key_prefix)|raw }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

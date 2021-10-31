@@ -1,0 +1,33 @@
+{% if nextPageUrl %}
+  <div class="loading-status-wrapper">
+    <div class="loader-status loader" style="display: none">
+      <p class="infinite-scroll-last font-sm color-grey no-m center">{{ trans('common.elements.end_of_content') }}</p>
+      <p class="infinite-scroll-error font-sm color-grey no-m center">{{ trans('common.elements.failed_to_load_more') }}</p>
+    </div>
+    
+    <a href="{{ nextPageUrl }}" class="btn btn--padded btn--primary btn--oval pagination__next mt-10">
+      <div class="line-scale infinite-scroll-request">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <span class="btn__text">{{trans('common.elements.load_more')}}</span>
+    </a>
+  </div>
+{% endif %}
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var pagination__next = document.querySelector('.loading-status-wrapper .pagination__next');
+  salla.event.on('infiniteScroll::request', function () {
+    pagination__next.classList.add('btn--has-loading');
+  })
+
+  salla.event.on('infiniteScroll::load', function () {
+    pagination__next.classList.remove('btn--has-loading');
+  })
+});
+</script>

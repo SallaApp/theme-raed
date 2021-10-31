@@ -1,0 +1,22 @@
+<!-- Language Switcher Dropdown -->
+<div id="language_switcher" class="dropdonw-menu-wrap switcher-toggler language-switcher mr-3">
+    <button class="btn btn--oval btn--grey btn--dropdown-toggle dropdown-trigger grey no-p">
+        <span class="btn-label d-none">
+          <span class="icon sicon-earth"></span>
+          <span>{{ trans('common.titles.language') }}</span>
+        </span>
+        <span class="btn-value"> {{ current.name }} </span>
+    </button>
+    <div class="dropdown-menu limited-height">
+        <ul>
+            {% for language in languages %}
+            <li>
+                <a href="{{language.url}}" class="{{current.code == language.code ? 'is-active' : ''}}">
+                    <i class="flag iti__flag iti__{{ language.country_code }}"></i>
+                    <span> {{language.name}}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

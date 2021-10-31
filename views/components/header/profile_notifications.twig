@@ -1,0 +1,17 @@
+<li class="tab-head {% if is_link('notifications') %}active{% endif %}">
+    <a href="{{ link('notifications') }}"
+       data-profile="#notifications">
+        {{ trans('common.titles.notifications') }}
+        <span class="badge badge--circular badge--small badge--danger">{{ new_notifications_count }}</span>
+    </a>
+</li>
+<li class="tab-head {% if is_link('orders') %}active{% endif %} {% if is_link('pending_orders') %}active{% endif %}">
+    <a href="{{ link('orders') }}" data-profile="#orders">
+        {% if is_link('pending_orders') %}
+            {{ trans('common.titles.pending_orders') }}
+            <span class="badge badge--circular badge--small badge--danger">{{ pending_orders_count }}</span>
+        {% else %}
+            {{ trans('common.titles.orders') }}
+        {% endif %}
+    </a>
+</li>

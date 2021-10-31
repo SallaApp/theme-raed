@@ -1,0 +1,25 @@
+<li class="menu-item {{ menu.has_children?'dropdown':'' }} {{ menu.mega_menu?'mega-menu':'' }}" {{ menu.attrs }}>
+    {% if not menu.has_children %}
+        <a {{ menu.link_attrs|raw }} href="{{ menu.url }}">{{ menu.title }}</a>
+    {% else %}
+        <a href="{{ menu.url }}" data-menu-dropdown="#sub_menu_{{ menu_id }}">{{ menu.title }}</a>
+        <div class="sub-menu hide" id="sub_menu_{{ menu_id }}">
+            <div class="sub-menu__inner {{ menu.mega_menu?'d-flex':'' }}">
+                <ul class="{{ menu.mega_menu?'flex-shrink-0 flex-grow-0':'' }}">
+                    {% for submenu in menu.children %}
+                        {% include _self with {menu:submenu} %}
+                    {% endfor %}
+                </ul>
+                {% if menu.mega_menu %}
+                    <div class="flex-grow-1">
+                        <div class="grid-block products-list-container products-list-container--auto-fit-4-col">
+                            {% for product in menu.mega_menu|slice(0, 4) %}
+                                {% include 'pages.partials.product.card' with {block_classes:'anime-mega-item'} %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</li>

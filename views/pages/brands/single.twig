@@ -1,0 +1,48 @@
+{% extends "layouts.master" %}
+{% block content %}
+    <!-- Start Product Details -->
+    <section class="brand-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="brand__header">
+                        {% if brand.banner %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="brand__banner">
+                                        <img class="lazy-load" data-src="{{ brand.banner }}" alt="{{ brand.name }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <article class="article article--center-content article--main">
+                            <img class="lazy-load" data-src="{{ brand.logo }}" alt="{{ brand.name }}">
+                            <h3 class="title title--primary">{{ brand.name }}</h3>
+                            <p>{{ brand.description|raw }}</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="brand__products">
+                        {% if products is not empty %}
+                            <div class="grid-block products-list-container products-list-container--center">
+                                {% for product in products %}
+                                    {% include 'pages.partials.product.card' %}
+                                {% endfor %}
+                            </div>
+                            {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
+                        {% else %}
+                            <div class="placeholder-block placeholder-block--no-category">
+                                <i class="sicon-inbox"></i>
+                                <p>
+                                    <span>{{trans('pages.brands.non_products')}}</span>
+                                    {{ brand.name }}
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

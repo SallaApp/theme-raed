@@ -1,0 +1,225 @@
+{% extends "pages.customer.layout" %}
+{% block tab_content %}
+    <div class="d-flex align-items-center mb-30">
+        <a class="btn btn--grey btn--circular btn--return mr-3" href="{{ link('orders') }}">
+            <i class="sicon-arrow-right"></i>
+        </a>
+        <h2 class="title title--medium">
+            {{ trans('pages.orders.details') }} &nbsp;
+            <b class="ltr">#{{ order.order_id }}</b>
+        </h2>
+    </div>
+
+    <div class="b-radius padded-30 bg-grey">
+        <div class="order-details__header d-flex">
+            <ul class="flex-grow-1 mb-sm-0 bg-white b-radius">
+                <li>
+                    <label>{{ trans('pages.orders.date') }} </label>
+                    <span>{{ order.created_at }}</span>
+                </li>
+                <li>
+                    <label>{{ trans('pages.orders.status') }}</label>
+                    <span style="color: {{ order.status.color }}">
+                        <i class="center-v mr-1 {{ order.status.icon }}"></i>
+                        {{ order.status.name }}
+                    </span>
+                </li>
+            </ul>
+            {% if order.shipping %}
+                <ul class="flex-grow-1">
+                    <li>
+                        <label>{{ trans('pages.orders.shipment_details') }} </label>
+                        <span>
+                            {% if order.shipping.logo %}
+                                <a href="{{ order.shipping.website }}" class="shipping-logo mr-1" target="_blank">
+                                    <img class="lazy-load" data-src="{{ order.shipping.logo }}" alt="Shipping Company Logo">
+                                </a>
+                            {% endif %}
+                            {{ order.shipping.name }}
+                        </span>
+                    </li>
+                    {% if order.shipping.number %}
+                        <li>
+                            <label>{{ trans('pages.orders.shipment_no') }}</label>
+                            <span>{{ order.shipping.number|raw }}</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <ul class="list list--table order-details b-radius bg-white">
+            <li class="list--table__head padded-10">
+                <div>
+                    <span>{{ trans('pages.orders.item') }}</span>
+                </div>
+                <div>
+                    <span>{{ trans('pages.products.quantity') }}</span>
+                    <span>{{ trans('pages.products.price') }}</span>
+                    <span>{{ trans('pages.orders.total') }}</span>
+                </div>
+            </li>
+            {% for item in order.items %}
+                <li class="product-block product-block--inline padded-10">
+                    <div class="product-block__thumb">
+                        {% if item.product %}
+                            <a class="d-flex" href="{{ item.product.url }}">
+                            <span class="avatar-wrapper avatar-wrapper--bordered avatar-wrapper--circular avatar-wrapper--small {% if not item.image('') %}placeholder{% endif %}">
+                                <img class="lazy-load"
+                                     src="{{ asset('images/img_loader.png') }}"
+                                     data-src="{{ item.image ?? (asset('images/img_placeholder.png')) }}"
+                                     alt="{{ item.name }}">
+                            </span>
+                                <span>
+                                <span class="title title--small">{{ item.name }}</span>
+                                <small class="d-block font-regular font-xsm color-muted mt-5">
+                                    {{ item.description|raw }}
+                                </small>
+                            </span>
+                            </a>
+
+                            {% if item.options %}
+                                <div class="product-options-wrapper">
+                                    <h4 class="font-regular font-sm mb-10">{{trans('pages.cart.item_options')}}</h4>
+                                    <ul class="list list--vertical product-options">
+                                        {% for option in item.options %}
+                                            <li class="borderless">
+                                                <span>{{ option.name }}:</span>
+                                                <span>
+                                                    {% if option.is_image %}
+                                                        <a href="{{ option.value }}"
+                                                           class="avatar-wrapper avatar-wrapper--circular avatar-wrapper--tiny"
+                                                           data-fslightbox="lightbox"
+                                                           target="_blank" rel="noopener noreferrer">
+                                                            <img src="{{ option.value ?? asset('images/img_loader.png') }}" alt="{{ option.name }}"/>
+                                                        </a>
+                                                    {% else %}
+                                                        ({{ option.value }})
+                                                    {% endif %}
+                                            </span>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            {% if item.has_sub_products %}
+                                <div class="product-options-wrapper">
+                                    <h4 class="font-regular font-sm mb-10">{{ trans('pages.orders.sub_products') }}</h4>
+                                    <ul class="list list--vertical product-options">
+                                        {% for product in item.sub_products %}
+                                            <li class="borderless">
+                                                <span><a href="{{ product.url }}">{{ product.name }}</a></span>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            {% if item.has_attachments %}
+                                <div class="font-xsm font-color-grey padded-10 bg-grey b-radius--min">
+                                    {{ item.note }}
+                                    <div class="mt-5">
+                                        {% for image in item.images %}
+                                            <a href="{{ image.image_url }}" class="color-grey"
+                                               data-fslightbox="lightbox_{{ item.id }}">
+                                                {% if image.type=='image' %}
+                                                    <span class="avatar-wrapper avatar-wrapper--bordered avatar-wrapper--circular avatar-wrapper--tiny no-m">
+                                                    <img class="lazy-load"
+                                                         data-src="{{ image.image_url }}"
+                                                         alt="{{ item.name }}"/>
+                                                </span>
+                                                {% else %}
+                                                    {{ trans('pages.orders.file_url') }}
+                                                {% endif %}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if order.is_complete %}
+                                {% if item.has_files %}
+                                    <div class="product-options-wrapper">
+                                        <h4 class="font-regular font-sm mb-10">{{ trans('pages.orders.files') }}</h4>
+                                        <ul class="list list--vertical product-options">
+                                            {% for file in item.files %}
+                                                <li>
+                                                <span>
+                                                    <a href="{{ file.url_for_order(order) }}"
+                                                       target="_blank">{{ file.name }}</a>
+                                                </span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+
+                                {% if item.has_codes %}
+                                    <div class="product-options-wrapper">
+                                        <h4 class="font-regular font-sm mb-10">{{ trans('pages.orders.codes') }}</h4>
+                                        <ul class="list list--vertical product-options">
+                                            {% for code in item.codes %}
+                                                <li><span>{{ code.code }}</span></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <p class="d-flex">
+                                {{ item.name }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="product-block__info">
+                        <span data-title="{{ trans('pages.products.quantity') }}">
+                            {{ item.quantity }}
+                        </span>
+                        <span data-title="{{ trans('pages.products.price') }}">
+                            {{ item.price }}
+                        </span>
+                        <span class="font-bold"
+                              data-title="{{ trans('pages.orders.total') }}">{{ item.total_price }}</span>
+                    </div>
+                </li>
+            {% endfor %}
+
+            <li class="total">
+                <div></div>
+                <div class="summary">
+                    <div class="sub-total mt-4 mb-0">
+                        <span>{{ trans('pages.cart.items_total') }}</span>
+                        <span>{{ order.amount_price }}</span>
+                    </div>
+                    {% for discount in order.discounts %}
+                        <div class="discount">
+                            <span>{{ discount.name }}</span>
+                            <span>{{ discount.discount }}</span>
+                        </div>
+                    {% endfor %}
+                    {% if order.cod_cost %}
+                        <div class="cod">
+                            <span>{{ trans('pages.orders.cod_cost') }}</span>
+                            <span>{{ order.cod_cost }}</span>
+                        </div>
+                    {% endif %}
+                    {% if order.shipping_price %}
+                        <div class="shipping">
+                            <span>{{ trans('pages.orders.shipping_cost') }}</span>
+                            <span>{{ order.shipping_price }}</span>
+                        </div>
+                    {% endif %}
+                    {% if order.tax %}
+                        <div class="tax">
+                            <span>{{ trans('pages.cart.tax') }} ({{ order.tax.percent }}%)</span>
+                            <span>{{ order.tax.amount }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="total bg-primary padded-10 b-radius--min my-4">
+                        <span>{{ trans('pages.orders.final_total') }}</span>
+                        <span>{{ order.total_price }}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% component 'reorder' with {order:order} %}
+{% endblock %}

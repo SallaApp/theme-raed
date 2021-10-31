@@ -1,0 +1,11 @@
+<select class="form-control js-choice visibility_condition"
+        name="options[{{ option.id }}]"
+        data-option="{{ option.id }}"
+        {{ attirubtes|raw }}>
+    <option placeholder value="">{{ option.placeholder }}</option>
+    {% for key,detail in option.details %}
+        <option {{ option.is_selected(detail.id) ? "selected" : "" }} value="{{ detail.id }}">
+            {{ detail.full_name(option.product) }}
+        </option>
+    {% endfor %}
+</select>

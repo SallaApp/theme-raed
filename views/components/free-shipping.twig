@@ -1,0 +1,19 @@
+{% if has_free_shipping %}
+<div class="text-center color-primary wide free-shipping-applied mt-30">
+    {{ trans('pages.cart.has_free_shipping')| raw }}
+    <span class="emoji">🎉</span>
+</div>
+{% else %}                                                    &nbsp;
+    <div class="progress-bar progress-bar--small progress-bar--primary progress-bar--oval wide free-shipping-bar mt-30">
+        <div class="progress-bar__bg">
+            <div class="progress-bar__progress" style="width: {{ percent }}%">
+                {% if percent %}
+                    <i class="sicon-shipping-fast"></i>
+                {% endif %}
+            </div>
+        </div>
+        <div class="font-regular font-xsm color-grey text-right mt-10">
+            {{  trans('pages.cart.free_shipping_alert', {'amount': total_until_free_total})| raw }}
+        </div>
+    </div>
+{% endif %}

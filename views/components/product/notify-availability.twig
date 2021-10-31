@@ -1,0 +1,84 @@
+<button type="button"
+   data-popup-trigger="notify-modal"
+   id="show-notify-availability"
+   class="btn btn--primary btn--large btn--oval btn--padded less popup-trigger no-m nowrap">
+    <i class="sicon-bell"></i>
+    {{ trans('pages.products.notify_availability') }}
+</button>
+
+{#modal#}
+<div class="popup-modal-wrap" data-popup-modal="notify-modal">
+    <div class="popup-modal shadow">
+        <div class="popup-modal-inner">
+            <button type="button"
+                    class="btn btn--transparent btn--circular btn--modal-close no-p"
+                    data-close-modal="true"
+                    id="close-notify-availability">
+                <i class="sicon-cancel"></i>
+            </button>
+        </div>
+        <header class="popup-modal__header center anime-item">
+            <div class="avatar-wrapper avatar-wrapper--medium avatar-wrapper--circular avatar-wrapper--primary">
+                <i class="sicon-bell-ring"></i>
+            </div>
+            <h2 class="title title--medium title--primary">{{ trans('pages.products.notify_availability_title') }}</h2>
+            <p class="mb-0 mt-10 font-sm color-grey">{{ trans('pages.products.notify_availability_subtitle') }}</p>
+        </header>
+        <section class="popup-modal__body">
+            <input type="hidden" name="id" value="{{ product.product_id }}">
+            <div class="form">
+                {% if email_notify %}
+                    <div class="form-group anime-item">
+                        <label>{{ trans('common.elements.email') }}</label>
+                        <input type="email"
+                               class="email form-control"
+                               name="email"
+                               value="{{ user.email }}"
+                               placeholder="{{ trans('common.elements.email_placeholder') }}" />
+                    </div>
+                {% endif %}
+
+                {% if mobile_notify %}
+                    <div class="form-group phone-input anime-item">
+                        <label>{{ trans('common.elements.mobile') }}</label>
+                        <div>
+                            <input type="text"
+                                   name="mobile"
+                                   class="phone form-control intl-input phone"
+                                   placeholder="{{ trans('common.elements.mobile_placeholder') }}"
+                                   value="{{ user.mobile }}"
+                                   id="notify-mobile"
+                                   data-digits>
+                            <input type="hidden"
+                                   name="country_code"
+                                   class="country_code"
+                                   value="{{ country_code ?: 'SA' }}" />
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+        <footer class="popup-modal__footer">
+            <div>
+                <button type="button" data-on-click="product-availability-notify"
+                        class="btn btn--large btn--rounded btn--padded less btn--wide btn--primary ajax">
+                    {{ trans('common.elements.submit') }}
+                </button>
+            </div>
+            <div>
+                <button type="button" class="btn btn--large btn--rounded btn--padded less btn--wide btn--grey"
+                   data-close-modal="true">{{trans('common.elements.cancel')}}</button>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        salla.product.event.onAvailabilitySubscribed(function () {
+            document.getElementById('show-notify-availability').remove();
+            salla.success('{{ trans('pages.products.notify_availability_success') }}');
+            document.getElementById('close-notify-availability').click();
+        });
+    });
+</script>

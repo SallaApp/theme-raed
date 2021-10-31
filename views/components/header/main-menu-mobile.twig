@@ -1,0 +1,16 @@
+<li>
+    <a href="#mobile-nav-menu" class="open-slide-menu" data-title="title">
+        <i class="sicon-list"></i>
+        {{ trans('common.titles.categories') }}
+    </a>
+    <nav id="mobile-nav-menu">
+        <button aria-label="close mobile menu" class="close-mobile-menu close-slide-menu">
+            <i class="sicon-cancel d-block ty-1d"></i>
+        </button>
+        <ul>
+            {% for menu_id, menu in menus %}
+                {% include 'components.header._menu-item-mobile' %}
+            {% endfor %} 
+        </ul>
+    </nav>
+</li>

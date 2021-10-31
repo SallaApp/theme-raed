@@ -1,0 +1,46 @@
+{% if user %}
+    <div class="dropdonw-menu-wrap user-dropdown">
+        <button class="btn btn--oval btn--grey btn--dropdown-toggle dropdown-trigger grey no-p">
+            <div class="avatar-wrapper avatar-wrapper--circular avatar-wrapper--tiny d-inline-block mr-1">
+                <img class="avatar icon" alt="{{ user.full_name }}" src="{{ user.avatar }}">
+            </div>
+            <span>{{ user.full_name }}</span>
+        </button>
+        <div class="dropdown-menu">
+            <ul>
+                {% component 'header.notifications' %}
+                <li>
+                    <a href="{{ link('orders') }}">
+                        <i class="sicon-box-bankers"></i>
+                        <span>{{ trans('common.titles.orders') }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ link('rating') }}">
+                        <i class="sicon-favorite"></i>
+                        <span>{{ trans('common.titles.rating') }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ link('profile') }}">
+                        <i class="sicon-user-circle"></i>
+                        <span>{{ trans('common.titles.profile') }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ link('logout') }}"
+                       data-on-click="auth-logout"
+                       class="logout-link color-danger">
+                        <i class="sicon-send-out"></i>
+                        <span>{{ trans('blocks.header.logout') }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <!-- Lign Dropdown -->
+    <button class="btn btn--oval btn--grey btn--padded less popup-trigger" data-popup-trigger="login-modal">
+            <i class="sicon-user"></i> <span>{{ trans('blocks.header.login') }}</span>
+        </button>
+{% endif %}

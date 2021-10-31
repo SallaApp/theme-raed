@@ -1,0 +1,45 @@
+{% extends "layouts.master" %}
+{% block content %}
+    <div class="category-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="category-title mb-30">
+                                <h4 class="title title--primary title--has-dash">{{ trans('blocks.header.offers') }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {% if products is not empty %}
+                                <div class="grid-block products-list-container">
+                                    {% for product in products %}
+                                        {% include 'pages.partials.product.card' %}
+                                    {% endfor %}
+                                </div>
+                                {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
+                            {% else %}
+                                <div class="placeholder-block placeholder-block--no-category">
+                                    <i class="sicon-inbox"></i>
+                                    <p>
+                                        <span>{{trans('pages.categories.no_products')}}</span>
+                                        {{ trans('blocks.header.offers') }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+      salla.infiniteScroll.initiate('.products-list-container', '.product-block')
+    })
+    </script>
+{% endblock %}

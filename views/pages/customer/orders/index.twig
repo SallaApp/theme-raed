@@ -1,0 +1,50 @@
+{% extends "pages.customer.layout" %}
+
+{% block tab_content %}
+    <div class="tabs active" data-profile-content id="orders">
+        {% if isPendingOrders %}
+            <a href="{{ link('orders') }}">
+                <h5 class="title title--medium">
+                    <i class="sicon-arrow-right"></i>
+                    {{ trans('common.titles.orders') }}
+                </h5>
+            </a>
+        {% endif %}
+        {% if orders is not empty %}
+            <ul class="list list--table link orders orders-container">
+                {% for order in orders %}
+                    <li class="order-row">
+                        {# user encoded order_id order.id after changing to the new order-id way#}
+                        <a href="{{ order.url }}">
+                            <span data-title="{{trans('pages.orders.details')}}">
+                                {{ trans('pages.orders.details') }} &nbsp;<b class="ltr ml-1">#{{ order.order_id }}</b>
+                            </span>
+                            <span data-title="{{trans('pages.orders.total')}}" class="price">{{ order.total_price }}</span>
+                            <span data-title="{{trans('pages.orders.status')}}" class="status" style="color: {{ order.status.color }}">
+                                <i class="{{ order.status.icon }} center-v mr-1"></i>
+                                {{ order.status.name }}
+                            </span>
+                            <span data-title="{{trans('pages.orders.date')}}">{{ order.time_ago }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% include 'pages.partials.loader-status' with {'nextPageUrl':orders.nextPageUrl} %}
+        {% else %}
+            <div class="placeholder-block placeholder-block--no-category">
+                <i class="sicon-box"></i>
+                <p><span>{{ trans('pages.orders.non_orders') }}</span></p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+      salla.infiniteScroll.initiate('.orders-container', '.order-row', {
+          history        : false,
+          scrollThreshold: false
+      })
+    });
+    </script>
+{% endblock %}

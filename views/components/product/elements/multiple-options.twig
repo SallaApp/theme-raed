@@ -1,0 +1,17 @@
+<ul class="list list--vertical" {{ attirubtes|raw }}>
+    {% for key,detail in option.details %}
+        <li class="checkbox checkbox--large checkbox--primary mb-20">
+            <input id="field_{{ key_prefix }}_{{ option.id }}_{{ detail.id }}"
+                   {{ detail.has_quantity(option.product)?"":"disabled" }}
+                   {{ option.is_selected(detail.id)?"checked":"" }}
+                   name="options[{{ option.id }}][]"
+                   data-option="{{ option.id }}"
+                   class="visibility_condition"
+                   value="{{ detail.id }}"
+                   type="checkbox">
+            <label for="field_{{ key_prefix }}_{{ option.id }}_{{ detail.id }}">
+                {{ detail.full_name(option.product) }}
+            </label>
+        </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,46 @@
+{% extends "pages.customer.layout" %}
+
+{% block tab_content %}
+    <div class="tabs active" data-profile-content id="rating">
+        {% if orders is not empty %}
+            <ul class="list list--table link rating-list">
+                {% for order in orders %}
+                    <li class="order_rating">
+                        <a href="{{ order.rating_url }}">
+                            <span>{{ trans('pages.rating.order_id') }} #{{ order.order_id }}</span>
+                            {% if order.order.has_feedback %}
+                                <span>
+                                    <small class="btn btn--oval btn--padded less btn--yellow font-xsm">
+                                        <i class="sicon-star2 mr-1"></i>
+                                        {{trans('pages.rating.rated')}}
+                                    </small>
+                                </span>
+                            {% else %}
+                                <span>
+                                    <small class="btn btn--oval btn--padded less btn--grey font-xsm">
+                                        <i class="sicon-star mr-1"></i>
+                                        {{trans('pages.rating.rate')}}
+                                    </small>
+                                </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% include 'pages.partials.loader-status' with {'nextPageUrl':orders.nextPageUrl} %}
+        {% else %}
+            <div class="placeholder-block placeholder-block--no-category">
+                <i class="sicon-star-o"></i>
+                <p><span>{{ trans('pages.rating.no_ratings') }}</span></p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+      salla.infiniteScroll.initiate('.rating-list', 'li.order_rating')
+    })
+    </script>
+{% endblock %}

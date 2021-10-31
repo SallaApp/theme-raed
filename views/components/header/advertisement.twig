@@ -1,0 +1,25 @@
+<div id="store_notify" class="store-notify d-none"
+     data-id="{{ advertisement.id }}"
+     style="background-color:{{ advertisement.colors.background }}; color:{{ advertisement.colors.text }}">
+
+    <a href="" class="btn ajax notify-close" id="notify_close">
+        <i class="sicon-cancel"></i>
+    </a>
+
+    {% if advertisement.icon %}
+        <span class="{{ advertisement.icon }}"></span>
+    {% endif %}
+    <p>
+        {% if advertisement.link %}
+            <a href="{{ advertisement.link.url }}"
+                    {% if advertisement.is_new_window %}
+                        target='_blank'
+                    {% endif %}
+            >
+                {{ advertisement.description }}
+            </a>
+        {% else %}
+            {{ advertisement.description }}
+        {% endif %}
+    </p>
+</div>

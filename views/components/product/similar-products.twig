@@ -1,0 +1,22 @@
+ {% if products is not empty %}
+    <section class="page-wrapper bg-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="title title--primary title--x-large title--has-dash mb-30">{{ trans('pages.products.similar_products') }}</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="grid-block products-list-container">
+                        {% for product in products %}
+                            {% include 'pages.partials.product.card' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ {% endif %}
+
+
