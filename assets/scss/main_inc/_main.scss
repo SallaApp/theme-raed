@@ -1,0 +1,66 @@
+body {
+    background-color: #fafafa;
+    // overflow-x: hidden;
+}
+
+.site-logo {
+    img {
+        max-height: 60px;
+        max-width: 175px;
+    }
+}
+
+.feature-box {
+    &:hover {
+        .slide-anime-icon {
+            i {
+                animation: toRightFromLeft 0.3s forwards;
+            }
+        }
+    }
+}
+
+.banner {
+    @media screen and (min-width: 768px) {
+        &:hover {
+            .banner__title {
+                animation: toTopFromBottom 0.9s;
+            }
+
+            .banner__description {
+                animation: delayKeyframe 0.3s, toTopFromBottom 0.9s 0.3s;
+            }
+        }
+    }
+}
+
+.full-banner-block {
+    &::after,
+    &::before {
+        height: 100%;
+        width: 100%;
+        top: 0;
+        right: -93%;
+        content: "";
+        background: var(--main-color);
+        position: absolute;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        -webkit-transform: rotate(110deg) translateY(-50%);
+        // transform: rotate(110deg) translateY(-50%);
+        transform: rotate(220deg) translateY(-50%) translateX(33%);
+        opacity: 0.25;
+    }
+
+    &::before {
+        background: #fff;
+        left: auto;
+        right: auto;
+        transform: rotate(220deg) translateY(-40%) translateX(0);
+
+        [dir="ltr"] &{
+            left: -52%;
+            right: 0;
+        }
+    }
+}

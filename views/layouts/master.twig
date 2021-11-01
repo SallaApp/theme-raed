@@ -1,136 +1,158 @@
 <!DOCTYPE html>
-<!-- بسم الله الرحمن الرحيم -->
 <html lang="{{ language.code }}" dir="{{ language.dir }}">
+<!-- بسم الله الرحمن الرحيم -->
 <head>
     <script>
         var baseUrl = '{{ link('/') }}';
         var is_rtl = parseInt({{ is_rtl?1:0 }});
         window.locale = "{{ language.code }}";
     </script>
-    {% hook 'head:start' %}
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-    <!-- theme color -->
-    <meta name="theme-color" content="{{ theme.color }}">
-    <meta name="msapplication-navbutton-color" content="{{ theme.color }}">
-    <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color }}">
-    <!-- fav icon -->
-    <link rel="icon" type="image/png" href="{{ store.favIcon ?? store.logo }}"/>
-    <link rel="apple-touch-icon-precomposed" href="{{ store.logo }}">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ store.logo }}">
-    <meta name="_token" content="{{ csrf_token() }}">
-    {# SEO Meta Tags #}
-    {% hook 'head' %}
-    <link rel="preconnect" href="https://www.googletagmanager.com"/>
-    <link rel="preconnect" href="https://assets.salla.sa"/>
-    <link rel="stylesheet" href="https://assets.salla.cloud/sallaicons.css" />
-
-    {% if is_rtl %}
-        <link rel="stylesheet" href="{{ asset('dist/css/bootstrap-rtl-grid.min.css') }}">
-        {% if is_home %}
-            <link rel="stylesheet" href="{{ asset('dist/css/app-homepage.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/intl-tel-input.css') }}">
-        {% else %}
-            <link rel="stylesheet" href="{{ asset('dist/css/choices.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/filepond.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/filepond-plugin-file-poster.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/flatpickr.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/intl-tel-input.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/fancybox.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/app.css') }}">
-      {% endif %}
-
-    {% else %}
-        <link rel="stylesheet" href="{{ asset('dist/css/bootstrap-grid.min.css') }}">
-        {% if is_home %}
-            <link rel="stylesheet" href="{{ asset('dist/css/app-ltr-homepage.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/intl-tel-input.css') }}">
-        {% else %}
-            <link rel="stylesheet" href="{{ asset('dist/css/choices.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/filepond.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/filepond-plugin-file-poster.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/flatpickr.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/intl-tel-input.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/fancybox.css') }}">
-            <link rel="stylesheet" href="{{ asset('dist/css/app-ltr.css') }}">
-      {% endif %}
-    {% endif %}
-    {% set font_name=store.theme.font.name?:'DINNextLTArabic-Regular' %}
-
+{#    {% hook 'head:start' %}#}
     <style>
-        :root {
-            /* main colors ---*/
-            --color-main: {{ store.theme.color }};
-            --color-main-d: {{ store.theme.darker_color(0.15) }};
-            --color-main-l: {{ store.theme.lighter_color(0.15) }};
-            --color-main-reverse: {{ store.theme.reverse_color }};
-            --color-text: {{ store.theme.text_color }};
-            --color-text-reverse: {{ store.theme.reverse_text_color }};
-            --color-title: {{ store.theme.color }};
-            /* new variables */
-            --color-secondary: {{ store.theme.color }}; {#{{ store.theme.darker_color(0.8) }};#} /* may come from dashboard - for now let's make it darker version of main color */
-            {# store.theme.font.name?:'DINNextLTArabic-Regular' #}
-            --font-main: '{{font_name}}';
-            {# Regular #}
-            --font-light: '{{font_name}}';
-            {# Light'; #}
-            --font-regular: '{{font_name}}';
-            {# Regular'; #}
-            --font-medium: '{{font_name}}-Medium';
-            {# Medium'; #}
-            --font-bold: '{{font_name}}-Bold';
-            {# Medium'; #}
-        }
 
-        .sf-dump {
-            direction: ltr;
-            text-align: left;
-        }
+        ::before,::after{box-sizing:border-box;}
+        ::-moz-focus-inner{border-style:none;padding:0;}
+        :-moz-focusring{outline:1px dotted ButtonText;}
+        *,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:initial;}
+        *,::before,::after{--tw-border-opacity:1;border-color:rgba(228,228,231,var(--tw-border-opacity));}
+        .absolute{position:absolute;}
+        .top-0{top:0;}
+        .z-0{z-index:0;}
+        .h-full{height:100%;}
+        .w-full{width:100%;}
+        .bg-dark{background-color:var(--main-text-color-dark);}
+        .opacity-60{opacity:.6;}
+        *,::before,::after{--tw-shadow:0 0 #0000;}
+        *,::before,::after{--tw-ring-inset:var(--tw-empty, );--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59, 130, 246, 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;}
+
+        ::before,::after{box-sizing:border-box;}
+        ::-moz-focus-inner{border-style:none;padding:0;}
+        :-moz-focusring{outline:1px dotted ButtonText;}
+        *,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:initial;}
+        *,::before,::after{--tw-border-opacity:1;border-color:rgba(228,228,231,var(--tw-border-opacity));}
+        .absolute{position:absolute;}
+        .top-0{top:0;}
+        .z-0{z-index:0;}
+        .h-full{height:100%;}
+        .w-full{width:100%;}
+        .bg-dark{background-color:var(--main-text-color-dark);}
+        .opacity-60{opacity:.6;}
+        *,::before,::after{--tw-shadow:0 0 #0000;}
+        *,::before,::after{--tw-ring-inset:var(--tw-empty, );--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59, 130, 246, 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;}
     </style>
-    <link rel="stylesheet" href="{{ asset(store.theme.font.path) }}" />
-    {% block styles %}{% endblock %}
 
-    {# tracking services, custom css feature. #}
-    {% hook 'head:end' %}
-    {% block head %}{% endblock %}
+    <link rel="preload" href="{{asset('test/css/swiper-bundle.min.min.8e36fa41853cf3d8548dbde2893de4092a5eb584b9a1f33142c89610053834c3.css')}}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{asset('test/css/mmenu-light.css')}}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{asset('test/css/filepond/filepond.min.css')}}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{asset('test/css/filepond/filepond-plugin-image-preview.min.css')}}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{asset('test/css/flatpickr.min.css')}}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="{{asset('test/css/style.css')}}" >
+    <link rel="stylesheet" href="{{asset('test/css/main.min.585d6d35c0b4638b35eb56b632cd0c56bcff2e18cb7e23233134a216759f9f1e.css')}}" >
+    <meta name="theme-color" content="#5CD5C4">
+
+{#    <link rel="preload" href="{{ asset('dist/plugins.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">#}
+
+{#    <link rel="stylesheet" href="{{ asset('dist/main.css') }}">#}
+
+{#    <!-- Favicon -->#}
+{#    #}{# <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-152x152.png"> #}
+{#    #}{# <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png"> #}
+{#    #}{# <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png"> #}
+{#    #}{# <link rel="manifest" href="../images/favicon/manifest.json"> #}
+{#    <!-- theme color -->#}
+{#    <meta name="msapplication-navbutton-color" content="{{ theme.color }}">#}
+{#    <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color }}">#}
+{#    <!-- fav icon -->#}
+{#    <link rel="icon" type="image/png" href="{{ store.favIcon ?? store.logo }}"/>#}
+{#    <link rel="apple-touch-icon-precomposed" href="{{ store.logo }}">#}
+{#    <meta name="msapplication-TileColor" content="#ffffff">#}
+{#    <meta name="msapplication-TileImage" content="{{ store.logo }}">#}
+{#    <meta name="_token" content="{{ csrf_token() }}">#}
+{#    {% hook 'head' %}#}
+{#    #}{# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
+{#    #}{# <link rel="preconnect" href="https://assets.salla.sa"/> #}
+{#    {% if is_rtl %}#}
+{#        {% if is_home %}#}
+{#        {% else %}#}
+{#        {% endif %}#}
+
+{#    {% else %}#}
+{#        {% if is_home %}#}
+{#        {% else %}#}
+{#        {% endif %}#}
+{#    {% endif %}#}
+{#    {% set font_name=store.theme.font.name?:'DINNextLTArabic-Regular' %}#}
+
+{#    <link rel="stylesheet" href="{{ asset(store.theme.font.path) }}"/>#}
+{#    {% block styles %}{% endblock %}#}
+
+{#    #}{# tracking services, custom css feature. #}
+{#    {% hook 'head:end' %}#}
+{#    {% block head %}{% endblock %}#}
 </head>
-<body class="{% hook 'body:classes' %}">
-<!-- body overlay -->
-<div class="body-blackout"></div>
-{% hook 'body:start' %}
-<noscript>
-    To get full functionality of this site you need to enable JavaScript. Here is how
-    <a href="https://www.enable-javascript.com/" rel="noreferrer"
-       target="_blank">To enable JavaScript on webpage</a>.
-</noscript>
-{% component 'header.header' %}
-{% component 'breadcrumbs' %}
-{% hook 'body' %}
-{% block content %}{% endblock %}
-{% component 'footer.footer' %}
-{% hook 'body:end' %}
-</body>
-<script src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=Promise%2CObject.assign%2CObject.values%2CArray.prototype.find%2CArray.prototype.findIndex%2CArray.prototype.includes%2CString.prototype.includes%2CString.prototype.startsWith%2CString.prototype.endsWith%2Cdocument.getElementsByClassName%2CPromise.prototype.finally%2CString.prototype.includes%2CNumber.isNaN%2Ces6%2CEvent%2CCustomEvent"></script>
-<script type="text/javascript" defer src="{{ asset('/dist/js/manifest.js') }}" ></script>
-<script defer src="{{ link("languages/assets/#{store.theme.translations_hash}.js") }}"></script>
 
-{% if is_home %}
-    <script type="text/javascript" defer src="{{ asset('dist/js/vendor.home.js') }}"></script>
-{% else %}
-    <script type="text/javascript" defer src="{{ asset('dist/js/filepond.bundle.js') }}"></script>
-    <script type="text/javascript" defer src="{{ asset('dist/js/vendor.bundle.js') }}"></script>
-{% endif %}
+<body id="app" class="{% hook 'body:classes' %}">
+{% include 'layouts.test' %}
+{#{% hook 'body:start' %}#}
+{#<noscript>#}
+{#    To get full functionality of this site you need to enable JavaScript. Here is how#}
+{#    <a href="https://www.enable-javascript.com/" rel="noreferrer"#}
+{#       target="_blank">To enable JavaScript on webpage</a>.#}
+{#</noscript>#}
+{#<!-- Mobile Menu -->#}
+{# <!-- {{- partial "header/mobile-nav.html" . -}} --> #}
+{#<div class="app-inner">#}
+{#    {% component 'header.header' %}#}
+{#    {% component 'breadcrumbs' %}#}
+{#    {% hook 'body' %}#}
+{#    {% block content %}{% endblock %}#}
+{#    <!-- Header -->#}
+{#    #}{# {{- partial "header.html" . -}} #}
 
-{% hook 'scripts' %}
-{% block scripts %}{% endblock %}
+{#    <!-- Mail Layout -->#}
+{#    #}{# {{- block "main" . }}{{- end }} #}
+
+{#    <!-- Footer -->#}
+{#    #}{# {{- partial "footer.html" . -}} #}
+{#</div>#}
+
+{# <!-- {{- partial "partials/components/offer-modal.html" . -}} --> #}
+
+{#{% component 'footer.footer' %}#}
+{#<script src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=Promise%2CObject.assign%2CObject.values%2CArray.prototype.find%2CArray.prototype.findIndex%2CArray.prototype.includes%2CString.prototype.includes%2CString.prototype.startsWith%2CString.prototype.endsWith%2Cdocument.getElementsByClassName%2CPromise.prototype.finally%2CString.prototype.includes%2CNumber.isNaN%2Ces6%2CEvent%2CCustomEvent"></script>#}
+{# <script type="text/javascript" defer src="{{ asset('/dist/js/manifest.js') }}" ></script> #}
+{# <script defer src="{{ link("languages/assets/#{store.theme.translations_hash}.js") }}"></script> #}
+
+ {% if is_home %}
+ <script type="text/javascript" defer src="{{ asset('dist/home.js') }}"></script>
+ {% else %}
+ <script type="text/javascript" defer src="{{ asset('dist/inner.js') }}"></script>
+ {% endif %}
+
+<script defer src="{{ asset('test/plugins/swiper-bundle.min.js') }}"></script>
+<script defer src="{{ asset('test/plugins/mmenu-light/mmenu-light.js') }}"></script>
+<script defer src="{{ asset('test/plugins/anime.min.min.js') }}"></script>
+<script src="{{ asset('test/js/intlTelInput.js') }}"></script>
+<script defer src="{{ asset('test/plugins/fslightbox/index.js') }}"></script>
+<script defer src="{{ asset('test/plugins/cdn.min.js') }}"></script>
+<script defer src="{{ asset('test/plugins/filepond/filepond.min.js') }}"></script>
+<script defer src="{{ asset('test/plugins/filepond/filepond-plugin-image-preview.min.js') }}"></script>
+<script defer src="{{ asset('test/plugins/flatpickr.min.js') }}"></script>
+<script defer type="module" src="{{ asset('test/js/custom.min.js') }}"></script>
+<script defer type="module" src="{{ asset('test/js/search-modal.min.js') }}"></script>
+<script defer type="module" src="{{ asset('test/js/salla-login.min.js') }}"></script>
+{#{% hook 'body:end' %}#}
+{#{% hook 'scripts' %}#}
+{#{% block scripts %}{% endblock %}#}
 {% if error %}
     <script>
-      document.addEventListener( 'DOMContentLoaded', function () {
-        salla.error('{{ error }}');
-      })
+        document.addEventListener( 'DOMContentLoaded', function () {
+            salla.error('{{ error }}');
+        })
     </script>
 {% endif %}
+</body>
 </html>

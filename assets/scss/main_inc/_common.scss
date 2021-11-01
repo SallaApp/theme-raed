@@ -1,0 +1,82 @@
+.fix-align {
+    transform: translateY(-3px);
+    display: inline-block;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+.unicode {
+    unicode-bidi: plaintext;
+}
+
+.products-container {
+    &.list {
+        .product-entry {
+            @media (min-width: 768px) {
+                flex-direction: row;
+
+                &__image {
+                    height: 100%;
+                    width: 240px;
+                }
+            }
+        }
+    }
+}
+
+.spinner-loader {
+    border-right-color: var(--main-color) !important;
+
+    &.reverse {
+        border-right-color: #9f7171 !important;
+        background-color: #f98181;
+    }
+}
+
+// for alpinejs
+[x-cloak]{
+    display: none;
+}
+
+.hide-scroll {
+    /* hide scrollbar but allow scrolling */
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none; /* for Chrome, Safari, and Opera */
+    }
+}
+
+.remove-item-btn:after {
+    content: "\ea47";
+    font-family: "sallaicons" !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.cart-thumb {
+    position: fixed;
+    z-index: 30;
+    transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+}
