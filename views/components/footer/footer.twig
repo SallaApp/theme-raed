@@ -1,101 +1,154 @@
-<footer class="footer">
-    <div class="container">
-        <div class="footer__top">
-            <div class="row">
-                <div class="col-md-{% if store.description is not empty %}4{% else %}6{% endif %} col-sm-12">
-                    {% component 'footer.pages' %}
-                </div>
-                {% if store.description is not empty %}
-                    <div class="col-md-4 col-sm-12">
-                        <div class="footer__block">
-                            <div class="store-about">
-                                <div class="title title--primary title--has-dash mb-20">{{ trans('blocks.footer.about_us') }}</div>
-                                <p>{{ store.description|raw }}</p>
-                            </div>
-                            {% component 'footer.social' %}
-                        </div>
-                    </div>
-                {% endif %}
-                <div class="col-md-{% if store.description is not empty %}4{% else %}6{% endif %} col-sm-12">
-                    <div class="footer__block">
-                        <div class="store-contact-info">
-                            <div class="title title--primary title--has-dash mb-20">{{ trans('blocks.footer.social') }}</div>
-                            <ul class="footer-list">
-                                {% component 'footer.contacts' with {'only':['phone', 'email']} %}
-                            </ul>
-                        </div>
-                        {% if store.description is empty %}
-                            {% component 'footer.social' %}
-                        {% endif %}
-                    </div>
-                </div>
+<footer id="footer" class="relative  bg-text-dark text-reverse">
+    <div aria-label="footer" class="py-11 lg:pt-28 lg:pb-40">
+        <div class="container lg:grid grid-cols-6 gap-6">
+            <div class="lg:col-span-2 pe-20">
+                <a href="https://salla.sa" class="flex mb-6">
+                    <img src="{{ asset('images/salla-logo.svg') }}" alt="" class="img-fluid b-logo">
+                    <h1 class="text-3xl text-primary font-bold mx-1.5 fix-align">سلة</h1>
+                </a>
+
+                <p class="max-w-sm leading-6 mb-6">
+                    مع سلة تستطيع خلال دقائق إنشاء متجرك الخاص بأقل التكاليف والحصول على استضافة مجانية وتحديثات مستمرة
+                    ومتجددة وبدون أي عمولة على المبيعات
+                </p>
+                <ul class="flex">
+
+                    <li class="me-2.5">
+                        <a href="#" rel="noopener" target="_blank" title="YouTube"
+                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
+                            <span class="sicon-youtube"></span>
+                        </a>
+                    </li>
+
+                    <li class="me-2.5">
+                        <a href="#" rel="noopener" target="_blank" title="Facebook"
+                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
+                            <span class="sicon-facebook"></span>
+                        </a>
+                    </li>
+
+                    <li class="me-2.5">
+                        <a href="#" rel="noopener" target="_blank" title="Instagram"
+                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
+                            <span class="sicon-instagram"></span>
+                        </a>
+                    </li>
+
+                    <li class="me-2.5">
+                        <a href="#" rel="noopener" target="_blank" title="Twitter"
+                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
+                            <span class="sicon-twitter"></span>
+                        </a>
+                    </li>
+
+
+                </ul>
             </div>
 
-        </div>
-        <div class="row">
-            <div class="container footer__mid">
-                <div class="row">
-                    <div class="col-md-4 col-sm-12">
-                        {% component 'footer.mobile-apps' %}
-                    </div>
+            <div>
+                <h3 class="font-bold mb-5"> عن سلة</h3>
+                <ul>
 
-                    <div class="col-md-8 col-sm-12">
-                        <div class="payment-methods-wrap">
+                    <li class="mb-4">
+                        <a href="#"
+                           class="focus:outline-none focus:underline text-sm leading-none hover:text-primary">اتفاقية
+                            الاستخدام</a>
+                    </li>
 
-                            <div class="store-certificate d-flex">
-                                {% if store.settings.tax.certificate %}
-                                    <a href="#!" class="tax-certificate image popup-trigger"
-                                       data-popup-trigger="tax_certificate_modal">
-                                        <img src="https://assets.salla.cloud/themes/default/assets/images/tax.png?v=v1.4.161"
-                                             alt=" ">
-                                    </a>
-                                {% endif %}
-                                {% if store.settings.tax.number %}
-                                    <span class="d-flex align-items-center store-certificate__text">
-                                        <span>{{ trans('common.elements.tax_number') }}:</span>
-                                        <span class="number">{{ store.tax_number }}</span>
-                                    </span>
-                                {% endif %}
-                            </div>
-                            {% if store.settings.tax.certificate %}
-                            <div class="popup-modal-wrap" data-popup-modal="tax_certificate_modal">
-                                <div class="popup-modal agreement-modal shadow">
-                                    <div class="popup-modal-inner">
-                                        <button class="btn btn--transparent btn--circular btn--modal-close no-p"
-                                                data-close-modal="true">
-                                            <i class="sicon-cancel"></i>
-                                        </button>
-                                        {% if store.settings.tax.number %}
-                                            <header class="popup-modal__header">
-                                                <h2 class="title title--medium title--primary">
-                                                    {{ trans('common.elements.tax_number') }}
-                                                    : {{ store.tax_number }} </h2>
-                                            </header>
-                                        {% endif %}
-                                        <section class="popup-modal__body">
-                                            <img class="w-100 lazy-load"
-                                                 data-src="{{ store.tax_certificate }}"
-                                                 alt="{{ store.tax_number }}">
-                                        </section>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
+                    <li class="mb-4">
+                        <a href="#"
+                           class="focus:outline-none focus:underline text-sm leading-none hover:text-primary">سياسة
+                            الخصوصية</a>
+                    </li>
 
-                            {% component 'footer.payment-methods' %}
-                        </div>
-                    </div>
-                </div>
+                    <li class="mb-4">
+                        <a href="#"
+                           class="focus:outline-none focus:underline text-sm leading-none hover:text-primary">انضم لفريق
+                            سلة</a>
+                    </li>
+
+                </ul>
             </div>
-        </div>
-    </div>
 
-    <!-- Start Bottom Bar -->
-    <div class="footer__bottom">
-        <div class="container">
-            <span>{{ trans('blocks.footer.copyright') }} {{ store.name }} © {{ "now"|date('Y') }}</span>
-            {% component 'footer.copyright' %}
+            <div>
+                <h3 class="mb-5">تواصل معنا علي</h3>
+                <ul>
+
+                    <li class="mb-4">
+                        <a href="#"
+                           class="flex items-center focus:outline-none focus:underline text-sm leading-none">
+                            <span
+                                    class="me-2.5 border text-reverse rounded-full w-8 h-8 justify-center flex items-center">
+                                <i class="sicon-mail"></i>
+                            </span>
+                            <span>
+                                askaster8@gmail.com
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="#"
+                           class="flex items-center focus:outline-none focus:underline text-sm leading-none">
+                            <span
+                                    class="me-2.5 border text-reverse rounded-full w-8 h-8 justify-center flex items-center">
+                                <i class="sicon-phone"></i>
+                            </span>
+                            <span>
+                                &#43;966556754472
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="lg:col-span-2 lg:ps-20">
+                <h3 class="mb-5">تحميل تطبيق الهاتف</h3>
+                <ul class="flex">
+
+
+                    <li class="me-4"><a class="focus:underline focus:outline-none  leading-none hover:text-primary"
+                                        href="#">
+                            <img class="w-36" src="{{ asset('images/app-store/google-play.png') }}" alt="Google Play"
+                                 title="Google Play">
+                        </a></li>
+
+
+                    <li class="me-4"><a class="focus:underline focus:outline-none  leading-none hover:text-primary"
+                                        href="#">
+                            <img class="w-36" src="{{ asset('images/app-store/app-store.png') }}" alt="App Store"
+                                 title="App Store">
+                        </a></li>
+
+                </ul>
+            </div>
+
+
         </div>
     </div>
-    <!-- End Bottom Bar -->
+    <div
+            class="md:flex items-center justify-between py-5  lg:px-0 container text-center border-t-2 border-border-dark border-dashed">
+        <p class="text-reverse-dark mb-2.5 md:mb-0">جميع الحقوق محفوظة لشركة سلة القابضة © 2021</p>
+        <ul class="flex justify-center items-center">
+
+
+            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/mada.png') }}" alt=""></li>
+
+
+            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/visa.png') }}" alt=""></li>
+
+
+            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/mastercard.png') }}" alt="">
+            </li>
+
+
+            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/stcpay.png') }}" alt=""></li>
+
+
+            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/applepay.png') }}" alt="">
+            </li>
+
+        </ul>
+    </div>
 </footer>

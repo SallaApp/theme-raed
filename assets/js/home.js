@@ -1,6 +1,5 @@
-import Swiper from 'swiper';
-
-window.Swiper = Swiper;
+window.Swiper = require('swiper/bundle').default;
+window.fslightbox = require('fslightbox');
 
 // <script defer src="/plugins/mmenu-light/mmenu-light.js"></script>
 // <script defer src="/plugins/anime.min.min.js"></script>

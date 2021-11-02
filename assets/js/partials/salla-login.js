@@ -1,4 +1,8 @@
-const template=document.createElement('template');template.innerHTML=`
+// Login  Web Component
+// Dependencies: Tailwind, AlpineJs, intl-tel-input
+const template = document.createElement('template');
+import TelInput from "intl-tel-input";
+template.innerHTML = `
 <style>
 [x-cloak] {
   display: none;
@@ -161,4 +165,146 @@ const template=document.createElement('template');template.innerHTML=`
   </div>
 </div>
 </div>
-`;export class SallaLogin extends HTMLElement{initTelInput=()=>{const a=document.querySelectorAll('.tel-input');a.length&&a.forEach(a=>{let b=intlTelInput(a,{initialCountry:a.dataset.code||'sa',preferredCountries:['sa','ae','kw','bh','qa','iq','om','ye','eg','jo','sy','ps','sd','lb','dz','tn','ma','ly'],formatOnDisplay:!1,separateDialCode:!0,autoPlaceholder:'aggressive',utilsScript:'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.min.js'});a.addEventListener("countrychange",()=>{let a=b.getSelectedCountryData();document.querySelectorAll('.country_code').forEach(b=>b.value=a.iso2.toUpperCase()),document.querySelectorAll('.country_key').forEach(b=>{b.value=('+'+a.dialCode).replace('++','+')})})})};connectedCallback(){this.append(template.content.cloneNode(!0)),this.initTelInput()}init(){return{showLoginModal:!1,showLoginMethods:!0,loginMethod:'',showOtp:!1,length:4,value:"",remainTime:'',countDown:function(){var a=5,b=setInterval(()=>{a--,this.remainTime=a,a===0&&clearInterval(b)},1e3)},openLoginModal:function(){this.showLoginModal=!0,document.getElementsByTagName('html')[0].style.position="fixed",document.getElementsByTagName('html')[0].style.overflowY="scroll"},closeModal:function(){this.showLoginModal=!1,document.getElementsByTagName('html')[0].style.position="static",document.getElementsByTagName('html')[0].style.overflowY="auto"},openOtp:function(){this.showOtp=!0,this.countDown(),this.animatItems()},openEmailLogin:function(){this.loginMethod='email',this.showLoginMethods=!1,this.animatItems()},animatItems:function(){anime({targets:'.anime-item',translateX:[30,0],opacity:[0,1],duration:1e3,delay:anime.stagger(50),easing:'easeOutExpo',begin:()=>{if(this.$refs.loginContainer.style.maxHeight=this.$refs.loginContainer.scrollHeight+'px',this.showOtp){this.$refs[0].focus();const a=Array.from(Array(this.length));a.forEach((b,a)=>{this.$refs[a].value=''})}}})},handleInput:function(c,b){this.$refs[b].value=this.$refs[b].value.replace(/[^0-9\u0660-\u0669]/g,'');const a=c.target;this.value=Array.from(Array(this.length),(b,a)=>this.$refs[a].value||"").join(""),a.nextElementSibling&&a.value&&(a.nextElementSibling.focus(),a.nextElementSibling.select())},handlePaste(b){const a=b.clipboardData.getData('text');this.value=a;const c=Array.from(Array(this.length));c.forEach((c,b)=>{this.$refs[b].value=a[b]||''})},handleBackspace(b){const a=parseInt(b,10)-1;this.$refs[a]&&this.$refs[a].focus()}}}}customElements.define('salla-login',SallaLogin)
+`;
+
+export class SallaLogin extends HTMLElement {
+    connectedCallback() {
+        this.append(template.content.cloneNode(true));
+        this.initTelInputs();
+    }
+
+    init() {
+        return {
+            showLoginModal  : false,
+            showLoginMethods: true,
+            loginMethod     : '',
+            showOtp         : false,
+            length          : 4,
+            value           : "",
+            remainTime      : '',
+
+            countDown: function () {
+                var counter = 5;
+                var timeCountdown = setInterval(() => {
+                    counter--
+                    this.remainTime = counter;
+
+                    if (counter === 0) {
+                        clearInterval(timeCountdown);
+                    }
+                }, 1000);
+            },
+
+
+            openLoginModal: function () {
+                this.showLoginModal = true;
+                document.getElementsByTagName('html')[0].style.position = "fixed";
+                document.getElementsByTagName('html')[0].style.overflowY = "scroll";
+            },
+
+            closeModal: function () {
+                this.showLoginModal = false;
+                document.getElementsByTagName('html')[0].style.position = "static";
+                document.getElementsByTagName('html')[0].style.overflowY = "auto";
+            },
+
+            openOtp: function () {
+                this.showOtp = true;
+                this.countDown();
+                this.animatItems();
+            },
+
+            openEmailLogin: function () {
+                this.loginMethod = 'email';
+                this.showLoginMethods = false;
+                this.animatItems()
+            },
+
+
+            animatItems: function () {
+                // let that = this;
+                anime({
+                    targets   : '.anime-item',
+                    translateX: [30, 0],
+                    opacity   : [0, 1],
+                    duration  : 1000,
+                    delay     : anime.stagger(50),
+                    easing    : 'easeOutExpo',
+                    begin     : () => {
+                        // animate height
+                        this.$refs.loginContainer.style.maxHeight = this.$refs.loginContainer.scrollHeight + 'px';
+                        if (this.showOtp) {
+                            this.$refs[0].focus();
+                            // reset inputs
+                            const inputs = Array.from(Array(this.length));
+                            inputs.forEach((element, i) => {
+                                this.$refs[i].value = '';
+                            });
+                        }
+                    }
+                });
+
+            },
+
+            // opt component
+            handleInput: function (e, index) {
+                this.$refs[index].value = this.$refs[index].value.replace(/[^0-9\u0660-\u0669]/g, '');
+
+                const input = e.target;
+                this.value = Array.from(Array(this.length), (element, i) => {
+                    return this.$refs[i].value || "";
+                }).join("");
+
+                // console.log('value', this.value);
+
+                if (input.nextElementSibling && input.value) {
+                    input.nextElementSibling.focus();
+                    input.nextElementSibling.select();
+                }
+            },
+
+            handlePaste(e) {
+                const paste = e.clipboardData.getData('text');
+                this.value = paste;
+                const inputs = Array.from(Array(this.length));
+
+                inputs.forEach((element, i) => {
+                    this.$refs[i].value = paste[i] || '';
+                });
+            },
+
+            handleBackspace(e) {
+                const previous = parseInt(e, 10) - 1;
+                this.$refs[previous] && this.$refs[previous].focus();
+            },
+
+        };
+    }
+
+    // initTelInput
+    //assign to all fields with .tel-input
+    initTelInputs() {
+        const intlInputs = document.querySelectorAll('.tel-input');
+        if (intlInputs.length) {
+            intlInputs.forEach(intlInput => {
+                let iti = TelInput(intlInput, {
+                    initialCountry    : intlInput.dataset.code || 'sa',
+                    preferredCountries: ['sa', 'ae', 'kw', 'bh', 'qa', 'iq', 'om', 'ye', 'eg', 'jo', 'sy', 'ps', 'sd', 'lb', 'dz', 'tn', 'ma', 'ly'],
+                    formatOnDisplay   : false,
+                    separateDialCode  : true,
+                    autoPlaceholder   : 'aggressive',
+                    utilsScript       : 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.min.js',
+                });
+                intlInput.addEventListener("countrychange", () => {
+                    let data = iti.getSelectedCountryData();
+                    document.querySelectorAll('.country_code').forEach(input => input.value = data.iso2.toUpperCase());
+                    document.querySelectorAll('.country_key').forEach(input => {
+                        input.value = ('+' + data.dialCode).replace('++', '+');
+                    });
+                });
+            });
+        }
+    }
+}
+
+customElements.define('salla-login', SallaLogin)

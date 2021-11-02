@@ -1,337 +1,1000 @@
-{% component 'header.theme-preview-bar' %}
-{# Top Block #}
+<div class="top-nav container flex justify-center lg:justify-between py-2 lg:py-0">
 
-<!-- Start Mobile Nav -->
-	<div class="nav-mobile"> <ul class="main-nav">
-		<li>
-			<a href="{{ link('/') }}">
-				<i class="sicon-home"></i>
-				{{ trans('common.titles.home') }}
-			</a>
-		</li>
-		{% component 'header.main-menu-mobile' as mainMenu %}
-		{% if user %}
-			{% component 'header.notifications' %}
-			<li>
-				<a class="open-account-menu" href="#!" aria-label="{{ trans('common.titles.profile') }}">
-					<i class="sicon-user"></i>
-					{{ trans('common.titles.profile') }}
+	<div class="flex items-center">
+		<ul class="hidden lg:flex items-center menu-divide">
+
+			<li class="inline-block">
+				<a href="/faq" class="block transition duration-300 p-4 text-sm">
+					الاسئلة الشائعة
 				</a>
-				<div class="sub-menu account-menu" id="account">
-					<div class="menu-header">
-						<h6>{{ trans('common.titles.profile') }}</h6>
-						<button class="close-mobile-menu close-account-menu" aria-label="{{ trans('common.titles.profile') }}">
-							<i class="sicon-cancel d-block ty-1d"></i>
-						</button>
-					</div>
+			</li>
+
+			<li class="inline-block">
+				<a href="/favorites" class="block transition duration-300 p-4 text-sm">
+					المفضلة
+				</a>
+			</li>
+
+			<li class="inline-block">
+				<a href="/privacy-policy" class="block transition duration-300 p-4 text-sm">
+					سياسة الإستبدال والاسترجاع
+				</a>
+			</li>
+
+		</ul>
+		<div class="relative inline-block mx-3" x-data="{toggleMenu: false}">
+			<div>
+				<button @click="toggleMenu = !toggleMenu" type="button"
+						class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
+						id="menu-button" aria-expanded="true" aria-haspopup="true">
+					<div class="flag iti__flag iti__sa me-1.5"></div>
+					<span class="">العربية</span>
+
+					<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+				</button>
+			</div>
+
+			<div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
+				 x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
+				 x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+				 x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
+				 class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
+				 role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+
+
+				<div class="py-1" role="none">
 					<ul>
-						<li><a href="{{ link('profile') }}"class="{{ is_link('profile')?'active':'' }}">{{ trans('pages.profile.info') }}</a></li>
-						<li><a href="{{ link('orders') }}"class="{{ is_link('orders')?'active':'' }}">{{ trans('common.titles.orders') }}</a></li>
-						<li><a href="{{ link('wishlist') }}"class="{{ is_link('wishlist')?'active':'' }}">{{ trans('common.titles.wishlist') }}</a></li>
-						<li><a href="{{ link('rating') }}"class="{{ is_link('rating')?'active':'' }}">{{ trans('common.titles.rating') }}</a></li>
-						<li><a href="{{ link('logout') }}" class="color-danger">{{ trans('blocks.header.logout') }}</a></li>
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__sa me-1.5"></div>
+								<span>العربية</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__us me-1.5"></div>
+								<span>الإنجليزية</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__it me-1.5"></div>
+								<span>الإيطالية</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__fr me-1.5"></div>
+								<span>الفرنسية</span>
+							</a>
+						</li>
 					</ul>
 				</div>
-			</li>
-		{% else %}
-			<li>
-				<a class="popup-trigger" data-popup-trigger="login-modal">
-					<i class="sicon-user"></i>
-					{{ trans('blocks.header.login') }}
-				</a>
-			</li>
-		{% endif %}
-	</ul>
-</div>
-<!-- End Mobile Nav -->
-
-<div class="top-header">
-	<div class="container">
-		{% component 'header.contacts' as contacts %}
-		<div class="d-flex">
-			{% component 'header.language-switcher' %}
-			{% component 'header.currency-switcher' %}
-			{% component 'header.user-menu' %}
-		</div>
-	</div>
-</div>
-
-
-{# Login Popup #}
-<!-- Login Popup -->
-<div class="popup-modal-wrap popup-modal-wrap--small" data-popup-modal="login-modal">
-	<div class="popup-modal login-modal shadow">
-		<div class="popup-modal-inner">
-			<button class="btn btn--transparent btn--circular btn--modal-close no-p" data-close-modal="true">
-				<i class="sicon-cancel"></i>
-			</button>
-			<button class="btn btn--circular btn--modal-return no-p hidden" data-login="#login-step-0">
-				<i class="sicon-arrow-right"></i>
-			</button>
-			<header class="popup-modal__header center">
-				<div class="avatar-wrapper avatar-wrapper--medium avatar-wrapper--circular avatar-wrapper--primary">
-					<i class="sicon-user"></i>
-				</div>
-				<h2 class="title title--medium title--primary">{{ trans('blocks.header.login') }}</h2>
-			</header>
-			<section
-				class="popup-modal__body">
-				{#Mobile Login ---#}
-				<a href="#" data-login="#reg-new-user" id="btn-reg-new-user" aria-label="Register New Uesr"></a>
-				<div
-					id="form_login_reg" class="form form--lg-fields form--modal form--login-reg">
-					<!-- Step #0 - Choose login Method -->
-					<section class="tabs active" data-login-content id="login-step-0">
-						<div class="login-methods">
-							{% if store.settings.auth.mobile_allowed %}
-								<div class="login-method login-method--phone anime-item">
-									<a href="#" id="login-with-phone" data-login="#login-phone-step-1">
-										<span>
-											<i class="icon sicon-iphone-x"></i>
-											<h6 class="text">{{ trans('common.elements.mobile') }}</h6>
-										</span>
-									</a>
-								</div>
-							{% endif %}
-							{% if store.settings.auth.email_allowed %}
-								<div class="login-method login-method--email anime-item">
-									<a href="#" id="login-with-email" data-login="#login-email-step-1">
-										<span>
-											<i class="icon sicon-mail"></i>
-											<h6 class="text">{{ trans('common.elements.email') }}</h6>
-										</span>
-									</a>
-								</div>
-							{% endif %}
-						</div>
-					</section>
-
-					{% if store.settings.auth.email_allowed %}
-						<!-- Login via Email, Step #1 Enter Email -->
-						<section class="tabs" salla-form-data data-login-content id="login-email-step-1">
-							<div class="required form-group anime-item">
-								<label for="input-email-step-1">{{ trans('common.elements.email') }}</label>
-								<input type="email" class="email form-control" name="email" id="input-email-step-1" placeholder="{{ trans('common.elements.email_placeholder') }}" autofocus="autofocus"/>
-							</div>
-							<div class="form-group mb-4 anime-item">
-								<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-login" data-type="email" id="btn-email-send-code" data-login="#login-email-step-2">
-									{{ trans('blocks.header.enter') }}
-								</button>
-							</div>
-						</section>
-						<!-- Login via Email, Step #2 Verify -->
-						<section class="tabs" salla-form-data data-login-content id="login-email-step-2">
-							<div class="required form-group anime-item">
-								<input type="email" disabled name="email" id="input-email-step-2" class="form-control center large label email"/>
-							</div>
-
-							<div class="required form-group anime-item">
-								<label for="email_verify_code">{{ trans('blocks.header.verify_code') }}</label>
-								<input type="text" maxlength="4" id="email_verify_code" data-digits class="form-control center verify input-verify_code" name="code"/>
-							</div>
-							<div class="form-group mb-0 anime-item">
-								<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-verify" disabled data-type="email">
-									{{ trans('blocks.header.verify') }}
-								</button>
-							</div>
-							<p class="timer-wrap font-xsm center anime-item">
-								{{ trans('blocks.header.resend_after') }}
-								<span class="d-block color-grey mt-5">
-									<span data-countdown-value="30" id="email-timer">30</span>
-									{{ trans('blocks.header.second') }}
-								</span>
-							</p>
-							<div class="resend-btns anime-item">
-								<button class="btn btn--small btn--oval btn--grey nowrap" disabled data-login="#login-phone-step-1">
-									<i class="sicon-iphone-x"></i>
-									{{ trans('blocks.header.sms') }}
-								</button>
-								<button class="btn btn--small btn--oval btn--grey nowrap" data-on-click="auth-login" data-type="email" disabled>
-									<i class="sicon-mail"></i>
-									{{ trans('common.elements.email') }}
-								</button>
-							</div>
-						</section>
-					{% endif %}
-					{% if store.settings.auth.mobile_allowed %}
-						<!-- Phone, Step #1 -->
-						<section class="tabs" salla-form-data data-login-content id="login-phone-step-1">
-							<div class="required form-group z-99 anime-item">
-								<label for="input-mobile-step-1">{{ trans('common.elements.mobile') }}</label>
-								<input type="text" class="form-control intl-input phone" name="phone" id="input-mobile-step-1" data-digits autofocus="autofocus"/>
-								<input type="hidden" name="country_code" class="country_code" value="SA">
-								<input type="hidden" name="country_key" class="country_key" value="+966">
-							</div>
-
-							<div class="form-group mb-4 anime-item">
-								<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-login" data-type="mobile" id="btn-mobile-send-code" data-login="#login-phone-step-2">
-									{{ trans('blocks.header.enter') }}
-								</button>
-							</div>
-						</section>
-						<!-- phone, Step #2 -->
-						<section class="tabs" salla-form-data data-login-content id="login-phone-step-2">
-							<div class="required form-group anime-item">
-								<input type="text" disabled id="input-mobile-step-2-placeholder" class="form-control center large label phone" placeholder="{{ trans('common.elements.mobile_placeholder') }}"/>
-								<input type="hidden" id="input-mobile-step-2" name="phone">
-								<input type="hidden" name="country_code" class="country_code" value="SA">
-								<input type="hidden" id="input-country_key" name="country_key" class="country_key" value="+966">
-							</div>
-
-							<div class="required form-group anime-item">
-								<label for="phone_verify_code">{{ trans('blocks.header.verify_code') }}</label>
-								<input type="text" maxlength="4" id="phone_verify_code" data-digits class="form-control center verify input-verify_code" name="code"/>
-							</div>
-							<div class="form-group anime-item">
-								<button class="btn btn--rounded btn--large btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-verify" disabled data-type="mobile">
-									{{ trans('blocks.header.verify') }}
-								</button>
-							</div>
-							<p class="timer-wrap center font-xsm anime-item">
-								{{ trans('blocks.header.resend_after') }}
-								<span class="d-block color-grey mt-5">
-									<span data-countdown-value="30" id="phone-timer">30</span>
-									{{ trans('blocks.header.second') }}
-								</span>
-							</p>
-							<div class="resend-btns anime-item">
-								<button class="btn btn--small btn--oval btn--grey nowrap" data-on-click="auth-login" data-type="mobile" disabled>
-									<i class="sicon-iphone-x"></i>
-									{{ trans('blocks.header.sms') }}
-								</button>
-								<button class="btn btn--small btn--oval btn--grey nowrap" disabled data-login="#login-email-step-1">
-									<i class="sicon-mail"></i>
-									{{ trans('common.elements.email') }}
-								</button>
-							</div>
-						</section>
-					{% endif %}
-					<!-- Rregister, Step #0 -->
-					<section class="tabs" salla-form-data data-login-content id="reg-new-user">
-						<div class="form-group anime-item">
-							<div class="row">
-								<div class="col-sm-12">
-									<label>{{ trans('blocks.header.your_name') }}</label>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6 col-sm-12 mb-sm-10">
-									<input type="text" class="form-control" name="first_name" placeholder="{{ trans('pages.profile.first_name') }}"/>
-								</div>
-								<div class="col-md-6 col-sm-12">
-									<input type="text" class="form-control" name="last_name" placeholder="{{ trans('pages.profile.last_name') }}"/>
-								</div>
-							</div>
-						</div>
-						<div class="required form-group anime-item z-99 input-reg-block" id="mobile-reg-block">
-							<label for="input-mobile-step-3">{{ trans('common.elements.mobile') }}</label>
-							<input type="text" class="form-control intl-input" name="phone" id="input-mobile-step-3" placeholder="{{ trans('common.elements.mobile_placeholder') }}"/>
-						</div>
-						<div class="required form-group anime-item input-reg-block" id="email-reg-block">
-							<label for="input-email-step-3">{{ trans('common.elements.email') }}</label>
-							<input type="email" class="email form-control" name="email" id="input-email-step-3" placeholder="{{ trans('common.elements.email_placeholder') }}">
-						</div>
-						<input type="hidden" name="country_code" class="country_code">
-						<input type="hidden" name="country_key" class="country_key">
-						<input type="hidden" name="code" id="reg_code">
-						<input type="hidden" name="verified_by" id="reg_verified_by">
-						<div class="form-group anime-item">
-							<button class="btn btn--rounded btn--large btn--wide btn--secondary submit-btn" data-on-click="auth-register">
-								{{ trans('blocks.header.register') }}
-							</button>
-						</div>
-					</section>
-				</div>
-			</section>
-		</div>
-	</div>
-</div>
-{#End Login Popup #}
-{#End Top Block #}
-
-
-{#Start main Header #}
-	<header id="site-header-outer"> <div class="site-header">
-		<div class="container">
-			<div class="site-header__wrapper">
-
-				<a href="{{ store.url }}" class="theme-logo">
-					<img width="55" height="55" src="{{ store.logo }}" height="65" alt="main-logo"/>
-					<div>
-						{#                        <h1 class="title title--small">{{ store.name }}</h1>#}
-						{% if store.slogan %}
-							<span>{{ store.slogan }}</span>
-						{% endif %}
-					</div>
-				</a>
-
-				<form id="search_form" class="form form--lg-fields form--oval-fields form--white-fields form--search" action="{{ link('search') }}">
-					<div class="form-group mb-0 search-field">
-						<div class="spinner spinner--small"></div>
-						<input type="text" class="form-control" id="searchbox" data-on-keyup="search-products" name="q" value="{{ searchWord }}" maxlength="100" placeholder="{{ trans('blocks.header.search_placeholder') }}">
-						<ul id="searchbox_results" class="searchbox-results hidden"></ul>
-					</div>
-				</form>
-
-				<div class="flex-shrink-0 main-header-components d-flex">
-					<div class="site-header__cart">
-						{% if user %}
-							<a href="{{ link('wishlist') }}" class="btn favorite-btn d-none d-md-inline-flex" aria-label="Wishlist">
-								<i class="sicon-heart"></i>
-							</a>
-						{% endif %}
-						<a href="{{ link('cart') }}" class="price btn" id="main-cart-btn">
-							<i class="cart-icon sicon-shopping-bag mr-2"></i>
-							<span class="badge badge--small badge--circular badge--danger quantity" data-cart-badge>{{ cart_summary.count }}</span>
-							<b data-cart-total>{{ cart_summary.amount }}</b>
-						</a>
-					</div>
-				</div>
-
-				<a href="#" class="mobile-search-trigger header-side-panel-trigger d-md-none ml-2" aria-label="Search Trigger">
-					<span class="sicon-search icon"></span>
-				</a>
-
-				<a href="#" class="side-panel-trigger header-side-panel-trigger d-md-none ml-2" aria-label="Mobile Side Panel Trigger" data-panel-trigger="header-mobiel-nav">
-					<span class="sicon-ellipsis-vertical icon"></span>
-				</a>
 			</div>
+		</div>
+
+
+
+		<div class="relative inline-block" x-data="{toggleMenu: false}">
+			<div>
+				<button @click="toggleMenu = !toggleMenu" type="button"
+						class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
+						id="menu-button" aria-expanded="true" aria-haspopup="true">
+					الريال السعودي
+
+					<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+				</button>
+			</div>
+
+			<div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
+				 x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
+				 x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+				 x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
+				 class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
+				 role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+
+
+				<div class="py-1" role="none">
+					<ul>
+
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__sa me-1.5"></div>
+								<span>الريال السعودي</span>
+							</a>
+						</li>
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__eg me-1.5"></div>
+								<span>الجنية المصري</span>
+							</a>
+						</li>
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__kw me-1.5"></div>
+								<span>الدينار الكويتي</span>
+							</a>
+						</li>
+						<li>
+							<a href="#"
+							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+								<div class="flag iti__flag iti__us me-1.5"></div>
+								<span>الدولار</span>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+		<search-modal></search-modal>
+	</div>
+
+	<div class="hidden lg:block">
+		<ul class="flex items-center menu-divide">
+			<li class="inline-block">
+				<a href="#" class="block transition duration-300 p-4 text-sm">
+					<span>تواصل معنا على: </span>
+					<span class="unicode">+966556754472</span>
+				</a>
+			</li>
+			<li class="inline-block">
+				<a href="#" class="block transition duration-300 p-4 text-sm">
+					salla@gmail.com
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<header id="site-header-outer" class="site-header-container bg-white shadow-default">
+	<div class="site-header">
+		<div class="container flex items-center justify-between">
+
+			<div class="flex items-center">
+				<a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
+					<span class="sicon-menu text-primary text-3xl me-2.5"></span>
+				</a>
+				<a class="site-logo theme-logo navbar-brand items-center flex" href="/">
+					<img src="{{asset('images/salla-logo.svg')}}" alt="" class="img-fluid b-logo">
+					<h1 class="text-3xl text-primary font-bold mx-1.5 fix-align">سلة</h1>
+				</a>
+
+				<ul class="hidden lg:flex main-menu items-center mx-6">
+
+					<li class="inline-block">
+						<a href="/category"
+						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+							<span>الإلكترونيات</span>
+
+							<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+
+						</a>
+
+						<ul>
+							<h2 class="pt-5 px-5 pb-2 font-bold text-base">الإلكترونيات</h2>
+
+							<li>
+								<a href="/category"
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>أجهزة</span>
+
+									<i class="sicon-keyboard_arrow_left  text-dark text-base leading-4"></i>
+
+								</a>
+								<ul>
+
+									<li>
+										<a href="/category" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>سامسونج</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="/category" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>أيفون</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="/category" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>أوبو</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="/category" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>رينو</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="/category" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>ريلمي</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="/category" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>هواوي</span>
+										</a>
+
+									</li>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href="/category"
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>جوالات</span>
+
+									<i class="sicon-keyboard_arrow_left  text-dark text-base leading-4"></i>
+
+								</a>
+								<ul>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>سامسونج</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>أيفون</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>أوبو</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>رينو</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>ريلمي</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>هواوي</span>
+										</a>
+
+									</li>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href="/category"
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>هواتف</span>
+
+									<i class="sicon-keyboard_arrow_left  text-dark text-base leading-4"></i>
+
+								</a>
+								<ul>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>سامسونج</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>أيفون</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>أوبو</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>رينو</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>ريلمي</span>
+										</a>
+
+									</li>
+
+									<li>
+										<a href="" class="block transition duration-300 px-5 py-3 text-sm">
+											<span>هواوي</span>
+										</a>
+
+									</li>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href="/category"
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>سماعات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+						</ul>
+
+
+					</li>
+
+					<li class="inline-block">
+						<a href="/category"
+						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+							<span>موبايلات وتابلت</span>
+
+							<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+
+						</a>
+
+						<ul>
+							<h2 class="pt-5 px-5 pb-2 font-bold text-base">موبايلات وتابلت</h2>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>أجهزة</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>جوالات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>هواتف</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>سماعات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+						</ul>
+
+
+					</li>
+
+					<li class="inline-block">
+						<a href="/category"
+						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+							<span>الأزياء</span>
+
+							<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+
+						</a>
+
+						<ul>
+							<h2 class="pt-5 px-5 pb-2 font-bold text-base">الأزياء</h2>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>أجهزة</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>جوالات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>هواتف</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>سماعات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+						</ul>
+
+
+					</li>
+
+					<li class="inline-block">
+						<a href="/category"
+						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+							<span>المنزل</span>
+
+							<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+
+						</a>
+
+						<ul>
+							<h2 class="pt-5 px-5 pb-2 font-bold text-base">المنزل</h2>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>أجهزة</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>جوالات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>هواتف</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>سماعات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+						</ul>
+
+
+					</li>
+
+					<li class="inline-block">
+						<a href="/category"
+						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+							<span>الجمال والعطور</span>
+
+							<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+
+						</a>
+
+						<ul>
+							<h2 class="pt-5 px-5 pb-2 font-bold text-base">الجمال والعطور</h2>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>أجهزة</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>جوالات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>هواتف</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>سماعات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+						</ul>
+
+
+					</li>
+
+					<li class="inline-block">
+						<a href="/category"
+						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+							<span>الأطفال</span>
+
+							<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+
+						</a>
+
+						<ul>
+							<h2 class="pt-5 px-5 pb-2 font-bold text-base">الأطفال</h2>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>أجهزة</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>جوالات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>هواتف</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+							<li>
+								<a href=""
+								   class="flex items-center justify-between transition duration-300 pe-4 ps-5 py-3 text-sm">
+									<span>سماعات</span>
+
+								</a>
+								<ul>
+
+								</ul>
+							</li>
+
+						</ul>
+
+
+					</li>
+
+					<li class="inline-block">
+						<a href="#"
+						   id="discountLink"
+						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">التخفيضات</a>
+					</li>
+				</ul>
+			</div>
+
+
+			<div class="flex items-center">
+
+
+				<div class="relative inline-block" x-data="{toggleMenu: false}">
+					<div>
+						<button @click="toggleMenu = !toggleMenu" type="button"
+								class="mx-1 md:mx-2  dropdown-trigger  border text-dark rounded-full overflow-hidden w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent"
+								id="menu-button" aria-expanded="true" aria-haspopup="true">
+							<img src="{{asset('images/avatar/avatar-1.jpeg')}}" alt="">
+						</button>
+					</div>
+
+					<div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false" x-transition:enter="transition ease-out duration-100"
+						 x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100"
+						 x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100"
+						 x-transition:leave-end="transform opacity-0 scale-95"
+						 class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
+						 role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+
+
+						<div class="py-1" role="none">
+							<ul class="pt-2.5 pb-5">
+
+								<li>
+									<a href="/orders" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+										<i class="sicon-packed-box me-3"></i>
+										قائمة الطلبات
+									</a>
+								</li>
+
+								<li>
+									<a href="/favorites" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+										<i class="sicon-heart me-3"></i>
+										الأمنيات
+									</a>
+								</li>
+
+								<li>
+									<a href="/profile" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+										<i class="sicon-settings me-3"></i>
+										الملف الشخصي
+									</a>
+								</li>
+
+								<li>
+									<a href="#" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+										<i class="sicon-send-out me-3"></i>
+										تسجيل خروج
+									</a>
+								</li>
+
+							</ul>
+						</div>
+					</div>
+				</div>
+
+
+
+				<salla-login></salla-login>
+				<div class="flex items-center ms-4" id="main-cart-btn">
+					<a href="/cart" class="me-1 relative focus:outline-none">
+						<i class="cart-icon block sicon-shopping-bag text-3xl text-dark"></i>
+						<div class="opacity-0 anime-count absolute top-1 -right-2 bg-primary text-reverse w-6 h-6 rounded-full flex items-start justify-center font-bold text-sm">23</div>
+					</a>
+					<div>
+						<p class="leading-3 mb-1">السلة</p>
+						<b class="text-dark leading-3">8,563 ر.س</b>
+					</div>
+				</div>
+
+				<script>
+					document.addEventListener('DOMContentLoaded', () => {
+						animateCount()
+					})
+
+					function animateCount() {
+						anime({
+							targets: '.anime-count',
+							opacity: [0, 1],
+							duration: 2000,
+							scale: [0.5, 1],
+							delay: function (el, i) {
+								return i * 100;
+							},
+						});
+					}
+				</script></div>
 		</div>
 	</div>
 </header>
 
-{# Slide Mobile Nav #}
-<div class="side-panel mobile-side-panel d-md-none" id="header-mobiel-nav">
-	<div class="side-panel__content">
 
-		<button class="close-mobile-menu close-mobile-side-panel" aria-label="{{ trans('common.titles.profile') }}">
-			<i class="sicon-cancel d-block ty-1d"></i>
-		</button>
 
-		{% if store.description is not empty %}
-			<div class="store-about d-flex mb-40">
-				<img src="{{ store.logo }}" height="65" alt="main-logo"/>
-				<div>
-					{# <h2>{{ store.name }}</h2> #}
-					<p>{{ store.description }}</p>
-				</div>
-			</div>
-		{% endif %}
+<nav id="mobile-menu" class="mobile-menu lg:hidden overflow-auto">
+	<ul>
 
-		{% component 'header.contacts' as contacts %}
 
-		<div class="switchers">
-			{% component 'header.language-switcher' %}
+		<li class="text-sm font-bold">
+			<span>الإلكترونيات</span>
+			<ul>
 
-			{% component 'header.currency-switcher' %}
-		</div>
 
-		{% component 'footer.social' %}
-	</div>
-</div>
+				<li class="text-sm font-bold">
+					<span>أجهزة</span>
+					<ul>
 
-{# End Main Header Mobile#}
-{% if not is_home or not store.theme.has_side_menu %}
-	{% component 'header.main-menu' %}
-{% endif %}
+						<li class="text-sm font-bold"><a href="#" class="text-dark">سامسونج</a></li>
 
+						<li class="text-sm font-bold"><a href="#" class="text-dark">أيفون</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">أوبو</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">رينو</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">ريلمي</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">هواوي</a></li>
+
+					</ul>
+				</li>
+
+
+
+				<li class="text-sm font-bold">
+					<span>جوالات</span>
+					<ul>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">سامسونج</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">أيفون</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">أوبو</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">رينو</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">ريلمي</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">هواوي</a></li>
+
+					</ul>
+				</li>
+
+
+
+				<li class="text-sm font-bold">
+					<span>هواتف</span>
+					<ul>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">سامسونج</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">أيفون</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">أوبو</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">رينو</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">ريلمي</a></li>
+
+						<li class="text-sm font-bold"><a href="#" class="text-dark">هواوي</a></li>
+
+					</ul>
+				</li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">سماعات</a></li>
+
+
+			</ul>
+		</li>
+
+
+
+		<li class="text-sm font-bold">
+			<span>موبايلات وتابلت</span>
+			<ul>
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">أجهزة</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">جوالات</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">هواتف</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">سماعات</a></li>
+
+
+			</ul>
+		</li>
+
+
+
+		<li class="text-sm font-bold">
+			<span>الأزياء</span>
+			<ul>
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">أجهزة</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">جوالات</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">هواتف</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">سماعات</a></li>
+
+
+			</ul>
+		</li>
+
+
+
+		<li class="text-sm font-bold">
+			<span>المنزل</span>
+			<ul>
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">أجهزة</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">جوالات</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">هواتف</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">سماعات</a></li>
+
+
+			</ul>
+		</li>
+
+
+
+		<li class="text-sm font-bold">
+			<span>الجمال والعطور</span>
+			<ul>
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">أجهزة</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">جوالات</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">هواتف</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">سماعات</a></li>
+
+
+			</ul>
+		</li>
+
+
+
+		<li class="text-sm font-bold">
+			<span>الأطفال</span>
+			<ul>
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">أجهزة</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">جوالات</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">هواتف</a></li>
+
+
+
+				<li class="Selected text-sm font-bold"><a href="/" class="text-dark">سماعات</a></li>
+
+
+			</ul>
+		</li>
+
+
+
+
+
+
+		<li class="Selected text-sm"><a href="/" class="text-dark">الاسئلة الشائعة</a></li>
+
+		<li class="Selected text-sm"><a href="/" class="text-dark">المفضلة</a></li>
+
+		<li class="Selected text-sm"><a href="/" class="text-dark">سياسة الإستبدال والاسترجاع</a></li>
+
+	</ul>
+	<button
+			class="close-mobile-menu hidden xs:block  focus:outline-none h-12 w-14  text-red-500 text-2xl absolute top-0 end-0 z-50">
+		<i class="sicon-cancel"></i>
+	</button>
+</nav>
+
+<button
+		class="close-sm-menu close-mobile-menu  opacity-0 transform -translate-y-full transition duration-300 focus:outline-none h-10 w-10 bg-red-500 text-white text-xl fixed top-0 end-0 z-50">
+	<i class="sicon-cancel"></i>
+</button>

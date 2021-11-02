@@ -1,3 +1,5 @@
+import TelInput from "intl-tel-input";
+import flatpickr from "flatpickr";//TODO:: move it to another place
 // mobile menu
 const menu = new MmenuLight(
     document.querySelector("#mobile-menu"),
@@ -142,11 +144,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // initTelInput
 //assign to all fields with .tel-input
-const initTelInput = () => {
+function initTelInput(){
     const intlInputs = document.querySelectorAll('.tel-input');
     if (intlInputs.length) {
         intlInputs.forEach(intlInput => {
-            let iti = intlTelInput(intlInput, {
+            let iti = TelInput(intlInput, {
                 initialCountry: intlInput.dataset.code || 'sa',
                 preferredCountries: ['sa', 'ae', 'kw', 'bh', 'qa', 'iq', 'om', 'ye', 'eg', 'jo', 'sy', 'ps', 'sd', 'lb', 'dz', 'tn', 'ma', 'ly'],
                 formatOnDisplay: false,
