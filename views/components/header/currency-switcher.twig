@@ -1,29 +1,36 @@
 
-<div id="currency_switcher" class="dropdonw-menu-wrap switcher-toggler currency-switcher mr-3">
-    <button class="btn btn--oval btn--grey btn--dropdown-toggle dropdown-trigger grey no-p">
-        {# <i class="flag currency-flag currency-flag-{{ currentCurrency.code|lower }} mr-2"></i> #}
-        <span class="btn-label d-none">
-          <span class="icon sicon-full-wallet"></span>
-          <span>{{ trans('common.titles.currency') }}</span>
-        </span>
+<div class="relative inline-block" x-data="{toggleMenu: false}">
+    <div>
+        <button @click="toggleMenu = !toggleMenu" type="button"
+                class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
+                id="menu-button" aria-expanded="true" aria-haspopup="true">
+            {{ currentCurrency.name }}
 
-        <div class="flag iti__flag iti__{{ currentCurrency.code|lower| slice(0, -1) }} mr-2"></div>
-        <span class="btn-value"> {{ currentCurrency.symbol }}</span>
-    </button>
-    <div class="dropdown-menu limited-height">
-        <ul>
-            {% for currency in currencies %}
-                <li>
-                    <a href="#"
-                       class="{{currentCurrency.code == currency.code ? 'is-active' : ''}}"
-                       data-on-click="currency-change"
-                       data-code="{{ currency.code }}">
-                        {# <i class="flag currency-flag currency-flag-{{ currency.code|lower }}"></i> #}
-                        <i class="flag iti__flag iti__{{ currency.code|lower| slice(0, -1) }}"></i>
-                        <span>{{ currency.name }}</span>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+            <i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+        </button>
+    </div>
+    <div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
+         x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
+         x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+         x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
+         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
+         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+
+        <div class="py-1" role="none">
+            <ul>
+                {% for currency in currencies %}
+                    <li>
+                        <a href="#"
+                           class="{{currentCurrency.code == currency.code ? 'is-active' : ''}} flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg"
+                           data-on-click="currency-change"
+                           data-code="{{ currency.code }}"
+                        >
+                            <div class="flag iti__flag iti__{{ currency.code|lower| slice(0, -1) }} me-1.5"></div>
+                            <span>{{ currency.name }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>

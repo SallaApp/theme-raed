@@ -45,11 +45,12 @@ module.exports = {
         new RemovePlugin({
             after: {
                 root: './assets/dist',
+                log:false,
                 include: [
                     'filepond_styles.js',
                     'home_styles.js',
                     'main_styles.js'
-                ]
+                ],
             }
         }),
         new MiniCssExtractPlugin(),

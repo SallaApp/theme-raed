@@ -1,14 +1,21 @@
-<ul class="top-header__info">
-    {% for contact in contacts %}
-        {% if contact.type == 'email' %}
-            <li>
-                <a href="{{ contact.url }}"><i class="sicon-mail"></i> <span>{{ contact.value }}</span></a>
-            </li>
-        {% endif %}
-        {% if contact.type == 'phone' %}
-            <li>
-                <a href="{{ contact.url }}"><i class="sicon-phone-talking"></i> <span class="text-unicode ">{{ contact.value }}</span></a>
-            </li>
-        {% endif %}
-    {% endfor %}
-</ul>
+<div class="hidden lg:block">
+    <ul class="flex items-center menu-divide">
+        {% for contact in contacts %}
+            {% if contact.type == 'email' %}
+                <li class="inline-block">
+                    <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm">
+                        {{ contact.value }}
+                    </a>
+                </li>
+            {% endif %}
+            {% if contact.type == 'phone' %}
+                <li class="inline-block">
+                    <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm">
+                        <span>{{ trans('blocks.footer.social') }}: </span>
+                        <span class="unicode">{{ contact.value }}</span>
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

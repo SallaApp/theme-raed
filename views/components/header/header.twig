@@ -1,167 +1,16 @@
+{% component 'header.theme-preview-bar' %}
 <div class="top-nav container flex justify-center lg:justify-between py-2 lg:py-0">
-
 	<div class="flex items-center">
-		<ul class="hidden lg:flex items-center menu-divide">
-
-			<li class="inline-block">
-				<a href="/faq" class="block transition duration-300 p-4 text-sm">
-					الاسئلة الشائعة
-				</a>
-			</li>
-
-			<li class="inline-block">
-				<a href="/favorites" class="block transition duration-300 p-4 text-sm">
-					المفضلة
-				</a>
-			</li>
-
-			<li class="inline-block">
-				<a href="/privacy-policy" class="block transition duration-300 p-4 text-sm">
-					سياسة الإستبدال والاسترجاع
-				</a>
-			</li>
-
-		</ul>
-		<div class="relative inline-block mx-3" x-data="{toggleMenu: false}">
-			<div>
-				<button @click="toggleMenu = !toggleMenu" type="button"
-						class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
-						id="menu-button" aria-expanded="true" aria-haspopup="true">
-					<div class="flag iti__flag iti__sa me-1.5"></div>
-					<span class="">العربية</span>
-
-					<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
-				</button>
-			</div>
-
-			<div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
-				 x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
-				 x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
-				 x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
-				 class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
-				 role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-
-
-				<div class="py-1" role="none">
-					<ul>
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__sa me-1.5"></div>
-								<span>العربية</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__us me-1.5"></div>
-								<span>الإنجليزية</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__it me-1.5"></div>
-								<span>الإيطالية</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__fr me-1.5"></div>
-								<span>الفرنسية</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-
-
-
-		<div class="relative inline-block" x-data="{toggleMenu: false}">
-			<div>
-				<button @click="toggleMenu = !toggleMenu" type="button"
-						class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
-						id="menu-button" aria-expanded="true" aria-haspopup="true">
-					الريال السعودي
-
-					<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
-				</button>
-			</div>
-
-			<div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
-				 x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
-				 x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
-				 x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
-				 class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
-				 role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-
-
-				<div class="py-1" role="none">
-					<ul>
-
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__sa me-1.5"></div>
-								<span>الريال السعودي</span>
-							</a>
-						</li>
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__eg me-1.5"></div>
-								<span>الجنية المصري</span>
-							</a>
-						</li>
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__kw me-1.5"></div>
-								<span>الدينار الكويتي</span>
-							</a>
-						</li>
-						<li>
-							<a href="#"
-							   class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-								<div class="flag iti__flag iti__us me-1.5"></div>
-								<span>الدولار</span>
-							</a>
-						</li>
-
-					</ul>
-				</div>
-			</div>
-		</div>
+		{% component 'header.page-links' as pagesLinks %}
+		{% component 'header.language-switcher' %}
+		{% component 'header.currency-switcher' %}
 		<search-modal></search-modal>
 	</div>
-
-	<div class="hidden lg:block">
-		<ul class="flex items-center menu-divide">
-			<li class="inline-block">
-				<a href="#" class="block transition duration-300 p-4 text-sm">
-					<span>تواصل معنا على: </span>
-					<span class="unicode">+966556754472</span>
-				</a>
-			</li>
-			<li class="inline-block">
-				<a href="#" class="block transition duration-300 p-4 text-sm">
-					salla@gmail.com
-				</a>
-			</li>
-		</ul>
-	</div>
+	{% component 'header.contacts' as contacts %}
 </div>
-
-
 <header id="site-header-outer" class="site-header-container bg-white shadow-default">
 	<div class="site-header">
 		<div class="container flex items-center justify-between">
-
 			<div class="flex items-center">
 				<a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
 					<span class="sicon-menu text-primary text-3xl me-2.5"></span>
@@ -170,16 +19,13 @@
 					<img src="{{asset('images/salla-logo.svg')}}" alt="" class="img-fluid b-logo">
 					<h1 class="text-3xl text-primary font-bold mx-1.5 fix-align">سلة</h1>
 				</a>
-
 				<ul class="hidden lg:flex main-menu items-center mx-6">
-
 					<li class="inline-block">
 						<a href="/category"
 						   class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
 							<span>الإلكترونيات</span>
 
 							<i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
-
 						</a>
 
 						<ul>

@@ -1,0 +1,11 @@
+{% if pages.count %}
+    <ul class="hidden lg:flex items-center menu-divide">
+        {% for page in pages|slice(0,3) %}
+            <li class="inline-block">
+                <a href="{{ page.url }}" class="block transition duration-300 p-4 text-sm">
+                    {{ page.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
