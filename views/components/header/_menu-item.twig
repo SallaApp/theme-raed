@@ -1,25 +1,16 @@
-<li class="menu-item {{ menu.has_children?'dropdown':'' }} {{ menu.mega_menu?'mega-menu':'' }}" {{ menu.attrs }}>
-    {% if not menu.has_children %}
-        <a {{ menu.link_attrs|raw }} href="{{ menu.url }}">{{ menu.title }}</a>
-    {% else %}
-        <a href="{{ menu.url }}" data-menu-dropdown="#sub_menu_{{ menu_id }}">{{ menu.title }}</a>
-        <div class="sub-menu hide" id="sub_menu_{{ menu_id }}">
-            <div class="sub-menu__inner {{ menu.mega_menu?'d-flex':'' }}">
-                <ul class="{{ menu.mega_menu?'flex-shrink-0 flex-grow-0':'' }}">
-                    {% for submenu in menu.children %}
-                        {% include _self with {menu:submenu} %}
-                    {% endfor %}
-                </ul>
-                {% if menu.mega_menu %}
-                    <div class="flex-grow-1">
-                        <div class="grid-block products-list-container products-list-container--auto-fit-4-col">
-                            {% for product in menu.mega_menu|slice(0, 4) %}
-                                {% include 'pages.partials.product.card' with {block_classes:'anime-mega-item'} %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
+<li class="{{ menu_class }}" {{ menu.attrs }}>
+    <a href="{{ menu.url }}"
+       class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+        <span>{{ menu.title }}</span>
+
+        <i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+    </a>
+    {% if menu.has_children %}
+        <ul>
+            <h2 class="pt-5 px-5 pb-2 font-bold text-base">{{ menu.title }}</h2>
+            {% for submenu in menu.children %}
+                {% include _self with {menu:submenu, menu_class:''} %}
+            {% endfor %}
+        </ul>
     {% endif %}
 </li>
