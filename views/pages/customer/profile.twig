@@ -1,31 +1,25 @@
 {% extends "layouts.master" %}
 {% block content %}
-    {#missing assets#}
-    <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}" />
+    {# missing assets #}
+    <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}"/>
     <script defer src="{{ asset('/dist/filepond.js') }}"></script>
 
-{#    <pre dir="ltr">#}
-{#        {{ dd(_context) }}#}
+    {# <pre dir="ltr"> #}
+    {# {{ dd(_context) }} #}
 
-    <button
-            class="close-sm-menu close-mobile-menu  opacity-0 transform -translate-y-full transition duration-300 focus:outline-none h-10 w-10 bg-red-500 text-white text-xl fixed top-0 end-0 z-50">
-        <i class="sicon-cancel"></i>
-    </button>
     <main id="main">
-        <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
+        <div class="relative profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
             <div class="container relative z-20 flex justify-between h-full items-center">
                 <div class="self-start">
                     <nav class="w-full py-5">
                         <ol class="list-reset flex items-center text-sm  text-reverse ">
                             <li><a href="#" class="fix-align text-primary  text-reverse ">الرئيسية</a></li>
                             <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                            <li><span class="fix-align">الإلكترونيات</span></li>
+                            <li><span class="fix-align">الملف الشخصي</span></li>
                         </ol>
                     </nav>
                 </div>
-
-
             </div>
         </div>
         <div class="container mb-24">
@@ -61,58 +55,48 @@
                             });
                           });
                         </Script>
-
-
                     </div>
-
-
                     <a href="/profile"
                        class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
                        aria-current="page">
                         <i class=" sicon-settings me-3 text-lg"></i>
                         <span class="truncate">
-                الملف الشخصي
-              </span>
+                    الملف الشخصي
+                    </span>
                     </a>
-
                     <a href="/orders"
                        class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
                        aria-current="page">
                         <i class=" sicon-packed-box me-3 text-lg"></i>
                         <span class="truncate">
-                قائمة الطلبات
-              </span>
+            قائمة الطلبات
+          </span>
                     </a>
-
                     <a href="/orders"
                        class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
                        aria-current="page">
                         <i class=" sicon-debit-card-back me-3 text-lg"></i>
                         <span class="truncate">
-                طلبات بانتظار الدفع
-              </span>
+            طلبات بانتظار الدفع
+          </span>
                     </a>
-
                     <a href="/favorites"
                        class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
                        aria-current="page">
                         <i class=" sicon-heart me-3 text-lg"></i>
                         <span class="truncate">
-                الأمنيات
-              </span>
+            الأمنيات
+          </span>
                     </a>
-
                     <a href="/"
                        class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
                        aria-current="page">
                         <i class=" sicon-send-out me-3 text-lg"></i>
                         <span class="truncate">
-                تسجيل خروج
-              </span>
+            تسجيل خروج
+          </span>
                     </a>
-
                 </nav>
-
                 <script>
                   document.addEventListener('DOMContentLoaded', () => {
 
@@ -136,16 +120,6 @@
                     });
 
 
-
-
-
-
-
-
-
-
-
-
                     anime({
                       targets: '.menu-item',
                       opacity: [0, 1],
@@ -156,8 +130,6 @@
                     })
                   });
                 </Script>
-
-
                 <div class="main-content flex-1 pb-10 pt-10 ">
                     <h1 class="font-bold text-lg mb-10">الملف الشخصي</h1>
                     <div class="lg:hidden">
@@ -200,7 +172,8 @@
                             </b>
                         </label>
                         <div class="mt-2.5 mb-5">
-                            <input type="text" name="user-name" value="{{ customer.full_name }}" id="user-name" autocomplete="given-name" class="form-input">
+                            <input type="text" name="user-name" value="{{ customer.full_name }}" id="user-name"
+                                   autocomplete="given-name" class="form-input">
                         </div>
                         <div class="sm:flex w-full sm:space-s-8">
                             <div class="flex-1">
@@ -210,7 +183,8 @@
                                     </b>
                                 </label>
                                 <div class="mt-2.5 mb-5">
-                                    <input type="email" name="user-email" value="{{ customer.email }}" id="user-email" class="form-input ">
+                                    <input type="email" name="user-email" value="{{ customer.email }}" id="user-email"
+                                           class="form-input ">
                                 </div>
                             </div>
 
@@ -221,7 +195,8 @@
                                     </b>
                                 </label>
                                 <div class="mt-2.5 mb-5">
-                                    <input type="tel" name="user-phone" value="{{ customer.mobile }}" id="user-phone" class="tel-input form-input">
+                                    <input type="tel" name="user-phone" value="{{ customer.mobile }}" id="user-phone"
+                                           class="tel-input form-input">
                                 </div>
                             </div>
                         </div>
