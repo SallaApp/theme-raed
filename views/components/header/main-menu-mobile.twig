@@ -1,16 +1,16 @@
-<li>
-    <a href="#mobile-nav-menu" class="open-slide-menu" data-title="title">
-        <i class="sicon-list"></i>
-        {{ trans('common.titles.categories') }}
-    </a>
-    <nav id="mobile-nav-menu">
-        <button aria-label="close mobile menu" class="close-mobile-menu close-slide-menu">
-            <i class="sicon-cancel d-block ty-1d"></i>
-        </button>
-        <ul>
-            {% for menu_id, menu in menus %}
-                {% include 'components.header._menu-item-mobile' %}
-            {% endfor %} 
-        </ul>
-    </nav>
-</li>
+<nav id="mobile-menu" class="mobile-menu lg:hidden overflow-auto">
+    <ul>
+        {% for menu_id, menu in menus %}
+            {% include 'components.header._menu-item-mobile' %}
+        {% endfor %}
+        {% component 'header.main-mobile-page-links' as pagesLinks %}
+    </ul>
+    <button
+            class="close-mobile-menu hidden xs:block  focus:outline-none h-12 w-14  text-red-500 text-2xl absolute top-0 end-0 z-50">
+        <i class="sicon-cancel"></i>
+    </button>
+</nav>
+<button
+        class="close-sm-menu close-mobile-menu  opacity-0 transform -translate-y-full transition duration-300 focus:outline-none h-10 w-10 bg-red-500 text-white text-xl fixed top-0 end-0 z-50">
+    <i class="sicon-cancel"></i>
+</button>

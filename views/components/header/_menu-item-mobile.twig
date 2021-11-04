@@ -1,12 +1,10 @@
-<li {{ menu.attrs }}>
+<li class="text-sm font-bold" {{ menu.attrs }}>
     {% if not menu.has_children %}
-        <a {{ menu.link_attrs }} href="{{ menu.url }}"  >{{ menu.title }}</a>
+        <a {{ menu.link_attrs }} href="{{ menu.url }}" class="text-dark">{{ menu.title }}</a>
     {% else %}
         <span>{{ menu.title }}</span>
         <ul>
-            <li>
-                <a {{ menu.link_attrs }} href="{{ menu.url }}">{{ menu.title }}</a>
-            </li>
+            <li class="text-sm font-bold"><a href="{{ menu.url }}" class="text-dark">{{ menu.title }}</a></li>
             {% for submenu in menu.children %}
                 {% include _self with {menu:submenu} %}
             {% endfor %}

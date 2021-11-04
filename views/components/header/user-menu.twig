@@ -1,46 +1,63 @@
 {% if user %}
-    <div class="dropdonw-menu-wrap user-dropdown">
-        <button class="btn btn--oval btn--grey btn--dropdown-toggle dropdown-trigger grey no-p">
-            <div class="avatar-wrapper avatar-wrapper--circular avatar-wrapper--tiny d-inline-block mr-1">
-                <img class="avatar icon" alt="{{ user.full_name }}" src="{{ user.avatar }}">
+    <div class="relative inline-block" x-data="{toggleMenu: false}">
+        <div>
+            <button @click="toggleMenu = !toggleMenu" type="button"
+                    class="mx-1 md:mx-2  dropdown-trigger  border text-dark rounded-full overflow-hidden w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent"
+                    id="menu-button" aria-expanded="true" aria-haspopup="true">
+                <img src="{{user.avatar}}" alt="">
+            </button>
+        </div>
+
+        <div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false" x-transition:enter="transition ease-out duration-100"
+             x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100"
+             x-transition:leave-end="transform opacity-0 scale-95"
+             class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
+             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+
+
+            <div class="py-1" role="none">
+                <ul class="pt-2.5 pb-5">
+                    <li>
+                        <a href="{{ link('orders') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                            <i class="sicon-packed-box me-3"></i>
+                            <span>{{ trans('common.titles.orders') }}</span>
+                        </a>
+                    </li>
+                    {% component 'header.notifications' %}
+                    <li>
+                        <a href="{{ link('wishlist') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                            <i class="sicon-heart me-3"></i>
+                            {{trans('common.titles.wishlist')}}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ link('rating') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                            <i class="sicon-favorite"></i>
+                            <span>{{ trans('common.titles.rating') }}</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ link('profile') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                            <i class="sicon-settings me-3"></i>
+                            {{ trans('common.titles.profile') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#"
+                           data-on-click="auth-logout"
+                           class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                            <i class="sicon-send-out me-3"></i>
+                            {{ trans('blocks.header.logout') }}
+                        </a>
+                    </li>
+
+                </ul>
             </div>
-            <span>{{ user.full_name }}</span>
-        </button>
-        <div class="dropdown-menu">
-            <ul>
-                {% component 'header.notifications' %}
-                <li>
-                    <a href="{{ link('orders') }}">
-                        <i class="sicon-box-bankers"></i>
-                        <span>{{ trans('common.titles.orders') }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ link('rating') }}">
-                        <i class="sicon-favorite"></i>
-                        <span>{{ trans('common.titles.rating') }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ link('profile') }}">
-                        <i class="sicon-user-circle"></i>
-                        <span>{{ trans('common.titles.profile') }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ link('logout') }}"
-                       data-on-click="auth-logout"
-                       class="logout-link color-danger">
-                        <i class="sicon-send-out"></i>
-                        <span>{{ trans('blocks.header.logout') }}</span>
-                    </a>
-                </li>
-            </ul>
         </div>
     </div>
 {% else %}
-    <!-- Lign Dropdown -->
-    <button class="btn btn--oval btn--grey btn--padded less popup-trigger" data-popup-trigger="login-modal">
-            <i class="sicon-user"></i> <span>{{ trans('blocks.header.login') }}</span>
-        </button>
+    <salla-login></salla-login>
 {% endif %}

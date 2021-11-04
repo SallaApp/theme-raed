@@ -1,15 +1,16 @@
-<li class="{{ menu_class }}" {{ menu.attrs }}>
+<li class="{{ is_root_menu?'inline-block':'' }}" {{ menu.attrs|raw }}>
     <a href="{{ menu.url }}"
        class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
         <span>{{ menu.title }}</span>
-
-        <i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+        {% if menu.has_children %}
+            <i class="{{ is_root_menu?'sicon-keyboard_arrow_down':'sicon-keyboard_arrow_left' }} self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+        {% endif %}
     </a>
     {% if menu.has_children %}
         <ul>
             <h2 class="pt-5 px-5 pb-2 font-bold text-base">{{ menu.title }}</h2>
             {% for submenu in menu.children %}
-                {% include _self with {menu:submenu, menu_class:''} %}
+                {% include _self with {menu:submenu, is_root_menu:false} %}
             {% endfor %}
         </ul>
     {% endif %}
