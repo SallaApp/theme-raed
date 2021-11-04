@@ -1,8 +1,9 @@
 const path = require('path');
 const themeWatcher = require('@sallaapp/theme-utils/WatcherPlugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const RemovePlugin = require('remove-files-webpack-plugin');
+
 
 
 module.exports = {
@@ -40,7 +41,17 @@ module.exports = {
     },
     plugins: [
         new themeWatcher(),
-        new FixStyleOnlyEntriesPlugin(),
+        //new FixStyleOnlyEntriesPlugin(),
+        new RemovePlugin({
+            after: {
+                root: './assets/dist',
+                include: [
+                    'filepond_styles.js',
+                    'home_styles.js',
+                    'main_styles.js'
+                ]
+            }
+        }),
         new MiniCssExtractPlugin(),
         new WebpackBuildNotifierPlugin({
             title: "Salla Theme",

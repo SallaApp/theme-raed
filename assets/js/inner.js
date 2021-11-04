@@ -1,1 +1,1 @@
-alert('hi2');
+console.log('inner js')
