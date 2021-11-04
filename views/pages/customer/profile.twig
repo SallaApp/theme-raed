@@ -1,145 +1,234 @@
-{% extends "pages.customer.layout" %}
-{% block tab_content %}
-    <div class="tabs {{ is_link('profile')?'active':'' }}"
-         data-profile-content
-         id="profile_info">
-        <form class="form form--user-profile ajax"
-              method="POST"
-              novalidate
-              action="{{ link('profile') }}"
-              data-filter-before-submit="update_profile_form">
-            {{ csrf_field() }}
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="relaxed form-group">
-                        <label for="first_name">{{ trans('pages.profile.first_name') }}</label>
-                        <input type="text"
-                               name="first_name"
-                               id="first_name"
-                               class="form-control"
-                               placeholder="{{ trans('pages.profile.first_name') }}..."
-                               value="{{ user.first_name }} "/>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="relaxed form-group">
-                        <label for="last_name">{{ trans('pages.profile.last_name') }}</label>
-                        <input type="text"
-                               class="form-control"
-                               name="last_name"
-                               id="last_name"
-                               placeholder="{{ trans('pages.profile.last_name') }}..."
-                               value="{{ user.last_name }}"/>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="relaxed form-group">
-                        <label for="gender">{{ trans('pages.profile.gender') }}</label>
-                        <select class="form-control js-choice" name="gender">
-                            <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
-                            <option value="male" {{ user.gender=='male'?'selected':'' }}>
-                                {{ trans('pages.profile.male') }}
-                            </option>
-                            <option value="female" {{ user.gender=='female'?'selected':'' }}>
-                                {{ trans('pages.profile.female') }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="relaxed form-group">
-                        <label for="birthday">{{ trans('pages.profile.birthday') }}</label>
-                        <input type="text"
-                               class="form-control date-element"
-                               name="birthday"
-                               value="{{ user.birthday }}"
-                               placeholder="{{ trans('pages.profile.birthday_placeholder') }}"/>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="relaxed form-group">
-                        <label for="email">{{ trans('common.elements.email') }}</label>
-                        <input type="email"
-                               name="email"
-                               id="email"
-                               class="email form-control"
-                               placeholder="{{ trans('common.elements.email_placeholder') }}..."
-                               value="{{ user.email }}"/>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="relaxed form-group">
-                        <label for="mobile">{{ trans('common.elements.mobile') }}</label>
-                        <input placeholder="{{ trans('common.elements.mobile_placeholder') }}"
-                               class="intl-input phone form-control"
-                               name="international_mobile"
-                               data-code="{{ country_code }}"
-                               value="{{ user.mobile }}"
-                               data-digits="true"
-                               type="text"
-                               id="mobile"
-                        />
-                        <input type="hidden" name="_country_iso2" class="country_code" value="{{ country_code }}">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <button type="submit"
-                          id="btn--update-profile"
-                          class="btn btn--oval btn--large btn--padded btn--primary btn--wide">
-                          <div class="line-scale">
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                          </div>
+{% extends "layouts.master" %}
+{% block content %}
+    {#missing assets#}
+    <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}" />
+    <script defer src="{{ asset('/dist/filepond.js') }}"></script>
 
-                          <span class="btn__text">{{ trans('common.elements.edit') }}</span>
-                        </button>
+{#    <pre dir="ltr">#}
+{#        {{ dd(_context) }}#}
+
+    <button
+            class="close-sm-menu close-mobile-menu  opacity-0 transform -translate-y-full transition duration-300 focus:outline-none h-10 w-10 bg-red-500 text-white text-xl fixed top-0 end-0 z-50">
+        <i class="sicon-cancel"></i>
+    </button>
+    <main id="main">
+        <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
+            <div class="container relative z-20 flex justify-between h-full items-center">
+                <div class="self-start">
+                    <nav class="w-full py-5">
+                        <ol class="list-reset flex items-center text-sm  text-reverse ">
+                            <li><a href="#" class="fix-align text-primary  text-reverse ">الرئيسية</a></li>
+                            <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+                            <li><span class="fix-align">الإلكترونيات</span></li>
+                        </ol>
+                    </nav>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="container mb-24">
+            <div class="flex flex-col lg:flex-row ">
+                <nav aria-label="Sidebar"
+                     class="hidden lg:block lg:sticky top-24 -mt-28 z-20 shadow-default rounded-md bg-white w-full lg:w-72  lg:me-8 pt-8 pb-11">
+                    <div class="text-center mb-9">
+                        <div class="text-center mb-9">
+                            <div class=" h-24 w-24 m-auto">
+                                <input type="file">
+                            </div>
+                        </div>
+                        <script>
+                          document.addEventListener('DOMContentLoaded', () => {
+
+                            FilePond.registerPlugin(
+                              FilePondPluginImagePreview,
+                            );
+
+                            const inputElement = document.querySelector('input[type="file"]');
+
+                            const pond = FilePond.create(inputElement, {
+                              labelIdle: `<div class="rounded-icon bg-primary h-10 w-10 text-white"> <span class="sicon-camera"></span></div>`,
+                              imagePreviewHeight: 170,
+                              imageCropAspectRatio: '1:1',
+                              imageResizeTargetWidth: 200,
+                              imageResizeTargetHeight: 200,
+                              stylePanelLayout: 'compact circle',
+                              styleLoadIndicatorPosition: 'center bottom',
+                              styleProgressIndicatorPosition: 'left bottom',
+                              styleButtonRemoveItemPosition: 'center bottom',
+                              styleButtonProcessItemPosition: 'right bottom',
+                            });
+                          });
+                        </Script>
+
+
                     </div>
+
+
+                    <a href="/profile"
+                       class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
+                       aria-current="page">
+                        <i class=" sicon-settings me-3 text-lg"></i>
+                        <span class="truncate">
+                الملف الشخصي
+              </span>
+                    </a>
+
+                    <a href="/orders"
+                       class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
+                       aria-current="page">
+                        <i class=" sicon-packed-box me-3 text-lg"></i>
+                        <span class="truncate">
+                قائمة الطلبات
+              </span>
+                    </a>
+
+                    <a href="/orders"
+                       class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
+                       aria-current="page">
+                        <i class=" sicon-debit-card-back me-3 text-lg"></i>
+                        <span class="truncate">
+                طلبات بانتظار الدفع
+              </span>
+                    </a>
+
+                    <a href="/favorites"
+                       class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
+                       aria-current="page">
+                        <i class=" sicon-heart me-3 text-lg"></i>
+                        <span class="truncate">
+                الأمنيات
+              </span>
+                    </a>
+
+                    <a href="/"
+                       class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
+                       aria-current="page">
+                        <i class=" sicon-send-out me-3 text-lg"></i>
+                        <span class="truncate">
+                تسجيل خروج
+              </span>
+                    </a>
+
+                </nav>
+
+                <script>
+                  document.addEventListener('DOMContentLoaded', () => {
+
+                    FilePond.registerPlugin(
+                      FilePondPluginImagePreview,
+                    );
+
+                    const inputElement = document.querySelector('input[type="file"]');
+
+                    const pond = FilePond.create(inputElement, {
+                      labelIdle: `<div class="rounded-icon bg-primary h-10 w-10 text-white"> <span class="sicon-camera"></span></div>`,
+                      imagePreviewHeight: 170,
+                      imageCropAspectRatio: '1:1',
+                      imageResizeTargetWidth: 200,
+                      imageResizeTargetHeight: 200,
+                      stylePanelLayout: 'compact circle',
+                      styleLoadIndicatorPosition: 'center bottom',
+                      styleProgressIndicatorPosition: 'left bottom',
+                      styleButtonRemoveItemPosition: 'center bottom',
+                      styleButtonProcessItemPosition: 'right bottom',
+                    });
+
+
+
+
+
+
+
+
+
+
+
+
+                    anime({
+                      targets: '.menu-item',
+                      opacity: [0, 1],
+                      translateY: [20, 0],
+                      delay: function (el, i) {
+                        return i * 100;
+                      },
+                    })
+                  });
+                </Script>
+
+
+                <div class="main-content flex-1 pb-10 pt-10 ">
+                    <h1 class="font-bold text-lg mb-10">الملف الشخصي</h1>
+                    <div class="lg:hidden">
+                        <div class="text-center mb-9">
+                            <div class=" h-24 w-24 m-auto">
+                                <input type="file">
+                            </div>
+
+                        </div>
+
+                        <script>
+                          document.addEventListener('DOMContentLoaded', () => {
+
+                            FilePond.registerPlugin(
+                              FilePondPluginImagePreview,
+                            );
+
+                            const inputElement = document.querySelector('input[type="file"]');
+
+                            const pond = FilePond.create(inputElement, {
+                              labelIdle: `<div class="rounded-icon bg-primary h-10 w-10 text-white"> <span class="sicon-camera"></span></div>`,
+                              imagePreviewHeight: 170,
+                              imageCropAspectRatio: '1:1',
+                              imageResizeTargetWidth: 200,
+                              imageResizeTargetHeight: 200,
+                              stylePanelLayout: 'compact circle',
+                              styleLoadIndicatorPosition: 'center bottom',
+                              styleProgressIndicatorPosition: 'left bottom',
+                              styleButtonRemoveItemPosition: 'center bottom',
+                              styleButtonProcessItemPosition: 'right bottom',
+                            });
+                          });
+                        </Script>
+                    </div>
+
+                    <form action="">
+                        <label for="user-name" class="block text-sm font-medium text-gray-700">
+                            <b class="block">
+                                اسم المستخدم
+                            </b>
+                        </label>
+                        <div class="mt-2.5 mb-5">
+                            <input type="text" name="user-name" value="{{ customer.full_name }}" id="user-name" autocomplete="given-name" class="form-input">
+                        </div>
+                        <div class="sm:flex w-full sm:space-s-8">
+                            <div class="flex-1">
+                                <label for="user-email" class="block text-sm font-medium text-gray-700">
+                                    <b class="block">
+                                        البريد الإلكتروني
+                                    </b>
+                                </label>
+                                <div class="mt-2.5 mb-5">
+                                    <input type="email" name="user-email" value="{{ customer.email }}" id="user-email" class="form-input ">
+                                </div>
+                            </div>
+
+                            <div class="flex-1">
+                                <label for="user-phone" class="block text-sm font-medium text-gray-700">
+                                    <b class="block">
+                                        رقم الهاتف
+                                    </b>
+                                </label>
+                                <div class="mt-2.5 mb-5">
+                                    <input type="tel" name="user-phone" value="{{ customer.mobile }}" id="user-phone" class="tel-input form-input">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary w-full">حفظ التعديلات</button>
+                    </form>
                 </div>
             </div>
-        </form>
-    </div>
-    <script>
-        window.update_profile_form = function handleFile(form_data, that, event) {          
-          let fileInput = window.fileponds ? window.fileponds.profile_img : undefined;
-          if (!fileInput) {
-              return form_data;
-          }
-          fileInput.getFiles()
-            .forEach(function (filepondFile) {
-                form_data.append('image_file', filepondFile.file);
-            })
-          return form_data;
-        };
-
-        document.addEventListener('DOMContentLoaded', function () {
-            salla.document.event.onKeyup('#verify-mobile-field', function (event) {
-                salla.helpers.digitsOnly('verify-mobile-field');
-                var btn = document.querySelector('#verify-mobile-btn');
-                if (event.target.value.length == 4) {
-                    btn.removeAttribute('disabled');
-                } else {
-                    btn.setAttribute('disabled', '');
-                }
-            });
-            salla.event.on("stores::profile.updated", function () {
-                window.location.reload();
-            }) 
-        }); 
-
-        {# Update profile Validations & Loading #}
-        {# var update_btn = document.getElementById('btn--update-profile');
-        update_btn.addEventListener('click', function(){
-          update_btn.classList.add('btn--has-loading');
-        }) #}
-    </script>
+        </div>
+    </main>
 {% endblock %}
