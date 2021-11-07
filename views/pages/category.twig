@@ -1,165 +1,366 @@
 {% extends "layouts.master" %}
 {% block content %}
     {% set witoutFilters = is_link('latest-products') %}
-    {#{% set withoutFilters = true %}#}
-    <section class="page-wrapper page--category {{ store.settings.category.show_testimonial ? 'pb-0' : '' }}">
-        <div class="container">
-            <div class="row">
-{#                {% if not witoutFilters %}#}
-{#                    <div class="col-md-3">#}
-{#                        <aside class="filters side-panel" id="filters-panel">#}
-{#                            <div class="filters__content side-panel__content">#}
-{#                                <div class="filters__top mb-30">#}
-{#                                    <h5 class="title title--small">{{ trans('pages.categories.filters') }}</h5>#}
-{#                                    <button class="btn btn--padded btn--oval btn--secondary btn-start-filter">{{ trans('pages.categories.filters_reset') }}</button>#}
-{#                                </div>#}
-{#                                <div class="accordion">#}
-{#                                    <div class="accordion__panel">#}
-{#                                        <a class="accordion__title"#}
-{#                                           data-accordion-target="#collapse_one">المقاسات</a>#}
-{#                                        <div class="accordion__body" id="collapse_one">#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="small">#}
-{#                                                <label for="small">صغير</label>#}
-{#                                            </div>#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="medium">#}
-{#                                                <label for="medium">وسط</label>#}
-{#                                            </div>#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="large">#}
-{#                                                <label for="large">كبير</label>#}
-{#                                            </div>#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="extra_large">#}
-{#                                                <label for="extra_large">كبير جدا</label>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="accordion__panel">#}
-{#                                        <a class="accordion__title collapsed"#}
-{#                                           data-accordion-target="#collapse_two">{{ trans('pages.categories.filter_rating') }}</a>#}
-{#                                        <div class="accordion__body collapsed" id="collapse_two">#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" class="rate" id="one_star">#}
-{#                                                <label for="one_star">#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                </label>#}
-{#                                            </div>#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="two_star">#}
-{#                                                <label for="two_star">#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                </label>#}
-{#                                            </div>#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="three_star">#}
-{#                                                <label for="three_star">#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                </label>#}
-{#                                            </div>#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="four_star">#}
-{#                                                <label for="four_star">#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                </label>#}
-{#                                            </div>#}
-{#                                            <div class="checkbox checkbox--large checkbox--primary">#}
-{#                                                <input type="checkbox" id="five_star">#}
-{#                                                <label for="five_star">#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                    <i class="sicon-star"></i>#}
-{#                                                </label>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="accordion__panel">#}
-{#                                        <a class="accordion__title collapsed"#}
-{#                                           data-accordion-target="#collapse_three">{{ trans('pages.categories.filter_price') }}</a>#}
-{#                                        <div class="accordion__body collapsed" id="collapse_three">#}
-{#                                            <div class="filters-price">#}
-{#                                                <div>#}
-{#                                                    <input type="text" class="form-control" placeholder="من">#}
-{#                                                    <span>ر.س</span>#}
-{#                                                </div>#}
-{#                                                -#}
-{#                                                <div>#}
-{#                                                    <input type="text" class="form-control" placeholder="الى">#}
-{#                                                    <span>ر.س</span>#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="accordion__panel">#}
-{#                                        <a class="accordion__title collapsed"#}
-{#                                           data-accordion-target="#collapse_four">الالوان</a>#}
-{#                                        <div class="accordion__body collapsed" id="collapse_four">#}
-{#                                            <ul class="colors pl-3">#}
-{#                                                <li class="blue"></li>#}
-{#                                                <li class="yellow"></li>#}
-{#                                                <li class="purple"></li>#}
-{#                                                <li class="red"></li>#}
-{#                                                <li class="black"></li>#}
-{#                                                <li class="grey"></li>#}
-{#                                            </ul>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="accordion__panel">#}
-{#                                        <a class="accordion__title collapsed"#}
-{#                                           data-accordion-target="#collapse_five">اختيارات</a>#}
-{#                                        <div class="accordion__body collapsed" id="collapse_five"></div>#}
-{#                                    </div>#}
-{#                                    <div class="accordion__panel">#}
-{#                                        <a class="accordion__title collapsed" data-accordion-target="#collapse_six">خيارات</a>#}
-{#                                        <div class="accordion__body collapsed" id="collapse_six">#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </aside>#}
-{#                    </div>#}
-{#                {% endif %}#}
+    <main id="main" x-data="initCategory()" x-cloak>
+        <div class="container mb-10 md:mb-20">
+            <nav class="w-full py-5">
+                <ol class="list-reset flex items-center text-sm ">
+                    <li><a href="#" class="fix-align text-primary ">الرئيسية</a></li>
+                    <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+                    <li><span class="fix-align">الإلكترونيات</span></li>
+                </ol>
+            </nav>
+            <div class="flex items-start flex-col md:flex-row ">
 
-                {#@jamal - set col-md-12 to col-md-9#}
-                <div class="{{ withoutFilters? 'col-md-12' : 'col-md-12' }}">
-                    <div class="category-title mb-30 {{ withoutFilters?'':'category-title--sortable' }}">
-                        <h4 class="title title--primary title--has-dash">{{ page_title }}</h4>
-                        {% if not withoutFilters %}
-                            {% include 'pages.partials.sorting-list' %}
+                <div class="sticky top-24  sidebarw-full h-screen md:h-auto overflow-y-auto  md:w-72  md:me-8 "
+                     id="filters-menu">
+
+                    <div class="widget bg-white rounded-md p-7 mb-7">
+                        <h4 class="font-bold text-sm mb-5">الماركة</h4>
+
+                        <div class="relative flex items-center mb-4">
+                            <input id="option1" name="option1" type="checkbox"
+                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                            <label for="option1" class="ms-2 font-medium ">أبل</label>
+                        </div>
+                        <div class="relative flex items-center mb-4">
+                            <input id="option2" name="option1" type="checkbox"
+                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                            <label for="option2" class="ms-2 font-medium ">هواوي</label>
+                        </div>
+                        <div class="relative flex items-center mb-4">
+                            <input id="option3" name="option1" type="checkbox"
+                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                            <label for="option3" class="ms-2 font-medium ">انفنيكس</label>
+                        </div>
+                        <div class="relative flex items-center mb-4">
+                            <input id="option4" name="option1" type="checkbox"
+                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                            <label for="option4" class="ms-2 font-medium ">ريلمي</label>
+                        </div>
+                        <div class="relative flex items-center mb-4">
+                            <input id="option5" name="option1" type="checkbox"
+                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                            <label for="option5" class="ms-2 font-medium ">شاومي</label>
+                        </div>
+
+                        <div x-ref="moreItems" class="relative overflow-hidden transition-all max-h-0 duration-500"
+                             id="moreContent"
+                             x-bind:style="showMoreLinks ? 'max-height: ' + $refs.moreItems.scrollHeight + 'px' : ''">
+                            <template x-for="link in links" :key="link.id">
+
+                                <div class="relative flex items-center mb-4">
+                                    <input :id="link.id" name="option1" type="checkbox"
+                                           class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                                    <label :for="link.id" class="ms-2 font-medium " x-text="link.label"></label>
+                                </div>
+                            </template>
+                        </div>
+                        <a @click="showMoreLinks = !showMoreLinks" class="text-sm cursor-pointer text-primary"
+                           x-text="showMoreLinks ? 'عرض أقل' : 'عرض المزيد' "></a>
+                    </div>
+
+
+                    <div class="widget  bg-white rounded-md p-7 pb-8 mb-7">
+                        <h4 class="font-bold text-sm mb-6">السعر</h4>
+
+                        <style>
+                            input[type=range]::-webkit-slider-thumb {
+                                pointer-events: all;
+                                width: 24px;
+                                height: 24px;
+                                -webkit-appearance: none;
+
+                            }
+                        </style>
+                        <div style="direction: ltr;" class="flex justify-center items-center">
+                            <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative max-w-xl w-full">
+                                <div class="rtl-range-slider">
+                                    <input type="range" step="100" x-bind:min="min" x-bind:max="max"
+                                           x-on:input="mintrigger" x-model="minprice"
+                                           class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+
+                                    <input type="range" step="100" x-bind:min="min" x-bind:max="max"
+                                           x-on:input="maxtrigger" x-model="maxprice"
+                                           class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+
+                                    <div class="relative z-10 h-2">
+
+                                        <div class="absolute z-10 left-0 right-0 bottom-0 top-0 rounded-md bg-border-color"></div>
+
+                                        <div class="absolute z-20 top-0 bottom-0 rounded-md bg-primary"
+                                             x-bind:style="'right:'+maxthumb+'%; left:'+minthumb+'%'"></div>
+
+                                        <div class="absolute z-30 w-4 h-4 top-0 left-0 bg-primary shadow-huge rounded-full -mt-1 -ml-0"
+                                             x-bind:style="'left: '+minthumb+'%'">
+
+                                        </div>
+
+                                        <div class="absolute z-30 w-4 h-4 top-0 right-0 bg-primary shadow-huge rounded-full -mt-1 -mr-0"
+                                             x-bind:style="'right: '+maxthumb+'%'">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="rtl-range-numbers flex justify-between items-center pt-8">
+                                    <p class="flex text-sm text-gray-text">
+                                        <span class="mx-1">ر.س</span>
+                                        <span x-html="minprice"></span>
+                                    </p>
+
+                                    <p class="flex text-sm text-gray-text">
+                                        <span class="mx-1">ر.س</span>
+                                        <span x-html="maxprice"></span>
+                                    </p>
+
+
+                                </div>
+
+                            </div>
+
+                            <script>
+                                function range() {
+                                    return {
+                                        minprice: 1000,
+                                        maxprice: 5000,
+                                        min: 100,
+                                        max: 10000,
+                                        minthumb: 0,
+                                        maxthumb: 0,
+
+                                        mintrigger() {
+                                            this.minprice = Math.min(this.minprice, this.maxprice - 500);
+                                            this.minthumb = ((this.minprice - this.min) / (this.max - this.min)) * 100;
+                                        },
+
+                                        maxtrigger() {
+                                            this.maxprice = Math.max(this.maxprice, this.minprice + 500);
+                                            this.maxthumb = 100 - (((this.maxprice - this.min) / (this.max - this.min)) * 100);
+                                        },
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+
+
+                    <div class="widget  bg-white rounded-md p-7 pb-10">
+                        <h4 class="font-bold text-sm mb-5">اللون</h4>
+                        <div class="custom-radios custom-radios--rounded">
+
+
+                            <div>
+                                <input type="radio" id="color-0" name="color" value="color-0">
+                                <label for="color-0">
+                                    <span style="background-color: #FF74DA" class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="color-1" name="color" value="color-1">
+                                <label for="color-1">
+                                    <span style="background-color: #27BEE1" class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="color-2" name="color" value="color-2">
+                                <label for="color-2">
+                                    <span style="background-color: #9A89F2" class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="color-3" name="color" value="color-3">
+                                <label for="color-3">
+                                    <span style="background-color: #FF9E01" class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="color-4" name="color" value="color-4">
+                                <label for="color-4">
+                                    <span style="background-color: #FF6767" class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="color-5" name="color" value="color-5">
+                                <label for="color-5">
+                                    <span style="background-color: #FFCA74" class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="color-6" name="color" value="color-6">
+                                <label for="color-6">
+                                    <span style="background-color: #74ffd5" class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="color-7" name="color" value="color-7">
+                                <label for="color-7">
+                                    <span style="background-color: " class="mb-0.5"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="flex justify-between space-s-4 p-7">
+                        <button type="button" class="btn btn-primary">
+                            تطبيق
+                        </button>
+
+                        <button type="button" class="btn btn-outline">
+                            إلغاء
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="main-content flex-1 md:pb-20 ">
+                    <div class="mb-5 md:flex justify-between items-center">
+                        <h2 class="font-bold mb-6 md:mb-0">الإلكترونيات</h2>
+                        <div class="flex items-center justify-between">
+                            <a class="lg:hidden mburger mburger--collapse" href="#filters-menu">
+                                <span class="sicon-filter text-gray-text text-2xl me-2.5"></span>
+                            </a>
+                            <div class="flex items-center">
+                                <div class="hidden md:flex items-center">
+                                    <a href="#" @click="toggleView('grid')"
+                                       :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-text'"
+                                       id="gridButton" data-grid="grid"
+                                       class="grid-trigger mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                                                class="sicon-grid"></i></a>
+                                    <a href="#" @click="toggleView('list')"
+                                       :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-text'"
+                                       id="listButton" data-grid="list"
+                                       class="grid-trigger mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                                                class="sicon-list"></i></a>
+                                </div>
+                                <div class="ms-4  md:ms-20 flex items-center">
+                                    <label class="hidden sm:block me-3 " for="productFilter">فرز المنتجات</label>
+                                    <select id="productFilter"
+                                            class="appearance-none form-input focus:ring-transparent focus:outline-none h-10 text-sm rounded-md  border border-border-color w-44 py-2.5">
+                                        <option>أحدث المنتجات</option>
+                                        <option>ترتيب بالسعر</option>
+                                        <option>الأكثر مبيعاً</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-ref="productsContainer"
+                         :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
+                         class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
+
+                        {% if products is not empty %}
+                            {% for product in products %}
+                                <div id="product_{{ product.id }}" class='product-entry product-entry--vertical relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
+                                    <a href="{{ product.url }}" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full h-40'>
+                                        <img class="sm:h-full w-full object-cover" src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+                                        <div class="absolute top-4 start-0 z-20">
+                                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض
+                                                خاص
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <div class="flex-1 px-5 pt-5 pb-7 ">
+                                        <div class="flex justify-between items-baseline">
+                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                                <a href="{{ product.url }}">{{ product.promotion_title or product.name }}</a>
+                                            </h3>
+                                        </div>
+
+                                        <p class="text-sm text-gray-text leading-6 mb-2.5">
+                                            {{ product.subtitle }}
+                                        </p>
+
+                                        <div class="w-full flex justify-between items-center mb-5">
+                                            <div class="space-s-1">
+                                                {% if product.on_sale %}
+                                                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
+                                                    <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
+                                                {% else %}
+                                                    <span class="text-sm text-gray-text line-through">{{ product.price }}</span>
+                                                    <span>{{ product.price }}</span>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="text-gray-text">
+                                                <div class="text-sm">
+                                                    <i class="sicon-star2 text-theme-yellow"></i>
+                                                    <span>4.5</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <button x-data="initAddToCart()" @click="addToCart('product_{{ product.id }}')"
+                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                اضف للسلة
+                                            </button>
+                                            <script>
+                                                function initAddToCart() {
+                                                    return {
+                                                        addToCart: function (id) {
+                                                            let newId = id.replace(/product_/g, '');
+                                                            window.addTocartAnimation(newId);
+                                                        }
+                                                    }
+                                                }
+                                            </script>
+
+                                            <div class="text-gray-text">
+                                                <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                                                        class="w-10 h-10 focus:outline-none">
+                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                                </button>
+
+                                                <script>
+                                                    function initAddToFavorite() {
+                                                        return {
+                                                            reminderModal: false,
+                                                            inFavorite: false,
+                                                            showMore: false,
+                                                            toggleFavorite: function () {
+                                                                this.inFavorite = !this.inFavorite;
+                                                            },
+                                                        }
+                                                    }
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
+                        {% else %}
+                            <div class="placeholder-block placeholder-block--no-category">
+                                <i class="sicon-inbox"></i>
+                                <p>
+                                    <span>{{trans('pages.categories.no_products')}}</span>
+                                    {{ page_title }}
+                                </p>
+                            </div>
                         {% endif %}
                     </div>
-                    {% if products is not empty %}
-                        <div class="grid-block products-list-container">
-                            {% for product in products %}
-                                {% include 'pages.partials.product.card' %}
-                            {% endfor %}
-                        </div>
-                        {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
-                    {% else %}
-                        <div class="placeholder-block placeholder-block--no-category">
-                            <i class="sicon-inbox"></i>
-                            <p>
-                                <span>{{trans('pages.categories.no_products')}}</span>
-                                {{ page_title }}
-                            </p>
-                        </div>
-                    {% endif %}
+
                 </div>
             </div>
         </div>
-        {% if store.settings.category.show_testimonial %}
-            {% component 'blocks.random_testimonials' %}
-        {% endif %}
-    </section>
+    </main>
 {% endblock %}
 
 {% block scripts %}
@@ -167,5 +368,32 @@
     document.addEventListener( 'DOMContentLoaded', function () {
       salla.infiniteScroll.initiate('.products-list-container', '.product-block')
     })
+
+    function initCategory() {
+        return {
+            showMoreLinks: false,
+            links: [{id: 1, label: 'رابط جديد'}, {id: 2, label: 'هواوي'}, {id: 3, label: 'سامسونج'}],
+            girdLayout: 'grid',
+
+            toggleView: function (layout) {
+
+                this.girdLayout = layout;
+                this.animateItems()
+            },
+
+            animateItems: function () {
+                anime({
+                    targets: '.product-entry',
+                    opacity: [0, 1],
+                    duration: 1200,
+                    translateY: [20, 0],
+                    delay: function (el, i) {
+                        return i * 100;
+                    },
+                })
+            }
+        }
+    }
+
     </script>
 {% endblock %}
