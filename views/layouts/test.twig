@@ -34,7 +34,9 @@
                     });
 
                     function animateSliderItems() {
-                      anime({
+                      let slideAnime = anime.timeline();
+
+                      slideAnime.add({
                         targets: '.swiper-slide-active .main-slide-anime',
                         opacity: [0, 1],
                         duration: 1800,
@@ -42,7 +44,7 @@
                         delay: function (el, i) {
                             return i * 100;
                         },
-                      }) 
+                      }, '+=500') 
                     }
                 });
             </script></section>
