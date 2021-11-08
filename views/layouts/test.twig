@@ -20,36 +20,29 @@
 
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
-                  
                     animateSliderItems()
                     const swiper = new Swiper('.main-slider', {
-
-                        loop: true,
-
-
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
+                      loop: true,
+                      navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                      },
                     });
-
 
                     swiper.on('slideChange', function () {
                         animateSliderItems()
                     });
 
                     function animateSliderItems() {
-                        setTimeout(() => {
-                            anime({
-                                targets: '.swiper-slide-active .main-slide-anime',
-                                opacity: [0, 1],
-                                duration: 3500,
-                                translateX: [70, 0],
-                                delay: function (el, i) {
-                                    return i * 200;
-                                },
-                            })
-                        }, 10);
+                      anime({
+                        targets: '.swiper-slide-active .main-slide-anime',
+                        opacity: [0, 1],
+                        duration: 1800,
+                        translateY: [40, 0],
+                        delay: function (el, i) {
+                            return i * 100;
+                        },
+                      }) 
                     }
                 });
             </script></section>
