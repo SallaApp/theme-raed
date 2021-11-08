@@ -21,6 +21,19 @@ module.exports = {
         clean: true,
         // filename: '[name]',
     },
+    stats:{
+        modules: false,
+        assetsSort: "size",
+        assetsSpace: 50,
+        cachedAssets: true,
+        groupAssetsByPath: false,
+        groupAssetsByExtension: false,
+        groupAssetsByEmitStatus: false,
+        groupAssetsByChunk: false,
+        groupAssetsByInfo: false,
+        relatedAssets: false,
+        performance: true,
+    },
     module : {
         rules: [
             {
