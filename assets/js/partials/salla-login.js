@@ -2,7 +2,7 @@
 // Dependencies: Tailwind, AlpineJs, intl-tel-input
 const template = document.createElement('template');
 import TelInput from "intl-tel-input";
-template.innerHTML = `
+template.innerHTML = /*html*/`
 <style>
 [x-cloak] {
   display: none;
@@ -91,7 +91,7 @@ template.innerHTML = `
                 <span class="text-red-500">*</span>
               </span>
             </label>
-            <input type="email" x-model="loginEmail" name="email" placeholder="your@email.com" id="userEmail"
+            <input type="email" name="email" placeholder="your@email.com" id="userEmail"
               class="form-input mb-5">
             <button @click="openOtp()" type="button" class="w-full btn btn-primary mb-5 h-10">
               دخول
@@ -107,10 +107,10 @@ template.innerHTML = `
             <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
               <span class="block">
                 ادخل رقم الهاتف
-                <span class="text-red-500">*</span>
+                <span class="text-red-500">*</span> 
               </span>
             </label>
-            <input type="tel" id="phone" x-model="loginPhone" name="phone" placeholder="1234344" class="tel-input form-input mb-5">
+            <input type="tel" id="phone" name="phone" placeholder="1234344" class="tel-input form-input mb-5">
             <button @click="openOtp()" type="button"
               class="w-full btn btn-primary mb-5 mt-5 h-10">
               دخول
