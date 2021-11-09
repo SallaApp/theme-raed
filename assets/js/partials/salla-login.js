@@ -182,6 +182,8 @@ export class SallaLogin extends HTMLElement {
             length          : 4,
             value           : "",
             remainTime      : '',
+            loginEmail      : '',
+            loginPhone      : '',
 
             countDown: function () {
                 var counter = 5;

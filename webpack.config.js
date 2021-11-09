@@ -5,7 +5,6 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 
-
 module.exports = {
     entry  : {
         main           : './assets/js/main.js',
@@ -21,6 +20,19 @@ module.exports = {
         path : path.resolve(__dirname, "assets", "dist"),
         clean: true,
         // filename: '[name]',
+    },
+    stats:{
+        modules: false,
+        assetsSort: "size",
+        assetsSpace: 50,
+        cachedAssets: true,
+        groupAssetsByPath: false,
+        groupAssetsByExtension: false,
+        groupAssetsByEmitStatus: false,
+        groupAssetsByChunk: false,
+        groupAssetsByInfo: false,
+        relatedAssets: false,
+        performance: true,
     },
     module : {
         rules: [
@@ -44,9 +56,10 @@ module.exports = {
         //new FixStyleOnlyEntriesPlugin(),
         new RemovePlugin({
             after: {
-                root: './assets/dist',
-                log:false,
-                include: [
+                root      : './assets/dist',
+                log       : false,
+                logWarning: false,
+                include   : [
                     'filepond_styles.js',
                     'home_styles.js',
                     'main_styles.js'
