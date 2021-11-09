@@ -1,15 +1,15 @@
-<li class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg {{ new_notifications_count ? 'has-badge' : '' }}">
+<li class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray hover:text-primary {{ new_notifications_count ? 'has-badge' : '' }}">
     <a href="{{ link('notifications') }}">
-        <i class="sicon-bell-ring"></i>
+        <i class="sicon-bell-ring me-3"></i>
         <span>{{ trans('common.titles.notifications') }}</span>
         {% if new_notifications_count %}
             <span id="notificationsCount" class="badge badge--small badge--circular badge--danger">{{ new_notifications_count }}</span>
         {% endif %}
     </a>
 </li>
-<li class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg {{ pending_orders_count ? 'has-badge' : '' }}">
+<li class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray hover:text-primary {{ pending_orders_count ? 'has-badge' : '' }}">
     <a href="{{ link('pending_orders') }}">
-        <i class="sicon-cart"></i>
+        <i class="sicon-cart me-3"></i>
         <span> {{ trans('common.titles.pending_orders') }}</span>
         {% if pending_orders_count %}
             <span class="badge badge--small badge--circular badge--danger">{{ pending_orders_count }}</span>

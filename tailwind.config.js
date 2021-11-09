@@ -73,6 +73,7 @@ module.exports = {
                 'default' : '5px 10px 30px #2B2D340D;',
                 'top'     : '0px 0px 10px #0000001A;',
                 'md'      : '5px 10px 99px #2B2D340D',
+                'dropdown'      : '0 4px 8px rgba(161, 121, 121, 0.07)',
                 'light'   : '0px 4px 15px rgba(1, 1, 1, 0.06)',
                 'huge'    : '0px 3px 6px #00000029',
                 'progress': '0 5px 15px rgba(92, 213, 196, 0.4)',
@@ -122,7 +123,7 @@ module.exports = {
     },
     variants: {
         extend: {
-            translate: ['group-hover'],
+          translate: ['group-hover'],
         },
     },
 

@@ -1,14 +1,14 @@
-<li class="{{ is_root_menu?'inline-block':'' }}" {{ menu.attrs|raw }}>
+<li class="relative {{ is_root_menu?'inline-block':'hover:bg-light-gray' }}" {{ menu.attrs|raw }}>
     <a href="{{ menu.url }}"
-       class="flex items-center transition duration-300 mx-1 p-2  text-dark text-sm font-bold">
+       class="flex justify-between items-center transition duration-300 p-2 ps-3 text-dark text-sm hover:text-primary hover:no-underline	{{is_root_menu? 'font-bold py-8':''}}">
         <span>{{ menu.title }}</span>
         {% if menu.has_children %}
-            <i class="{{ is_root_menu?'sicon-keyboard_arrow_down':'sicon-keyboard_arrow_left' }} self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+            <i class="{{ is_root_menu?'sicon-keyboard_arrow_down':'sicon-keyboard_arrow_left' }} inline-block transition-transform duration-300 self-end mx-0.5 text-lg opacity-50 leading-4"></i>
         {% endif %}
     </a>
     {% if menu.has_children %}
-        <ul>
-            <h2 class="pt-5 px-5 pb-2 font-bold text-base">{{ menu.title }}</h2>
+        <ul class="z-20 transition transition-delay-300 opacity-0 invisible absolute bg-white w-56 transform -translate-y-3 top-full shadow-default pb-2">
+            {# <h2 class="pt-5 px-5 pb-2 font-bold text-base">{{ menu.title }}</h2> #}
             {% for submenu in menu.children %}
                 {% include _self with {menu:submenu, is_root_menu:false} %}
             {% endfor %}
