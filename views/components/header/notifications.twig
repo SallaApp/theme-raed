@@ -1,18 +1,24 @@
-<li class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg {{ new_notifications_count ? 'has-badge' : '' }}">
+<li class="{{ new_notifications_count ? 'has-badge' : '' }}">
     <a href="{{ link('notifications') }}">
-        <i class="sicon-bell-ring"></i>
-        <span>{{ trans('common.titles.notifications') }}</span>
+        <span>
+            <i class="sicon-school-bell"></i>
+            <span>{{ trans('common.titles.notifications') }}</span>
+        </span>
         {% if new_notifications_count %}
-            <span id="notificationsCount" class="badge badge--small badge--circular badge--danger">{{ new_notifications_count }}</span>
+            <span id="notifications-count"
+                  class="bg-theme-red rounded-full inline-block text-center w-6 h-6 text-white pt-0.5 text-xs">{{ new_notifications_count }}</span>
         {% endif %}
     </a>
 </li>
-<li class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg {{ pending_orders_count ? 'has-badge' : '' }}">
+<li class="{{ pending_orders_count ? 'has-badge' : '' }}">
     <a href="{{ link('pending_orders') }}">
-        <i class="sicon-cart"></i>
-        <span> {{ trans('common.titles.pending_orders') }}</span>
+        <span>
+            <i class="sicon-cart"></i>
+            <span>{{ trans('common.titles.pending_orders') }}</span>
+        </span>
         {% if pending_orders_count %}
-            <span class="badge badge--small badge--circular badge--danger">{{ pending_orders_count }}</span>
+            <span id="pending-orders-count"
+                  class="bg-theme-red rounded-full inline-block text-center w-6 h-6 text-white pt-0.5 text-xs">{{ pending_orders_count }}</span>
         {% endif %}
     </a>
 </li>
