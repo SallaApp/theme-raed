@@ -10,7 +10,7 @@ template.innerHTML = /*html*/`
 </style>
 <div x-data="$el.parentElement.init()">
 <button @click="openLoginModal" type="button"
-  class="mx-1   dropdown-trigger  border text-dark rounded-full w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent"
+  class="mx-1   dropdown-trigger  border text-dark rounded-full w-10 h-10 font-medium  focus:ring-offset-transparent"
   id="menu-button" aria-expanded="true" aria-haspopup="true">
   <i class="sicon-user-circle"></i>
 </button>
@@ -24,7 +24,7 @@ template.innerHTML = /*html*/`
         <h5 class="text-black max-w-none text-lg font-bold mb-8 leading-3">سجل دخول إلي الموقع</h5>
 
         <button @click="closeModal"
-          class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
+          class="close-modal text-gray-text w-6 h-6  text-lg absolute top-6 end-6">
           <i class="sicon-cancel"></i>
         </button>
 
@@ -42,7 +42,7 @@ template.innerHTML = /*html*/`
                 </div>
               </div>
               <div class="flex-1 min-w-0">
-                <a href="#" class="focus:outline-none flex justify-between items-center">
+                <a href="#" class=" flex justify-between items-center">
                   <div class="flex-1">
                     <span class="absolute inset-0" aria-hidden="true"></span>
                     <p class="text-sm text-gray-text">
@@ -66,7 +66,7 @@ template.innerHTML = /*html*/`
                 </div>
               </div>
               <div class="flex-1 min-w-0">
-                <a href="#" class="focus:outline-none flex justify-between items-center">
+                <a href="#" class=" flex justify-between items-center">
                   <div class="flex-1">
                     <span class="absolute inset-0" aria-hidden="true"></span>
                     <p class="text-sm text-gray-text">

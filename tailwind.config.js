@@ -122,11 +122,15 @@ module.exports = {
             }
         },
     },
-
+    
     variants: {
         extend: {
           translate: ['group-hover'],
         },
+    },
+
+    corePlugins: {
+      outline: false,
     },
 
     plugins: [require('tailwindcss-rtl'), require('@tailwindcss/forms')],

@@ -35,7 +35,7 @@ template.innerHTML = /*html*/`
             <h2 class="font-bold mb-2"> جدول القياسات </h2>
         </div>
         <button type="button" @click="openSizesTableModal()"
-            class="focus:outline-none text-primary bg-transparent py-2 flex items-center justify-center text-sm">
+            class=" text-primary bg-transparent py-2 flex items-center justify-center text-sm">
             <span class="fix-align">عرض دليل القياسات</span>
             <i class="font-medium sicon-caret-left ms-1.5 text-md"></i>
         </button>
@@ -66,7 +66,7 @@ template.innerHTML = /*html*/`
 
                 <div class="modal-body text-start">
                     <button @click="closeSizesTableModal"
-                        class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
+                        class="close-modal text-gray-text w-6 h-6  text-lg absolute top-6 end-6">
                         <i class="sicon-cancel"></i>
                     </button>
                     <!-- content -->
