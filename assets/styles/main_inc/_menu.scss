@@ -17,6 +17,24 @@
 			}
 		}
 	}
+
+  &{
+
+  }
+
+  &.contacts-menu{
+    li:last-child{
+      a{
+        [dir="rtl"] &{
+          padding-left: 0;
+        }
+
+        [dir="ltr"] &{
+          padding-right: 0;
+        }
+      }
+    }
+  }
 }
 
 // css dropMenu
@@ -26,8 +44,8 @@
 	}
 
 	li {
-		ul {
-      ul {
+		.sub-menu {
+      .sub-menu {
         top: 0;
         right: 100%;
 
@@ -41,17 +59,9 @@
 		&:hover {
       > a{
         color: var(--main-color); 
-
-        .sicon-keyboard_arrow_down{
-          opacity: 1;
-          transform: scaleY(-1);
-          // &:before {
-          //   content: "\e96c";
-          // }
-        }
       }
 
-			> ul {
+			> .sub-menu {
 				opacity: 1;
 				visibility: visible;
 				transform: translateY(0);
@@ -60,9 +70,17 @@
 	}
 }
 
+.main-menu li:hover > a,
+.btn-is-opened{
+  > .sicon-keyboard_arrow_down{
+    opacity: 1;
+    transform: scaleY(-1); 
+  }
+}
+
 .inset-top-shadow:after,
-.main-menu > li > ul:after,
-.main-menu > li > ul > li:first-child > ul:after{
+.main-menu > li > .sub-menu:after,
+.main-menu > li > .sub-menu > ul > li:first-child > .sub-menu:after{
   content: '';
   position: absolute;
   top: 0;

@@ -41,6 +41,7 @@ module.exports = {
                 'dark'         : 'var(--main-text-color-dark)',
                 'gray-text'    : 'var(--main-text-color2)',
                 'gray-bg2'     : 'var(--bg-gray)',// 'light-gray': '#F9FAFB',
+                'gray-150'     : '#eff0f0',
                 'color-gray'   : 'var(--color-grey)',
                 'gray-bg'      : '#F5F5F5',
                 'darkGray-bg'  : '#F3F3F3',
@@ -121,6 +122,7 @@ module.exports = {
             }
         },
     },
+
     variants: {
         extend: {
           translate: ['group-hover'],

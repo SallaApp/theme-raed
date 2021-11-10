@@ -13,7 +13,7 @@ template.innerHTML = /*html*/`
 <div class="" x-data="$el.parentElement.init()" @keydown.escape="closeSearch" x-init="$watch('searchTerm', () => {search()})">
 
   <section>
-    <button type="button" class="bg-gray-bg2 mx-3 text-dark text-sm rounded-full w-9 h-9 focus:outline-none"
+    <button type="button" class="bg-gray-bg2 hover:bg-gray-150 mx-3 text-dark text-sm rounded-full w-9 h-9 focus:outline-none"
       @click="openSearch">
       <i class="sicon-search font-bold"></i>
     </button>
