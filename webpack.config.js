@@ -1,5 +1,5 @@
 const path = require('path');
-const themeWatcher = require('@sallaapp/theme-utils/WatcherPlugin');
+const ThemeWatcher = require('@sallaapp/theme-utils/WatcherPlugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 const RemovePlugin = require('remove-files-webpack-plugin');
@@ -52,7 +52,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new themeWatcher(),
+        new ThemeWatcher(),
         //new FixStyleOnlyEntriesPlugin(),
         new RemovePlugin({
             after: {
