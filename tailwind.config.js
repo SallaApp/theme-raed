@@ -4,7 +4,7 @@ module.exports = {
         enabled: true,
         content: ["views/**/*.twig", "assets/js/partials/salla-login.js", "assets/js/partials/search-modal.js"],
     },
-    darkMode: false, // or 'media' or 'class'
+    darkMode: 'class', // or 'media' or 'class'
     theme   : {
         container : {
             center : true,

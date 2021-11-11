@@ -10,21 +10,21 @@ template.innerHTML = /*html*/`
 </style>
 <div x-data="$el.parentElement.init()">
 <button @click="openLoginModal" type="button"
-  class="mx-1   dropdown-trigger  border text-dark rounded-full w-10 h-10 font-medium  focus:ring-offset-transparent"
+  class="mx-1 dropdown-trigger border dark:border-gray-500 rounded-full w-10 h-10 font-medium  focus:ring-offset-transparent hover:text-primary"
   id="menu-button" aria-expanded="true" aria-haspopup="true">
   <i class="sicon-user-circle"></i>
 </button>
 
 <div x-show="showLoginModal" x-cloak class="login-modal">
-  <div class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-light-gray">
+  <div class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-light-gray dark:bg-gray-800 dark:bg-opacity-90">
     <!-- Modal inner -->
     <div x-ref="loginContainer"
-        class="login-container relative p-8 max-h-80 w-80 box-content  shadow-default max-w-3xl  mx-auto  bg-white rounded transition-all ease-in-out duration-500">
+        class="login-container relative p-8 max-h-80 w-80 box-content  shadow-default max-w-3xl  mx-auto  bg-white dark:bg-gray-700 rounded transition-all ease-in-out duration-500">
       <div x-ref="modalContent" class="box-inner ">
-        <h5 class="text-black max-w-none text-lg font-bold mb-8 leading-3">سجل دخول إلي الموقع</h5>
+        <h5 class="text-black dark:text-white max-w-none text-lg font-bold mb-8 leading-3">سجل دخول إلي الموقع</h5>
 
         <button @click="closeModal"
-          class="close-modal text-gray-text w-6 h-6  text-lg absolute top-6 end-6">
+          class="close-modal text-gray-text hover:text-primary w-6 h-6  text-lg absolute top-6 end-6">
           <i class="sicon-cancel"></i>
         </button>
 
@@ -35,7 +35,7 @@ template.innerHTML = /*html*/`
             <p class="text-sm text-gray-text mb-5">اختر الوسيلة المناسبة</p>
             <!--item -->
             <div @click="openEmailLogin"
-              class="mb-2.5 box-content relative rounded-md border border-border-color bg-white py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-gray-200">
+              class="mb-2.5 box-content relative rounded-md border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-primary">
               <div class="flex-shrink-0">
                 <div class="bg-primary w-12 h-12 text-lg text-white rounded-icon">
                   <i class="sicon-mail"></i>
@@ -59,7 +59,7 @@ template.innerHTML = /*html*/`
             <!-- end:item-->
             <!--item -->
             <div @click="loginMethod = 'phone'; showLoginMethods = false; animatItems() "
-              class=" box-content relative rounded-md border border-border-color bg-white py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-gray-200">
+              class=" box-content relative rounded-md border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-primary">
               <div class="flex-shrink-0">
                 <div class="bg-primary w-12 h-12 text-lg text-white rounded-icon">
                   <i class="sicon-phone"></i>
@@ -85,7 +85,7 @@ template.innerHTML = /*html*/`
 
           <!-- email login -->
           <form x-show="loginMethod == 'email' && !showOtp " class="anime-item">
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <span class="block">
                 ادخل البريد الإلكتروني
                 <span class="text-red-500">*</span>
@@ -104,7 +104,7 @@ template.innerHTML = /*html*/`
 
           <!-- phone login -->
           <form x-show="loginMethod == 'phone' && !showOtp " class="anime-item">
-            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <span class="block">
                 ادخل رقم الهاتف
                 <span class="text-red-500">*</span> 
@@ -123,7 +123,7 @@ template.innerHTML = /*html*/`
 
           <!-- otp -->
           <form x-show="showOtp" action="#" method="POST" class="anime-item">
-            <p for="email" class="block text-sm font-medium text-gray-700 mb-2">
+            <p for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <span class="block">
                 ادخل رمز التحقق
                 <span class="text-red-500">*</span>
@@ -149,7 +149,7 @@ template.innerHTML = /*html*/`
             <button type="button" class="w-full btn btn-primary mb-5 h-10">
               إرسال
             </button>
-            <p class="mb-5 text-center text-sm text-gray-text">إعادة الارسال بعد <b  class="text-dark" x-text="'0' + remainTime + ':00'"></b>
+            <p class="mb-5 text-center text-sm text-gray-text">إعادة الارسال بعد <b x-text="'0' + remainTime + ':00'"></b>
             </p>
             <div class="flex justify-between space-s-5 mb-5">
               <button class="btn btn-default font-normal rounded-md">رسالة نصية</button>
