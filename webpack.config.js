@@ -7,14 +7,14 @@ const RemovePlugin = require('remove-files-webpack-plugin');
 
 module.exports = {
     entry  : {
-        main           : './assets/js/main.js',
+        app           : './assets/js/app.js',
         inner          : './assets/js/inner.js',
         home           : './assets/js/home.js',
         salla_login    : './assets/js/partials/salla-login.js',
-        filepond       : './assets/js/plugins/filepond/filepond.js',
-        filepond_styles: './assets/js/plugins/filepond/filepond.scss',
-        home_styles    : './assets/styles/home.scss',
-        main_styles    : './assets/styles/main.scss',
+        'filepond'       : './assets/js/plugins/filepond/filepond.js',
+        'filepond': './assets/js/plugins/filepond/filepond.scss',
+        'home'    : './assets/styles/home.scss',
+        'app'    : './assets/styles/app.scss',
     },
     output : {
         path : path.resolve(__dirname, "assets", "dist"),
