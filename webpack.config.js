@@ -1,26 +1,38 @@
 const path = require('path');
-const themeWatcher = require('@sallaapp/theme-utils/WatcherPlugin');
+const ThemeWatcher = require('@sallaapp/theme-utils/WatcherPlugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 
-
 module.exports = {
     entry  : {
-        main           : './assets/js/main.js',
+        app           : './assets/js/app.js',
         inner          : './assets/js/inner.js',
         home           : './assets/js/home.js',
         salla_login    : './assets/js/partials/salla-login.js',
-        filepond       : './assets/js/plugins/filepond/filepond.js',
-        filepond_styles: './assets/js/plugins/filepond/filepond.scss',
-        home_styles    : './assets/styles/home.scss',
-        main_styles    : './assets/styles/main.scss',
+        'filepond'       : './assets/js/plugins/filepond/filepond.js',
+        'filepond': './assets/js/plugins/filepond/filepond.scss',
+        'home'    : './assets/styles/home.scss',
+        'app'    : './assets/styles/app.scss',
     },
     output : {
         path : path.resolve(__dirname, "assets", "dist"),
         clean: true,
         // filename: '[name]',
+    },
+    stats:{
+        modules: false,
+        assetsSort: "size",
+        assetsSpace: 50,
+        cachedAssets: true,
+        groupAssetsByPath: false,
+        groupAssetsByExtension: false,
+        groupAssetsByEmitStatus: false,
+        groupAssetsByChunk: false,
+        groupAssetsByInfo: false,
+        relatedAssets: false,
+        performance: true,
     },
     module : {
         rules: [
@@ -40,13 +52,14 @@ module.exports = {
         ]
     },
     plugins: [
-        new themeWatcher(),
+        new ThemeWatcher(),
         //new FixStyleOnlyEntriesPlugin(),
         new RemovePlugin({
             after: {
-                root: './assets/dist',
-                log:false,
-                include: [
+                root      : './assets/dist',
+                log       : false,
+                logWarning: false,
+                include   : [
                     'filepond_styles.js',
                     'home_styles.js',
                     'main_styles.js'
