@@ -5,6 +5,8 @@
 *Notec: if marchent wants equal image, {{store.product_image_type}} will be (contain|cover) if not will be empty.
 #}
 
+{# {{dd(product)}} #}
+
 <div id="{{ product.id }}"
      class='product-entry {{ block_classes ?? '' }}{{ is_special?'product-entry--special':'' }}  {{ is_horizontal?'product-entry--horizontal md:flex-row':'product-entry--vertical' }} relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
     {# Equal image height option: add/remove "h-40" class #}
@@ -34,6 +36,45 @@
                 </div>
             {% endif %}
         </div>
+
+
+         {# donation #}
+            <div x-data="initDonation()">
+                <h2 class="text-sm mb-4">هدف الحملة</h2>
+                <div class="flex justify-between text-sm mb-2.5">
+                    <span>25,899.99 ر.س</span>
+                    <span>50,899 ر.س</span>
+                </div>
+                <div class="bg-border-color rounded-full  mb-1.5">
+                    <div class="progress-bg transition-all duration-500 opacity0 h-4 bg-primary relative rounded-full flex justify-end"
+                        style="width: 30%">
+                        <!-- <p class="text-sm absolute -bottom-7 -end-6">1220 ر.س</p> -->
+                    </div>
+                </div>
+                <small class="text-xs text-gray-text">تنتهي الحملة في 01-10-2021</small>
+                <div class="border-color py-5 mt-5 mb-2.5">
+                    <label for="donationAmount" class="block text-sm ">مبلغ التبرع <span class="text-red-500">*</span> </label>
+                    <div class="mt-2.5 relative">
+                        <input type="number" @keyup="isShowCopounError = false" @keyup.enter="addDonation()"
+                            x-model="donationAmount" id="donationAmount" name="copoun-code"
+                            :class="{'has-error': isShowCopounError}" class="pe-24 form-input" :disabled="isDonationAdded">
+                        <button x-show="isDonationAdded" @click="addDonation();" type="button"
+                            class="copoun-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn px-4"
+                            :class="isDonationAdded ? 'btn-danger' : 'btn-default'">
+                            <!-- <span x-show="!isDonationAdded">تفعيل</span> -->
+                            <i x-show="isDonationAdded" class="sicon-cancel text-xl w-8"></i>
+                        </button>
+                        <!-- error msg -->
+                        <p x-show="isShowCopounError" class="absolute -bottom-5 text-xs text-red-700" id="validationHelp">مثال
+                            لرسالة
+                            الخطأ.</p>
+                    </div>
+                </div>
+            </div>
+            {# end donation #}
+
+
+
         {# {% if show_wishlist %} #}
         {# <button type="button" #}
         {# class="btn btn--circular btn--like btn--product-like btn--wishlist liked" #}
@@ -100,6 +141,25 @@
             toggleFavorite: function () {
                 this.inFavorite = !this.inFavorite;
             },
+        }
+    }
+
+    function initDonation() {
+        return {
+            donationAmount: '',
+            isDonationAdded: false,
+            isShowCopounError: false,
+            addDonation: function () {
+                if (this.donationAmount) {
+                    this.isShowCopounError = false;
+                    this.isDonationAdded = !this.isDonationAdded;
+                    if (!this.isDonationAdded) {
+                        this.donationAmount = '';
+                    }
+                } else {
+                    this.isShowCopounError = true;
+                }
+            }
         }
     }
 </script>
