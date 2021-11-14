@@ -1,61 +1,55 @@
 {% if user %}
-    <div class="relative inline-block" x-data="{toggleMenu: false}">
-        <div>
-            <button @click="toggleMenu = !toggleMenu" type="button"
-                    class="relative mx-1 md:mx-2  dropdown-trigger rounded-full font-medium focus:outline-none focus:ring-offset-transparent"
-                    id="menu-button" aria-expanded="true" aria-haspopup="true">
-                <img src="{{user.avatar}}" alt="user-avatar" class="h-10 w-10 object-cover rounded-full">
-                <!-- if has notifications -->
-                <div class="bg-theme-red border-2 border-white  w-3 h-3 rounded-full absolute top-0 -start-1"></div>
-            </button>
-        </div>
-
-        <div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
-             x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
-             x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
-             x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
-             class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
+    <div class="relative inline-flex items-center h-full w-10 mx-1 md:mx-2" x-data="{toggleMenu: false}">
+        <button @click="toggleMenu = !toggleMenu" type="button"
+                class="dropdown-trigger  border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium  focus:ring-offset-transparent"
+                id="menu-button" aria-expanded="true" aria-haspopup="true">
+            <img class="h-10 w-10 object-cover" src="{{user.avatar}}" alt="">
+        </button> 
+        <div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false" x-transition:enter="transition ease-out duration-100"
+             x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100"
+             x-transition:leave-end="transform opacity-0 scale-95"
+             class="origin-top-right absolute z-30 w-48 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full"
              role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-
-
-
-            <ul class="py-1.5">
-                {% component 'header.notifications' %}
+ 
+            <ul class="py-2">
                 <li>
-                    <a href="{{ link('orders') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                    <a href="{{ link('orders') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
                         <i class="sicon-packed-box me-3"></i>
                         <span>{{ trans('common.titles.orders') }}</span>
                     </a>
                 </li>
+                {% component 'header.notifications' %}
                 <li>
-                    <a href="{{ link('wishlist') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                    <a href="{{ link('wishlist') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
                         <i class="sicon-heart me-3"></i>
                         {{trans('common.titles.wishlist')}}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('rating') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
-                        <i class="sicon-favorite"></i>
+                    <a href="{{ link('rating') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
+                        <i class="sicon-favorite me-3"></i>
                         <span>{{ trans('common.titles.rating') }}</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ link('profile') }}" class="block px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg">
+                    <a href="{{ link('profile') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
                         <i class="sicon-settings me-3"></i>
                         {{ trans('common.titles.profile') }}
                     </a>
                 </li>
+
                 <li>
                     <a href="#"
-                       data-on-click="auth-logout"
-                       class="block px-4 py-2 text-theme-red text-sm transition-colors duration-300 hover:bg-gray-bg">
+                        data-on-click="auth-logout"
+                        class="block px-4 py-2 text-sm text-red-500 transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5">
                         <i class="sicon-send-out me-3"></i>
                         {{ trans('blocks.header.logout') }}
                     </a>
                 </li>
-            </ul>
 
+            </ul> 
         </div>
     </div>
 {% else %}
