@@ -1,21 +1,20 @@
-<div class="footer__block">
-    <div class="store-links">
-        <div class="title title--primary title--has-dash mb-20">{{ trans('blocks.footer.pages_links') }}</div>
-        <ul class="footer-list {{ (pages|length)>4?'store-links-items':'' }}">
-            {% for item in pages %}
-                <li><a href="{{ item.url }}">{{ item.title }}</a></li>
-            {% endfor %}
-        </ul>
-        {% if (pages|length)>4 %}
-            <ul class="footer-list more-links">
-                <li>
-                    <a href="#" id="show-more-store-links">
-                        {{ trans('blocks.footer.more_from') }}
-                        {{ trans('blocks.footer.pages_links') }}
-                        <i class="sicon-keyboard_arrow_down"></i>
-                    </a>
-                </li>
-            </ul>
-        {% endif %}
-    </div>
+
+<div>
+    <h3 class="font-bold mb-5">{{ trans('blocks.footer.pages_links') }}</h3>
+    <ul class="footer-list {{ (pages|length)>4?'store-links-items':'' }}">
+        {% for item in pages %}
+            <li class="mb-4"><a href="{{ item.url }}" class=" focus:underline text-sm leading-none hover:text-primary">{{ item.title }}</a></li>
+        {% endfor %}
+    </ul>
+{#    {% if (pages|length)>4 %}#}
+{#        <ul class="footer-list more-links">#}
+{#            <li>#}
+{#                <a href="#" id="show-more-store-links">#}
+{#                    {{ trans('blocks.footer.more_from') }}#}
+{#                    {{ trans('blocks.footer.pages_links') }}#}
+{#                    <i class="sicon-keyboard_arrow_down"></i>#}
+{#                </a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    {% endif %}#}
 </div>
