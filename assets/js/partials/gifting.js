@@ -20,7 +20,7 @@ template.innerHTML = /*html*/`
             <p class="text-gray-text">يمكن الان ارسال الهدايا لمن تحب عن طريق منصتنا وفي الوقت الذي تحبه ! </p>
         </div>
         <button type="button" @click="openGiftingModal()"
-            class="focus:outline-none text-gray-text bg-gray-bg  py-2 xs:px-8 rounded-md flex items-center justify-center text-sm">
+            class=" text-gray-text bg-gray-bg  py-2 xs:px-8 rounded-md flex items-center justify-center text-sm">
             <i class="font-medium sicon-gift-sharing me-1.5 text-md"></i>
             <span class="fix-align">ارسل كهدية</span>
         </button>
@@ -52,7 +52,7 @@ template.innerHTML = /*html*/`
 
                 <div class="modal-body text-start">
                     <button @click="closeGiftingModal"
-                        class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
+                        class="close-modal text-gray-text w-6 h-6  text-lg absolute top-6 end-6">
                         <i class="sicon-cancel"></i>
                     </button>
 
@@ -89,7 +89,7 @@ template.innerHTML = /*html*/`
                                     <img :src="selectedImage" class="w-full h-full object-cover rounded-md" alt="Gift Image">
 
                                     <button @click="showSelectedImage = false; selectedImageId = null"
-                                        class="remove-image bg-theme-red text-xxs flex justify-center items-center rounded-full  text-light-gray w-4 h-4 focus:outline-none text-lg absolute top-2.5 end-2.5">
+                                        class="remove-image bg-theme-red text-xxs flex justify-center items-center rounded-full  text-light-gray w-4 h-4  text-lg absolute top-2.5 end-2.5">
                                         <i class="sicon-cancel"></i>
                                     </button>
                                 </div>

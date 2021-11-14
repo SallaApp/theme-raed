@@ -1,12 +1,13 @@
 <div class="relative inline-block mx-3" x-data="{toggleMenu: false}">
     <div>
         <button @click="toggleMenu = !toggleMenu" type="button"
-                class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
+                class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 hover:bg-gray-150 dark:hover:bg-opacity-10 text-sm font-medium  focus:ring-offset-transparent transition duration-300"
+                :class="toggleMenu ? 'btn-is-opened bg-gray-150 dark:bg-opacity-10' : ''"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
-            <div class="flag iti__flag iti__sa me-1.5"></div>
+            <div class="flag iti__flag iti__sa me-1.5 rounded-md"></div>
             <span class="">{{ current.name }}</span>
 
-            <i class="sicon-keyboard_arrow_down self-end mx-0.5 text-gray-text text-lg leading-4"></i>
+            <i class="sicon-keyboard_arrow_down inline-block self-end mx-0.5 me-0 opacity-50 text-lg leading-4 transition duration-300"></i>
         </button>
     </div>
 
@@ -14,20 +15,19 @@
          x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
          x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
-         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-md shadow-default bg-white  focus:outline-none"
+         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default bg-white dark:bg-gray-800 overflow-hidden"
          role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-        <div class="py-1" role="none">
-            <ul>
-                {% for language in languages %}
-                    <li>
-                        <a href="{{language.url}}"
-                           class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg {{current.code == language.code ? 'is-active' : ''}}">
-                            <div class="flag iti__flag iti__{{ language.country_code }} me-1.5"></div>
-                            <span>{{language.name}}</span>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+        
+          <ul>
+              {% for language in languages %}
+                  <li>
+                      <a href="{{language.url}}"
+                          class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg dark:hover:bg-opacity-5 {{current.code == language.code ? 'is-active' : ''}}">
+                          <div class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></div>
+                          <span>{{language.name}}</span>
+                      </a>
+                  </li>
+              {% endfor %}
+          </ul> 
     </div>
 </div>

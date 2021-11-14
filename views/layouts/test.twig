@@ -1,80 +1,49 @@
-
-    <main id="main">
+ <main id="main">
         <section class="-mb-28">
             <div class="swiper  home-slider main-slider">
-                <div class="swiper-wrapper">
-
-                    <div class="swiper-slide home-slider__slide relative" style="background-image: url('{{asset('images/slider/slide1.jpg')}}');">
-                        <div class="flex justify-center items-center container  home-slider__content relative h-full">
-                            <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
-                                <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-normal mb-4">وحدة تحكم لمشغل العاب الفيديو بلاي ستيشن</h3>
-                                <p class="main-slide-anime opacity-0 description">يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم</p>
-                            </div>
+              <div class="swiper-wrapper">
+                <div class="swiper-slide home-slider__slide relative" style="background-image: url('{{asset('images/slider/slide1.jpg')}}');">
+                    <div class="flex justify-center items-center container  home-slider__content relative h-full">
+                        <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
+                            <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-normal mb-4">وحدة تحكم لمشغل العاب الفيديو بلاي ستيشن</h3>
+                            <p class="main-slide-anime opacity-0 description">يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم</p>
                         </div>
-                        <div class="overlay absolute top-0 z-0 bg-dark opacity-60  w-full h-full"></div>
                     </div>
-
-                    <div class="swiper-slide home-slider__slide relative" style="background-image: url('{{asset('images/slider/slide2.jpg')}}');">
-                        <div class="flex justify-center items-center container  home-slider__content relative h-full">
-                            <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
-                                <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-normal mb-4">سماعات عالية الجوده بتقنية عزل الأصوات المزعجة</h3>
-                                <p class="main-slide-anime opacity-0 description">يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم</p>
-                            </div>
-                        </div>
-                        <div class="overlay absolute top-0 z-0 bg-dark opacity-60  w-full h-full"></div>
-                    </div>
-
-                    <div class="swiper-slide home-slider__slide relative" style="background-image: url('{{asset('images/slider/slide3.jpg')}}');">
-                        <div class="flex justify-center items-center container  home-slider__content relative h-full">
-                            <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
-                                <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-normal mb-4">جهاز ألعاب بخاصة التحكم عن طريق الواي فاي</h3>
-                                <p class="main-slide-anime opacity-0 description">يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم</p>
-                            </div>
-                        </div>
-                        <div class="overlay absolute top-0 z-0 bg-dark opacity-60  w-full h-full"></div>
-                    </div>
-
+                    <div class="overlay absolute top-0 z-0 bg-dark opacity-60  w-full h-full"></div>
                 </div>
+              </div>
 
-
-
-
-
-                <div class="w-10 h-10 shadow-sm bg-white swiper-button-prev rounded-full"></div>
-                <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
+              <div class="w-10 h-10 shadow-sm bg-white swiper-button-prev rounded-full"></div>
+              <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
             </div>
 
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     animateSliderItems()
                     const swiper = new Swiper('.main-slider', {
-
-                        loop: true,
-
-
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
+                      loop: true,
+                      navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                      },
                     });
-
 
                     swiper.on('slideChange', function () {
                         animateSliderItems()
                     });
 
                     function animateSliderItems() {
-                        setTimeout(() => {
-                            anime({
-                                targets: '.swiper-slide-active .main-slide-anime',
-                                opacity: [0, 1],
-                                duration: 3500,
-                                translateX: [70, 0],
-                                delay: function (el, i) {
-                                    return i * 200;
-                                },
-                            })
-                        }, 10);
+                      let slideAnime = anime.timeline();
+
+                      slideAnime.add({
+                        targets: '.swiper-slide-active .main-slide-anime',
+                        opacity: [0, 1],
+                        duration: 1800,
+                        translateY: [40, 0],
+                        delay: function (el, i) {
+                            return i * 100;
+                        },
+                      }, '+=500') 
                     }
                 });
             </script></section>
@@ -333,7 +302,7 @@ flex-col
                             <div class="text-gray-text">
 
                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                        class="w-10 h-10 focus:outline-none">
+                                        class="w-10 h-10 ">
                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                 </button>
 
@@ -433,7 +402,7 @@ flex-col
                             <div class="text-gray-text">
 
                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                        class="w-10 h-10 focus:outline-none">
+                                        class="w-10 h-10 ">
                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                 </button>
 
@@ -533,7 +502,7 @@ flex-col
                             <div class="text-gray-text">
 
                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                        class="w-10 h-10 focus:outline-none">
+                                        class="w-10 h-10 ">
                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                 </button>
 
@@ -640,7 +609,7 @@ flex-col
                             <div class="text-gray-text">
 
                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                        class="w-10 h-10 focus:outline-none">
+                                        class="w-10 h-10 ">
                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                 </button>
 
@@ -740,7 +709,7 @@ flex-col
                             <div class="text-gray-text">
 
                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                        class="w-10 h-10 focus:outline-none">
+                                        class="w-10 h-10 ">
                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                 </button>
 
@@ -840,7 +809,7 @@ flex-col
                             <div class="text-gray-text">
 
                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                        class="w-10 h-10 focus:outline-none">
+                                        class="w-10 h-10 ">
                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                 </button>
 
@@ -980,10 +949,10 @@ flex-col
 
 
                             <div class="hidden sm:block" dir="rtl">
-                                <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                <button class="slider-prev   border border-gray text-dark rounded-full w-7 h-7">
                                     <i class="text-gray-text sicon-keyboard_arrow_right"></i>
                                 </button>
-                                <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                <button class="slider-next  border border-gray text-dark rounded-full w-7 h-7">
                                     <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
                                 </button>
                             </div>
@@ -1079,7 +1048,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -1186,7 +1155,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -1293,7 +1262,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -1400,7 +1369,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -1507,7 +1476,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -1632,10 +1601,10 @@ flex-col
 
 
                             <div class="hidden sm:block" dir="rtl">
-                                <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                <button class="slider-prev   border border-gray text-dark rounded-full w-7 h-7">
                                     <i class="text-gray-text sicon-keyboard_arrow_right"></i>
                                 </button>
-                                <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                <button class="slider-next  border border-gray text-dark rounded-full w-7 h-7">
                                     <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
                                 </button>
                             </div>
@@ -1725,7 +1694,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -1827,7 +1796,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -1929,7 +1898,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2031,7 +2000,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2133,7 +2102,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2235,7 +2204,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2337,7 +2306,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2439,7 +2408,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2541,7 +2510,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2643,7 +2612,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2745,7 +2714,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2847,7 +2816,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -2928,10 +2897,10 @@ flex-col
 
 
                             <div class="hidden md:block space-s-4" dir="rtl">
-                                <button class="slider-prev  focus:outline-none border border-white text-dark rounded-full w-10 h-10">
+                                <button class="slider-prev   border border-white text-dark rounded-full w-10 h-10">
                                     <i class="text-white  text-xl sicon-keyboard_arrow_right"></i>
                                 </button>
-                                <button class="slider-next focus:outline-none border border-white text-dark rounded-full w-10 h-10">
+                                <button class="slider-next  border border-white text-dark rounded-full w-10 h-10">
                                     <i class="text-white text-xl  sicon-keyboard_arrow_left"></i>
                                 </button>
                             </div>
@@ -3025,7 +2994,7 @@ flex-col
                                             <div class="text-gray-text">
 
                                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                        class="w-10 h-10 focus:outline-none">
+                                                        class="w-10 h-10 ">
                                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                                 </button>
 
@@ -3125,7 +3094,7 @@ flex-col
                                             <div class="text-gray-text">
 
                                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                        class="w-10 h-10 focus:outline-none">
+                                                        class="w-10 h-10 ">
                                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                                 </button>
 
@@ -3225,7 +3194,7 @@ flex-col
                                             <div class="text-gray-text">
 
                                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                        class="w-10 h-10 focus:outline-none">
+                                                        class="w-10 h-10 ">
                                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                                 </button>
 
@@ -3332,7 +3301,7 @@ flex-col
                                             <div class="text-gray-text">
 
                                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                        class="w-10 h-10 focus:outline-none">
+                                                        class="w-10 h-10 ">
                                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                                 </button>
 
@@ -3432,7 +3401,7 @@ flex-col
                                             <div class="text-gray-text">
 
                                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                        class="w-10 h-10 focus:outline-none">
+                                                        class="w-10 h-10 ">
                                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                                 </button>
 
@@ -3532,7 +3501,7 @@ flex-col
                                             <div class="text-gray-text">
 
                                                 <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                        class="w-10 h-10 focus:outline-none">
+                                                        class="w-10 h-10 ">
                                                     <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                                 </button>
 
@@ -3734,7 +3703,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -3842,7 +3811,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -3929,7 +3898,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -4016,7 +3985,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -4103,7 +4072,7 @@ flex-col
                                     <div class="text-gray-text">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -4201,7 +4170,7 @@ rounded-lg justify-around overflow-hidden'>
                                     <div class="text-white">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -4280,7 +4249,7 @@ flex flex-col md:flex-row'>
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -4355,7 +4324,7 @@ flex flex-col md:flex-row'>
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -4430,7 +4399,7 @@ flex flex-col md:flex-row'>
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -4525,7 +4494,7 @@ rounded-lg justify-around overflow-hidden'>
                                     <div class="text-white">
 
                                         <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                class="w-10 h-10 focus:outline-none">
+                                                class="w-10 h-10 ">
                                             <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                         </button>
 
@@ -4604,7 +4573,7 @@ flex flex-col md:flex-row'>
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -4679,7 +4648,7 @@ flex flex-col md:flex-row'>
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -4754,7 +4723,7 @@ flex flex-col md:flex-row'>
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -4883,7 +4852,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -4983,7 +4952,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5083,7 +5052,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5190,7 +5159,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5290,7 +5259,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5390,7 +5359,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5415,10 +5384,10 @@ flex-col
                     </div>
 
                     <div class="text-center pt-7 space-s-3" dir="rtl">
-                        <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                        <button class="slider-prev   border border-gray text-dark rounded-full w-10 h-10">
                             <i class="text-gray-text sicon-keyboard_arrow_right"></i>
                         </button>
-                        <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                        <button class="slider-next  border border-gray text-dark rounded-full w-10 h-10">
                             <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
                         </button>
                     </div>
@@ -5515,7 +5484,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5615,7 +5584,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5715,7 +5684,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5822,7 +5791,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -5922,7 +5891,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -6022,7 +5991,7 @@ flex-col
                                         <div class="text-gray-text">
 
                                             <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                    class="w-10 h-10 focus:outline-none">
+                                                    class="w-10 h-10 ">
                                                 <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                                             </button>
 
@@ -6047,10 +6016,10 @@ flex-col
                     </div>
 
                     <div class="text-center pt-7 space-s-3">
-                        <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                        <button class="slider-prev   border border-gray text-dark rounded-full w-10 h-10">
                             <i class="text-gray-text sicon-keyboard_arrow_right"></i>
                         </button>
-                        <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                        <button class="slider-next  border border-gray text-dark rounded-full w-10 h-10">
                             <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
                         </button>
                     </div>

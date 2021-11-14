@@ -1,0 +1,71 @@
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}">
+{% endblock %}
+<nav aria-label="Sidebar"
+     class="hidden lg:block lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11">
+    <div class="text-center mb-9">
+        <div class="text-center mb-9">
+            <div class="h-24 w-24 m-auto">
+                <input type="file">
+            </div>
+        </div>
+    </div>
+    <a href="/profile"
+       class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
+       aria-current="page">
+        <i class=" sicon-settings me-3 text-lg"></i>
+        <span class="truncate">
+            الملف الشخصي
+        </span>
+    </a>
+    <a href="/orders" class="group menu-item opacity-0 flex items-center px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
+        <i class="sicon-packed-box me-3 text-lg"></i>
+        <span class="truncate">قائمة الطلبات</span>
+    </a>
+    <a href="/orders" class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
+        <i class=" sicon-debit-card-back me-3 text-lg"></i>
+        <span class="truncate">طلبات بانتظار الدفع</span>
+    </a>
+    <a href="/favorites" class="group menu-item opacity-0 flex items-center px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
+        <i class=" sicon-heart me-3 text-lg"></i>
+        <span class="truncate">الأمنيات</span>
+    </a>
+    <a href="/" class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
+        <i class=" sicon-send-out me-3 text-lg"></i>
+        <span class="truncate">تسجيل خروج</span>
+    </a>
+</nav>
+{% block scripts %}
+    <script defer src="{{ asset('/dist/filepond.js') }}"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        FilePond.registerPlugin(
+          FilePondPluginImagePreview,
+        );
+
+        const inputElement = document.querySelector('input[type="file"]');
+        const pond = FilePond.create(inputElement, {
+          labelIdle: `<div class="rounded-icon bg-primary h-10 w-10 text-white"> <span class="sicon-camera"></span></div>`,
+          imagePreviewHeight: 170,
+          imageCropAspectRatio: '1:1',
+          imageResizeTargetWidth: 200,
+          imageResizeTargetHeight: 200,
+          stylePanelLayout: 'compact circle',
+          styleLoadIndicatorPosition: 'center bottom',
+          styleProgressIndicatorPosition: 'left bottom',
+          styleButtonRemoveItemPosition: 'center bottom',
+          styleButtonProcessItemPosition: 'right bottom',
+        });
+
+        anime({
+          targets: '.menu-item',
+          opacity: [0, 1],
+          translateY: [20, 0],
+          delay: function (el, i) {
+            return i * 100;
+          },
+        })
+      });
+    </Script>
+{% endblock %}
