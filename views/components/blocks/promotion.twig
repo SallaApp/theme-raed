@@ -1,17 +1,15 @@
-<section class="home-block home-block--parallax {{ with_opacity }} {{ is_repeated?'repeated-block pt-0':'' }}" >
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="parallax-wrapper">
-                    {% if title is not empty %}
-                        <h1 class="title title--white title--xxx-large {{ url is empty or link_text is empty ? 'no-m' : '' }}">{{ title }}</h1>
-                    {% endif %}
-                    {% if url is not empty and link_text is not empty %}
-                        <a href="{{ url }}" class="btn btn--rounded btn--outlined white b-2x">{{ link_text }}</a>
-                    {% endif %}
-                </div>
+<section class="home-block home-block--full-banner mb-20 {{ with_opacity }} {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="row-span-2 full-banner-block h-full-banner bg-warmGray-200 transition-opacity hover:opacity-95 bg-center bg-cover text-white text-center p-5 overflow-hidden relative" style="background-image: url('{{ image.url }}');">
+        <div class="flex h-full items-center justify-center p-5 xs:p-11 relative z-20">
+            <div>
+                {% if title %}
+                <h3 class="text-lg font-bold leading-12">{{title}}</h3>
+                {% endif %}
+                {% if url is not empty and link_text is not empty %}
+                    <a href="{{ url }}" class="inline-block text-white text-sm border rounded-md font-bold px-8 py-4">{{ link_text }}</a>
+                {% endif %}
             </div>
         </div>
+        <div class="overlay h-full w-full bg-dark opacity-60 absolute top-0 left-0 z-10"></div>
     </div>
-    <div class="bg-holder lazy-background" data-src="{{ image.url }}"></div>
 </section>

@@ -1,35 +1,61 @@
-{#@jamal add the class show-all if show all button option is enabled#}
-<section class="home-block home-block--bg home-block--slide-products home-block--products-slider show-all {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="container">
-        {% if title %}
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title title--primary title--x-large title--has-dash mb-30">
-                    {{ title }}
+<section
+        class="home-block home-block--best-offers mb-20 container pe-0 lg:px-5 {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="swiper  best-offers-slider">
+        <div class="pe-5 lg:pe-0">
+            <div class="flex justify-between mb-8">
+                {% if title %}
+                    <h2 class="font-bold text-lg text-text-dark">{{ title }}</h2>
+                {% endif %}
+                <div class="flex items-center">
                     {% if display_all_url %}
                         <a href="{{ display_all_url }}"
-                           class="btn btn--oval btn--padded narrow btn--primary outlined font-base">
-                            {{ trans('blocks.home.display_all') }}
-                        </a>
+                           class="text-sm font-bold text-primary mx-3">{{ trans('blocks.home.display_all') }}</a>
                     {% endif %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="splide splide-products splide--products-slider">
-                    <div class="splide__track">
-                        <ul class="splide__list">
-                            {% for product in products %}
-                                <li class="splide__slide">
-                                    {% include 'pages.partials.product.card' %}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                    <div class="hidden sm:block" dir="rtl">
+                        <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                            <i class="text-gray-text sicon-keyboard_arrow_right"></i>
+                        </button>
+                        <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                            <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="swiper-wrapper">
+            {% for product in products %}
+                <div class="swiper-slide best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+                    {% include 'pages.partials.product.card' %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.best-offers-slider', {
+            // Optional parameters
+            // loop: true,
+            spaceBetween : 30,
+            slidesPerView: 'auto',
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.slider-next',
+                prevEl: '.slider-prev',
+            },
+
+            breakpoints: {
+                // when window width is >= 980px
+                980: {
+                    slidesPerView: 4,
+                }
+            }
+
+        });
+
+    });
+
+</script>

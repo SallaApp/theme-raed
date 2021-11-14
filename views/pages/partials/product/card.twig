@@ -1,7 +1,8 @@
 {# view options:
  1- is_horizontal = false  // display horizonal card
  2- is_special = false  // display special product with count down
- 3- show_desc = false   // display product card without description and rating
+
+*Notec: if marchent wants equal image, {{store.product_image_type}} will be (contain|cover) if not will be empty.
 #}
 
 <div id="{{ product.id }}"
@@ -11,7 +12,8 @@
     <a href="{{ product.url }}"
        class='product-entry__image relative overflow-hidden hover:opacity-90 w-full {{ is_special?'sm:h-500':'h-40' }} {{ is_horizontal?"md:h-full md:w-60":"" }}'>
         {# Equal image height option: object-cover/object-contain #}
-        <img class="sm:h-full w-full object-{{ store.product_image_type }}" src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+        <img class="sm:h-full w-full object-{{ store.product_image_type }}" src="{{ product.image.url }}"
+             alt="{{ product.image.alt }}"/>
         {% if product.promotion_title %}
             <div class="absolute top-4 start-0 z-20">
                 <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
@@ -32,44 +34,42 @@
                 </div>
             {% endif %}
         </div>
-{#        {% if show_wishlist %}#}
-{#            <button type="button"#}
-{#                    class="btn btn--circular btn--like btn--product-like btn--wishlist liked"#}
-{#                    data-id="{{ product.product_id }}"#}
-{#                    data-on-click="wishlist-remove">#}
-{#                <i class="sicon-heart"></i>#}
-{#            </button>#}
-{#        {% endif %}#}
+        {# {% if show_wishlist %} #}
+        {# <button type="button" #}
+        {# class="btn btn--circular btn--like btn--product-like btn--wishlist liked" #}
+        {# data-id="{{ product.product_id }}" #}
+        {# data-on-click="wishlist-remove"> #}
+        {# <i class="sicon-heart"></i> #}
+        {# </button> #}
+        {# {% endif %} #}
         {# description #}
-        {% if show_desc %}
         <p class="text-sm text-gray-text leading-6 mb-2.5">
             {{ product.subtitle }}
         </p>
-        {% endif %}
         <div class="w-full flex justify-between items-center mb-5">
             {% if product.on_sale %}
-            <div class="space-s-1">
-                <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
-            </div>
-            {% else %}
-            <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
-            {% endif %}
-            {% if show_desc %}
-            <div class="text-gray-text">
-                <div class="text-sm">
-                    <i class="sicon-star2 text-theme-yellow"></i>
-                    <span>4.5</span>
+                <div class="space-s-1">
+                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
+                    <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
                 </div>
-            </div>
+            {% else %}
+                <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
+            {% endif %}
+            {% if product.rating %}
+                <div class="text-gray-text">
+                    <div class="text-sm">
+                        <i class="sicon-star2 text-theme-yellow"></i>
+                        <span>{{ product.rating|number }}</span>
+                    </div>
+                </div>
             {% endif %}
         </div>
         <div class="flex items-center">
             {# add to cart #}
-            <button x-data="initAddToCart()"  @click="addToCart('{{product.id}}')"
+            <button x-data="initAddToCart()" @click="addToCart('{{ product.id }}')"
                     {% if not product.is_available %} disabled {% endif %}
                     class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
-                {{trans('pages.cart.add_to_cart')}}
+                {{ trans('pages.cart.add_to_cart') }}
             </button>
             {# add-to-favorite #}
             <div class="text-gray-text">
@@ -81,21 +81,22 @@
         </div>
     </div>
 </div>
-{# TODO:: Move scripts To js file#}
+{# TODO:: Move scripts To js file #}
 <script>
-    function initAddToCart(){
+    function initAddToCart() {
         return {
-            addToCart: function(id){
-                let newId = id.replace(/product_/g,'');
+            addToCart: function (id) {
+                let newId = id.replace(/product_/g, '');
                 window.addTocartAnimation(newId);
             }
         }
     }
+
     function initAddToFavorite() {
         return {
-            reminderModal: false,
-            inFavorite: false,
-            showMore: false,
+            reminderModal : false,
+            inFavorite    : false,
+            showMore      : false,
             toggleFavorite: function () {
                 this.inFavorite = !this.inFavorite;
             },
