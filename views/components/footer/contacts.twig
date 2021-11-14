@@ -1,8 +1,15 @@
-{% for contact in contacts %}
-    <li>
-        <a href="{{ contact.url }}">
-            <i class="{{ contact.icon }}"></i>
-            <span class="text-unicode">{{ contact.value }}</span>
-        </a>
-    </li>
-{% endfor %}
+<div>
+    <h3 class="mb-5">{{ trans('blocks.footer.social') }}</h3>
+    <ul>
+        {% for contact in contacts %}
+            <li class="mb-4">
+                <a href="{{ contact.url }}" class="flex items-center  focus:underline text-sm leading-none">
+                    <span class="me-2.5 border text-reverse rounded-full w-8 h-8 justify-center flex items-center">
+                        <i class="{{ contact.icon }}"></i>
+                    </span>
+                    <span class="text-unicode">{{ contact.value }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
