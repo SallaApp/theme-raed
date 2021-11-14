@@ -1,7 +1,10 @@
 const colors = require('tailwindcss/colors');
+delete colors['lightBlue']
+
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
+    mode: 'jit',
     purge   : {
         enabled: true,
         content: ["views/**/*.twig", 
@@ -55,7 +58,6 @@ module.exports = {
                 'darker'       : '#333',
                 'reverse'      : 'var(--color-text-reverse)',
                 'reverse-dark' : '#C6C7CE',
-                'topnav-bg-color' : 'var(--topnav-bg-color)'
             },
             borderRadius       : {
                 'large': '22px',
@@ -127,8 +129,7 @@ module.exports = {
                 'height': 'height'
             }
         },
-    },
-    
+    },    
     variants: {
         extend: {
           translate: ['group-hover'],
