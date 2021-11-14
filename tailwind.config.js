@@ -1,8 +1,13 @@
 const colors = require('tailwindcss/colors');
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
     purge   : {
         enabled: true,
-        content: ["views/**/*.twig", "assets/js/partials/salla-login.js", "assets/js/partials/search-modal.js"],
+        content: ["views/**/*.twig", 
+                  "assets/js/partials/salla-login.js", 
+                  "assets/js/partials/search-modal.js"
+                ],
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {
@@ -50,6 +55,7 @@ module.exports = {
                 'darker'       : '#333',
                 'reverse'      : 'var(--color-text-reverse)',
                 'reverse-dark' : '#C6C7CE',
+                'topnav-bg-color' : 'var(--topnav-bg-color)'
             },
             borderRadius       : {
                 'large': '22px',
@@ -133,5 +139,9 @@ module.exports = {
       outline: false,
     },
 
-    plugins: [require('tailwindcss-rtl'), require('@tailwindcss/forms')],
+    plugins: [
+      require('tailwindcss-rtl'), 
+      require('@tailwindcss/forms'),
+      require('@tailwindcss/jit'),
+    ],
 }
