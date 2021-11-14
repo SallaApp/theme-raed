@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}">
 <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}">
 <nav aria-label="Sidebar"
-     class="hidden lg:block lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72  lg:me-8 pt-8 pb-11">
+     class="hidden lg:block z-10 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72  lg:me-8 pt-8 pb-11">
     <div class="text-center mb-9">
         <div class="text-center mb-9">
             <div class=" h-24 w-24 m-auto">
@@ -19,7 +19,7 @@
                 const inputElement = document.querySelector('input[type="file"]');
                 // Create a FilePond instance
                 const pond = FilePond.create(inputElement, {
-                    labelIdle                     : `<img class="inline-block h-24 w-24 rounded-full" src="{{ user.avatar }}" alt="">`,
+                    labelIdle                     : `<img class="inline-block h-full w-full rounded-full object-cover" src="{{ user.avatar }}" alt="">`,
                     imagePreviewHeight            : 170,
                     imageCropAspectRatio          : '1:1',
                     imageResizeTargetWidth        : 200,

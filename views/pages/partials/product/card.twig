@@ -24,7 +24,7 @@
     </a>
 
     {# content #}
-    <div class="flex-1 px-5 pt-5 pb-7 ">
+    <div class="flex-1 px-5 pt-5 pb-7 flex flex-col">
         <div class="flex  justify-between items-baseline">
             <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
                 <a href="{{ product.url }}">{{ product.name }}</a>
@@ -105,7 +105,7 @@
                 </div>
             {% endif %}
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center mt-auto">
             {# add to cart #}
             <button x-data="initAddToCart()" @click="addToCart('{{ product.id }}')"
                     {% if not product.is_available %} disabled {% endif %}
