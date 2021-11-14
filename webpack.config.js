@@ -5,9 +5,9 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
 module.exports = {
     entry  : {
-        app        : ['./assets/js/app.js', './assets/styles/home.scss'],
+        app        : ['./assets/js/app.js', './assets/styles/app.scss'],
         inner      : './assets/js/inner.js',
-        home       : './assets/js/home.js',
+        home       : ['./assets/js/home.js', './assets/styles/home.scss'],
         salla_login: './assets/js/partials/salla-login.js',
         filepond   : ['./assets/js/plugins/filepond/filepond.js', './assets/js/plugins/filepond/filepond.scss'],
     },
