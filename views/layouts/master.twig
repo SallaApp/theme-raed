@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {% hook 'head:start' %}
     {% block styles %}{% endblock %}
-    <link rel="stylesheet" href="{{ asset('dist/main_styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/app.css') }}">
 
     <!-- theme color -->
     <meta name="msapplication-navbutton-color" content="{{ theme.color }}">
@@ -43,6 +43,9 @@
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
     {% block head %}{% endblock %}
+
+    <script type="module" src="http://localhost:3333/build/salla-web-components.esm.js" data-stencil></script>
+    <script nomodule="" src="http://localhost:3333/build/salla-web-components.js" data-stencil></script>
 </head>
 
 <body id="app" class="{% hook 'body:classes' %}">
@@ -61,7 +64,7 @@
 </div>
 
 <script defer src="{{ link("languages/assets/#{store.theme.translations_hash}.js") }}"></script>
-<script defer src="{{ asset('dist/main.js') }}"></script>
+<script defer src="{{ asset('dist/app.js') }}"></script>
 {% if not is_home %}
     <script type="text/javascript" defer src="{{ asset('dist/inner.js') }}"></script>
 {% endif %}

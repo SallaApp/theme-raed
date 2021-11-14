@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}">
+<link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}">
+<nav aria-label="Sidebar"
+     class="hidden lg:block lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72  lg:me-8 pt-8 pb-11">
+    <div class="text-center mb-9">
+        <div class="text-center mb-9">
+            <div class=" h-24 w-24 m-auto">
+                <input type="file">
+            </div>
+
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // filepond
+                FilePond.registerPlugin(
+                    FilePondPluginImagePreview,
+                );
+                // Get a reference to the file input element
+                const inputElement = document.querySelector('input[type="file"]');
+                // Create a FilePond instance
+                const pond = FilePond.create(inputElement, {
+                    labelIdle                     : `<img class="inline-block h-24 w-24 rounded-full" src="{{ user.avatar }}" alt="">`,
+                    imagePreviewHeight            : 170,
+                    imageCropAspectRatio          : '1:1',
+                    imageResizeTargetWidth        : 200,
+                    imageResizeTargetHeight       : 200,
+                    stylePanelLayout              : 'compact circle',
+                    styleLoadIndicatorPosition    : 'center bottom',
+                    styleProgressIndicatorPosition: 'left bottom',
+                    styleButtonRemoveItemPosition : 'center bottom',
+                    styleButtonProcessItemPosition: 'right bottom',
+                });
+            });
+        </Script>
+    </div>
+    {% component 'header.profile_notifications' as notifications %}
+    <a href="{{ link('orders') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-packed-box me-3 text-lg"></i>
+        <span class="truncate">{{ trans('common.titles.orders') }}</span>
+    </a>
+
+    <a href="{{ link('wishlist') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-heart me-3 text-lg"></i>
+        {{ trans('common.titles.wishlist') }}
+    </a>
+    <a href="{{ link('rating') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-favorite me-3 text-lg"></i>
+        <span>{{ trans('common.titles.rating') }}</span>
+    </a>
+    <a href="{{ link('profile') }}"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-settings me-3 text-lg"></i>
+        {{ trans('common.titles.profile') }}
+    </a>
+    <a href="#"
+       data-on-click="auth-logout"
+       class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-send-out me-3 text-lg"></i>
+        {{ trans('blocks.header.logout') }}
+    </a>
+</nav>
+<script defer src="{{ asset('/dist/filepond.js') }}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // filepond
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+        );
+        // Get a reference to the file input element
+        const inputElement = document.querySelector('input[type="file"]');
+        // Create a FilePond instance
+        const pond = FilePond.create(inputElement, {
+            labelIdle                     : `<div class="rounded-icon bg-primary h-10 w-10 text-white"> <span class="sicon-camera"></span></div>`,
+            imagePreviewHeight            : 170,
+            imageCropAspectRatio          : '1:1',
+            imageResizeTargetWidth        : 200,
+            imageResizeTargetHeight       : 200,
+            stylePanelLayout              : 'compact circle',
+            styleLoadIndicatorPosition    : 'center bottom',
+            styleProgressIndicatorPosition: 'left bottom',
+            styleButtonRemoveItemPosition : 'center bottom',
+            styleButtonProcessItemPosition: 'right bottom',
+        });
+
+        // anime({
+        //     targets: '.smile-anime',
+        //     scale: [0, 1],
+        //     opacity: [0, 1],
+        //     translateY: [20, 0],
+        //     translateX: [20, 0],
+        //     delay: function (el, i) {
+        //         return i * 100;
+        //     },
+        // }),
+
+        anime({
+            targets   : '.menu-item',
+            opacity   : [0, 1],
+            translateY: [20, 0],
+            delay     : function (el, i) {
+                return i * 100;
+            },
+        })
+    });
+</Script>
