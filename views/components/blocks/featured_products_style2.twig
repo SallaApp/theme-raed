@@ -1,48 +1,90 @@
-<section class="home-block home-block--bg home-block--slide-products {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <ul class="tabs-heads tabs-heads--center">
-                    {% for section in items %}
-                        <li class="tab-head">
-                            <button class="btn btn--oval btn--padded btn--grey {{ loop.first?'active':'' }}" data-tab-target="#featured_tab_{{ section.id }}">
-                                {{ section.title }}
-                            </button>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+<section class="home-block  home-block--tabsProdutcs bg-gray-bg2 pb-10 {{ is_repeated?'repeated-block pt-0':'pt-20' }}">
+    <div class="container pe-0 lg:px-5" x-data="initTabs()">
+        <div class="tabs text-center pb-10 space-s-1 md:space-s-4 whitespace-nowrap overflow-x-auto hide-scroll">
+            {% for section in items %}
+                <button @click.prevent="switchTab('featured-tab-{{ section.id }}')"
+                        :class="currentTab === 'featured-tab-{{ section.id }}' ? 'btn-primary' : 'btn-outline-primary'"
+                        class="cursor-pointer btn">{{ section.title }}</button>
+            {% endfor %}
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="tabs-body">
-                    {% for section in items %}
-                        <div id="featured_tab_{{ section.id }}" data-tab-content class="tab-body {{ loop.first?'active':'' }}">
-                            {% if is_slider %}
-                                {#slider products#}
-                                <div class="splide splide-products splide--products-slider">
-                                    <div class="splide__track">
-                                        <ul class="splide__list">
-                                            {% for product in section.products %}
-                                                <li class="splide__slide">
-                                                    {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                </div>
-                            {% else %}
 
-                                <div class="grid-block centered products-list-container">
-                                    {% for product in section.products %}
-                                        {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
+        {% for section in items %}
+            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" class="swiper pb-10 tabs-slider">
+                {% if is_slider %}
+                    <div class="swiper-wrapper">
+                        {% for product in section.products %}
+                            <div class="swiper-slide tabs-slider__slide tab-product opacity-0 w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+                                {% include 'pages.partials.product.card' %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center pt-7 space-s-3" dir="rtl">
+                        <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                            <i class="text-gray-text sicon-keyboard_arrow_right"></i>
+                        </button>
+                        <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                            <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
+                        </button>
+                    </div>
+                {% else %}
+                {% endif %}
             </div>
-        </div>
+        {% endfor %}
     </div>
 </section>
+{# TODO:: move to js file #}
+<script>
+    function initTabs() {
+        return {
+            currentTab: 'featured-tab-{{ items[0].id }}',
+            switchTab : function (tabId) {
+                this.currentTab = tabId
+                animatItems()
+            }
+        }
+    }
+
+    function animatItems() {
+        anime({
+            targets   : '.tab-product',
+            translateX: [40, 0],
+            opacity   : [0, 1],
+
+            easing: 'easeOutExpo',
+        }, '+=200');
+
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        animatItems()
+        const swiper = new Swiper('.tabs-slider', {
+            // Optional parameters
+            // loop: true,
+            spaceBetween : 30,
+            slidesPerView: 'auto',
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.slider-next',
+                prevEl: '.slider-prev',
+            },
+
+            breakpoints: {
+                // // when window width is >= 640px
+                // 640: {
+                //     slidesPerView: 2,
+                // },
+                // // when window width is >= 768px
+                // 768: {
+                //     slidesPerView: 3,
+                // },
+                // when window width is >= 980px
+                980: {
+                    slidesPerView: 4,
+                }
+            }
+
+        });
+
+    });
+</script>
