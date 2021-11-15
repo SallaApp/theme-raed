@@ -1,6 +1,12 @@
 {#{% component 'header.theme-preview-bar' %}#}
-<div class="dark">
-  <div id="top-nav" class="py-2 lg:py-0 dark:bg-gray-800 dark:text-gray-300 bg-[color:var(--topnav-bg)]">
+
+<div class="{{ store.theme.topnav_is_dark ? 'dark':''}}">
+  <div id="top-nav" class="py-2 lg:py-0 
+    {{ store.theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]' : ''}}
+    {{ store.theme.topnav_bg_gradient ? 'bg-gradient-to-r !from-[color:var(--topnav-gradient-from)] !to-[color:var(--topnav-gradient-to)]' : ''}}
+    {{ store.theme.topnav_text_color ? '!text-[color:var(--topnav-text-color)]' : ''}} 
+    {{ store.theme.topnav_is_dark ? 'dark:bg-gray-800 dark:text-gray-300': ''}}
+    ">
     <div class="container">
       <div class="flex justify-center lg:justify-between">
         <div class="flex items-center">
@@ -15,9 +21,9 @@
   </div>
 </div>
 
-<div class="dark--stop">
+<div class="dark">
   <header id="site-header-outer" class="site-header-container bg-white dark:bg-gray-700 dark:text-gray-300 shadow-default">
-    <div class="site-header">
+    <div class="site-header bg-inherit">
       <div class="container">
         <div class="flex items-stretch justify-between relative">
           <div class="flex items-center">
@@ -25,9 +31,7 @@
               <span class="sicon-menu text-primary text-3xl me-2.5"></span>
             </a>
             <a class="site-logo theme-logo navbar-brand items-center flex" href="{{ store.url }}">
-              {# <img src="{{store.logo}}" alt="" class="img-fluid b-logo"> #}
-              <img src="{{asset('images/salla-logo.svg')}}" alt="" class="img-fluid b-logo">
-              
+              <img src="{{store.logo}}" alt="" class="img-fluid b-logo">
               {# <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1> #}
               <h1 class="hidden">{{store.name}}</h1>
             </a>
@@ -40,7 +44,7 @@
                 <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
                 <div class="opacity-0 anime-count absolute top-1 -right-2 bg-primary text-reverse w-6 h-6 rounded-full flex items-start justify-center font-bold text-sm">23</div>
               </a>
-              <div>
+              <div class="whitespace-nowrap">
                 <p class="leading-3 text-gray-400">السلة</p>
                 <b class="leading-3">8,563 ر.س</b>
               </div>

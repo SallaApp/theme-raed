@@ -35,6 +35,7 @@ module.exports = {
                 'auto-fill-6': 'repeat(auto-fill, 180px)',
             },
             colors             : {
+                'inherit'      : 'inherit',
                 'primary'      : 'var(--main-color)',
                 'primary-light': "#eefbf9",
                 'dark-gray'    : '#A6B3BA',

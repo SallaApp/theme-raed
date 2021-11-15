@@ -3,14 +3,14 @@
         {% for contact in contacts %}
             {% if contact.type == 'email' %}
                 <li class="inline-block">
-                    <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm hover:text-primary">
+                    <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm hover:text-{{ store.theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary'}} ">
                         {{ contact.value }}
                     </a>
                 </li>
             {% endif %}
             {% if contact.type == 'phone' %}
                 <li class="inline-block">
-                    <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm hover:text-primary">
+                    <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm hover:text-{{ store.theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary'}}">
                         <span>{{ trans('blocks.footer.social') }}: </span>
                         <span class="unicode">{{ contact.value }}</span>
                     </a>
