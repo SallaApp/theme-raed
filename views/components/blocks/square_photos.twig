@@ -1,32 +1,34 @@
-<section class="home-block home-block--square-images">
-    <div class="container">
-        {% if title %}
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="title title--primary title--x-large title--has-dash mb-30">
-                        {{ title }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-        <div class="row">
-            {% for item in items %}
-                <div class="col-md-4 col-sm-12">
-                    <a href="{{ item.url }}"
-                       class="banner banner--square {% if item.text is not empty %}has-title{% endif %} {% if loop.last%}last{% endif %}"
-                       {% if item.link_type == 'external_link' %}target="_blank"{% endif %}
-                       aria-label="Banner {{ item.text }}">
-                        <figure class="banner-effect-1">
-                            <img class="lazy-load" data-src="{{ item.image.url }}" alt="{{ item.text }}">
-                            {% if item.text is not empty %}
-                            <figcaption>
-                                <h2>{{ item.text }}</h2>
-                            </figcaption>
-                            {% endif %}
-                        </figure>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+{#<section class="home-block home-block--banners mb-20 container">#}
+{#    <div class="grid grid-cols-2 md:grid-cols-3 grid-flow-row gap-3 sm:gap-7">#}
+{#        <div class="col-span-2 sm:col-span-1 sm:row-span-2  bg-warmGray-200 transition-opacity hover:opacity-95 bg-cover h-lg-banner text-white text-center p-5 rounded-md overflow-hidden relative" style="background-image: url('../images/banners/banner-1.jpg');">#}
+{#            <a href="{{item[0].url}}"#}
+{#               class="flex flex-col justify-center  h-full p-11 relative z-20 xs:border border-dashed border-border-color rounded-md">#}
+{#                <h3 class="text-2xl font-bold leading-12 mb-5">وحدات تحكم متوافق مع بلاي ستيشن 3</h3>#}
+{#                <p>تصميم مريح لبصمة اليد، استجابة بالاهتزاز Dualshock، تجربة لعب سهلة وممتعة</p>#}
+{#            </a>#}
+{#            <div class="overlay h-full w-full bg-dark opacity-60 absolute top-0 left-0 z-10"></div>#}
+{#        </div>#}
+
+{#        {% for item in items %}#}
+{#            <div class="col-md-4 col-sm-12">#}
+{#                <a href="{{ item.url }}"#}
+{#                   class="banner banner--square {% if item.text is not empty %}has-title{% endif %} {% if loop.last%}last{% endif %}"#}
+{#                   {% if item.link_type == 'external_link' %}target="_blank"{% endif %}#}
+{#                   aria-label="Banner {{ item.text }}">#}
+{#                    <figure class="banner-effect-1">#}
+{#                        <img class="lazy-load" data-src="{{ item.image.url }}" alt="{{ item.text }}">#}
+{#                        {% if item.text is not empty %}#}
+{#                            <figcaption>#}
+{#                                <h2>{{ item.text }}</h2>#}
+{#                            </figcaption>#}
+{#                        {% endif %}#}
+{#                    </figure>#}
+{#                </a>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#        {{ range $key, $item := .Site.Data.banners.items }}#}
+{#        {{ partial "partials/components/banner.html" (dict "banner" $item )}}#}
+{#        {{end}}#}
+
+{#    </div>#}
+{#</section>#}

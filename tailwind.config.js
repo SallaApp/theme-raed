@@ -4,7 +4,7 @@ module.exports = {
         enabled: true,
         content: ["views/**/*.twig", "assets/js/partials/salla-login.js", "assets/js/partials/search-modal.js"],
     },
-    darkMode: false, // or 'media' or 'class'
+    darkMode: 'class', // or 'media' or 'class'
     theme   : {
         container : {
             center : true,
@@ -41,6 +41,7 @@ module.exports = {
                 'dark'         : 'var(--main-text-color-dark)',
                 'gray-text'    : 'var(--main-text-color2)',
                 'gray-bg2'     : 'var(--bg-gray)',// 'light-gray': '#F9FAFB',
+                'gray-150'     : '#eff0f0',
                 'color-gray'   : 'var(--color-grey)',
                 'gray-bg'      : '#F5F5F5',
                 'darkGray-bg'  : '#F3F3F3',
@@ -73,6 +74,7 @@ module.exports = {
                 'default' : '5px 10px 30px #2B2D340D;',
                 'top'     : '0px 0px 10px #0000001A;',
                 'md'      : '5px 10px 99px #2B2D340D',
+                'dropdown'      : '0 4px 8px rgba(161, 121, 121, 0.07)',
                 'light'   : '0px 4px 15px rgba(1, 1, 1, 0.06)',
                 'huge'    : '0px 3px 6px #00000029',
                 'progress': '0 5px 15px rgba(92, 213, 196, 0.4)',
@@ -120,10 +122,15 @@ module.exports = {
             }
         },
     },
+    
     variants: {
         extend: {
-            translate: ['group-hover'],
+          translate: ['group-hover'],
         },
+    },
+
+    corePlugins: {
+      outline: false,
     },
 
     plugins: [require('tailwindcss-rtl'), require('@tailwindcss/forms')],

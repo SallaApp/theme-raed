@@ -1,7 +1,7 @@
 {% extends "layouts.master" %}
 {% block content %}
     {# missing assets #}
-    <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}"/>
     <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('/dist/mmenu-light.css') }}">
     <link rel="stylesheet" href="{{ asset('/dist/main.min.585d6d35c0b4638b35eb56b632cd0c56bcff2e18cb7e23233134a216759f9f1e.css') }}">
@@ -12,7 +12,7 @@
 
     <main id="main">
         <div class="relative profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
-            <div class="container relative z-20 flex justify-between h-full items-center">
+            <div class="container relative z-10 flex justify-between h-full items-center">
                 <div class="self-start">
                     <nav class="w-full py-5">
                         <ol class="list-reset flex items-center text-sm  text-reverse ">
@@ -26,7 +26,7 @@
         </div>
         <div class="container mb-24">
             <div class="flex flex-col lg:flex-row ">
-                {% include 'pages.customer.partials.sidebar.twig' %}
+                {% component 'header.profile_sidebar' as userMenu %}
                 <div class="main-content flex-1 pb-10 pt-10 ">
                     <h1 class="font-bold text-lg mb-10">الملف الشخصي</h1>
                     <div class="lg:hidden">

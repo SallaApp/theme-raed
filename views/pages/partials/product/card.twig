@@ -1,40 +1,165 @@
-<div class="product-block {{ store.product_image_type }} {{ block_classes ?? '' }}" id="product_{{ product.product_id }}">
-    <div class="product-block__thumb">
+{# view options:
+ 1- is_horizontal = false  // display horizonal card
+ 2- is_special = false  // display special product with count down
+
+*Notec: if marchent wants equal image, {{store.product_image_type}} will be (contain|cover) if not will be empty.
+#}
+
+{# {{dd(product)}} #}
+
+<div id="{{ product.id }}"
+     class='product-entry {{ block_classes ?? '' }}{{ is_special?'product-entry--special':'' }}  {{ is_horizontal?'product-entry--horizontal md:flex-row':'product-entry--vertical' }} relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
+    {# Equal image height option: add/remove "h-40" class #}
+    {# image #}
+    <a href="{{ product.url }}"
+       class='product-entry__image relative overflow-hidden hover:opacity-90 w-full {{ is_special?'sm:h-500':'h-40' }} {{ is_horizontal?"md:h-full md:w-60":"" }}'>
+        {# Equal image height option: object-cover/object-contain #}
+        <img class="sm:h-full w-full object-{{ store.product_image_type }}" src="{{ product.image.url }}"
+             alt="{{ product.image.alt }}"/>
         {% if product.promotion_title %}
-            <span class="badge badge--ribbon badge--primary">
-                {{ product.promotion_title }}
-            </span>
+            <div class="absolute top-4 start-0 z-20">
+                <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
+            </div>
         {% endif %}
-        <a href="{{ product.url }}" class="thumb-wrapper" aria-label="{{ product.name }}">
-            <img class="lazy-load" width="200" height="200" src="{{ asset('images/img_loader.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}" />
-        </a>
-    </div>
-    {% if show_wishlist %}
-        <button type="button"
-                class="btn btn--circular btn--like btn--product-like btn--wishlist liked"
-                data-id="{{ product.product_id }}"
-                data-on-click="wishlist-remove">
-            <i class="sicon-heart"></i>
-        </button>
-    {% endif %}
-    <div class="product-block__info">
-        <a href="{{ product.url }}" class="product-title">
-            <h2 class="title title--primary title--small">{{ product.name }}</h2>
-            <p>{{product.subtitle}}</p>
-        </a>
-        <div class="price-wrapper">
-            {% if product.on_sale %}
-                <span class="color-danger">{{ product.sale_price }}</span>
-                <small>{{ product.regular_price }}</small>
-            {% else %}
-                <span>{{ product.price }}</span>
+    </a>
+
+    {# content #}
+    <div class="flex-1 px-5 pt-5 pb-7 flex flex-col">
+        <div class="flex  justify-between items-baseline">
+            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                <a href="{{ product.url }}">{{ product.name }}</a>
+            </h3>
+            {% if is_special %}
+                <div class="flex-shrink-0 border-4 border-border-color rounded-full w-20 h-20 flex flex-col items-center justify-center text-sm">
+                    <b class="font-bold text-primary leading-3">{{ product.quantity|number }}</b>
+                    <h5>{{ trans('pages.products.remained') }}</h5>
+                </div>
             {% endif %}
         </div>
+
+
+         {# donation #}
+            <div x-data="initDonation()">
+                <h2 class="text-sm mb-4">هدف الحملة</h2>
+                <div class="flex justify-between text-sm mb-2.5">
+                    <span>25,899.99 ر.س</span>
+                    <span>50,899 ر.س</span>
+                </div>
+                <div class="bg-border-color rounded-full  mb-1.5">
+                    <div class="progress-bg transition-all duration-500 opacity0 h-4 bg-primary relative rounded-full flex justify-end"
+                        style="width: 30%">
+                        <!-- <p class="text-sm absolute -bottom-7 -end-6">1220 ر.س</p> -->
+                    </div>
+                </div>
+                <small class="text-xs text-gray-text">تنتهي الحملة في 01-10-2021</small>
+                <div class="border-color py-5 mt-5 mb-2.5">
+                    <label for="donationAmount" class="block text-sm ">مبلغ التبرع <span class="text-red-500">*</span> </label>
+                    <div class="mt-2.5 relative">
+                        <input type="number" @keyup="isShowCopounError = false" @keyup.enter="addDonation()"
+                            x-model="donationAmount" id="donationAmount" name="copoun-code"
+                            :class="{'has-error': isShowCopounError}" class="pe-24 form-input" :disabled="isDonationAdded">
+                        <button x-show="isDonationAdded" @click="addDonation();" type="button"
+                            class="copoun-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn px-4"
+                            :class="isDonationAdded ? 'btn-danger' : 'btn-default'">
+                            <!-- <span x-show="!isDonationAdded">تفعيل</span> -->
+                            <i x-show="isDonationAdded" class="sicon-cancel text-xl w-8"></i>
+                        </button>
+                        <!-- error msg -->
+                        <p x-show="isShowCopounError" class="absolute -bottom-5 text-xs text-red-700" id="validationHelp">مثال
+                            لرسالة
+                            الخطأ.</p>
+                    </div>
+                </div>
+            </div>
+            {# end donation #}
+
+
+
+        {# {% if show_wishlist %} #}
+        {# <button type="button" #}
+        {# class="btn btn--circular btn--like btn--product-like btn--wishlist liked" #}
+        {# data-id="{{ product.product_id }}" #}
+        {# data-on-click="wishlist-remove"> #}
+        {# <i class="sicon-heart"></i> #}
+        {# </button> #}
+        {# {% endif %} #}
+        {# description #}
+        <p class="text-sm text-gray-text leading-6 mb-2.5">
+            {{ product.subtitle }}
+        </p>
+        <div class="w-full flex justify-between items-center mb-5">
+            {% if product.on_sale %}
+                <div class="space-s-1">
+                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
+                    <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
+                </div>
+            {% else %}
+                <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
+            {% endif %}
+            {% if product.rating %}
+                <div class="text-gray-text">
+                    <div class="text-sm">
+                        <i class="sicon-star2 text-theme-yellow"></i>
+                        <span>{{ product.rating|number }}</span>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="flex items-center mt-auto">
+            {# add to cart #}
+            <button x-data="initAddToCart()" @click="addToCart('{{ product.id }}')"
+                    {% if not product.is_available %} disabled {% endif %}
+                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                {{ trans('pages.cart.add_to_cart') }}
+            </button>
+            {# add-to-favorite #}
+            <div class="text-gray-text">
+                <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                        class="w-10 h-10 focus:outline-none">
+                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                </button>
+            </div>
+        </div>
     </div>
-    <button class="btn btn--floated btn--add-to-cart {{ product.is_available?'':'disabled' }}"
-            aria-label="Add To Cart"
-            {% if not product.is_available %} disabled {% endif %}
-            data-on-click="cart-quick-add" data-id="{{ product.product_id }}">
-        <i class="sicon-shopping-bag"></i>
-    </button>
 </div>
+{# TODO:: Move scripts To js file #}
+<script>
+    function initAddToCart() {
+        return {
+            addToCart: function (id) {
+                let newId = id.replace(/product_/g, '');
+                window.addTocartAnimation(newId);
+            }
+        }
+    }
+
+    function initAddToFavorite() {
+        return {
+            reminderModal : false,
+            inFavorite    : false,
+            showMore      : false,
+            toggleFavorite: function () {
+                this.inFavorite = !this.inFavorite;
+            },
+        }
+    }
+
+    function initDonation() {
+        return {
+            donationAmount: '',
+            isDonationAdded: false,
+            isShowCopounError: false,
+            addDonation: function () {
+                if (this.donationAmount) {
+                    this.isShowCopounError = false;
+                    this.isDonationAdded = !this.isDonationAdded;
+                    if (!this.isDonationAdded) {
+                        this.donationAmount = '';
+                    }
+                } else {
+                    this.isShowCopounError = true;
+                }
+            }
+        }
+    }
+</script>

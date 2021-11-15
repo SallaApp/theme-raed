@@ -1,29 +1,18 @@
-<section class="home-block home-block--fixed-products show-all {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                {% if title %}
-                    <div class="title title--primary title--x-large title--has-dash mb-30">
-                    {{ title }}
-                    {% if display_all_url %}
-                        <a href="{{ display_all_url }}"
-                           class="btn btn--oval btn--padded narrow btn--primary outlined font-base">
-                            {{ trans('blocks.home.display_all') }}
-                        </a>
-                    {% endif %}
-                    </div>
-                {% endif %}
-            </div>
+<section class="home-block  home-block--latestProducts mb-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="flex justify-between mb-8">
+        {% if title %}
+            <h2 class="font-bold text-lg text-text-dark">{{ title }}</h2>
+        {% endif %}
+        <div class="flex items-center">
+            {% if display_all_url %}
+                <a href="{{ display_all_url }}" class="text-sm font-bold text-primary mx-3">{{ trans('blocks.home.display_all') }}</a>
+            {% endif %}
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="grid-block products-list-container">
-                    {% for product in products %}
-                        {% include 'pages.partials.product.card' %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {% for product in products %}
+            {% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
+        {% endfor %}
     </div>
 </section>
 

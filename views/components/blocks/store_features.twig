@@ -1,22 +1,13 @@
-<section class="home-block home-block--store-features">
-    <div class="container">
-        {#<div class="row">
-            <div class="col-md-12">
-                <div class="title title--large title--center mb-30">{{ trans('blocks.home.store_features') }}</h5>
-            </div>
-        </div>#}
-        <div class="row">
-            {% for item in items %}
-                <div class="col-md-4 col-sm-12">
-                    <div class="store-feature {% if loop.last %}last{% endif %}">
-                        <div class="store-feature__icon">
-                            <i class="icon {{ item.icon }}"></i>
-                        </div>
-                        <div class="title title--large title--primary">{{ item.title }}</div>
-                        <p>{{ item.text }}</p>
-                    </div>
+<section class="home-block  home-block--features mb-20 container">
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 xl:gap-8">
+        {% for item in items %}
+            <div class="feature-box bg-white transition-shadow duration-500 hover:shadow-default  rounded-md flex-grow h-48 flex flex-col items-center justify-center">
+                <div class="slide-anime-icon mb-3 bg-primary w-16 h-16 rounded-full flex items-center justify-center">
+                    <i class="{{ item.icon }} text-reverse text-3xl"></i>
                 </div>
-            {% endfor %}
-        </div>
+                <h4 class="font-bold text-sm text-title-color mb-1">{{ item.title }}</h4>
+                <p class="text-sm text-text-dark">{{ item.text }}</p>
+            </div>
+        {% endfor %}
     </div>
 </section>
