@@ -1,46 +1,78 @@
-<section class="home-block home-block--bg home-block--testimonials {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title title--primary title--x-large title--has-dash mb-30">{{ trans('blocks.home.testimonials') }}</div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="splide splide--testimonials">
-                    <div class="splide__track">
-                        <ul class="splide__list">
-                            {% for item in items %}
-                                <li class="splide__slide">
-                                    <div class="testimonial-entry">
-                                        <div class="testimonial-entry__info">
-                                            <div class="avatar-wrapper avatar-wrapper--circular avatar-wrapper--small">
-                                                <img src="{{ item.customer.avatar }}" alt="{{ item.customer.full_name }}"/>
-                                            </div>
-                                            <div class="title title--primary title--small">
-                                                {{ item.customer.full_name }}
-                                                <small>{{ item.customer.city }}</small>
-                                            </div>
-                                        </div>
-                                        <div class="testimonial-entry__excerpt">
-                                            <p>{{ item.text }}</p>
-                                        </div>
-                                        {%  if item.stars %}
-                                        <div class="testimonial-entry__rate">
-                                            <span class="btn btn--transparent btn--star small selected"><i class="sicon-star2"></i></span>
-                                            <span class="btn btn--transparent btn--star small {{ item.stars>=2?'selected':'' }}"><i class="sicon-star2"></i></span>
-                                            <span class="btn btn--transparent btn--star small {{ item.stars>=3?'selected':'' }}"><i class="sicon-star2"></i></span>
-                                            <span class="btn btn--transparent btn--star small {{ item.stars>=4?'selected':'' }}"><i class="sicon-star2"></i></span>
-                                            <span class="btn btn--transparent btn--star small {{ item.stars==5?'selected':'' }}"><i class="sicon-star2"></i></span>
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+<section class="home-block home-block--testimonials mb-16 overflow-hidden {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="container pe-0 lg:px-5">
+        <div class="swiper  testimonials-slider lg:-mx-40 pb-10">
+            <div class="lg:px-40">
+                <div class="flex justify-between mb-8">
+                    <h2 class="font-bold text-lg text-text-dark">{{ trans('blocks.home.testimonials') }}</h2>
                 </div>
             </div>
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                {% for item in items %}
+                    <div class="swiper-slide testimonials-slider__slide w-10/12 lg:w-auto">
+                        <div class="testimonial shadow-default lg:shadow-none flex relative px-5 md:px-16 lg:pe-36 lg:ps-10 pt-4 md:pt-8 lg:pt-14 pb-8 lg:pb-16 bg-white shadowmd rounded-md">
+                            <div class="testimonial__avatar w-12 h-12 lg:w-20 lg:h-20 rounded-full overflow-hidden me-3 flex-shrink-0">
+                                <img src="{{ item.customer.avatar }}" alt="{{ item.customer.full_name }}"
+                                     class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1">
+                                <p class="leading-6 mb-2 xs:mb-6">{{ item.text }}</p>
+
+                                <!-- footer -->
+                                <div class="flex justify-between items-center">
+                                    <div class="testimonial__info">
+                                        <h4 class="font-bold text-xs xs:text-sm">{{ item.customer.full_name }}</h4>
+                                        <div class="text-sm text-gray-text">{{ item.customer.city }}</div>
+                                    </div>
+                                    <div class="testimonial__rating text-sm">
+                                        {% for i in range(0, item.stars) %}
+                                            <i class="sicon-star2 text-theme-yellow"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- absolute -->
+                            <div class=" lg:block testimonial__border absolute h-full w-1.5 bg-primary top-0 start-0 rounded-md"></div>
+                            <i class="hidden lg:block testimonial__icon absolute  top-10 end-10 text-primary text-5xl  sicon-quote-open"></i>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- If we need navigation buttons -->
+            <div class="slider-next-lg swiper-button-next rounded-full hidden lg:flex end-5 lg:end-60 top-48"></div>
+            <div class="slider-prev-lg swiper-button-prev rounded-full hidden lg:flex start-5 lg:start-60 top-48"></div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const swiper = new Swiper('.testimonials-slider', {
+                // Optional parameters
+                slidesPerView : "auto",
+                loop          : true,
+                centeredSlides: true,
+                spaceBetween  : 15,
+
+
+                // Navigation arrows
+                navigation: {
+                    nextEl: '.slider-next-lg',
+                    prevEl: '.slider-prev-lg',
+                },
+
+                breakpoints: {
+                    // when window width is >= 980px
+                    1024: {
+                        slidesPerView: 2,
+                        spaceBetween : 30,
+                    },
+
+                }
+
+            });
+
+        });
+    </script>
 </section>

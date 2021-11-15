@@ -1,13 +1,13 @@
-<div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 xl:gap-8">
-{#    {% set colors=[1,2,3] %}#}
-    {% for item in items %}
-    <div
-            class="feature-box bg-white transition-shadow duration-500 hover:shadow-default  rounded-md flex-grow h-48 flex flex-col items-center justify-center">
-        <div class="slide-anime-icon mb-3  w-16 h-16 rounded-full flex items-center justify-center">
-            <i class="{{item.icon}} text-reverse text-3xl"></i>
-        </div>
-        <h4 class="font-bold text-sm text-title-color mb-1">{{item.title}}</h4>
-        <p class="text-sm text-text-dark">{{item.text}}</p>
+<section class="home-block  home-block--features mb-20 container">
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 xl:gap-8">
+        {% for item in items %}
+            <div class="feature-box bg-white transition-shadow duration-500 hover:shadow-default  rounded-md flex-grow h-48 flex flex-col items-center justify-center">
+                <div class="slide-anime-icon mb-3 bg-primary w-16 h-16 rounded-full flex items-center justify-center">
+                    <i class="{{ item.icon }} text-reverse text-3xl"></i>
+                </div>
+                <h4 class="font-bold text-sm text-title-color mb-1">{{ item.title }}</h4>
+                <p class="text-sm text-text-dark">{{ item.text }}</p>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
+</section>

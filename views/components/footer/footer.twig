@@ -2,153 +2,24 @@
     <div aria-label="footer" class="py-11 lg:pt-28 lg:pb-40">
         <div class="container lg:grid grid-cols-6 gap-6">
             <div class="lg:col-span-2 pe-20">
-                <a href="https://salla.sa" class="flex mb-6">
-                    <img src="{{ asset('images/salla-logo.svg') }}" alt="" class="img-fluid b-logo">
-                    <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">سلة</h1>
+                <a href="{{ link('/') }}" class="flex mb-6">
+                    <img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
+                    <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1>
                 </a>
-
+                {% if store.description %}
                 <p class="max-w-sm leading-6 mb-6">
-                    مع سلة تستطيع خلال دقائق إنشاء متجرك الخاص بأقل التكاليف والحصول على استضافة مجانية وتحديثات مستمرة
-                    ومتجددة وبدون أي عمولة على المبيعات
+                    {{ store.description|raw }}
                 </p>
-                <ul class="flex">
-
-                    <li class="me-2.5">
-                        <a href="#" rel="noopener" target="_blank" title="YouTube"
-                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
-                            <span class="sicon-youtube"></span>
-                        </a>
-                    </li>
-
-                    <li class="me-2.5">
-                        <a href="#" rel="noopener" target="_blank" title="Facebook"
-                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
-                            <span class="sicon-facebook"></span>
-                        </a>
-                    </li>
-
-                    <li class="me-2.5">
-                        <a href="#" rel="noopener" target="_blank" title="Instagram"
-                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
-                            <span class="sicon-instagram"></span>
-                        </a>
-                    </li>
-
-                    <li class="me-2.5">
-                        <a href="#" rel="noopener" target="_blank" title="Twitter"
-                           class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary transition duration-300 text-sm">
-                            <span class="sicon-twitter"></span>
-                        </a>
-                    </li>
-
-
-                </ul>
+                {% endif %}
+                {% component 'footer.social' %}
             </div>
-
-            <div>
-                <h3 class="font-bold mb-5"> عن سلة</h3>
-                <ul>
-
-                    <li class="mb-4">
-                        <a href="#"
-                           class=" focus:underline text-sm leading-none hover:text-primary">اتفاقية
-                            الاستخدام</a>
-                    </li>
-
-                    <li class="mb-4">
-                        <a href="#"
-                           class=" focus:underline text-sm leading-none hover:text-primary">سياسة
-                            الخصوصية</a>
-                    </li>
-
-                    <li class="mb-4">
-                        <a href="#"
-                           class=" focus:underline text-sm leading-none hover:text-primary">انضم لفريق
-                            سلة</a>
-                    </li>
-
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="mb-5">تواصل معنا علي</h3>
-                <ul>
-
-                    <li class="mb-4">
-                        <a href="#"
-                           class="flex items-center  focus:underline text-sm leading-none">
-                            <span
-                                    class="me-2.5 border text-reverse rounded-full w-8 h-8 justify-center flex items-center">
-                                <i class="sicon-mail"></i>
-                            </span>
-                            <span>
-                                askaster8@gmail.com
-                            </span>
-                        </a>
-                    </li>
-
-                    <li class="mb-4">
-                        <a href="#"
-                           class="flex items-center  focus:underline text-sm leading-none">
-                            <span
-                                    class="me-2.5 border text-reverse rounded-full w-8 h-8 justify-center flex items-center">
-                                <i class="sicon-phone"></i>
-                            </span>
-                            <span>
-                                &#43;966556754472
-                            </span>
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
-
-            <div class="lg:col-span-2 lg:ps-20">
-                <h3 class="mb-5">تحميل تطبيق الهاتف</h3>
-                <ul class="flex">
-
-
-                    <li class="me-4"><a class="focus:underline   leading-none hover:text-primary"
-                                        href="#">
-                            <img class="w-36" src="{{ asset('images/app-store/google-play.png') }}" alt="Google Play"
-                                 title="Google Play">
-                        </a></li>
-
-
-                    <li class="me-4"><a class="focus:underline   leading-none hover:text-primary"
-                                        href="#">
-                            <img class="w-36" src="{{ asset('images/app-store/app-store.png') }}" alt="App Store"
-                                 title="App Store">
-                        </a></li>
-
-                </ul>
-            </div>
-
-
+            {% component 'footer.pages' %}
+            {% component 'footer.contacts' %}
+            {% component 'footer.mobile-apps' %}
         </div>
     </div>
-    <div
-            class="md:flex items-center justify-between py-5  lg:px-0 container text-center border-t-2 border-border-dark border-dashed">
-        <p class="text-reverse-dark mb-2.5 md:mb-0">جميع الحقوق محفوظة لشركة سلة القابضة © 2021</p>
-        <ul class="flex justify-center items-center">
-
-
-            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/mada.png') }}" alt=""></li>
-
-
-            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/visa.png') }}" alt=""></li>
-
-
-            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/mastercard.png') }}" alt="">
-            </li>
-
-
-            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/stcpay.png') }}" alt=""></li>
-
-
-            <li class="w-20"><img class="object-contain" src="{{ asset('images/pay-methods/applepay.png') }}" alt="">
-            </li>
-
-        </ul>
+    <div class="md:flex items-center justify-between py-5  lg:px-0 container text-center border-t-2 border-border-dark border-dashed">
+        {% component 'footer.copyright' %}
+        {% component 'footer.payment-methods' %}
     </div>
 </footer>
