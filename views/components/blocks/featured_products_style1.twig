@@ -1,98 +1,27 @@
-<section class="home-block home-block--special-offers home-block--slide-products {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="grid-block special-products-wrapper {% if main_product %}special-products-wrapper--sta{% endif %}">
-                    {% if main_product %}
-                        <div class="sta-product-wrapper">
-                            <div class="title title--primary title--x-large title--has-dash mb-30">{{ main_product.title }}</div>
-                            <a href="{{ main_product.product.url }}" class="sta-product">
-                                <div class="sta-product__thumb">
-                                    {% if main_product.product.promotion_title %}
-                                        <span class="badge badge--ribbon badge--primary">
-                                        {{ main_product.product.promotion_title }}
-                                    </span>
-                                    {% endif %}
-                                    <img class="lazy-load"
-                                        width="400" height="200"
-                                         src="{{ asset('images/img_loader.png') }}"
-                                         data-src="{{ main_product.product.image.url }}"
-                                         alt="{{ main_product.product.image.alt }}"/>
-                                </div>
-                                <div class="sta-product__info">
-                                    <div class="sta-product-title-discount">
-                                        <div class="sta-product-title">
-                                            <div class="title title--primary title--large">
-                                                {{ main_product.product.name }}
-                                            </div>
-                                            <div class="price-wrapper price-wrapper--large">
-                                                {% if main_product.product.on_sale %}
-                                                    <span class="color-danger">{{ main_product.product.sale_price }}</span>
-                                                    <small>{{ main_product.product.regular_price }}</small>
-                                                {% else %}
-                                                    <span>{{ main_product.product.regular_price }}</span>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% if main_product.product.quantity %}
-                                        <div data-quantity="{{ main_product.product.quantity }}"
-                                             data-total="{{ main_product.product.quantity }}"
-                                             class="pie-wrapper sta-product__qty">
-                                            <span>
-                                                <b id="staProductQty" title="{{ main_product.product.quantity }}" data-quantity="{{ main_product.product.quantity }}">{{ main_product.product.quantity }}</b>
-                                                {{ trans('pages.products.remained') }}
-                                            </span>
-                                            <svg width="72" height="72" class="pie-svg">
-                                                <circle r="34" cx="36" cy="36"
-                                                        fill="transparent"
-                                                        stroke-dasharray="0"
-                                                        stroke-dashoffset="213.63"
-                                                        class="circle_base">
-                                                </circle>
-                                                <circle r="34" cx="36" cy="36"
-                                                        fill="transparent"
-                                                        stroke-dasharray="213.63 213.63"
-                                                        stroke-dashoffset="213.63"
-                                                        class="circle_bar">
-                                                </circle>
-                                            </svg>
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                    {% if main_product.product.has_discount and main_product.product.sale_end_after %}
-                                        <ul id="countdown_id"
-                                            class="timer countdown-timer mt-30"
-                                            data-dunixtime="{{ main_product.product.sale_end_after }}"></ul>
-                                    {% endif %}
-                                </div>
-                            </a>
-                        </div>
-                    {% endif %}
-                    <div class="special-offers-tabs">
-                        <ul class="tabs-heads mb-20">
-                            {% for section in items %}
-                                <li class="tab-head">
-                                    <button class="btn btn--transparent {{ loop.first?'active':'' }}"
-                                            data-tab-target="#special_offer_{{ section.id }}">
-                                        {{ section.title }}
-                                    </button>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        <div class="tabs-body">
-                            {% for section in items %}
-                                <div id="special_offer_{{ section.id }}" data-tab-content
-                                     class="tab-body {{ loop.first?'active':'' }}">
-                                    <div class="grid-block products-list-container">
-                                        {% for product in section.products %}
-                                            {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+<section class="home-block  home-block--specialProducts mb-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {% if main_product %}
+            <div class="flex flex-col">
+                <div class="flex justify-between mb-8">
+                    <h2 class="font-bold text-lg text-text-dark">{{ main_product.title }}</h2>
                 </div>
+                <div class="flex-1">
+                    {% include 'pages.partials.product.card' with {product:main_product.product, is_special:true} %}
+                </div>
+            </div>
+        {% endif %}
+        <div>
+            {% for section in items %}
+                <div class="flex justify-between mb-8">
+                    <h2 class="font-bold text-lg text-text-dark">{{ section.title }}</h2>
+                </div>
+            {% endfor %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {% for section in items %}
+                    {% for product in section.products|slice(0,main_product?4:8) %}
+                        {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}
+                    {% endfor %}
+                {% endfor %}
             </div>
         </div>
     </div>
