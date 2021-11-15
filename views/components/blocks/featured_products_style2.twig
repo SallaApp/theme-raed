@@ -27,6 +27,14 @@
                         </button>
                     </div>
                 {% else %}
+                	{# without slider #}
+					<section>
+						<div class="grid grid-cols-1 lg:grid-cols-2 gap-8  tab-product">
+							{% for product in section.products %}
+								{% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
+							{% endfor %}
+						</div>
+					</section>
                 {% endif %}
             </div>
         {% endfor %}
@@ -55,14 +63,10 @@
 
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        animatItems()
+    function initSlider(){
         const swiper = new Swiper('.tabs-slider', {
-            // Optional parameters
-            // loop: true,
             spaceBetween : 30,
             slidesPerView: 'auto',
-
             // Navigation arrows
             navigation: {
                 nextEl: '.slider-next',
@@ -70,21 +74,16 @@
             },
 
             breakpoints: {
-                // // when window width is >= 640px
-                // 640: {
-                //     slidesPerView: 2,
-                // },
-                // // when window width is >= 768px
-                // 768: {
-                //     slidesPerView: 3,
-                // },
-                // when window width is >= 980px
                 980: {
                     slidesPerView: 4,
                 }
             }
 
         });
+    }
 
+    document.addEventListener('DOMContentLoaded', function () {
+        animatItems();
+        initSlider();
     });
 </script>
