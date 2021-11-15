@@ -1,18 +1,20 @@
 {% extends "layouts.master" %}
 {% block content %}
     {% set witoutFilters = is_link('latest-products') %}
+
     <main id="main" x-data="initCategory()" x-cloak>
         <div class="container mb-10 md:mb-20">
             <nav class="w-full py-5">
                 <ol class="list-reset flex items-center text-sm ">
-                    <li><a href="#" class="fix-align text-primary ">الرئيسية</a></li>
+                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{trans('titles.home')}}</a></li>
                     <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                    <li><span class="fix-align">الإلكترونيات</span></li>
+                    <li><span class="fix-align">{{ page_title }}</span></li>
                 </ol>
             </nav>
-            <div class="flex items-start flex-col md:flex-row ">
+            <div class="flex items-start flex-col md:flex-row">
 
-                <div class="sticky top-24  sidebarw-full h-screen md:h-auto overflow-y-auto  md:w-72  md:me-8 "
+                {% if not witoutFilters %}
+                {#<div class="sticky top-24  sidebarw-full h-screen md:h-auto overflow-y-auto  md:w-72  md:me-8 "
                      id="filters-menu">
 
                     <div class="widget bg-white rounded-md p-7 mb-7">
@@ -223,16 +225,18 @@
 
                     </div>
 
-                </div>
-
+                </div>#}
+                {% endif %}
 
                 <div class="main-content flex-1 md:pb-20 ">
                     <div class="mb-5 md:flex justify-between items-center">
-                        <h2 class="font-bold mb-6 md:mb-0">الإلكترونيات</h2>
+                        <h2 class="font-bold mb-6 md:mb-0">{{ page_title }}</h2>
                         <div class="flex items-center justify-between">
-                            <a class="lg:hidden mburger mburger--collapse" href="#filters-menu">
-                                <span class="sicon-filter text-gray-text text-2xl me-2.5"></span>
-                            </a>
+                            {% if not withoutFilters %}
+                                <a class="lg:hidden mburger mburger--collapse" href="#filters-menu">
+                                    <span class="sicon-filter text-gray-text text-2xl me-2.5"></span>
+                                </a>
+                            {% endif %}
                             <div class="flex items-center">
                                 <div class="hidden md:flex items-center">
                                     <a href="#" @click="toggleView('grid')"
@@ -246,16 +250,9 @@
                                        class="grid-trigger mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
                                                 class="sicon-list"></i></a>
                                 </div>
-                                <div class="ms-4  md:ms-20 flex items-center">
-                                    <label class="hidden sm:block me-3 " for="productFilter">فرز المنتجات</label>
-                                    <select id="productFilter"
-                                            class="appearance-none form-input focus:ring-transparent focus:outline-none h-10 text-sm rounded-md  border border-border-color w-44 py-2.5">
-                                        <option>أحدث المنتجات</option>
-                                        <option>ترتيب بالسعر</option>
-                                        <option>الأكثر مبيعاً</option>
-                                    </select>
-
-                                </div>
+                                {% if not withoutFilters %}
+                                    {% include 'pages.partials.sorting-list' %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -266,83 +263,7 @@
 
                         {% if products is not empty %}
                             {% for product in products %}
-                                <div id="product_{{ product.id }}" class='product-entry product-entry--vertical relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
-                                    <a href="{{ product.url }}" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full h-40'>
-                                        <img class="sm:h-full w-full object-cover" src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
-                                        <div class="absolute top-4 start-0 z-20">
-                                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض
-                                                خاص
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <div class="flex-1 px-5 pt-5 pb-7 ">
-                                        <div class="flex justify-between items-baseline">
-                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
-                                                <a href="{{ product.url }}">{{ product.promotion_title or product.name }}</a>
-                                            </h3>
-                                        </div>
-
-                                        <p class="text-sm text-gray-text leading-6 mb-2.5">
-                                            {{ product.subtitle }}
-                                        </p>
-
-                                        <div class="w-full flex justify-between items-center mb-5">
-                                            <div class="space-s-1">
-                                                {% if product.on_sale %}
-                                                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                                                    <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
-                                                {% else %}
-                                                    <span class="text-sm text-gray-text line-through">{{ product.price }}</span>
-                                                    <span>{{ product.price }}</span>
-                                                {% endif %}
-                                            </div>
-
-                                            <div class="text-gray-text">
-                                                <div class="text-sm">
-                                                    <i class="sicon-star2 text-theme-yellow"></i>
-                                                    <span>4.5</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <button x-data="initAddToCart()" @click="addToCart('product_{{ product.id }}')"
-                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
-                                                اضف للسلة
-                                            </button>
-                                            <script>
-                                                function initAddToCart() {
-                                                    return {
-                                                        addToCart: function (id) {
-                                                            let newId = id.replace(/product_/g, '');
-                                                            window.addTocartAnimation(newId);
-                                                        }
-                                                    }
-                                                }
-                                            </script>
-
-                                            <div class="text-gray-text">
-                                                <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                                                        class="w-10 h-10 focus:outline-none">
-                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
-                                                </button>
-
-                                                <script>
-                                                    function initAddToFavorite() {
-                                                        return {
-                                                            reminderModal: false,
-                                                            inFavorite: false,
-                                                            showMore: false,
-                                                            toggleFavorite: function () {
-                                                                this.inFavorite = !this.inFavorite;
-                                                            },
-                                                        }
-                                                    }
-                                                </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {% include 'pages.partials.product.card' %}
                             {% endfor %}
 
                             {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}

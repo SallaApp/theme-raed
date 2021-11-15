@@ -1,50 +1,11 @@
-<div class="dropdonw-menu-wrap sort">
-    <button class="btn btn--padded less btn--grey btn--dropdown-toggle btn--oval dropdown-trigger sort">
-        <i class="sicon-left mr-1"></i>
-        {{trans('pages.categories.sorting')}}
-    </button>
-    <div class="dropdown-menu">
-        <ul id="sort_options">
-            <li>
-                <div class="checkbox checkbox--primary">
-                    <input name="sort-opt" type="radio" id="opt-1" value="ourSuggest">
-                    <label class="d-block font-sm" for="opt-1">
-                        {{trans('pages.categories.sort_by_suggestions')}}
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="checkbox checkbox--primary">
-                    <input name="sort-opt" type="radio" id="opt-2" value="bestSell">
-                    <label class="d-block font-sm" for="opt-2">
-                        {{trans('pages.categories.sort_by_sales')}}
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="checkbox checkbox--primary">
-                    <input name="sort-opt" type="radio" id="opt-3" value="topRated">
-                    <label class="d-block font-sm" for="opt-3">
-                        {{trans('pages.categories.sort_by_rating')}}
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="checkbox checkbox--primary">
-                    <input name="sort-opt" type="radio" id="opt-4" value="priceFromTopToLow">
-                    <label class="d-block font-sm" for="opt-4">
-                        {{trans('pages.categories.sort_by_price_za')}}
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="checkbox checkbox--primary">
-                    <input name="sort-opt" type="radio" id="opt-5" value="priceFromLowToTop">
-                    <label class="d-block font-sm" for="opt-5">
-                        {{trans('pages.categories.sort_by_price_az')}}
-                    </label>
-                </div>
-            </li>
-        </ul>
-    </div>
+<div class="ms-4  md:ms-20 flex items-center">
+    <label class="hidden sm:block me-3" for="productFilter">{{trans('pages.categories.sorting')}}</label>
+    <select id="productFilter" name="sort-opt"
+            class="appearance-none form-input focus:ring-transparent focus:outline-none h-10 text-sm rounded-md  border border-border-color w-44 py-2.5">
+        <option value="ourSuggest">{{trans('pages.categories.sort_by_suggestions')}}</option>
+        <option value="bestSell">{{trans('pages.categories.sort_by_sales')}}</option>
+        <option value="topRated">{{trans('pages.categories.sort_by_rating')}}</option>
+        <option value="priceFromTopToLow">{{trans('pages.categories.sort_by_price_za')}}</option>
+        <option value="priceFromLowToTop">{{trans('pages.categories.sort_by_price_az')}}</option>
+    </select>
 </div>
