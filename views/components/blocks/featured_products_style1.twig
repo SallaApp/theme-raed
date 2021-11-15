@@ -1,5 +1,5 @@
 <section class="home-block  home-block--specialProducts mb-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-1 {% endif %} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
                 <div class="flex justify-between mb-8">
@@ -10,13 +10,13 @@
                 </div>
             </div>
         {% endif %}
-        <div>
+        <div class="flex flex-col">
             {% for section in items %}
                 <div class="flex justify-between mb-8">
                     <h2 class="font-bold text-lg text-text-dark">{{ section.title }}</h2>
                 </div>
             {% endfor %}
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
                 {% for section in items %}
                     {% for product in section.products|slice(0,main_product?4:8) %}
                         {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}

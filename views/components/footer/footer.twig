@@ -1,25 +1,27 @@
-<footer id="footer" class="relative  bg-text-dark text-reverse">
-    <div aria-label="footer" class="py-11 lg:pt-28 lg:pb-40">
-        <div class="container lg:grid grid-cols-6 gap-6">
-            <div class="lg:col-span-2 pe-20">
-                <a href="{{ link('/') }}" class="flex mb-6">
-                    <img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
-                    <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1>
-                </a>
-                {% if store.description %}
-                <p class="max-w-sm leading-6 mb-6">
-                    {{ store.description|raw }}
-                </p>
-                {% endif %}
-                {% component 'footer.social' %}
-            </div>
-            {% component 'footer.pages' %}
-            {% component 'footer.contacts' %}
-            {% component 'footer.mobile-apps' %}
-        </div>
-    </div>
-    <div class="md:flex items-center justify-between py-5  lg:px-0 container text-center border-t-2 border-border-dark border-dashed">
-        {% component 'footer.copyright' %}
-        {% component 'footer.payment-methods' %}
-    </div>
+<footer id="footer" class="relative">
+	<div class="bg-text-dark text-reverse">
+		<div aria-label="footer" class="py-11 lg:pt-28 lg:pb-40">
+			<div class="container lg:grid grid-cols-6 gap-6">
+				<div class="lg:col-span-2 pe-20">
+					<a href="{{ link('/') }}" class="flex mb-6">
+						<img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
+						<h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1>
+					</a>
+					{% if store.description %}
+						<p class="max-w-sm leading-6 mb-6">
+							{{ store.description|raw }}
+						</p>
+					{% endif %}
+					{% component 'footer.social' %}
+				</div>
+				{% component 'footer.pages' %}
+				{% component 'footer.contacts' %}
+				{% component 'footer.mobile-apps' %}
+			</div>
+		</div>
+	</div>
+	<div class="md:flex items-center justify-between py-2  lg:px-0 container text-center border-border-dark border-dashed">
+		{% component 'footer.copyright' %}
+		{% component 'footer.payment-methods' %}
+	</div>
 </footer>
