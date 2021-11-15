@@ -1,73 +1,25 @@
-<section class="home-block home-block--horizontal-blocks {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                {# singleton if is one element only #}
-                <div class="grid-block horizontal-products {{ items|length == 1 ?'singleton':'' }}">
-                    {% for section in items %}
-                        <div class="special-offer-entry">
-                            <div class="title title--primary title--x-large title--has-dash mb-30">{{ section.title }}</div>
-                            <div class="grid-block special-offer-entry__content {% if not section.featured_product %}wide{% endif %}">
-                                {% if not section.featured_product %}
-                                    {#{% for products in section.products|batch(3) %}#}
-                                        <ul class="list list--horizontal {{ items|length == 1 ?'singleton':'' }}">
-                                            {% for product in section.products %}
-                                                <li class="{{ not loop.last ? 'mb-10' : '' }}">
-                                                    {% include 'pages.partials.product.mini-card' %}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    {#{% endfor %}#}
-                                {% else %}
-                                    {% if section.products.count %}
-                                        <ul class="list list--vertical">
-                                            {% for product in section.products|slice(0,3) %}
-                                                <li class="{{ not loop.last ? 'mb-10' : '' }}">
-                                                    {% include 'pages.partials.product.mini-card' %}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                    <div class="product-block product-block--large">
-                                        <div class="product-block__thumb">
-                                            {% if section.featured_product.promotion_title %}
-                                                <span class="badge badge--ribbon badge--primary">
-                                                        {{ section.featured_product.promotion_title }}
-                                                </span>
-                                            {% endif %}
-                                            <a href="{{ section.featured_product.url }}"
-                                               class="thumb-wrapper lazy-background"
-                                               style="background-image: url('{{ asset("images/img_loader.png") }}')"
-                                               data-src="{{ section.featured_product.image.url }}"
-                                               title="{{ section.featured_product.image.alt }}"></a>
-                                        </div>
-                                        <div class="product-block__info">
-                                            <a href="{{ section.featured_product.url }}" class="product-title">
-                                                <h2 class="title title--primary title--small">{{ section.featured_product.name }}</h2>
-                                            </a>
-                                            <div class="price-wrapper product-price--large">
-                                                {% if section.featured_product.on_sale %}
-                                                    <span>{{section.featured_product.sale_price}}</span>
-                                                    <small>{{section.featured_product.regular_price}}</small>
-                                                {% else %}
-                                                    <span>{{ section.featured_product.regular_price }}</span>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <button class="btn btn--floated btn--add-to-cart {{ section.featured_product.is_available?'':'disabled' }}"
-                                                {% if not section.featured_product.is_available %} disabled {% endif %}
-                                                data-id='{{section.featured_product.product_id}}'
-                                                data-on-click="cart-quick-add"
-                                                data-cart-quick-add='{{ section.featured_product.product_id }}'>
-                                            <i class="sicon-shopping-bag"></i>
-                                        </button>
-                                    </div>
-                                {% endif %}
-                            </div>
+<section class="home-block  home-block--featuresProducts mb-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="grid lg:grid-cols-2 gap-5">
+        {% for section in items %}
+            <div>
+                <div class="flex justify-between mb-8">
+                    <h2 class="font-bold text-lg text-text-dark">{{ section.title }}</h2>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-5">
+                    {% if section.featured_product %}
+                        {% include 'pages.partials.product.card-full-image' with {product:section.featured_product} %}
+                        <div class="grid gap-5">
+                            {% for product in section.products|slice(0,3) %}
+                                {% include 'pages.partials.product.card-mini' %}
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                    {% else %}
+                        {% for product in section.products %}
+                            {% include 'pages.partials.product.card-mini' %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 </section>

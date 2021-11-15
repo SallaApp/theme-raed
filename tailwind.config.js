@@ -2,7 +2,7 @@ const colors = require('tailwindcss/colors');
 module.exports = {
     purge   : {
         enabled: true,
-        content: ["views/**/*.twig", "assets/js/partials/salla-login.js", "assets/js/partials/search-modal.js"],
+        content: ["views/**/*.twig"],
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {
