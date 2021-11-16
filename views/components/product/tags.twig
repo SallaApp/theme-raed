@@ -1,13 +1,9 @@
-<div class="product-section">
-    <div>
-        <ul class="list list--horizontal list--tags wrap">
-            {% for tag in tags %}
-                <li>
-                    <a href="{{ tag.url }}" class="btn btn--tag">{{ tag.name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="mb-4">
+    {% for tag in tags %}
+        <a href="{{ tag.url }}"
+           class="me-2.5 px-3 rounded-large inline-flex items-center text-dark hover:text-primary justify-center text-sm mb-2.5">
+            <i class="font-medium sicon-tag me-1.5 text-md"></i>
+            <span class="fix-align">{{ tag.name }}</span>
+        </a>
+    {% endfor %}
 </div>
-
-
