@@ -36,9 +36,16 @@
             currentTab: 'featured-style1-tab-{{ items[0].id }}',
             switchTab : function (tabId) {
                 this.currentTab = tabId
+
+                let elements = document.querySelectorAll('.anime-item');
+                elements.forEach(element => {
+                    element.style.removeProperty("opacity");
+                    element.style.removeProperty("transform");
+                })
+
                 setTimeout(() => {
-                animateTabItems();
-                },100)
+                    animateTabItems();
+                },10)
             }
         }
     }
@@ -47,11 +54,9 @@
         anime({
             targets   : '.active-tab .anime-item',
             translateY: [30, 0],
-            opacity   : [0, 1],
-            easing: 'easeOutExpo',
-            delay: function(el, i){
-                 return i * 100;
-            },
+            opacity: [0, 1],
+            duration: 1200,
+            delay: anime.stagger(70),
         });
     }
 
