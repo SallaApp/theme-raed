@@ -19,15 +19,19 @@
 				{% component 'footer.mobile-apps' %}
 
                 {# vat #}
+                {% if store.settings.tax.number %}
                  <div class="flex  space-s-2 items-end">
-                    <a data-fslightbox="gallery" href="https://assets.salla.cloud/themes/default/assets/images/tax.png?v=v1.4.161">
-                        <img src="https://assets.salla.cloud/themes/default/assets/images/tax.png?v=v1.4.161" class="w-10">
+                 {% if store.settings.tax.certificate %}
+                    <a data-fslightbox="gallery" href="{{ store.tax_certificate }}" alt="{{ store.tax_number }}">
+                        <img src="{{asset('images/tax.png')}}" class="w-10">
                     </a>
+                 {% endif %}
                     <div>
                         <p class="text-sm text-text-grey mb-1">الرقم الضريبي</p>
-                        <b class="text-sm">VAT-875428595458</b>
+                        <b class="text-sm">{{ store.tax_number }}</b>
                     </div>
                 </div>
+                {% endif %}
 			</div>
 		</div>
 	</div>

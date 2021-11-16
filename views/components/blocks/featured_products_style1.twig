@@ -11,16 +11,16 @@
             </div>
         {% endif %}
         <div class="flex flex-col" x-data="initFeaturedTabs()">
-             <div class="tabs mb-8 space-s-1 md:space-s-5 whitespace-nowrap overflow-x-auto hide-scroll">
+             <div class="tabs mb-8 space-s-2 md:space-s-12 whitespace-nowrap overflow-x-auto hide-scroll">
             {% for section in items %}
                 <button @click.prevent="switchTab('featured-style1-tab-{{ section.id }}')"
-                        :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'text-primary' : ''"
+                        :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'text-title-color' : 'text-gray-text'"
                         class="cursor-pointer border-0 font-bold">{{ section.title }}</button>
             {% endfor %}
             </div>
        
             {% for section in items %}
-                <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
+                <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
                 {% for product in section.products|slice(0,main_product?4:8) %}
                     {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}
                 {% endfor %}
