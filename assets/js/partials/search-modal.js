@@ -13,7 +13,7 @@ template.innerHTML = /*html*/`
 <div class="" x-data="$el.parentElement.init()" @keydown.escape="closeSearch" x-init="$watch('searchTerm', () => {search()})">
 
   <section>
-    <button type="button" class="bg-gray-bg2 hover:bg-gray-150 dark:hover:bg-opacity-10 transition duration-300 mx-3 text-sm rounded-full w-9 h-9 "
+    <button type="button" class="bg-gray-200/10 hover:bg-gray-200/20 transition duration-300 mx-3 text-sm rounded-full w-9 h-9 "
       @click="openSearch">
       <i class="sicon-search font-bold"></i>
     </button>
@@ -30,7 +30,7 @@ template.innerHTML = /*html*/`
             <div class="relative bg-white rounded-tiny border border-border-color"
               :class="{'rounded-b-none': showResult}">
               <input x-model.debounce.500ms="searchTerm"
-                class="anime-item bg-transparent border-0  form-input w-full focus:border-border-color ps-10 pt-6 pb-7 rounded-tiny"
+                class="anime-item bg-transparent border-0 form-input w-full ps-10 pt-6 pb-7 rounded-tiny text-gray-600"
                 type="text" placeholder="ابحث هنا ..." x-ref="searchInput">
               <button x-show="fetchStatus != 'loading'"
                 class="anime-item flex justify-end items-cente absolute top-5 start-4 text-md text-gray-text">
@@ -52,35 +52,32 @@ template.innerHTML = /*html*/`
 
             <div class="results">
               <template x-for="(result, index) in results">
-                <div class="transition-colors duration-300 hover:bg-gray-bg2 results__item px-4 xs:px-5 py-5 border-t-0"
+                <a href="#" class="block transition-colors duration-300 hover:bg-gray-50 results__item px-4 xs:px-5 py-5 border-t-0"
                   :class="{ 'border-t': index > 0}">
                  
                     <!-- product component -->
                     <div class='product-entry h-full transition duration-500 bg-transparent justify-around overflow-hidden flex'>
                         <!-- image -->
-                        <a href="/single" class='product-entry__image relative overflow-hidden w-20 h-20 sm:w-28 sm:h-28 rounded-md'>
-                            <img class="h-full w-full object-cover " :src="'https://picsum.photos/200/300?random=' + index" alt="product image" />
-                        </a>
+                        <img class="w-16 h-16 object-cover rounded-md" :src="'https://picsum.photos/200/300?random=' + index" alt="product image" />
+                         
                         <!-- content -->
                         <div class="flex-1 ps-4 xs:ps-5 pt-1">
-                            <div class="flex flex-col justify-start items-baseline">
-                                <!-- title -->
-                                <h3 class="text-sm font-bold text-title-color leading-6 mb-2.5">
-                                    <a href="/single" x-text="result.Title"></a>
-                                </h3>
-                            </div>
-                            <!-- description -->
-                            <p class="text-sm text-gray-text leading-6 mb-2.5" x-text="result.Type">
-                            </p>
-                            <div class="w-full flex justify-between items-center mb-5">
-                                <!-- price -->
-                                <h4 class="text-primary font-bold text-sm">‏10,978.00 ر.س</h4>
-                            </div>
+                          <div class="flex flex-col justify-start items-baseline">
+                            <!-- title -->
+                            <h3 class="text-sm font-bold text-title-color leading-1" x-text="result.Title"></h3>
+                          </div>
+                          <!-- description -->
+                          <p class="text-sm text-gray-text leading-1" x-text="result.Type">
+                          </p>
+                          <div class="w-full flex justify-between items-center">
+                            <!-- price -->
+                            <h4 class="text-primary font-bold text-sm">‏10,978.00 ر.س</h4>
+                          </div>
                         </div>
                     </div>
                     <!-- End::product component -->
+                </a>
 
-                </div>
               </template>
             </div>
           </div>
@@ -140,7 +137,7 @@ export class SearchModal extends HTMLElement {
         this.showResult = false;
         this.results = []
         fetch(
-          "http://www.omdbapi.com/?&apikey=e1a73560&s=" + this.searchTerm + "&type=movie"
+          "https://www.omdbapi.com/?&apikey=e1a73560&s=" + this.searchTerm + "&type=movie"
         )
           .then((response) => response.json())
           .then((response) => {

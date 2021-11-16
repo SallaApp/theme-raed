@@ -1,9 +1,8 @@
-
 <div class="relative inline-block" x-data="{toggleMenu: false}">
     <div>
         <button @click="toggleMenu = !toggleMenu" type="button"
-                class="inline-flex justify-center w-full rounded-full  cursor-pointer pe-2.5 ps-4 py-2 items-center bg-gray-bg2 hover:bg-gray-150 dark:hover:bg-opacity-10 text-sm font-medium  focus:ring-offset-transparent transition duration-300"
-                :class="toggleMenu ? 'btn-is-opened bg-gray-150 dark:bg-opacity-10' : ''"
+                class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center hover:bg-gray-200/20 text-sm font-medium  focus:ring-offset-transparent transition duration-300"
+                :class="toggleMenu ? 'btn-is-opened bg-gray-200/20' : 'bg-gray-200/10'"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
             {{ currentCurrency.name }}
 
@@ -14,14 +13,20 @@
          x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
          x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
-         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default bg-white   dark:bg-gray-800 overflow-hidden"
+         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default overflow-hidden
+         {{store.theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]': 'bg-white '}}
+         {# {{store.theme.topnav_bg_gradient ? '!bg-[color:var(--topnav-gradient-to)]': ''}} #}
+         {{store.theme.topnav_is_dark ? 'dark:bg-gray-800': ''}}
+         "
          role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
 
           <ul>
               {% for currency in currencies %}
                   <li>
                       <a href="#"
-                          class="{{currentCurrency.code == currency.code ? 'is-active' : ''}} flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg dark:hover:bg-opacity-5"
+                          class="{{currentCurrency.code == currency.code ? 'is-active' : ''}} flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-200/30 dark:hover:bg-gray-200/10
+                          {{ store.theme.topnav_is_dark == false and store.theme.topnav_bg_gradient ? 'text-gray-800': ''}}
+                          "
                           data-on-click="currency-change"
                           data-code="{{ currency.code }}"
                       >

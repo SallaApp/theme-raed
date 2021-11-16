@@ -46,9 +46,30 @@
 
     <script type="module" src="http://localhost:3333/build/salla-web-components.esm.js" data-stencil></script>
     <script nomodule="" src="http://localhost:3333/build/salla-web-components.js" data-stencil></script>
+
+    <style>
+      :root{
+        {% if store.theme.topnav_bg %}
+          --topnav-bg: {{store.theme.topnav_bg}};
+        {% endif %}
+
+        {% if store.theme.topnav_text_color %}
+          --topnav-text-color: {{store.theme.topnav_text_color}};
+        {% endif %}
+
+        {% if store.theme.topnav_link_hover %}
+          --topnav-link-hover: {{store.theme.topnav_link_hover}};
+        {% endif %}
+
+        {% if store.theme.topnav_bg_gradient %}
+          --topnav-gradient-from: {{store.theme.topnav_bg_gradient_from}};
+          --topnav-gradient-to: {{store.theme.topnav_bg_gradient_to}};
+        {% endif %}
+      }
+    </style>
 </head>
 
-<body id="app" class="{% hook 'body:classes' %}">
+<body id="app" class="{% hook 'body:classes' %} bg-gray-50">
 <noscript>
     To get full functionality of this site you need to enable JavaScript. Here is how
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
