@@ -59,7 +59,7 @@ document.querySelectorAll(".close-mobile-menu").forEach((elem) => {
 
 var headerWrapper = document.getElementById('site-header-outer'),
     headerContent = document.querySelector('.site-header');
-var headerHeight = headerContent.clientHeight; 
+var headerHeight = headerContent.clientHeight;
 headerWrapper.style.height = headerHeight + 'px';
 
 window.addEventListener('resize', function () {
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // initTelInput
 //assign to all fields with .tel-input
-function initTelInput(){
+function initTelInput() {
     const intlInputs = document.querySelectorAll('.tel-input');
     if (intlInputs.length) {
         intlInputs.forEach(intlInput => {
@@ -171,7 +171,7 @@ function initTelInput(){
 initTelInput();
 
 // globals
-window.copyToClipboard = function(elementId) {
+window.copyToClipboard = function (elementId) {
     debugger;
     // icon
     let copyIcon = document.querySelector('.copy-icon');
@@ -267,3 +267,23 @@ window.addTocartAnimation = (productID) => {
             },
         }, '-=1700')
 }
+
+// tabs animation
+window.animateTabsItems = (ItemClass) => {
+    let elements = document.querySelectorAll(ItemClass);
+    elements.forEach(element => {
+        element.style.removeProperty("opacity");
+        element.style.removeProperty("transform");
+    })
+
+    anime({
+        targets: `.active-tab ${ItemClass}`,
+        translateY: [30, 0],
+        opacity: [0, 1],
+        duration: 1200,
+        delay: anime.stagger(70),
+    });
+
+}
+
+
