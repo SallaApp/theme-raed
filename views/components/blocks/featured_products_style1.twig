@@ -1,4 +1,4 @@
-<section class="home-block  home-block--specialProducts mb-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
+<section class="s-home-block  s-home-block--specialProducts mb-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
     <div class="grid grid-cols-1  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-1 {% endif %} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
@@ -22,7 +22,7 @@
             {% for section in items %}
                 <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
                 {% for product in section.products|slice(0,main_product?4:8) %}
-                    {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}
+                    {% include 'pages.partials.product.card' with {block_classes:'opacity-0 anime-item'} %}
                 {% endfor %}
                 </div>
             {% endfor %}
@@ -35,8 +35,23 @@
             currentTab: 'featured-style1-tab-{{ items[0].id }}',
             switchTab : function (tabId) {
                 this.currentTab = tabId
-                animatItems()
+                setTimeout(() => {
+                animateTabItems();
+                },100)
             }
         }
+    }
+
+    function animateTabItems() {
+        anime({
+            targets   : '.active-tab .anime-item',
+            translateY: [30, 0],
+            opacity   : [0, 1],
+            easing: 'easeOutExpo',
+            delay: function(el, i){
+                 return i * 100;
+            },
+        });
+
     }
 </script>
