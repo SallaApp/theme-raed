@@ -14,9 +14,9 @@
          x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
          class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default overflow-hidden
-         {{store.theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]': 'bg-white '}}
-         {# {{store.theme.topnav_bg_gradient ? '!bg-[color:var(--topnav-gradient-to)]': ''}} #}
-         {{store.theme.topnav_is_dark ? 'dark:bg-gray-800': ''}}
+         {{store.theme.settings.topnav_bg ? '!bg-[color:var(--topnav-bg)]': 'bg-white '}}
+         {# {{store.theme.settings.topnav_bg_gradient ? '!bg-[color:var(--topnav-gradient-to)]': ''}} #}
+         {{store.theme.settings.topnav_is_dark ? 'dark:bg-gray-800': ''}}
          "
          role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
 
@@ -25,7 +25,7 @@
                   <li>
                       <a href="#"
                           class="{{currentCurrency.code == currency.code ? 'is-active' : ''}} flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-200/30 dark:hover:bg-gray-200/10
-                          {{ store.theme.topnav_is_dark == false and store.theme.topnav_bg_gradient ? 'text-gray-800': ''}}
+                          {{ store.theme.settings.topnav_is_dark == false and store.theme.settings.topnav_bg_gradient ? 'text-gray-800': ''}}
                           "
                           data-on-click="currency-change"
                           data-code="{{ currency.code }}"
