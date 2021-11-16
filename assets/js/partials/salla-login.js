@@ -200,12 +200,14 @@ export class SallaLogin extends HTMLElement {
                 this.showLoginModal = true;
                 document.getElementsByTagName('html')[0].style.position = "fixed";
                 document.getElementsByTagName('html')[0].style.overflowY = "scroll";
+                document.getElementsByTagName('body')[0].classList.add('s-modal-open');
             },
 
             closeModal: function () {
                 this.showLoginModal = false;
                 document.getElementsByTagName('html')[0].style.position = "static";
                 document.getElementsByTagName('html')[0].style.overflowY = "auto";
+                document.getElementsByTagName('body')[0].classList.remove('s-modal-open');
             },
 
             openOtp: function () {

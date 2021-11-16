@@ -268,3 +268,12 @@ window.addTocartAnimation = (productID) => {
         }, '-=1700')
 }
 
+// add / remove classes to body
+window.addClassToBody = (className) => {
+    document.getElementsByTagName('body')[0].classList.add(className);
+}
+
+window.removeClassFrombBody = (className) => {
+    document.getElementsByTagName('body')[0].classList.remove(className);
+}
+

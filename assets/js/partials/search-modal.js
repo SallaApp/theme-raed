@@ -121,6 +121,7 @@ export class SearchModal extends HTMLElement {
         window.scrollTo(0, 0);
         document.getElementsByTagName('html')[0].style.position = "fixed";
         document.getElementsByTagName('html')[0].style.overflowY = "scroll";
+        document.getElementsByTagName('body')[0].classList.add('s-modal-open');
         this.$nextTick(() => { this.$refs.searchInput.focus(); });
         this.animatItems();
       },
@@ -130,6 +131,7 @@ export class SearchModal extends HTMLElement {
         this.results = [];
         document.getElementsByTagName('html')[0].style.position = "static";
         document.getElementsByTagName('html')[0].style.overflowY = "auto";
+        document.getElementsByTagName('body')[0].classList.remove('s-modal-open');
         this.showModal = false;
       },
       search: function () {
