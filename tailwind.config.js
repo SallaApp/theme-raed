@@ -7,9 +7,10 @@ module.exports = {
     mode: 'jit',
     purge   : {
         enabled: true,
-        content: ["views/**/*.twig", 
+        content: [
+                  "views/**/*.twig", 
                   "assets/js/partials/salla-login.js", 
-                  "assets/js/partials/search-modal.js"
+                  "assets/js/partials/search-modal.js",
                 ],
     },
     darkMode: 'class', // or 'media' or 'class'

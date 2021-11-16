@@ -1,0 +1,62 @@
+<div class='product-entry product-entry--full-image relative h-80 md:h-auto transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around overflow-hidden'>
+    <a href="{{ product.url }}"
+        class='product-entry__image relative overflow-hidden rounded-md hover:opacity-90 w-full h-full max-h-52'>
+        <img class="sm:h-full w-full object-cover" src="{{product.image.url}}" alt="{{ product.image.alt }}" />
+    </a>
+
+     <!-- badage -->
+    {% if product.promotion_title %}
+    <div class="absolute z-10 top-4 start-0">
+        <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
+     </div>
+    {% endif %}
+
+
+    <!-- content -->
+    <!-- overlay -->
+    <a href="{{ product.url }}" class="overlay transition-opacity duration-700 opacity-50 hover:opacity-40 absolute top-0 bottom-0 left-0 right-0 bg-black "></a>
+    <div class="absolute z-10 bottom-0 px-10  w-full pt-5 pb-7 ">
+        <div class="flex  justify-between items-baseline">
+            <!-- title -->
+            <h3 class="product-entry__title  text-sm font-bold text-white leading-6 mb-2.5">
+                <a href="{{ product.url }}">{{product.name}}</a>
+            </h3>
+        </div>
+      
+        <div class="w-full flex justify-between items-center mb-5">
+            {% if product.on_sale %}
+                <div class="space-s-1">
+                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
+                    <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
+                </div>
+            {% else %}
+                <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
+            {% endif %}
+
+            {% if product.rating %}
+                <div class="text-white">
+                    <div class="text-sm">
+                        <i class="sicon-star2 text-theme-yellow"></i>
+                        <span>{{ product.rating|number }}</span>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="flex items-center">
+            {# add to cart #}
+            <button x-data="initAddToCart()" @click="addToCart('{{ product.id }}')"
+                    {% if not product.is_available %} disabled {% endif %}
+                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                {{ trans('pages.cart.add_to_cart') }}
+            </button>
+            {# add-to-favorite #}
+            <div class="text-white">
+                <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                        class="w-10 h-10 focus:outline-none">
+                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

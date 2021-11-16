@@ -39,38 +39,38 @@
 
 
          {# donation #}
-            <div x-data="initDonation()">
-                <h2 class="text-sm mb-4">هدف الحملة</h2>
-                <div class="flex justify-between text-sm mb-2.5">
-                    <span>25,899.99 ر.س</span>
-                    <span>50,899 ر.س</span>
-                </div>
-                <div class="bg-border-color rounded-full  mb-1.5">
-                    <div class="progress-bg transition-all duration-500 opacity0 h-4 bg-primary relative rounded-full flex justify-end"
-                        style="width: 30%">
-                        <!-- <p class="text-sm absolute -bottom-7 -end-6">1220 ر.س</p> -->
-                    </div>
-                </div>
-                <small class="text-xs text-gray-text">تنتهي الحملة في 01-10-2021</small>
-                <div class="border-color py-5 mt-5 mb-2.5">
-                    <label for="donationAmount" class="block text-sm ">مبلغ التبرع <span class="text-red-500">*</span> </label>
-                    <div class="mt-2.5 relative">
-                        <input type="number" @keyup="isShowCopounError = false" @keyup.enter="addDonation()"
-                            x-model="donationAmount" id="donationAmount" name="copoun-code"
-                            :class="{'has-error': isShowCopounError}" class="pe-24 form-input" :disabled="isDonationAdded">
-                        <button x-show="isDonationAdded" @click="addDonation();" type="button"
-                            class="copoun-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn px-4"
-                            :class="isDonationAdded ? 'btn-danger' : 'btn-default'">
-                            <!-- <span x-show="!isDonationAdded">تفعيل</span> -->
-                            <i x-show="isDonationAdded" class="sicon-cancel text-xl w-8"></i>
-                        </button>
-                        <!-- error msg -->
-                        <p x-show="isShowCopounError" class="absolute -bottom-5 text-xs text-red-700" id="validationHelp">مثال
-                            لرسالة
-                            الخطأ.</p>
-                    </div>
-                </div>
-            </div>
+{#            <div x-data="initDonation()">#}
+{#                <h2 class="text-sm mb-4">هدف الحملة</h2>#}
+{#                <div class="flex justify-between text-sm mb-2.5">#}
+{#                    <span>25,899.99 ر.س</span>#}
+{#                    <span>50,899 ر.س</span>#}
+{#                </div>#}
+{#                <div class="bg-border-color rounded-full  mb-1.5">#}
+{#                    <div class="progress-bg transition-all duration-500 opacity0 h-4 bg-primary relative rounded-full flex justify-end"#}
+{#                        style="width: 30%">#}
+{#                        <!-- <p class="text-sm absolute -bottom-7 -end-6">1220 ر.س</p> -->#}
+{#                    </div>#}
+{#                </div>#}
+{#                <small class="text-xs text-gray-text">تنتهي الحملة في 01-10-2021</small>#}
+{#                <div class="border-color py-5 mt-5 mb-2.5">#}
+{#                    <label for="donationAmount" class="block text-sm ">مبلغ التبرع <span class="text-red-500">*</span> </label>#}
+{#                    <div class="mt-2.5 relative">#}
+{#                        <input type="number" @keyup="isShowCopounError = false" @keyup.enter="addDonation()"#}
+{#                            x-model="donationAmount" id="donationAmount" name="copoun-code"#}
+{#                            :class="{'has-error': isShowCopounError}" class="pe-24 h-9 form-input" :disabled="isDonationAdded">#}
+{#                        <button x-show="isDonationAdded" @click="addDonation();" type="button"#}
+{#                            class="copoun-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn px-4"#}
+{#                            :class="isDonationAdded ? 'btn-danger' : 'btn-default'">#}
+{#                            <!-- <span x-show="!isDonationAdded">تفعيل</span> -->#}
+{#                            <i x-show="isDonationAdded" class="sicon-cancel text-xl w-8"></i>#}
+{#                        </button>#}
+{#                        <!-- error msg -->#}
+{#                        <p x-show="isShowCopounError" class="absolute -bottom-5 text-xs text-red-700" id="validationHelp">مثال#}
+{#                            لرسالة#}
+{#                            الخطأ.</p>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
             {# end donation #}
 
 
@@ -83,10 +83,9 @@
         {# <i class="sicon-heart"></i> #}
         {# </button> #}
         {# {% endif %} #}
-        {# description #}
-        <p class="text-sm text-gray-text leading-6 mb-2.5">
-            {{ product.subtitle }}
-        </p>
+        {% if product.subtitle %}
+        <p class="text-sm text-gray-text leading-6 mb-2.5">{{ product.subtitle }}</p>
+        {% endif %}
         <div class="w-full flex justify-between items-center mb-5">
             {% if product.on_sale %}
                 <div class="space-s-1">
