@@ -1,284 +1,2524 @@
 {% extends "layouts.master" %}
 {% block content %}
-    <!-- Start Product Details -->
-    <section class="page-wrapper page--product-details"
-             data-product-id="{{ product.product_id }}"
-             id="product_{{ product.product_id }}">
+    <main id="main" x-data="initProductDetails()" x-cloak>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-5 col-md-12" style="direction: ltr">
-                    <div class="product-details__slider {{ product.images|length < 2 ? 'singleton' : '' }}">
-                        {% if product.promotion_title %}
-                            <span class="badge badge--ribbon reverse font-base badge--primary z-7">{{ product
-                                .promotion_title }}</span>
-                        {% endif %}
-                        <div class="splide-images-wrapper">
-                            <div class="splide splide--images" id="product_main_slider">
-                                <div class="splide__track">
-                                    <ul class="splide__list">
-                                        {% for image in product.images %}
-                                            <li class="splide__slide {{ image.video_url?'video-entry':'' }}"
-                                                data-img-id="{{ image.id }}"
-                                                data-slid-index="{{ loop.index-1 }}"
-                                                    {% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}>
-                                                <a data-fancybox="product-details" data-caption="{{ image.alt }}" data-infinite="false" data-type="{{ image.video_url?'youtube':'image' }}" href="{{ image.video_url?image.video_url:image.url }}" aria-label="{{
-                                                product.name }}">
-                                                    <img data-splide-lazy="{{ image.url }}" alt="{{ image.alt }}"/>
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
+            <nav class="w-full py-5">
+                <ol class="list-reset flex items-center text-sm ">
+                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{ trans('common.titles.home') }}</a></li>
+                    <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+                    <li><span class="fix-align">{{ product.name }}</span></li>
+                </ol>
+            </nav>
+            <div class="flex flex-col items-start md:flex-row">
+
+                <div class="sidebar md:sticky top-24 w-full md:w-2/4  me-8 pb-16">
+
+                    <div class="swiper relative my-gallery details-slider rounded-md mb-2.5">
+                        <div class="absolute z-10 top-4 start-0">
+                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض خاص</div>
                         </div>
-                        <div class="splide-thumbs-wrapper">
-                            <div class="splide splide--thumbs" id="product_thumbs_slider">
-                                <div class="splide__track">
-                                    <ul class="splide__list">
-                                        {% for image in product.images %}
-                                            <li class="splide__slide {{ image.video_url?'video-entry':'' }} lazy-background"
-                                                data-src="{{ image.url }}"
-                                                title="{{ image.alt }}"></li>
-                                        {% endfor %}
-                                    </ul>
+                        <div class="swiper-wrapper">
+                            {% for image in product.images %}
+                                <a data-fslightbox="gallery"
+                                   data-img-id="{{ image.id }}"
+                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                   data-caption="{{ image.alt }}"
+                                   data-infinite="false"
+                                   data-type="{{ image.video_url?'youtube':'image' }}"
+                                   href="{{ image.video_url?image.video_url:image.url }}"
+                                   aria-label="{{ product.name }}"
+                                   class="swiper-slide h-500 homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
+                                    <img src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-cover">
+                                </a>
+                            {% endfor %}
+                        </div>
+
+                        <div class="w-10 h-10 shadow-sm bg-white text-primary text-lg swiper-button-prev rounded-full"></div>
+                        <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
+                    </div>
+
+                    <div thumbsSlider="" class="swiper thumbs-slider">
+                        <div class="swiper-wrapper">
+                            {% for image in product.images %}
+                                <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
+                                    <img src="{{ image.url }}" class="object-cover h-full" title="{{ image.alt }}" alt="{{ image.alt }}"/>
                                 </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-7 col-md-12">
-                    <div class="product-details__info">
-                        <form class="form form--product-optins product-details__options ajax"
-                              data-filter-before-submit="append_image"
-                              data-on-change="product-price"
-                              enctype="multipart/form-data"
-                              action="{{ link('cart/item/%s/add'|format(product.id)) }}"
-                              data-on-success="itemAdded"
-                              data-on-fail="itemFailedTobeAdded"
-                        >
-                            <input type="hidden" name="id" value="{{ product.id }}">
-                            <div class="product-details__title">
-                                <div class="title-wrapper">
-                                    {% component 'product.brand' with {'product': product} %}
-                                    <h1 class="title title--xx-large {% if product.subtitle %} mb-0 {% else %} mb-10 {% endif %}">{{ product.name }}</h1>
-                                    {% if product.subtitle %}
-                                        <h2 class="title title--small color-grey mb-10">{{ product.subtitle }}</h2>
-                                    {% endif %}
-                                    <div class="price-wrapper-info price-wrapper--large">
-                                        {% if product.on_sale %}
-                                            <span class="color-danger">{{ product.sale_price }}</span>
-                                            <span class="price-wrapper">
-                                              <small>{{ product.regular_price }}</small>
-                                            </span>
-                                        {% else %}
-                                            <span>{{ product.price }}</span>
-                                        {% endif %}
-                                    </div>
-                                    {% component 'product.tax-label' with {'product': product} %}
-                                </div>
-                                <div class="share-like-wrapper">
-                                    <div class="share-like">
-                                        <button type="button" aria-label="Wishlist"
-                                            {% if user %}
-                                                data-on-click="{{ in_wishlist?'wishlist-remove':'wishlist-add' }}"
-                                            {% else %}
-                                                onClick="salla.error('{{ trans('common.messages.must_login') }}')"
-                                            {% endif %}
-                                                class="btn btn--circular btn--like {{ in_wishlist?'liked':'' }}">
-                                            <i class="sicon-heart"></i>
-                                        </button>
-                                        <div class="share-wrapper">
-                                            <button type="button" class="btn btn--circular btn--share" aria-label="Share">
-                                                <i class="sicon-share-alt"></i>
-                                            </button>
-                                            <ul class="share-btns-list a2a_kit share">
-                                              <li>
-                                                  <a class="a2a_button_whatsapp" aria-label="Share Via Whatsapp">
-                                                      <i class="sicon-whatsapp"></i>
-                                                  </a>
-                                              </li>
-                                              <li>
-                                                  <a class="a2a_button_facebook" aria-label="Share Via Facebook">
-                                                      <i class="sicon-facebook"></i>
-                                                  </a>
-                                              </li>
-                                              <li>
-                                                  <a class="a2a_button_twitter" aria-label="Share Via Twitter">
-                                                      <i class="sicon-twitter"></i>
-                                                  </a>
-                                              </li>
-                                              <li>
-                                                  <a class="a2a_button_email" aria-label="Share Via Email">
-                                                      <i class="sicon-mail"></i>
-                                                  </a>
-                                              </li>
-                                              <li>
-                                                  <a class="a2a_button_copy_link" aria-label="Copy Product Link">
-                                                      <i class="sicon-link"></i>
-                                                  </a>
-                                              </li>
-                                            </ul>
-                                            <script type="text/javascript">
-                                                var a2a_config = a2a_config || {};
-                                                a2a_config.linkurl = "{{ product.url }}";
-                                                a2a_config.locale = "{{ language.code }}";
-                                            </script>
-                                            <script async src="https://static.addtoany.com/menu/page.js"></script>
-                                        </div>
-                                    </div>
-                                </div>
+
+                <div class="main-content flex-1 pb-20">
+                    {% component 'product.brand' with {'product': product} %}
+
+                    <div class="flex">
+                        <h1 class="text-3xl font-bold mb-5 w-5/6 text-dark">{{ product.name }}</h1>
+                        <div class="mt-5">
+                            <div class="text-sm">
+                                <i class="sicon-star2 text-theme-yellow"></i>
+                                <span>4.5</span>
                             </div>
+                        </div>
+                    </div>
 
-                            {% if product.can_show_total_sold or product.can_show_remained_quantity %}
-                                <div class="d-flex px-3 py-2 bg-grey b-radius mb-30 float-start purchase-hot-wrapper">
-                                    {% if product.can_show_total_sold %}
-                                        <p class="purchase-hot">
-                                            <i class="sicon-fire"></i>
-                                            {{ trans('pages.products.sold') }}
-                                            {{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}
-                                        </p>
-                                    {% endif %}
-                                    {% if product.can_show_remained_quantity %}
-                                    <p class="purchase-hot">
-                                        <i class="sicon-box-bankers"></i>
-                                        {{ trans('pages.products.remained') }}
-                                        <span>{{ product.quantity }}</span>
-                                    </p>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
+                    {% if product.subtitle %}
+                        <h3 class="product-entry__sub-title  text-sm text-gray-text leading-6 mb-2.5">
+                            {{ product.subtitle }}
+                        </h3>
+                    {% endif %}
 
-                            {% if product.can_show_read_more %}
-                                <article class="article article--main article--product-details mb-50 pd-exp"
-                                         data-shrink-height="300"
-                                         style="height: 300px">
-                                    {{ product.description|raw }}
-                                </article>
-                                <div class="pd-expand-wrapper">
-                                    <button class="btn btn--padded less btn--grey bordered btn--oval expand-toggle">
-                                        {{ trans('pages.products.read_more') }}
-                                    </button>
-                                </div>
+                    <div class="mb-2">
+                        <div class="space-s-1">
+                            {% if product.on_sale %}
+                                <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
+                                <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
                             {% else %}
-                                <article class="article article--main article--product-details mb-50 ">
-                                    {{ product.description|raw }}
-                                </article>
+                                <span>{{ product.price }}</span>
                             {% endif %}
-                            {% component 'product.quick-access' with {'entity': product} %}
-                            {% component 'product.tags' with {'product': product} %}
-                            <div class="d-flex pay-installment">
-                                {% hook 'product:after-description' %}
+                        </div>
+                    </div>
+
+                    <div class="product__description leading-7 mb-6">
+                        {% if product.can_show_read_more %}
+                            <p class="pb-1">{{ product.description|raw }}</p>
+
+                            <div class="relative overflow-hidden transition-all max-h-0 duration-300" id="moreContent"
+                                 x-bind:style="showMore  ? 'max-height: ' + document.getElementById('moreContent').scrollHeight + 'px' : ''">
+                                <p>
+                                    {{ product.description|raw }}
+                                </p>
                             </div>
-                            <div class="product-sections-wrapper">
-                                {% include 'pages.partials.product.fields' %}
-                                {% if not product.is_donation %}
-                                    <div class="product-section product-section--has-label product-section--totals">
-                                        <div>
-                                            <label>{{ trans('pages.products.price') }}</label>
+
+                            <div x-show="!showMore" class="mt-2">
+                                <a href="#" @click="showMore = !showMore" data-linkText="show more"
+                                   class="show-more text-primary" x-text="showMore ? '' : '{{ trans('pages.products.read_more') }}' "></a>
+                            </div>
+
+                        {% else %}
+                            <p class="pb-1">{{ product.description|raw }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex mb-7 space-s-3 ">
+                        <div class="share-wrapper relative" @click.away="showShareMenu = false">
+                            <button type="button" @click="toggleShareMenu()"
+                                    class="btn--share shadow-md hover:shadow-default transition-shadow bg-white text-primary rounded-full w-10 h-10 focus:outline-none"
+                                    aria-label="Share">
+                                <i :class="showShareMenu ?  'sicon-cancel' :'sicon-share-alt'"></i>
+                            </button>
+                            <ul class="absolute h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share"
+                                :class="showShareMenu? 'h-auto' : 'h-0 opacity-0' ">
+                                <li>
+                                    <a class="a2a_button_whatsapp block p-2.5" aria-label="Share Via Whatsapp">
+                                        <i class="sicon-whatsapp"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="a2a_button_facebook block p-2.5 hover:text-primary"
+                                       aria-label="Share Via Facebook">
+                                        <i class="sicon-facebook"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="a2a_button_twitter block p-2.5 hover:text-primary"
+                                       aria-label="Share Via Twitter">
+                                        <i class="sicon-twitter"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="a2a_button_email block p-2.5 hover:text-primary"
+                                       aria-label="Share Via Email">
+                                        <i class="sicon-mail"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="a2a_button_copy_link block p-2.5 hover:text-primary"
+                                       aria-label="Copy Product Link">
+                                        <i class="sicon-link"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                            <script type="text/javascript">
+                                var a2a_config = a2a_config || {};
+                                a2a_config.linkurl = "#";
+                                a2a_config.locale = "";
+                            </script>
+                            <script async src="https://static.addtoany.com/menu/page.js"></script>
+                        </div>
+
+                        <button @click="toggleFavorite()"
+                                :class="inFavorite ? 'text-white bg-primary' : 'bg-white text-theme-red'"
+                                class="anime-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none">
+                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                        </button>
+                    </div>
+
+                    {% component 'product.tags' with {'product': product} %}
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                        <div class="bg-white hover:shadow-default duration-500 transition-shadow grid-cols-2 p-5 rounded-md">
+                            <img src="../assets/images/taby.png" class="w-14 mb-2.5" alt="">
+                            <p class="text-sm leading-6 text-text-dark mb-3">اليوم والباقي SAR ادفع ربع القيمة 11.77
+                                .قسطه
+                                على 3 أشهر. بدون رسوم</p>
+                            <a href="#" class="text-sm text-primary">لمعرفة المزيد</a>
+                        </div>
+
+                        <div class="bg-white hover:shadow-default duration-500 transition-shadow grid-cols-2 p-5 rounded-md">
+                            <img src="../assets/images/tamara.png" class="w-16 mb-2.5" alt="">
+                            <p class="text-sm leading-6 text-text-dark mb-3">ادفع 586 ر.س فقط علي 3 دفعات بدون رسوم</p>
+                            <a href="#" class="text-sm text-primary">لمعرفة المزيد</a>
+                        </div>
+                    </div>
+
+                    <section class="bg-white p-5 rounded-md mb-5">
+                        <h2 class="text-sm font-bold mb-4"> صور المنتج</h2>
+                        <div class="radio-images">
+
+                            <input id="image-0" type="radio" name="productImage">
+                            <label for="image-0" data-slideIndex="0"
+                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
+
+                                <img src="../images/banners/banner-1.jpg" class=" object-cover h-full"
+                                     title="اسم المنتج"
+                                     alt="صورة المنتج"/>
+
+                            </label>
+
+                            <input id="image-1" type="radio" name="productImage">
+                            <label for="image-1" data-slideIndex="1"
+                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
+
+                                <img src="../images/banners/banner-2.jpg" class=" object-cover h-full"
+                                     title="اسم المنتج"
+                                     alt="صورة المنتج"/>
+
+                            </label>
+
+                            <input id="image-2" type="radio" name="productImage">
+                            <label for="image-2" data-slideIndex="2"
+                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
+
+                                <img src="../images/banners/banner-3.jpg" class=" object-cover h-full"
+                                     title="اسم المنتج"
+                                     alt="صورة المنتج"/>
+
+                            </label>
+
+                            <input id="image-3" type="radio" name="productImage">
+                            <label for="image-3" data-slideIndex="3"
+                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
+
+                                <img src="../images/banners/banner-4.jpg" class=" object-cover h-full"
+                                     title="اسم المنتج"
+                                     alt="صورة المنتج"/>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+                    <section class="bg-white p-5 rounded-md mb-5">
+                        <h2 class="text-sm font-bold mb-4">الألوان المتاحة</h2>
+                        <div class="custom-radios custom-radios--rounded">
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-0" name="color">
+                                <label class="flex flex-col items-center" for="color-0">
+                                    <span style="background-color: #FF74DA" class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-1" name="color">
+                                <label class="flex flex-col items-center" for="color-1">
+                                    <span style="background-color: #27BEE1" class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-2" name="color">
+                                <label class="flex flex-col items-center" for="color-2">
+                                    <span style="background-color: #9A89F2" class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-3" name="color">
+                                <label class="flex flex-col items-center" for="color-3">
+                                    <span style="background-color: #FF9E01" class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-4" name="color">
+                                <label class="flex flex-col items-center" for="color-4">
+                                    <span style="background-color: #FF6767" class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-5" name="color">
+                                <label class="flex flex-col items-center" for="color-5">
+                                    <span style="background-color: #FFCA74" class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-6" name="color">
+                                <label class="flex flex-col items-center" for="color-6">
+                                    <span style="background-color: #74ffd5" class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                            <div class="me-8 mb-8">
+                                <input type="radio" id="color-7" name="color">
+                                <label class="flex flex-col items-center" for="color-7">
+                                    <span style="background-color: " class="mb-2"></span>
+                                    <p class="text-sm text-gray-text">اسم اللون</p>
+                                </label>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <form>
+                        <section class="bg-white p-5 rounded-md mb-5">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="product-name" class="form-label">
+                                    <b class="block">
+                                        اسم المنتج
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                    <small class="text-gray-text">اضف اسم المنتج هنا</small>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" name="product-name" id="product-name" autocomplete="given-name"
+                                           class="form-input">
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="forms-validationInputCode_error" class="form-label">
+                                    <b class="block">
+                                        اسم المنتج
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                    <small class="text-gray-text">اضف اسم المنتج هنا</small>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input class="form-input has-error" type="text" id="forms-validationInputCode_error"
+                                           aria-describedby="passwordHelp"/>
+                                    <span class="text-xs text-red-700" id="validationHelp">اسم المنتج مطلوب.</span>
+                                </div>
+                            </div>
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="forms-validationInputCode_success" class="form-label">
+                                    <b class="block">
+                                        اسم المنتج
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                    <small class="text-gray-text">اضف اسم المنتج هنا</small>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input class="form-input has-success" type="text"
+                                           id="forms-validationInputCode_success"
+                                           aria-describedby="passwordHelp"/>
+                                    <span class="text-xs text-green-700" id="validationHelpSuccess">مثال لإظهار رسالة
+                                    تأكيد.</span>
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="productCalendar" class="form-label">
+                                    <b class="block">
+                                        تاريخ التوصيل
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                    <small class="text-gray-text">اضف تاريخ التوصيل</small>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" name="date" id="productCalendar" class="form-input">
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="product-color" class="form-label">
+                                    <b class="block">
+                                        لون المنتج
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <select class="form-input appearance-none">
+                                        <option disabled selected>- أختر -</option>
+                                        <option>أزرق</option>
+                                        <option>سماوي</option>
+                                        <option>أخضر فاتح</option>
+                                        <option>رصاصي فاتح</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="product-type" class="form-label">
+                                    <b class="block">
+                                        النوع
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" name="product-type" id="product-type" class="form-input">
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="product-notes" class="form-label">
+                                    <b class="block">
+                                        ملاحظات
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <textarea type="text" name="product-notes" id="product-type"
+                                          class="form-input h-24"></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="product-notes" class="form-label">
+                                    <b class="block">
+                                        نوع الاختيار
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 md:flex flex-wrap items-center">
+                                    <div class="relative flex items-center mb-4 md:w-6/12">
+                                        <input id="option1" name="option1" type="checkbox"
+                                               class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                                        <label for="option1" class="ms-2 text-sm font-medium text-gray-700">قيمة
+                                            رقم١</label>
+                                    </div>
+
+                                    <div class="relative flex items-center mb-4 md:w-6/12">
+                                        <input id="option2" name="option1" type="checkbox"
+                                               class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                                        <label for="option2" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم
+                                            ٢</label>
+                                    </div>
+
+                                    <div class="relative flex items-center mb-4 md:w-6/12">
+                                        <input id="option3" name="option1" type="checkbox"
+                                               class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                                        <label for="option3" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم
+                                            ٣</label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label for="receiveTime" class="form-label">
+                                    <b class="block">
+                                        حدد وقت الوصول
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" name="date" id="receiveTime" class="form-input">
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="bg-white p-5 rounded-md mb-5">
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-gray-200 sm:pt-5 mb-5">
+                                <label for="cover-photo" class="form-label sm:pt-2">
+                                    <b class="block">
+                                        صورة المنتج
+                                        <span class="text-red-500">*</span>
+                                    </b>
+                                    <small class="text-gray-text">ارفع صورة المنتج هنا</small>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 border border-border-color rounded-md p-2.5">
+                                    <div
+                                            class="max-w-lg flex justify-center px-6 pt-8 pb-9 border border-border-color border-dashed rounded-md">
+                                        <div class="space-y-1 text-center">
+                                            <i class="sicon-camera text-primary text-xl"></i>
+                                            <div class="flex text-sm text-gray-600">
+                                                <p class="pe-1 text-gray-text">اسحب وافلت الصورة هنا او </p>
+                                                <label for="file-upload"
+                                                       class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
+                                                    <span class="font-bold"> تصفح جهازك </span>
+                                                    <input id="file-upload" name="file-upload" type="file"
+                                                           class="sr-only">
+                                                </label>
+                                            </div>
+
                                         </div>
-                                        <div class="text-left">
-                                            <div class="price-wrapper price-wrapper--large">
-                                                {% if product.on_sale %}
-                                                    <span class="color-danger">{{ product.sale_price }}</span>
-                                                    <small>{{ product.regular_price }}</small>
-                                                {% else %}
-                                                    <span>
-                                                         {% if product.showPriceAsDash() %}
-                                                             —
-                                                        {% elseif ((not hideStartingPric or not hideStartingPrice)
-                                                            and product.price_start_enabled) %}
-                                                                            يبدأ من
-                                                                    {{ product.starting_price }}
-                                                        {% else %}
-                                                                    {{ product.regular_price }}
-                                                         {% endif %}
-                                                    </span>
-                                                {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="border-t-2 border-b-2 border-border-color py-5 mb-5">
+                                <div class="bg-gray-bg  py-4 ps-7 pe-5 rounded-md flex justify-between text-sm mb-2.5">
+                                    <p class="flex items-center text-dark">
+                                        <i class="font-medium sicon-location me-4 text-lg"></i>
+                                        <span class="fix-align">
+                                        التوفر في المعارض
+                                    </span>
+                                    </p>
+                                    <b class="text-primary">اختر مدينة</b>
+                                </div>
+
+                                <div class="bg-gray-bg  py-4 ps-7 pe-5 rounded-md md:flex justify-between text-sm">
+                                    <p class="flex items-center text-dark">
+                                        <i class="font-medium sicon-shipping me-4 text-lg"></i>
+                                        <span class="fix-align">
+                                        اطلب في غضون <b>15</b> ساعة <b>31</b> دقيقة
+                                    </span>
+                                    </p>
+                                    <b class="text-orange-400">توصلك يوم غداً, مارس 3</b>
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label class="form-label">
+                                    <b class="block">
+                                        المرفقات
+                                    </b>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end" x-data="{ tab: '' }">
+
+                                    <div class="flex space-s-3 mb-1">
+                                        <button type="button" @click="tab = 'showNote'"
+                                                class="w-full focus:outline-none  bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5">
+                                            <i class="font-medium sicon-chat-conversation-alt me-1.5 text-md"></i>
+                                            <span class="fix-align">كتابة ملاحظة </span>
+                                        </button>
+
+                                        <button @click="tab = 'showUpload' " type="button"
+                                                class="w-full  focus:outline-none bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5">
+                                            <i class="font-medium sicon-paperclip me-1.5 text-md"></i>
+                                            <span class="fix-align">إرفاق ملف</span>
+                                        </button>
+                                    </div>
+
+
+                                    <div x-show="tab === 'showNote'">
+                                    <textarea
+                                            class="animated animatedfadeInDown fadeInDown form-input h-16 bg-coolGray-50"
+                                            name="" id="" cols="30" rows="10"></textarea>
+                                    </div>
+
+
+                                    <div x-show="tab === 'showUpload'">
+                                        <div
+                                                class="animated animatedfadeInDown fadeInDown mt-1 sm:mt-0 sm:col-span-2 bg-coolGray-50 border border-border-color border-dashed rounded-md p-2.5">
+                                            <div class="max-w-lg flex justify-center px-6 pt-2 pb-4">
+                                                <div class="space-y-1 text-center">
+                                                    <i class="sicon-paperclip text-primary text-xl"></i>
+                                                    <div class="flex text-sm text-gray-600">
+                                                        <p class="pe-1 text-gray-text">اسحب وافلت الملف هنا او </p>
+                                                        <label for="file-upload"
+                                                               class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
+                                                            <span class="font-bold"> تصفح جهازك </span>
+                                                            <input id="file-upload" name="file-upload" type="file"
+                                                                   class="sr-only">
+                                                        </label>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                {% endif %}
-                                <div class="product-section {{ product.is_available or product.is_donation ? 'product-section--quantity' : 'product-section--notify list--spaced' }}  no-p mb-0 no-border">
-                                    {% if product.hide_quantity or not product.is_available %}
-                                        <input type="hidden" value="1" name="quantity"/>
-                                    {% else %}
-                                        <div class="qty-wrapper">
-                                            <div class="qty qty--large qty--circular" data-on-click="product-price">
-                                                <button type="button"
-                                                        aria-label="Increase Quantity"
-                                                        data-qty="add"><i class="sicon-add"></i></button>
-                                                <input id="product-quantity"
-                                                       data-digits="1"
-                                                       name="quantity"
-                                                       type="number"
-                                                       max="{{ product.max_quantity }}"
-                                                       data-max_quantity="{{ product.max_quantity }}"
-                                                       value="1"
-                                                       data-on-keyup="product-price"
-                                                       aria-label="Product Quantity"
-                                                       min="1"/>
-                                                <button type="button"
-                                                        data-qty="sub"
-                                                        aria-label="Decrease Quantity"><i class="sicon-minus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                    {% if product.is_available or product.is_donation %}
-                                        <button class="btn btn--wide btn--large btn--oval btn--primary {{ product.is_available ?'':'out-of-stock' }}"
-                                                {% if not product.is_available %} disabled {% endif %}>
-                                            {% if product.is_available %}
-                                                <i class="sicon-shopping-bag"></i>
-                                                {{ trans('pages.cart.add_to_cart') }}
-                                            {% elseif product.is_donation %}
-                                                {{ trans('pages.products.donation_exceed') }}
-                                            {% else %}
-                                                {{ trans('pages.products.out_of_stock') }}
-                                            {% endif %}
-                                        </button>
-                                    {% else %}
-                                        <span class="btn btn--large btn--grey btn--oval btn--padded less color-grey disabled font-sm">{{ trans('pages.products.out_of_stock') }}</span>
-                                        {% component 'product.notify-availability' with {product:product} %}
-                                    {% endif %}
+
                                 </div>
                             </div>
-                        </form>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label class="form-label">
+                                    <b class="block">
+                                        الكمية
+                                    </b>
+                                </label>
+                                <div x-data="{itemQty: 1}" class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
+                                    <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
+                                        <button type="button" @click="itemQty += 1"
+                                                class="text-gray-text w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                            <i
+                                                    class="sicon-add"></i></button>
+                                        <input x-model="itemQty"
+                                               class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
+                                               type="text" value="1">
+                                        <button type="button" @click="if(itemQty > 1 ) {itemQty-= 1}"
+                                                class="text-gray-text w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                            <i
+                                                    class="sicon-minus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                <label class="form-label">
+                                    <b class="block">
+                                        السعر
+                                    </b>
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end space-s-1">
+
+
+                                    <div class="space-s-1">
+                                        <h4 class="text-theme-red font-bold text-sm inline-block">‏600 ر.س</h4>
+                                        <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="flex justify-between space-s-4">
+                                <button type="button" class="btn btn-outline">
+                                    نفدت الكمية
+                                </button>
+
+                                <button @click="openReminderModal()" type="button" class="btn btn-primary">
+                                    اعملني عند التوفر
+                                </button>
+                            </div>
+
+
+                        </section>
+
+                        <section class="relative overflow-hidden bg-white p-5 pb-0 rounded-md mb-5">
+                            <p class="mb-5 pe-10 ">اشتري منتجين واحصل على خصم 15 ر.س من التصنيفات التالية</p>
+
+
+                            <a href="#"
+                               class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-dark justify-center text-sm mb-2.5">
+                                <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                                <span class="fix-align">شواحن</span>
+                            </a>
+
+                            <a href="#"
+                               class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-dark justify-center text-sm mb-2.5">
+                                <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                                <span class="fix-align">اكسسوارات</span>
+                            </a>
+
+                            <a href="#"
+                               class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-dark justify-center text-sm mb-2.5">
+                                <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                                <span class="fix-align">شواحن</span>
+                            </a>
+
+                            <a href="#"
+                               class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-dark justify-center text-sm mb-2.5">
+                                <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                                <span class="fix-align">اكسسوارات</span>
+                            </a>
+
+
+                            <div class="absolute top-5 w-40 end-0 transform -translate-x-12 -rotate-45 text-center">
+                                <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض خاص
+                                </div>
+                            </div>
+
+
+                            <div class="mt-5 border-b-2 border-red-400"></div>
+                        </section>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="reminderModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title"
+             role="dialog"
+             aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+                <div x-show="reminderModal" x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 "
+                     x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                     aria-hidden="true"></div>
+
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+
+                <div x-show="reminderModal" @click.away="closeReminderModal"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     class="inline-block align-bottom bg-white  p-8 rounded-md   shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ">
+
+                    <div>
+                        <button @click="closeReminderModal"
+                                class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
+                            <i class="sicon-cancel"></i>
+                        </button>
+
+                        <div class="flex justify-center mb-5">
+                            <div
+                                    class="common-anime bg-white text-lg text-text-dark border border-border-color rounded-icon ">
+                                <i class="sicon-bell-ring"></i>
+                            </div>
+                        </div>
+
+                        <h3 class="common-anime text-base leading-6 font-bold mb-2" id="modal-title">
+                            اعلمني عند التوفر
+                        </h3>
+                        <div class="mb-10">
+                            <p class="common-anime text-gray-text text-sm leading-6">
+                                ادخل بياناتك وكن أول من يعلم بتوفر المنتج لدينا
+                            </p>
+                        </div>
+                        <div class="common-anime z-50 relative">
+                            <label for="user-phone" class="block text-sm font-medium text-gray-700">
+                                <b class="block text-start">
+                                    رقم الجوال
+                                </b>
+                            </label>
+                            <div class="mt-2.5 mb-10">
+                                <input type="tel" x-ref="userPhone" name="user-phone" id="user-phone"
+                                       class="tel-input form-input">
+                            </div>
+                        </div>
+
+
+                        <div class="common-anime flex justify-between space-s-4">
+                            <button type="button" class=" btn btn-primary"> إرسال</button>
+                            <button @click="closeReminderModal()" type="button" class="btn btn-outline">إلغاء</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <section class="container relative overflow-hidden bg-white p-5 text-center rounded-md mb-5">
+            <div x-data="{openModal: false}">
+                <button @click="openModal = true; animatedTitles();" type="button" class="btn btn-primary">
+                    انقر لعرض العروض الخاصة
+                </button>
+                <div x-cloak x-show="openModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title"
+                     role="dialog" aria-modal="true">
+                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+                        <div x-show="openModal" x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 "
+                             x-transition:leave-end="opacity-0"
+                             class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                             aria-hidden="true"></div>
+
+
+                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                              aria-hidden="true">&#8203;</span>
+
+
+                        <div x-show="openModal" @click.away="openModal = false"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             class="inline-block align-bottom bg-white rounded-md text-start overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-11/12">
+                            <div>
+                                <button @click="openModal = false"
+                                        class="close-modal text-gray-text w-6 h-6 focus:outline-none text-2xl absolute z-20 top-5 end-5">
+                                    <i class="sicon-cancel"></i>
+                                </button>
+
+                                <div class="bg-gray-bg px-5 md:px-10 pt-8 pb-10">
+                                    <b class="offer-item opacity-0 block text-red-400 text-lg">عرض خاص</b>
+                                    <h3 class="offer-item opacity-0 text-2xl leading-6 font-bold mb-8" id="modal-title">
+                                        اشتري قطعتين من هذا المنتج
+                                    </h3>
+                                    <div>
+                                        <div class='product-entry rounded-md h-full transition duration-500
+justify-between
+overflow-hidden
+flex
+flex-col
+md:flex-row space-s-24'>
+
+                                            <div class="flex items-center">
+                                                <a href="#"
+                                                   class='product-entry__image relative overflow-hidden w-20 h-16 md:w-24 md:h-20 rounded-md'>
+                                                    <img class="h-full w-full object-cover "
+                                                         src="../../../../images/products/product-3.jpg"
+                                                         alt="product image"/>
+                                                </a>
+
+                                                <div class="flex-1 ps-5">
+                                                    <div class="flex flex-col justify-start items-baseline">
+
+                                                        <h3 class="text-sm font-bold text-title-color leading-6 mb-1.5">
+                                                            <a href="#">وحدات تحكم متوافق مع بلاي ستيشن 3</a>
+                                                        </h3>
+                                                        <p class="text-sm text-gray-text">متوافقة مع جميع الأجهزة</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="flex flex-col md:flex-row md:items-center md:justify-between w-full md:w-auto md:space-s-8">
+
+
+                                                <h4 class="text-primary font-bold text-sm">‏10,978.00 ر.س</h4>
+
+
+                                                <button
+                                                        class="transition mt-4 md:mt-0 w-36 duration-300  flex-1 border border-primary  text-sm  font-bold text-reverse bg-primary md:px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                    اضف
+                                                    للسلة
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ps-5 md:px-10 py-8">
+                                    <h4 class="text-base mb-5 pe-5">و احصل <b>مجانآ</b> على احد المنتجات التالية</h4>
+
+                                    <div class="swiper  offer-slider mb-8">
+                                        <div class="swiper-wrapper">
+
+
+                                            <div class="swiper-slide offer-slider__slide w-10/12 md:w-auto">
+
+
+                                                <div id="product_1334908781" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                                                    <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                                        <img class="sm:h-full w-full object-cover"
+                                                             src="../images/products/product-3.jpg"
+                                                             alt="product image"/>
+
+
+                                                        <div class="absolute top-4 start-0 z-20">
+                                                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">
+                                                                عرض خاص
+                                                            </div>
+                                                        </div>
+
+                                                    </a>
+
+
+                                                    <div class="flex-1 px-5 pt-5 pb-7 ">
+                                                        <div class="flex  justify-between items-baseline">
+
+                                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                                                <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3
+                                                                    متوافقة مع جميع الأجهزة </a>
+                                                            </h3>
+
+
+                                                        </div>
+
+
+                                                        <div class="w-full flex justify-between items-center mb-5">
+
+
+                                                            <div class="space-s-1">
+                                                                <h4 class="text-theme-red font-bold text-sm inline-block">
+                                                                    ‏600 ر.س</h4>
+                                                                <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                                            </div>
+
+
+                                                        </div>
+                                                        <div class="flex items-center">
+
+                                                            <button x-data="initAddToCart()"
+                                                                    @click="addToCart('product_1334908781')"
+                                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                                اضف للسلة
+                                                            </button>
+                                                            <script>
+                                                                function initAddToCart() {
+                                                                    return {
+                                                                        addToCart: function (id) {
+                                                                            let newId = id.replace(/product_/g, '');
+                                                                            window.addTocartAnimation(newId);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </script>
+
+                                                            <div class="text-gray-text">
+
+                                                                <button x-data="initAddToFavorite()"
+                                                                        @click="toggleFavorite()"
+                                                                        class="w-10 h-10 focus:outline-none">
+                                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                                                </button>
+
+                                                                <script>
+                                                                    function initAddToFavorite() {
+                                                                        return {
+                                                                            reminderModal: false,
+                                                                            inFavorite: false,
+                                                                            showMore: false,
+                                                                            toggleFavorite: function () {
+                                                                                this.inFavorite = !this.inFavorite;
+                                                                            },
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="swiper-slide offer-slider__slide w-10/12 md:w-auto">
+
+
+                                                <div id="product_1334905681" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                                                    <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                                        <img class="sm:h-full w-full object-cover"
+                                                             src="../images/products/product-4.jpg"
+                                                             alt="product image"/>
+
+
+                                                    </a>
+
+
+                                                    <div class="flex-1 px-5 pt-5 pb-7 ">
+                                                        <div class="flex  justify-between items-baseline">
+
+                                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                                                <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3
+                                                                    متوافقة مع جميع الأجهزة </a>
+                                                            </h3>
+
+
+                                                        </div>
+
+
+                                                        <div class="w-full flex justify-between items-center mb-5">
+
+
+                                                            <h4 class="text-primary font-bold text-sm">‏10,978.00
+                                                                ر.س</h4>
+
+
+                                                        </div>
+                                                        <div class="flex items-center">
+
+                                                            <button x-data="initAddToCart()"
+                                                                    @click="addToCart('product_1334905681')"
+                                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                                اضف للسلة
+                                                            </button>
+                                                            <script>
+                                                                function initAddToCart() {
+                                                                    return {
+                                                                        addToCart: function (id) {
+                                                                            let newId = id.replace(/product_/g, '');
+                                                                            window.addTocartAnimation(newId);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </script>
+
+                                                            <div class="text-gray-text">
+
+                                                                <button x-data="initAddToFavorite()"
+                                                                        @click="toggleFavorite()"
+                                                                        class="w-10 h-10 focus:outline-none">
+                                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                                                </button>
+
+                                                                <script>
+                                                                    function initAddToFavorite() {
+                                                                        return {
+                                                                            reminderModal: false,
+                                                                            inFavorite: false,
+                                                                            showMore: false,
+                                                                            toggleFavorite: function () {
+                                                                                this.inFavorite = !this.inFavorite;
+                                                                            },
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="swiper-slide offer-slider__slide w-10/12 md:w-auto">
+
+
+                                                <div id="product_109834881" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                                                    <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                                        <img class="sm:h-full w-full object-cover"
+                                                             src="../images/products/product-1.jpg"
+                                                             alt="product image"/>
+
+
+                                                    </a>
+
+
+                                                    <div class="flex-1 px-5 pt-5 pb-7 ">
+                                                        <div class="flex  justify-between items-baseline">
+
+                                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                                                <a href="/single"> S وحدات تحكم متوافق مع بلاي ستيشن 3
+                                                                    متوافقة مع جميع الأجهزة </a>
+                                                            </h3>
+
+
+                                                        </div>
+
+
+                                                        <div class="w-full flex justify-between items-center mb-5">
+
+
+                                                            <h4 class="text-primary font-bold text-sm">‏10,978.00
+                                                                ر.س</h4>
+
+
+                                                        </div>
+                                                        <div class="flex items-center">
+
+                                                            <button x-data="initAddToCart()"
+                                                                    @click="addToCart('product_109834881')"
+                                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                                اضف للسلة
+                                                            </button>
+                                                            <script>
+                                                                function initAddToCart() {
+                                                                    return {
+                                                                        addToCart: function (id) {
+                                                                            let newId = id.replace(/product_/g, '');
+                                                                            window.addTocartAnimation(newId);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </script>
+
+                                                            <div class="text-gray-text">
+
+                                                                <button x-data="initAddToFavorite()"
+                                                                        @click="toggleFavorite()"
+                                                                        class="w-10 h-10 focus:outline-none">
+                                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                                                </button>
+
+                                                                <script>
+                                                                    function initAddToFavorite() {
+                                                                        return {
+                                                                            reminderModal: false,
+                                                                            inFavorite: false,
+                                                                            showMore: false,
+                                                                            toggleFavorite: function () {
+                                                                                this.inFavorite = !this.inFavorite;
+                                                                            },
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="swiper-slide offer-slider__slide w-10/12 md:w-auto">
+
+
+                                                <div id="product_1334912334" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                                                    <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                                        <img class="sm:h-full w-full object-cover"
+                                                             src="../images/products/product-2.jpg"
+                                                             alt="product image"/>
+
+
+                                                        <div class="absolute top-4 start-0 z-20">
+                                                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">
+                                                                عرض خاص
+                                                            </div>
+                                                        </div>
+
+                                                    </a>
+
+
+                                                    <div class="flex-1 px-5 pt-5 pb-7 ">
+                                                        <div class="flex  justify-between items-baseline">
+
+                                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                                                <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3
+                                                                    متوافقة مع جميع الأجهزة </a>
+                                                            </h3>
+
+
+                                                        </div>
+
+
+                                                        <div class="w-full flex justify-between items-center mb-5">
+
+
+                                                            <div class="space-s-1">
+                                                                <h4 class="text-theme-red font-bold text-sm inline-block">
+                                                                    ‏600 ر.س</h4>
+                                                                <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                                            </div>
+
+
+                                                        </div>
+                                                        <div class="flex items-center">
+
+                                                            <button x-data="initAddToCart()"
+                                                                    @click="addToCart('product_1334912334')"
+                                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                                اضف للسلة
+                                                            </button>
+                                                            <script>
+                                                                function initAddToCart() {
+                                                                    return {
+                                                                        addToCart: function (id) {
+                                                                            let newId = id.replace(/product_/g, '');
+                                                                            window.addTocartAnimation(newId);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </script>
+
+                                                            <div class="text-gray-text">
+
+                                                                <button x-data="initAddToFavorite()"
+                                                                        @click="toggleFavorite()"
+                                                                        class="w-10 h-10 focus:outline-none">
+                                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                                                </button>
+
+                                                                <script>
+                                                                    function initAddToFavorite() {
+                                                                        return {
+                                                                            reminderModal: false,
+                                                                            inFavorite: false,
+                                                                            showMore: false,
+                                                                            toggleFavorite: function () {
+                                                                                this.inFavorite = !this.inFavorite;
+                                                                            },
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="swiper-slide offer-slider__slide w-10/12 md:w-auto">
+
+
+                                                <div id="product_1330364551" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                                                    <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                                        <img class="sm:h-full w-full object-cover"
+                                                             src="../images/products/product-1.jpg"
+                                                             alt="product image"/>
+
+
+                                                    </a>
+
+
+                                                    <div class="flex-1 px-5 pt-5 pb-7 ">
+                                                        <div class="flex  justify-between items-baseline">
+
+                                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                                                <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3
+                                                                    متوافقة مع جميع الأجهزة </a>
+                                                            </h3>
+
+
+                                                        </div>
+
+
+                                                        <div class="w-full flex justify-between items-center mb-5">
+
+
+                                                            <h4 class="text-primary font-bold text-sm">‏10,978.00
+                                                                ر.س</h4>
+
+
+                                                        </div>
+                                                        <div class="flex items-center">
+
+                                                            <button x-data="initAddToCart()"
+                                                                    @click="addToCart('product_1330364551')"
+                                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                                اضف للسلة
+                                                            </button>
+                                                            <script>
+                                                                function initAddToCart() {
+                                                                    return {
+                                                                        addToCart: function (id) {
+                                                                            let newId = id.replace(/product_/g, '');
+                                                                            window.addTocartAnimation(newId);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </script>
+
+                                                            <div class="text-gray-text">
+
+                                                                <button x-data="initAddToFavorite()"
+                                                                        @click="toggleFavorite()"
+                                                                        class="w-10 h-10 focus:outline-none">
+                                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                                                </button>
+
+                                                                <script>
+                                                                    function initAddToFavorite() {
+                                                                        return {
+                                                                            reminderModal: false,
+                                                                            inFavorite: false,
+                                                                            showMore: false,
+                                                                            toggleFavorite: function () {
+                                                                                this.inFavorite = !this.inFavorite;
+                                                                            },
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="swiper-slide offer-slider__slide w-10/12 md:w-auto">
+
+
+                                                <div id="product_342349043741" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                                                    <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                                        <img class="sm:h-full w-full object-cover"
+                                                             src="../images/products/product-3.jpg"
+                                                             alt="product image"/>
+
+
+                                                    </a>
+
+
+                                                    <div class="flex-1 px-5 pt-5 pb-7 ">
+                                                        <div class="flex  justify-between items-baseline">
+
+                                                            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                                                <a href="/single">L وحدات تحكم متوافق مع بلاي ستيشن 3
+                                                                    متوافقة مع جميع الأجهزة </a>
+                                                            </h3>
+
+
+                                                        </div>
+
+
+                                                        <div class="w-full flex justify-between items-center mb-5">
+
+
+                                                            <h4 class="text-primary font-bold text-sm">‏10,978.00
+                                                                ر.س</h4>
+
+
+                                                        </div>
+                                                        <div class="flex items-center">
+
+                                                            <button x-data="initAddToCart()"
+                                                                    @click="addToCart('product_342349043741')"
+                                                                    class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                                                اضف للسلة
+                                                            </button>
+                                                            <script>
+                                                                function initAddToCart() {
+                                                                    return {
+                                                                        addToCart: function (id) {
+                                                                            let newId = id.replace(/product_/g, '');
+                                                                            window.addTocartAnimation(newId);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </script>
+
+                                                            <div class="text-gray-text">
+
+                                                                <button x-data="initAddToFavorite()"
+                                                                        @click="toggleFavorite()"
+                                                                        class="w-10 h-10 focus:outline-none">
+                                                                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                                                </button>
+
+                                                                <script>
+                                                                    function initAddToFavorite() {
+                                                                        return {
+                                                                            reminderModal: false,
+                                                                            inFavorite: false,
+                                                                            showMore: false,
+                                                                            toggleFavorite: function () {
+                                                                                this.inFavorite = !this.inFavorite;
+                                                                            },
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="hidden md:block">
+                                            <button class="offer-prev  swiper-button-prev ">
+                                            </button>
+                                            <button class="offer-next swiper-button-next ">
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-col md:flex-row justify-between text-sm text-gray-text">
+                                        <p class="mb-5 md:mb-0">العرض ساري حتى 22/4/2020م</p>
+                                        <div class="relative flex items-center me-5 md:me-0">
+                                            <input id="dontRem" name="option2" type="checkbox"
+                                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
+                                            <label for="dontRem" class="ms-2 text-sm font-medium ">لا تذكرني مرة
+                                                اخرى</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% component 'product.quick-buy' with {product: product} %}
-            {% component 'offer.block' with {product:product} %}
-            {% component 'product.comments' with {comments: comments, 'id': product.product_id} %}
+
+            <script>
+                function animatedTitles() {
+                    anime({
+                        targets: '.offer-item',
+                        opacity: [0, 1],
+                        duration: 1900,
+                        translateX: [40, 0],
+                        delay: function (el, i) {
+                            return i * 200;
+                        },
+                    })
+                }
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const swiper = new Swiper('.offer-slider', {
+
+
+                        spaceBetween: 20,
+                        slidesPerView: "auto",
+
+
+                        navigation: {
+                            nextEl: '.offer-next',
+                            prevEl: '.offer-prev',
+                        },
+
+                        breakpoints: {
+
+                            640: {
+                                slidesPerView: 2,
+                            },
+
+                            768: {
+                                slidesPerView: 3,
+                            },
+                        }
+
+                    });
+
+                });
+            </script>
+        </section>
+
+        <div class="bg-darkGray-bg mb-20 pt-20 pb-20">
+            <div class="container">
+                <form action="" class="mb-8">
+                    <h2 class="mb-5 text-lg font-bold text-dark">إضافة تعليق</h2>
+                    <textarea name="" placeholder="هل لديك تعليق معين" class="form-input h-24 mb-5" id="" cols="30"
+                              rows="30"></textarea>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary h-10"> نشر التعليق</button>
+                    </div>
+                </form>
+                <div>
+                    <h2 class="text-lg font-bold text-dark mb-8"> التعليقات</h2>
+
+
+                    <div class=" border-b mb-8 border-coolGray-300">
+                        <div class="comment flex text-sm  space-s-3  pb-8">
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="nested-comment reply md:ps-16 flex text-sm space-s-3 pb-8">
+                            <i class=" sicon-reply text-lg text-gray-text "></i>
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class=" border-b mb-8 border-coolGray-300">
+                        <div class="comment flex text-sm  space-s-3  pb-8">
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="nested-comment reply md:ps-16 flex text-sm space-s-3 pb-8">
+                            <i class=" sicon-reply text-lg text-gray-text "></i>
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class=" border-b mb-8 border-coolGray-300">
+                        <div class="comment flex text-sm  space-s-3  pb-8">
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="nested-comment reply md:ps-16 flex text-sm space-s-3 pb-8">
+                            <i class=" sicon-reply text-lg text-gray-text "></i>
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class=" border-b mb-8 border-coolGray-300">
+                        <div class="comment flex text-sm  space-s-3  pb-8">
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="nested-comment reply md:ps-16 flex text-sm space-s-3 pb-8">
+                            <i class=" sicon-reply text-lg text-gray-text "></i>
+                            <div class="flex-none">
+                                <img src="../images/avatar/avatar-1.jpeg" alt=""
+                                     class="w-10 h-10 bg-gray-100 rounded-full">
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                                    <div class="md:flex items-center">
+                                        <h3 class="font-bold text-base me-5 fix-align mb-1">خالد عبدالرحمن</h3>
+                                        <div class="flex">
+                                            <i
+                                                    class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                                            <span class="fix-align ms-1 text-sm text-gray-text">قام بالشراء وتم
+                                            تقييمه</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-text text-sm">منذ 3 أشهر</p>
+
+                                    <div class=" -mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                        <i class="sicon-star2 text-theme-yellow"></i>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="prose prose-sm max-w-none text-gray-500">
+                                    <p>رائع. التوصيل فى وقت قياسى.. شكرا . السعر بدون خصم الفيزا كما فى المحلات الاخرى
+                                        وبذلك
+                                        يكون الخصومات وهميه</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="text-center">
+                    <button type="button" class="btn btn-outline-dark">
+                        عرض المزيد من التعليقات
+                    </button>
+                </div>
+            </div>
         </div>
-    </section>
-    {% component 'product.similar-products' %}
+
+        <section class="mb-20 container pe-0 lg:px-5">
+            <div class="swiper  best-offers-slider">
+                <div class="pe-5 lg:pe-0">
+                    <div class="flex justify-between mb-8">
+                        <h2 class="font-bold text-lg text-text-dark  ">أفضل العروض</h2>
+                        <div class="flex items-center">
+                            <a href="#" class="text-sm font-bold text-primary mx-3">عرض الكل</a>
+
+
+                            <div class="hidden sm:block" dir="rtl">
+                                <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                    <i class="text-gray-text sicon-keyboard_arrow_right"></i>
+                                </button>
+                                <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                    <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-wrapper">
+
+
+                    <div class="swiper-slide best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+
+
+                        <div id="" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                            <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                <img class="sm:h-full w-full object-cover" src="../images/products/product-3.jpg"
+                                     alt="product image"/>
+
+
+                                <div class="absolute top-4 start-0 z-20">
+                                    <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض
+                                        خاص
+                                    </div>
+                                </div>
+
+                            </a>
+
+
+                            <div class="flex-1 px-5 pt-5 pb-7 ">
+                                <div class="flex  justify-between items-baseline">
+
+                                    <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                        <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة
+                                            وبسعر ممتاز</a>
+                                    </h3>
+
+
+                                </div>
+
+
+                                <p class="text-sm text-gray-text leading-6 mb-2.5">
+                                    نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل
+                                    نص بديل للتفاصيل
+                                </p>
+
+                                <div class="w-full flex justify-between items-center mb-5">
+
+
+                                    <div class="space-s-1">
+                                        <h4 class="text-theme-red font-bold text-sm inline-block">‏600 ر.س</h4>
+                                        <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                    </div>
+
+
+                                    <div class="text-gray-text">
+                                        <div class="text-sm">
+                                            <i class="sicon-star2 text-theme-yellow"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex items-center">
+
+                                    <button x-data="initAddToCart()" @click="addToCart('')"
+                                            class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                        اضف للسلة
+                                    </button>
+                                    <script>
+                                        function initAddToCart() {
+                                            return {
+                                                addToCart: function (id) {
+                                                    let newId = id.replace(/product_/g, '');
+                                                    window.addTocartAnimation(newId);
+                                                }
+                                            }
+                                        }
+                                    </script>
+
+                                    <div class="text-gray-text">
+
+                                        <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                                                class="w-10 h-10 focus:outline-none">
+                                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                        </button>
+
+                                        <script>
+                                            function initAddToFavorite() {
+                                                return {
+                                                    reminderModal: false,
+                                                    inFavorite: false,
+                                                    showMore: false,
+                                                    toggleFavorite: function () {
+                                                        this.inFavorite = !this.inFavorite;
+                                                    },
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+
+
+                        <div id="" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                            <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                <img class="sm:h-full w-full object-cover" src="../images/products/product-2.jpg"
+                                     alt="product image"/>
+
+
+                                <div class="absolute top-4 start-0 z-20">
+                                    <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض
+                                        خاص
+                                    </div>
+                                </div>
+
+                            </a>
+
+
+                            <div class="flex-1 px-5 pt-5 pb-7 ">
+                                <div class="flex  justify-between items-baseline">
+
+                                    <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                        <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة
+                                            وبسعر ممتاز</a>
+                                    </h3>
+
+
+                                </div>
+
+
+                                <p class="text-sm text-gray-text leading-6 mb-2.5">
+                                    نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل
+                                    نص بديل للتفاصيل
+                                </p>
+
+                                <div class="w-full flex justify-between items-center mb-5">
+
+
+                                    <div class="space-s-1">
+                                        <h4 class="text-theme-red font-bold text-sm inline-block">‏600 ر.س</h4>
+                                        <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                    </div>
+
+
+                                    <div class="text-gray-text">
+                                        <div class="text-sm">
+                                            <i class="sicon-star2 text-theme-yellow"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex items-center">
+
+                                    <button x-data="initAddToCart()" @click="addToCart('')"
+                                            class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                        اضف للسلة
+                                    </button>
+                                    <script>
+                                        function initAddToCart() {
+                                            return {
+                                                addToCart: function (id) {
+                                                    let newId = id.replace(/product_/g, '');
+                                                    window.addTocartAnimation(newId);
+                                                }
+                                            }
+                                        }
+                                    </script>
+
+                                    <div class="text-gray-text">
+
+                                        <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                                                class="w-10 h-10 focus:outline-none">
+                                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                        </button>
+
+                                        <script>
+                                            function initAddToFavorite() {
+                                                return {
+                                                    reminderModal: false,
+                                                    inFavorite: false,
+                                                    showMore: false,
+                                                    toggleFavorite: function () {
+                                                        this.inFavorite = !this.inFavorite;
+                                                    },
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+
+
+                        <div id="" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                            <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                <img class="sm:h-full w-full object-cover" src="../images/products/product-3.jpg"
+                                     alt="product image"/>
+
+
+                                <div class="absolute top-4 start-0 z-20">
+                                    <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض
+                                        خاص
+                                    </div>
+                                </div>
+
+                            </a>
+
+
+                            <div class="flex-1 px-5 pt-5 pb-7 ">
+                                <div class="flex  justify-between items-baseline">
+
+                                    <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                        <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة
+                                            وبسعر ممتاز</a>
+                                    </h3>
+
+
+                                </div>
+
+
+                                <p class="text-sm text-gray-text leading-6 mb-2.5">
+                                    نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل
+                                    نص بديل للتفاصيل
+                                </p>
+
+                                <div class="w-full flex justify-between items-center mb-5">
+
+
+                                    <div class="space-s-1">
+                                        <h4 class="text-theme-red font-bold text-sm inline-block">‏600 ر.س</h4>
+                                        <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                    </div>
+
+
+                                    <div class="text-gray-text">
+                                        <div class="text-sm">
+                                            <i class="sicon-star2 text-theme-yellow"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex items-center">
+
+                                    <button x-data="initAddToCart()" @click="addToCart('')"
+                                            class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                        اضف للسلة
+                                    </button>
+                                    <script>
+                                        function initAddToCart() {
+                                            return {
+                                                addToCart: function (id) {
+                                                    let newId = id.replace(/product_/g, '');
+                                                    window.addTocartAnimation(newId);
+                                                }
+                                            }
+                                        }
+                                    </script>
+
+                                    <div class="text-gray-text">
+
+                                        <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                                                class="w-10 h-10 focus:outline-none">
+                                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                        </button>
+
+                                        <script>
+                                            function initAddToFavorite() {
+                                                return {
+                                                    reminderModal: false,
+                                                    inFavorite: false,
+                                                    showMore: false,
+                                                    toggleFavorite: function () {
+                                                        this.inFavorite = !this.inFavorite;
+                                                    },
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+
+
+                        <div id="" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                            <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                <img class="sm:h-full w-full object-cover" src="../images/products/product-1.jpg"
+                                     alt="product image"/>
+
+
+                                <div class="absolute top-4 start-0 z-20">
+                                    <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض
+                                        خاص
+                                    </div>
+                                </div>
+
+                            </a>
+
+
+                            <div class="flex-1 px-5 pt-5 pb-7 ">
+                                <div class="flex  justify-between items-baseline">
+
+                                    <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                        <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة
+                                            وبسعر ممتاز</a>
+                                    </h3>
+
+
+                                </div>
+
+
+                                <p class="text-sm text-gray-text leading-6 mb-2.5">
+                                    نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل
+                                    نص بديل للتفاصيل
+                                </p>
+
+                                <div class="w-full flex justify-between items-center mb-5">
+
+
+                                    <div class="space-s-1">
+                                        <h4 class="text-theme-red font-bold text-sm inline-block">‏600 ر.س</h4>
+                                        <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                    </div>
+
+
+                                    <div class="text-gray-text">
+                                        <div class="text-sm">
+                                            <i class="sicon-star2 text-theme-yellow"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex items-center">
+
+                                    <button x-data="initAddToCart()" @click="addToCart('')"
+                                            class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                        اضف للسلة
+                                    </button>
+                                    <script>
+                                        function initAddToCart() {
+                                            return {
+                                                addToCart: function (id) {
+                                                    let newId = id.replace(/product_/g, '');
+                                                    window.addTocartAnimation(newId);
+                                                }
+                                            }
+                                        }
+                                    </script>
+
+                                    <div class="text-gray-text">
+
+                                        <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                                                class="w-10 h-10 focus:outline-none">
+                                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                        </button>
+
+                                        <script>
+                                            function initAddToFavorite() {
+                                                return {
+                                                    reminderModal: false,
+                                                    inFavorite: false,
+                                                    showMore: false,
+                                                    toggleFavorite: function () {
+                                                        this.inFavorite = !this.inFavorite;
+                                                    },
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+
+
+                        <div id="" class='product-entry    product-entry--vertical  relative h-full transition-shadow duration-500 bg-white hover:shadow-default
+rounded-lg justify-around
+overflow-hidden
+flex
+flex-col
+'>
+
+
+                            <a href="/single" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full
+
+            h-40
+
+        '>
+
+
+                                <img class="sm:h-full w-full object-cover" src="../images/products/product-3.jpg"
+                                     alt="product image"/>
+
+
+                                <div class="absolute top-4 start-0 z-20">
+                                    <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض
+                                        خاص
+                                    </div>
+                                </div>
+
+                            </a>
+
+
+                            <div class="flex-1 px-5 pt-5 pb-7 ">
+                                <div class="flex  justify-between items-baseline">
+
+                                    <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                        <a href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة
+                                            وبسعر ممتاز</a>
+                                    </h3>
+
+
+                                </div>
+
+
+                                <p class="text-sm text-gray-text leading-6 mb-2.5">
+                                    نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل
+                                    نص بديل للتفاصيل
+                                </p>
+
+                                <div class="w-full flex justify-between items-center mb-5">
+
+
+                                    <div class="space-s-1">
+                                        <h4 class="text-theme-red font-bold text-sm inline-block">‏600 ر.س</h4>
+                                        <span class="text-sm text-gray-text line-through">‏850 ر.س</span>
+                                    </div>
+
+
+                                    <div class="text-gray-text">
+                                        <div class="text-sm">
+                                            <i class="sicon-star2 text-theme-yellow"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex items-center">
+
+                                    <button x-data="initAddToCart()" @click="addToCart('')"
+                                            class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
+                                        اضف للسلة
+                                    </button>
+                                    <script>
+                                        function initAddToCart() {
+                                            return {
+                                                addToCart: function (id) {
+                                                    let newId = id.replace(/product_/g, '');
+                                                    window.addTocartAnimation(newId);
+                                                }
+                                            }
+                                        }
+                                    </script>
+
+                                    <div class="text-gray-text">
+
+                                        <button x-data="initAddToFavorite()" @click="toggleFavorite()"
+                                                class="w-10 h-10 focus:outline-none">
+                                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                                        </button>
+
+                                        <script>
+                                            function initAddToFavorite() {
+                                                return {
+                                                    reminderModal: false,
+                                                    inFavorite: false,
+                                                    showMore: false,
+                                                    toggleFavorite: function () {
+                                                        this.inFavorite = !this.inFavorite;
+                                                    },
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const swiper = new Swiper('.best-offers-slider', {
+
+
+                        spaceBetween: 30,
+                        slidesPerView: 'auto',
+
+
+                        navigation: {
+                            nextEl: '.slider-next',
+                            prevEl: '.slider-prev',
+                        },
+
+                        breakpoints: {
+
+                            980: {
+                                slidesPerView: 4,
+                            }
+                        }
+
+                    });
+
+                });
+
+            </script>
+        </section>
+    </main>
+
 {% endblock %}
 
 {% block scripts %}
     <script>
-    document.addEventListener( 'DOMContentLoaded', function () {
-      salla.infiniteScroll.initiate('.comments-container', '.comment-block', {history:false, scrollThreshold: false})
+        function initProductDetails() {
+            return {
+                reminderModal: false,
+                inFavorite: false,
+                showMore: false,
+                showShareMenu: false,
+                toggleFavorite: function () {
+                    this.inFavorite = !this.inFavorite;
+                    anime({
+                        targets: '.anime-favorite',
+                        opacity: [0, 1],
+                        duration: 800,
+                        scale: [0.6, 1],
+                    });
+                },
 
-      window.append_image = function (form_data, that, event) {
-          let fileInput = window.fileponds ? window.fileponds["attached_file_{{ product.id }}"] : undefined;
-          if (!fileInput) {
-              return form_data;
-          }
-          fileInput.getFiles()
-              .forEach(function (filepondFile) {
-                  form_data.append('file[]', filepondFile.file);
-              })
-          return form_data;
-      };
+                openReminderModal: function () {
+                    this.reminderModal = true
+                    this.animateCommonItems();
+                },
 
-      window.itemAdded = function (response, data) {
-          salla.cart.event.itemAdded(response, data.id);
-      }
+                closeReminderModal: function () {
+                    this.reminderModal = false;
+                },
 
-      window.itemFailedTobeAdded = function (error, data) {
-          salla.cart.event.itemAddedFailed(error, data.id);
-      }
-    })
+                animateCommonItems: function () {
+                    let that = this;
+                    anime({
+                        targets: '.common-anime',
+                        opacity: [0, 1],
+                        translateY: [20, 0],
+                        duration: 600,
+                        delay: function (el, i) {
+                            return i * 100;
+                        },
+                        begin: function () {
+                            that.$refs['userPhone'].focus();
+                        }
+                    })
+                },
+
+                toggleShareMenu() {
+                    this.showShareMenu = !this.showShareMenu
+                    if (this.showShareMenu) {
+                        this.animateShareList();
+                    }
+                },
+
+                animateShareList: function () {
+                    const shareListAnime = new anime.timeline();
+                    shareListAnime.add({
+                        targets: '.share-btns-list',
+                        translateY: [-50, 0],
+                        opacity: [0, 1],
+                        duration: 300,
+                        podding: '0',
+                        easing: 'easeInOutSine'
+                    }).add({
+                        targets: '.share-btns-list li',
+                        translateZ: 0,
+                        translateY: [-30, 0],
+                        scaleY: [0, 1],
+                        opacity: [0, 1],
+                        duration: 1200,
+                        delay: anime.stagger(100),
+                    }, '-=200');
+                }
+
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            salla.infiniteScroll.initiate('.comments-container', '.comment-block', {
+                history: false,
+                scrollThreshold: false
+            })
+
+            window.append_image = function (form_data, that, event) {
+                let fileInput = window.fileponds ? window.fileponds["attached_file_{{ product.id }}"] : undefined;
+                if (!fileInput) {
+                    return form_data;
+                }
+                fileInput.getFiles()
+                    .forEach(function (filepondFile) {
+                        form_data.append('file[]', filepondFile.file);
+                    })
+                return form_data;
+            };
+
+            window.itemAdded = function (response, data) {
+                salla.cart.event.itemAdded(response, data.id);
+            }
+
+            window.itemFailedTobeAdded = function (error, data) {
+                salla.cart.event.itemAddedFailed(error, data.id);
+            }
+        })
     </script>
 
 {% endblock %}
