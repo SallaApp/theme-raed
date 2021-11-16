@@ -6,7 +6,7 @@
         <div class="container mb-10 md:mb-20">
             <nav class="w-full py-5">
                 <ol class="list-reset flex items-center text-sm ">
-                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{trans('titles.home')}}</a></li>
+                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{trans('common.titles.home')}}</a></li>
                     <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
                     <li><span class="fix-align">{{ page_title }}</span></li>
                 </ol>
@@ -257,27 +257,27 @@
                         </div>
                     </div>
 
-                    <div x-ref="productsContainer"
-                         :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
-                         class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
+                    {% if products is not empty %}
+                        <div x-ref="productsContainer"
+                             :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
+                             class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
 
-                        {% if products is not empty %}
-                            {% for product in products %}
-                                {% include 'pages.partials.product.card' %}
-                            {% endfor %}
+                                {% for product in products %}
+                                    {% include 'pages.partials.product.card' %}
+                                {% endfor %}
+                        </div>
 
-                            {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
-                        {% else %}
-                            <div class="placeholder-block placeholder-block--no-category">
-                                <i class="sicon-inbox"></i>
-                                <p>
-                                    <span>{{trans('pages.categories.no_products')}}</span>
-                                    {{ page_title }}
-                                </p>
-                            </div>
-                        {% endif %}
-                    </div>
+                        {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
 
+                    {% else %}
+                        <div class="placeholder-block placeholder-block--no-category">
+                            <i class="sicon-inbox"></i>
+                            <p>
+                                <span>{{trans('pages.categories.no_products')}}</span>
+                                {{ page_title }}
+                            </p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -286,35 +286,34 @@
 
 {% block scripts %}
     <script>
-    document.addEventListener( 'DOMContentLoaded', function () {
-      salla.infiniteScroll.initiate('.products-list-container', '.product-block')
-    })
+        document.addEventListener( 'DOMContentLoaded', function () {
+            salla.infiniteScroll.initiate('.products-container', '.product-entry')
+        })
 
-    function initCategory() {
-        return {
-            showMoreLinks: false,
-            links: [{id: 1, label: 'رابط جديد'}, {id: 2, label: 'هواوي'}, {id: 3, label: 'سامسونج'}],
-            girdLayout: 'grid',
+        function initCategory() {
+            return {
+                showMoreLinks: false,
+                links: [{id: 1, label: 'رابط جديد'}, {id: 2, label: 'هواوي'}, {id: 3, label: 'سامسونج'}],
+                girdLayout: 'grid',
 
-            toggleView: function (layout) {
+                toggleView: function (layout) {
 
-                this.girdLayout = layout;
-                this.animateItems()
-            },
+                    this.girdLayout = layout;
+                    this.animateItems()
+                },
 
-            animateItems: function () {
-                anime({
-                    targets: '.product-entry',
-                    opacity: [0, 1],
-                    duration: 1200,
-                    translateY: [20, 0],
-                    delay: function (el, i) {
-                        return i * 100;
-                    },
-                })
+                animateItems: function () {
+                    anime({
+                        targets: '.product-entry',
+                        opacity: [0, 1],
+                        duration: 1200,
+                        translateY: [20, 0],
+                        delay: function (el, i) {
+                            return i * 100;
+                        },
+                    })
+                }
             }
         }
-    }
-
     </script>
 {% endblock %}
