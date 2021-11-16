@@ -33,6 +33,7 @@ template.innerHTML = /*html*/`
           <!-- login methods -->
           <div x-show="showLoginMethods">
             <p class="text-sm text-gray-text mb-5">اختر الوسيلة المناسبة</p>
+
             <!--item -->
             <div @click="openEmailLogin"
               class="mb-2.5 box-content relative rounded-md border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-primary">
@@ -45,18 +46,15 @@ template.innerHTML = /*html*/`
                 <a href="#" class=" flex justify-between items-center">
                   <div class="flex-1">
                     <span class="absolute inset-0" aria-hidden="true"></span>
-                    <p class="text-sm text-gray-text">
-                      سجل دخول
-                    </p>
-                    <h6 class="font-boldf">
-                      البريد الإلكتروني
-                    </h6>
+                    <p class="text-sm text-gray-text">سجل دخول</p>
+                    <h6 class="font-boldf">البريد الإلكتروني</h6>
                   </div>
                   <i class="sicon-keyboard_arrow_left text-primary text-xl"></i>
                 </a>
               </div>
             </div>
             <!-- end:item-->
+
             <!--item -->
             <div @click="loginMethod = 'phone'; showLoginMethods = false; animatItems() "
               class=" box-content relative rounded-md border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-primary">
