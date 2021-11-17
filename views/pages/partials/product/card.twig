@@ -7,8 +7,8 @@
 <div id="{{ product.id }}"
      class='product-entry {{ block_classes ?? '' }}{{ is_special?'product-entry--special':'' }} {{ is_horizontal?'product-entry--horizontal md:flex-row':'product-entry--vertical' }} relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
     <a href="{{ product.url }}"
-       class='product-entry__image relative overflow-hidden hover:opacity-90 w-full {{ is_special?'sm:h-500':(store.product_image_type?'':'h-40') }} {{ is_horizontal?"md:h-full md:w-60":"" }}'>
-        <img class="sm:h-full w-full object-{{ store.product_image_type }}" src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+       class='product-entry__image relative overflow-hidden hover:opacity-90 w-full {{ is_special?(store.product_image_type?'sm:h-500': ''):(store.product_image_type?'h-40':'') }} {{ is_horizontal?"md:h-full md:w-60":"" }}'>
+        <img class="sm:h-full w-full object-{{ store.product_image_type ? :'cover' }}" src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
         {% if product.promotion_title %}
             <div class="absolute top-4 start-0 z-20">
                 <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
