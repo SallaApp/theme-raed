@@ -1,7 +1,13 @@
 {# {% component 'header.theme-preview-bar' %} #}
 
-{% include 'components.header.top-nav' %}
+{% if store.theme.settings.topnav_is_bellow == false %}
+  {% include 'components.header.top-nav' %}
+{% endif %}
 
 {% include 'components.header.main-nav' %}
+
+{% if store.theme.settings.topnav_is_bellow == true %}
+  {% include 'components.header.top-nav' %}
+{% endif %}
 
 {% component 'header.main-menu-mobile' as mainMenu %}
