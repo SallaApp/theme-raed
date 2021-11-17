@@ -1,34 +1,34 @@
-{#<section class="home-block home-block--banners mb-20 container">#}
-{#    <div class="grid grid-cols-2 md:grid-cols-3 grid-flow-row gap-3 sm:gap-7">#}
-{#        <div class="col-span-2 sm:col-span-1 sm:row-span-2  bg-warmGray-200 transition-opacity hover:opacity-95 bg-cover h-lg-banner text-white text-center p-5 rounded-md overflow-hidden relative" style="background-image: url('../images/banners/banner-1.jpg');">#}
-{#            <a href="{{item[0].url}}"#}
-{#               class="flex flex-col justify-center  h-full p-11 relative z-20 xs:border border-dashed border-border-color rounded-md">#}
-{#                <h3 class="text-2xl font-bold leading-12 mb-5">وحدات تحكم متوافق مع بلاي ستيشن 3</h3>#}
-{#                <p>تصميم مريح لبصمة اليد، استجابة بالاهتزاز Dualshock، تجربة لعب سهلة وممتعة</p>#}
-{#            </a>#}
-{#            <div class="overlay h-full w-full bg-dark opacity-60 absolute top-0 left-0 z-10"></div>#}
-{#        </div>#}
+<section class="s-home-block s-home-block--banners container mb-7 {{ is_repeated?'repeated-block':'mt-20 mb-7' }}">
+    <div class="grid grid-cols-2 md:grid-cols-3 grid-flow-row gap-3 sm:gap-7">
+        <div class="col-span-2 sm:col-span-1 sm:row-span-2  bg-warmGray-200 transition-opacity hover:opacity-95 bg-cover h-lg-banner text-white text-center p-5 rounded-md overflow-hidden relative"
+             style="background-image: url('{{ items[0].image.url }}');">
+            <a href="{{ items[0].url }}"
+               class="flex flex-col justify-center  h-full p-11 relative z-20 xs:border border-dashed border-border-color rounded-md">
 
-{#        {% for item in items %}#}
-{#            <div class="col-md-4 col-sm-12">#}
-{#                <a href="{{ item.url }}"#}
-{#                   class="banner banner--square {% if item.text is not empty %}has-title{% endif %} {% if loop.last%}last{% endif %}"#}
-{#                   {% if item.link_type == 'external_link' %}target="_blank"{% endif %}#}
-{#                   aria-label="Banner {{ item.text }}">#}
-{#                    <figure class="banner-effect-1">#}
-{#                        <img class="lazy-load" data-src="{{ item.image.url }}" alt="{{ item.text }}">#}
-{#                        {% if item.text is not empty %}#}
-{#                            <figcaption>#}
-{#                                <h2>{{ item.text }}</h2>#}
-{#                            </figcaption>#}
-{#                        {% endif %}#}
-{#                    </figure>#}
-{#                </a>#}
-{#            </div>#}
-{#        {% endfor %}#}
-{#        {{ range $key, $item := .Site.Data.banners.items }}#}
-{#        {{ partial "partials/components/banner.html" (dict "banner" $item )}}#}
-{#        {{end}}#}
+                {% if items[0].text %}
+                    <h3 class="text-2xl font-bold leading-12 mb-5">{{ items[0].text }}</h3>
+                {% endif %}
+                {# <p>تصميم مريح لبصمة اليد، استجابة بالاهتزاز Dualshock، تجربة لعب سهلة وممتعة</p> #}
+            </a>
+            <div class="overlay h-full w-full bg-dark opacity-60 absolute top-0 left-0 z-10"></div>
+        </div>
 
-{#    </div>#}
-{#</section>#}
+        {% for item in items|slice(1) %}
+            <div class="banner relative p-2 xs:p-4 overflow-hidden transition-opacity hover:opacity-95 text-white text-center  bg-warmGray-200  rounded-md h-banner bg-cover"
+                 style="background-image: url('{{ item.image.url }}');">
+                <!-- <a href="#" class="overlay h-full w-full bg-dark opacity-20 absolute top-0 left-0 z-10"></a> -->
+
+                <a href="{{ item.url }}"
+                   class="bannerــtext flex md:opacity-0 hover:opacity-100 transition-opacity duration-500 flex-col justify-center  h-full p-0 xs:p-6 relative z-20 xs:border border-dashed border-border-color rounded-md"
+                   {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
+                    {% if item.text %}
+                        <h3 class="banner__title text-md font-bold  mb-1 leading-6">{{ item.text }}</h3>
+                    {% endif %}
+                    {# <p class="banner__description">تصميم Dualshock، تجربة لعب سهلة وممتعة</p> #}
+                </a>
+                <div class="overlay h-full w-full bg-dark opacity-60 absolute top-0 left-0 z-10"></div>
+            </div>
+        {% endfor %}
+
+    </div>
+</section>

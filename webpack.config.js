@@ -8,7 +8,7 @@ module.exports = {
         app        : ['./assets/js/app.js', './assets/styles/app.scss'],
         inner      : './assets/js/inner.js',
         home       : ['./assets/js/home.js', './assets/styles/home.scss'],
-        salla_login: './assets/js/partials/salla-login.js',
+        // salla_login: './assets/js/partials/salla-login.js',
         filepond   : ['./assets/js/plugins/filepond/filepond.js', './assets/js/plugins/filepond/filepond.scss'],
     },
     output : {
@@ -26,7 +26,7 @@ module.exports = {
         groupAssetsByEmitStatus: false,
         groupAssetsByChunk     : false,
         groupAssetsByInfo      : false,
-        relatedAssets          : false,
+        relatedAssets          : true,
         performance            : true,
     },
     module : {

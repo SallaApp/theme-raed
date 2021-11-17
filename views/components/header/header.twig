@@ -1,74 +1,13 @@
-{#{% component 'header.theme-preview-bar' %}#}
-<div class="dark">
-  <div id="top-nav" class="py-2 lg:py-0 dark:bg-gray-800 dark:text-gray-300">
-    <div class="container">
-      <div class="flex justify-center lg:justify-between">
-        <div class="flex items-center">
-          {% component 'header.page-links' as pagesLinks %}
-          {% component 'header.language-switcher' %}
-          {% component 'header.currency-switcher' %}
-          <search-modal></search-modal>
-        </div>
-        {% component 'header.contacts' as contacts %}
-      </div>
-    </div>
-  </div>
-</div>
+{# {% component 'header.theme-preview-bar' %} #}
 
-<div class="dark--stop">
-  <header id="site-header-outer" class="site-header-container bg-white dark:bg-gray-700 dark:text-gray-300 shadow-default">
-    <div class="site-header">
-      <div class="container">
-        <div class="flex items-stretch justify-between relative">
-          <div class="flex items-center">
-            <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
-              <span class="sicon-menu text-primary text-3xl me-2.5"></span>
-            </a>
-            <a class="site-logo theme-logo navbar-brand items-center flex" href="{{ store.url }}">
-              {# <img src="{{store.logo}}" alt="" class="img-fluid b-logo"> #}
-              <img src="{{asset('images/salla-logo.svg')}}" alt="" class="img-fluid b-logo">
-              
-              {# <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1> #}
-              <h1 class="hidden">{{store.name}}</h1>
-            </a>
-            {% component 'header.main-menu'%}
-          </div>
-          <div class="flex items-center">
-            {% component 'header.user-menu' %}
-            <div class="flex items-center ms-4" id="main-cart-btn">
-              <a href="/cart" class="me-1 relative ">
-                <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
-                <div class="opacity-0 anime-count absolute top-1 -right-2 bg-primary text-reverse w-6 h-6 rounded-full flex items-start justify-center font-bold text-sm">23</div>
-              </a>
-              <div>
-                <p class="leading-3 text-gray-400">السلة</p>
-                <b class="leading-3">8,563 ر.س</b>
-              </div>
-            </div>
+{% if store.theme.settings.topnav_is_bellow == false %}
+  {% include 'components.header.top-nav' %}
+{% endif %}
 
-            <script>
-              document.addEventListener('DOMContentLoaded', () => {
-                animateCount()
-              })
+{% include 'components.header.main-nav' %}
 
-              function animateCount() {
-                anime({
-                  targets: '.anime-count',
-                  opacity: [0, 1],
-                  duration: 2000,
-                  scale: [0.5, 1],
-                  delay: function (el, i) {
-                    return i * 100;
-                  },
-                });
-              }
-            </script></div>
-        </div>
-      </div>
-    </div>
-  </header>
-</div>
-
-
+{% if store.theme.settings.topnav_is_bellow == true %}
+  {% include 'components.header.top-nav' %}
+{% endif %}
 
 {% component 'header.main-menu-mobile' as mainMenu %}

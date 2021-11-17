@@ -1,7 +1,7 @@
 {% if user %}
     <div class="relative inline-flex items-center h-full w-10 mx-1 md:mx-2" x-data="{toggleMenu: false}">
         <button @click="toggleMenu = !toggleMenu" type="button"
-                class="dropdown-trigger  border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium  focus:ring-offset-transparent"
+                class="dropdown-trigger  border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
             <img class="h-10 w-10 object-cover" src="{{user.avatar}}" alt="">
         </button> 
@@ -9,32 +9,36 @@
              x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100"
              x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100"
              x-transition:leave-end="transform opacity-0 scale-95"
-             class="origin-top-right absolute z-30 w-48 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full"
+             class="origin-top-right absolute z-30 w-48 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full after:border-t
+             {{store.theme.settings.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white '}}
+             {{store.theme.settings.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30'}}
+            
+             "
              role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
  
             <ul class="py-2">
                 <li>
-                    <a href="{{ link('orders') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
+                    <a href="{{ link('orders') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/20 dark:hover:bg-gray-200/10 {{store.theme.settings.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary'}}">
                         <i class="sicon-packed-box me-3"></i>
                         <span>{{ trans('common.titles.orders') }}</span>
                     </a>
                 </li>
                 {% component 'header.notifications' %}
                 <li>
-                    <a href="{{ link('wishlist') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
+                    <a href="{{ link('wishlist') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/20 dark:hover:bg-gray-200/10 {{store.theme.settings.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary'}}">
                         <i class="sicon-heart me-3"></i>
                         {{trans('common.titles.wishlist')}}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('rating') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
+                    <a href="{{ link('rating') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/20 dark:hover:bg-gray-200/10 {{store.theme.settings.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary'}}">
                         <i class="sicon-favorite me-3"></i>
                         <span>{{ trans('common.titles.rating') }}</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ link('profile') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5 hover:text-primary">
+                    <a href="{{ link('profile') }}" class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/20 dark:hover:bg-gray-200/10 {{store.theme.settings.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary'}}">
                         <i class="sicon-settings me-3"></i>
                         {{ trans('common.titles.profile') }}
                     </a>
@@ -43,7 +47,7 @@
                 <li>
                     <a href="#"
                         data-on-click="auth-logout"
-                        class="block px-4 py-2 text-sm text-red-500 transition-colors duration-200 hover:bg-light-gray dark:hover:bg-opacity-5">
+                        class="block px-4 py-2 text-sm text-red-500 transition-colors duration-200 hover:bg-gray-200/20 dark:hover:bg-gray-200/10">
                         <i class="sicon-send-out me-3"></i>
                         {{ trans('blocks.header.logout') }}
                     </a>

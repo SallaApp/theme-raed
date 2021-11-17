@@ -1,5 +1,5 @@
-<section class="home-block  home-block--specialProducts mb-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<section class="s-home-block  s-home-block--specialProducts my-20 container {{ is_repeated?'repeated-block pt-0':'' }}">
+    <div class="grid grid-cols-1  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-1 {% endif %} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
                 <div class="flex justify-between mb-8">
@@ -10,19 +10,40 @@
                 </div>
             </div>
         {% endif %}
-        <div>
+        <div class="flex flex-col" x-data="initFeaturedTabs()">
+             <div class="tabs mb-8 space-s-2 md:space-s-12 whitespace-nowrap overflow-x-auto hide-scroll">
             {% for section in items %}
-                <div class="flex justify-between mb-8">
-                    <h2 class="font-bold text-lg text-text-dark">{{ section.title }}</h2>
+                <button @click.prevent="switchTab('featured-style1-tab-{{ section.id }}')"
+                        :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'text-title-color' : 'text-gray-text'"
+                        class="cursor-pointer border-0 font-bold">{{ section.title }}</button>
+            {% endfor %}
+            </div>
+       
+            {% for section in items %}
+                <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
+                {% for product in section.products|slice(0,main_product?4:8) %}
+                    {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item-style1'} %}
+                {% endfor %}
                 </div>
             {% endfor %}
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {% for section in items %}
-                    {% for product in section.products|slice(0,main_product?4:8) %}
-                        {% include 'pages.partials.product.card' with {block_classes:'anime-item'} %}
-                    {% endfor %}
-                {% endfor %}
-            </div>
-        </div>
     </div>
 </section>
+
+<script>
+
+ function initFeaturedTabs() {
+        return {
+            currentTab: 'featured-style1-tab-{{ items[0].id }}',
+            switchTab : function (tabId) {
+                this.currentTab = tabId
+                setTimeout(() => {
+                    window.animateTabsItems('.featured-item-style1');
+                },10)
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded',  () => {
+        window.animateTabsItems('.featured-item-style1');
+    });
+</script>

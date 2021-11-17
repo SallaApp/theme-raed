@@ -1,8 +1,11 @@
 const colors = require('tailwindcss/colors');
+delete colors['lightBlue']
+
 module.exports = {
+    mode: 'jit',
     purge   : {
         enabled: true,
-        content: ["views/**/*.twig"],
+        content: ["views/**/*.twig", "node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt"]
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {
@@ -27,6 +30,7 @@ module.exports = {
                 'auto-fill-6': 'repeat(auto-fill, 180px)',
             },
             colors             : {
+                'inherit'      : 'inherit',
                 'primary'      : 'var(--main-color)',
                 'primary-light': "#eefbf9",
                 'dark-gray'    : '#A6B3BA',
@@ -122,7 +126,6 @@ module.exports = {
             }
         },
     },
-    
     variants: {
         extend: {
           translate: ['group-hover'],
@@ -133,5 +136,10 @@ module.exports = {
       outline: false,
     },
 
-    plugins: [require('tailwindcss-rtl'), require('@tailwindcss/forms')],
+    plugins: [
+      require('tailwindcss-rtl'),
+      require('@tailwindcss/forms'),
+      require('@tailwindcss/jit'),
+      require('@salla.sa/twilight-tailwind-theme')
+    ],
 }

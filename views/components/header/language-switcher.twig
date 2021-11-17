@@ -1,10 +1,11 @@
+
 <div class="relative inline-block mx-3" x-data="{toggleMenu: false}">
     <div>
         <button @click="toggleMenu = !toggleMenu" type="button"
-                class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 hover:bg-gray-150 dark:hover:bg-opacity-10 text-sm font-medium  focus:ring-offset-transparent transition duration-300"
-                :class="toggleMenu ? 'btn-is-opened bg-gray-150 dark:bg-opacity-10' : ''"
+                class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center hover:bg-gray-200/20 text-sm font-medium focus:ring-offset-transparent transition duration-300"
+                :class="toggleMenu ? 'btn-is-opened bg-gray-200/20' : 'bg-gray-200/10'"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
-            <div class="flag iti__flag iti__sa me-1.5 rounded-md"></div>
+            <div class="flag iti__flag iti__{{ current.country_code }} me-1.5 rounded-md"></div>
             <span class="">{{ current.name }}</span>
 
             <i class="sicon-keyboard_arrow_down inline-block self-end mx-0.5 me-0 opacity-50 text-lg leading-4 transition duration-300"></i>
@@ -15,14 +16,18 @@
          x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
          x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
-         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default bg-white dark:bg-gray-800 overflow-hidden"
+         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default  overflow-hidden
+         {{store.theme.settings.topnav_bg ? '!bg-[color:var(--topnav-bg)]': 'bg-white '}}
+         {{store.theme.settings.topnav_is_dark ? 'dark:bg-gray-800': ''}}"
          role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
         
           <ul>
               {% for language in languages %}
                   <li>
                       <a href="{{language.url}}"
-                          class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-bg dark:hover:bg-opacity-5 {{current.code == language.code ? 'is-active' : ''}}">
+                          class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{current.code == language.code ? 'is-active' : ''}}
+                          {{ store.theme.settings.topnav_is_dark == false and store.theme.settings.topnav_bg_gradient ? 'text-gray-800': ''}}
+                          ">
                           <div class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></div>
                           <span>{{language.name}}</span>
                       </a>
