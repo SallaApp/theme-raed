@@ -7,7 +7,10 @@ module.exports = {
     mode: 'jit',
     purge   : {
         enabled: true,
-        content: ["views/**/*.twig", "@salla.sa/twilight-tailwind-theme/safe-list-css.txt",],
+        content: ["views/**/*.twig", "node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt"],
+        safelist: [
+            // 's-search-modal-results-item',
+            ]
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {

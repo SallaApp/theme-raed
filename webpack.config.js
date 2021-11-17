@@ -26,7 +26,7 @@ module.exports = {
         groupAssetsByEmitStatus: false,
         groupAssetsByChunk     : false,
         groupAssetsByInfo      : false,
-        relatedAssets          : false,
+        relatedAssets          : true,
         performance            : true,
     },
     module : {
