@@ -1,4 +1,4 @@
-<section class="home-block  home-block--tabsProdutcs bg-gray-bg2 pb-10 {{ is_repeated?'repeated-block pt-0':'pt-20' }}">
+<section class="s-home-block  s-home-block--tabsProdutcs bg-gray-bg2 pb-10 {{ is_repeated?'repeated-block pt-0':'pt-20' }}">
     <div class="container pe-0 lg:px-5" x-data="initTabs()">
         <div class="tabs text-center pb-10 space-s-1 md:space-s-4 whitespace-nowrap overflow-x-auto hide-scroll">
             {% for section in items %}
@@ -9,11 +9,11 @@
         </div>
 
         {% for section in items %}
-            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" class="swiper pb-10 tabs-slider">
+            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class="swiper pb-10 tabs-slider">
                 {% if is_slider %}
                     <div class="swiper-wrapper">
                         {% for product in section.products %}
-                            <div class="h-auto swiper-slide tabs-slider__slide tab-product opacity-0 w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+                            <div class="h-auto swiper-slide tabs-slider__slide featured-item-style2 opacity-0 w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
                                 {% include 'pages.partials.product.card' %}
                             </div>
                         {% endfor %}
@@ -29,9 +29,11 @@
                 {% else %}
                 	{# without slider #}
 					<section>
-						<div class="grid grid-cols-1 lg:grid-cols-2 gap-8  tab-product">
+						<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 							{% for product in section.products %}
+                            <div class="featured-item-style2">
 								{% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
+                            </div>
 							{% endfor %}
 						</div>
 					</section>
@@ -47,20 +49,12 @@
             currentTab: 'featured-tab-{{ items[0].id }}',
             switchTab : function (tabId) {
                 this.currentTab = tabId
-                animatItems()
+
+                setTimeout(() => {
+                    window.animateTabsItems('.featured-item-style2');
+                },10)
             }
         }
-    }
-
-    function animatItems() {
-        anime({
-            targets   : '.tab-product',
-            translateX: [40, 0],
-            opacity   : [0, 1],
-
-            easing: 'easeOutExpo',
-        }, '+=200');
-
     }
 
     function initSlider(){
@@ -72,18 +66,16 @@
                 nextEl: '.slider-next',
                 prevEl: '.slider-prev',
             },
-
             breakpoints: {
                 980: {
                     slidesPerView: 4,
                 }
             }
-
         });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        animatItems();
+        window.animateTabsItems('.featured-item-style2');
         initSlider();
     });
 </script>
