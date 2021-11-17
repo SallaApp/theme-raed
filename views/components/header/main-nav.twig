@@ -1,0 +1,55 @@
+<div class="{{ store.theme.settings.mainnav_is_dark ? 'dark': ''}}">
+  <header id="site-header-outer" class="site-header-container shadow-default
+    {{ store.theme.settings.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]' : ''}}
+    {{ store.theme.settings.mainnav_text_color ? '!text-[color:var(--mainnav-text-color)]' : ''}}
+    {{ store.theme.settings.mainnav_is_dark ? 'dark:bg-gray-700 dark:text-gray-300': 'bg-white'}}
+    ">
+    <div class="site-header bg-inherit">
+      <div class="container">
+        <div class="flex items-stretch justify-between relative">
+          <div class="flex items-center">
+            <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
+              <span class="sicon-menu text-primary text-3xl me-2.5"></span>
+            </a>
+            <a class="site-logo theme-logo navbar-brand items-center flex my-2 lg:my-0" href="{{ store.url }}">
+              <img src="{{store.logo}}" alt="{{store.name}}" class="max-h-14 sm:max-h-16 max-w-[170px]">
+              {# <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1> #}
+              <h1 class="hidden">{{store.name}}</h1>
+            </a>
+            {% component 'header.main-menu'%}
+          </div>
+          <div class="flex items-center">
+            {% component 'header.user-menu' %}
+            <div class="flex items-center ms-4" id="main-cart-btn">
+              <a href="/cart" class="me-1 relative ">
+                <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
+                <div class="opacity-0 anime-count absolute top-1 -right-2 bg-primary text-reverse w-6 h-6 rounded-full flex items-start justify-center font-bold text-sm">23</div>
+              </a>
+              <div class="whitespace-nowrap">
+                <p class="leading-3 opacity-60">السلة</p>
+                <b class="leading-3">8,563 ر.س</b>
+              </div>
+            </div>
+
+            <script>
+              document.addEventListener('DOMContentLoaded', () => {
+                animateCount()
+              })
+
+              function animateCount() {
+                anime({
+                  targets: '.anime-count',
+                  opacity: [0, 1],
+                  duration: 2000,
+                  scale: [0.5, 1],
+                  delay: function (el, i) {
+                    return i * 100;
+                  },
+                });
+              }
+            </script></div>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>

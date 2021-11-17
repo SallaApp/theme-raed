@@ -1,16 +1,11 @@
 const colors = require('tailwindcss/colors');
 delete colors['lightBlue']
 
-const plugin = require('tailwindcss/plugin');
-
 module.exports = {
     mode: 'jit',
     purge   : {
         enabled: true,
-        content: ["views/**/*.twig", 
-                  "assets/js/partials/salla-login.js", 
-                  "assets/js/partials/search-modal.js"
-                ],
+        content: ["views/**/*.twig", "node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt"]
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {
@@ -130,7 +125,7 @@ module.exports = {
                 'height': 'height'
             }
         },
-    },    
+    },
     variants: {
         extend: {
           translate: ['group-hover'],
@@ -142,8 +137,9 @@ module.exports = {
     },
 
     plugins: [
-      require('tailwindcss-rtl'), 
+      require('tailwindcss-rtl'),
       require('@tailwindcss/forms'),
       require('@tailwindcss/jit'),
+      require('@salla.sa/twilight-tailwind-theme')
     ],
 }

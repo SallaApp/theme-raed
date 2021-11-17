@@ -15,7 +15,9 @@ template.innerHTML = /*html*/`
   <i class="sicon-user-circle"></i>
 </button>
 
-<div x-show="showLoginModal" x-cloak class="login-modal">
+<div x-show="showLoginModal" 
+    x-cloak 
+    class="login-modal">
   <div class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-light-gray dark:bg-gray-800 dark:bg-opacity-90">
     <!-- Modal inner -->
     <div x-ref="loginContainer"
@@ -36,7 +38,7 @@ template.innerHTML = /*html*/`
 
             <!--item -->
             <div @click="openEmailLogin"
-              class="mb-2.5 box-content relative rounded-md border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-primary">
+              class="mb-2.5 box-content relative rounded-md transition border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:!border-primary">
               <div class="flex-shrink-0">
                 <div class="bg-primary w-12 h-12 text-lg text-white rounded-icon">
                   <i class="sicon-mail"></i>
@@ -57,7 +59,7 @@ template.innerHTML = /*html*/`
 
             <!--item -->
             <div @click="loginMethod = 'phone'; showLoginMethods = false; animatItems() "
-              class=" box-content relative rounded-md border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:border-primary">
+              class=" box-content relative rounded-md transition border border-border-color dark:border-gray-600 py-5 pe-4 ps-5 flex items-center space-s-3 hover:!border-primary">
               <div class="flex-shrink-0">
                 <div class="bg-primary w-12 h-12 text-lg text-white rounded-icon">
                   <i class="sicon-phone"></i>
@@ -83,7 +85,7 @@ template.innerHTML = /*html*/`
 
           <!-- email login -->
           <form x-show="loginMethod == 'email' && !showOtp " class="anime-item">
-            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label for="userEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <span class="block">
                 ادخل البريد الإلكتروني
                 <span class="text-red-500">*</span>
@@ -150,8 +152,8 @@ template.innerHTML = /*html*/`
             <p class="mb-5 text-center text-sm text-gray-text">إعادة الارسال بعد <b x-text="'0' + remainTime + ':00'"></b>
             </p>
             <div class="flex justify-between space-s-5 mb-5">
-              <button class="btn btn-default font-normal rounded-md">رسالة نصية</button>
-              <button class="btn btn-default font-normal rounded-md">إعادة إرسال</button>
+              <button class="btn btn-primary font-normal rounded-md" disabled>رسالة نصية</button>
+              <button class="btn btn-primary font-normal rounded-md" disabled>إعادة إرسال</button>
             </div>
 
             <a href="#" @click="showOtp = false; animatItems() " class="text-sm text-primary block text-center"> رجوع
