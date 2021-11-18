@@ -1,10 +1,11 @@
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main" x-data="initProductDetails()" x-cloak>
+    <main id="main" x-data="initProductDetails()" x-cloak data-product-id="{{ product.product_id }}">
         <div class="container">
             <nav class="w-full py-5">
                 <ol class="list-reset flex items-center text-sm ">
-                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{ trans('common.titles.home') }}</a></li>
+                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{ trans('common.titles.home') }}</a>
+                    </li>
                     <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
                     <li><span class="fix-align">{{ product.name }}</span></li>
                 </ol>
@@ -14,9 +15,9 @@
                 <div class="sidebar md:sticky top-24 w-full md:w-2/4  me-8 pb-16">
 
                     <div class="swiper relative my-gallery details-slider rounded-md mb-2.5">
-                        <div class="absolute z-10 top-4 start-0">
+                        {# <div class="absolute z-10 top-4 start-0">
                             <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض خاص</div>
-                        </div>
+                        </div> #}
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
                                 <a data-fslightbox="gallery"
@@ -41,7 +42,8 @@
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
                                 <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
-                                    <img src="{{ image.url }}" class="object-cover h-full" title="{{ image.alt }}" alt="{{ image.alt }}"/>
+                                    <img src="{{ image.url }}" class="object-cover h-full" title="{{ image.alt }}"
+                                         alt="{{ image.alt }}"/>
                                 </div>
                             {% endfor %}
                         </div>
@@ -53,12 +55,14 @@
 
                     <div class="flex">
                         <h1 class="text-3xl font-bold mb-5 w-5/6 text-dark">{{ product.name }}</h1>
-                        <div class="mt-5">
-                            <div class="text-sm">
-                                <i class="sicon-star2 text-theme-yellow"></i>
-                                <span>4.5</span>
+                        {% if product.rating %}
+                            <div class="mt-5">
+                                <div class="text-sm">
+                                    <i class="sicon-star2 text-theme-yellow"></i>
+                                    <span>{{ product.rating }}</span>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
 
                     {% if product.subtitle %}
@@ -91,9 +95,9 @@
 
                             <div x-show="!showMore" class="mt-2">
                                 <a href="#" @click="showMore = !showMore" data-linkText="show more"
-                                   class="show-more text-primary" x-text="showMore ? '' : '{{ trans('pages.products.read_more') }}' "></a>
+                                   class="show-more text-primary"
+                                   x-text="showMore ? '' : '{{ trans('pages.products.read_more') }}' "></a>
                             </div>
-
                         {% else %}
                             <p class="pb-1">{{ product.description|raw }}</p>
                         {% endif %}
@@ -104,7 +108,7 @@
                             <button type="button" @click="toggleShareMenu()"
                                     class="btn--share shadow-md hover:shadow-default transition-shadow bg-white text-primary rounded-full w-10 h-10 focus:outline-none"
                                     aria-label="Share">
-                                <i :class="showShareMenu ?  'sicon-cancel' :'sicon-share-alt'"></i>
+                                <i :class="showShareMenu ? 'sicon-cancel' :'sicon-share-alt'"></i>
                             </button>
                             <ul class="absolute h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share"
                                 :class="showShareMenu? 'h-auto' : 'h-0 opacity-0' ">
@@ -140,444 +144,106 @@
                             </ul>
                             <script type="text/javascript">
                                 var a2a_config = a2a_config || {};
-                                a2a_config.linkurl = "#";
-                                a2a_config.locale = "";
+                                a2a_config.linkurl = "{{ product.url }}";
+                                a2a_config.locale = "{{ language.code }}";
                             </script>
                             <script async src="https://static.addtoany.com/menu/page.js"></script>
                         </div>
 
-                        <button @click="toggleFavorite()"
-                                :class="inFavorite ? 'text-white bg-primary' : 'bg-white text-theme-red'"
+                        <button
+                                {% if user %}
+                                    @click="toggleFavorite()"
+                                {% else %}
+                                    onClick="salla.error('{{ trans('common.messages.must_login') }}')"
+                                {% endif %}
+                                :class="{{ in_wishlist ? 'text-white bg-primary' : 'bg-white text-theme-red' }}"
                                 class="anime-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none">
-                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                            <i :class="{{ in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
                         </button>
                     </div>
 
                     {% component 'product.tags' with {'product': product} %}
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-                        <div class="bg-white hover:shadow-default duration-500 transition-shadow grid-cols-2 p-5 rounded-md">
-                            <img src="../assets/images/taby.png" class="w-14 mb-2.5" alt="">
-                            <p class="text-sm leading-6 text-text-dark mb-3">اليوم والباقي SAR ادفع ربع القيمة 11.77
-                                .قسطه
-                                على 3 أشهر. بدون رسوم</p>
-                            <a href="#" class="text-sm text-primary">لمعرفة المزيد</a>
-                        </div>
-
-                        <div class="bg-white hover:shadow-default duration-500 transition-shadow grid-cols-2 p-5 rounded-md">
-                            <img src="../assets/images/tamara.png" class="w-16 mb-2.5" alt="">
-                            <p class="text-sm leading-6 text-text-dark mb-3">ادفع 586 ر.س فقط علي 3 دفعات بدون رسوم</p>
-                            <a href="#" class="text-sm text-primary">لمعرفة المزيد</a>
-                        </div>
+                        {% hook 'product:after-description' %}
                     </div>
 
-                    <section class="bg-white p-5 rounded-md mb-5">
-                        <h2 class="text-sm font-bold mb-4"> صور المنتج</h2>
-                        <div class="radio-images">
+                    <form class="form form--product-optins product-details__options ajax"
+                          data-filter-before-submit="append_image"
+                          data-on-change="product-price"
+                          enctype="multipart/form-data"
+                          action="{{ link('cart/item/%s/add'|format(product.id)) }}"
+                          data-on-success="itemAdded"
+                          data-on-fail="itemFailedTobeAdded"
+                    >
+                        <input type="hidden" name="id" value="{{ product.id }}">
 
-                            <input id="image-0" type="radio" name="productImage">
-                            <label for="image-0" data-slideIndex="0"
-                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
+                        {% include 'pages.partials.product.fields' %}
 
-                                <img src="../images/banners/banner-1.jpg" class=" object-cover h-full"
-                                     title="اسم المنتج"
-                                     alt="صورة المنتج"/>
-
-                            </label>
-
-                            <input id="image-1" type="radio" name="productImage">
-                            <label for="image-1" data-slideIndex="1"
-                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
-
-                                <img src="../images/banners/banner-2.jpg" class=" object-cover h-full"
-                                     title="اسم المنتج"
-                                     alt="صورة المنتج"/>
-
-                            </label>
-
-                            <input id="image-2" type="radio" name="productImage">
-                            <label for="image-2" data-slideIndex="2"
-                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
-
-                                <img src="../images/banners/banner-3.jpg" class=" object-cover h-full"
-                                     title="اسم المنتج"
-                                     alt="صورة المنتج"/>
-
-                            </label>
-
-                            <input id="image-3" type="radio" name="productImage">
-                            <label for="image-3" data-slideIndex="3"
-                                   class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
-
-                                <img src="../images/banners/banner-4.jpg" class=" object-cover h-full"
-                                     title="اسم المنتج"
-                                     alt="صورة المنتج"/>
-
-                            </label>
-
-                        </div>
-
-                    </section>
-
-                    <section class="bg-white p-5 rounded-md mb-5">
-                        <h2 class="text-sm font-bold mb-4">الألوان المتاحة</h2>
-                        <div class="custom-radios custom-radios--rounded">
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-0" name="color">
-                                <label class="flex flex-col items-center" for="color-0">
-                                    <span style="background-color: #FF74DA" class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-1" name="color">
-                                <label class="flex flex-col items-center" for="color-1">
-                                    <span style="background-color: #27BEE1" class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-2" name="color">
-                                <label class="flex flex-col items-center" for="color-2">
-                                    <span style="background-color: #9A89F2" class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-3" name="color">
-                                <label class="flex flex-col items-center" for="color-3">
-                                    <span style="background-color: #FF9E01" class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-4" name="color">
-                                <label class="flex flex-col items-center" for="color-4">
-                                    <span style="background-color: #FF6767" class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-5" name="color">
-                                <label class="flex flex-col items-center" for="color-5">
-                                    <span style="background-color: #FFCA74" class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-6" name="color">
-                                <label class="flex flex-col items-center" for="color-6">
-                                    <span style="background-color: #74ffd5" class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                            <div class="me-8 mb-8">
-                                <input type="radio" id="color-7" name="color">
-                                <label class="flex flex-col items-center" for="color-7">
-                                    <span style="background-color: " class="mb-2"></span>
-                                    <p class="text-sm text-gray-text">اسم اللون</p>
-                                </label>
-                            </div>
-
-                        </div>
-                    </section>
-
-                    <form>
-                        <section class="bg-white p-5 rounded-md mb-5">
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="product-name" class="form-label">
-                                    <b class="block">
-                                        اسم المنتج
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                    <small class="text-gray-text">اضف اسم المنتج هنا</small>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" name="product-name" id="product-name" autocomplete="given-name"
-                                           class="form-input">
+                        {# is_donation must be here #}
+                        {% if not product.is_donation %}
+                            {#<div class="product-section product-section--has-label product-section--totals">
+                                <div>
+                                    <label>{{ trans('pages.products.price') }}</label>
                                 </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="forms-validationInputCode_error" class="form-label">
-                                    <b class="block">
-                                        اسم المنتج
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                    <small class="text-gray-text">اضف اسم المنتج هنا</small>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input class="form-input has-error" type="text" id="forms-validationInputCode_error"
-                                           aria-describedby="passwordHelp"/>
-                                    <span class="text-xs text-red-700" id="validationHelp">اسم المنتج مطلوب.</span>
-                                </div>
-                            </div>
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="forms-validationInputCode_success" class="form-label">
-                                    <b class="block">
-                                        اسم المنتج
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                    <small class="text-gray-text">اضف اسم المنتج هنا</small>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input class="form-input has-success" type="text"
-                                           id="forms-validationInputCode_success"
-                                           aria-describedby="passwordHelp"/>
-                                    <span class="text-xs text-green-700" id="validationHelpSuccess">مثال لإظهار رسالة
-                                    تأكيد.</span>
-                                </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="productCalendar" class="form-label">
-                                    <b class="block">
-                                        تاريخ التوصيل
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                    <small class="text-gray-text">اضف تاريخ التوصيل</small>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" name="date" id="productCalendar" class="form-input">
-                                </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="product-color" class="form-label">
-                                    <b class="block">
-                                        لون المنتج
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <select class="form-input appearance-none">
-                                        <option disabled selected>- أختر -</option>
-                                        <option>أزرق</option>
-                                        <option>سماوي</option>
-                                        <option>أخضر فاتح</option>
-                                        <option>رصاصي فاتح</option>
-                                    </select>
-                                </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="product-type" class="form-label">
-                                    <b class="block">
-                                        النوع
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" name="product-type" id="product-type" class="form-input">
-                                </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="product-notes" class="form-label">
-                                    <b class="block">
-                                        ملاحظات
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <textarea type="text" name="product-notes" id="product-type"
-                                          class="form-input h-24"></textarea>
-                                </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="product-notes" class="form-label">
-                                    <b class="block">
-                                        نوع الاختيار
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2 md:flex flex-wrap items-center">
-                                    <div class="relative flex items-center mb-4 md:w-6/12">
-                                        <input id="option1" name="option1" type="checkbox"
-                                               class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                                        <label for="option1" class="ms-2 text-sm font-medium text-gray-700">قيمة
-                                            رقم١</label>
+                                <div class="text-left">
+                                    <div class="price-wrapper price-wrapper--large">
+                                        {% if product.on_sale %}
+                                            <span class="color-danger">{{ product.sale_price }}</span>
+                                            <small>{{ product.regular_price }}</small>
+                                        {% else %}
+                                            <span>
+                                                         {% if product.showPriceAsDash() %}
+                                                             —
+                                                         {% elseif ((not hideStartingPric or not hideStartingPrice)
+                                                             and product.price_start_enabled) %}
+                                                             يبدأ من
+                                                             {{ product.starting_price }}
+                                                         {% else %}
+                                                             {{ product.regular_price }}
+                                                         {% endif %}
+                                                    </span>
+                                        {% endif %}
                                     </div>
-
-                                    <div class="relative flex items-center mb-4 md:w-6/12">
-                                        <input id="option2" name="option1" type="checkbox"
-                                               class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                                        <label for="option2" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم
-                                            ٢</label>
-                                    </div>
-
-                                    <div class="relative flex items-center mb-4 md:w-6/12">
-                                        <input id="option3" name="option1" type="checkbox"
-                                               class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                                        <label for="option3" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم
-                                            ٣</label>
-                                    </div>
-
                                 </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label for="receiveTime" class="form-label">
-                                    <b class="block">
-                                        حدد وقت الوصول
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" name="date" id="receiveTime" class="form-input">
-                                </div>
-                            </div>
-                        </section>
+                            </div>#}
+                        {% endif %}
 
                         <section class="bg-white p-5 rounded-md mb-5">
 
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-gray-200 sm:pt-5 mb-5">
-                                <label for="cover-photo" class="form-label sm:pt-2">
-                                    <b class="block">
-                                        صورة المنتج
-                                        <span class="text-red-500">*</span>
-                                    </b>
-                                    <small class="text-gray-text">ارفع صورة المنتج هنا</small>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2 border border-border-color rounded-md p-2.5">
-                                    <div
-                                            class="max-w-lg flex justify-center px-6 pt-8 pb-9 border border-border-color border-dashed rounded-md">
-                                        <div class="space-y-1 text-center">
-                                            <i class="sicon-camera text-primary text-xl"></i>
-                                            <div class="flex text-sm text-gray-600">
-                                                <p class="pe-1 text-gray-text">اسحب وافلت الصورة هنا او </p>
-                                                <label for="file-upload"
-                                                       class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
-                                                    <span class="font-bold"> تصفح جهازك </span>
-                                                    <input id="file-upload" name="file-upload" type="file"
-                                                           class="sr-only">
-                                                </label>
-                                            </div>
+                            {% if product.hide_quantity or not product.is_available %}
+                                <input type="hidden" value="1" name="quantity"/>
+                            {% else %}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                                    <label class="form-label">
+                                        <b class="block">
+                                            الكمية
+                                        </b>
+                                    </label>
+                                    <div x-data="{itemQty: 1}" class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
+                                        <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
+                                            <button type="button" @click="itemQty += 1" class="text-gray-text w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                                <i class="sicon-add"></i></button>
+                                            <input id="product-quantity"
+                                                   x-model="itemQty"
+                                                   data-digits="1"
+                                                   name="quantity"
+                                                   type="number"
+                                                   max="{{ product.max_quantity }}"
+                                                   data-max_quantity="{{ product.max_quantity }}"
+                                                   value="1"
+                                                   class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
+                                                   data-on-keyup="product-price"
+                                                   aria-label="Product Quantity"
+                                                   min="1"/>
 
+                                            <button type="button" @click="if(itemQty > 1 ) {itemQty-= 1}"
+                                                    class="text-gray-text w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                                <i class="sicon-minus"></i></button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div class="border-t-2 border-b-2 border-border-color py-5 mb-5">
-                                <div class="bg-gray-bg  py-4 ps-7 pe-5 rounded-md flex justify-between text-sm mb-2.5">
-                                    <p class="flex items-center text-dark">
-                                        <i class="font-medium sicon-location me-4 text-lg"></i>
-                                        <span class="fix-align">
-                                        التوفر في المعارض
-                                    </span>
-                                    </p>
-                                    <b class="text-primary">اختر مدينة</b>
-                                </div>
-
-                                <div class="bg-gray-bg  py-4 ps-7 pe-5 rounded-md md:flex justify-between text-sm">
-                                    <p class="flex items-center text-dark">
-                                        <i class="font-medium sicon-shipping me-4 text-lg"></i>
-                                        <span class="fix-align">
-                                        اطلب في غضون <b>15</b> ساعة <b>31</b> دقيقة
-                                    </span>
-                                    </p>
-                                    <b class="text-orange-400">توصلك يوم غداً, مارس 3</b>
-                                </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label class="form-label">
-                                    <b class="block">
-                                        المرفقات
-                                    </b>
-                                </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end" x-data="{ tab: '' }">
-
-                                    <div class="flex space-s-3 mb-1">
-                                        <button type="button" @click="tab = 'showNote'"
-                                                class="w-full focus:outline-none  bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5">
-                                            <i class="font-medium sicon-chat-conversation-alt me-1.5 text-md"></i>
-                                            <span class="fix-align">كتابة ملاحظة </span>
-                                        </button>
-
-                                        <button @click="tab = 'showUpload' " type="button"
-                                                class="w-full  focus:outline-none bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5">
-                                            <i class="font-medium sicon-paperclip me-1.5 text-md"></i>
-                                            <span class="fix-align">إرفاق ملف</span>
-                                        </button>
-                                    </div>
-
-
-                                    <div x-show="tab === 'showNote'">
-                                    <textarea
-                                            class="animated animatedfadeInDown fadeInDown form-input h-16 bg-coolGray-50"
-                                            name="" id="" cols="30" rows="10"></textarea>
-                                    </div>
-
-
-                                    <div x-show="tab === 'showUpload'">
-                                        <div
-                                                class="animated animatedfadeInDown fadeInDown mt-1 sm:mt-0 sm:col-span-2 bg-coolGray-50 border border-border-color border-dashed rounded-md p-2.5">
-                                            <div class="max-w-lg flex justify-center px-6 pt-2 pb-4">
-                                                <div class="space-y-1 text-center">
-                                                    <i class="sicon-paperclip text-primary text-xl"></i>
-                                                    <div class="flex text-sm text-gray-600">
-                                                        <p class="pe-1 text-gray-text">اسحب وافلت الملف هنا او </p>
-                                                        <label for="file-upload"
-                                                               class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
-                                                            <span class="font-bold"> تصفح جهازك </span>
-                                                            <input id="file-upload" name="file-upload" type="file"
-                                                                   class="sr-only">
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label class="form-label">
-                                    <b class="block">
-                                        الكمية
-                                    </b>
-                                </label>
-                                <div x-data="{itemQty: 1}" class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
-                                    <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                                        <button type="button" @click="itemQty += 1"
-                                                class="text-gray-text w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
-                                            <i
-                                                    class="sicon-add"></i></button>
-                                        <input x-model="itemQty"
-                                               class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                               type="text" value="1">
-                                        <button type="button" @click="if(itemQty > 1 ) {itemQty-= 1}"
-                                                class="text-gray-text w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
-                                            <i
-                                                    class="sicon-minus"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-
+                            {% endif %}
 
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
                                 <label class="form-label">
@@ -596,24 +262,32 @@
                                 </div>
                             </div>
 
-
                             <div class="flex justify-between space-s-4">
-                                <button type="button" class="btn btn-outline">
-                                    نفدت الكمية
-                                </button>
-
-                                <button @click="openReminderModal()" type="button" class="btn btn-primary">
-                                    اعملني عند التوفر
-                                </button>
+                                {% if product.is_available or product.is_donation %}
+                                    <button type="button" class="btn btn--primary btn--large btn--oval btn--padded less popup-trigger no-m nowrap"
+                                            {% if not product.is_available %} disabled {% endif %}>
+                                        {% if product.is_available %}
+                                            <i class="sicon-shopping-bag"></i>
+                                            {{ trans('pages.cart.add_to_cart') }}
+                                        {% elseif product.is_donation %}
+                                            {{ trans('pages.products.donation_exceed') }}
+                                        {% else %}
+                                            {{ trans('pages.products.out_of_stock') }}
+                                        {% endif %}
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn btn-outline">
+                                        {{ trans('pages.products.out_of_stock') }}
+                                    </button>
+                                    {% component 'product.notify-availability' with {product:product} %}
+                                {% endif %}
                             </div>
-
 
                         </section>
 
                         <section class="relative overflow-hidden bg-white p-5 pb-0 rounded-md mb-5">
                             <p class="mb-5 pe-10 ">اشتري منتجين واحصل على خصم 15 ر.س من التصنيفات التالية</p>
 
-
                             <a href="#"
                                class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-dark justify-center text-sm mb-2.5">
                                 <i class="font-medium sicon-tag me-1.5 text-md"></i>
@@ -637,86 +311,15 @@
                                 <i class="font-medium sicon-tag me-1.5 text-md"></i>
                                 <span class="fix-align">اكسسوارات</span>
                             </a>
-
 
                             <div class="absolute top-5 w-40 end-0 transform -translate-x-12 -rotate-45 text-center">
                                 <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">عرض خاص
                                 </div>
                             </div>
 
-
                             <div class="mt-5 border-b-2 border-red-400"></div>
                         </section>
                     </form>
-                </div>
-            </div>
-        </div>
-
-        <div x-show="reminderModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title"
-             role="dialog"
-             aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-
-                <div x-show="reminderModal" x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                     x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 "
-                     x-transition:leave-end="opacity-0"
-                     class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                     aria-hidden="true"></div>
-
-
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-
-                <div x-show="reminderModal" @click.away="closeReminderModal"
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                     x-transition:leave="transition ease-in duration-200"
-                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                     class="inline-block align-bottom bg-white  p-8 rounded-md   shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ">
-
-                    <div>
-                        <button @click="closeReminderModal"
-                                class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
-                            <i class="sicon-cancel"></i>
-                        </button>
-
-                        <div class="flex justify-center mb-5">
-                            <div
-                                    class="common-anime bg-white text-lg text-text-dark border border-border-color rounded-icon ">
-                                <i class="sicon-bell-ring"></i>
-                            </div>
-                        </div>
-
-                        <h3 class="common-anime text-base leading-6 font-bold mb-2" id="modal-title">
-                            اعلمني عند التوفر
-                        </h3>
-                        <div class="mb-10">
-                            <p class="common-anime text-gray-text text-sm leading-6">
-                                ادخل بياناتك وكن أول من يعلم بتوفر المنتج لدينا
-                            </p>
-                        </div>
-                        <div class="common-anime z-50 relative">
-                            <label for="user-phone" class="block text-sm font-medium text-gray-700">
-                                <b class="block text-start">
-                                    رقم الجوال
-                                </b>
-                            </label>
-                            <div class="mt-2.5 mb-10">
-                                <input type="tel" x-ref="userPhone" name="user-phone" id="user-phone"
-                                       class="tel-input form-input">
-                            </div>
-                        </div>
-
-
-                        <div class="common-anime flex justify-between space-s-4">
-                            <button type="button" class=" btn btn-primary"> إرسال</button>
-                            <button @click="closeReminderModal()" type="button" class="btn btn-outline">إلغاء</button>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -2425,8 +2028,8 @@ flex-col
         function initProductDetails() {
             return {
                 reminderModal: false,
-                inFavorite: false,
-                showMore: false,
+                inFavorite: {{ in_wishlist }},
+                showMore: {{ product.can_show_read_more }},
                 showShareMenu: false,
                 toggleFavorite: function () {
                     this.inFavorite = !this.inFavorite;
