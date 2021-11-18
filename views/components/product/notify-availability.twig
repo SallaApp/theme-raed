@@ -1,3 +1,7 @@
+<button @click="openReminderModal()" type="button" class="btn btn-primary">
+    {{ trans('pages.products.notify_availability') }}
+</button>
+
 <button type="button"
    data-popup-trigger="notify-modal"
    id="show-notify-availability"
@@ -6,70 +10,101 @@
     {{ trans('pages.products.notify_availability') }}
 </button>
 
-{#modal#}
-<div class="popup-modal-wrap" data-popup-modal="notify-modal">
-    <div class="popup-modal shadow">
-        <div class="popup-modal-inner">
-            <button type="button"
-                    class="btn btn--transparent btn--circular btn--modal-close no-p"
-                    data-close-modal="true"
-                    id="close-notify-availability">
-                <i class="sicon-cancel"></i>
-            </button>
-        </div>
-        <header class="popup-modal__header center anime-item">
-            <div class="avatar-wrapper avatar-wrapper--medium avatar-wrapper--circular avatar-wrapper--primary">
-                <i class="sicon-bell-ring"></i>
-            </div>
-            <h2 class="title title--medium title--primary">{{ trans('pages.products.notify_availability_title') }}</h2>
-            <p class="mb-0 mt-10 font-sm color-grey">{{ trans('pages.products.notify_availability_subtitle') }}</p>
-        </header>
-        <section class="popup-modal__body">
-            <input type="hidden" name="id" value="{{ product.product_id }}">
-            <div class="form">
-                {% if email_notify %}
-                    <div class="form-group anime-item">
-                        <label>{{ trans('common.elements.email') }}</label>
-                        <input type="email"
-                               class="email form-control"
-                               name="email"
-                               value="{{ user.email }}"
-                               placeholder="{{ trans('common.elements.email_placeholder') }}" />
-                    </div>
-                {% endif %}
+{# modal #}
+<div x-show="reminderModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title"
+     role="dialog"
+     aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
-                {% if mobile_notify %}
-                    <div class="form-group phone-input anime-item">
-                        <label>{{ trans('common.elements.mobile') }}</label>
-                        <div>
+        <div x-show="reminderModal" x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 "
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+             aria-hidden="true"></div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div x-show="reminderModal" @click.away="closeReminderModal"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             class="inline-block align-bottom bg-white  p-8 rounded-md   shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ">
+
+            <div>
+                <button @click="closeReminderModal"
+                        class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
+                    <i class="sicon-cancel"></i>
+                </button>
+
+                <div class="flex justify-center mb-5">
+                    <div
+                            class="common-anime bg-white text-lg text-text-dark border border-border-color rounded-icon ">
+                        <i class="sicon-bell-ring"></i>
+                    </div>
+                </div>
+
+                <h3 class="common-anime text-base leading-6 font-bold mb-2" id="modal-title">
+                    {{ trans('pages.products.notify_availability_title') }}
+                </h3>
+                <div class="mb-10">
+                    <p class="common-anime text-gray-text text-sm leading-6">
+                        {{ trans('pages.products.notify_availability_subtitle') }}
+                    </p>
+                </div>
+                <div class="common-anime z-50 relative">
+                    <input type="hidden" name="id" value="{{ product.product_id }}">
+                    {% if email_notify %}
+                        <label for="user-phone" class="block text-sm font-medium text-gray-700">
+                            <b class="block text-start">
+                                {{ trans('common.elements.email') }}
+                            </b>
+                        </label>
+                        <div class="mt-2.5 mb-10">
+                            <input type="email"
+                                   name="email"
+                                   class="email form-control intl-input"
+                                   placeholder="{{ trans('common.elements.email_placeholder') }}"
+                                   value="{{ user.email }}"
+                                   id="notify-email"
+                                   data-digits>
+                        </div>
+                    {% endif %}
+
+                    {% if mobile_notify %}
+                        <label for="user-phone" class="block text-sm font-medium text-gray-700">
+                            <b class="block text-start">
+                                {{ trans('common.elements.mobile') }}
+                            </b>
+                        </label>
+                        <div class="mt-2.5 mb-10">
                             <input type="text"
                                    name="mobile"
                                    class="phone form-control intl-input phone"
                                    placeholder="{{ trans('common.elements.mobile_placeholder') }}"
                                    value="{{ user.mobile }}"
                                    id="notify-mobile"
+                                   x-ref="userPhone"
                                    data-digits>
                             <input type="hidden"
                                    name="country_code"
-                                   class="country_code"
+                                   class="tel-input form-input"
                                    value="{{ country_code ?: 'SA' }}" />
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
+
+
+                <div class="common-anime flex justify-between space-s-4">
+                    <button type="button" class=" btn btn-primary"> {{ trans('common.elements.submit') }}</button>
+                    <button @click="closeReminderModal()" type="button" class="btn btn-outline">{{ trans('common.elements.cancel') }}</button>
+                </div>
             </div>
-        </section>
-        <footer class="popup-modal__footer">
-            <div>
-                <button type="button" data-on-click="product-availability-notify"
-                        class="btn btn--large btn--rounded btn--padded less btn--wide btn--primary ajax">
-                    {{ trans('common.elements.submit') }}
-                </button>
-            </div>
-            <div>
-                <button type="button" class="btn btn--large btn--rounded btn--padded less btn--wide btn--grey"
-                   data-close-modal="true">{{trans('common.elements.cancel')}}</button>
-            </div>
-        </footer>
+
+        </div>
     </div>
 </div>
 
