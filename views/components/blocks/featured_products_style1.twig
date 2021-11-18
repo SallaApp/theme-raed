@@ -10,17 +10,17 @@
                 </div>
             </div>
         {% endif %}
-        <div class="flex flex-col" x-data="initFeaturedTabs()">
+        <div class="flex flex-col" x-data="initFeaturedTabs()"  x-init="currentTab = 'featured-style1-tab-{{ items[0].id }}'">
              <div class="tabs mb-8 space-s-2 md:space-s-12 whitespace-nowrap overflow-x-auto hide-scroll">
             {% for section in items %}
                 <button @click.prevent="switchTab('featured-style1-tab-{{ section.id }}')"
                         :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'text-title-color' : 'text-gray-text'"
-                        class="cursor-pointer border-0 font-bold">{{ section.title }}</button>
+                        class="cursor-pointer border-0 font-bold leading-7"> <h2>{{ section.title }}</h2></button>
             {% endfor %}
             </div>
        
             {% for section in items %}
-                <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
+                <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" id="featured-style1-tab-{{ section.id }}" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
                 {% for product in section.products|slice(0,main_product?4:8) %}
                     {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item-style1'} %}
                 {% endfor %}
@@ -33,17 +33,17 @@
 
  function initFeaturedTabs() {
         return {
-            currentTab: 'featured-style1-tab-{{ items[0].id }}',
+            currentTab: '',
             switchTab : function (tabId) {
                 this.currentTab = tabId
                 setTimeout(() => {
-                    window.animateTabsItems('.featured-item-style1');
+                    window.animateTabsItems(`#${tabId} .featured-item-style1`);
                 },10)
             }
         }
     }
 
     document.addEventListener('DOMContentLoaded',  () => {
-        window.animateTabsItems('.featured-item-style1');
+        window.animateTabsItems('#featured-style1-tab-{{ items[0].id }} .featured-item-style1');
     });
 </script>

@@ -277,7 +277,7 @@ window.animateTabsItems = (ItemClass) => {
     })
 
     anime({
-        targets: `.active-tab ${ItemClass}`,
+        targets: `${ItemClass}`,
         translateY: [30, 0],
         opacity: [0, 1],
         duration: 1200,

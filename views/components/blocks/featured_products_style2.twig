@@ -1,5 +1,5 @@
-<section class="s-home-block  s-home-block--tabsProdutcs bg-gray-bg2 pt-20 pb-10 {{ is_repeated?'repeated-block pt-0':'' }}">
-    <div class="container pe-0 lg:px-5" x-data="initTabs()">
+<section class="s-home-block  s-home-block--tabsProdutcs bg-gray-bg2 pt-20 pb-10 {{ is_repeated?'repeated-block':'' }}">
+    <div class="container pe-0 lg:px-5" x-data="initTabs()"  x-init="currentTab = 'featured-tab-{{ items[0].id }}'">
         <div class="tabs text-center pb-10 space-s-1 md:space-s-4 whitespace-nowrap overflow-x-auto hide-scroll">
             {% for section in items %}
                 <button @click.prevent="switchTab('featured-tab-{{ section.id }}')"
@@ -9,7 +9,7 @@
         </div>
 
         {% for section in items %}
-            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class="swiper pb-10 tabs-slider">
+            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" id="featured-tab-{{ section.id }}" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class="swiper pb-10 tabs-slider">
                 {% if is_slider %}
                     <div class="swiper-wrapper">
                         {% for product in section.products %}
@@ -46,12 +46,12 @@
 <script>
     function initTabs() {
         return {
-            currentTab: 'featured-tab-{{ items[0].id }}',
+            currentTab: '',
             switchTab : function (tabId) {
                 this.currentTab = tabId
 
                 setTimeout(() => {
-                    window.animateTabsItems('.featured-item-style2');
+                    window.animateTabsItems(`#${tabId} .featured-item-style2`);
                 },10)
             }
         }
@@ -75,7 +75,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        window.animateTabsItems('.featured-item-style2');
+        window.animateTabsItems('#featured-tab-{{ items[0].id }} .featured-item-style2');
         initSlider();
     });
 </script>
