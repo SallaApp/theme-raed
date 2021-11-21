@@ -15,9 +15,15 @@
                 <div class="self-start">
                     <nav class="w-full py-5">
                         <ol class="list-reset flex items-center text-sm text-reverse ">
-                            <li><a href="#" class="fix-align text-primary text-reverse ">الرئيسية</a></li>
+                            <li><a href="{{ link('/') }}" class="fix-align text-primary text-reverse">{{trans('common.titles.home')}}</a></li>
                             <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                            <li><span class="fix-align">{{ trans('common.titles.orders') }}</span></li>
+                            <li>
+                                {% if isPendingOrders %}
+                                    <a href="{{ link('orders') }}" class="fix-align text-primary">{{trans('common.titles.orders')}}</a>
+                                {% else %}
+                                <span class="fix-align">{{ trans('common.titles.orders') }}</span>
+                                {% endif %}
+                            </li>
                         </ol>
                     </nav>
                 </div>
@@ -25,7 +31,7 @@
         </div>
         <div class="container mb-24">
             <div class="flex items-start flex-col lg:flex-row ">
-                {% include 'pages.customer.partials.sidebar.twig' %}
+                {% include 'pages.customer.partials.sidebar' %}
                 <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
                     <h1 class="font-bold text-lg md:mb-5">{{trans('pages.orders.details')}}</h1>
                     <div class=" overflow-hidden">
@@ -49,46 +55,54 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="orders-container">
                             {% for order in orders.items %}
-                                <tr class="border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
-                                <td class="w-full md:w-auto md:rounded-s-md px-6 py-6 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
-                                    <a href="/order-details">#{{ order.id }}</a>
-                                </td>
-                                <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                    {{ order.total_price }}
-                                </td>
-                                <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                    {# TODO: parse the date based on the static design #}
-                                    {{ order.created_at }}
-                                </td>
-                                <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                    <span class="text-primary bg-primary-light px-4 pt-0.5 pb-1.5 inline-block rounded-2xl">
-                                        {#{{ order.status.icon }} TODO: HOW TO AD THE ICON?#}
-                                        {{ order.status.name }}
-                                    </span>
-                                </td>
-                                <td class="w-full md:w-auto md:rounded-e-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-lg font-medium md:text-end">
-                                    <span class="md:hidden w-32 inline-block font-normal text-sm"></span>
-                                    <a href="#" class="text-red-500 hover:text-red-600 mx-2">
-                                        <i class="sicon-trash-2"></i>
-                                    </a>
-                                    <a href="{{ order.url }}" class="text-gray-text hover:text-gray-500 mx-2">
-                                        <i class="sicon-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                                <tr class="order-row border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
+                                    <td class="w-full md:w-auto md:rounded-s-md px-6 py-6 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
+                                        <a href="{{ order.url }}">#{{ order.id }}</a>
+                                    </td>
+                                    <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
+                                        {{ order.total_price }}
+                                    </td>
+                                    <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
+                                        {# TODO: parse the date based on the static design #}
+                                        {{ order.created_at }}
+                                    </td>
+                                    <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
+                                        <span class="text-primary bg-primary-light px-4 pt-0.5 pb-1.5 inline-block rounded-2xl" style="color: {{ order.status.color }}">
+                                            {#{{ order.status.icon }} TODO: HOW TO AD THE ICON?#}
+                                            {{ order.status.name }}
+                                        </span>
+                                    </td>
+                                    <td class="w-full md:w-auto md:rounded-e-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-lg font-medium md:text-end">
+                                        <span class="md:hidden w-32 inline-block font-normal text-sm"></span>
+                                        {#<a href="#" class="text-red-500 hover:text-red-600 mx-2">
+                                            <i class="sicon-trash-2"></i>
+                                        </a>#}
+                                        <a href="{{ order.url }}" class="text-gray-text hover:text-gray-500 mx-2">
+                                            <i class="sicon-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>
-                        <div class="text-center">
-                            <button type="button" class="w-full md:w-auto btn btn-outline-dark">
-                                {{ trans('common.elements.load_more') }}
-                            </button>
-                        </div>
+
+                        {% include 'pages.partials.loader-status' with {'nextPageUrl':orders.nextPageUrl} %}
                     </div>
                 </div>
             </div>
         </div>
     </main>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener( 'DOMContentLoaded', function () {
+            salla.infiniteScroll.initiate('.orders-container', '.order-row', {
+                history        : false,
+                scrollThreshold: false
+            })
+        });
+    </script>
 {% endblock %}
