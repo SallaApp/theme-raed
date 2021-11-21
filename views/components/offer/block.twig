@@ -1,37 +1,27 @@
-<div class="offers-block bg-grey mt-50">
-    <span class="badge badge--corner-ribbon end">{{ trans('pages.products.special_offer') }}</span>
-    <div class="offers-block__title-wrapper mb-20">
-        <h2 class="title title--medium mb-5">{{ offer.name }}</h2>
-        <p class="font-sm color-grey mt-0 mb-0">{{ offer.title|raw }}</p>
-    </div>
+<section class="relative overflow-hidden bg-white p-5 pb-0 rounded-md mb-5">
+    <p class="mb-5 pe-10 ">{{ offer.name }}: {{ offer.title|raw }}</p>
+
     {% if categories %}
-    <ul class="list list--horizontal list--auto-width wrap">
         {% for category in categories %}
-        <li class="mr-1 mb-1">
-            <a href="{{ category.url }}" class="btn btn--grey btn--tag btn--oval ">{{ category.name }}</a>
-        </li>
+            <a href="{{ category.url }}" class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-dark justify-center text-sm mb-2.5">
+                <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                <span class="fix-align">{{ category.name }}</span>
+            </a>
         {% endfor %}
-    </ul>
     {% endif %}
+
     {% if products %}
-        {% if products|length > 4 %}
-            <div class="splide splide--products-slider center-arrows offers">
-                <div class="splide__track">
-                    <ul class="splide__list">
-                        {% for product in products %}
-                            <li class="splide__slide">
-                                {% include 'pages.partials.product.card' %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        {% else %}
-            <div class="grid-block products-list-container">
-                {% for product in products %}
-                    {% include 'pages.partials.product.card' %}
-                {% endfor %}
-            </div>
-        {% endif %}
+        {% for product in products %}
+            <a href="{{ product.url }}" class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-dark justify-center text-sm mb-2.5">
+                <span class="fix-align">{{ product.name }}</span>
+            </a>
+        {% endfor %}
     {% endif %}
-</div>
+
+    <div class="absolute top-5 w-40 end-0 transform -translate-x-12 -rotate-45 text-center">
+        <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ trans('pages.products.special_offer') }}
+        </div>
+    </div>
+
+    <div class="mt-5 border-b-2 border-red-400"></div>
+</section>

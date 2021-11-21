@@ -1,51 +1,59 @@
-<div class="view-comment__comment comment_id_{{ comment.id}} {% if comment.is_admin %} admin {% endif%}  {% if comment.is_replay %} replay_to_{{ comment.parent_id}} replays {% else %} comment-block view-comment__comment--has-replays {% endif %}">
-        <img class="lazy-load" data-src="{{ comment.avatar }}" alt="avatar"/>
-    <div class="comment-wrapper">
-        <div class="comment-header d-flex justify-content-between">
-            <div>
-                <div>
-                    <div class="d-flex name-rating-wrapper">
-                        <h3 class="name">{{ comment.name }}</h3>
-                        <div class="d-flex user-info">
-                            {% if comment.order_id %}
-                                <span class="badge">
-                                    <span class="sicon-check icon"></span>
-                                    <span>{{trans('blocks.comments.has_bought')}} </span>
-                                </span>
-                            {% endif %}
-                            {% if comment.stars %}<span>{{trans('pages.rating.rated')}}</span>{% endif %}
-                        </div>
+<div class="border-b mb-8 border-coolGray-300">
+    <div class="{% if comment.is_replay %} nested-comment reply md:ps-16 {% else %} comment {% endif%} flex text-sm space-s-3 pb-8 comment_id_{{ comment.id}} {% if comment.is_admin %} admin {% endif%}">
+        {% if comment.is_replay %}
+            <i class=" sicon-reply text-lg text-gray-text"></i>
+        {% endif%}
+        <div class="flex-none">
+            <img src="{{ comment.avatar }}" alt="{{ comment.name }}" class="w-10 h-10 bg-gray-100 rounded-full">
+        </div>
+
+        <div class="flex-1">
+            <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
+                <div class="md:flex items-center">
+                    <h3 class="font-bold text-base me-5 fix-align mb-1">{{ comment.name }}</h3>
+                    <div class="flex">
+                        {% if comment.order_id %}
+                            <i class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                            <span class="fix-align ms-1 text-sm text-gray-text">
+                                {{ trans('blocks.comments.has_bought') }}
+                            </span>
+                        {% endif %}
+                        {% if comment.stars %}
+                            <span class="fix-align ms-1 text-sm text-gray-text">
+                                {{ trans('pages.rating.rated') }}
+                            </span>
+                        {% endif %}
                     </div>
                 </div>
+                <p class="text-gray-text text-sm">{{ time_diff_for_humans(comment.created_at) }}</p>
                 {% if comment.stars %}
-                    <div class="rating">
-                        <span class="sicon-star2 checked"></span>
-                        <span class="sicon-star2 {{ comment.stars >= 2 ? 'checked' : '' }}"></span>
-                        <span class="sicon-star2 {{ comment.stars >= 3 ? 'checked' : '' }}"></span>
-                        <span class="sicon-star2 {{ comment.stars >= 4 ? 'checked' : '' }}"></span>
-                        <span class="sicon-star2 {{ comment.stars == 5 ? 'checked' : '' }}"></span>
+                    <div class="-mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+                        <i class="sicon-star2 text-theme-yellow"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 2 ? 'text-theme-yellow' : '' }}"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 3 ? 'text-theme-yellow' : '' }}"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 4 ? 'text-theme-yellow' : '' }}"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 5 ? 'text-theme-yellow' : '' }}"></i>
                     </div>
                 {% endif %}
             </div>
-            <span class="comment-date">{{ time_diff_for_humans(comment.created_at) }}</span>
-        </div>
-        <p>{{ comment.content|raw }}{% if comment.status != 'approved' %} <span class="pending-comment">{{ trans('blocks.comments.waiting_approval') }}</span>{% endif %}</p>
-        {% if comment.order_id != 0 %}
-            <i class="icon-cart user-buy" data-toggle="tooltip" data-placement="right" title="{{ trans('blocks.comments.has_order') }}"></i>
-        {% endif %}
 
-        <div class="add-comment hide" id="comment_{{ comment.id }}">
-            <div class="avatar-wrapper avatar-wrapper--medium avatar-wrapper--circular avatar-wrapper--bordered mr-2">
-                <img class="lazy-load" data-src="{{ comment.avatar }}" alt="avatar"/>
-            </div>
-            <div>
-                <textarea class="form-control" placeholder="{{trans('replay_placeholder')}}"></textarea>
+            <div class="prose prose-sm max-w-none text-gray-500">
+                <p>{{ comment.content|raw }}{% if comment.status != 'approved' %} <span class="pending-comment">{{ trans('blocks.comments.waiting_approval') }}</span>{% endif %}</p>
+                {% if comment.order_id != 0 %}
+                    <i class="icon-cart user-buy" data-toggle="tooltip" data-placement="right" title="{{ trans('blocks.comments.has_order') }}"></i>
+                {% endif %}
+
+                <div class="add-comment hide" id="comment_{{ comment.id }}">
+                    <div>
+                        <textarea class="form-control" placeholder="{{trans('replay_placeholder')}}"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
-        {% if not comment.is_replay and comment.replies %}
-            {% for replay in comment.replies %}
-                {% include _self with {'comment':replay} %}
-            {% endfor %}
-        {% endif %}
     </div>
+    {% if not comment.is_replay and comment.replies %}
+        {% for replay in comment.replies %}
+            {% include _self with {'comment':replay} %}
+        {% endfor %}
+    {% endif %}
 </div>

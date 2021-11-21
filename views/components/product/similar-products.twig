@@ -1,22 +1,52 @@
- {% if products is not empty %}
-    <section class="page-wrapper bg-grey">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="title title--primary title--x-large title--has-dash mb-30">{{ trans('pages.products.similar_products') }}</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="grid-block products-list-container">
-                        {% for product in products %}
-                            {% include 'pages.partials.product.card' %}
-                        {% endfor %}
+{% if products is not empty %}
+    <section class="mb-20 container pe-0 lg:px-5">
+        <div class="swiper  best-offers-slider">
+            <div class="pe-5 lg:pe-0">
+                <div class="flex justify-between mb-8">
+                    <h2 class="font-bold text-lg text-text-dark">{{ trans('pages.products.similar_products') }}</h2>
+                    <div class="flex items-center">
+                        {# <a href="#" class="text-sm font-bold text-primary mx-3">عرض الكل</a> #}
+
+                        <div class="hidden sm:block" dir="rtl">
+                            <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                <i class="text-gray-text sicon-keyboard_arrow_right"></i>
+                            </button>
+                            <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                                <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
+            <div class="swiper-wrapper">
+                {% for product in products %}
+                    <div class="swiper-slide best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+                        {% include 'pages.partials.product.card' %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const swiper = new Swiper('.best-offers-slider', {
+                    spaceBetween: 30,
+                    slidesPerView: 'auto',
+
+                    navigation: {
+                        nextEl: '.slider-next',
+                        prevEl: '.slider-prev',
+                    },
+
+                    breakpoints: {
+
+                        980: {
+                            slidesPerView: 4,
+                        }
+                    }
+                });
+            });
+        </script>
     </section>
- {% endif %}
-
-
+{% endif %}
