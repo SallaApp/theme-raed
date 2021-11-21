@@ -29,7 +29,7 @@
                                    href="{{ image.video_url?image.video_url:image.url }}"
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide h-500 homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
-                                    <img src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-cover">
+                                    <img data-src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-cover lazy-load">
                                 </a>
                             {% endfor %}
                         </div>
@@ -42,7 +42,7 @@
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
                                 <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
-                                    <img src="{{ image.url }}" class="object-cover h-full" title="{{ image.alt }}"
+                                    <img data-src="{{ image.url }}" class="object-cover h-full lazy-load" title="{{ image.alt }}"
                                          alt="{{ image.alt }}"/>
                                 </div>
                             {% endfor %}

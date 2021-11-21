@@ -9,8 +9,7 @@
                             {% for item in items %}
                                 <li class="splide__slide">
                                     <a href="{{ item.url }}" aria-label="Banner {{ item.link_type }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
-                                        <img data-splide-lazy="{{ item.image.url }}"
-                                             alt="{{ item.image.alt }}" />
+                                        <img class="lazy-load" data-src="{{ item.image.url }}" alt="{{ item.image.alt }}" />
                                     </a>
                                 </li>
                             {% endfor %}
