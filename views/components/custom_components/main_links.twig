@@ -1,0 +1,107 @@
+{% set links= [
+    {
+        "title": "الإلكترونيات",
+        "icon": "sicon-plug-electric"
+    },
+    {
+        "title": "موبايلات",
+        "icon": "sicon-android-phone"
+    },
+    {
+        "title": "الأزياء",
+        "icon": "sicon-t-shirt"
+    },
+    {
+        "title": "المنزل",
+        "icon": "sicon-mailbox"
+    },
+    {
+        "title": "الجمال والعطور",
+        "icon": "sicon-macro"
+    },
+    {
+        "title": "سوبر ماركت",
+        "icon": "sicon-shipping-fast"
+    }
+] %}
+<section class="home-block home-block--categories mb-12 relative z-10 overflow-hidden">
+    <div class="container">
+        <div class="-mx-11 h-60">
+            <div class="swiper pb-8 px-11 category-slider hidden">
+                <div class="flex justify-between mb-8">
+                    <h2 class="font-bold text-lg text-white">الأقسام</h2>
+                </div>
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    {% for link in links %}
+                    <div class="swiper-slide category-slider__slide w-4/6 sm:w-2/6 md:w-3/12">
+                        <a href="#"
+                           class="bg-white rounded-md h-36 flex flex-col items-center justify-center text-gray-text transition-shadow duration-500 hover:shadow-default hover:text-text-dark">
+                            <i class="{{ link.icon }} text-primary text-icon-lg mb-4 cat-item"></i>
+                            <h4 class="font-bold text-sm cat-item">{{ link.title }}</h4>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<script>
+    function animatedItems() {
+        anime({
+            targets   : '.cat-item',
+            opacity   : [0, 1],
+            translateY: [15, 0],
+            delay     : function (el, i) {
+                return i * 70;
+            },
+        })
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementsByClassName('category-slider')[0].style.display = 'block'
+        animatedItems();
+        const swiper = new Swiper('.category-slider', {
+            // Optional parameters
+            spaceBetween : 30,
+            slidesPerView: "auto",
+
+            // loop: true,
+
+            // Navigation arrows
+            // navigation: {
+            //   nextEl: '.slider-next',
+            //   prevEl: '.slider-prev',
+            // },
+
+            breakpoints: {
+                // when window width is >=
+                // when window width is >=
+                // 640: {
+                //   slidesPerView: 2,
+                // },
+                // when window width is >=
+                // 768: {
+                //   slidesPerView: 4,
+                // },
+                // // when window width is >=
+                // 980: {
+                //   slidesPerView: 5,
+                //   loop: true,
+                // },
+
+                1200: {
+                    slidesPerView : 6,
+                    centeredSlides: false,
+                    loop          : false
+                }
+            }
+
+        });
+
+    });
+</script>

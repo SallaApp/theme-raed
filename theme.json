@@ -13,15 +13,51 @@
         }
     },
     "components": {
-        "slider_with_links": {
-            "name": "صور متحركة مع روابط سريعة",
+        "enhanced_slider": {
+            "name": "صور متحركة محسنة",
             "icon": "sicon-image-carousel",
-            "path": "custom_components.slider_with_links",
+            "path": "custom_components.slider",
             "fields": {
                 "images": {
                     "type": "collection",
                     "fields": {
                         "image": {
+                            "type": "image"
+                        },
+                        "url": {
+                            "type": "link"
+                        },
+                        "title": {
+                            "type": "string",
+                            "icon": "sicon-format-text-alt",
+                            "label": "test someThing",
+                            "placeholder": "Placeholder text ..",
+                            "minLength": 6,
+                            "maxLength": 30,
+                            "required": false
+                        }
+                    }
+                }
+            }
+        },
+        "main_links": {
+            "name": "روابط سريعة",
+            "icon": "sicon-layout-grid-rearrange",
+            "path": "custom_components.main_links",
+            "fields": {
+                "title": {
+                    "type": "string",
+                    "icon": "sicon-format-text-alt",
+                    "label": "test someThing",
+                    "placeholder": "Placeholder text ..",
+                    "minLength": 6,
+                    "maxLength": 30,
+                    "required": false
+                },
+                "links": {
+                    "type": "collection",
+                    "fields": {
+                        "icon": {
                             "type": "image"
                         },
                         "url": {
