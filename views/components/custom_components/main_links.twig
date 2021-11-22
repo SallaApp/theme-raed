@@ -24,10 +24,11 @@
         "icon": "sicon-shipping-fast"
     }
 ] %}
-<section class="home-block home-block--categories mb-12 relative z-10 overflow-hidden">
+
+<section class="home-block home-block--categories relative z-10 overflow-hidden {{ is_repeated?'repeated-block mt-8':'mt-16' }}">
     <div class="container">
-        <div class="-mx-11 h-60">
-            <div class="swiper pb-8 px-11 category-slider hidden">
+        <div class="-mx-11">
+            <div class="swiper px-11 category-slider hidden">
                 <div class="flex justify-between mb-8">
                     <h2 class="font-bold text-lg text-white">الأقسام</h2>
                 </div>
@@ -47,61 +48,60 @@
         </div>
 
     </div>
+
+  <script>
+      function animatedItems() {
+          anime({
+              targets   : '.cat-item',
+              opacity   : [0, 1],
+              translateY: [15, 0],
+              delay     : function (el, i) {
+                  return i * 70;
+              },
+          })
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+          document.getElementsByClassName('category-slider')[0].style.display = 'block'
+          animatedItems();
+          const swiper = new Swiper('.category-slider', {
+              // Optional parameters
+              spaceBetween : 30,
+              slidesPerView: "auto",
+
+              // loop: true,
+
+              // Navigation arrows
+              // navigation: {
+              //   nextEl: '.slider-next',
+              //   prevEl: '.slider-prev',
+              // },
+
+              breakpoints: {
+                  // when window width is >=
+                  // when window width is >=
+                  // 640: {
+                  //   slidesPerView: 2,
+                  // },
+                  // when window width is >=
+                  // 768: {
+                  //   slidesPerView: 4,
+                  // },
+                  // // when window width is >=
+                  // 980: {
+                  //   slidesPerView: 5,
+                  //   loop: true,
+                  // },
+
+                  1200: {
+                      slidesPerView : 6,
+                      centeredSlides: false,
+                      loop          : false
+                  }
+              }
+
+          });
+
+      });
+  </script>
 </section>
-
-
-<script>
-    function animatedItems() {
-        anime({
-            targets   : '.cat-item',
-            opacity   : [0, 1],
-            translateY: [15, 0],
-            delay     : function (el, i) {
-                return i * 70;
-            },
-        })
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementsByClassName('category-slider')[0].style.display = 'block'
-        animatedItems();
-        const swiper = new Swiper('.category-slider', {
-            // Optional parameters
-            spaceBetween : 30,
-            slidesPerView: "auto",
-
-            // loop: true,
-
-            // Navigation arrows
-            // navigation: {
-            //   nextEl: '.slider-next',
-            //   prevEl: '.slider-prev',
-            // },
-
-            breakpoints: {
-                // when window width is >=
-                // when window width is >=
-                // 640: {
-                //   slidesPerView: 2,
-                // },
-                // when window width is >=
-                // 768: {
-                //   slidesPerView: 4,
-                // },
-                // // when window width is >=
-                // 980: {
-                //   slidesPerView: 5,
-                //   loop: true,
-                // },
-
-                1200: {
-                    slidesPerView : 6,
-                    centeredSlides: false,
-                    loop          : false
-                }
-            }
-
-        });
-
-    });
-</script>
