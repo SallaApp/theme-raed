@@ -1,8 +1,9 @@
 require('mmenu-light');
+require('@sallaapp/theme-utils') // todo :: change the namespace to salla.sa
+salla.init();
 require('./partials/custom');
 require('./plugins/lazyload.js');
 // require('./partials/search-modal')
-require('@sallaapp/theme-utils') // todo :: change the namespace to salla.sa
 require('@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm')
 
 window.anime = require('animejs').default;
