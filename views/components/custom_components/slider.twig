@@ -13,31 +13,9 @@
         "title": "جهاز ألعاب بخاصة التحكم عن طريق الواي فاي",
         "description": "يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم",
         "img": asset("images/slider/slide3.jpg")
-    }] %}
-<section class="-mb-28">
-    <div class="swiper  home-slider main-slider">
+    }] 
+%}
 
-        <div class="swiper-wrapper">
-            <!-- Slides -->
-            {% for slide in slides %}
-                <div class="swiper-slide home-slider__slide relative lazy-background" data-src="{{ slide.img }}">
-                    <div class="flex justify-center items-center container  home-slider__content relative h-full">
-                        <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
-                            <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-normal mb-4">{{ slide.title }}</h3>
-                            <p class="main-slide-anime opacity-0 description">{{ slide.description }}</p>
-                        </div>
-                    </div>
-                    <div class="overlay absolute top-0 z-0 bg-dark opacity-60  w-full h-full"></div>
-                </div>
-            {% endfor %}
-        </div>
-
-
-        <!-- If we need navigation buttons -->
-        <div class="w-10 h-10 shadow-sm bg-white swiper-button-prev rounded-full"></div>
-        <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
-    </div>
-</section>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         animateSliderItems()
@@ -72,3 +50,26 @@
         }
     });
 </script>
+
+<section class="home-slider">
+    <div class="swiper main-slider">
+      <div class="swiper-wrapper">
+          <!-- Slides -->
+          {% for slide in slides %}
+              <div class="swiper-slide home-slider__slide relative lazy-background" data-src="{{ slide.img }}">
+                  <div class="flex justify-center items-center container  home-slider__content relative h-full">
+                      <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
+                          <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-normal mb-4">{{ slide.title }}</h3>
+                          <p class="main-slide-anime opacity-0 description">{{ slide.description }}</p>
+                      </div>
+                  </div>
+                  <div class="overlay absolute top-0 z-0 bg-dark opacity-60  w-full h-full"></div>
+              </div>
+          {% endfor %}
+      </div>
+
+      <!-- If we need navigation buttons -->
+      <div class="w-10 h-10 shadow-sm bg-white swiper-button-prev rounded-full"></div>
+      <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
+    </div>
+</section>
