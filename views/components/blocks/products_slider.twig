@@ -1,60 +1,59 @@
 <section class="s-block s-block--best-offers container pe-0 lg:px-5 {{ is_repeated?'repeated-block mt-8':'mt-16' }}">
-    <div class="swiper  best-offers-slider">
-        <div class="pe-5 lg:pe-0">
-            <div class="flex justify-between mb-8">
-                {% if title %}
-                    <h2 class="font-bold text-lg text-text-dark">{{ title }}</h2>
-                {% endif %}
-                <div class="flex items-center">
-                    {% if display_all_url %}
-                        <a href="{{ display_all_url }}"
-                           class="text-sm font-bold text-primary mx-3">{{ trans('blocks.home.display_all') }}</a>
-                    {% endif %}
-                    <div class="hidden sm:block" dir="rtl">
-                        <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
-                            <i class="text-gray-text sicon-keyboard_arrow_right"></i>
-                        </button>
-                        <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
-                            <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="swiper-wrapper">
-            {% for product in products %}
-                <div class="swiper-slide h-auto best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
-                    {% include 'pages.partials.product.card' %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+  <div class="swiper  best-offers-slider">
+      <div class="pe-5 lg:pe-0">
+          <div class="flex justify-between mb-8">
+              {% if title %}
+                  <h2 class="font-bold text-lg text-text-dark">{{ title }}</h2>
+              {% endif %}
+              <div class="flex items-center">
+                  {% if display_all_url %}
+                      <a href="{{ display_all_url }}"
+                          class="text-sm font-bold text-primary hover:opacity-80 ms-3">{{ trans('blocks.home.display_all') }}</a>
+                  {% endif %}
+                  <div class="hidden sm:block ms-3" dir="rtl">
+                      <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                          <i class="text-gray-text sicon-keyboard_arrow_right"></i>
+                      </button>
+                      <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-7 h-7">
+                          <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="swiper-wrapper">
+          {% for product in products %}
+              <div class="swiper-slide h-auto best-offers-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+                  {% include 'pages.partials.product.card' %}
+              </div>
+          {% endfor %}
+      </div>
+  </div>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const swiper = new Swiper('.best-offers-slider', {
+              // Optional parameters
+              // loop: true,
+              spaceBetween : 30,
+              slidesPerView: 'auto',
+
+              // Navigation arrows
+              navigation: {
+                  nextEl: '.slider-next',
+                  prevEl: '.slider-prev',
+              },
+
+              breakpoints: {
+                  // when window width is >= 980px
+                  980: {
+                      slidesPerView: 4,
+                  }
+              }
+
+          });
+
+      });
+
+  </script>
 </section>
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const swiper = new Swiper('.best-offers-slider', {
-            // Optional parameters
-            // loop: true,
-            spaceBetween : 30,
-            slidesPerView: 'auto',
-
-            // Navigation arrows
-            navigation: {
-                nextEl: '.slider-next',
-                prevEl: '.slider-prev',
-            },
-
-            breakpoints: {
-                // when window width is >= 980px
-                980: {
-                    slidesPerView: 4,
-                }
-            }
-
-        });
-
-    });
-
-</script>
