@@ -21,13 +21,14 @@
           <div class="flex items-center">
             {% component 'header.user-menu' %}
             <div class="flex items-center ms-4" id="main-cart-btn">
-              <a href="/cart" class="me-1 relative ">
+              <a href="{{ link('cart') }}" class="me-1 relative ">
                 <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
-                <div class="opacity-0 anime-count absolute top-1 -right-2 bg-primary text-reverse w-6 h-6 rounded-full flex items-start justify-center font-bold text-sm">23</div>
+                <div data-cart-badge class="opacity-0 anime-count absolute top-1 -right-2 bg-primary text-reverse w-6 h-6 rounded-full flex items-start justify-center font-bold text-sm">
+                  {{ cart_summary.count }}</div>
               </a>
               <div class="whitespace-nowrap">
-                <p class="leading-3 opacity-60">السلة</p>
-                <b class="leading-3">8,563 ر.س</b>
+                <p class="leading-3 opacity-60">{{trans('blocks.header.cart')}}</p>
+                <b class="leading-3" data-cart-total>{{ cart_summary.amount }}</b>
               </div>
             </div>
 

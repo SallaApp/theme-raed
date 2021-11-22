@@ -1,8 +1,9 @@
-{# view options:
+{#
+view options:
  1- is_horizontal = false  // display horizonal card
  2- is_special = false  // display special product with count down
 
-*Notice: if marchent wants equal image, {{store.product_image_type}} will be (contain|cover) if not will be empty.
+*Notice: if marchent wants equal image, {{store.product_image_type}} will be (contain|cover) if not, it will be empty.
 #}
 <div id="{{ product.id }}"
      class='product-entry {{ block_classes ?? '' }}{{ is_special?'product-entry--special':'' }} {{ is_horizontal?'product-entry--horizontal md:flex-row':'product-entry--vertical' }} relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
@@ -99,16 +100,15 @@
         </div>
         <div class="flex items-center mt-auto">
             {# add to cart #}
-            <button x-data="initAddToCart()" @click="addToCart('{{ product.id }}')"
-                    {% if not product.is_available %} disabled {% endif %}
+            <button  data-on-click="cart::quick-add" data-id="{{ product.id }}" {% if not product.is_available %} disabled {% endif %}
                     class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
                 {{ trans('pages.cart.add_to_cart') }}
             </button>
             {# add-to-favorite #}
             <div class="text-gray-text">
-                <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                        class="w-10 h-10 focus:outline-none">
-                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                <button class="w-10 h-10 focus:outline-none">
+                    {# sicon-heart #}
+                    <i class="sicon-heart-off"></i>
                 </button>
             </div>
         </div>
@@ -116,42 +116,22 @@
 </div>
 {# TODO:: Move scripts To js file #}
 <script>
-    function initAddToCart() {
-        return {
-            addToCart: function (id) {
-                let newId = id.replace(/product_/g, '');
-                window.addTocartAnimation(newId);
-            }
-        }
-    }
-
-    function initAddToFavorite() {
-        return {
-            reminderModal : false,
-            inFavorite    : false,
-            showMore      : false,
-            toggleFavorite: function () {
-                this.inFavorite = !this.inFavorite;
-            },
-        }
-    }
-
-    function initDonation() {
-        return {
-            donationAmount: '',
-            isDonationAdded: false,
-            isShowCopounError: false,
-            addDonation: function () {
-                if (this.donationAmount) {
-                    this.isShowCopounError = false;
-                    this.isDonationAdded = !this.isDonationAdded;
-                    if (!this.isDonationAdded) {
-                        this.donationAmount = '';
-                    }
-                } else {
-                    this.isShowCopounError = true;
-                }
-            }
-        }
-    }
+    // function initDonation() {
+    //     return {
+    //         donationAmount: '',
+    //         isDonationAdded: false,
+    //         isShowCopounError: false,
+    //         addDonation: function () {
+    //             if (this.donationAmount) {
+    //                 this.isShowCopounError = false;
+    //                 this.isDonationAdded = !this.isDonationAdded;
+    //                 if (!this.isDonationAdded) {
+    //                     this.donationAmount = '';
+    //                 }
+    //             } else {
+    //                 this.isShowCopounError = true;
+    //             }
+    //         }
+    //     }
+    // }
 </script>
