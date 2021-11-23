@@ -1,5 +1,5 @@
 const path = require('path');
-const ThemeWatcher = require('@sallaapp/theme-utils/WatcherPlugin');
+const ThemeWatcher = require('@salla.sa/twilight/watcher');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
@@ -14,7 +14,6 @@ module.exports = {
     output : {
         path : path.resolve(__dirname, "assets", "dist"),
         clean: true,
-        // filename: '[name]',
     },
     stats  : {
         modules                : false,

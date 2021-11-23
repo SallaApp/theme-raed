@@ -5,7 +5,10 @@ module.exports = {
     mode: 'jit',
     purge   : {
         enabled: true,
-        content: ["views/**/*.twig", "node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt"]
+        content: [
+            "views/**/*.twig",
+            require('@salla.sa/twilight/tailwind_css_list')
+        ]
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {
@@ -146,6 +149,6 @@ module.exports = {
       require('tailwindcss-rtl'),
       require('@tailwindcss/forms'),
       require('@tailwindcss/jit'),
-      require('@salla.sa/twilight-tailwind-theme')
+      require('@salla.sa/twilight/tailwind')
     ],
 }
