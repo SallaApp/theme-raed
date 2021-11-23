@@ -3,48 +3,50 @@
       <div class="tabs text-center pb-10 space-s-1 md:space-s-4 whitespace-nowrap overflow-x-auto hide-scroll">
           {% for section in items %}
               <button @click.prevent="switchTab('featured-tab-{{ section.id }}')"
-                      :class="currentTab === 'featured-tab-{{ section.id }}' ? 'btn-primary' : 'btn-outline-primary'"
-                      class="cursor-pointer btn">{{ section.title }}</button>
+                      :class="currentTab === 'featured-tab-{{ section.id }}' ? 'btn-primary text-white' : ''"
+                      class="cursor-pointer btn-outline-primary btn">{{ section.title }}</button>
           {% endfor %}
       </div>
 
-      {% for section in items %}
-          <div x-show="currentTab === 'featured-tab-{{ section.id }}'" id="featured-tab-{{ section.id }}" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class="swiper pb-10 tabs-slider">
-              {% if is_slider %}
-                  <div class="swiper-wrapper flex -mx-5 lg:-mx-3.75 w-[calc(100%+68px)] lg:w-[calc(100%+28px)]">
+      <div class="tabs-wrapper">
+        {% for section in items %}
+            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" id="featured-tab-{{ section.id }}" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class="swiper pb-10 tabs-slider">
+                {% if is_slider %}
+                    <div class="swiper-wrapper flex -mx-5 lg:-mx-3.75 w-[calc(100%+68px)] lg:w-[calc(100%+28px)]">
+                        {% for product in section.products %}
+                            <div class="h-auto swiper-slide tabs-slider__slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-3.75">
+                                {% include 'pages.partials.product.card' %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center pt-7 space-s-3" dir="rtl">
+                        <button class="slider-prev focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                            <i class="text-gray-text sicon-keyboard_arrow_right"></i>
+                        </button>
+                        <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                            <i class="text-gray-text sicon-keyboard_arrow_left"></i>
+                        </button>
+                    </div>
+                {% else %}
+                  <section>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       {% for product in section.products %}
-                          <div class="h-auto swiper-slide tabs-slider__slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-3.75">
-                              {% include 'pages.partials.product.card' %}
-                          </div>
+                                    <div class="featured-item-style2">
+                        {% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
+                                    </div>
                       {% endfor %}
-                  </div>
-                  <div class="text-center pt-7 space-s-3" dir="rtl">
-                      <button class="slider-prev focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
-                          <i class="text-gray-text sicon-keyboard_arrow_right"></i>
-                      </button>
-                      <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
-                          <i class="text-gray-text sicon-keyboard_arrow_left"></i>
-                      </button>
-                  </div>
-              {% else %}
-                {# without slider #}
-        <section>
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {% for product in section.products %}
-                          <div class="featured-item-style2">
-              {% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
-                          </div>
-            {% endfor %}
-          </div>
-        </section>
-              {% endif %}
-          </div>
-      {% endfor %}
+                    </div>
+                  </section>
+                {% endif %}
+            </div>
+        {% endfor %}
+      </div>
   </div>
 
   {# TODO:: move to js file #}
   <script>
       function initTabs() {
+          document.querySelector('.s-block--tabsProdutcs').classList.add('tabs-initialized');
           return {
               currentTab: '',
               switchTab : function (tabId) {
@@ -61,7 +63,7 @@
           const swiper = new Swiper('.tabs-slider', {
               //spaceBetween : 30,
               slidesPerView: 'auto',
-              slidesPerView: 4,
+              //slidesPerView: 4,
 
               // Navigation arrows
               navigation: {
