@@ -13,7 +13,7 @@ jobs:
 
       - name: npm run production
         run: |
-          npm config set registry https://npm.pkg.github.com/sallaapp
+          @sallaapp:registry=https://npm.pkg.github.com
           echo "//npm.pkg.github.com/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" >> ~/.npmrc
           npm install cross-env
           npm install
