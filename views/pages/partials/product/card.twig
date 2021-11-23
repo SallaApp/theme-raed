@@ -5,7 +5,7 @@ view options:
 
 *Notice: if marchent wants equal image, {{store.product_image_type}} will be (contain|cover) if not, it will be empty.
 #}
-<div id="{{ product.id }}"
+<div id="product_{{ product.id }}"
      class='product-entry {{ block_classes ?? '' }}{{ is_special?'product-entry--special':'' }} {{ is_horizontal?'product-entry--horizontal md:flex-row':'product-entry--vertical' }} relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
     <a href="{{ product.url }}"
        class='product-entry__image relative overflow-hidden hover:opacity-90 w-full {{ is_special?(store.product_image_type?'sm:h-500': ''):(store.product_image_type?'h-40':'') }} {{ is_horizontal?"md:h-full md:w-60":"" }}'>
@@ -99,12 +99,10 @@ view options:
             {% endif %}
         </div>
         <div class="flex items-center mt-auto">
-            {# add to cart #}
-            <button  data-on-click="cart::quick-add" data-id="{{ product.id }}" {% if not product.is_available %} disabled {% endif %}
+            <button data-on-click="cart::quick-add" data-id="{{ product.id }}" {% if not product.is_available %} disabled {% endif %}
                     class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
                 {{ trans('pages.cart.add_to_cart') }}
             </button>
-            {# add-to-favorite #}
             <div class="text-gray-text">
                 <button class="w-10 h-10 focus:outline-none">
                     {# sicon-heart #}
