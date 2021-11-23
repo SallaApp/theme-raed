@@ -51,76 +51,74 @@
     }
 ] %}
 
-<section class="s-block s-block--slider-with-bg first-of-type:mt-0 {{ is_repeated?'repeated-block mt-8':'mt-16' }}">
-    <div class="bg-gray-bg2 pb-20">
-        <div class="h-full-banner-bg transition-opacity hover:opacity-95 bg-center bg-cover text-white rounded-md  relative"
-             style="background-image: url('{{ asset('images/banners/banner-1.jpg') }}');">
-            <div class="container pt-20 relative z-20">
-                <div>
-                    <h3 class="text-lg font-bold leading-12">وحدات تحكم متوافق مع بلاي ستيشن 3</h3>
-                    <p class="text-sm mb-8">تصميم مريح لبصمة اليد، استجابة بالاهتزاز Dualshock، تجربة لعب سهلة
-                        وممتعة</p>
-                </div>
-            </div>
-            <div class="overlay h-full w-full bg-dark opacity-60 absolute top-0 left-0 z-10"></div>
-        </div>
+<section class="s-block s-block--slider-with-bg bg-gray-100 pb-16 first-of-type:mt-0 {{ is_repeated?'repeated-block':'mt-16' }}"> 
+  <div class="h-full-banner-bg transition-opacity hover:opacity-95 bg-center bg-cover text-white rounded-md  relative"
+        style="background-image: url('{{ asset('images/banners/banner-1.jpg') }}');">
+      <div class="container pt-20 relative z-20">
+          <div>
+              <h3 class="text-lg font-bold leading-12">وحدات تحكم متوافق مع بلاي ستيشن 3</h3>
+              <p class="text-sm mb-8">تصميم مريح لبصمة اليد، استجابة بالاهتزاز Dualshock، تجربة لعب سهلة
+                  وممتعة</p>
+          </div>
+      </div>
+      <div class="overlay h-full w-full bg-dark opacity-60 absolute top-0 left-0 z-10"></div>
+  </div>
 
-        <div class="container pe-0 lg:px-5 relative z-20 -mt-60">
-            <div class="swiper  product-slider">
-                <div class="flex justify-between mb-8 pe-5 md:px-0">
-                    <a href="#"
-                       class="inline-block text-white text-sm border rounded-full font-bold px-10 h-10 leading-10">تصفح
-                        المنتجات</a>
+  <div class="container pe-0 lg:px-5 relative z-20 -mt-60">
+      <div class="swiper  product-slider">
+          <div class="flex justify-between mb-8 pe-5 md:px-0">
+              <a href="#"
+                  class="inline-block text-white text-sm border rounded-full font-bold px-10 h-10 leading-10">تصفح
+                  المنتجات</a>
 
-                    <!-- slider arrows -->
-                    <div class="hidden md:block space-s-4" dir="rtl">
-                        <button class="slider-prev  focus:outline-none border border-white text-dark rounded-full w-10 h-10">
-                            <i class="text-white  text-xl sicon-keyboard_arrow_right"></i>
-                        </button>
-                        <button class="slider-next focus:outline-none border border-white text-dark rounded-full w-10 h-10">
-                            <i class="text-white text-xl  sicon-keyboard_arrow_left"></i>
-                        </button>
-                    </div>
+              <!-- slider arrows -->
+              <div class="hidden md:block space-s-4" dir="rtl">
+                  <button class="slider-prev  focus:outline-none border border-white text-dark rounded-full w-10 h-10">
+                      <i class="text-white  text-xl sicon-keyboard_arrow_right"></i>
+                  </button>
+                  <button class="slider-next focus:outline-none border border-white text-dark rounded-full w-10 h-10">
+                      <i class="text-white text-xl  sicon-keyboard_arrow_left"></i>
+                  </button>
+              </div>
 
-                </div>
-                <div class="swiper-wrapper">
-                    {% for product in products %}
-                        <div class="swiper-slide product-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
-                            {% include 'pages.partials.product.card' %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
+          </div>
+          <div class="swiper-wrapper">
+              {% for product in products %}
+                  <div class="swiper-slide product-slider__slide w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+                      {% include 'pages.partials.product.card' %}
+                  </div>
+              {% endfor %}
+          </div>
+      </div>
 
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const swiper = new Swiper('.product-slider', {
-                        // Optional parameters
+      <script>
+          document.addEventListener('DOMContentLoaded', function () {
+              const swiper = new Swiper('.product-slider', {
+                  // Optional parameters
 
-                        spaceBetween : 30,
-                        slidesPerView: "auto",
-                        navigation   : {
-                            nextEl: '.slider-next',
-                            prevEl: '.slider-prev',
-                        },
+                  spaceBetween : 30,
+                  slidesPerView: "auto",
+                  navigation   : {
+                      nextEl: '.slider-next',
+                      prevEl: '.slider-prev',
+                  },
 
-                        breakpoints: {
-                            // when window width is >= 980
-                            980: {
-                                slidesPerView: 4,
+                  breakpoints: {
+                      // when window width is >= 980
+                      980: {
+                          slidesPerView: 4,
 
-                                navigation: {
-                                    nextEl: '.slider-next',
-                                    prevEl: '.slider-prev',
-                                },
-                            }
-                        }
+                          navigation: {
+                              nextEl: '.slider-next',
+                              prevEl: '.slider-prev',
+                          },
+                      }
+                  }
 
-                    });
+              });
 
-                });
-            </script>
-        </div>
-    </div>
+          });
+      </script>
+  </div>
 </section>
