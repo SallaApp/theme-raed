@@ -13,7 +13,7 @@ jobs:
 
       - name: npm run production
         run: |
-          @${{secrets.GIT_DEVOPS_USERNAME}}:registry=https://npm.pkg.github.com/sallaapp
+          echo @${{secrets.GIT_DEVOPS_USERNAME}}:registry=https://npm.pkg.github.com/sallaapp >> ~/.npmrc
           //npm.pkg.github.com/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}
           registry=https://registry.npmjs.org
           npm install cross-env
