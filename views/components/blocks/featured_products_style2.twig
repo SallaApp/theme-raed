@@ -1,4 +1,4 @@
-<section class="s-block s-block--tabsProdutcs bg-gray-bg2 pb-8 {{ is_repeated?'repeated-block pt-8':'mt-16 pt-16' }}">
+<section class="s-block s-block--tabsProdutcs bg-gray-bg2 pb-8 first-of-type:mt-0 {{ is_repeated?'repeated-block pt-8':'mt-16 pt-16' }}">
   <div class="container pe-0 lg:px-5" x-data="initTabs()"  x-init="currentTab = 'featured-tab-{{ items[0].id }}'">
       <div class="tabs text-center pb-10 space-s-1 md:space-s-4 whitespace-nowrap overflow-x-auto hide-scroll">
           {% for section in items %}
@@ -11,19 +11,19 @@
       {% for section in items %}
           <div x-show="currentTab === 'featured-tab-{{ section.id }}'" id="featured-tab-{{ section.id }}" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class="swiper pb-10 tabs-slider">
               {% if is_slider %}
-                  <div class="swiper-wrapper">
+                  <div class="swiper-wrapper flex -mx-5 lg:-mx-3.75 w-[calc(100%+68px)] lg:w-[calc(100%+28px)]">
                       {% for product in section.products %}
-                          <div class="h-auto swiper-slide tabs-slider__slide featured-item-style2 opacity-0 w-10/12 sm:w-8/12 md:w-5/12 lg:w-auto">
+                          <div class="h-auto swiper-slide tabs-slider__slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-3.75">
                               {% include 'pages.partials.product.card' %}
                           </div>
                       {% endfor %}
                   </div>
                   <div class="text-center pt-7 space-s-3" dir="rtl">
-                      <button class="slider-prev  focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
+                      <button class="slider-prev focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
                           <i class="text-gray-text sicon-keyboard_arrow_right"></i>
                       </button>
                       <button class="slider-next focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
-                          <i class="text-gray-text  sicon-keyboard_arrow_left"></i>
+                          <i class="text-gray-text sicon-keyboard_arrow_left"></i>
                       </button>
                   </div>
               {% else %}
@@ -59,18 +59,15 @@
 
       function initSlider(){
           const swiper = new Swiper('.tabs-slider', {
-              spaceBetween : 30,
+              //spaceBetween : 30,
               slidesPerView: 'auto',
+              slidesPerView: 4,
+
               // Navigation arrows
               navigation: {
                   nextEl: '.slider-next',
                   prevEl: '.slider-prev',
               },
-              breakpoints: {
-                  980: {
-                      slidesPerView: 4,
-                  }
-              }
           });
       }
 
