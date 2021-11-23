@@ -45,17 +45,14 @@ rounded-lg justify-around overflow-hidden'>
             {% endif %}
         </div>
         <div class="flex items-center">
-            {# add to cart #}
-            <button x-data="initAddToCart()" @click="addToCart('{{ product.id }}')"
+            <button data-on-click="cart::quick-add" data-id="{{ product.id }}"
                     {% if not product.is_available %} disabled {% endif %}
                     class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
                 {{ trans('pages.cart.add_to_cart') }}
             </button>
-            {# add-to-favorite #}
             <div class="text-white">
-                <button x-data="initAddToFavorite()" @click="toggleFavorite()"
-                        class="w-10 h-10 focus:outline-none">
-                    <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
+                <button class="w-10 h-10 focus:outline-none">
+                    <i class="sicon-heart-off"></i>
                 </button>
             </div>
         </div>

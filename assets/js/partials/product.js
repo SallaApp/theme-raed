@@ -1,10 +1,20 @@
-salla.cart.event.onItemAdded(function(response, productId) {
+/**
+ * @typedef {{  total               : string,
+ *              shipping_cost       : number,
+ *              final_total         : string,
+ *              sub_total           : string,
+ *              count               : number,
+ *              total_discounted    : string,
+ *              hasOffer            : boolean}} CartSummary
+ */
+salla.cart.event.onUpdated(function (cartSummary) {
+    /** @type CartSummary cartSummary*/
+    document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = cartSummary.final_total);
+    document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = cartSummary.count);
+});
+salla.cart.event.onItemAdded(function (response, productId) {
     // remove .cart-thumb el from body ---
-    if (document.querySelectorAll('.cart-thumb').length) {
-        document.querySelectorAll('.cart-thumb').forEach(el => {
-            el.remove();
-        });
-    }
+    document.querySelectorAll('.cart-thumb').forEach(el => el.remove());
 
     /*let parentNode = findAncestor(event.target, '.product-block');
     console.log(parentNode);*/
@@ -17,7 +27,7 @@ salla.cart.event.onItemAdded(function(response, productId) {
 
     // get thumb position ---
     let
-        productBlock = document.getElementById('product_' + productID),
+        productBlock = document.getElementById('product_' + productId),
         productImg = productBlock.getElementsByTagName('img')[0],
         position = productImg.getBoundingClientRect(),
         width = productImg.offsetWidth + 'px',
