@@ -13,8 +13,9 @@ jobs:
 
       - name: npm run production
         run: |
-          npm config set registry https://npm.pkg.github.com/sallaapp
+          echo @${{secrets.GIT_DEVOPS_USERNAME}}:registry=https://npm.pkg.github.com/sallaapp
           echo "//npm.pkg.github.com/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" >> ~/.npmrc
+          registry=https://registry.npmjs.org
           npm install cross-env
           npm install
           npm run production
