@@ -55,6 +55,10 @@ module.exports = {
                 'reverse'      : 'var(--color-text-reverse)',
                 'reverse-dark' : '#C6C7CE',
             },
+            spacing: {
+              '3.75' : '15px',
+              '7.5' : '30px',
+            },
             borderRadius       : {
                 'large': '22px',
                 'big'  : '40px',

@@ -22,31 +22,36 @@
     {
         "title": "سوبر ماركت",
         "icon": "sicon-shipping-fast"
+    },
+    {
+        "title": "الجمال والعطور",
+        "icon": "sicon-macro"
+    },
+    {
+        "title": "سوبر ماركت",
+        "icon": "sicon-shipping-fast"
     }
 ] %}
 
 <section class="s-block s-block--categories relative z-10 overflow-hidden {{ is_repeated?'repeated-block mt-8':'mt-16' }}">
     <div class="container">
-        <div class="-mx-11">
-            <div class="swiper px-11 category-slider hidden">
-                <div class="flex justify-between mb-8">
-                    <h2 class="font-bold text-lg text-white">الأقسام</h2>
-                </div>
-                <div class="swiper-wrapper">
-                    <!-- Slides -->
-                    {% for link in links %}
-                    <div class="swiper-slide category-slider__slide w-4/6 sm:w-2/6 md:w-3/12">
-                        <a href="#"
-                           class="bg-white rounded-md h-36 flex flex-col items-center justify-center text-gray-text transition-shadow duration-500 hover:shadow-default hover:text-text-dark">
-                            <i class="{{ link.icon }} text-primary text-icon-lg mb-4 cat-item"></i>
-                            <h4 class="font-bold text-sm cat-item">{{ link.title }}</h4>
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
+      <div class="flex justify-between mb-8">
+        <h2 class="font-bold text-lg text-white">الأقسام</h2>
+      </div>
+      <div class="swiper category-slider -mx-5 lg:-mx-3.75 w-[calc(100%+68px)] lg:w-[calc(100%+28px)]">
+          <div class="swiper-wrapper flex">
+              <!-- Slides -->
+              {% for link in links %}
+              <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-3.75">
+                  <a href="#"
+                      class="bg-white rounded-md h-36 mb-5 flex flex-col items-center justify-center text-gray-text transition-shadow duration-500 hover:shadow-default hover:text-text-dark">
+                      <i class="{{ link.icon }} text-primary text-icon-lg mb-4 cat-item"></i>
+                      <h4 class="font-bold text-sm cat-item">{{ link.title }}</h4>
+                  </a>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
     </div>
 
   <script>
@@ -66,11 +71,10 @@
           animatedItems();
           const swiper = new Swiper('.category-slider', {
               // Optional parameters
-              spaceBetween : 30,
+              //spaceBetween : 30,
+              slidesPerView : 6,
               slidesPerView: "auto",
-
               // loop: true,
-
               // Navigation arrows
               // navigation: {
               //   nextEl: '.slider-next',
@@ -94,10 +98,10 @@
                   // },
 
                   1200: {
-                      slidesPerView : 6,
+                      
                       centeredSlides: false,
                       loop          : false
-                  }
+                  },
               }
 
           });
