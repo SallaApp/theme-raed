@@ -1,4 +1,3 @@
-require('@salla.sa/twilight');
 require('./partials/initate');
 require('./partials/product');
 require('./partials/helpers');

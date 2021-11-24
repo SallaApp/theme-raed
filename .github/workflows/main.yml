@@ -9,15 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # @see https://github.com/anothrNick/github-tag-action#bumping
-
-      - name: npm run production
+      - name: npm production && publish 
         run: |
-          echo @${{secrets.GIT_DEVOPS_USERNAME}}:registry=https://npm.pkg.github.com/sallaapp
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" >> ~/.npmrc
-          registry=https://registry.npmjs.org
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" >> ~/.npmrc
           npm install cross-env
-          npm install
+          npm install 
           npm run production
       - name: Commit Assets If Different
         run: |

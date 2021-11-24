@@ -1,21 +1,21 @@
-<section class="breadcrumb">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                {% if breadcrumbs is not empty %}
-                    {% for breadcrumb in breadcrumbs %}
-                        {% if loop.first %}
-                            <a href="{{ breadcrumb.url }}" aria-label="Home Page"><i class="sicon-home"></i> </a>
-                            <span class="separate">/</span>
-                        {% elseif loop.last %}
-                            <span>{{ breadcrumb.title }}</span>
-                        {% else %}
-                            <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
-                            <span class="separate">/</span>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</section>
+# ====== ScopeData  ====== #
+| Variable                 | Type                  | Description                           | @see                                                   |
+|--------------------------|-----------------------|---------------------------------------|--------------------------------------------------------|
+| breadcrumbs              | BreadcrumbObject[]    | A list of breadcrumb for current page | https://docs.salla.dev/themes/objects/BreadcrumbObject |
+| breadcrumbs[].title      | A title of breadcrumb |                                       |                                                        |
+| breadcrumbs[].url        | A url of breadcrumb   |                                       |                                                        |
+| breadcrumbs[].loop.last  |                       |                                       |                                                        |
+| breadcrumbs[].loop.first |                       |                                       |                                                        |
+#}
+<nav class="w-full py-5">
+    <ol class="list-reset flex items-center text-sm {{ is_dark ? 'text-reverse' : '' }}">
+        {% for breadcrumb in breadcrumbs %}
+            {% if not loop.last %}
+                <li><a href="{{ breadcrumb.url }}" class="fix-align text-primary {{ is_dark ? 'text-reverse' : '' }}">{{ breadcrumb.title }}</a></li>
+                <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+            {% else %}
+                <li><span class="fix-align">{{ breadcrumb.title }}</span></li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</nav>

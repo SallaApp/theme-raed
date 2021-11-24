@@ -1,10 +1,11 @@
-import TelInput from "intl-tel-input";
-import Alpine from 'alpinejs'
-
+require('@salla.sa/twilight');
+require('./product');
+require('./helpers');
 require('mmenu-light');
 require('../plugins/lazyload.js');
+const TelInput = require('intl-tel-input');
 window.anime = require('animejs').default;
-window.Alpine = Alpine;
+window.Alpine = require('alpinejs').default;
 Alpine.start();
 salla.init();
 

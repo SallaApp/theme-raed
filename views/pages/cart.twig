@@ -1,203 +1,201 @@
 {% extends "layouts.master" %}
+{% block styles %}
+	{# TODO:: Move To file #}
+	<style>
+		.cart-items-count span:after{
+			content: ' x ';
+		}
+	</style>
+{% endblock %}
 {% block content %}
-	<section class="page-wrapper page--cart">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-10 offset-lg-1 col-md-12">
-					<div class="cart-progress d-flex justify-content-between align-items-center">
-						<div class="step step-1 is-active">
-							<span class="step__icon">
-								<i class="sicon-cart"></i>
-								<span class="badge badge--small badge--circular badge--danger quantity" id="cart-items-count-badge">{{ items|length }}</span>
-							</span>
-							<div class="step__title">
-								<h3 class="title">{{ trans('common.titles.cart') }}</h3>
-								<span class="font-sm color-muted">{{ trans('pages.cart.step_one') }}</span>
-							</div>
+	<main id="main">
+		<div class="container px-3 xs:px-5">
+			 {% component breadcrumbs with {is_dark:true} %}
+			<div class="flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
+				<div class="main-content flex-1 w-full">
+					{% for item in items %}
+						{% include 'pages.temp_cart_item' with {moreFields:item.has_options} %}
+					{% else %}
+						<div class="h-full content-placeholder content-placeholder--cart text-gray-text pt-36 pb-20 flex items-center flex-col justify-center">
+                        <span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
+                            <i class="sicon-shopping-bag text-6xl block text-reverse-dark"></i>
+                        </span>
+							<p class="text-sm mb-5">{{ trans('pages.cart.empty_cart') }}</p>
+							<a href="{{ link('/') }}" class="btn btn-outline-primary">{{ trans('common.elements.back_home') }}</a>
 						</div>
-						<div class="step step-2">
-							<span class="step__icon">
-								<i class="sicon-full-wallet"></i>
-							</span>
-							<div class="step__title">
-								<h3 class="title">{{ trans('pages.cart.complete_order') }}</h3>
-								<span class="font-sm color-muted">{{ trans('pages.cart.step_two') }}</span>
-							</div>
+					{% endfor %}
+				</div>
+				<!-- sidebar -->
+				<div x-data="initCart()" x-cloak class="sticky -top-24 w-full lg:w-96  lg:ms-8">
+						{% component 'free-shipping' %}
+					<div
+							class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
+						<h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
+						<div class="flex justify-between text-sm mb-5">
+							<span class="text-gray-text cart-items-count">{{ pluralize("blocks.header.products_count", items|length|number)|raw }}</span>
+							<b>{{ cart.sub_total|money }}</b>
 						</div>
-					</div>
-					<div class="b-radius padded-30 bg-grey cart-elements-wrapper">
-						{% if items is not empty %}
-							<ul class="list list--table borderless cart-details">
-								<li class="list--table__head bg-white b-radius">
-									<div>
-										<span>{{ trans('pages.cart.item') }}</span>
-									</div>
-									<div>
-										<span>
-											{{ trans('pages.products.price') }}
-										</span>
-										<span>
-											{{ trans('pages.products.quantity') }}
-										</span>
-										<span class="text-left">
-											{{ trans('pages.cart.total') }}
-										</span>
-										<span class="delete-item"></span>
-									</div>
-								</li>
-								{% for item in items %}
-									{% set key_prefix=item.id %}
-									<li class="cart-product-entry padded-10 bg-white b-radius mb-30" id="item-{{ item.id }}">
-										<div class="wide form" salla-form-data data-on-change="cart-update-item">
-											<input type="hidden" name="id" value="{{ item.id }}">
-											<div class="product-block product-block--inline">
-												<div class="product-block__thumb center">
-													<a class="d-flex" href="{{ item.url }}">
-														<span class="avatar-wrapper avatar-wrapper--bordered avatar-wrapper--circular avatar-wrapper--small {% if not item.product.image.url %}placeholder{% endif %}">
-															<img class="lazy-load" data-src="{{ item.product_image ? item.product_image : asset('images/img_loader.png') }}" alt="{{ item.product_name }}">
-														</span>
-														<span>
-															<h6 class="title title--small">{{ item.product_name }}</h6>
-														</span>
-													</a>
-												</div>
-												<div class="product-block__info">
-													<span class="{{ item.is_donation?'cart-item-total':'' }} cart-item-price" data-title="{{ trans('pages.products.price') }}">
-														{{ item.product_price_formatted }}
-													</span>
-													{% if item.is_donation %}
-														<span data-title="{{ trans('pages.products.quantity') }}">
-															--
-														</span>
-													{% elseif item.hide_quantity or not item.is_available %}
-														<span data-title="{{ trans('pages.products.quantity') }}">
-															<input type="hidden" value="{{ item.quantity }}" name="quantity"/>
-															<span>{{ item.quantity }}</span>
-														</span>
-													{% else %}
-														<span data-title="{{ trans('pages.products.quantity') }}">
-															<div class="qty qty--small" data-on-keyup="cart-update-item">
-																<button type="button" data-on-click="cart-update-item" data-qty="add">
-																	<i class="sicon-add"></i>
-																</button>
-																<input data-max_quantity="{{ product.max_quantity }}" max="{{ product.max_quantity }}" value="{{ item.quantity }}" data-quantity="{{ item.quantity }}" data-digits="1" name="quantity" type="text" id="qty-{{ item.id }}" min="1"/>
-																<button type="button" data-on-click="cart-update-item" data-qty="sub">
-																	<i class="sicon-minus"></i>
-																</button>
-															</div>
-														</span>
-													{% endif %}
-													<span class="font-bold text-left cart-item-total" data-title="{{ trans('pages.cart.total') }}">
-														{% if item.is_available %}
-															{{ item.total_product_price_formatted }}
-														{% else %}
-															{{ trans('pages.cart.out_of_stock') }}
-														{% endif %}
-													</span>
-													<span class="delete-entry">
-														<button class="btn btn--circular btn--delete-item" data-on-click="cart-delete-item" data-delete-item="item-{{ item.id }}">
-															<i class="sicon-cancel"></i>
-														</button>
-													</span>
-												</div>
-											</div>
-											{% if item.has_options %}
-												<div class="cart-product-entry__options">
-													{% include 'pages.partials.product.fields' with {product:item} %}
-												</div>
-											{% endif %}
-										</div>
-									</li>
-								{% endfor %}
-								<!-- Cart subtotal -->
-								<li class="total padded-20 bg-white b-radius {{ store.settings.product.show_price_with_tax?'mb-5':'mb-30' }}">
-									<div class="wide no-p summary">
-										{% if store.settings.cart.can_apply_coupon %}
-											<form class="form form--coupon {{ cart.coupon ? 'coupon-applied' : '' }}">
-												<div class="form-group">
-													<input type="hidden" name="cart_id" value="{{ cart.id }}" />
-													<input placeholder="{{ trans('pages.cart.coupon_placeholder') }}" class="form-control coupone-code__input" id="coupone-input" name="coupon" type="text" value="{{ cart.coupon }}"/>
-													<button class="coupone-code__submit btn btn--rounded btn--padded less btn--primary" id="btn-add-coupon" data-on-click="coupon-add">
-														{{ trans('pages.cart.save_coupon') }}
-													</button>
-													<button class="coupone-code__submit btn btn--rounded btn--padded less btn--primary" id="btn-remove-coupon" data-on-click="coupon-remove">
-														<i class="sicon-cancel d-block ty-1u"></i>
-													</button>
-												</div>
-											</form>
-										{% endif %}
-										<div class="mt-0 mb-0">
-											<span>{{ trans('pages.cart.items_count') }}</span>
-											<span id="cart-items-count">{{ items|length|number }}</span>
-										</div>
-										<div class="sub-total">
-											<span>{{ trans("pages.cart.items_total") }}</span>
-											<span id="cart-sub-total">{{ cart.sub_total_price }}</span>
-										</div>
-										<div class="shipping {{ cart.has_shipping_cost?'':'hidden' }}">
-											<span>{{ trans('pages.cart.shipping_cost') }}</span>
-											<span id="cart-shipping-cost">{{ cart.display_shipping_cost_price }}</span>
-										</div>
-										<div class="discount {{ cart.has_discount?'':'hidden' }}">
-											<span>{{ trans('pages.cart.discount') }}</span>
-											<span id="cart-total-discount">-
-												{{ cart.display_discount_price }}</span>
-										</div>
-										<div class="total color-primary no-border">
-											<span>{{ trans('pages.cart.final_total') }}</span>
-											<span id="cart-final-total">{{ cart.final_total_price }}</span>
-										</div>
-										<div id="free-shipping-bar" class="wide d-flex flex-column my-10 free-shipping-wrapper">
-											{% component 'free-shipping' %}
-										</div>
-									</div>
-								</li>
-								{% if store.settings.product.show_price_with_tax %}
-									<li class="hints bg-hover-none mb-30">
-										<small class="d-block font-xsm color-muted mt-10">
-											* {{ trans('pages.cart.prices_taxed') }}
-										</small>
-									</li>
-								{% endif %}
-							</ul>
-							<button class="btn btn--wide btn--large btn--oval btn--primary btn--proceed next" data-function="hasApplePay" data-on-click="cart-submit">
-								{{ trans('pages.cart.complete_order') }}
-							</button>
-						{% else %}
-							<div class="not-found-products-msg white-bg mt-5">
-								<div class="white placeholder-block placeholder-block--empty-cart mt-20 mb-20">
-									<i class="sicon-cart"></i>
-									<p>{{ trans('pages.cart.empty_cart') }}</p>
-								</div>
-								<a href="{{ link('/') }}" class="btn btn--wide btn--padded btn--oval btn--primary">
-									{{ trans('common.elements.back_home') }}
-								</a>
+						<div class="flex justify-between text-sm mb-5 shipping {{ cart.has_shipping_cost?'':'hidden' }}">
+							<span class="text-gray-text">{{ trans('pages.cart.shipping_cost') }}</span>
+							<b>{{cart.real_shipping_cost|money}}</b>
+						</div>
+
+						{% if store.settings.cart.can_apply_coupon %}
+						<div class="border-t border-border-color border-b py-5 mb-5">
+							<label for="copounCode" class="block text-sm ">{{trans('pages.cart.have_coupon')}}</label>
+							<div class="mt-2.5 relative">
+								<input type="text" @keyup="isShowCopounError = false" @keyup.enter="addCopoun()"
+									   placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
+									   x-model="copounCode" id="copounCode" name="copoun-code"
+									   :class="{'has-error': isShowCopounError}" class="pe-24 form-input"
+									   :disabled="isShowCopounDiscount">
+								<button @click="addCopoun(); $dispatch('foo')" type="button"
+										class="copoun-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn"
+										:class="isShowCopounDiscount ? 'btn-danger' : 'btn-default'">
+									<span x-show="!isShowCopounDiscount">تفعيل</span>
+									<i x-show="isShowCopounDiscount" class="sicon-cancel text-xl w-8"></i>
+								</button>
+							</div>
+							<!-- error msg -->
+							<span x-show="isShowCopounError" class="text-xs text-red-700" id="validationHelp">مثال لرسالة
+                            الخطأ.</span>
+						</div>
+						{% endif %}
+
+						<!-- copoun discount -->
+						<div x-show="{{ cart.has_discount?"true":"false" }}"
+							 x-transition:enter="transition-height ease-out duration-300"
+							 x-transition:enter-start="opacity-0 transfor h-0"
+							 x-transition:enter-end="opacity-100 transform h-10"
+							 x-transition:leave="transition-height ease-in duration-300"
+							 x-transition:leave-start="opacity-100 transform h-10"
+							 x-transition:leave-end="opacity-0 transform h-0" class="flex justify-between text-sm">
+							<span class="text-gray-text block  h-10">{{trans('pages.cart.discount')}}</span>
+							<b>- {{ cart.real_discount|money }}</b>
+						</div>
+
+						<div class="flex justify-between text-sm mb-5">
+							<span class="text-gray-text">{{ trans('pages.cart.final_total') }}</span>
+							<b>{{ cart.total|money }}</b>
+						</div>
+						{% if store.settings.product.show_price_with_tax %}
+							<div class="flex justify-between text-sm mb-5">
+								<small class="text-gray-text">
+									* {{ trans('pages.cart.prices_taxed') }}
+								</small>
 							</div>
 						{% endif %}
+
+						<button class="w-full btn btn-primary" data-function="hasApplePay" data-on-click="cart-submit">
+							{{ trans('pages.cart.complete_order') }}
+						</button>
+
 					</div>
+				</div>
+
+				<div
+						class="fixed md:hidden space-s-2 flex justify-center items-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-50">
+					<span class="text-gray-text">{{ trans('pages.cart.final_total') }}:</span>
+					<b>{{ cart.total|money }}</b>
 				</div>
 			</div>
 		</div>
-	</section>
+	</main>
 {% endblock %}
 
 {% block scripts %}
-	{% if items is empty %}
-		<script>
-			salla.cart.event.clearCartSummary();
-		</script>
-	{% endif %}
+
 	<script>
-		window.addEventListener("DOMContentLoaded", (event) => {
-            salla.document.event.onRequest((endPointUrl, formData, method, headers) => {
-                if (formData && formData.onClick == "cart-update-item" && formData.qty == 'sub' && formData.quantity == "1") {
-                    throw "Can't sub under number 1";
-                }
-            })
-        });
+
 		function hasApplePay() {
 			// let's check if the broswer has apple pay support!
 			return {'has_apple_pay': !!window.ApplePaySession};
+		}
+		document.addEventListener('DOMContentLoaded', () => {
+			{% if items is empty %}
+			salla.cart.event.clearCartSummary();
+			{% endif %}
+
+			salla.document.event.onRequest((endPointUrl, formData, method, headers) => {
+				if (formData && formData.onClick == "cart-update-item" && formData.qty == 'sub' && formData.quantity == "1") {
+					throw "Can't sub under number 1";
+				}
+			})
+			animatedItems()
+		})
+		// TODO: add timeline
+		function animatedItems() {
+			anime({
+				targets: '.free-shipping',
+				opacity: [0, 1],
+				duration: 2000,
+				translateX: [-20, 0],
+				delay: function (el, i) {
+					return i * 100;
+				},
+			});
+
+			anime({
+				targets: '.shipping-item',
+				opacity: [0, 1],
+				duration: 2000,
+				translateX: [-20, 0],
+				delay: function (el, i) {
+					return i * 100;
+				},
+			});
+
+			// change progress
+			document.querySelector('.progress-bg').style.width = '200px';
+		}
+		// cart
+		function initCart() {
+			return {
+				copounCode: '{{ cart.coupon }}',
+				isShowCopounDiscount: false,
+				isShowCopounError: false,
+				addCopoun: function () {
+					if (this.copounCode) {
+						this.isShowCopounError = false;
+						this.isShowCopounDiscount = !this.isShowCopounDiscount;
+						if (!this.isShowCopounDiscount) {
+							this.copounCode = '';
+						}
+					} else {
+						this.isShowCopounError = true;
+					}
+				}
+			}
+		}
+		//cart Item
+		function initCartItem() {
+			return {
+				itemQty: 1,
+				isRemoveItem: false,
+				removeItem: function (event) {
+					if (!this.isRemoveItem) {
+						this.isRemoveItem = true;
+						this.removeAnime();
+					}
+				},
+				removeAnime() {
+					let item = event.target.parentNode
+					anime({
+						targets: item,
+						height: '0', // -> from 'height' to '0',
+						'padding-top': '0',
+						margin: 0,
+						'padding-bottom': '0',
+						easing: 'easeInOutQuad',
+						duration: 500,
+						opacity: 0,
+						complete: function () {
+							item.remove()
+						}
+					});
+				}
+
+			}
 		}
 	</script>
 {% endblock %}
