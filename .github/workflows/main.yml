@@ -9,15 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 10
-      - run: npm install
-      - run: npm test
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          access: 'restricted'
+      - name: npm public 
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" >> ~/.npmrc
+          npm install 
       # @see https://github.com/anothrNick/github-tag-action#bumping
 
 #       - name: npm run production
