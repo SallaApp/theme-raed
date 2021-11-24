@@ -9,33 +9,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - run: npm install
+      - run: npm test
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: 'restricted'
       # @see https://github.com/anothrNick/github-tag-action#bumping
 
-      - name: npm run production
-        run: |
-          echo @${{secrets.GIT_DEVOPS_USERNAME}}:registry=https://npm.pkg.github.com/sallaapp
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" >> ~/.npmrc
-          registry=https://registry.npmjs.org
-          npm install cross-env
-          npm install
-          npm run production
-      - name: Commit Assets If Different
-        run: |
-          git add -f ./assets
-          git diff --cached --name-only
-          if git diff --cached --name-only ./assets | grep .; then
-           git config --global user.name ${{secrets.GIT_DEVOPS_USERNAME}}
-           git config --global user.email "${{secrets.GIT_DEVOPS_EMAIL}}@users.noreply.github.com"
-           git commit -m "Auto Build Assets 😎"
-           git push
-          else
-            echo "No New files gentrated for assets directory"
-          fi
-      - name: Auto Tagging
-        id: autotagger
-        uses: anothrNick/github-tag-action@1.13.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: false
-          RELEASE_BRANCHES: master
+#       - name: npm run production
+#         run: |
+#           echo @${{secrets.GIT_DEVOPS_USERNAME}}:registry=https://npm.pkg.github.com/sallaapp
+#           echo "//npm.pkg.github.com/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" >> ~/.npmrc
+#           registry=https://registry.npmjs.org
+#           npm install cross-env
+#           npm install
+#           npm run production
+#       - name: Commit Assets If Different
+#         run: |
+#           git add -f ./assets
+#           git diff --cached --name-only
+#           if git diff --cached --name-only ./assets | grep .; then
+#            git config --global user.name ${{secrets.GIT_DEVOPS_USERNAME}}
+#            git config --global user.email "${{secrets.GIT_DEVOPS_EMAIL}}@users.noreply.github.com"
+#            git commit -m "Auto Build Assets 😎"
+#            git push
+#           else
+#             echo "No New files gentrated for assets directory"
+#           fi
+#       - name: Auto Tagging
+#         id: autotagger
+#         uses: anothrNick/github-tag-action@1.13.0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           WITH_V: false
+#           RELEASE_BRANCHES: master
           DEFAULT_BUMP: patch
