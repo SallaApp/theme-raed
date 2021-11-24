@@ -1,19 +1,32 @@
-{% if has_free_shipping %}
-<div class="text-center color-primary wide free-shipping-applied mt-30">
-    {{ trans('pages.cart.has_free_shipping')| raw }}
-    <span class="emoji">🎉</span>
-</div>
-{% else %}                                                    &nbsp;
-    <div class="progress-bar progress-bar--small progress-bar--primary progress-bar--oval wide free-shipping-bar mt-30">
-        <div class="progress-bar__bg">
-            <div class="progress-bar__progress" style="width: {{ percent }}%">
-                {% if percent %}
-                    <i class="sicon-shipping-fast"></i>
-                {% endif %}
-            </div>
+<div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative">
+    <div class="flex space-s-3">
+        <div class="bg-primary text-white rounded-icon">
+            <i class="free-shipping opacity-0 sicon-shipping-fast"></i>
         </div>
-        <div class="font-regular font-xsm color-grey text-right mt-10">
-            {{  trans('pages.cart.free_shipping_alert', {'amount': total_until_free_total})| raw }}
+        <div class="flex-1">
+            <h4 class="shipping-item opacity-0 font-bold text-sm mb-1.5">{{trans('pages.cart.free_shipping')}}</h4>
+            {% if has_free_shipping %}
+                <p class="shipping-item opacity-0 text-sm font- text-gray-text free-shipping-applied">
+                    {{ trans('pages.cart.has_free_shipping')| raw }}
+                    <span class="emoji">🎉</span>
+                </p>
+            {% else %}
+                <p class="shipping-item opacity-0 text-sm font- text-gray-text">
+                    {{ trans('pages.cart.free_shipping_alert', {'amount': total_until_free_total})| raw }}
+                </p>
+            {% endif %}
         </div>
     </div>
-{% endif %}
+    {% if not has_free_shipping %}
+        <div class="mt-6" aria-hidden="true">
+            <div class="bg-border-color rounded-full  mb-1.5">
+                <div class="progress-bg transition-all duration-500 opacity0 h-4 bg-primary relative rounded-full flex justify-end"
+                     style="width: {{ percent }}%">
+                    {% if percent %}
+                        <p class="text-sm absolute -bottom-7 -end-6"><i class="sicon-shipping-fast"></i></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

@@ -126,30 +126,6 @@
 												</div>
 											</form>
 										{% endif %}
-										<div class="mt-0 mb-0">
-											<span>{{ trans('pages.cart.items_count') }}</span>
-											<span id="cart-items-count">{{ items|length|number }}</span>
-										</div>
-										<div class="sub-total">
-											<span>{{ trans("pages.cart.items_total") }}</span>
-											<span id="cart-sub-total">{{ cart.sub_total_price }}</span>
-										</div>
-										<div class="shipping {{ cart.has_shipping_cost?'':'hidden' }}">
-											<span>{{ trans('pages.cart.shipping_cost') }}</span>
-											<span id="cart-shipping-cost">{{ cart.display_shipping_cost_price }}</span>
-										</div>
-										<div class="discount {{ cart.has_discount?'':'hidden' }}">
-											<span>{{ trans('pages.cart.discount') }}</span>
-											<span id="cart-total-discount">-
-												{{ cart.display_discount_price }}</span>
-										</div>
-										<div class="total color-primary no-border">
-											<span>{{ trans('pages.cart.final_total') }}</span>
-											<span id="cart-final-total">{{ cart.final_total_price }}</span>
-										</div>
-										<div id="free-shipping-bar" class="wide d-flex flex-column my-10 free-shipping-wrapper">
-											{% component 'free-shipping' %}
-										</div>
 									</div>
 								</li>
 								{% if store.settings.product.show_price_with_tax %}
@@ -164,40 +140,10 @@
 								{{ trans('pages.cart.complete_order') }}
 							</button>
 						{% else %}
-							<div class="not-found-products-msg white-bg mt-5">
-								<div class="white placeholder-block placeholder-block--empty-cart mt-20 mb-20">
-									<i class="sicon-cart"></i>
-									<p>{{ trans('pages.cart.empty_cart') }}</p>
-								</div>
-								<a href="{{ link('/') }}" class="btn btn--wide btn--padded btn--oval btn--primary">
-									{{ trans('common.elements.back_home') }}
-								</a>
-							</div>
 						{% endif %}
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-{% endblock %}
-
-{% block scripts %}
-	{% if items is empty %}
-		<script>
-			salla.cart.event.clearCartSummary();
-		</script>
-	{% endif %}
-	<script>
-		window.addEventListener("DOMContentLoaded", (event) => {
-            salla.document.event.onRequest((endPointUrl, formData, method, headers) => {
-                if (formData && formData.onClick == "cart-update-item" && formData.qty == 'sub' && formData.quantity == "1") {
-                    throw "Can't sub under number 1";
-                }
-            })
-        });
-		function hasApplePay() {
-			// let's check if the broswer has apple pay support!
-			return {'has_apple_pay': !!window.ApplePaySession};
-		}
-	</script>
 {% endblock %}
