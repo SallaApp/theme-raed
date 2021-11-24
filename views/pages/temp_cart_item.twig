@@ -1,258 +1,270 @@
-<section x-data="initCartItem()" class="bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative" id="">
+{# ====== ScopeData  ====== #
+{
+    "item":{
+        "id":"int"
+    }
+}
+#}
+
+{% set key_prefix=item.id %}
+<section x-data="initCartItem({{ item.id }},{{ item.quantity }})" class="bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
+         id="item-{{ item.id }}" salla-form-data data-on-change="cart-update-item">
+    <input type="hidden" name="id" value="{{ item.id }}">
     <!-- product -->
     <div class="md:flex md:space-s-12 items-center justify-between mb-8">
         <div class="flex flex-1 space-s-4">
-            <img src="../images/products/product-3.jpg" alt="وحدة تحكم لمشغل العاب الفيديو"
-                 class="flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
+            <a href="{{ item.url }}">
+                <img src="{{ item.product_image }}" alt="{{item.product_name}}"
+                     class="flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
+            </a>
             <div class=" space-y-1">
                 <h3 class="text-gray-900">
-                    <a href="#" class="text-base">وحدة تحكم لمشغل العاب الفيديو</a>
+                    <a href="{{ item.url }}" class="text-base">{{item.product_name}}</a>
                 </h3>
-                <p class="text-sm text-gray-text">‏560 ر.س</p>
+                <p class="text-sm text-gray-text">{{item.price|money}}</p>
             </div>
         </div>
 
         <div
                 class="flex-1 border-t border-b border-border-color py-3 md:p-0 md:border-none mt-5 md:mt-1 flex justify-between items-center ">
             <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                <button @click="itemQty += 1"
-                        class="text-gray-text w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300"><i
+                <button @click="addQty()"
+                        class="text-gray-text w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                    <i
                             class="sicon-add"></i></button>
                 <input x-model="itemQty"
                        class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                       type="text" value="1">
-                <button @click="if(itemQty > 1 ) {itemQty-= 1}"
-                        class="text-gray-text w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300"><i
+                       type="text" value="{{ item.quantity }}">
+                <button @click="subQty()"
+                        class="text-gray-text w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                    <i
                             class="sicon-minus"></i></button>
             </div>
 
-            <p class="text-primary flex-none font-bold text-sm">الإجمالي: 560 ر.س</p>
+            <p class="text-primary flex-none font-bold text-sm">الإجمالي: {{item.total|money}}</p>
 
         </div>
 
     </div>
 
 
-    {{if .moreFields}}
-    <!-- more options -->
-    <section class="bg-white py-5 rounded-md mb-5">
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-            <label for="product-name" class="form-label">
-                <b class="block">
-                    اسم المنتج
-                    <span class="text-red-500">*</span>
-                </b>
-                <small class="text-gray-text">اضف اسم المنتج هنا</small>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <input type="text" name="product-name" id="product-name" autocomplete="given-name" class="form-input">
-            </div>
-        </div>
+    {# {{if moreFields}} #}
+    {# <!-- more options --> #}
+    {# <section class="bg-white py-5 rounded-md mb-5"> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label for="product-name" class="form-label"> #}
+    {# <b class="block"> #}
+    {# اسم المنتج #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# <small class="text-gray-text">اضف اسم المنتج هنا</small> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2"> #}
+    {# <input type="text" name="product-name" id="product-name" autocomplete="given-name" class="form-input"> #}
+    {# </div> #}
+    {# </div> #}
 
-        <!-- datepicker -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-            <label for="productCalendar" class="form-label">
-                <b class="block">
-                    تاريخ التوصيل
-                    <span class="text-red-500">*</span>
-                </b>
-                <small class="text-gray-text">اضف تاريخ التوصيل</small>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <input type="text" name="date" id="productCalendar" class="form-input">
-            </div>
-        </div>
+    {# <!-- datepicker --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label for="productCalendar" class="form-label"> #}
+    {# <b class="block"> #}
+    {# تاريخ التوصيل #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# <small class="text-gray-text">اضف تاريخ التوصيل</small> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2"> #}
+    {# <input type="text" name="date" id="productCalendar" class="form-input"> #}
+    {# </div> #}
+    {# </div> #}
 
-        <!-- color :: select -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-            <label for="product-color" class="form-label">
-                <b class="block">
-                    لون المنتج
-                    <span class="text-red-500">*</span>
-                </b>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <select class="form-input">
-                    <option disabled selected>- أختر -</option>
-                    <option>أزرق</option>
-                    <option>سماوي</option>
-                    <option>أخضر فاتح</option>
-                    <option>رصاصي فاتح</option>
-                </select>
-            </div>
-        </div>
+    {# <!-- color :: select --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label for="product-color" class="form-label"> #}
+    {# <b class="block"> #}
+    {# لون المنتج #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2"> #}
+    {# <select class="form-input"> #}
+    {# <option disabled selected>- أختر -</option> #}
+    {# <option>أزرق</option> #}
+    {# <option>سماوي</option> #}
+    {# <option>أخضر فاتح</option> #}
+    {# <option>رصاصي فاتح</option> #}
+    {# </select> #}
+    {# </div> #}
+    {# </div> #}
 
-        <!-- type:: text -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-            <label for="product-type" class="form-label">
-                <b class="block">
-                    النوع
-                    <span class="text-red-500">*</span>
-                </b>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <input type="text" name="product-type" id="product-type" class="form-input">
-            </div>
-        </div>
+    {# <!-- type:: text --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label for="product-type" class="form-label"> #}
+    {# <b class="block"> #}
+    {# النوع #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2"> #}
+    {# <input type="text" name="product-type" id="product-type" class="form-input"> #}
+    {# </div> #}
+    {# </div> #}
 
-        <!-- notes:: textarea -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-            <label for="product-notes" class="form-label">
-                <b class="block">
-                    ملاحظات
-                    <span class="text-red-500">*</span>
-                </b>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <textarea type="text" name="product-notes" id="product-type" class="form-input h-24"></textarea>
-            </div>
-        </div>
+    {# <!-- notes:: textarea --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label for="product-notes" class="form-label"> #}
+    {# <b class="block"> #}
+    {# ملاحظات #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2"> #}
+    {# <textarea type="text" name="product-notes" id="product-type" class="form-input h-24"></textarea> #}
+    {# </div> #}
+    {# </div> #}
 
-        <!-- options:: checkbox -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-            <label for="product-notes" class="form-label">
-                <b class="block">
-                    نوع الاختيار
-                    <span class="text-red-500">*</span>
-                </b>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2 md:flex flex-wrap">
-                <div class="relative flex items-center mb-4 md:w-6/12">
-                    <input id="option1" name="option1" type="checkbox"
-                           class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                    <label for="option1" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم
-                        ١</label>
-                </div>
+    {# <!-- options:: checkbox --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label for="product-notes" class="form-label"> #}
+    {# <b class="block"> #}
+    {# نوع الاختيار #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2 md:flex flex-wrap"> #}
+    {# <div class="relative flex items-center mb-4 md:w-6/12"> #}
+    {# <input id="option1" name="option1" type="checkbox" #}
+    {# class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md"> #}
+    {# <label for="option1" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم #}
+    {# ١</label> #}
+    {# </div> #}
 
-                <div class="relative flex items-center mb-4 md:w-6/12">
-                    <input id="option2" name="option1" type="checkbox"
-                           class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                    <label for="option2" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم
-                        ٢</label>
-                </div>
+    {# <div class="relative flex items-center mb-4 md:w-6/12"> #}
+    {# <input id="option2" name="option1" type="checkbox" #}
+    {# class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md"> #}
+    {# <label for="option2" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم #}
+    {# ٢</label> #}
+    {# </div> #}
 
-                <div class="relative flex items-center mb-4 md:w-6/12">
-                    <input id="option3" name="option1" type="checkbox"
-                           class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                    <label for="option3" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم
-                        ٣</label>
-                </div>
+    {# <div class="relative flex items-center mb-4 md:w-6/12"> #}
+    {# <input id="option3" name="option1" type="checkbox" #}
+    {# class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md"> #}
+    {# <label for="option3" class="ms-2 text-sm font-medium text-gray-700">قيمة رقم #}
+    {# ٣</label> #}
+    {# </div> #}
 
-            </div>
-        </div>
+    {# </div> #}
+    {# </div> #}
 
-        <!-- timepicker -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-            <label for="receiveTime" class="form-label">
-                <b class="block">
-                    حدد وقت الوصول
-                    <span class="text-red-500">*</span>
-                </b>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <input type="text" name="date" id="receiveTime" class="form-input">
-            </div>
-        </div>
+    {# <!-- timepicker --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label for="receiveTime" class="form-label"> #}
+    {# <b class="block"> #}
+    {# حدد وقت الوصول #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2"> #}
+    {# <input type="text" name="date" id="receiveTime" class="form-input"> #}
+    {# </div> #}
+    {# </div> #}
 
-        <!-- upload file -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-gray-200 sm:pt-5 mb-5">
-            <label for="cover-photo" class="form-label sm:pt-2">
-                <b class="block">
-                    صورة المنتج
-                    <span class="text-red-500">*</span>
-                </b>
-                <small class="text-gray-text">ارفع صورة المنتج هنا</small>
-            </label>
-            <div class="mt-1 sm:mt-0 sm:col-span-2 border border-border-color rounded-md p-2.5">
-                <div
-                        class="max-w-lg flex justify-center px-6 pt-8 pb-9 border border-border-color border-dashed rounded-md">
-                    <div class="space-y-1 text-center">
-                        <i class="sicon-camera text-primary text-xl"></i>
-                        <div class="flex text-sm text-gray-600">
-                            <p class="pe-1 text-gray-text">اسحب وافلت الصورة هنا او </p>
-                            <label for="file-upload"
-                                   class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
-                                <span class="font-bold"> تصفح جهازك </span>
-                                <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                            </label>
-                        </div>
+    {# <!-- upload file --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-gray-200 sm:pt-5 mb-5"> #}
+    {# <label for="cover-photo" class="form-label sm:pt-2"> #}
+    {# <b class="block"> #}
+    {# صورة المنتج #}
+    {# <span class="text-red-500">*</span> #}
+    {# </b> #}
+    {# <small class="text-gray-text">ارفع صورة المنتج هنا</small> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2 border border-border-color rounded-md p-2.5"> #}
+    {# <div #}
+    {# class="max-w-lg flex justify-center px-6 pt-8 pb-9 border border-border-color border-dashed rounded-md"> #}
+    {# <div class="space-y-1 text-center"> #}
+    {# <i class="sicon-camera text-primary text-xl"></i> #}
+    {# <div class="flex text-sm text-gray-600"> #}
+    {# <p class="pe-1 text-gray-text">اسحب وافلت الصورة هنا او </p> #}
+    {# <label for="file-upload" #}
+    {# class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none"> #}
+    {# <span class="font-bold"> تصفح جهازك </span> #}
+    {# <input id="file-upload" name="file-upload" type="file" class="sr-only"> #}
+    {# </label> #}
+    {# </div> #}
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    {{end}}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </section> #}
+    {# {{end}} #}
 
-    <!-- attachments -->
-    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-        <label class="form-label">
-            <b class="block">
-                المرفقات
-            </b>
-        </label>
-        <div class="mt-1 sm:mt-0 sm:col-span-2 text-end" x-data="{ tab: '' }">
-            <!-- buttons -->
-            <div class="flex space-s-3 mb-1">
-                <button type="button" @click="tab = 'showNote'"
-                        class="w-full focus:outline-none  bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5">
-                    <i class="font-medium sicon-chat-conversation-alt me-1.5 text-md"></i>
-                    <span class="fix-align">كتابة ملاحظة </span>
-                </button>
+    {# <!-- attachments --> #}
+    {# <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5"> #}
+    {# <label class="form-label"> #}
+    {# <b class="block"> #}
+    {# المرفقات #}
+    {# </b> #}
+    {# </label> #}
+    {# <div class="mt-1 sm:mt-0 sm:col-span-2 text-end" x-data="{ tab: '' }"> #}
+    {# <!-- buttons --> #}
+    {# <div class="flex space-s-3 mb-1"> #}
+    {# <button type="button" @click="tab = 'showNote'" #}
+    {# class="w-full focus:outline-none  bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5"> #}
+    {# <i class="font-medium sicon-chat-conversation-alt me-1.5 text-md"></i> #}
+    {# <span class="fix-align">كتابة ملاحظة </span> #}
+    {# </button> #}
 
-                <button @click="tab = 'showUpload' " type="button"
-                        class="w-full  focus:outline-none bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5">
-                    <i class="font-medium sicon-paperclip me-1.5 text-md"></i>
-                    <span class="fix-align">إرفاق ملف</span>
-                </button>
-            </div>
+    {# <button @click="tab = 'showUpload' " type="button" #}
+    {# class="w-full  focus:outline-none bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-dark justify-center text-sm mb-2.5"> #}
+    {# <i class="font-medium sicon-paperclip me-1.5 text-md"></i> #}
+    {# <span class="fix-align">إرفاق ملف</span> #}
+    {# </button> #}
+    {# </div> #}
 
-            <!-- content: textarea || upload -->
-            <div x-show="tab === 'showNote'">
-                <textarea class="animated animatedfadeInDown fadeInDown form-input h-16 bg-coolGray-50" name="" id=""
-                          cols="30" rows="10"></textarea>
-            </div>
+    {# <!-- content: textarea || upload --> #}
+    {# <div x-show="tab === 'showNote'"> #}
+    {# <textarea class="animated animatedfadeInDown fadeInDown form-input h-16 bg-coolGray-50" name="" id="" #}
+    {# cols="30" rows="10"></textarea> #}
+    {# </div> #}
 
-            <!-- upload file -->
-            <div x-show="tab === 'showUpload'">
-                <div
-                        class="animated animatedfadeInDown fadeInDown mt-1 sm:mt-0 sm:col-span-2 bg-coolGray-50 border border-border-color border-dashed rounded-md p-2.5">
-                    <div class="max-w-lg flex justify-center px-6 pt-2 pb-4">
-                        <div class="space-y-1 text-center">
-                            <i class="sicon-paperclip text-primary text-xl"></i>
-                            <div class="flex text-sm text-gray-600">
-                                <p class="pe-1 text-gray-text">اسحب وافلت الملف هنا او </p>
-                                <label for="file-upload"
-                                       class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
-                                    <span class="font-bold"> تصفح جهازك </span>
-                                    <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                </label>
-                            </div>
+    {# <!-- upload file --> #}
+    {# <div x-show="tab === 'showUpload'"> #}
+    {# <div #}
+    {# class="animated animatedfadeInDown fadeInDown mt-1 sm:mt-0 sm:col-span-2 bg-coolGray-50 border border-border-color border-dashed rounded-md p-2.5"> #}
+    {# <div class="max-w-lg flex justify-center px-6 pt-2 pb-4"> #}
+    {# <div class="space-y-1 text-center"> #}
+    {# <i class="sicon-paperclip text-primary text-xl"></i> #}
+    {# <div class="flex text-sm text-gray-600"> #}
+    {# <p class="pe-1 text-gray-text">اسحب وافلت الملف هنا او </p> #}
+    {# <label for="file-upload" #}
+    {# class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none"> #}
+    {# <span class="font-bold"> تصفح جهازك </span> #}
+    {# <input id="file-upload" name="file-upload" type="file" class="sr-only"> #}
+    {# </label> #}
+    {# </div> #}
 
-                        </div>
-                    </div>
-                </div>
-            </div>
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
+    {# </div> #}
 
-        </div>
-    </div>
+    {# </div> #}
+    {# </div> #}
 
-    <div class="text-sm flex justify-end">
-        <span class="mx-1"> التوفر في المعارض</span>
-        <span class="text-primary">اختر مدينة</span>
-    </div>
+    {# <div class="text-sm flex justify-end"> #}
+    {# <span class="mx-1"> التوفر في المعارض</span> #}
+    {# <span class="text-primary">اختر مدينة</span> #}
+    {# </div> #}
 
 
-    <button @click="removeItem($event)"
-            class="remove-item-btn bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
-        <!-- <i x-show="!isRemoveItem" class="sicon-cancel"></i> -->
-
-        <span x-show="isRemoveItem" class="spinner-loader-wrap start-1 w-4 h-4 absolute">
-            <span
-                    class="block -z-1 spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full"></span>
-        </span>
-    </button>
-
+     <button @click="removeItem()"
+     class="remove-item-btn bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
+     <span x-show="isRemoveItem" class="spinner-loader-wrap start-1 w-4 h-4 absolute">
+     <span
+     class="block -z-1 spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full"></span>
+     </span>
+     </button>
 
 
     <!-- <div x-data="{dropdownMenu: false}" class="relative">
