@@ -1,14 +1,16 @@
 
+[data-background],
 [data-src]{
   transition: opacity .5s ease-in, transform 0.3s;
 
-  &.loaded {
+  &.loaded,
+  &.swiper-lazy-loaded{
     animation: lazy_loaded_anime 1s;
   }
 }
 
 // .lazy-load:not([style*='background-image']),
-.lazy-background:not(.loaded),
+.lazy-background:not(.loaded):not(.swiper-lazy-loaded),
 .lazy-load[src*="s-empty"]{
   opacity: 1;
   background-image: linear-gradient(to left, #f2f3f4 0%, #edeef1 20%, #f2f3f4 40%, #f2f3f4 100%);

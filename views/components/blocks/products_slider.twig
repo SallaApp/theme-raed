@@ -1,5 +1,5 @@
 {% set blockId = random(0, 1000) %}
-<section id="best-offers-{{ blockId }}" class="s-block s-block--best-offers container pe-0 lg:px-5 mt-8 sm:mt-16 {{ is_repeated?'repeated-block':'' }}">
+<section id="best-offers-{{ blockId }}" class="s-block s-block--best-offers container overflow-hidden mt-8 sm:mt-16 {{ is_repeated?'repeated-block':'' }}">
     <div class="pe-5 lg:pe-0">
         <div class="flex justify-between mb-6 sm:mb-8">
             {% if title %}
@@ -21,16 +21,14 @@
             </div>
         </div>
     </div>
-
-    <div class="overflow-hidden">
-      <div class="swiper product-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="best-offers-{{ blockId }}">
-        <div class="swiper-wrapper flex">
-            {% for product in products %}
-                <div class="h-auto swiper-slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
-                    {% include 'pages.partials.product.card' %}
-                </div>
-            {% endfor %}
-        </div> 
-    </div> 
+ 
+    <div class="swiper product-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="best-offers-{{ blockId }}">
+      <div class="swiper-wrapper flex">
+          {% for product in products %}
+              <div class="h-auto swiper-slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
+                  {% include 'pages.partials.product.card' %}
+              </div>
+          {% endfor %}
+      </div>  
   </div>
 </section>

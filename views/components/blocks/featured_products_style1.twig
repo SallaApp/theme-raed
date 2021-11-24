@@ -19,7 +19,7 @@
        
             <div class="tabs-wrapper flex flex-1">
               {% for section in items %}
-                  <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" id="featured-style1-tab-{{ section.id }}" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
+                  <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" id="featured-style1-tab-{{ section.id }}" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-4 sm:gap-8">
                   {% for product in section.products|slice(0,main_product?4:8) %}
                       {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item-style1'} %}
                   {% endfor %}

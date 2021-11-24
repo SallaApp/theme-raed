@@ -1,18 +1,12 @@
 {% set pagination=pagination or pagination is not defined %}
 {% set navigation=navigation or navigation is not defined %}
-<section class="s-block s-block--block-slider {{ is_repeated?'repeated-block mt-4 sm:mt-8':'mt-8 sm:mt-16' }}">
-    <div class="swiper home-slider block-slider">
+
+{% set blockId = random(0, 1000) %}
+<section id="photos-{{ blockId }}" class="s-block s-block--photos-slider {{ is_repeated?'repeated-block mt-4 sm:mt-8':'mt-8 sm:mt-16' }}">
+    <div class="swiper home-slider photos-slider" data-id="photos-{{ blockId }}">
         <div class="swiper-wrapper">
             {% for item in items %}
-                <div class="swiper-slide home-slider__slide relative lazy-background" data-src="{{ item.image.url }}">
-                    <div class="flex justify-center items-center container  home-slider__content relative h-full">
-                        <div class="z-20 w-5/6 md:w-7/12 lg:w-5/12 lg:text-center text-white">
-                            {# <h3 class="block-slide-anime  lg:text-title-size font-bold leading-normal mb-4">{{ item.text }}</h3> #}
-                            {# <p class="block-slide-anime description">{{ $slide.description }}</p> #}
-                        </div>
-                    </div>
-{#                    <div class="overlay absolute top-0 z-0 bg-dark opacity-60  w-full h-full"></div>#}
-                </div>
+              <div class="swiper-slide h-80 md:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background swiper-lazy" data-background="{{ item.image.url }}"></div>
             {% endfor %}
         </div>
         {% if pagination %}
@@ -24,64 +18,3 @@
         {% endif %}
     </div>
 </section>
-{# TODO:: Move To js file #}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const swiper = new Swiper('.block-slider', {
-            // Optional parameters
-            slidesPerView : "auto",
-            loop          : true,
-            centeredSlides: true,
-            spaceBetween  : 30,
-
-            // pagination
-            pagination: {
-                el       : '.swiper-pagination',
-                clickable: true,
-            },
-
-            // Navigation arrows
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-
-            breakpoints: {
-                // when window width is >=
-                320: {
-                    spaceBetween: 10,
-
-                },
-                // when window width is >=
-                768: {
-                    spaceBetween: 15,
-                },
-                // when window width is >=
-                980: {
-                    paceBetween: 30,
-                },
-            }
-
-        });
-
-        swiper.on('slideChange', function () {
-            animateSliderItems()
-        });
-
-        function animateSliderItems() {
-            setTimeout(() => {
-                anime({
-                    targets   : '.swiper-slide-active .block-slide-anime',
-                    opacity   : [0, 1],
-                    duration  : 3500,
-                    translateX: [70, 0],
-                    delay     : function (el, i) {
-                        // console.log("i", i);
-                        return i * 200;
-                    },
-                })
-            }, 10);
-        }
-
-    });
-</script>

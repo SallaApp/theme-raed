@@ -5,10 +5,10 @@
                 <div class="flex justify-between mb-6 sm:mb-8">
                     <h2 class="font-bold text-lg text-text-dark">{{ section.title }}</h2>
                 </div>
-                <div class="flex-1 grid lg:grid-cols-2 gap-5">
+                <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
                     {% if section.featured_product %}
                         {% include 'pages.partials.product.card-full-image' with {product:section.featured_product} %}
-                        <div class="grid gap-5">
+                        <div class="grid gap-4 sm:gap-8">
                             {% for product in section.products|slice(0,3) %}
                                 {% include 'pages.partials.product.card-mini' %}
                             {% endfor %}
