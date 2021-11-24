@@ -1,3 +1,18 @@
+{#
+| Variable                      | Type      | Description                                                         | @see  |
+|-------------------------------|-----------|---------------------------------------------------------------------|-------|
+| items                         | Array     |                                                                     |       |
+| items[].title                 | String    | Section title                                                       |       |
+| items[].name                  | String    | Alias for title                                                     |       |
+| items[].type                  | String    | category,most_sales,latest_products,chosen_products                 |       |
+| items[].featured_product      | Product   |                                                                     | #TODO |
+| items[].special_product.id    | string    | Product string id                                                   |       |
+| items[].special_product.title | string    | Product Name                                                        |       |
+| items[].products[]            | Product[] |                                                                     | #TODO |
+| items[].limit                 | Int       | Number of products to be shown                                      |       |
+| items[].id                    | String    | Section id                                                          |       |
+| is_repeated                   | Bool      | There was another block like this before                            |       |
+#}
 <section class="s-block s-block--featuresProducts container mt-8 sm:mt-16 {{ is_repeated?'repeated-block':'' }}">
     <div class="grid {% if items | length > 1 %} lg:grid-cols-2 {% endif %} gap-5">
         {% for section in items %}

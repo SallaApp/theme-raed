@@ -257,17 +257,16 @@
                         </div>
                     </div>
 
-                    {% if products is not empty %}
+                    {% if products|length %}
                         <div x-ref="productsContainer"
                              :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
                              class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
-
                                 {% for product in products %}
                                     {% include 'pages.partials.product.card' %}
                                 {% endfor %}
                         </div>
 
-                        {% include 'pages.partials.loader-status' with {'nextPageUrl':products.nextPageUrl} %}
+                        {% include 'pages.partials.loader-status' with {next_page:products.nextPageUrl} %}
 
                     {% else %}
                         <div class="placeholder-block placeholder-block--no-category">

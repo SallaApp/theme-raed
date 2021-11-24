@@ -7,7 +7,8 @@
         var is_rtl = parseInt({{ is_rtl?1:0 }});
         window.locale = "{{ language.code }}";
     </script>
-    
+
+    {% hook 'head:inner' %}
     {# TopNav #}
     {{ store.theme.set('topnav_is_bellow', false) }}
     {{ store.theme.set('topnav_is_dark', false) }}
@@ -33,7 +34,7 @@
     <!-- theme color -->
     <meta name="msapplication-navbutton-color" content="{{ theme.color }}">
     <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color }}">
-
+    {{ store.theme.settings.custom_input }}
     <!-- fav icon -->
     <link rel="icon" type="image/png" href="{{ store.fav_icon ?? store.logo }}"/>
     <link rel="apple-touch-icon-precomposed" href="{{ store.logo }}">
@@ -98,6 +99,7 @@
 </head>
 
 <body id="app" class="{% hook 'body:classes' %} bg-gray-50">
+{% hook 'head:end' %}
 <noscript>
     To get full functionality of this site you need to enable JavaScript. Here is how
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
@@ -109,7 +111,6 @@
     {% block content %}{% endblock %}
     {% component 'footer.footer' %}
 </div>
-
 <script defer src="{{ link("languages/assets/#{store.theme.translations_hash}.js") }}"></script>
 <script defer src="{{ asset('dist/app.js') }}"></script>
 {% if not is_home %}

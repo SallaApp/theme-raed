@@ -1,4 +1,19 @@
-
+{#
+| Variable                      | Type      | Description                                                         | @see  |
+|-------------------------------|-----------|---------------------------------------------------------------------|-------|
+| items                         | Array     | shared variable in all layout, index.twig, and all components views |       |
+| items[].title                 | String    | Section title                                                       |       |
+| items[].name                  | String    | Alias for title                                                     |       |
+| items[].type                  | String    | category,most_sales,latest_products,chosen_products                 |       |
+| items[].featured_product      | Product   |                                                                     | #TODO |
+| items[].special_product.id    | string    | Product string id                                                   |       |
+| items[].special_product.title | string    | Product Name                                                        |       |
+| items[].products[]            | Product[] |                                                                     | #TODO |
+| items[].limit                 | Int       | Number of products to be shown                                      |       |
+| items[].id                    | String    | Section id                                                          |       |
+| is_repeated                   | Bool      | There was another block like this before                            |       |
+| is_slider                     | Bool      | Products should be movable or static                                |       |
+#}
 <section class="s-block s-block--tabsProdutcs bg-gray-bg2 pb-8 sm:pb-16 first-of-type:mt-0 {{ is_repeated?'repeated-block pt-8':'mt-8 sm:mt-16 pt-8 sm:pt-16' }}">
   <div class="container {{ is_slider ? 'px-0 lg:px-5':'' }}" x-data="initTabs()"  x-init="currentTab = 'featured-tab-{{ items[0].id }}'">
 
