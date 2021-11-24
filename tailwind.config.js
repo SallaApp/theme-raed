@@ -61,6 +61,9 @@ module.exports = {
             spacing: {
               '3.75' : '15px',
               '7.5' : '30px',
+              '58' : '232px',
+              '116' : '464px',
+              '132' : '528px',
             },
             borderRadius       : {
                 'large': '22px',
@@ -105,7 +108,6 @@ module.exports = {
                 'full-banner'   : '600px',
                 '500'           : '500px',
                 '460'           : '460px',
-                'full-banner-bg': '445px'
             },
             minWidth           : {
                 '1/4': '25%',
@@ -148,6 +150,7 @@ module.exports = {
     plugins: [
       require('tailwindcss-rtl'),
       require('@tailwindcss/forms'),
+      require('@tailwindcss/line-clamp'),
       require('@tailwindcss/jit'),
       require('@salla.sa/twilight/tailwind')
     ],

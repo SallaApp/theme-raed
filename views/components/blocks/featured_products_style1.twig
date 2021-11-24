@@ -1,13 +1,11 @@
-<section class="s-block s-block--specialProducts container mt-16 {{ is_repeated?'repeated-block':'' }}">
+<section class="s-block s-block--specialProducts container mt-8 sm:mt-16 {{ is_repeated?'repeated-block':'' }}">
     <div class="grid grid-cols-1  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-1 {% endif %} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
-                <div class="flex justify-between mb-8">
+                <div class="flex justify-between mb-6 sm:mb-8">
                     <h2 class="font-bold text-lg text-text-dark">{{ main_product.title }}</h2>
                 </div>
-                <div class="flex-1">
-                    {% include 'pages.partials.product.card' with {product:main_product.product, is_special:true} %}
-                </div>
+                {% include 'pages.partials.product.card' with {product:main_product.product, is_special:true} %}
             </div>
         {% endif %}
         <div class="flex flex-col" x-data="initFeaturedTabs()"  x-init="currentTab = 'featured-style1-tab-{{ items[0].id }}'">
@@ -19,13 +17,15 @@
             {% endfor %}
             </div>
        
-            {% for section in items %}
-                <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" id="featured-style1-tab-{{ section.id }}" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
-                {% for product in section.products|slice(0,main_product?4:8) %}
-                    {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item-style1'} %}
-                {% endfor %}
-                </div>
-            {% endfor %}
+            <div class="tabs-wrapper flex flex-1">
+              {% for section in items %}
+                  <div x-show="currentTab === 'featured-style1-tab-{{ section.id }}'" id="featured-style1-tab-{{ section.id }}" :class="currentTab === 'featured-style1-tab-{{ section.id }}' ? 'active-tab' : '' " class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-4 {% endif %} gap-8">
+                  {% for product in section.products|slice(0,main_product?4:8) %}
+                      {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item-style1'} %}
+                  {% endfor %}
+                  </div>
+              {% endfor %}
+            </div>
     </div>
 
   <script>
@@ -42,6 +42,8 @@
     }
 
     document.addEventListener('DOMContentLoaded',  () => {
+      document.querySelectorAll('.s-block--specialProducts').forEach( block => block.classList.add('tabs-initialized') )
+
         window.animateTabsItems('#featured-style1-tab-{{ items[0].id }} .featured-item-style1');
     });
   </script>

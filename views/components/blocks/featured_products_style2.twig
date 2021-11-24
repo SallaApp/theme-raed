@@ -1,6 +1,7 @@
-<section class="s-block s-block--tabsProdutcs bg-gray-bg2 pb-8 first-of-type:mt-0 {{ is_repeated?'repeated-block pt-8':'mt-16 pt-16' }}">
-  <div class="container pe-0 lg:px-5" x-data="initTabs()"  x-init="currentTab = 'featured-tab-{{ items[0].id }}'">
-      <div class="tabs text-center pb-10 space-s-1 md:space-s-4 whitespace-nowrap overflow-x-auto hide-scroll">
+
+<section class="s-block s-block--tabsProdutcs bg-gray-bg2 pb-8 sm:pb-16 first-of-type:mt-0 {{ is_repeated?'repeated-block pt-8':'mt-8 sm:mt-16 pt-8 sm:pt-16' }}">
+  <div class="container px-0 lg:px-5" x-data="initTabs()"  x-init="currentTab = 'featured-tab-{{ items[0].id }}'">
+      <div class="tabs text-center pb-6 sm:pb-10 px-5 space-s-1 md:space-s-4 whitespace-nowrap overflow-x-auto hide-scroll">
           {% for section in items %}
               <button @click.prevent="switchTab('featured-tab-{{ section.id }}')"
                       :class="currentTab === 'featured-tab-{{ section.id }}' ? 'btn-primary text-white' : ''"
@@ -10,16 +11,18 @@
 
       <div class="tabs-wrapper">
         {% for section in items %}
-            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" id="featured-tab-{{ section.id }}" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class="swiper pb-10 tabs-slider">
+            <div x-show="currentTab === 'featured-tab-{{ section.id }}'" id="featured-tab-{{ section.id }}" :class="currentTab === 'featured-tab-{{ section.id }}' ? 'active-tab' : '' " class=" overflow-hidden">
                 {% if is_slider %}
-                    <div class="swiper-wrapper flex -mx-5 lg:-mx-3.75 w-[calc(100%+68px)] lg:w-[calc(100%+28px)]">
-                        {% for product in section.products %}
-                            <div class="h-auto swiper-slide tabs-slider__slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-3.75">
-                                {% include 'pages.partials.product.card' %}
-                            </div>
-                        {% endfor %}
+                    <div class="swiper product-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-8 lg:ps-0" data-id="featured-tab-{{ section.id }}">
+                      <div class="swiper-wrapper flex">
+                          {% for product in section.products %}
+                              <div class="h-auto swiper-slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
+                                  {% include 'pages.partials.product.card' %}
+                              </div>
+                          {% endfor %}
+                      </div>
                     </div>
-                    <div class="text-center pt-7 space-s-3" dir="rtl">
+                    <div class="hidden md:block text-center pt-7 space-s-3" dir="rtl">
                         <button class="slider-prev focus:outline-none border border-gray text-dark rounded-full w-10 h-10">
                             <i class="text-gray-text sicon-keyboard_arrow_right"></i>
                         </button>
@@ -28,15 +31,13 @@
                         </button>
                     </div>
                 {% else %}
-                  <section>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      {% for product in section.products %}
-                                    <div class="featured-item-style2">
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                    {% for product in section.products %}
+                      <div class="featured-item-style2">
                         {% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
-                                    </div>
-                      {% endfor %}
-                    </div>
-                  </section>
+                      </div>
+                    {% endfor %}
+                  </div>
                 {% endif %}
             </div>
         {% endfor %}
@@ -46,7 +47,6 @@
   {# TODO:: move to js file #}
   <script>
       function initTabs() {
-          document.querySelector('.s-block--tabsProdutcs').classList.add('tabs-initialized');
           return {
               currentTab: '',
               switchTab : function (tabId) {
@@ -58,24 +58,10 @@
               }
           }
       }
-
-      function initSlider(){
-          const swiper = new Swiper('.tabs-slider', {
-              //spaceBetween : 30,
-              slidesPerView: 'auto',
-              //slidesPerView: 4,
-
-              // Navigation arrows
-              navigation: {
-                  nextEl: '.slider-next',
-                  prevEl: '.slider-prev',
-              },
-          });
-      }
-
       document.addEventListener('DOMContentLoaded', function () {
-          window.animateTabsItems('#featured-tab-{{ items[0].id }} .featured-item-style2');
-          initSlider();
+        document.querySelectorAll('.s-block--tabsProdutcs').forEach( block =>  block.classList.add('tabs-initialized') )
+
+        window.animateTabsItems('#featured-tab-{{ items[0].id }} .featured-item-style2');
       });
   </script>
 </section>

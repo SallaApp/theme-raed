@@ -1,5 +1,5 @@
-<section class="s-block s-block--latestProducts container {{ is_repeated?'repeated-block mt-8':'mt-16' }}">
-    <div class="flex justify-between mb-8">
+<section class="s-block s-block--latestProducts container mt-8 {{ is_repeated?'repeated-block':'sm:mt-16' }}">
+    <div class="flex justify-between mb-6 sm:mb-8">
         {% if title %}
             <h2 class="font-bold text-lg text-text-dark">{{ title }}</h2>
         {% endif %}
@@ -9,7 +9,7 @@
             {% endif %}
         </div>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {% for product in products %}
             {% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
         {% endfor %}

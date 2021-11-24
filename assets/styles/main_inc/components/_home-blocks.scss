@@ -46,15 +46,34 @@
 			left: -52%;
 		}
 	}
+
+  @media (max-width: 1330px){
+    &::after {
+      top: -50%;
+    }
+  }
+
+  @media (max-width: 480px){
+    &::before {
+      top: 20%;
+    }
+
+    &::after{
+      top: -80%;
+    }
+  }
 }
 
 /*
   Tabs Block
 */
 
-.s-block--tabsProdutcs:not(.tabs-initialized){
-  .tabs-wrapper > div:not(:first-child){
-    display: none;
+.s-block--tabsProdutcs,
+.s-block--specialProducts{
+  &:not(.tabs-initialized){
+    .tabs-wrapper > div:not(:first-child){
+      display: none;
+    }
   }
 }
 
