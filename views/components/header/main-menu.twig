@@ -1,5 +1,25 @@
-<ul class="hidden lg:flex flex-wrap main-menu items-center mx-6">
-    {% for menu_id, menu in menus %}
-      {% include 'components.header._menu-item' with {is_root_menu:true} %}
-    {% endfor %}
-</ul>
+{% if is_mobile %}
+  <nav id="mobile-menu" class="mobile-menu lg:hidden overflow-auto">
+      <ul>
+          {% for menu_id, menu in menus %}
+              {% include 'components.header._menu-item' with {is_mobile:true} %}
+          {% endfor %}
+          
+          {% component 'footer.pages' with {is_header:true} %}
+      </ul>
+      <button
+              class="close-mobile-menu hidden xs:block   h-12 w-14  text-red-500 text-2xl absolute top-0 end-0 z-50">
+          <i class="sicon-cancel"></i>
+      </button>
+  </nav>
+  <button class="close-sm-menu close-mobile-menu  opacity-0 transform -translate-y-full transition duration-300  h-10 w-10 bg-red-500 text-white text-xl fixed top-0 end-0 z-50">
+      <i class="sicon-cancel"></i>
+  </button>
+
+{% else %}
+  <ul class="hidden lg:flex flex-wrap main-menu items-center mx-6">
+      {% for menu_id, menu in menus %}
+        {% include 'components.header._menu-item' with {is_root_menu:true} %}
+      {% endfor %}
+  </ul>
+{% endif %}
