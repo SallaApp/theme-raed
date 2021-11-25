@@ -12,6 +12,7 @@ salla.cart.event.onUpdated(function (cartSummary) {
     document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = cartSummary.final_total);
     document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = cartSummary.count);
 });
+
 salla.cart.event.onItemAdded(function (response, productId) {
     // remove .cart-thumb el from body ---
     document.querySelectorAll('.cart-thumb').forEach(el => el.remove());
@@ -74,4 +75,15 @@ salla.cart.event.onItemAdded(function (response, productId) {
                 cartThumb.remove();
             },
         }, '-=1700');
+
+
+      // remove loading class
+      document.querySelector('.add-to-cart-btn.btn--is-loading').classList.remove('btn--is-loading');
+})
+
+
+document.querySelectorAll('.add-to-cart-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    btn.classList.add('btn--is-loading');
+  })
 })
