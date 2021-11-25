@@ -5,188 +5,50 @@
                 <div class="bg-border-color w-12 h-12 text-xl text-gray-text rounded-icon">
                     <i class="sicon-store"></i>
                 </div>
-                <span class="font-bold text-sm"> تقييم الطلب</span>
+                <span class="font-bold text-sm">{{ trans('pages.rating.rate_order') }}</span>
             </div>
         </div>
 
         <div class="panel__body pt-14 h-52 overflow-hidden">
+            {# oreder store rate #}
+            {% if store.ratings.store_enabled %}
+                <div class="step1 text-center" x-show.transition.in="step === 1"
+                     x-transition.duration.300ms>
+                    <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_the_store') }}</h2>
 
-            <div class="step1 text-center" x-show.transition.in="step === 1"
-                 x-transition.duration.300ms>
-                <h2 class="font-bold text-lg mb-8">ما رأيك في خدمات شركة الشحن؟</h2>
-                <div class="custom-radios custom-radios--icons text-gray-text">
-
-                    <div class="mb-8 w-20">
-                        <input x-model="review.shippingRate" value="1" type="radio" id="shipping-0"
-                               name="shipping">
-                        <label class="flex flex-col items-center" for="shipping-0">
-                            <div class="icon mb-2">😡</div>
-                            <p class="rate-title text-sm text-gray-text">منزعج</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8 w-20">
-                        <input x-model="review.shippingRate" value="2" type="radio" id="shipping-1"
-                               name="shipping">
-                        <label class="flex flex-col items-center" for="shipping-1">
-                            <div class="icon mb-2">😒</div>
-                            <p class="rate-title text-sm text-gray-text">ماعجبني </p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8 w-20">
-                        <input x-model="review.shippingRate" value="3" type="radio" id="shipping-2"
-                               name="shipping">
-                        <label class="flex flex-col items-center" for="shipping-2">
-                            <div class="icon mb-2">🙂</div>
-                            <p class="rate-title text-sm text-gray-text">جيد</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8 w-20">
-                        <input x-model="review.shippingRate" value="4" type="radio" id="shipping-3"
-                               name="shipping">
-                        <label class="flex flex-col items-center" for="shipping-3">
-                            <div class="icon mb-2">😃</div>
-                            <p class="rate-title text-sm text-gray-text">أعجبني</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8 w-20">
-                        <input x-model="review.shippingRate" value="5" type="radio" id="shipping-4"
-                               name="shipping">
-                        <label class="flex flex-col items-center" for="shipping-4">
-                            <div class="icon mb-2">😍</div>
-                            <p class="rate-title text-sm text-gray-text">حبيته</p>
-                        </label>
-                    </div>
-
+                    {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'store'} %}
                 </div>
-            </div>
+            {% endif %}
 
+            {# order products rate #}
+            {% if store.ratings.products_enabled %}
+                <div class="step1 text-center" x-show.transition.in="step === 2"
+                     x-transition.duration.300ms>
+                    <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_products') }}</h2>
 
-            <div class="step1 text-center" x-show.transition.in="step === 2"
-                 x-transition.duration.300ms>
-                <h2 class="font-bold text-lg mb-8">ما رأيك في منتجات المتجر؟</h2>
-                <div class="custom-radios custom-radios--icons text-gray-text">
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.productsRate" value="1" type="radio" id="products-0"
-                               name="products">
-                        <label class="flex flex-col items-center" for="products-0">
-                            <div class="icon mb-2">😡</div>
-                            <p class="rate-title text-sm text-gray-text">منزعج</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.productsRate" value="2" type="radio" id="products-1"
-                               name="products">
-                        <label class="flex flex-col items-center" for="products-1">
-                            <div class="icon mb-2">😒</div>
-                            <p class="rate-title text-sm text-gray-text">ماعجبني </p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.productsRate" value="3" type="radio" id="products-2"
-                               name="products">
-                        <label class="flex flex-col items-center" for="products-2">
-                            <div class="icon mb-2">🙂</div>
-                            <p class="rate-title text-sm text-gray-text">جيد</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.productsRate" value="4" type="radio" id="products-3"
-                               name="products">
-                        <label class="flex flex-col items-center" for="products-3">
-                            <div class="icon mb-2">😃</div>
-                            <p class="rate-title text-sm text-gray-text">أعجبني</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.productsRate" value="5" type="radio" id="products-4"
-                               name="products">
-                        <label class="flex flex-col items-center" for="products-4">
-                            <div class="icon mb-2">😍</div>
-                            <p class="rate-title text-sm text-gray-text">حبيته</p>
-                        </label>
-                    </div>
-
+                    {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'products'} %}
                 </div>
-            </div>
+            {% endif %}
 
+            {# order shipping company rate #}
+            {% if order.has_shipping and store.ratings.shipping_enabled %}
+                <div class="step1 text-center" x-show.transition.in="step === 3"
+                     x-transition.duration.300ms>
+                    <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_shipping') }}</h2>
 
-            <div class="step1 text-center" x-show.transition.in="step === 3"
-                 x-transition.duration.300ms>
-                <h2 class="font-bold text-lg mb-8">ما رأيك في المتجر؟</h2>
-                <div class="custom-radios custom-radios--icons text-gray-text">
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.storeRate" value="1" type="radio" id="store-0"
-                               name="store">
-                        <label class="flex flex-col items-center" for="store-0">
-                            <div class="icon mb-2">😡</div>
-                            <p class="rate-title text-sm text-gray-text">منزعج</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.storeRate" value="2" type="radio" id="store-1"
-                               name="store">
-                        <label class="flex flex-col items-center" for="store-1">
-                            <div class="icon mb-2">😒</div>
-                            <p class="rate-title text-sm text-gray-text">ماعجبني </p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.storeRate" value="3" type="radio" id="store-2"
-                               name="store">
-                        <label class="flex flex-col items-center" for="store-2">
-                            <div class="icon mb-2">🙂</div>
-                            <p class="rate-title text-sm text-gray-text">جيد</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.storeRate" value="4" type="radio" id="store-3"
-                               name="store">
-                        <label class="flex flex-col items-center" for="store-3">
-                            <div class="icon mb-2">😃</div>
-                            <p class="rate-title text-sm text-gray-text">أعجبني</p>
-                        </label>
-                    </div>
-
-                    <div class="mb-8  w-20">
-                        <input x-model="review.storeRate" value="5" type="radio" id="store-4"
-                               name="store">
-                        <label class="flex flex-col items-center" for="store-4">
-                            <div class="icon mb-2">😍</div>
-                            <p class="rate-title text-sm text-gray-text">حبيته</p>
-                        </label>
-                    </div>
-
+                    {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'shipping'} %}
                 </div>
-            </div>
+            {% endif %}
         </div>
 
 
         <div class="relative">
-
-            <div class="absolute text-xs -top-1.5 w-full tex text-center text-red-500"
-                 x-text="review[currentStep] ? '' : validationMessage "></div>
+            <div class="absolute text-xs -top-1.5 w-full tex text-center text-red-500" x-text="review[currentStep] ? '' : validationMessage "></div>
 
             <ul class="flex justify-center text-center space-s-1.5 py-8">
                 <template x-for="stepPage in steps">
-
-                    <li
-                            class="cursor-pointer w-2.5 h-2.5 bg-gray-200 rounded-full transition-colors duration-300"
-                            :class="{'bg-primary': step == stepPage}"></li>
+                    <li class="cursor-pointer w-2.5 h-2.5 bg-gray-200 rounded-full transition-colors duration-300" :class="{'bg-primary': step == stepPage}"></li>
                 </template>
-
             </ul>
         </div>
 
@@ -196,7 +58,7 @@
             </button>
             <button @click="validateStep" class="btn btn-primary h-10 px-8"
                     :class="{'w-48': step == 3}"
-                    x-text="step == 3 ? 'إرسالة التقييم': 'التالي' "></button>
+                    x-text="step == 3 ? '{{ trans('pages.rating.send_ratings') }}': 'التالي' "></button>
         </div>
     </div>
 
@@ -228,23 +90,19 @@
                  class="inline-block align-bottom bg-white rounded-md px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-24">
                 <div>
                     <div class="mx-auto flex items-center justify-center">
-                        <button @click="closeModal"
-                                class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
+                        <button @click="closeModal" class="close-modal text-gray-text w-6 h-6 focus:outline-none text-lg absolute top-6 end-6">
                             <i class="sicon-cancel"></i>
                         </button>
 
-                        <img src="../assets/images/review.svg" alt=""
-                             class="message-item opacity-0">
+                        <img src="../assets/images/review.svg" alt="" class="message-item opacity-0">
                     </div>
                     <div class="mt-3 text-center sm:mt-5">
                         <h3 class="message-item text-base leading-6 font-bold" id="modal-title">
-                            تم إرسال تقييمك بنجاح
+                            {#تم إرسال تقييمك بنجاح#}
                         </h3>
                         <div class="mt-2">
                             <p class="message-item text-sm leading-6">
-                                شكرآ لك لقد تم إرسال تقييمك بنجاح, رأيك يهمنا للمساهمة في استمرار
-                                تقديم خدماتنا بشكل
-                                افضل
+                                {{ trans('pages.rating.thanks') }}
                             </p>
                         </div>
                     </div>

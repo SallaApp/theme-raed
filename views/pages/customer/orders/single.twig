@@ -271,7 +271,9 @@
                     </div>
                 </div>
 
-                {% include 'pages.customer.orders.partials.rating' with {'order':order} %}
+                {% if store.ratings.store_enabled or store.ratings.products_enabled or store.ratings.shipping_enabled %}
+                    {% include 'pages.customer.orders.partials.rating' with {'order':order} %}
+                {% endif %}
             </div>
         </div>
     </div>
