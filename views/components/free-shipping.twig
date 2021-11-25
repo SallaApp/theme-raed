@@ -1,3 +1,11 @@
+{#
+| Variable          | Type    | Description                   | @see |
+|-------------------|---------|-------------------------------|------|
+| remaining         | Double  | How much need more to be free |      |
+| minimum_amount    | Integer | How much need to be free      |      |
+| has_free_shipping | Boolean |                               |      |
+| percent           | Integer | 0-100                         |      |
+#}
 <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative" id="free-shipping-bar">
     <div class="flex space-s-3">
         <div class="bg-primary text-white rounded-icon">
@@ -12,7 +20,7 @@
                 </p>
             {% else %}
                 <p class="shipping-item opacity-0 text-sm font- text-gray-text">
-                    {{ trans('pages.cart.free_shipping_alert', {'amount': total_until_free_total})| raw }}
+                    {{ trans('pages.cart.free_shipping_alert', {'amount': remaining|money})| raw }}
                 </p>
             {% endif %}
         </div>
