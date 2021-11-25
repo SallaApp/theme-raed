@@ -14,10 +14,34 @@
           {% component 'footer.pages' with {is_header:true} %}
           {% component 'header.language-switcher' %}
           {% component 'header.currency-switcher' %}
-          <salla-search-modal></salla-search-modal>
 
+          {# Search Modal #}
+          <salla-search-modal></salla-search-modal>
         </div>
+
         {% component 'header.contacts' as contacts %}
+        {# <div class="hidden lg:block">
+          <ul class="flex items-center contacts-menu menu-divide">
+              {% for contact in contacts %}
+                  {% if contact.type == 'email' %}
+                      <li class="inline-block">
+                          <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm {{ store.theme.settings.topnav_link_hover ? 'hover:text-[color:var(--topnav-link-hover)]' : 'hover:text-primary'}} ">
+                              {{ contact.value }}
+                          </a>
+                      </li>
+                  {% endif %}
+                  {% if contact.type == 'phone' %}
+                      <li class="inline-block">
+                          <a href="{{ contact.url }}" class="block transition duration-300 p-4 text-sm hover:text-{{ store.theme.settings.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary'}}">
+                              <span>{{ trans('blocks.footer.social') }}: </span>
+                              <span class="unicode">{{ contact.value }}</span>
+                          </a>
+                      </li>
+                  {% endif %}
+              {% endfor %}
+          </ul>
+        </div> #}
+
       </div>
     </div>
   </div>
