@@ -1,0 +1,25 @@
+{#
+| Variable      | Type   | Description                                                      | @see |
+|---------------|--------|------------------------------------------------------------------|------|
+| items[]       | Array  | List of 3 features                                               |      |
+| items[].icon  | string | SallaIcons css class `sicon-*`                                   |      |
+| items[].title | String | Title of the feature                                             |      |
+| items[].text  | String | Subtitle for the feature                                         |      |
+| is_repeated   | Bool   | Determine if there was another section like this rendered before |      |
+| position      | Int    | Sorting number start from zero                                   |      |
+| order         | Int    | Sorting number start from one                                    |      |
+| block_count   | Int    | Number of times this section rendered                            |      |
+#}
+<section class="s-block s-block--features container {{ is_repeated?'repeated-block mt-4 sm:mt-8':'mt-8 sm:mt-16' }}">
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-4 sm:gap-6 xl:gap-8">
+        {% for item in items %}
+            <div class="feature-box cursor-pointer bg-white transition-shadow duration-500 hover:shadow-default  rounded-md flex-grow h-48 flex flex-col items-center justify-center">
+                <div class="slide-anime-icon mb-3 bg-primary w-16 h-16 rounded-full flex items-center justify-center">
+                    <i class="{{ item.icon }} text-reverse text-3xl"></i>
+                </div>
+                <h4 class="font-bold text-sm text-title-color mb-1">{{ item.title }}</h4>
+                <p class="text-sm text-text-dark">{{ item.text }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>

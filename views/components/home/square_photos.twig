@@ -1,5 +1,17 @@
 {#
-
+| Variable          | Type   | Description                                                      | @see |
+|-------------------|--------|------------------------------------------------------------------|------|
+| title             | String | Section title                                                    |      |
+| items[]           | Array  | List of images                                                   |      |
+| items[].url       | Bool   | Should set overlay on the background or not                      |      |
+| items[].link_type | String | category,product,offers,page,external_link,brand                 |      |
+| items[].image.url | String |                                                                  |      |
+| items[].image.alt | String |                                                                  |      |
+| items[].text      | String | Visible title for the photo                                      |      |
+| is_repeated       | Bool   | Determine if there was another section like this rendered before |      |
+| position          | Int    | Sorting number start from zero                                   |      |
+| order             | Int    | Sorting number start from one                                    |      |
+| block_count       | Int    | Number of times this section rendered                            |      |
 #}
 <section class="s-block s-block--banners container {{ is_repeated?'repeated-block mt-4 sm:mt-8':'mt-8 sm:mt-16' }}">
     <div class="grid grid-cols-2 md:grid-cols-3 grid-flow-row gap-3 sm:gap-8">
