@@ -1,11 +1,5 @@
 {% extends "layouts.master" %}
 {% block content %}
-    {# missing assets #}
-    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('/dist/mmenu-light.css') }}">
-    <link rel="stylesheet" href="{{ asset('/dist/main.min.585d6d35c0b4638b35eb56b632cd0c56bcff2e18cb7e23233134a216759f9f1e.css') }}">
-    <script defer src="{{ asset('/dist/filepond.js') }}"></script>
 
     {# <pre dir="ltr"> #}
     {# {{ dd(_context) }} #}
@@ -26,117 +20,8 @@
         </div>
         <div class="container mb-24">
             <div class="flex flex-col lg:flex-row ">
-                <nav aria-label="Sidebar"
-                    class="hidden lg:block z-10 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar opacity-0">
-                    <div class="text-center mb-9">
-                        <div class="text-center mb-9">
-                          <div class="h-24 w-24 m-auto avatar-wrap opacity-0">
-                            <input type="file">
-                          </div>
-                        </div>
-                        
-                        <script>
-                            document.addEventListener('DOMContentLoaded', () => {
-                                // filepond
-                                FilePond.registerPlugin(
-                                    FilePondPluginImagePreview,
-                                );
-                                // Get a reference to the file input element
-                                const inputElement = document.querySelector('input[type="file"]');
-                                // Create a FilePond instance
-                                const pond = FilePond.create(inputElement, {
-                                    labelIdle                     : `<img class="inline-block h-full w-full rounded-full object-cover" src="{{ user.avatar }}" alt="">`,
-                                    imagePreviewHeight            : 170,
-                                    imageCropAspectRatio          : '1:1',
-                                    imageResizeTargetWidth        : 200,
-                                    imageResizeTargetHeight       : 200,
-                                    stylePanelLayout              : 'compact circle',
-                                    styleLoadIndicatorPosition    : 'center bottom',
-                                    styleProgressIndicatorPosition: 'left bottom',
-                                    styleButtonRemoveItemPosition : 'center bottom',
-                                    styleButtonProcessItemPosition: 'right bottom',
-                                });
-                            });
-                        </script>
-                    </div>
-
-                    <a href="{{ link('notifications') }}"
-                      class="{% if is_link('notifications') %}active{% endif %} flex justify-between items-center menu-item opacity-0   px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-                        <span>
-                        <i class="sicon-school-bell me-3 text-lg"></i>
-                        <span> {{ trans('common.titles.notifications') }}</span>
-                        </span>
-                        {% if new_notifications_count %}
-                            <span class="bg-theme-red rounded-full inline-block text-center w-6 h-6 text-white pt-0.5 text-xs">{{ new_notifications_count }}</span>
-                        {% endif %}
-                    </a>
-
-                    <a href="{{ link('pending_orders') }}"
-                      class="{% if is_link('pending_orders') %}active{% endif %} flex justify-between items-center menu-item opacity-0   px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-                        <span>
-                        <i class="sicon-school-bell me-3 text-lg"></i>
-                        <span> {{ trans('common.titles.pending_orders') }}</span>
-                        </span>
-                        {% if pending_orders_count %}
-                            <span class="bg-theme-red rounded-full inline-block text-center w-6 h-6 text-white pt-0.5 text-xs">{{ pending_orders_count }}</span>
-                        {% endif %}
-                    </a>
-                    
-                    <a href="{{ link('orders') }}"
-                      aria-current="page"
-                      class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-                        <i class="sicon-packed-box me-3 text-lg"></i>
-                        <span class="truncate">{{ trans('common.titles.orders') }}</span>
-                    </a>
-
-                    <a href="{{ link('wishlist') }}"
-                      aria-current="page"
-                      class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-                        <i class="sicon-heart me-3 text-lg"></i>
-                        {{ trans('common.titles.wishlist') }}
-                    </a>
-                    <a href="{{ link('rating') }}"
-                      aria-current="page"
-                      class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-                        <i class="sicon-favorite me-3 text-lg"></i>
-                        <span>{{ trans('common.titles.rating') }}</span>
-                    </a>
-                    <a href="{{ link('profile') }}"
-                      class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-                        <i class="sicon-settings me-3 text-lg"></i>
-                        {{ trans('common.titles.profile') }}
-                    </a>
-                    <a href="#"
-                      data-on-click="auth-logout"
-                      class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-bg">
-                        <i class="sicon-send-out me-3 text-lg"></i>
-                        {{ trans('blocks.header.logout') }}
-                    </a>
-                </nav>
-                <script>
-                    document.addEventListener('DOMContentLoaded', () => {
-                        let sidebarAnime = anime.timeline();
-                        sidebarAnime
-                        .add({
-                            targets   : '.sidebar',
-                            opacity   : [0, 1],
-                            translateY: [30, 0],
-                        }, '+=200')
-                        .add({
-                            targets   : '.avatar-wrap',
-                            opacity   : [0, 1],
-                            scale: [0, 1],
-                        }, '-=900')
-                        .add({
-                            targets   : '.menu-item',
-                            opacity   : [0, 1],
-                            translateY: [20, 0],
-                            delay     : function (el, i) {
-                                return i * 100;
-                            },
-                        }, '-=700')
-                    });
-                </Script>
+                {# ----- Sidebar ---- #}
+                {% include 'pages.customer.partials.sidebar.twig' %}
 
                 <div class="main-content flex-1 pb-10 pt-10 ">
                     <h1 class="font-bold text-lg mb-10">الملف الشخصي</h1>
