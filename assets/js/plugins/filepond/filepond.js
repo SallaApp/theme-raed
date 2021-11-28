@@ -128,7 +128,7 @@ document.querySelectorAll('.filepond')
         let filePond = FilePond.create(fileInput,
             fileInput.matches('.profile-img')
                 ? {
-                    labelIdle                     : isRTL ? 'اختر صورة مناسبة للعرض' : 'Choose a proper image',
+                    labelIdle                     : isRTL ? '<span class="avatar-placeholder flex justify-center items-center flex-col"><span class="sicon-user"></span><span class="text">اختر صورة مناسبة</span></span>' : '<span class="avatar-placeholder flex justify-center items-center flex-col"><span class="sicon-user"></span><span class="text">Choose your image</span></span>',
                     instantUpload                 : false,
                     files                         : defaultFiles,
                     multiple                      : false,
