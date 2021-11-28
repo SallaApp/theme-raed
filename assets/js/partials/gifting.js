@@ -17,10 +17,10 @@ template.innerHTML = /*html*/`
     <section class="bg-white p-5 rounded-md mb-5 flex space-s-10 items-center justify-between">
         <div class="text-sm max-w-xs">
             <h2 class="font-bold mb-2">اهدي من تحب</h2>
-            <p class="text-gray-text">يمكن الان ارسال الهدايا لمن تحب عن طريق منصتنا وفي الوقت الذي تحبه ! </p>
+            <p class="text-gray-400">يمكن الان ارسال الهدايا لمن تحب عن طريق منصتنا وفي الوقت الذي تحبه ! </p>
         </div>
         <button type="button" @click="openGiftingModal()"
-            class=" text-gray-text bg-gray-bg  py-2 xs:px-8 rounded-md flex items-center justify-center text-sm">
+            class=" text-gray-400 bg-gray-bg  py-2 xs:px-8 rounded-md flex items-center justify-center text-sm">
             <i class="font-medium sicon-gift-sharing me-1.5 text-md"></i>
             <span class="fix-align">ارسل كهدية</span>
         </button>
@@ -52,7 +52,7 @@ template.innerHTML = /*html*/`
 
                 <div class="modal-body text-start">
                     <button @click="closeGiftingModal"
-                        class="close-modal text-gray-text w-6 h-6  text-lg absolute top-6 end-6">
+                        class="close-modal text-gray-400 w-6 h-6  text-lg absolute top-6 end-6">
                         <i class="sicon-cancel"></i>
                     </button>
 
@@ -192,7 +192,7 @@ template.innerHTML = /*html*/`
                                 <div class="form-group mb-5">
                                     <label for="receiver-email" class="form-label mb-2.5">
                                         البريد الإلكتروني للمستلم
-                                        <small class="text-gray-text">
+                                        <small class="text-gray-400">
                                             (إختياري)
                                         </small>
                                     </label>

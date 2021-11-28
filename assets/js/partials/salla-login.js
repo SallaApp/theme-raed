@@ -26,7 +26,7 @@ template.innerHTML = /*html*/`
         <h5 class="text-black dark:text-white max-w-none text-lg font-bold mb-8 leading-3">سجل دخول إلي الموقع</h5>
 
         <button @click="closeModal"
-          class="close-modal text-gray-text hover:text-primary w-6 h-6  text-lg absolute top-6 end-6">
+          class="close-modal text-gray-400 hover:text-primary w-6 h-6  text-lg absolute top-6 end-6">
           <i class="sicon-cancel"></i>
         </button>
 
@@ -34,7 +34,7 @@ template.innerHTML = /*html*/`
         <div class="modal-content">
           <!-- login methods -->
           <div x-show="showLoginMethods">
-            <p class="text-sm text-gray-text mb-5">اختر الوسيلة المناسبة</p>
+            <p class="text-sm text-gray-400 mb-5">اختر الوسيلة المناسبة</p>
 
             <!--item -->
             <div @click="openEmailLogin"
@@ -48,7 +48,7 @@ template.innerHTML = /*html*/`
                 <a href="#" class=" flex justify-between items-center">
                   <div class="flex-1">
                     <span class="absolute inset-0" aria-hidden="true"></span>
-                    <p class="text-sm text-gray-text">سجل دخول</p>
+                    <p class="text-sm text-gray-400">سجل دخول</p>
                     <h6 class="font-boldf">البريد الإلكتروني</h6>
                   </div>
                   <i class="sicon-keyboard_arrow_left text-primary text-xl"></i>
@@ -69,7 +69,7 @@ template.innerHTML = /*html*/`
                 <a href="#" class=" flex justify-between items-center">
                   <div class="flex-1">
                     <span class="absolute inset-0" aria-hidden="true"></span>
-                    <p class="text-sm text-gray-text">
+                    <p class="text-sm text-gray-400">
                       سجل دخول
                     </p>
                     <h6 class="font-boldf">
@@ -149,7 +149,7 @@ template.innerHTML = /*html*/`
             <button type="button" class="w-full btn btn-primary mb-5 h-10">
               إرسال
             </button>
-            <p class="mb-5 text-center text-sm text-gray-text">إعادة الارسال بعد <b x-text="'0' + remainTime + ':00'"></b>
+            <p class="mb-5 text-center text-sm text-gray-400">إعادة الارسال بعد <b x-text="'0' + remainTime + ':00'"></b>
             </p>
             <div class="flex justify-between space-s-5 mb-5">
               <button class="btn btn-primary font-normal rounded-md" disabled>رسالة نصية</button>

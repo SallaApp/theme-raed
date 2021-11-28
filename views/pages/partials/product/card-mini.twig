@@ -14,13 +14,13 @@ flex flex-col md:flex-row'>
             {% if product.on_sale %}
                 <div class="space-s-1">
                     <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                    <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
+                    <span class="text-sm text-gray-400 line-through">{{ product.regular_price }}</span>
                 </div>
             {% else %}
                 <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
             {% endif %}
             {% if product.rating %}
-                <div class="text-gray-text">
+                <div class="text-gray-400">
                     <div class="text-sm">
                         <i class="sicon-star2 text-theme-yellow"></i>
                         <span>{{ product.rating|number }}</span>
@@ -34,7 +34,7 @@ flex flex-col md:flex-row'>
                     class="add-to-cart-btn anime-btn transition duration-300 flex-1 border border-primary  text-sm  font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
                 {{ trans('pages.cart.add_to_cart') }}
             </button>
-            <div class="text-gray-text">
+            <div class="text-gray-400">
                 <button class="w-10 h-10 focus:outline-none">
                     <i class="sicon-heart-off"></i>
                 </button>

@@ -1,7 +1,7 @@
 <div class="border-b mb-8 border-coolGray-300">
     <div class="{% if comment.is_replay %} nested-comment reply md:ps-16 {% else %} comment {% endif%} flex text-sm space-s-3 pb-8 comment_id_{{ comment.id}} {% if comment.is_admin %} admin {% endif%}">
         {% if comment.is_replay %}
-            <i class=" sicon-reply text-lg text-gray-text"></i>
+            <i class=" sicon-reply text-lg text-gray-400"></i>
         {% endif%}
         <div class="flex-none">
             <img data-src="{{ comment.avatar }}" alt="{{ comment.name }}" class="w-10 h-10 bg-gray-100 rounded-full lazy-load">
@@ -14,18 +14,18 @@
                     <div class="flex">
                         {% if comment.order_id %}
                             <i class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
-                            <span class="fix-align ms-1 text-sm text-gray-text">
+                            <span class="fix-align ms-1 text-sm text-gray-400">
                                 {{ trans('blocks.comments.has_bought') }}
                             </span>
                         {% endif %}
                         {% if comment.stars %}
-                            <span class="fix-align ms-1 text-sm text-gray-text">
+                            <span class="fix-align ms-1 text-sm text-gray-400">
                                 {{ trans('pages.rating.rated') }}
                             </span>
                         {% endif %}
                     </div>
                 </div>
-                <p class="text-gray-text text-sm">{{ time_diff_for_humans(comment.created_at) }}</p>
+                <p class="text-gray-400 text-sm">{{ time_diff_for_humans(comment.created_at) }}</p>
                 {% if comment.stars %}
                     <div class="-mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
                         <i class="sicon-star2 text-theme-yellow"></i>
