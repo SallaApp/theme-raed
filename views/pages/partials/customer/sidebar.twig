@@ -59,27 +59,45 @@
 {% block scripts %}
     <script defer src="{{ asset('/dist/filepond.js') }}"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        let sidebarAnime = anime.timeline();
-        sidebarAnime
-        .add({
-            targets   : '.sidebar',
-            opacity   : [0, 1],
-            translateY: [30, 0],
-        }, '+=200')
-        .add({
-            targets   : '.avatar-wrap',
-            opacity   : [0, 1],
-            scale: [0, 1],
-        }, '-=900')
-        .add({
-            targets   : '.menu-item',
-            opacity   : [0, 1],
-            translateY: [20, 0],
-            delay     : function (el, i) {
-                return i * 100;
-            },
-        }, '-=700') 
-      });
+        document.addEventListener('DOMContentLoaded', () => {
+            // filepond
+            FilePond.registerPlugin(FilePondPluginImagePreview);
+            // Get a reference to the file input element
+            const inputElement = document.querySelector('input[type="file"]');
+            // Create a FilePond instance
+            const pond = FilePond.create(inputElement, {
+                labelIdle                     : `<img class="inline-block h-full w-full rounded-full object-cover" src="{{ user.avatar }}" alt="">`,
+                imagePreviewHeight            : 170,
+                imageCropAspectRatio          : '1:1',
+                imageResizeTargetWidth        : 200,
+                imageResizeTargetHeight       : 200,
+                stylePanelLayout              : 'compact circle',
+                styleLoadIndicatorPosition    : 'center bottom',
+                styleProgressIndicatorPosition: 'left bottom',
+                styleButtonRemoveItemPosition : 'center bottom',
+                styleButtonProcessItemPosition: 'right bottom',
+            });
+
+            let sidebarAnime = anime.timeline();
+            sidebarAnime
+                .add({
+                    targets   : '.sidebar',
+                    opacity   : [0, 1],
+                    translateY: [30, 0],
+                }, '+=200')
+                .add({
+                    targets: '.avatar-wrap',
+                    opacity: [0, 1],
+                    scale  : [0, 1],
+                }, '-=900')
+                .add({
+                    targets   : '.menu-item',
+                    opacity   : [0, 1],
+                    translateY: [20, 0],
+                    delay     : function (el, i) {
+                        return i * 100;
+                    },
+                }, '-=700')
+        });
     </Script>
 {% endblock %}
