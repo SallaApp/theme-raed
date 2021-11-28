@@ -7,9 +7,8 @@
 {% extends "layouts.master" %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{ asset('/dist/flatpickr.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/flatpickr.css') }}">
 {% endblock %}
-
 {% block content %}
     <main id="main">
         <div class="relative profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
@@ -21,9 +20,7 @@
         </div>
         <div class="container mb-24">
             <div class="flex flex-col lg:flex-row ">
-
                 {% include 'pages.partials.customer.sidebar' %}
-
                 <div class="main-content flex-1 pt-10">
                     <h1 class="font-bold text-lg mb-10">{{ trans('pages.profile.edit') }}</h1>
                     <div class="lg:hidden">
@@ -33,13 +30,11 @@
                             </div>
                         </div>
                     </div>
-
                     <form class="form form--user-profile ajax"
                         method="POST"
                         novalidate
                         action="{{ link('profile') }}"
                         data-filter-before-submit="update_profile_form">
-
                         <div class="sm:flex w-full sm:space-s-8">
                             <div class="flex-1">
                                 <label for="first-name" class="block text-sm font-medium text-gray-700">
@@ -123,19 +118,19 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ asset('/dist/flatpickr.js') }}"></script>
+    <script defer src="{{ asset('dist/flatpickr.js') }}"></script>
     <script>
-      window.update_profile_form = function handleFile(form_data, that, event) {          
-        let fileInput = window.fileponds ? window.fileponds.profile_img : undefined;
-        if (!fileInput) {
-            return form_data;
-        }
-        fileInput.getFiles()
-          .forEach(function (filepondFile) {
-              form_data.append('image_file', filepondFile.file);
-          })
-        return form_data;
-      };
+      // window.update_profile_form = function handleFile(form_data, that, event) {
+      //   let fileInput = window.fileponds ? window.fileponds.profile_img : undefined;
+      //   if (!fileInput) {
+      //       return form_data;
+      //   }
+      //   fileInput.getFiles()
+      //     .forEach(function (filepondFile) {
+      //         form_data.append('image_file', filepondFile.file);
+      //     })
+      //   return form_data;
+      // };
 
       document.addEventListener('DOMContentLoaded', () => {
         flatpickr('.date-element', {
