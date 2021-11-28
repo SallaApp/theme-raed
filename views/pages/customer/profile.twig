@@ -1,4 +1,3 @@
-
 {#
 | Variable     | Type     | Description                  | @see |
 |--------------|----------|------------------------------|------|
@@ -27,41 +26,52 @@
                             </div>
                         </div>
                     </div>
-                    <form action="">
+                    <form data-filter-before-submit="update_profile_form"
+                          action="{{ link('profile') }}"
+                          method="POST"
+                          class="ajax">
+                        {{ csrf_field() }}
                         <div class="sm:flex w-full sm:space-s-8">
                             <div class="flex-1">
-                                <label for="user-name" class="block text-sm font-medium text-gray-700">
-                                    <b class="block">{{trans('pages.profile.first_name')}}</b>
+                                <label for="first_name" class="block text-sm font-medium text-gray-700">
+                                    <b class="block">{{ trans('pages.profile.first_name') }}</b>
                                 </label>
                                 <div class="mt-2.5 mb-5">
-                                    <input type="text" name="user-name" value="{{ customer.first_name }}" id="user-name"
-                                           autocomplete="given-name" class="form-input">
+                                    <input type="text"
+                                           name="first_name"
+                                           value="{{ customer.first_name }}"
+                                           id="first_name"
+                                           autocomplete="given-name"
+                                           class="form-input">
                                 </div>
                             </div>
                             <div class="flex-1">
-                                <label for="user-name" class="block text-sm font-medium text-gray-700">
-                                    <b class="block">{{trans('pages.profile.last_name')}}</b>
+                                <label for="last_name" class="block text-sm font-medium text-gray-700">
+                                    <b class="block">{{ trans('pages.profile.last_name') }}</b>
                                 </label>
                                 <div class="mt-2.5 mb-5">
-                                    <input type="text" name="user-name" value="{{ customer.last_name }}" id="user-name"
-                                           autocomplete="given-name" class="form-input">
+                                    <input type="text"
+                                           name="last_name"
+                                           value="{{ customer.last_name }}"
+                                           id="last_name"
+                                           autocomplete="given-name"
+                                           class="form-input">
                                 </div>
                             </div>
                         </div>
                         <div class="sm:flex w-full sm:space-s-8">
                             <div class="flex-1">
-                                <label for="user-email" class="block text-sm font-medium text-gray-700">
-                                    <b class="block">{{trans('common.elements.email')}}</b>
+                                <label for="email" class="block text-sm font-medium text-gray-700">
+                                    <b class="block">{{ trans('common.elements.email') }}</b>
                                 </label>
                                 <div class="mt-2.5 mb-5">
-                                    <input type="email" name="user-email" value="{{ customer.email }}" id="user-email"
-                                           class="form-input ">
+                                    <input type="email" name="email" value="{{ customer.email }}" id="email" class="form-input ">
                                 </div>
                             </div>
 
                             <div class="flex-1">
                                 <label for="user-phone" class="block text-sm font-medium text-gray-700">
-                                    <b class="block">{{trans('common.elements.mobile')}}</b>
+                                    <b class="block">{{ trans('common.elements.mobile') }}</b>
                                 </label>
                                 <div class="mt-2.5 mb-5">
                                     <input type="tel" name="user-phone" value="{{ customer.mobile }}" id="user-phone"
@@ -69,10 +79,25 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary w-full">{{trans('common.elements.save')}}</button>
+                        <button class="btn btn-primary w-full">{{ trans('common.elements.save') }}</button>
                     </form>
                 </div>
             </div>
         </div>
     </main>
+{% endblock %}
+{% block scripts %}
+    <script>
+        function update_profile_form(form_data, that, event) {
+            let fileInput = window.fileponds ? window.fileponds.profile_img : undefined;
+            if (!fileInput) {
+                return form_data;
+            }
+            fileInput.getFiles()
+                .forEach(function (filepondFile) {
+                    form_data.append('image_file', filepondFile.file);
+                })
+            return form_data;
+        };
+    </script>
 {% endblock %}
