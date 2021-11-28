@@ -1,90 +1,68 @@
-
 {% block styles %}
     <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
-    {# <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}"> #}
 {% endblock %}
 
 <nav aria-label="Sidebar"
-  class="hidden lg:block z-10 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar opacity-0">
-  
-  <div class="text-center mb-9">
-      <div class="text-center mb-9">
-        {# <div class="h-24 w-24 m-auto avatar-wrap opacity-0">
+     class="hidden lg:block z-10 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar opacity-0">
+
+    <div class="text-center mb-9">
+        <div class="text-center mb-9">
+            {# <div class="h-24 w-24 m-auto avatar-wrap opacity-0">
           <input type="file">
         </div> #}
-        <div class="h-24 w-24 m-auto avatar-wrap opacity-0">
-            <input type="file"
-              class="filepond profile-img file-pond--circular"
-              name="filepond"
-              id="profile_img"
-              data-default="{{ user.avatar }}"
-              data-max-file-size="3MB"/>
+            <div class="h-24 w-24 m-auto avatar-wrap opacity-0">
+                <input type="file"
+                       class="filepond profile-img file-pond--circular"
+                       name="filepond"
+                       id="profile_img"
+                       data-default="{{ user.avatar }}"
+                       data-max-file-size="3MB"/>
 
-              {# {% if user.avatar is not empty %}
+                {# {% if user.avatar is not empty %}
                   <img class="avatar icon lazy-load rounded-full" alt="{{ user.full_name }}" data-src="{{ user.avatar }}">
               {% else %}
                   <input type="file">
               {% endif %} #}
-              
+
+            </div>
         </div>
-      </div>
-  </div>
+    </div>
 
-  <a href="{{ link('notifications') }}"
-    class="{% if is_link('notifications') %}active{% endif %} flex justify-between items-center menu-item opacity-0   px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-      <span>
-      <i class="sicon-school-bell me-3 text-lg"></i>
-      <span> {{ trans('common.titles.notifications') }}</span>
-      </span>
-      {% if new_notifications_count %}
-          <span class="bg-theme-red rounded-full inline-block text-center w-6 h-6 text-white pt-0.5 text-xs">{{ new_notifications_count }}</span>
-      {% endif %}
-  </a>
+    {% component 'header.notifications' with{is_profile_sidebar:true} %}
 
-  <a href="{{ link('pending_orders') }}"
-    class="{% if is_link('pending_orders') %}active{% endif %} flex justify-between items-center menu-item opacity-0   px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-      <span>
-      <i class="sicon-school-bell me-3 text-lg"></i>
-      <span> {{ trans('common.titles.pending_orders') }}</span>
-      </span>
-      {% if pending_orders_count %}
-          <span class="bg-theme-red rounded-full inline-block text-center w-6 h-6 text-white pt-0.5 text-xs">{{ pending_orders_count }}</span>
-      {% endif %}
-  </a>
-  
-  <a href="{{ link('orders') }}"
-    aria-current="page"
-    class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-      <i class="sicon-packed-box me-3 text-lg"></i>
-      <span class="truncate">{{ trans('common.titles.orders') }}</span>
-  </a>
+    <a href="{{ link('orders') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-packed-box me-3 text-lg"></i>
+        <span class="truncate">{{ trans('common.titles.orders') }}</span>
+    </a>
 
-  <a href="{{ link('wishlist') }}"
-    aria-current="page"
-    class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-      <i class="sicon-heart me-3 text-lg"></i>
-      {{ trans('common.titles.wishlist') }}
-  </a>
+    <a href="{{ link('wishlist') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-heart me-3 text-lg"></i>
+        {{ trans('common.titles.wishlist') }}
+    </a>
 
-  <a href="{{ link('rating') }}"
-    aria-current="page"
-    class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-      <i class="sicon-favorite me-3 text-lg"></i>
-      <span>{{ trans('common.titles.rating') }}</span>
-  </a>
+    <a href="{{ link('rating') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-favorite me-3 text-lg"></i>
+        <span>{{ trans('common.titles.rating') }}</span>
+    </a>
 
-  <a href="{{ link('profile') }}"
-    class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
-      <i class="sicon-settings me-3 text-lg"></i>
-      {{ trans('common.titles.profile') }}
-  </a>
+    <a href="{{ link('profile') }}"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-settings me-3 text-lg"></i>
+        {{ trans('common.titles.profile') }}
+    </a>
 
-  <a href="#"
-    data-on-click="auth-logout"
-    class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-bg">
-      <i class="sicon-send-out me-3 text-lg"></i>
-      {{ trans('blocks.header.logout') }}
-  </a>
+    <a href="#"
+       data-on-click="auth-logout"
+       class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-send-out me-3 text-lg"></i>
+        {{ trans('blocks.header.logout') }}
+    </a>
 </nav>
 
 {% block scripts %}
