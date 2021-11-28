@@ -1,7 +1,13 @@
 {#
-| Variable      | Type                      | Description | @see |
-|---------------|---------------------------|-------------|------|
-| notifications | Notification[] *Paginator |             | TODO |
+| Variable                  | Type                      | Description | @see |
+|---------------------------|---------------------------|-------------|------|
+| notifications             | Notification[] *Paginator |             | TODO |
+| notifications.next_page   | ?String                   |             |      |
+| notifications.count       | Integer                   |             |      |
+| notifications[].is_new    | Bool                      |             |      |
+| notifications[].url       | String                    |             |      |
+| notifications[].sub_title | String                    |             |      |
+| notifications[].date      | String                    |             |      |
 #}
 {% extends "layouts.master" %}
 {% block content %}
@@ -23,7 +29,7 @@
                             <table class="min-w-full border-separate" style="border-spacing: 0 20px;">
                                 <tbody class="notification-container">
                                 {% for notification in notifications %}
-                                    <tr class="notification-item {{ item.is_new?'unread':'' }} border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
+                                    <tr class="notification-item {{ notification.is_new?'unread':'' }} border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
                                         <td class="w-full md:w-auto md:rounded-s-md px-6 py-6 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
                                             <a href="{{ notification.url }}">
                                                 <p>{{ notification.title }}</p>
@@ -31,9 +37,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ notification.url }}">
-                                                {{ notification.date }}
-                                            </a>
+                                            <a href="{{ notification.url }}">{{ notification.date }}</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -42,10 +46,8 @@
                             {% include 'pages.partials.loader-status' with {next_page:notifications.next_page} %}
                         {% else %}
                             <div class="placeholder-block placeholder-block--no-category">
-                                <i class="sicon-inbox"></i>
-                                <p>
-                                    <span>{{ trans('blocks.header.no_notifications') }}</span>
-                                </p>
+                                <i class="sicon-bell-off"></i>
+                                <p><span>{{ trans('blocks.header.no_notifications') }}</span></p>
                             </div>
                         {% endif %}
                     </div>
