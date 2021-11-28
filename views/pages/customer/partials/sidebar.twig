@@ -1,80 +1,88 @@
 {% block styles %}
-    <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}">
-    <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
 {% endblock %}
 <nav aria-label="Sidebar"
-     class="hidden lg:block lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11">
+     class="hidden lg:block z-10 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar opacity-0">
     <div class="text-center mb-9">
         <div class="text-center mb-9">
-            <div class="h-24 w-24 m-auto">
-                {% if user.avatar is not empty %}
-                    <img class="avatar icon lazy-load" alt="{{ user.full_name }}" data-src="{{ user.avatar }}">
-                {% else %}
-                    <input type="file">
-                {% endif %}
+            <div class="h-24 w-24 m-auto avatar-wrap opacity-0">
+                <input type="file">
             </div>
         </div>
     </div>
-    <a href="{{ link('profile') }}"
-       class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg"
-       aria-current="page">
-        <i class=" sicon-settings me-3 text-lg"></i>
-        <span class="truncate">
-            {{ trans('common.titles.profile') }}
-        </span>
-    </a>
-    <a href="{{ link('orders') }}" class="group menu-item opacity-0 flex items-center px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
+    {% component 'header.notifications' with{is_profile_sidebar:true} %}
+    <a href="{{ link('orders') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
         <i class="sicon-packed-box me-3 text-lg"></i>
         <span class="truncate">{{ trans('common.titles.orders') }}</span>
     </a>
-    <a href="{{ link('pending_orders') }}" class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
-        <i class=" sicon-debit-card-back me-3 text-lg"></i>
-        <span class="truncate">{{ trans('common.titles.pending_orders') }}</span>
+
+    <a href="{{ link('wishlist') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-heart me-3 text-lg"></i>
+        {{ trans('common.titles.wishlist') }}
     </a>
-    <a href="{{ link('wishlist') }}" class="group menu-item opacity-0 flex items-center px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
-        <i class=" sicon-heart me-3 text-lg"></i>
-        <span class="truncate">{{ trans('common.titles.wishlist') }}</span>
+    <a href="{{ link('rating') }}"
+       aria-current="page"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-favorite me-3 text-lg"></i>
+        <span>{{ trans('common.titles.rating') }}</span>
     </a>
-    <a href="{{ link('rating') }}" class="group menu-item opacity-0 flex items-center px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
-        <i class=" sicon-favorite me-3 text-lg"></i>
-        <span class="truncate">{{ trans('common.titles.rating') }}</span>
+    <a href="{{ link('profile') }}"
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-settings me-3 text-lg"></i>
+        {{ trans('common.titles.profile') }}
     </a>
-    <a href="{{ link('logout') }}"
-       data-on-click="auth-logout" class="group menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-text hover:text-dark transition-colors duration-300 hover:bg-gray-bg" aria-current="page">
-        <i class=" sicon-send-out me-3 text-lg"></i>
-        <span class="truncate">{{ trans('blocks.header.logout') }}</span>
+    <a href="#"
+       data-on-click="auth-logout"
+       class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-bg">
+        <i class="sicon-send-out me-3 text-lg"></i>
+        {{ trans('blocks.header.logout') }}
     </a>
 </nav>
 {% block scripts %}
     <script defer src="{{ asset('/dist/filepond.js') }}"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        FilePond.registerPlugin(
-          FilePondPluginImagePreview,
-        );
-
-        const inputElement = document.querySelector('input[type="file"]');
-        const pond = FilePond.create(inputElement, {
-          labelIdle: `<div class="rounded-icon bg-primary h-10 w-10 text-white"> <span class="sicon-camera"></span></div>`,
-          imagePreviewHeight: 170,
-          imageCropAspectRatio: '1:1',
-          imageResizeTargetWidth: 200,
-          imageResizeTargetHeight: 200,
-          stylePanelLayout: 'compact circle',
-          styleLoadIndicatorPosition: 'center bottom',
-          styleProgressIndicatorPosition: 'left bottom',
-          styleButtonRemoveItemPosition: 'center bottom',
-          styleButtonProcessItemPosition: 'right bottom',
+        document.addEventListener('DOMContentLoaded', () => {
+            // filepond
+            FilePond.registerPlugin(FilePondPluginImagePreview);
+            // Get a reference to the file input element
+            const inputElement = document.querySelector('input[type="file"]');
+            // Create a FilePond instance
+            const pond = FilePond.create(inputElement, {
+                labelIdle                     : `<img class="inline-block h-full w-full rounded-full object-cover" src="{{ user.avatar }}" alt="">`,
+                imagePreviewHeight            : 170,
+                imageCropAspectRatio          : '1:1',
+                imageResizeTargetWidth        : 200,
+                imageResizeTargetHeight       : 200,
+                stylePanelLayout              : 'compact circle',
+                styleLoadIndicatorPosition    : 'center bottom',
+                styleProgressIndicatorPosition: 'left bottom',
+                styleButtonRemoveItemPosition : 'center bottom',
+                styleButtonProcessItemPosition: 'right bottom',
+            });
+            let sidebarAnime = anime.timeline();
+            sidebarAnime
+                .add({
+                    targets   : '.sidebar',
+                    opacity   : [0, 1],
+                    translateY: [30, 0],
+                }, '+=200')
+                .add({
+                    targets   : '.avatar-wrap',
+                    opacity   : [0, 1],
+                    scale: [0, 1],
+                }, '-=900')
+                .add({
+                    targets   : '.menu-item',
+                    opacity   : [0, 1],
+                    translateY: [20, 0],
+                    delay     : function (el, i) {
+                        return i * 100;
+                    },
+                }, '-=700')
         });
-
-        anime({
-          targets: '.menu-item',
-          opacity: [0, 1],
-          translateY: [20, 0],
-          delay: function (el, i) {
-            return i * 100;
-          },
-        })
-      });
     </Script>
 {% endblock %}
