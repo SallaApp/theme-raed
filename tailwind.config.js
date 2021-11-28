@@ -46,7 +46,6 @@ module.exports = {
                 'border-color' : '#EEEEEE',
                 'border-dark'  : '#3A3C43',
                 'dark'         : 'var(--main-text-color-dark)',
-                'gray-text'    : 'var(--main-text-color2)',
                 'gray-bg2'     : 'var(--bg-gray)',// 'light-gray': '#F9FAFB',
                 'gray-150'     : '#eff0f0',
                 'color-gray'   : 'var(--color-grey)',

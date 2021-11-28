@@ -6,9 +6,6 @@
         </div>
 
         <a href="{{ next_page }}" class="btn btn-outline-dark pagination__next px-11 py-2.5 relative">
-            <span class="spinner-loader-wrap start-4 w-4 h-4 absolute">
-                <span class="block spinner-loader w-4 h-4 animate-spin border-2 border-gray-300 rounded-full"></span>
-            </span>
             <span class="fix-align">{{ trans('common.elements.load_more') }}</span>
         </a>
     </div>
@@ -17,11 +14,11 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         salla.event.on('infiniteScroll::request', function () {
-            document.querySelector('.loading-status-wrapper .pagination__next').classList.add('btn--has-loading');
+            //document.querySelector('.loading-status-wrapper .spinner-loader-wrap').classList.remove('hidden');
         })
 
         salla.event.on('infiniteScroll::load', function () {
-            document.querySelector('.loading-status-wrapper .pagination__next').classList.remove('btn--has-loading');
+            document.querySelector('.loading-status-wrapper .loader-status').style.display='none';
         })
     });
 </script>

@@ -66,7 +66,7 @@
                     </div>
 
                     {% if product.subtitle %}
-                        <h3 class="product-entry__sub-title  text-sm text-gray-text leading-6 mb-2.5">
+                        <h3 class="product-entry__sub-title  text-sm text-gray-400 leading-6 mb-2.5">
                             {{ product.subtitle }}
                         </h3>
                     {% endif %}
@@ -75,7 +75,7 @@
                         <div class="space-s-1">
                             {% if product.on_sale %}
                                 <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                                <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
+                                <span class="text-sm text-gray-400 line-through">{{ product.regular_price }}</span>
                             {% else %}
                                 <span>{{ product.price }}</span>
                             {% endif %}
@@ -222,7 +222,7 @@
                                     </label>
                                     <div x-data="{itemQty: 1}" class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
                                         <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                                            <button type="button" @click="itemQty += 1" class="text-gray-text w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                            <button type="button" @click="itemQty += 1" class="text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
                                                 <i class="sicon-add"></i></button>
                                             <input id="product-quantity"
                                                    x-model="itemQty"
@@ -238,7 +238,7 @@
                                                    min="1"/>
 
                                             <button type="button" @click="if(itemQty > 1 ) {itemQty-= 1}"
-                                                    class="text-gray-text w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                                    class="text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
                                                 <i class="sicon-minus"></i></button>
                                         </div>
                                     </div>
@@ -255,7 +255,7 @@
                                     <div class="space-s-1">
                                         {% if product.on_sale %}
                                             <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                                            <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
+                                            <span class="text-sm text-gray-400 line-through">{{ product.regular_price }}</span>
                                         {% else %}
                                             <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.price }}</h4>
                                         {% endif %}

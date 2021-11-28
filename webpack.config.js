@@ -10,6 +10,7 @@ module.exports = {
         home    : ['./assets/js/home.js', './assets/styles/home.scss'],
         cart    : './assets/js/pages/cart.js',
         filepond: ['./assets/js/plugins/filepond/filepond.js', './assets/js/plugins/filepond/filepond.scss'],
+        flatpickr: [ './node_modules/flatpickr/dist/flatpickr.js', './assets/styles/main_inc/plugins/flatpicker.scss' ],
     },
     output : {
         path : path.resolve(__dirname, "assets", "dist"),

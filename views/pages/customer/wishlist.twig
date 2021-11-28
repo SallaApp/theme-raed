@@ -1,0 +1,87 @@
+{#
+| Variable   | Type                 | Description | @see |
+|------------|----------------------|-------------|------|
+| products[] | Product[] *Paginator |             | TODO |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+    <main id="main">
+        <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
+            <div class="container relative z-10 flex justify-between h-full items-center">
+                <div class="self-start">
+                    {% component breadcrumbs with{is_dark:true} %}
+                </div>
+            </div>
+        </div>
+        <div class="container mb-24">
+            <div class="flex items-start flex-col lg:flex-row ">
+                {% include 'pages.partials.customer.sidebar' %}
+                <div class="main-content w-full flex-1 pt-10 ">
+                    <h1 class="font-bold text-lg text-center  md:text-start mb-5">{{ trans('common.titles.wishlist') }}</h1>
+                    <div class="space-y-5 mb-10" id="wishlist">
+                        {% for product in products %}
+                            <div class='product-entry rounded-md p-5 bg-white h-full transition duration-500 justify-between overflow-hidden flex flex-col md:flex-row'
+                                 id="product_{{ product.id }}">
+                                <div class="flex items-center">
+                                    <a href="{{ product.url }}"
+                                       class='product-entry__image relative overflow-hidden w-20 h-16 md:w-24 md:h-20 rounded-md'>
+                                        <img class="h-full w-full object-cover" src="{{ product.image.url }}"
+                                             alt="{{ product.image.alt }}"/>
+                                    </a>
+                                    <div class="flex-1 ps-5">
+                                        <div class="flex flex-col justify-start items-baseline">
+                                            <h3 class="text-sm text-title-color leading-6 mb-1.5">
+                                                <a href="{{ product.url }}">{{ product.name }}</a>
+                                            </h3>
+                                        </div>
+                                        <div class="w-full flex justify-between items-center mb-5 md:mb-0">
+                                            {% if product.on_sale %}
+                                                <div class="space-s-1">
+                                                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
+                                                    <span class="text-sm text-gray-text line-through">{{ product.regular_price }}</span>
+                                                </div>
+                                            {% else %}
+                                                <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between w-full md:w-auto space-s-4">
+                                    <button class="transition duration-300 w-28 md:w-64 flex-1 border border-primary text-sm font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary hover:text-reverse"
+                                            data-on-click="cart::quick-add"
+                                            data-id="{{ product.product_id }}">
+                                        {{ trans('pages.cart.add_to_cart') }}
+                                    </button>
+                                    <button class="rounded-icon bg-red-500 text-white w-6 h-6"
+                                            data-id="{{ product.product_id }}"
+                                            data-on-click="wishlist::remove">
+                                        <i class="sicon-cancel text-base"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="placeholder-block placeholder-block--no-category">
+                                <i class="sicon-heart"></i>
+                                <p>
+                                    <span>{{ trans('pages.profile.wishlist_placeholder') }}</span>
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+ {% block scripts %}
+     <script>
+         document.addEventListener('DOMContentLoaded', function () {
+             salla.wishlist.event.onRemoved((response, prodId) => {
+                 document.querySelector('#product_' + prodId).remove();
+                 if (!document.querySelector('#wishlist>*')) {
+                     window.location.reload();
+                 }
+             });
+         })
+     </script>
+ {% endblock %}

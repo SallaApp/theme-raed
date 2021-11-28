@@ -16,7 +16,7 @@
                     {% for item in items %}
                         {% include 'pages.temp_cart_item' with {moreFields:item.has_options} %}
                     {% else %}
-                        <div class="h-full content-placeholder content-placeholder--cart text-gray-text pt-36 pb-20 flex items-center flex-col justify-center">
+                        <div class="h-full content-placeholder content-placeholder--cart text-gray-400 pt-36 pb-20 flex items-center flex-col justify-center">
                         <span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
                             <i class="sicon-shopping-bag text-6xl block text-reverse-dark"></i>
                         </span>
@@ -34,11 +34,11 @@
                                 class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
                             <h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
                             <div class="flex justify-between text-sm mb-5">
-                                <span class="text-gray-text cart-items-count">{{ pluralize("blocks.header.products_count", items|length|number)|raw }}</span>
+                                <span class="text-gray-400 cart-items-count">{{ pluralize("blocks.header.products_count", items|length|number)|raw }}</span>
                                 <b>{{ cart.sub_total|money }}</b>
                             </div>
                             <div class="flex justify-between text-sm mb-5 shipping {{ cart.has_shipping_cost?'':'hidden' }}">
-                                <span class="text-gray-text">{{ trans('pages.cart.shipping_cost') }}</span>
+                                <span class="text-gray-400">{{ trans('pages.cart.shipping_cost') }}</span>
                                 <b>{{ cart.real_shipping_cost|money }}</b>
                             </div>
 
@@ -73,17 +73,17 @@
                                  x-transition:leave="transition-height ease-in duration-300"
                                  x-transition:leave-start="opacity-100 transform h-10"
                                  x-transition:leave-end="opacity-0 transform h-0" class="flex justify-between text-sm">
-                                <span class="text-gray-text block  h-10">{{ trans('pages.cart.discount') }}</span>
+                                <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
                                 <b>- {{ cart.real_discount|money }}</b>
                             </div>
 
                             <div class="flex justify-between text-sm mb-5">
-                                <span class="text-gray-text">{{ trans('pages.cart.final_total') }}</span>
+                                <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
                                 <b>{{ cart.total|money }}</b>
                             </div>
                             {% if store.settings.product.show_price_with_tax %}
                                 <div class="flex justify-between text-sm mb-5">
-                                    <small class="text-gray-text">
+                                    <small class="text-gray-400">
                                         * {{ trans('pages.cart.prices_taxed') }}
                                     </small>
                                 </div>
@@ -96,7 +96,7 @@
                     </div>
 
                     <div class="fixed md:hidden space-s-2 flex justify-center items-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-50">
-                        <span class="text-gray-text">{{ trans('pages.cart.final_total') }}:</span>
+                        <span class="text-gray-400">{{ trans('pages.cart.final_total') }}:</span>
                         <b>{{ cart.total|money }}</b>
                     </div>
                 {% endif %}

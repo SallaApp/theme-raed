@@ -1,55 +1,33 @@
 {% extends "layouts.master" %}
-{% block styles %}
-    {#    <link rel="stylesheet" href="{{ asset('/dist/filepond_styles.css') }}">#}
-    {#    <link rel="stylesheet" href="{{ asset('/dist/filepond-plugin-image-preview.min.css') }}">#}
-    <link rel="stylesheet" href="{{ asset('/dist/mmenu-light.css') }}">
-    <link rel="stylesheet" href="{{ asset('/dist/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('/dist/main.min.585d6d35c0b4638b35eb56b632cd0c56bcff2e18cb7e23233134a216759f9f1e.css') }}">
-{% endblock %}
 {% block content %}
-{#     <pre dir="ltr">#}
-{#     {{ dd(_context) }}#}
 <main id="main">
     <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
         <div class="container relative z-10 flex justify-between h-full items-center">
             <div class="self-start">
-                <nav class="w-full py-5">
-                    <ol class="list-reset flex items-center text-sm text-reverse ">
-                        <li><a href="{{ link('/') }}" class="fix-align text-primary text-reverse">{{trans('common.titles.home')}}</a></li>
-                        <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                        <li>
-                            <a href="{{ link('orders') }}" class="fix-align text-primary text-reverse">{{ trans('common.titles.orders') }}</a>
-                        </li>
-                        <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                        <li>
-                            <span class="fix-align">{{ trans('pages.orders.details') }} <b class="ltr">#{{ order.order_id }}</b></span>
-                        </li>
-                    </ol>
-                </nav>
+                {% component breadcrumbs with{is_dark:true} %}
             </div>
         </div>
     </div>
     <div class="container mb-24">
         <div class="flex items-start flex-col lg:flex-row ">
-            {% include 'pages.customer.partials.sidebar' %}
+            {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10 ">
                 <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }}</h1>
-
                 <table class="min-w-full mb-10">
                     <tbody>
 
                     <tr class="bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
                         <td class="w-full md:w-auto  md:rounded-s-md px-6 pt-4 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            <span class="me-2 inline-block font-normal text-gray-text">{{trans('pages.thank_you.order_id')}}</span>
+                            <span class="me-2 inline-block font-normal text-gray-400">{{trans('pages.thank_you.order_id')}}</span>
                             <b>#{{ order.order_id }}</b>
                         </td>
                         <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            <span class="me-2 inline-block font-normal text-gray-text">{{ trans('pages.orders.date') }}</span>
+                            <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.orders.date') }}</span>
                             <b>{{ order.created_at }}</b>
                         </td>
                         {% if order.shipping %}
                             <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                <span class="me-2 inline-block font-normal text-gray-text">{{ trans('pages.orders.shipment_details') }}</span>
+                                <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.orders.shipment_details') }}</span>
                                 <b>{{ order.shipping.name }}</b>
                             </td>
                         {% endif %}
