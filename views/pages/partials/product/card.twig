@@ -106,11 +106,11 @@ view options:
             </button>
             <div class="text-gray-400">
                 <button class="w-10 h-10 focus:outline-none"
-                        {% if user %}
-                    data-on-click="{{ 'wishlist::add' }}"
-                {% else %}
-                    onClick="salla.error('{{ trans('common.messages.must_login') }}')"
-                        {% endif %}>
+                    {% if user %}
+                        data-on-click="wishlist::add" data-id="{{ product.id }}"
+                    {% else %}
+                        onClick="salla.error('{{ trans('common.messages.must_login') }}')"
+                    {% endif %}>
                     {# sicon-heart-off #}
                     <i class="sicon-heart"></i>
                 </button>
