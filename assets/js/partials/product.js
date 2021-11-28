@@ -81,7 +81,11 @@ salla.cart.event.onItemAdded(function (response, productId) {
       document.querySelector('.add-to-cart-btn.btn--is-loading').classList.remove('btn--is-loading');
 })
 
+salla.cart.event.onItemAddedFailed(function (response, productId) {
+  document.querySelector('.add-to-cart-btn.btn--is-loading').classList.remove('btn--is-loading');
+})
 
+// Add loading icon
 document.querySelectorAll('.add-to-cart-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     btn.classList.add('btn--is-loading');
