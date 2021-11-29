@@ -7,7 +7,7 @@ module.exports = {
         enabled: true,
         content: [
             "views/**/*.twig",
-            require('@salla.sa/twilight/tailwind_css_list')
+            // require('@salla.sa/twilight/tailwind_css_list')
         ]
     },
     darkMode: 'class', // or 'media' or 'class'

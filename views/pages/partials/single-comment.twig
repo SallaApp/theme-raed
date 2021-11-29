@@ -1,10 +1,13 @@
-<div class="border-b mb-8 border-coolGray-300">
-    <div class="{% if comment.is_replay %} nested-comment reply md:ps-16 {% else %} comment {% endif%} flex text-sm space-s-3 pb-8 comment_id_{{ comment.id}} {% if comment.is_admin %} admin {% endif%}">
+{% if not comment.is_replay %}
+<div class="border-b mb-8 border-coolGray-300 comment-block">
+    {% endif %}
+    <div class="{% if comment.is_replay %} nested-comment reply md:ps-16 {% else %} comment {% endif %} flex text-sm space-s-3 pb-8 comment_id_{{ comment.id }} {% if comment.is_admin %} admin {% endif %}">
         {% if comment.is_replay %}
-            <i class=" sicon-reply text-lg text-gray-400"></i>
-        {% endif%}
+            <i class="sicon-reply text-lg text-gray-400"></i>
+        {% endif %}
         <div class="flex-none">
-            <img data-src="{{ comment.avatar }}" alt="{{ comment.name }}" class="w-10 h-10 bg-gray-100 rounded-full lazy-load">
+            <img data-src="{{ comment.avatar }}" alt="{{ comment.name }}"
+                 class="w-10 h-10 bg-gray-100 rounded-full lazy-load">
         </div>
 
         <div class="flex-1">
@@ -25,7 +28,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <p class="text-gray-400 text-sm">{{ time_diff_for_humans(comment.created_at) }}</p>
+                <p class="text-gray-400 text-sm">{{ comment.created_at|time_ago }}</p>
                 {% if comment.stars %}
                     <div class="-mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
                         <i class="sicon-star2 text-theme-yellow"></i>
@@ -38,22 +41,18 @@
             </div>
 
             <div class="prose prose-sm max-w-none text-gray-500">
-                <p>{{ comment.content|raw }}{% if comment.status != 'approved' %} <span class="pending-comment">{{ trans('blocks.comments.waiting_approval') }}</span>{% endif %}</p>
+                <p>{{ comment.content|raw }}{% if comment.is_pending %} <span class="pending-comment">{{ trans('blocks.comments.waiting_approval') }}</span>{% endif %}
+                </p>
                 {% if comment.order_id != 0 %}
-                    <i class="icon-cart user-buy" data-toggle="tooltip" data-placement="right" title="{{ trans('blocks.comments.has_order') }}"></i>
+                    <i class="icon-cart user-buy" data-toggle="tooltip" data-placement="right"
+                       title="{{ trans('blocks.comments.has_order') }}"></i>
                 {% endif %}
-
-                <div class="add-comment hide" id="comment_{{ comment.id }}">
-                    <div>
-                        <textarea class="form-control" placeholder="{{trans('replay_placeholder')}}"></textarea>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
     {% if not comment.is_replay and comment.replies %}
-        {% for replay in comment.replies %}
-            {% include _self with {'comment':replay} %}
-        {% endfor %}
-    {% endif %}
+    {% for replay in comment.replies %}
+        {% include _self with {comment:replay} %}
+    {% endfor %}
 </div>
+{% endif %}

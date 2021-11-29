@@ -1,10 +1,27 @@
-<div class="bg-gray-500Gray-bg mb-20 pt-20 pb-20">
+{#
+| Variable              | Type                       | Description | @see |
+|-----------------------|----------------------------|-------------|------|
+| comments              | Feedback[] *Paginator      |             | TODO |
+| comments[].id         | Integer                    |             |      |
+| comments[].is_replay  | Bool                       |             |      |
+| comments[].is_admin   | Bool                       |             |      |
+| comments[].avatar     | String                     |             |      |
+| comments[].name       | String                     |             |      |
+| comments[].order_id   | ?Integer                   |             |      |
+| comments[].created_at | Date *Carbon               |             |      |
+| comments[].stars      | Integer                    |             |      |
+| comments[].content    | String                     |             |      |
+| comments[].status     | String "pending, approved" |             |      |
+| comments[].replies    | Feedback[] *Collection     |             | TODO |
+| can_comment           | Bool                       |             |      |
+| id                    | Integer                    | ProductId   |      |
+#}
+<div class="bg-darkGray-bg mb-20 pt-20 pb-20">
     <div class="container">
         {% if can_comment %}
             <div class="form form--add-comment" salla-form-data>
                 {% honeypot %}
-                <h2 class="mb-5 text-lg font-bold text-gray-500">إضافة تعليق</h2>
-
+                <h2 class="mb-5 text-lg font-bold text-gray-500">{{trans('pages.products.comments_title')}}</h2>
                 <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
                           class="form-input h-24 mb-5"
                           name="ask_textarea"
@@ -21,15 +38,14 @@
         {% endif %}
 
         {% if comments is not empty %}
-            <div>
-                <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', total_comments)|raw }}</h2>
-
+            <div class="comments-container">
+                <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
                 {% for comment in comments %}
                     {% include 'pages.partials.single-comment' %}
                 {% endfor %}
             </div>
 
-            {% include 'pages.partials.loader-status' with {'nextPageUrl':comments.nextPageUrl} %}
+            {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
         {% endif %}
     </div>
 </div>

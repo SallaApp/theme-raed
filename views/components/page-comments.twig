@@ -29,12 +29,12 @@
             {% endif %}
             {% if comments is not empty %}
                 <div class="view-comment comments-container">
-                    <div class="comments-title">{{ pluralize('blocks.comments.comment', total_comments)|raw }} </div>
+                    <div class="comments-title">{{ pluralize('blocks.comments.comment', comments.total)|raw }} </div>
                     {% for comment in comments %}
                         {% include 'pages.partials.single-comment' %}
                     {% endfor %}
                 </div>
-                {% include 'pages.partials.loader-status' with {'nextPageUrl':comments.nextPageUrl} %}
+                {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
             {% endif %}
         </div>
     </div>
