@@ -1,7 +1,50 @@
+{#
+| Variable                  | Type                                                                      | Description  | @see |
+|---------------------------|---------------------------------------------------------------------------|--------------|------|
+| product                   | Product[]                                                                 |              | TODO |
+| product.id                | Integer                                                                   |              |      |
+| product.product_id        | Integer                                                                   | Alias For id |      |
+| product.name              | String                                                                    |              |      |
+| product.description       | String *HTML                                                              |              |      |
+| product.url               | String                                                                    |              |      |
+| product.promotion_title   | String                                                                    |              |      |
+| product.subtitle          | Float                                                                     |              |      |
+| product.type              | String "product, service, group_products, codes, digital, food, donating" |              |      |
+| product.status            | String "sale, out"                                                        |              |      |
+| product.rating            | Integer                                                                   |              |      |
+| product.price             | Float                                                                     |              |      |
+| product.sale_price        | ?Float                                                                    |              |      |
+| product.regular_price     | ?Float                                                                    |              |      |
+| product.starting_price    | ?Float                                                                    |              |      |
+| product.quantity          | Integer                                                                   |              |      |
+| product.sold_quantity     | Integer                                                                   |              |      |
+| product.max_quantity      | Integer                                                                   |              |      |
+| product.discount_ends     | ?Date *Carbon                                                             |              |      |
+| product.image             | Array .url, .alt                                                          |              |      |
+| product.images            | Array[] .id, .url, .alt, .video_url, .type                                |              |      |
+| product.brand             | Array .url, .name, .logo                                                  |              |      |
+| product.comments          | Feedback[] *Paginator                                                     |              |      |
+| product.tags              | Tags[] *Collection                                                        |              | TODO |
+| product.options           | ProductOptions[] *Collection                                              |              | TODO |
+| product.show_read_more    | Bool                                                                      |              |      |
+| product.can_add_note      | Bool                                                                      |              |      |
+| product.can_show_remained | Bool                                                                      |              |      |
+| product.can_show_sold     | Bool                                                                      |              |      |
+| product.can_upload_file   | Bool                                                                      |              |      |
+| product.hide_zero_price   | Bool                                                                      |              | TODO |
+| product.has_options       | Bool                                                                      |              |      |
+| product.has_discount      | Bool                                                                      |              |      |
+| product.hide_zero_price   | Bool                                                                      |              |      |
+| product.hide_quantity     | Bool                                                                      |              |      |
+| product.hide_zero_price   | Bool                                                                      |              |      |
+| product.is_available      | Bool                                                                      |              |      |
+| product.is_donation       | Bool                                                                      |              |      |
+| in_wishlist               | Bool                                                                      |              |      |
+#}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main" x-data="initProductDetails({{ product.product_id }}, {{ in_wishlist?1:0 }}, {{ product.can_show_read_more?1:0 }})"
-          x-cloak data-product-id="{{ product.product_id }}">
+    <main id="main" x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }})"
+          x-cloak data-product-id="{{ product.id }}">
         <div class="container">
             {% component breadcrumbs %}
             <div class="flex flex-col items-start md:flex-row">
@@ -81,7 +124,7 @@
                     </div>
 
                     <div class="product__description leading-7 mb-6">
-                        {% if product.can_show_read_more %}
+                        {% if product.show_read_more %}
                             <p class="pb-1">{{ product.description|raw }}</p>
 
                             <div class="relative overflow-hidden transition-all max-h-0 duration-300" id="moreContent"
@@ -160,7 +203,7 @@
                         </button>
                     </div>
 
-                    {% component 'product.tags' with {'product': product} %}
+                    {% component 'product.tags' with {product: product} %}
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                         {% hook 'product:after-description' %}
@@ -292,7 +335,7 @@
         </div>
 
         {% include 'components.offer.popup' with {product:product} %}
-        {% component 'product.comments' with {comments: comments, 'id': product.product_id} %}
+        {% component 'product.comments' with {comments: comments, id: product.id} %}
 
         {% component 'product.similar-products' %}
     </main>
