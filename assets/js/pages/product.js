@@ -1,5 +1,7 @@
 import flatpickr from "flatpickr";
+import Swiper from "swiper";
 
+window.Swiper = Swiper;
 window.initProductDetails = function (productId, inFavorite, showMore) {
     window.productId = productId;
     return {

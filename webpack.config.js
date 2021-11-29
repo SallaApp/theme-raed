@@ -6,11 +6,11 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 module.exports = {
     entry  : {
         app      : ['./assets/js/app.js', './assets/styles/app.scss'],
-        home     : ['./assets/js/home.js', './assets/styles/home.scss'],
+        home     : './assets/js/home.js',
         cart     : './assets/js/pages/cart.js',
         product  : './assets/js/pages/product.js',
         category : './assets/js/pages/category.js',
-        filepond : ['./assets/js/plugins/filepond/filepond.js', './assets/js/plugins/filepond/filepond.scss'],
+        filepond : ['./assets/js/partials/filepond.js', './assets/styles/filepond.scss'],
         flatpickr: ['./node_modules/flatpickr/dist/flatpickr.js', './assets/styles/main_inc/plugins/flatpicker.scss'],
     },
     output : {

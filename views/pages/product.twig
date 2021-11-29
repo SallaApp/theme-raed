@@ -1,6 +1,6 @@
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main" x-data="initProductDetails(productId, {{ in_wishlist?1:0 }}, {{ product.can_show_read_more?1:0 }})"
+    <main id="main" x-data="initProductDetails({{ product.product_id }}, {{ in_wishlist?1:0 }}, {{ product.can_show_read_more?1:0 }})"
           x-cloak data-product-id="{{ product.product_id }}">
         <div class="container">
             {% component breadcrumbs %}

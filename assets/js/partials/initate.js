@@ -2,7 +2,6 @@ require('@salla.sa/twilight');
 require('./product');
 require('./helpers');
 require('mmenu-light');
-require('../plugins/lazyload.js');
 const TelInput = require('intl-tel-input');
 window.anime = require('animejs').default;
 window.Alpine = require('alpinejs').default;
