@@ -1,37 +1,71 @@
-{% extends "pages.customer.layout" %}
-
-{% block tab_content %}
-    <div class="tabs active" data-profile-content id="notifications">
-        {% if notifications is not empty %}
-            <ul class="list list--table link notifications-list">
-                {% for item in notifications %}
-                    <li class="notification-item {{ item.is_new?'unread':'' }}">
-                        <a href="{{ item.url }}">
-                            <span>
-                                <p>{{ item.title }}</p>
-                                <small class="d-block font-xsm color-muted">{{ item.sub_title }}</small>
-                            </span>
-                            <span>{{ item.date }}</span>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-            {% include 'pages.partials.loader-status' with {'nextPageUrl':notifications.nextPageUrl} %}
-        {% else %}
-            <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
-                <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
-                <p class="text-base text-gray-500">
-                    <span>{{ trans('blocks.header.no_notifications') }}</span>
-                </p>
+{#
+| Variable                  | Type                      | Description | @see |
+|---------------------------|---------------------------|-------------|------|
+| notifications             | Notification[] *Paginator |             | TODO |
+| notifications.next_page   | ?String                   |             |      |
+| notifications.count       | Integer                   |             |      |
+| notifications[].is_new    | Bool                      |             |      |
+| notifications[].url       | String                    |             |      |
+| notifications[].sub_title | String                    |             |      |
+| notifications[].date      | String                    |             |      |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+    <main id="main">
+        <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
+            <div class="container relative z-10 flex justify-between h-full items-center">
+                <div class="self-start">
+                    {% component breadcrumbs with{is_dark:true} %}
+                </div>
             </div>
-        {% endif %}
-    </div>
+        </div>
+        <div class="container mb-24">
+            <div class="flex items-start flex-col lg:flex-row ">
+                {% include 'pages.partials.customer.sidebar' %}
+                <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
+                    <h1 class="font-bold text-lg md:mb-5">{{ trans('common.titles.notifications') }}</h1>
+                    <div class=" overflow-hidden">
+                        {% if notifications.count %}
+                            <table class="min-w-full border-separate" style="border-spacing: 0 20px;">
+                                <tbody class="notification-container">
+                                {% for notification in notifications %}
+                                    <tr class="notification-item {{ notification.is_new?'unread':'' }} border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
+                                        <td class="w-full md:w-auto md:rounded-s-md px-6 py-6 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
+                                            <a href="{{ notification.url }}">
+                                                <p>{{ notification.title }}</p>
+                                                <small class="d-block font-xsm color-muted">{{ notification.sub_title }}</small>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ notification.url }}">{{ notification.date }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% include 'pages.partials.loader-status' with {next_page:notifications.next_page} %}
+                        {% else %}
+                            <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
+                              <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
+                              <p class="text-base text-gray-500">
+                                  <span>{{ trans('blocks.header.no_notifications') }}</span>
+                              </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock %}
 
 {% block scripts %}
     <script>
-    document.addEventListener( 'DOMContentLoaded', function () {
-      salla.infiniteScroll.initiate('.notifications-list', '.notification-item')
-    })
+        document.addEventListener('DOMContentLoaded', function () {
+            salla.infiniteScroll.initiate('.notification-container', '.notification-item', {
+                history        : false,
+                scrollThreshold: false
+            })
+        });
     </script>
 {% endblock %}

@@ -105,9 +105,14 @@ view options:
                 <span class="transition-transform duration-500 inline-block btn--text">{{ trans('pages.cart.add_to_cart') }}</span>
             </button>
             <div class="text-gray-400">
-                <button class="w-10 h-10 focus:outline-none">
-                    {# sicon-heart #}
-                    <i class="sicon-heart-off"></i>
+                <button class="w-10 h-10 focus:outline-none"
+                    {% if user %}
+                        data-on-click="wishlist::add" data-id="{{ product.id }}"
+                    {% else %}
+                        onClick="salla.error('{{ trans('common.messages.must_login') }}')"
+                    {% endif %}>
+                    {# sicon-heart-off #}
+                    <i class="sicon-heart"></i>
                 </button>
             </div>
         </div>
