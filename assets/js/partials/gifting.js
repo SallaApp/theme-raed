@@ -58,7 +58,7 @@ template.innerHTML = /*html*/`
 
                     <div class="flex justify-center mt-2.5 mb-5">
                         <div
-                            class=" bg-white text-xl text-text-dark border w-20 h-20 border-border-color rounded-icon ">
+                            class=" bg-white text-xl text-gray-500 border w-20 h-20 border-border-color rounded-icon ">
                             <i class="sicon-gift-sharing"></i>
                         </div>
                     </div>
@@ -113,7 +113,7 @@ template.innerHTML = /*html*/`
                                             <i class="sicon-check"></i></span>
                                         <!-- overlay -->
                                         <div x-show="selectedImageId == imageId"
-                                            class="overlay absolute top-0 z-0 bg-dark opacity-30  w-full h-full"></div>
+                                            class="overlay absolute top-0 z-0 bg-gray-500 opacity-30  w-full h-full"></div>
                                         <img :src="'https://picsum.photos/id/' + imageId + '/600/300'"
                                             @click="selectedImage = $event.target.getAttribute('src'); selectedImageId= imageId; showSelectedImage =  true"
                                             class="object-cover h-full w-full" title="اسم المنتج" alt="صورة المنتج" />

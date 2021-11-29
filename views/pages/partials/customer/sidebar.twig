@@ -3,7 +3,7 @@
 {% endblock %}
 
 <nav aria-label="Sidebar"
-     class="hidden lg:block z-10 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar opacity-0">
+     class="hidden lg:block z-10 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar opacity-0 space-y-px">
 
     <div class="text-center mb-9">
         <div class="text-center mb-9">
@@ -23,34 +23,34 @@
 
     <a href="{{ link('orders') }}"
        aria-current="page"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-400 hover:text-dark transition-colors duration-300 hover:bg-gray-bg {{ is_link('orders')and not is_link('pending_orders')? 'text-primary':'' }}">
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('orders')?  'text-primary bg-gray-200/20':'text-gray-400 hover:text-gray-500' }}">
         <i class="sicon-packed-box me-3 text-lg"></i>
         <span class="truncate">{{ trans('common.titles.orders') }}</span>
     </a>
 
     <a href="{{ link('wishlist') }}"
        aria-current="page"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-400 hover:text-dark transition-colors duration-300 hover:bg-gray-bg {{ is_link('wishlist')? 'text-primary':'' }}">
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'text-gray-400 hover:text-gray-500' }}">
         <i class="sicon-heart me-3 text-lg"></i>
         {{ trans('common.titles.wishlist') }}
     </a>
 
     <a href="{{ link('rating') }}"
        aria-current="page"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-400 hover:text-dark transition-colors duration-300 hover:bg-gray-bg {{ is_link('rating')? 'text-primary':'' }}">
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('rating')?  'text-primary bg-gray-200/20':'text-gray-400 hover:text-gray-500' }}">
         <i class="sicon-favorite me-3 text-lg"></i>
         <span>{{ trans('common.titles.rating') }}</span>
     </a>
 
     <a href="{{ link('profile') }}"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-400 hover:text-dark transition-colors duration-300 hover:bg-gray-bg {{ is_link('profile')? 'text-primary':'' }}">
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('profile')?  'text-primary bg-gray-200/20':'text-gray-400 hover:text-gray-500' }}">
         <i class="sicon-settings me-3 text-lg"></i>
         {{ trans('common.titles.profile') }}
     </a>
 
     <a href="#"
        data-on-click="auth-logout"
-       class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-bg">
+       class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30">
         <i class="sicon-send-out me-3 text-lg"></i>
         {{ trans('blocks.header.logout') }}
     </a>
