@@ -1,25 +1,25 @@
+{#
+| Variable     | Type                  | Description | @see |
+|--------------|-----------------------|-------------|------|
+| page         | Page                  |             | TODO |
+| page.title   | String                |             |      |
+| page.content | String                |             |      |
+| page.url     | String                |             |      |
+| comments     | Feedback[] *Paginator |             | TODO |
+#}
 {% extends "layouts.master" %}
-
 {% block content %}
-    <section class="page-wrapper page--single bg-grey">
-        <div class="container">
-            <div class="bg-white padded-50 b-radius">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 class="title title--xx-large mb-30">{{ item.title }}</h3>
-                    </div>
-                    <div class="col-md-12">
-                        <article class="article articel--main">
-                            {{ item.content|raw }}
-                        </article>
-                    </div>
-                </div>
-                {% component 'page-comments' with {'comments':comments, 'id': item.id} %}
+    <main id="main">
+        <div class="container mb-24">
+            {% component breadcrumbs with {breadcrumbs:[{url:link('/'),title:trans('common.titles.home')},{title:page.title}]} %}
+            <h1 class="font-bold text-2xl text-center  md:text-start mb-7">{{ page.title }}</h1>
+            <div class="content lg:w-2/3">
+                {{ page.content|raw }}
             </div>
+            {% component 'page-comments' with {comments:comments, id:page.id} %}
         </div>
-    </section>
+    </main>
 {% endblock %}
-
 {% block scripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function () {

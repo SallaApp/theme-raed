@@ -1,19 +1,23 @@
+{#
+| Variable                | Type        | Description | @see |
+|-------------------------|-------------|-------------|------|
+| products                | Product[]   |             | TODO |
+| page_title              | Integer     |             |      |
+| category                | Category    |             | TODO |
+| category.name           | String      |             |      |
+| category.sub_categories | ?Category[] |             |      |
+| category.url            | String      |             |      |
+#}
 {% extends "layouts.master" %}
 {% block content %}
-    {% set witoutFilters = is_link('latest-products') %}
+    {% set without_filters = is_link('latest-products') %}
 
     <main id="main" x-data="initCategory()" x-cloak>
         <div class="container mb-10 md:mb-20">
-            <nav class="w-full py-5">
-                <ol class="list-reset flex items-center text-sm ">
-                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{trans('common.titles.home')}}</a></li>
-                    <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                    <li><span class="fix-align">{{ page_title }}</span></li>
-                </ol>
-            </nav>
+            {% component breadcrumbs %}
             <div class="flex items-start flex-col md:flex-row">
 
-                {% if not witoutFilters %}
+                {% if not without_filters %}
                 {#<div class="sticky top-24  sidebarw-full h-screen md:h-auto overflow-y-auto  md:w-72  md:me-8 "
                      id="filters-menu">
 
@@ -232,7 +236,7 @@
                     <div class="mb-5 md:flex justify-between items-center">
                         <h2 class="font-bold mb-6 md:mb-0">{{ page_title }}</h2>
                         <div class="flex items-center justify-between">
-                            {% if not withoutFilters %}
+                            {% if not without_filters %}
                                 <a class="lg:hidden mburger mburger--collapse" href="#filters-menu">
                                     <span class="sicon-filter text-gray-400 text-2xl me-2.5"></span>
                                 </a>
@@ -250,7 +254,7 @@
                                        class="grid-trigger mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
                                                 class="sicon-list"></i></a>
                                 </div>
-                                {% if not withoutFilters %}
+                                {% if not without_filters %}
                                     {% include 'pages.partials.sorting-list' %}
                                 {% endif %}
                             </div>

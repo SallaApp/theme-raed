@@ -1,41 +1,76 @@
-<div class="row">
-    <div class="col-md-12">
-        <div class="comments comments--page mt-50 mb-0">
-            {% if can_comment %}
-                <div class="form form--add-comment" salla-form-data>
-                    {% honeypot %}
-                    <div class="comment-field-wrapper">
-                        <div class="avatar-wrapper avatar-wrapper--small avatar-wrapper--circular avatar-wrapper--bordered mr-4">
-                            <img class="lazy-load" data-src="{{ user.avatar?:asset('images/avatar_male.png') }}" alt="user avarar">
-                        </div>
-                        <div>
-                            <div class="form-group">
-                                <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
-                                          class="form-control"
-                                          name="ask_textarea"
-                                          maxlength="500"></textarea>
-                            </div>
-                            <div class="form-group mb-0">
-                                <a class="btn btn--oval btn--wide btn--padded btn--large btn--primary"
-                                        data-on-click="comment-page-add"
-                                        data-id="{{ id }}"
-                                        href="#">
-                                    {{ trans('blocks.comments.submit') }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+{#
+| Variable              | Type                       | Description | @see |
+|-----------------------|----------------------------|-------------|------|
+| comments              | Feedback[] *Paginator      |             | TODO |
+| comments[].id         | Integer                    |             |      |
+| comments[].is_replay  | Bool                       |             |      |
+| comments[].is_admin   | Bool                       |             |      |
+| comments[].avatar     | String                     |             |      |
+| comments[].name       | String                     |             |      |
+| comments[].order_id   | ?Integer                   |             |      |
+| comments[].created_at | Date *Carbon               |             |      |
+| comments[].stars      | Integer                    |             |      |
+| comments[].content    | String                     |             |      |
+| comments[].status     | String "pending, approved" |             |      |
+| comments[].replies    | Feedback[] *Collection     |             | TODO |
+| can_comment           | Bool                       |             |      |
+| id                    | Integer                    | PageId      |      |
+#}
+<div class="bg-darkGray-bg mb-20 pt-20 pb-20">
+    <div class="container">
+        {% if can_comment %}
+            <div class="form form--add-comment" salla-form-data>
+                {% honeypot %}
+                <h2 class="mb-5 text-lg font-bold text-gray-500">{{trans('blocks.comments.title')}}</h2>
+                <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
+                          class="form-input h-24 mb-5"
+                          name="ask_textarea"
+                          maxlength="500" cols="30"
+                          rows="30"></textarea>
+
+                <div class="text-end">
+                    <button type="button" class="btn btn-primary h-10"
+                            data-on-click="comment-product-add"
+                            id="add-new-comment-btn"
+                            data-id="{{ id }}">{{ trans('blocks.comments.submit') }}</button>
                 </div>
-            {% endif %}
-            {% if comments is not empty %}
-                <div class="view-comment comments-container">
-                    <div class="comments-title">{{ pluralize('blocks.comments.comment', comments.total)|raw }} </div>
-                    {% for comment in comments %}
-                        {% include 'pages.partials.single-comment' %}
-                    {% endfor %}
-                </div>
-                {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
+
+        {% if comments.count %}
+            <div class="comments-container">
+                <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
+                {% for comment in comments %}
+                    {% include 'pages.partials.single-comment' %}
+                {% endfor %}
+            </div>
+
+            {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
+        {% endif %}
     </div>
 </div>
+
+
+<script>
+    {# ADD Comment Validations & Loading #}
+    var add_btn = document.getElementById('add-new-comment-btn'),
+        ask_textarea = document.querySelector('textarea[name="ask_textarea"]');
+
+    if (add_btn) {
+        add_btn.addEventListener('click', function(){
+            if(ask_textarea.value !== '' && ask_textarea.value.length >= 3 ){
+                add_btn.classList.add('btn--has-loading');
+                add_btn.setAttribute('disabled',true);
+            }
+            else {
+                ask_textarea.parentElement.classList.add('error');
+            }
+        })
+    }
+
+    if (ask_textarea) {
+        ask_textarea.addEventListener('keyup', function(){
+            ask_textarea.parentElement.classList.remove('error');
+        });
+    }
+</script>

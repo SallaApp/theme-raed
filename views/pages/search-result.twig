@@ -1,242 +1,19 @@
+{#
+| Variable                | Type        | Description | @see |
+|-------------------------|-------------|-------------|------|
+| products                | Product[]   |             | TODO |
+| page_title              | Integer     |             |      |
+#}
 {% extends "layouts.master" %}
 {% block content %}
-    {% set witoutFilters = is_link('latest-products') %}
-
     <main id="main" x-data="initCategory()" x-cloak>
         <div class="container mb-10 md:mb-20">
-            <nav class="w-full py-5">
-                <ol class="list-reset flex items-center text-sm ">
-                    <li><a href="{{ link('/') }}" class="fix-align text-primary">{{trans('common.titles.home')}}</a></li>
-                    <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                    <li><span class="fix-align">{{ page_title }}</span></li>
-                </ol>
-            </nav>
+            {% component breadcrumbs with {breadcrumbs:[{title:trans('common.titles.home'), url:link('/')}, {title:page_title}]} %}
             <div class="flex items-start flex-col md:flex-row">
-
-                {% if not witoutFilters %}
-                    {#<div class="sticky top-24  sidebarw-full h-screen md:h-auto overflow-y-auto  md:w-72  md:me-8 "
-                     id="filters-menu">
-
-                    <div class="widget bg-white rounded-md p-7 mb-7">
-                        <h4 class="font-bold text-sm mb-5">الماركة</h4>
-
-                        <div class="relative flex items-center mb-4">
-                            <input id="option1" name="option1" type="checkbox"
-                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                            <label for="option1" class="ms-2 font-medium ">أبل</label>
-                        </div>
-                        <div class="relative flex items-center mb-4">
-                            <input id="option2" name="option1" type="checkbox"
-                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                            <label for="option2" class="ms-2 font-medium ">هواوي</label>
-                        </div>
-                        <div class="relative flex items-center mb-4">
-                            <input id="option3" name="option1" type="checkbox"
-                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                            <label for="option3" class="ms-2 font-medium ">انفنيكس</label>
-                        </div>
-                        <div class="relative flex items-center mb-4">
-                            <input id="option4" name="option1" type="checkbox"
-                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                            <label for="option4" class="ms-2 font-medium ">ريلمي</label>
-                        </div>
-                        <div class="relative flex items-center mb-4">
-                            <input id="option5" name="option1" type="checkbox"
-                                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                            <label for="option5" class="ms-2 font-medium ">شاومي</label>
-                        </div>
-
-                        <div x-ref="moreItems" class="relative overflow-hidden transition-all max-h-0 duration-500"
-                             id="moreContent"
-                             x-bind:style="showMoreLinks ? 'max-height: ' + $refs.moreItems.scrollHeight + 'px' : ''">
-                            <template x-for="link in links" :key="link.id">
-
-                                <div class="relative flex items-center mb-4">
-                                    <input :id="link.id" name="option1" type="checkbox"
-                                           class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                                    <label :for="link.id" class="ms-2 font-medium " x-text="link.label"></label>
-                                </div>
-                            </template>
-                        </div>
-                        <a @click="showMoreLinks = !showMoreLinks" class="text-sm cursor-pointer text-primary"
-                           x-text="showMoreLinks ? 'عرض أقل' : 'عرض المزيد' "></a>
-                    </div>
-
-
-                    <div class="widget  bg-white rounded-md p-7 pb-8 mb-7">
-                        <h4 class="font-bold text-sm mb-6">السعر</h4>
-
-                        <style>
-                            input[type=range]::-webkit-slider-thumb {
-                                pointer-events: all;
-                                width: 24px;
-                                height: 24px;
-                                -webkit-appearance: none;
-
-                            }
-                        </style>
-                        <div style="direction: ltr;" class="flex justify-center items-center">
-                            <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative max-w-xl w-full">
-                                <div class="rtl-range-slider">
-                                    <input type="range" step="100" x-bind:min="min" x-bind:max="max"
-                                           x-on:input="mintrigger" x-model="minprice"
-                                           class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
-
-                                    <input type="range" step="100" x-bind:min="min" x-bind:max="max"
-                                           x-on:input="maxtrigger" x-model="maxprice"
-                                           class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
-
-                                    <div class="relative z-10 h-2">
-
-                                        <div class="absolute z-10 left-0 right-0 bottom-0 top-0 rounded-md bg-border-color"></div>
-
-                                        <div class="absolute z-20 top-0 bottom-0 rounded-md bg-primary"
-                                             x-bind:style="'right:'+maxthumb+'%; left:'+minthumb+'%'"></div>
-
-                                        <div class="absolute z-30 w-4 h-4 top-0 left-0 bg-primary shadow-huge rounded-full -mt-1 -ml-0"
-                                             x-bind:style="'left: '+minthumb+'%'">
-
-                                        </div>
-
-                                        <div class="absolute z-30 w-4 h-4 top-0 right-0 bg-primary shadow-huge rounded-full -mt-1 -mr-0"
-                                             x-bind:style="'right: '+maxthumb+'%'">
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="rtl-range-numbers flex justify-between items-center pt-8">
-                                    <p class="flex text-sm text-gray-400">
-                                        <span class="mx-1">ر.س</span>
-                                        <span x-html="minprice"></span>
-                                    </p>
-
-                                    <p class="flex text-sm text-gray-400">
-                                        <span class="mx-1">ر.س</span>
-                                        <span x-html="maxprice"></span>
-                                    </p>
-
-
-                                </div>
-
-                            </div>
-
-                            <script>
-                                function range() {
-                                    return {
-                                        minprice: 1000,
-                                        maxprice: 5000,
-                                        min: 100,
-                                        max: 10000,
-                                        minthumb: 0,
-                                        maxthumb: 0,
-
-                                        mintrigger() {
-                                            this.minprice = Math.min(this.minprice, this.maxprice - 500);
-                                            this.minthumb = ((this.minprice - this.min) / (this.max - this.min)) * 100;
-                                        },
-
-                                        maxtrigger() {
-                                            this.maxprice = Math.max(this.maxprice, this.minprice + 500);
-                                            this.maxthumb = 100 - (((this.maxprice - this.min) / (this.max - this.min)) * 100);
-                                        },
-                                    }
-                                }
-                            </script>
-                        </div>
-                    </div>
-
-
-                    <div class="widget  bg-white rounded-md p-7 pb-10">
-                        <h4 class="font-bold text-sm mb-5">اللون</h4>
-                        <div class="custom-radios custom-radios--rounded">
-
-
-                            <div>
-                                <input type="radio" id="color-0" name="color" value="color-0">
-                                <label for="color-0">
-                                    <span style="background-color: #FF74DA" class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="color-1" name="color" value="color-1">
-                                <label for="color-1">
-                                    <span style="background-color: #27BEE1" class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="color-2" name="color" value="color-2">
-                                <label for="color-2">
-                                    <span style="background-color: #9A89F2" class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="color-3" name="color" value="color-3">
-                                <label for="color-3">
-                                    <span style="background-color: #FF9E01" class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="color-4" name="color" value="color-4">
-                                <label for="color-4">
-                                    <span style="background-color: #FF6767" class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="color-5" name="color" value="color-5">
-                                <label for="color-5">
-                                    <span style="background-color: #FFCA74" class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="color-6" name="color" value="color-6">
-                                <label for="color-6">
-                                    <span style="background-color: #74ffd5" class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="color-7" name="color" value="color-7">
-                                <label for="color-7">
-                                    <span style="background-color: " class="mb-0.5"></span>
-                                </label>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="flex justify-between space-s-4 p-7">
-                        <button type="button" class="btn btn-primary">
-                            تطبيق
-                        </button>
-
-                        <button type="button" class="btn btn-outline">
-                            إلغاء
-                        </button>
-
-                    </div>
-
-                </div>#}
-                {% endif %}
-
                 <div class="main-content flex-1 md:pb-20 ">
                     <div class="mb-5 md:flex justify-between items-center">
-                        <h2 class="font-bold mb-6 md:mb-0">{{ page_title }}</h2>
+                        <h2 class="font-bold mb-6 md:mb-0">{{ page_title|raw }}</h2>
                         <div class="flex items-center justify-between">
-                            {% if not withoutFilters %}
-                                <a class="lg:hidden mburger mburger--collapse" href="#filters-menu">
-                                    <span class="sicon-filter text-gray-400 text-2xl me-2.5"></span>
-                                </a>
-                            {% endif %}
                             <div class="flex items-center">
                                 <div class="hidden md:flex items-center">
                                     <a href="#" @click="toggleView('grid')"
@@ -250,9 +27,7 @@
                                        class="grid-trigger mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
                                                 class="sicon-list"></i></a>
                                 </div>
-                                {% if not withoutFilters %}
-                                    {% include 'pages.partials.sorting-list' %}
-                                {% endif %}
+                                {% include 'pages.partials.sorting-list' %}
                             </div>
                         </div>
                     </div>
