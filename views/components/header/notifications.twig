@@ -1,6 +1,6 @@
 {% if is_profile_sidebar %}
     <a href="{{ link('notifications') }}"
-       class="{% if is_link('notifications') %}active{% endif %} menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-400 hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+       class="{% if is_link('notifications') %}active{% endif %} menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm hover:text-gray-500 transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('notifications')? 'text-primary bg-gray-200/20':'text-gray-400' }}">
         <i class="sicon-school-bell me-3 text-lg"></i>
         <span class="truncate"> {{ trans('common.titles.notifications') }}</span>
         {% if new_notifications_count %}
@@ -8,7 +8,7 @@
         {% endif %}
     </a>
     <a href="{{ link('pending_orders') }}"
-       class="{% if is_link('pending_orders') %}active{% endif %} menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm text-gray-400 hover:text-dark transition-colors duration-300 hover:bg-gray-bg">
+       class="{% if is_link('pending_orders') %}active{% endif %} menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm hover:text-gray-500 transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'text-gray-400' }}">
         <i class="sicon-school-bell me-3 text-lg"></i>
         <span class="truncate"> {{ trans('common.titles.pending_orders') }}</span>
         {% if pending_orders_count %}
@@ -18,7 +18,7 @@
 {% else %}
     <li class="{{ new_notifications_count ? 'has-badge' : '' }}">
         <a href="{{ link('notifications') }}"
-           class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/20 dark:hover:bg-gray-200/10 {{ store.theme.settings.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary' }}">
+           class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('notifications')? 'text-primary bg-gray-200/20':'hover:text-gray-500' }}">
             <i class="sicon-bell-ring me-3"></i>
             <span>{{ trans('common.titles.notifications') }}</span>
             {% if new_notifications_count %}
@@ -29,7 +29,7 @@
     </li>
     <li class="{{ pending_orders_count ? 'has-badge' : '' }}">
         <a href="{{ link('pending_orders') }}"
-           class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/20 dark:hover:bg-gray-200/10 {{ store.theme.settings.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary' }}">
+           class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'hover:text-gray-500' }}">
             <i class="sicon-cart me-3"></i>
             <span> {{ trans('common.titles.pending_orders') }}</span>
             {% if pending_orders_count %}
