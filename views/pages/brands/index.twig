@@ -22,20 +22,16 @@
                     :class="scrolAtTop ? 'px-18 lg:px-44 space-s-2 space-y-2' : 'flex-col flex-wrap h-full fixed z-10 top-9 start-3 space-y-0.5 pt-16 pb-10 '"
                     @scroll.window="scrolAtTop = (window.pageYOffset > 200) ? false : true">
                     {% for char,brands_group in brands %}
-                        <li><a :href="'#brandSection_{{ loop.index }}'" @click="currentSection = 'section_{{ i }}'"
-                               :class="{'bg-primary lg:bg-primary text-reverse opacity-100':  currentSection == 'section_{{ i }}','w-10 h-10 bg-white': scrolAtTop, 'px-1 pb-1 opacity-50 lg:opacity-100 lg:bg-white': !scrolAtTop } "
-                               class="fix-align rounded-md flex
-                                items-center
-                                justify-center
-                                hover:shadow-sm
-                               focus:border-primary text-sm">{{ char }}</a></li>
+                        <li><a :href="'#brandSection_{{ loop.index }}'" @click="currentSection = 'section_{{ loop.index }}'"
+                               :class="{'bg-primary lg:bg-primary text-reverse opacity-100':  currentSection == 'section_{{ loop.index }}','w-10 h-10 bg-white': scrolAtTop, 'px-1 pb-1 opacity-50 lg:opacity-100 lg:bg-white': !scrolAtTop } "
+                               class="fix-align rounded-md flex items-center justify-center hover:shadow-sm focus:border-primary text-sm">{{ char }}</a></li>
                     {% endfor %}
                 </ul>
                 <div x-show="!scrolAtTop" :style="'height: ' + $refs.brandsNav.offsetHeight + 'px'"></div>
                 <!-- end:: brands nav -->
 
                 {% for char,brandGroup in brands %}
-                    <section :id="'brandSection_' + r" class="pt-24">
+                    <section id="brandSection_{{ loop.index }}" class="pt-24">
                         <!-- separator -->
                         <div class="flex items-center mb-10">
                     <span :class="currentSection == 'section_{{ loop.index }}' ? 'bg-primary text-reverse' : '' "
@@ -113,44 +109,8 @@
         function initBrands() {
             return {
                 currentSection: '',
+                scrolAtTop: true,
             }
         }
-    </script>
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Brands List ---
-            var handleBrands = function () {
-                if ($('#brands_list').length) {
-                    var brandsIndex = $('#brands_index'),
-                        brandsList = $('#brands_list'),
-                        alphaIndex = [
-                            {% for ar_char,brandsGroup in brands %}
-                            {id: '{{ brandsGroup.first().id }}', index: '{{ ar_char }}'},
-                            {% endfor %}
-                        ];
-                    alphaIndex.forEach(function (alpha) {
-                        brandsIndex.append('<li><a href="#brand_' + alpha.id + '">' + alpha.index + '</a> </li>')
-                    })
-                    brandsIndex.find('li').each(function () {
-                        var $this = $(this),
-                            index = $this.find('a');
-                        index.on('click', function (e) {
-                            var targetSection = $(this).attr('href');
-                            $this.addClass('active').siblings().removeClass('active');
-                            brandsList.find('.brand-section').removeClass('active');
-                            $(targetSection).addClass('active');
-                            $('html, body').animate({
-                                scrollTop: $($.attr(this, 'href')).offset().top - ($('.site-header').outerHeight())
-                            }, {
-                                duration: 850,
-                            });
-                            e.preventDefault();
-                        })
-                    })
-                }
-            }
-            handleBrands();
-        });
     </script>
 {% endblock %}
