@@ -1,10 +1,17 @@
+{#
+| Variable    | Type   | Description          | @see |
+|-------------|--------|----------------------|------|
+| apps        | Array  |                      |      |
+| apps[].name | String | appstore, googleplay |      |
+| apps[].url  | String |                      |      |
+#}
 <div class="lg:col-span-2 lg:ps-20">
     <h3 class="mb-5">{{trans('blocks.footer.download_apps')}}</h3>
     <ul class="flex">
         {% for app in apps %}
             <li class="me-4">
                 <a href="{{ app.url }}" rel="noreferrer" target="_blank"  class="focus:underline leading-none hover:text-primary">
-                    <img src="https://assets.salla.cloud/themes/default/assets/images/{{app.image }}" alt="{{ app.name }}"/>
+                    <img src="https://assets.salla.cloud/themes/default/assets/images/{{app.name}}.png" alt="{{ app.name }}"/>
                 </a>
             </li>
         {% endfor %}

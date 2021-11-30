@@ -1,4 +1,5 @@
-{# {% component 'header.theme-preview-bar' %} #}
+{# * Important to put all footer components here, to be excluded in mobile apps #}
+{% component 'header.theme-preview-bar' %}
 
 {# Top nav ------------------------------------  #}
 <div class="{{ store.theme.settings.topnav_is_dark ? 'dark':''}}">
@@ -14,13 +15,9 @@
           {% component 'footer.pages' with {is_header:true} %}
           {% component 'header.language-switcher' %}
           {% component 'header.currency-switcher' %}
-
-          {# Search Modal #}
           <salla-search-modal></salla-search-modal>
         </div>
-
         {% component 'footer.contacts' with {is_header:true} %}
-        
       </div>
     </div>
   </div>

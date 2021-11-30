@@ -1,3 +1,11 @@
+{#
+| Variable        | Type  | Description                                                     | @see |
+|-----------------|-------|-----------------------------------------------------------------|------|
+| payment_methods | Array | List of active payments ex: [mada, credit_card, bank, cod, ...] |      |
+
+* cod: Cash On Delivery.
+* Bank: Bank transfer (Transfer receipt)
+#}
 <ul class="flex justify-center items-center space-s-2">
     {% for method in payment_methods %}
         <li class="w-14"><img class="object-contain" src="{{ asset('images/payment/'~ method ~'_mini.png') }}" alt="{{ method }}"></li>
