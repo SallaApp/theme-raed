@@ -1,18 +1,41 @@
+{#
+| Variable     | Type                   | Description | @see |
+|--------------|------------------------|-------------|------|
+| tag          | Tag                    |             | TODO |
+| tag.products | Products[] *Collection |             | TODO |
+| tag.name     | String                 |             |      |
+| tag.url      | String                 |             |      |
+#}
 {% extends "layouts.master" %}
 {% block content %}
-    <section class="page-wrapper page--search-results">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="category-title mb-30">
-                        <h5 class="title title--primary title--has-dash">{{ page_title }}</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {% if tag.products is not empty %}
-                        <div class="grid-block products-list-container">
+    <main id="main" x-data="initTagProducts()" x-cloak>
+        <div class="container mb-10 md:mb-20">
+            {% component breadcrumbs %}
+            <div class="flex items-start flex-col md:flex-row">
+                <div class="main-content flex-1 md:pb-20 ">
+                    {% if tag.products|length %}
+                        <div class="mb-5 md:flex justify-between items-center">
+                            <h2 class="font-bold mb-6 md:mb-0">{{ tag.name }}</h2>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="hidden md:flex items-center">
+                                        <a href="#" @click="toggleView('grid')"
+                                           :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
+                                           id="gridButton" data-grid="grid"
+                                           class="grid-trigger mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                                                    class="sicon-grid"></i></a>
+                                        <a href="#" @click="toggleView('list')"
+                                           :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
+                                           id="listButton" data-grid="list"
+                                           class="grid-trigger mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                                                    class="sicon-list"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div x-ref="productsContainer"
+                             :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
+                             class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
                             {% for product in tag.products %}
                                 {% include 'pages.partials.product.card' %}
                             {% endfor %}
@@ -22,21 +45,45 @@
                         <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
                             <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
                             <p class="text-base text-gray-500">
-                                <span>{{trans('pages.categories.no_products')}}</span>
-                              {{ page_title }}
+                                <span>{{trans('pages.categories.no_products')}}</span> {{ tag.name }}
                             </p>
                         </div>
                     {% endif %}
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 {% endblock %}
-
 {% block scripts %}
     <script>
-    document.addEventListener( 'DOMContentLoaded', function () {
-      salla.infiniteScroll.initiate('.products-list-container', '.product-block')
-    })
+        document.addEventListener( 'DOMContentLoaded', function () {
+            salla.infiniteScroll.initiate('.products-container', '.product-entry')
+        })
+
+        function initTagProducts() {
+            return {
+                showMoreLinks: false,
+                links: [{id: 1, label: 'رابط جديد'}, {id: 2, label: 'هواوي'}, {id: 3, label: 'سامسونج'}],
+                girdLayout: 'grid',
+
+                toggleView: function (layout) {
+
+                    this.girdLayout = layout;
+                    this.animateItems()
+                },
+
+                animateItems: function () {
+                    anime({
+                        targets: '.product-entry',
+                        opacity: [0, 1],
+                        duration: 1200,
+                        translateY: [20, 0],
+                        delay: function (el, i) {
+                            return i * 100;
+                        },
+                    })
+                }
+            }
+        }
     </script>
 {% endblock %}
