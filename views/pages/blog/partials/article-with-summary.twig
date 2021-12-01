@@ -10,9 +10,9 @@
 | article.author_name     | String        |             |      |
 | article.author_url      | String        |             |      |
 | article.summary         | String        |             |      |
-| article.categories      | BlogCategory[]|             |      |
-| category.name           | String        |             |      |
-| category.url            | String        |             |      |
+| article.tags            | ArticleTag[]  |             |      |
+| tag.name           	  | String        |             |      |
+| tag.url            	  | String        |             |      |
 #}
 <div id="" class='post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
 	<a href="{{ article.url }}" class='post-entry__image relative overflow-hidden hover:opacity-90 w-full h-56 bg-border-color flex items-center justify-center'>
@@ -39,12 +39,12 @@
 		</p>
 	</div>
 
-	{% if article.categories is not empty %}
+	{% if article.tags is not empty %}
 		<div class="p-4 flex flex-wrap items-center border-t border-border-color">
-			{% for category in article.categories %}
-				<a href="{{ category.url }}" class="py-2 px-4 rounded-large inline-flex items-center text-gray-text hover:text-dark justify-center text-sm">
+			{% for tag in article.tags %}
+				<a href="{{ tag.url }}" class="py-2 px-4 rounded-large inline-flex items-center text-gray-text hover:text-dark justify-center text-sm">
 					<i class="font-medium sicon-tag me-1.5 text-md"></i>
-					<span class="fix-align whitespace-nowrap">{{ category.name }}</span>
+					<span class="fix-align whitespace-nowrap">{{ tag.name }}</span>
 				</a>
 			{% endfor %}
 		</div>
