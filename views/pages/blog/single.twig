@@ -1,181 +1,43 @@
 {% extends "layouts.master" %}
 
 {% block content %}
-<div class="page-wrapper page--single">
-    <div class="container">
-        <div class="page-main-container blog-archive with-side-menu">
-            <div class="blog-archive__heading d-flex">
-                <h1>المقالات</h1>
+	<main id="main">
+		<div class="container mb-24">
+			<div class="flex items-center justify-between">
+				{% component breadcrumbs %}
+			</div>
 
-                <a href="#" class="circle-action blog-archive__menu-indicator side-menu-toggle" rel="nofollow">
-                    <span class="sicon-filter"></a>
-            </div>
+			<div class="md:flex items-start">
+				<div class="main-content blog-category md:w-96 flex-1 bg-white p-8 rounded-md mb-10 md:mb-0">
+					<h1 class="font-bold text-3xl mb-5 leading-10">{{ article.name }}</h1>
+					<div class="mb-10 text-gray-text rounded-md inline-flex text-sm space-s-5">
+						<div class=" flex items-center">
+							<i class="sicon-calendar-date me-1 text-md"></i>
+							<span class="">{{ article.created_at }}</span>
+						</div>
+						<a href="{{ article.author_url }}" class=" flex items-center hover:text-dark">
+							<i class="sicon-user me-1 text-md"></i>
+							<span class="">{{ article.author_name }}</span>
+						</a>
+					</div>
 
+					{% if article.has_image %}
+						<img src="{{ article.image }}" alt="{{ article.image_alt }}" title="{{ article.image_alt }}" class="h-80 mb-10 w-full object-cover rounded-md"/>
+					{% endif %}
 
-            <div class="row">
-                <div
-                        class="col-md-12">
-                    <!-- slider -->
-                    <section style="background: #FAFAFA;" class="slider-section">
-                        <div class="splide splide--blog-slider blog-slider">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    {% for i in 0..3  %}
-                                        <li class="splide__slide blog-slider__slide" style="background-image: url('https://images.unsplash.com/photo-1604328702728-d26d2062c20b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
-                                            <a href="#" rel="">
-                                                <article>
-                                                    <h3 class="blog-slider__heading">
-                                                        كيف تجلب مزيد من المشترين الي موقعك الإلكتروني
-                                                    </h3>
-                                                    <p>
-                                                        هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة لقد تمتوليد هذا النص من مولد النص العربى
-                                                    </p>
-                                                    <div class="blog-slider__meta-data">
-																<span class="post-date d-inline-flex align-items-center">
-																	<i class="sicon-calendar-alt"></i>
-																	<span>مارس 27, 2021</span>
-																</span>
-                                                        <a href="#" class="post-author">كتبها: عادل الشافعي
-                                                        </a>
-                                                </article>
-                                            </a>
-                                            <div class="blog-slider__overlay"></div>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
+					<p class="leading-7 text-sm mb-10">{{ article.description|raw }}</p>
+				</div>
 
-            <div class="row align-items-start">
-                <div class="col-lg-2 sidebar">
-                    <div class="side-menu__overlay"></div>
-                    <div class="sidebar__blog-menu side-menu">
-                        <button class="side-menu__close">
-                            <i class="sicon-cancel"></i>
-                        </button>
-                        <h2 class="side-menu__heading">التصنيفات</h2>
-                        <ul class="side-menu__ul">
-                            <li>
-                                <a href="#">
-                                    إلكترونيات</a>
-                            </li>
-                            <li>
-                                <a href="#">تليفزيونات</a>
-                            </li>
-                            <li class="active">
-                                <a href="#">جولات</a>
-                            </li>
-                            <li>
-                                <a href="#">سماعات</a>
-                            </li>
-                            <li>
-                                <a href="#">ثلاجات</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div
-                        class="col-lg-10">
-                    <!-- section 1 -->
-                    <section>
-                        <div class="section-header section-header--border-b mb-4">
-                            <h2 class="section--title">
-											<span>
-												اختيارات المحررين
-											</span>
-                            </h2>
-                        </div>
+				<aside aria-label="Sidebar" class="sticky flex-shrink-0 top-24 md:w-96 lg:ms-8 pb-11">
+					{% if related is not empty %}
+						<h2 class="font-bold mb-3">{{ trans('pages.blog_articles.related') }}</h2>
 
-                        <div class="grid-block grid-block--xl grid-block--col-2 grid-block--gap-20">
-                            <div class="d-flex flex-column mb-sm-20">
-                                <div class="grid-block grid-block--col-2 grid-block--gap-20 flex-1">
-                                    {% for i in 0..3 %}
-                                        <div class="post post--image-box">
-                                            <a
-                                                    class="post__img" href="" style="background-image: url('https://images.unsplash.com/photo-1523206489230-c012c64b2b48?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80');"><!-- <img src="" alt=""> -->
-                                            </a>
-                                            <div class="post__body">
-                                                <h3 class="post__title">
-                                                    <a href="">كيف تجلب مزيد من المشترين الي موقعك الإلكتروني</a>
-                                                </h3>
-                                            </div>
-                                            <div class="post__overlay"></div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="d-flex flex-column dark-list">
-                                <div class="section-header section-header--border-b mb-4">
-                                    <h2 class="section--title">
-                                        <span>الأكثر قراءة</span>
-                                    </h2>
-                                </div>
-
-                                {% for i in 0..3 %}
-                                    <div class="post post--small post--reverse flex-1">
-                                        <a
-                                                class="post__img" href="" style="background-image: url('https://images.unsplash.com/photo-1551721434-8b94ddff0e6d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=802&q=80');"><!-- <img src="" alt=""> -->
-                                        </a>
-                                        <div class="post__body">
-                                            <h3 class="post__title">
-                                                <a href="">هذا النص هو مثال كيف تجلب مزيد من المشترين الي موقعك   </a>
-                                            </h3>
-
-                                            <div class="post__meta text-muted">
-                                                <span class="post-date">مارس 27, 2021</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- section 2 -->
-                    <section>
-                        <div class="section-header section-header--border-b mb-4">
-                            <h2 class="section--title">
-											<span>
-												المزيد من المقالات
-											</span>
-                            </h2>
-                        </div>
-                        <div class="grid-block grid-block--col-2 grid-block--gap-30">
-                            {% for i in 0..5 %}
-                                <div class="post post--row">
-                                    <a
-                                            class="post__img" href="" style="background-image: url('https://images.unsplash.com/photo-1536300099515-6c61b290b654?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
-                                        <!-- <img src="" alt=""> -->
-                                        <div class="post__overlay"></div>
-
-                                    </a>
-                                    <div class="post__body">
-                                        <h3 class="post__title">
-                                            <a href="">كيف تجلب مزيد من المشترين الي موقعك الإلكتروني</a>
-                                        </h3>
-                                        {# meta #}
-                                        <div class="post__meta text-muted">
-                                            <p class="post-date d-flex align-items-center">
-                                                <i class="sicon-calendar-alt"></i>
-                                                <span>مارس 27, 2021</span>
-                                            </p>
-                                            <a href="#" class="post-author">كتبها: عادل الشافعي
-                                            </a>
-                                        </div>
-                                        {# text #}
-                                        <p>
-                                            هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+						{% for article in related  %}
+							{% include 'pages.blog.partials.article' %}
+						{% endfor %}
+					{% endif %}
+				</aside>
+			</div>
+		</div>
+	</main>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "layouts.master" %}
+
+{% block content %}
+	<main id="main">
+		<div class="container mb-24">
+			<div class="flex items-center justify-between">
+				{% component breadcrumbs %}
+
+				<a class="lg:hidden  space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary" href="#filters-menu">
+					<i class="sicon-filter text-xs"></i>
+					<span class="fix-align">{{ trans('pages.blog_categories.categories') }}</span>
+				</a>
+			</div>
+
+			<div class="flex items-start">
+
+				{% include 'pages.blog.partials.sidebar' %}
+
+				<div class="main-content w-96 flex-1">
+					{% if slides is not empty %}
+						<div class="mb-8">
+							<div class="swiper blog-slider  rounded-md overflow-hidden">
+
+								<div class="swiper-wrapper">
+									{% for article in slides  %}
+										<div class="swiper-slide blog-slider__slide h-460 relative bg-border-color flex justify-center {{article.has_image ? '' : 'no-thumb' }}">
+											<img src="{{ article.image }}" alt="{{ article.image_alt }}" class="object-cover h-full w-full">
+											<div class="absolute z-10 bottom-0 start-0 ps-10 pb-20">
+												<div class="blog-slider__content relative">
+													<div class="z-20 w-5/6 lg:w-6/12 text-white">
+														<div class="block-slide-anime">
+															<div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
+																<div class="flex items-center">
+																	<i class="sicon-calendar-date me-1 text-md"></i>
+																	<span class="">{{ article.created_at }}</span>
+																</div>
+																<a href="{{ article.url }}" class=" flex items-center hover:underline">
+																	<i class="sicon-user me-1 text-md"></i>
+																	<span class="">{{ article.author_name }}</span>
+																</a>
+															</div>
+															<h3 class="text-sm font-bold leading-normal mb-4">{{ article.name }}</h3>
+														</div>
+														<p class="block-slide-anime description">{{ article.summary }}</p>
+													</div>
+												</div>
+											</div>
+											<div class="overlay absolute top-0 z-0 bg-dark opacity-50  w-full h-full"></div>
+										</div>
+									{% endfor %}
+								</div>
+								<div class="swiper-pagination text-start px-10 pb-8  bottom-10"></div>
+							</div>
+
+							<script>
+								document.addEventListener('DOMContentLoaded', function () {
+									const swiper = new Swiper('.blog-slider', {
+
+										slidesPerView: 1,
+										loop: true,
+										centeredSlides: true,
+										spaceBetween: 30,
+										effect: "fade",
+
+										pagination: {
+											el: '.swiper-pagination',
+											clickable: true,
+										},
+										breakpoints: {
+											320: {
+												spaceBetween: 10,
+											},
+											768: {
+												spaceBetween: 15,
+											},
+											980: {
+												paceBetween: 30,
+											},
+										}
+									});
+
+									swiper.on('slideChange', function () {
+										animateSliderItems()
+									});
+
+									function animateSliderItems() {
+										setTimeout(() => {
+											anime({
+												targets: '.swiper-slide-active .block-slide-anime',
+												opacity: [0, 1],
+												duration: 2500,
+												translateX: [20, 0],
+												delay: function (el, i) {
+													return i * 200;
+												},
+											})
+										}, 10);
+									}
+								});
+							</script>
+						</div>
+					{% endif %}
+
+					{% if articles is not empty %}
+						<div class="grid md:grid-cols-2 gap-8">
+							{% for article in articles  %}
+								{% include 'pages.blog.partials.article-with-summary' %}
+							{% endfor %}
+						</div>
+
+						<div class="text-center pt-8">
+							<button type="button" class="btn btn-outline-dark"> عرض المزيد </button>
+						</div>
+					{% else %}
+						<div class="grid md:grid-cols-2 gap-8">
+							<div class="text-center pt-8">
+								<p>
+									<span>{{ trans('pages.blog_categories.no_articles') }}</span>
+									{{ page_title }}
+								</p>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

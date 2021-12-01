@@ -1,0 +1,50 @@
+{% extends "layouts.master" %}
+
+{% block content %}
+    <main id="main">
+        <div class="container mb-24">
+            <div class="flex items-center justify-between">
+                {% component breadcrumbs %}
+
+                <a class="lg:hidden  space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary"
+                   href="#filters-menu">
+                    <i class="sicon-filter text-xs"></i>
+                    <span class="fix-align">{{ trans('pages.blog_categories.categories') }}</span>
+                </a>
+            </div>
+
+            <div class="flex items-start">
+
+                {% include 'pages.blog.partials.sidebar' %}
+
+                <div class="main-content blog-category w-96 flex-1">
+
+                    <div class="sr-only lg:not-sr-only ">
+                        <h1 class="blog-category__title font-bold text-lg mb-8">{{ tag.name }}</h1>
+                    </div>
+
+                    {% if articles is not empty %}
+                        <div class="grid md:grid-cols-2 gap-8">
+                            {% for article in articles %}
+                                {% include 'pages.blog.partials.article-with-summary' %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="text-center pt-8">
+                            <button type="button" class="btn btn-outline-dark"> عرض المزيد</button>
+                        </div>
+                    {% else %}
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="text-center pt-8">
+                                <p>
+                                    <span>{{ trans('pages.blog_categories.no_articles') }}</span>
+                                    {{ page_title }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,36 @@
+<div id="" class='post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
+	<a href="{{ article.url }}" class='post-entry__image relative overflow-hidden hover:opacity-90 w-full h-56 bg-border-color flex items-center justify-center'>
+		<img class="sm:h-full w-full object-cover {{article.has_image ? '' : 'post-entry__placeholder' }}" src="{{ article.image }}" alt="{{ article.image_alt }}"/>
+	</a>
+
+	<div class="flex-1 px-5 pt-5 pb-7">
+		<div class="mb-2.5 text-gray-text rounded-md inline-flex text-sm space-s-5">
+			<div class="flex items-center">
+				<i class="sicon-calendar-date me-1 text-md"></i>
+				<span class="">{{ article.created_at }}</span>
+			</div>
+			<a href="{{ article.author_url }}" class="flex items-center hover:text-dark">
+				<i class="sicon-user me-1 text-md"></i>
+				<span class="">{{ article.author_name }}</span>
+			</a>
+		</div>
+
+		<h3 class="post-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+			<a href="{{ article.url }}">{{ article.name }}</a>
+		</h3>
+		<p class="text-sm text-gray-text leading-6 mb-2.5">
+			{{ article.summary }}
+		</p>
+	</div>
+
+	{% if article.categories is not empty %}
+		<div class="p-4 flex flex-wrap items-center border-t border-border-color">
+			{% for category in article.categories %}
+				<a href="{{ category.url }}" class="py-2 px-4 rounded-large inline-flex items-center text-gray-text hover:text-dark justify-center text-sm">
+					<i class="font-medium sicon-tag me-1.5 text-md"></i>
+					<span class="fix-align whitespace-nowrap">{{ category.name }}</span>
+				</a>
+			{% endfor %}
+		</div>
+	{% endif %}
+</div>
