@@ -115,15 +115,13 @@
 					{% endif %}
 
 					{% if articles is not empty %}
-						<div class="grid md:grid-cols-2 gap-8">
+						<div class="grid md:grid-cols-2 gap-8 articles-container">
 							{% for article in articles  %}
 								{% include 'pages.blog.partials.article-with-summary' %}
 							{% endfor %}
 						</div>
 
-						<div class="text-center pt-8">
-							<button type="button" class="btn btn-outline-dark"> عرض المزيد </button>
-						</div>
+						{% include 'pages.partials.loader-status' with {next_page:articles.next_page} %}
 					{% else %}
 						<div class="grid md:grid-cols-2 gap-8">
 							<div class="text-center pt-8">
@@ -138,4 +136,12 @@
 			</div>
 		</div>
 	</main>
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		document.addEventListener( 'DOMContentLoaded', function () {
+			salla.infiniteScroll.initiate('.articles-container', '.post-entry')
+		})
+	</script>
 {% endblock %}
