@@ -1,11 +1,22 @@
+{#
+| Variable            | Type                   | Description |
+|---------------------|------------------------|-------------|
+| current             | Currency               |             |
+| current.code        | String                 |             |
+| current.symbol      | String                 |             |
+| current.name        | String                 |             |
+| currencies          | Currency[] *Collection |             |
+| currencies[].code   | String                 |             |
+| currencies[].symbol | String                 |             |
+| currencies[].name   | String                 |             |
+#}
 <div class="relative inline-block" x-data="{toggleMenu: false}">
     <div>
         <button @click="toggleMenu = !toggleMenu" type="button"
                 class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center hover:bg-gray-200/20 text-sm font-medium  focus:ring-offset-transparent transition duration-300"
                 :class="toggleMenu ? 'btn-is-opened bg-gray-200/20' : 'bg-gray-200/10'"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
-            {{ currentCurrency.name }}
-
+            {{ current.name }}
             <i class="sicon-keyboard_arrow_down inline-block self-end mx-0.5 me-0 opacity-50 text-lg leading-4 transition duration-300"></i>
         </button>
     </div>
@@ -23,7 +34,7 @@
               {% for currency in currencies %}
                   <li>
                       <a href="#"
-                          class="{{currentCurrency.code == currency.code ? 'is-active' : ''}} flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-200/30 dark:hover:bg-gray-200/10
+                          class="{{current.code == currency.code ? 'is-active' : ''}} flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-200/30 dark:hover:bg-gray-200/10
                           {{ store.theme.settings.topnav_is_dark == false and store.theme.settings.topnav_bg_gradient ? 'text-gray-800': ''}}
                           "
                           data-on-click="currency-change"
