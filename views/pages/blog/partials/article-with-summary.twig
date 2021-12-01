@@ -1,3 +1,19 @@
+{#
+| Variable                | Type          | Description | @see |
+|-------------------------|---------------|-------------|------|
+| article.name            | String        |             |      |
+| article.url             | String        |             |      |
+| article.has_image       | Bool          |             |      |
+| article.image           | String        |             |      |
+| article.image_alt       | String        |             |      |
+| article.created_at      | ?Date *Carbon |             |      |
+| article.author_name     | String        |             |      |
+| article.author_url      | String        |             |      |
+| article.summary         | String        |             |      |
+| article.categories      | BlogCategory[]|             |      |
+| category.name           | String        |             |      |
+| category.url            | String        |             |      |
+#}
 <div id="" class='post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
 	<a href="{{ article.url }}" class='post-entry__image relative overflow-hidden hover:opacity-90 w-full h-56 bg-border-color flex items-center justify-center'>
 		<img class="sm:h-full w-full object-cover {{article.has_image ? '' : 'post-entry__placeholder' }}" src="{{ article.image }}" alt="{{ article.image_alt }}"/>
