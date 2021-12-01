@@ -1,9 +1,9 @@
 {#
-| Variable   | Type    | Description                     |
-|------------|---------|---------------------------------|
-| cart       | Array   |                                 |
-| cart.count | Integer | Number of the items in the cart |
-| cart.total | String  | Formatted total ex: "١٠٠ ر.س"   |
+| Variable         | Type    | Description                     |
+|------------------|---------|---------------------------------|
+| cart             | Array   |                                 |
+| cart.items_count | Integer |                                 |
+| cart.total       | String  | Formatted total ex: "١٠٠ ر.س"   |
 
 * It's important to put all Header components here, to be excluded in mobile apps
 #}
@@ -142,11 +142,11 @@
                                 <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
                                 <div data-cart-badge
                                      class="opacity-0 anime-count absolute top-1 -start-2 bg-primary text-reverse w-6 h-6 rounded-full flex items-start justify-center font-bold text-sm">
-                                    {{ cart.count }}</div>
+                                    {{ cart.items_count }}</div>
                             </a>
                             <div class="whitespace-nowrap">
                                 <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
-                                <b class="leading-3" data-cart-total>{{ cart.amount }}</b>
+                                <b class="leading-3" data-cart-total>{{ cart.total }}</b>
                             </div>
                         </div>
 

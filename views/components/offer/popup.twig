@@ -1,9 +1,21 @@
+{#
+| Variable                      | Type                    | Description |
+|-------------------------------|-------------------------|-------------|
+| offer                         | Offer                   | TODO        |
+| offer.id                      | Integer                 |             |
+| offer.name                    | String                  |             |
+| offer.description             | String *HTML            |             |
+| offer.categories              | Category[] *Collection  |             |
+| offer.products                | Product[] *Collection   |             |
+| offer.steps(product_quantity) | Array                   |             |
+#}
 <section class="container relative overflow-hidden bg-white p-5 text-center rounded-md mb-5">
     <div x-data="{openModal: false}">
         <button @click="openModal = true; animatedTitles();" type="button" class="btn btn-primary">
             انقر لعرض العروض الخاصة
         </button>
-        <div x-cloak x-show="openModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div x-cloak x-show="openModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title"
+             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
                 <div x-show="openModal" x-transition:enter="transition ease-out duration-300"
@@ -31,10 +43,10 @@
                         </button>
 
                         <div class="bg-gray-bg px-5 md:px-10 pt-8 pb-10">
-                            <b class="offer-item opacity-0 block text-red-400 text-lg">عرض خاص</b>
+                            <b class="offer-item opacity-0 block text-red-400 text-lg">{{ offer.name }}</b>
 
                             <h3 class="offer-item opacity-0 text-2xl leading-6 font-bold mb-8" id="modal-title">
-                                اشتري قطعتين من هذا المنتج
+                                {# {{offer.description|raw}} #}
                             </h3>
                             <div>
                                 <div class='product-entry rounded-md h-full transition duration-500
@@ -48,46 +60,52 @@
                                         <a href="#"
                                            class='product-entry__image relative overflow-hidden w-20 h-16 md:w-24 md:h-20 rounded-md'>
                                             <img class="h-full w-full object-cover "
-                                                 src="../../../../images/products/product-3.jpg"
-                                                 alt="product image"/>
+                                                 src="{{ product.image.url }}"
+                                                 alt="{{ product.image.alt }}"/>
                                         </a>
 
                                         <div class="flex-1 ps-5">
                                             <div class="flex flex-col justify-start items-baseline">
 
                                                 <h3 class="text-sm font-bold text-title-color leading-6 mb-1.5">
-                                                    <a href="#">وحدات تحكم متوافق مع بلاي ستيشن 3</a>
+                                                    <a href="{{ product.url }}">{{ product.name }}</a>
                                                 </h3>
-                                                <p class="text-sm text-gray-400">متوافقة مع جميع الأجهزة</p>
+                                                {% if product.subtitle %}
+                                                    <p class="text-sm text-gray-400">{{ product.subtitle }}</p>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="flex flex-col md:flex-row md:items-center md:justify-between w-full md:w-auto md:space-s-8">
+                                        {% if product.on_sale %}
+                                            <div class="space-s-1">
+                                                <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
+                                                <span class="text-sm text-gray-400 line-through">{{ product.regular_price }}</span>
+                                            </div>
+                                        {% else %}
+                                            <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
+                                        {% endif %}
 
-
-                                        <h4 class="text-primary font-bold text-sm">‏10,978.00 ر.س</h4>
-
-
-                                        <button
-                                                class="transition mt-4 md:mt-0 w-36 duration-300  flex-1 border border-primary  text-sm  font-bold text-reverse bg-primary md:px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse">
-                                            اضف
-                                            للسلة
+                                        <button data-on-click="cart::quick-add"
+                                                data-id="{{ product.id }}" {% if not product.is_available %} disabled {% endif %}
+                                                class="transition mt-4 md:mt-0 w-36 duration-300  flex-1 border border-primary  text-sm  font-bold text-reverse bg-primary md:px-3 py-2.5 rounded-md hover:bg-primary  hover:text-reverse {{ product.is_available ? 'btn-outline-primary':'' }}">
+                                            {{ trans('pages.cart.add_to_cart') }}
                                         </button>
 
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="ps-5 md:px-10 py-8">
-                            <h4 class="text-base mb-5 pe-5">و احصل <b>مجانآ</b> على احد المنتجات التالية</h4>
-                            {% if offer.is_given_categories %}
+                            <h4 class="text-base mb-5 pe-5"> {{ offer.description|raw }}</h4>
+                            {% if offer.categories|length %}
                                 <div class="offers-block bg-grey mt-50">
                                     <ul class="list list--horizontal list--auto-width wrap">
-                                        {% for category in categories %}
+                                        {% for category in offer.categories %}
                                             <li class="mr-1 mb-1">
-                                                <a href="{{ category.url }}" class="btn btn--grey btn--tag btn--oval ">{{ category.name }}</a>
+                                                <a href="{{ category.url }}"
+                                                   class="btn btn--grey btn--tag btn--oval ">{{ category.name }}</a>
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -95,7 +113,7 @@
                             {% else %}
                                 <div class="swiper offer-slider mb-8">
                                     <div class="swiper-wrapper">
-                                        {% for product in offer.given_products %}
+                                        {% for product in offer.products %}
                                             <div class="swiper-slide offer-slider__slide w-10/12 md:w-auto">
                                                 {% include 'pages.partials.product.card' with {block_classes:'product-block--small'} %}
                                             </div>
@@ -110,11 +128,13 @@
                             {% endif %}
 
                             <div class="flex flex-col md:flex-row justify-between text-sm text-gray-400">
-                                <p class="mb-5 md:mb-0">العرض ساري حتى 22/4/2020م</p>
+                                {% if offer.expiry_date %}
+                                    <p class="mb-5 md:mb-0">{{trans('pages.products.offer_expires_in')}} {{ offer.expiry_date|date }}</p>
+                                {% endif %}
                                 <div class="relative flex items-center me-5 md:me-0">
                                     <input id="dontRem" name="option2" type="checkbox"
                                            class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md">
-                                    <label for="dontRem" class="ms-2 text-sm font-medium ">{{ trans('pages.offer.continue_shopping') }}اخرى</label>
+                                    <label for="dontRem" class="ms-2 text-sm font-medium ">{{trans('common.remember_my_choice')}}</label>
                                 </div>
                             </div>
                         </div>
@@ -128,11 +148,11 @@
     <script>
         function animatedTitles() {
             anime({
-                targets: '.offer-item',
-                opacity: [0, 1],
-                duration: 1900,
+                targets   : '.offer-item',
+                opacity   : [0, 1],
+                duration  : 1900,
                 translateX: [40, 0],
-                delay: function (el, i) {
+                delay     : function (el, i) {
                     return i * 200;
                 },
             })
@@ -142,7 +162,7 @@
             const swiper = new Swiper('.offer-slider', {
 
 
-                spaceBetween: 20,
+                spaceBetween : 20,
                 slidesPerView: "auto",
 
 

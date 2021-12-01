@@ -1,19 +1,31 @@
+{#
+| Variable                      | Type                    | Description |
+|-------------------------------|-------------------------|-------------|
+| offer                         | Offer                   | TODO        |
+| offer.id                      | Integer                 |             |
+| offer.name                    | String                  |             |
+| offer.description             | String *HTML            |             |
+| offer.categories              | Category[] *Collection  |             |
+| offer.products                | Product[] *Collection   |             |
+| offer.steps(product_quantity) | Array                   |             |
+#}
 <section class="relative overflow-hidden bg-white p-5 pb-0 rounded-md mb-5">
-    <p class="mb-5 pe-10 ">{{ offer.name }}: {{ offer.title|raw }}</p>
+    <p class="mb-5 pe-10 ">{{ offer.name }}: {{ offer.description|raw }}</p>
 
-    {% if categories %}
-        {% for category in categories %}
-            <a href="{{ category.url }}" class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-gray-500 justify-center text-sm mb-2.5">
-                <i class="font-medium sicon-tag me-1.5 text-md"></i>
-                <span class="fix-align">{{ category.name }}</span>
+
+    {% if offer.products|length %}
+        {% for product in offer.products %}
+            <a href="{{ product.url }}"
+               class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-gray-500 justify-center text-sm mb-2.5">
+                <span class="fix-align">{{ product.name }}</span>
             </a>
         {% endfor %}
-    {% endif %}
-
-    {% if products %}
-        {% for product in products %}
-            <a href="{{ product.url }}" class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-gray-500 justify-center text-sm mb-2.5">
-                <span class="fix-align">{{ product.name }}</span>
+    {% else %}
+        {% for category in offer.categories %}
+            <a href="{{ category.url }}"
+               class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-gray-500 justify-center text-sm mb-2.5">
+                <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                <span class="fix-align">{{ category.name }}</span>
             </a>
         {% endfor %}
     {% endif %}
@@ -22,6 +34,6 @@
         <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ trans('pages.products.special_offer') }}
         </div>
     </div>
-
+{#    {% include 'components.offer.popup' with {product:product} %}#}
     <div class="mt-5 border-b-2 border-red-400"></div>
 </section>
