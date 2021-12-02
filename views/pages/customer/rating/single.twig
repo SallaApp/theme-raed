@@ -1,6 +1,41 @@
+{#
+| Variable              | Type               | Description | @see |
+|-----------------------|--------------------|-------------|------|
+| orders                | Order[] *Paginator |             | TODO |
+| orders.next_page      | ?String            |             |      |
+| orders.count          | Integer            |             |      |
+| orders[].id           | Integer            |             |      |
+| orders[].rating_url   | String             |             |      |
+| orders[].has_feedback | Bool               |             |      |
+#}
 {% extends "layouts.master" %}
-{#TODO:: Show Only Allowed Rating Form Store Settings #}
+
 {% block content %}
+    <main id="main">
+        <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
+            <div class="container relative z-10 flex justify-between h-full items-center">
+                <div class="self-start">
+                    {% component breadcrumbs with {is_dark:true} %}
+                </div>
+            </div>
+        </div>
+        <div class="container mb-24">
+            <div class="flex items-start flex-col lg:flex-row ">
+                {% include 'pages.partials.customer.sidebar' %}
+                <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
+                    <h1 class="font-bold text-lg md:mb-5">
+                        {{ trans('pages.rating.rate_order') }} #{{ order.order_id }}
+                    </h1>
+                    {% if store.settings.rating.store or store.settings.rating.products or store.settings.rating.shipping %}
+                        {% include 'pages.customer.orders.partials.rating' with {'order':order} %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
     <div class="d-flex align-items-center mb-30">
         <a class="btn btn--grey btn--circular btn--return mr-3" href="{{ link('rating') }}">
             <i class="sicon-arrow-right"></i>
@@ -51,142 +86,142 @@
                 {# oreder store rate #}
                 {% if testimonials_enabled %}
                     <div class="tabs active" data-tab-content data-type="store" id="rw__store">
-                    <div class="d-flex flex-column align-items-center {{ testimonial?'':'rating-outer-form' }}"
-                         data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
-                        <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                        <input type="hidden" name="type" value="store">
-                        <article class="center article article--small tab-title mb-30">
-                            <p>{{ trans('pages.rating.rate_the_store') }}</p>
-                        </article>
-                        <div class="rating-wrap">
-                            <form class="rate-element rate-element--has-label">
-                                {% include 'pages.partials.rating-stars' with {large:true, stars:testimonial.stars} %}
-                            </form>
-                            <p class="rate-label font-sm center mb-0">{{ (testimonial.stars?trans('pages.rating.'~testimonial.stars~'_stars'):'')|raw }}</p>
-                        </div>
-                        <div class="wide form-group mt-30">
-                            {% if testimonial %}
-                                <div class="d-block text-center font-sm padded-10 bg-grey b-radius--min">
-                                    {{ testimonial.content|raw }}
-                                </div>
-                            {% else %}
-                                <textarea placeholder="{{ trans('pages.rating.write_store_rate') }}"
-                                          class="form-control font-xsm comment"
-                                          name="comment"
-                                ></textarea>
-                            {% endif %}
-                            {% if testimonial.is_pending %}
-                                <span class="pending-comment d-block color-grey font-xsm mt-5">{{ trans('pages.rating.pending') }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="d-flex justify-content-between wide">
-                            <div></div>
-                            {% if(products_enabled) %}
-                                <button class="btn btn--primary btn--padded less btn--oval btn--proceed next next-rating-tab"
-                                        data-tab-target="#rw__products" data-index="1">
-                                    {{ trans('pages.rating.rate') }} {{ trans('pages.rating.products') }}
-                                </button>
-                            {% endif %}
-                            {% if shipping_enabled and not products_enabled %}
-                                {% if order.has_shipping %}
-                                    <button class="btn btn--primary btn--padded less btn--oval btn--proceed next next-rating-tab" data-tab-target="#rw__shipping" data-index="2">
-                                        {{ trans('pages.rating.rate') }} {{ trans('pages.rating.shipping') }}
-                                    </button>
-                                {% elseif not order.has_feedback or not testimonial %}
-                                    <button class="btn btn--oval btn--padded less btn--primary btn--proceed next next-rating-tab send-rating"
-                                            data-tab-target="#rw__send">
-                                        {{ trans('pages.rating.send_ratings') }}
+                        <div class="d-flex flex-column align-items-center {{ testimonial?'':'rating-outer-form' }}"
+                             data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
+                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                            <input type="hidden" name="type" value="store">
+                            <article class="center article article--small tab-title mb-30">
+                                <p>{{ trans('pages.rating.rate_the_store') }}</p>
+                            </article>
+                            <div class="rating-wrap">
+                                <form class="rate-element rate-element--has-label">
+                                    {% include 'pages.partials.rating-stars' with {large:true, stars:testimonial.stars} %}
+                                </form>
+                                <p class="rate-label font-sm center mb-0">{{ (testimonial.stars?trans('pages.rating.'~testimonial.stars~'_stars'):'')|raw }}</p>
+                            </div>
+                            <div class="wide form-group mt-30">
+                                {% if testimonial %}
+                                    <div class="d-block text-center font-sm padded-10 bg-grey b-radius--min">
+                                        {{ testimonial.content|raw }}
+                                    </div>
+                                {% else %}
+                                    <textarea placeholder="{{ trans('pages.rating.write_store_rate') }}"
+                                              class="form-control font-xsm comment"
+                                              name="comment"
+                                    ></textarea>
+                                {% endif %}
+                                {% if testimonial.is_pending %}
+                                    <span class="pending-comment d-block color-grey font-xsm mt-5">{{ trans('pages.rating.pending') }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex justify-content-between wide">
+                                <div></div>
+                                {% if(products_enabled) %}
+                                    <button class="btn btn--primary btn--padded less btn--oval btn--proceed next next-rating-tab"
+                                            data-tab-target="#rw__products" data-index="1">
+                                        {{ trans('pages.rating.rate') }} {{ trans('pages.rating.products') }}
                                     </button>
                                 {% endif %}
-                            {% endif %}
+                                {% if shipping_enabled and not products_enabled %}
+                                    {% if order.has_shipping %}
+                                        <button class="btn btn--primary btn--padded less btn--oval btn--proceed next next-rating-tab" data-tab-target="#rw__shipping" data-index="2">
+                                            {{ trans('pages.rating.rate') }} {{ trans('pages.rating.shipping') }}
+                                        </button>
+                                    {% elseif not order.has_feedback or not testimonial %}
+                                        <button class="btn btn--oval btn--padded less btn--primary btn--proceed next next-rating-tab send-rating"
+                                                data-tab-target="#rw__send">
+                                            {{ trans('pages.rating.send_ratings') }}
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endif %}
                 {# order products rate #}
                 {% if(products_enabled) %}
-                <div data-type="product"
-                     id="rw__products"
-                     data-tab-content
-                     class="tabs {% if not testimonials_enabled %}active{% endif %}">
-                    <div>
-                        <article class="center article article--small tab-title mb-30">
-                            <p>{{ trans('pages.rating.rate_products') }} {{ trans('pages.rating.order_id') }}
-                                #{{ order.order_id }}</p>
-                        </article>
-                        <div class="orders-list">
-                            <div class="rw-products">
-                                {% for item in order.items %}
-                                    <div class="rw-product-entry {{ item.feedback?'':'rating-outer-form' }}"
-                                         data-stars-error="{{ trans('pages.rating.rate_product_stars', {'item':item.name}) }}">
-                                        <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                                        <input type="hidden" name="products[{{ loop.index0 }}][product_id]" value="{{ item.product_id }}">
-                                        <input type="hidden" name="type" value="products">
-                                        <div class="rw-product-entry__info">
-                                            <a href="{{ item.product.url }}" class="rw-product-entry__title">
-                                                <div class="avatar-wrapper avatar-wrapper--rounded avatar-wrapper--bordered avatar-wrapper--small mr-3">
-                                                    <img class="lazy-load" data-src="{{ item.image }}" alt="{{ item.name }}"/>
-                                                </div>
-                                                <h4 class="title title--x-small">{{ item.name }}</h4>
-                                            </a>
-                                            <div class="rw-product-entry__rate">
-                                                <div class="rating-wrap">
-                                                    <form class="rate-element rate-element--has-label">
-                                                        {% include 'pages.partials.rating-stars' with {stars:item.feedback.stars, rating_name:'products['~loop.index0~'][rating]'} %}
-                                                    </form>
-                                                    <p class="rate-label font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+                    <div data-type="product"
+                         id="rw__products"
+                         data-tab-content
+                         class="tabs {% if not testimonials_enabled %}active{% endif %}">
+                        <div>
+                            <article class="center article article--small tab-title mb-30">
+                                <p>{{ trans('pages.rating.rate_products') }} {{ trans('pages.rating.order_id') }}
+                                    #{{ order.order_id }}</p>
+                            </article>
+                            <div class="orders-list">
+                                <div class="rw-products">
+                                    {% for item in order.items %}
+                                        <div class="rw-product-entry {{ item.feedback?'':'rating-outer-form' }}"
+                                             data-stars-error="{{ trans('pages.rating.rate_product_stars', {'item':item.name}) }}">
+                                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                            <input type="hidden" name="products[{{ loop.index0 }}][product_id]" value="{{ item.product_id }}">
+                                            <input type="hidden" name="type" value="products">
+                                            <div class="rw-product-entry__info">
+                                                <a href="{{ item.product.url }}" class="rw-product-entry__title">
+                                                    <div class="avatar-wrapper avatar-wrapper--rounded avatar-wrapper--bordered avatar-wrapper--small mr-3">
+                                                        <img class="lazy-load" data-src="{{ item.image }}" alt="{{ item.name }}"/>
+                                                    </div>
+                                                    <h4 class="title title--x-small">{{ item.name }}</h4>
+                                                </a>
+                                                <div class="rw-product-entry__rate">
+                                                    <div class="rating-wrap">
+                                                        <form class="rate-element rate-element--has-label">
+                                                            {% include 'pages.partials.rating-stars' with {stars:item.feedback.stars, rating_name:'products['~loop.index0~'][rating]'} %}
+                                                        </form>
+                                                        <p class="rate-label font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="rw-product-entry__comment wide form-group mb-0">
-                                            {% if item.feedback %}
-                                                <div class="d-block font-xsm padded-10 bg-grey speech-bubble top start b-radius--min">
-                                                    {{ item.feedback.content|raw }}
-                                                </div>
-                                                {% if item.feedback.is_pending %}
-                                                    <span class="pending-comment d-block color-grey font-xsm mt-5">{{ trans('pages.rating.pending') }}</span>
+                                            <div class="rw-product-entry__comment wide form-group mb-0">
+                                                {% if item.feedback %}
+                                                    <div class="d-block font-xsm padded-10 bg-grey speech-bubble top start b-radius--min">
+                                                        {{ item.feedback.content|raw }}
+                                                    </div>
+                                                    {% if item.feedback.is_pending %}
+                                                        <span class="pending-comment d-block color-grey font-xsm mt-5">{{ trans('pages.rating.pending') }}</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <input type="text" class="form-control font-xsm comment"
+                                                           placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"
+                                                           name="products[{{ loop.index0 }}][comment]"
+                                                    ></input>
                                                 {% endif %}
-                                            {% else %}
-                                                <input type="text" class="form-control font-xsm comment"
-                                                       placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"
-                                                       name="products[{{ loop.index0 }}][comment]"
-                                                ></input>
-                                            {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-between wide">
-                            {% if testimonials_enabled %}
-                                <button class="btn btn--oval btn--padded btn--proceed prev less btn--grey"
-                                        data-tab-target="#rw__store" data-index="0">
-                                    {{ trans('pages.rating.rate') }} {{ trans('pages.rating.store') }}
-                                </button>
-                            {% else %}
-                                <div></div>
-                            {% endif %}
-                            {% if shipping_enabled %}
-                                {% if order.has_shipping %}
-                                    <button class="btn btn--primary btn--padded less btn--oval btn--proceed next next-rating-tab" data-tab-target="#rw__shipping" data-index="2">
-                                        {{ trans('pages.rating.rate') }} {{ trans('pages.rating.shipping') }}
+                            <div class="d-flex justify-content-between wide">
+                                {% if testimonials_enabled %}
+                                    <button class="btn btn--oval btn--padded btn--proceed prev less btn--grey"
+                                            data-tab-target="#rw__store" data-index="0">
+                                        {{ trans('pages.rating.rate') }} {{ trans('pages.rating.store') }}
                                     </button>
-                                {% elseif not order.has_feedback or not testimonial %}
-                                    <button class="btn btn--oval btn--padded less btn--primary btn--proceed next next-rating-tab send-rating"
+                                {% else %}
+                                    <div></div>
+                                {% endif %}
+                                {% if shipping_enabled %}
+                                    {% if order.has_shipping %}
+                                        <button class="btn btn--primary btn--padded less btn--oval btn--proceed next next-rating-tab" data-tab-target="#rw__shipping" data-index="2">
+                                            {{ trans('pages.rating.rate') }} {{ trans('pages.rating.shipping') }}
+                                        </button>
+                                    {% elseif not order.has_feedback or not testimonial %}
+                                        <button class="btn btn--oval btn--padded less btn--primary btn--proceed next next-rating-tab send-rating"
+                                                data-tab-target="#rw__send">
+                                            {{ trans('pages.rating.send_ratings') }}
+                                        </button>
+                                    {% endif %}
+                                {% else %}
+                                    <button class="btn btn--oval btn--padded less btn--primary next-rating-tab send-rating"
                                             data-tab-target="#rw__send">
                                         {{ trans('pages.rating.send_ratings') }}
+                                        <i class="sicon-arrow-left icon ml-1"></i>
                                     </button>
                                 {% endif %}
-                            {% else %}
-                                <button class="btn btn--oval btn--padded less btn--primary next-rating-tab send-rating"
-                                        data-tab-target="#rw__send">
-                                    {{ trans('pages.rating.send_ratings') }}
-                                    <i class="sicon-arrow-left icon ml-1"></i>
-                                </button>
-                            {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endif %}
 
                 {# order shipping company rate #}
