@@ -3,7 +3,8 @@
   "theme_name": "Theme One",
   "repo_url": "https://github.com/SallaApp/theme-one",
   "features": [
-    "mega_menu"
+    "mega_menu",
+    "font_list"
   ],
   "settings": [
     {
@@ -14,110 +15,132 @@
       "value": true
     }
   ],
-  "components": {
-    "enhanced_slider": {
-      "name": "صور متحركة (محسنة)",
+  "components": [
+    {
+      "name": "enhanced_slider",
+      "title": "صور متحركة (محسنة)",
       "icon": "sicon-image-carousel",
       "path": "home.slider",
-      "fields": {
-        "images": {
+      "fields": [
+        {
+          "id": "images",
           "type": "collection",
-          "fields": {
-            "image": {
-              "type": "image"
-            },
-            "url": {
-              "type": "link"
-            },
-            "title": {
+          "format": "collection",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 10,
+          "fields": [
+            {
+              "id": "image",
               "type": "string",
-              "icon": "sicon-format-text-alt",
-              "label": "test someThing",
-              "placeholder": "Placeholder text ..",
-              "minLength": 6,
-              "maxLength": 30,
-              "required": false
+              "format": "image"
+            },
+            {
+              "id": "title",
+              "type": "string",
+              "label": "عنوان رئيسي (إختياري)"
+            },
+            {
+              "id": "sub_title",
+              "type": "string",
+              "format": "textarea",
+              "label": "نص توضيحي (إختياري)"
             }
-          }
+          ]
         }
-      }
+      ]
     },
-    "main_links": {
-      "name": "روابط سريعة",
+    {
+      "name": "main_links",
+      "title": "روابط سريعة",
       "icon": "sicon-layout-grid-rearrange",
       "path": "home.main_links",
-      "fields": {
-        "title": {
+      "fields": [
+        {
+          "id": "title",
           "type": "string",
-          "icon": "sicon-format-text-alt",
           "label": "test someThing",
           "placeholder": "Placeholder text ..",
           "minLength": 6,
           "maxLength": 30,
           "required": false
         },
-        "links": {
+        {
+          "id": "links",
           "type": "collection",
-          "fields": {
-            "icon": {
-              "type": "image"
-            },
-            "url": {
-              "type": "link"
-            },
-            "title": {
+          "fields": [
+            {
+              "id": "icon",
               "type": "string",
-              "icon": "sicon-format-text-alt",
-              "label": "test someThing",
-              "placeholder": "Placeholder text ..",
-              "minLength": 6,
-              "maxLength": 30,
-              "required": false
+              "format": "image"
+            },
+            {
+              "id": "url",
+              "type": "string",
+              "format": "url",
+              "inputType": "url"
+            },
+            {
+              "id": "title",
+              "type": "string",
+              "label": "عنوان الرابط"
             }
-          }
+          ]
         }
-      }
+      ]
     },
-    "brands": {
-      "name": "الماركات التجارية",
+    {
+      "name": "brands",
+      "title": "الماركات التجارية",
       "icon": "sicon-award-ribbon",
       "path": "home.brands",
-      "fields": {
-        "brands": {
-          "type": "link"
+      "fields": [
+        {
+          "id": "brands",
+          "type": "items",
+          "label": "العلامات التجارية",
+          "format": "dropdown",
+          "multichoice": true,
+          "required": true,
+          "source": "Brands"
         }
-      }
+      ]
     },
-    "slider_products_with_header": {
-      "name": "منتجات متحركة مع خلفية",
+    {
+      "name": "slider_products_with_header",
+      "title": "منتجات متحركة مع خلفية",
       "icon": "sicon-list-play",
       "path": "home.slider_products_with_header",
-      "fields": {
-        "products": {
-          "type": "tems",
+      "fields": [
+        {
+          "id": "products",
+          "type": "items",
           "icon": "sicon-list",
           "label": "المنتجات",
           "format": "dropdown",
           "required": true,
-          "source": "Manual"
+          "source": "Products",
+          "multichoice": true
         }
-      }
+      ]
     },
-    "enhanced_square_images": {
-      "name": "صور ثابتة (محسنة)",
+    {
+      "name": "enhanced_square_images",
+      "title": "صور ثابتة (محسنة)",
       "icon": "sicon-image",
       "path": "home.enhanced_square_images",
-      "fields": {
-        "products": {
-          "type": "tems",
+      "fields": [
+        {
+          "id": "products",
+          "type": "items",
           "icon": "sicon-list",
           "label": "المنتجات",
           "format": "dropdown",
           "required": true,
-          "source": "Manual"
+          "source": "Products"
         }
-      }
+      ]
     }
-  },
+  ],
   "support_url": "https://salla.dev"
 }
