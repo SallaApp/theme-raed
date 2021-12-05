@@ -76,9 +76,7 @@
                  class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                  aria-hidden="true"></div>
 
-
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
 
             <div x-show="openRatingModal" @click.away="closeModal"
                  x-transition:enter="transition ease-out duration-300"
@@ -116,11 +114,11 @@
 <script>
     function ratingInit() {
         return {
-            review: {storeRate: {{ order.store_feedback.stars }}, productsRate: null, shippingRate: {{ order.shipping_feedback.stars }}},
-            step: 1,
-            steps: 3,
+            review: {storeRate: {{ order.store_feedback.stars }}, productsRate: null, shippingRate: {{ order.shipping_feedback.stars }} },
+            step: {{ (store.settings.rating.store ? 1 : (store.settings.rating.products ? 2 : 3)) }},
+            steps: {{ (store.settings.rating.store + store.settings.rating.products + store.settings.rating.shipping) }},
             validationMessage: '',
-            currentStep: 'storeRate',
+            currentStep: Object.keys(this.review)[this.step],
             openRatingModal: false,
             validationMessages: {
                 shippingRate: 'تقيمم شركة الشحن مطلوب',
@@ -168,13 +166,17 @@
             },
 
             sendReview: function (review) {
-
-
+                if (this.currentStep === 'storeRate'){
+                    salla.feedback.api.store({order_id: {{ order.id }}, comment: review, rating: this.review.storeRate});
+                } else if(this.currentStep === 'productsRate'){
+                    salla.feedback.api.product({order_id: {{ order.id }}, comment: review, rating: this.review.productsRate});
+                } else if(this.currentStep === 'shippingRate'){
+                    salla.feedback.api.shipping({order_id: {{ order.id }}, comment: review, rating: this.review.shippingRate});
+                }
             },
 
             closeModal: function () {
                 this.openRatingModal = false;
-
             }
 
         }
