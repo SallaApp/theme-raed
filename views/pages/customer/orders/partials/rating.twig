@@ -9,34 +9,46 @@
             </div>
         </div>
 
-        <div class="panel__body pt-14 h-52 overflow-hidden">
+        <div class="panel__body pt-14 h-72 overflow-hidden">
             {# oreder store rate #}
             {% if store.settings.rating.store %}
-                <div class="step1 text-center" x-show.transition.in="step === 1"
+                <div class="step1 flex flex-col items-center" x-show.transition.in="step === 1"
                      x-transition.duration.300ms>
                     <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_the_store') }}</h2>
 
                     {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'store'} %}
+
+                <div class="w-4/6">
+                    <textarea placeholder="اكتب رأيك في المتجر ..." class="form-input h-16"></textarea>
+                </div>       
                 </div>
             {% endif %}
 
             {# order products rate #}
             {% if store.settings.rating.products %}
-                <div class="step1 text-center" x-show.transition.in="step === 2"
+                <div class="step2 flex flex-col items-center" x-show.transition.in="step === 2"
                      x-transition.duration.300ms>
                     <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_products') }}</h2>
 
                     {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'products'} %}
+
+                <div class="w-4/6">
+                    <textarea placeholder="اكتب رأيك في المتجر ..." class="form-input h-16"></textarea>
+                </div>     
                 </div>
             {% endif %}
 
             {# order shipping company rate #}
             {% if order.has_shipping and store.settings.rating.shipping %}
-                <div class="step1 text-center" x-show.transition.in="step === 3"
+                <div class="step3 flex flex-col items-center" x-show.transition.in="step === 3"
                      x-transition.duration.300ms>
                     <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_shipping') }}</h2>
 
                     {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'shipping'} %}
+
+                <div class="w-4/6">
+                    <textarea placeholder="اكتب رأيك في المتجر ..." class="form-input h-16"></textarea>
+                </div>      
                 </div>
             {% endif %}
         </div>
@@ -113,7 +125,6 @@
 
 <script>
     function ratingInit() {
-        debugger;
         return {
             review: {"storeRate": {{ order.store_feedback.stars }}, "productsRate": null, "shippingRate": {{ order.shipping_feedback.stars }} },
             step: {{ (store.settings.rating.store ? 1 : (store.settings.rating.products ? 2 : 3)) }},
