@@ -116,7 +116,7 @@
         return {
             review: {"storeRate": {{ order.store_feedback.stars }}, "productsRate": null, "shippingRate": {{ order.shipping_feedback.stars }} },
             step: {{ (store.settings.rating.store ? 1 : (store.settings.rating.products ? 2 : 3)) }},
-            steps: {{(store.settings.rating.store + store.settings.rating.products + order.has_shipping and store.settings.rating.shipping) }},
+            steps: {{(store.settings.rating.store + store.settings.rating.products + (order.has_shipping and store.settings.rating.shipping)) }},
             validationMessage: '',
             currentStep: "",
             openRatingModal: false,
