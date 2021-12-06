@@ -17,10 +17,7 @@
                     <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_the_store') }}</h2>
 
                     {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'store'} %}
-
-                <div class="w-4/6">
-                    <textarea placeholder="اكتب رأيك في المتجر ..." class="form-input h-16"></textarea>
-                </div>       
+     
                 </div>
             {% endif %}
 
@@ -30,11 +27,7 @@
                      x-transition.duration.300ms>
                     <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_products') }}</h2>
 
-                    {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'products'} %}
-
-                <div class="w-4/6">
-                    <textarea placeholder="اكتب رأيك في المنتجات ..." class="form-input h-16"></textarea>
-                </div>     
+                    {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'products'} %} 
                 </div>
             {% endif %}
 
@@ -45,10 +38,7 @@
                     <h2 class="font-bold text-lg mb-8">{{ trans('pages.rating.rate_shipping') }}</h2>
 
                     {% include 'pages.customer.orders.partials.rating-emojis' with {'for': 'shipping'} %}
-
-                <div class="w-4/6">
-                    <textarea placeholder="اكتب رأيك في الشحن ..." class="form-input h-16"></textarea>
-                </div>      
+  
                 </div>
             {% endif %}
         </div>
@@ -126,7 +116,7 @@
 <script>
     function ratingInit() {
         return {
-            review: {"storeRate": {{ order.store_feedback.stars }}, "productsRate": null, "shippingRate": {{ order.shipping_feedback.stars }} },
+            review: {"storeRate": {{ order.store_feedback.stars }}, "productsRate": null, "shippingRate": {{ order.shipping_feedback.stars }}, "storeComment":'',  "productsComment": '', "shippingComment": ''},
             step: {{ (store.settings.rating.store ? 1 : (store.settings.rating.products ? 2 : 3)) }},
             steps: {{(store.settings.rating.store + store.settings.rating.products + (order.has_shipping and store.settings.rating.shipping)) }},
             validationMessage: '',
