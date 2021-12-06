@@ -46,7 +46,7 @@
     <main id="main" x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }})"
           x-cloak data-product-id="{{ product.id }}">
         <div class="container">
-            {% component breadcrumbs %}
+            {% component 'header.breadcrumbs' %}
             <div class="flex flex-col items-start md:flex-row">
 
                 <div class="sidebar md:sticky top-24 w-full md:w-2/4  me-8 pb-16">
@@ -328,7 +328,7 @@
                         </section>
 
                         {# {% component 'product.quick-buy' with {product: product} %} #} {# frontend TODO:: support this section #}
-                        {% component 'offer.block' with {product:product} %}
+                        {% component 'product.offer' with {product:product} %}
                     </form>
                 </div>
             </div>
