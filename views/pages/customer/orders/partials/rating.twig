@@ -1,4 +1,4 @@
-<div x-data="ratingInit()">
+<div x-data="ratingInit()" x-init="currentStep = Object.keys(review)[step-1]; console.log(currentStep)">
     <div class="panel bg-white rounded-md">
         <div class="panel__header border-b border-border-color p-5">
             <div class="flex items-center space-s-3">
@@ -114,11 +114,11 @@
 <script>
     function ratingInit() {
         return {
-            review: {storeRate: {{ order.store_feedback.stars }}, productsRate: null, shippingRate: {{ order.shipping_feedback.stars }} },
+            review: {"storeRate": {{ order.store_feedback.stars }}, "productsRate": null, "shippingRate": {{ order.shipping_feedback.stars }} },
             step: {{ (store.settings.rating.store ? 1 : (store.settings.rating.products ? 2 : 3)) }},
-            steps: {{ (store.settings.rating.store + store.settings.rating.products + store.settings.rating.shipping) }},
+            steps: {{(store.settings.rating.store + store.settings.rating.products + order.has_shipping and store.settings.rating.shipping) }},
             validationMessage: '',
-            currentStep: Object.keys(this.review)[this.step],
+            currentStep: "",
             openRatingModal: false,
             validationMessages: {
                 shippingRate: 'تقيمم شركة الشحن مطلوب',

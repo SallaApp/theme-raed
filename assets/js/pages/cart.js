@@ -60,15 +60,15 @@ window.initCart = function (copoun) {
  *          }} res
  */
 function updateCartPageInfo(res) {
-    res.data.items.forEach(item => {
-
-    });
+    // TODO: items is not defined 
+    // res.data.items.forEach(item => {
+    // });
     let shippingBar = res.sections['free-shipping-bar'];
-    if (shippingBar) {
-        document.querySelector('#free-shipping-bar').outerHTML = shippingBar;
-        animatedItem('.free-shipping');
-        animatedItem('.shipping-item');
-    }
+    // if (shippingBar) {
+    document.querySelector('#free-shipping-bar').outerHTML = shippingBar;
+    //     animatedItem('.free-shipping');
+    //     animatedItem('.shipping-item');
+    // }
 }
 
 //cart Item
