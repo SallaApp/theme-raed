@@ -116,7 +116,8 @@
 <script>
     function ratingInit() {
         return {
-            review: {"storeRate": {{ order.store_feedback.stars }}, "productsRate": null, "shippingRate": {{ order.shipping_feedback.stars }}, "storeComment":'',  "productsComment": '', "shippingComment": ''},
+            review: {"storeRate": {{ order.store_feedback.stars }}, "productsRate": null, "shippingRate": {{ order.shipping_feedback.stars }}},
+            comment: {"storeComment":'',  "productsComment": '', "shippingComment": ''},
             step: {{ (store.settings.rating.store ? 1 : (store.settings.rating.products ? 2 : 3)) }},
             steps: {{(store.settings.rating.store + store.settings.rating.products + (order.has_shipping and store.settings.rating.shipping)) }},
             validationMessage: '',
@@ -141,7 +142,7 @@
                 } else if (this.step >= this.steps) {
                     this.openRatingModal = true;
                     this.animatedItems();
-                    this.sendReview(this.review)
+                    this.sendReview(this.comment[this.currentStep])
                 }
             },
 
@@ -167,13 +168,13 @@
                 })
             },
 
-            sendReview: function (review) {
+            sendReview: function (comment) {
                 if (this.currentStep === 'storeRate'){
-                    salla.feedback.api.store({order_id: {{ order.id }}, comment: review, rating: this.review.storeRate});
+                    salla.feedback.api.store({order_id: {{ order.id }}, comment: comment, rating: this.review.storeRate});
                 } else if(this.currentStep === 'productsRate'){
-                    salla.feedback.api.product({order_id: {{ order.id }}, comment: review, rating: this.review.productsRate});
+                    salla.feedback.api.product({order_id: {{ order.id }}, comment: comment, rating: this.review.productsRate});
                 } else if(this.currentStep === 'shippingRate'){
-                    salla.feedback.api.shipping({order_id: {{ order.id }}, comment: review, rating: this.review.shippingRate});
+                    salla.feedback.api.shipping({order_id: {{ order.id }}, comment: comment, rating: this.review.shippingRate});
                 }
             },
 
