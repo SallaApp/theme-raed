@@ -7,16 +7,16 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
-	const sliders = document.querySelectorAll(".product-slider");
+	// const sliders = document.querySelectorAll(".product-slider");
 
-	sliders.forEach((slider) => {
+	document.querySelectorAll(".product-slider").forEach((slider) => {
 		const sliderId = '#' + slider.dataset.id;
 		const next = document.querySelector(sliderId +
 			' .slider-next');
 		const prev = document.querySelector(sliderId +
 			' .slider-prev');
 
-		const swiper = new Swiper(slider, {
+		new Swiper(slider, {
 			slidesPerView: 'auto',
 			draggable: true,
 			navigation: {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const prev = document.querySelector(sliderId + ' .swiper-button-prev');
 		const pagination = document.querySelector(sliderId + ' .swiper-pagination');
 
-		const swiper = new Swiper(slider, {
+		new Swiper(slider, {
 			slidesPerView: "auto",
 			loop: true,
 			centeredSlides: true,

@@ -1,7 +1,7 @@
 import flatpickr from "flatpickr";
-import Swiper from "swiper";
+// import Swiper from "swiper";
 
-window.Swiper = Swiper;
+// window.Swiper = Swiper;
 window.initProductDetails = function (productId, inFavorite, showMore) {
     window.productId = productId;
     return {
@@ -98,11 +98,11 @@ document.addEventListener('DOMContentLoaded', function () {
         noCalendar: true,
         dateFormat: "H:i",
     });
-    var isDetailsSlider = document.getElementsByClassName('details-slider');
+    let isDetailsSlider = document.getElementsByClassName('details-slider');
     if (!isDetailsSlider.length) {
         return;
     }
-    var swiper = new Swiper(".thumbs-slider", {
+    let thumbSwiper = new Swiper(".thumbs-slider", {
         spaceBetween : 10,
         slidesPerView: 3,
         // loop: true,
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // centeredSlides: true,
     });
 
-    var swiper2 = new Swiper('.details-slider', {
+    let swiper2 = new Swiper('.details-slider', {
         // Optional parameters
         // loop: true,
         centeredSlides: true,
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         thumbs: {
-            swiper: swiper,
+            swiper: thumbSwiper,
         },
     });
 
@@ -135,4 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
             swiper2.slideTo(slideindex, 0);
         });
     })
+
+
 });

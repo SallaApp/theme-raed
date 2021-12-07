@@ -1,6 +1,5 @@
 window.Swiper = require('swiper/bundle').default;
 window.copyToClipboard = function (elementId) {
-    debugger;
     // icon
     let copyIcon = document.querySelector('.copy-icon');
     // Create an auxiliary hidden input

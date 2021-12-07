@@ -82,7 +82,7 @@
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
                                 <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
-                                    <img data-src="{{ image.url }}" class="object-cover h-full lazy-load"
+                                    <img data-src="{{ image.url }}" class="object-cover w-full h-full lazy-load"
                                          title="{{ image.alt }}"
                                          alt="{{ image.alt }}"/>
                                 </div>
@@ -95,7 +95,7 @@
                     {% component 'product.brand' with {product: product} %}
 
                     <div class="flex">
-                        <h1 class="text-3xl font-bold mb-5 w-5/6 text-gray-500">{{ product.name }}</h1>
+                        <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
                         {% if product.rating %}
                             <div class="mt-5">
                                 <div class="text-sm">
@@ -197,9 +197,8 @@
                                 {% else %}
                                     onClick="salla.error('{{ trans('common.messages.must_login') }}')"
                                 {% endif %}
-                                :class="{{ in_wishlist ? 'text-white bg-primary' : 'bg-white text-theme-red' }}"
-                                class="anime-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none">
-                            <i :class="{{ in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
+                                class="{{ in_wishlist ? 'text-white bg-primary' : 'bg-white text-theme-red' }} anime-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none">
+                            <i class="{{ in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
                         </button>
                     </div>
 
@@ -307,10 +306,10 @@
 
                             <div class="flex justify-between space-s-4">
                                 {% if product.is_available or product.is_donation %}
-                                    <button type="button" class="btn btn--primary btn--large btn--oval btn--padded less popup-trigger no-m nowrap"
+                                    <button type="button" class="btn btn-primary"
                                             {% if not product.is_available %} disabled {% endif %}>
                                         {% if product.is_available %}
-                                            <i class="sicon-shopping-bag"></i>
+                                            {# <i class="sicon-shopping-bag"></i> #}
                                             {{ trans('pages.cart.add_to_cart') }}
                                         {% elseif product.is_donation %}
                                             {{ trans('pages.products.donation_exceed') }}

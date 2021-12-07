@@ -6,17 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
     animatedItem('.shipping-item');
 });
 window.hasApplePay = function () {
-    return {'has_apple_pay': !!window.ApplePaySession};
+    return { 'has_apple_pay': !!window.ApplePaySession };
 }
 
 // TODO: add timeline
 function animatedItem(selector) {
     anime({
-        targets   : selector,
-        opacity   : [0, 1],
-        duration  : 2000,
+        targets: selector,
+        opacity: [0, 1],
+        duration: 2000,
         translateX: [-20, 0],
-        delay     : (el, i) => i * 100,
+        delay: (el, i) => i * 100,
     });
     // change progress
     //document.querySelectorAll('.progress-bg').style.width = '200px';
@@ -25,10 +25,10 @@ function animatedItem(selector) {
 // cart
 window.initCart = function (copoun) {
     return {
-        copounCode          : copoun,
+        copounCode: copoun,
         isShowCopounDiscount: false,
-        isShowCopounError   : false,
-        addCopoun           : function () {
+        isShowCopounError: false,
+        addCopoun: function () {
             if (this.copounCode) {
                 this.isShowCopounError = false;
                 this.isShowCopounDiscount = !this.isShowCopounDiscount;
@@ -64,56 +64,57 @@ function updateCartPageInfo(res) {
     // res.data.items.forEach(item => {
     // });
     let shippingBar = res.sections['free-shipping-bar'];
-    // if (shippingBar) {
-    document.querySelector('#free-shipping-bar').outerHTML = shippingBar;
-    //     animatedItem('.free-shipping');
-    //     animatedItem('.shipping-item');
-    // }
+    let shippingBarEl = document.querySelector('#free-shipping-bar');
+    if (shippingBar && shippingBarEl) {
+        shippingBarEl.outerHTML = shippingBar;
+        //     animatedItem('.free-shipping');
+        //     animatedItem('.shipping-item');
+    }
 }
 
 //cart Item
 window.initCartItem = function (itemId, quantity) {
     return {
-        itemId      : itemId,
-        itemQty     : quantity,
+        itemId: itemId,
+        itemQty: quantity,
         isRemoveItem: false,
-        addQty      : function () {
+        addQty: function () {
             salla.cart.api
-                .updateItem({id: this.itemId, quantity: this.itemQty + 1})
+                .updateItem({ id: this.itemId, quantity: this.itemQty + 1 })
                 .then(res => {
                     updateCartPageInfo(res);
                     this.itemQty++;
                 });
         },
-        subQty      : function () {
+        subQty: function () {
             if (this.itemQty <= 1) {
                 return;
             }
             salla.cart.api
-                .updateItem({id: this.itemId, quantity: this.itemQty - 1})
+                .updateItem({ id: this.itemId, quantity: this.itemQty - 1 })
                 .then(res => {
                     this.itemQty--;
                     updateCartPageInfo(res);
                 });
         },
-        removeItem  : function () {
+        removeItem: function () {
             this.isRemoveItem = true;
             salla.cart.api
                 .deleteItem(this.itemId).then(res => {
-                updateCartPageInfo(res);
-                let item = document.querySelector('#item-' + itemId);
-                anime({
-                    targets         : item,
-                    height          : '0', // -> from 'height' to '0',
-                    margin          : 0,
-                    easing          : 'easeInOutQuad',
-                    duration        : 500,
-                    opacity         : 0,
-                    'padding-bottom': 0,
-                    'padding-top'   : 0,
-                    complete        : () => item.remove(),
-                });
-            })
+                    updateCartPageInfo(res);
+                    let item = document.querySelector('#item-' + itemId);
+                    anime({
+                        targets: item,
+                        height: '0', // -> from 'height' to '0',
+                        margin: 0,
+                        easing: 'easeInOutQuad',
+                        duration: 500,
+                        opacity: 0,
+                        'padding-bottom': 0,
+                        'padding-top': 0,
+                        complete: () => item.remove(),
+                    });
+                })
         },
     }
 }
