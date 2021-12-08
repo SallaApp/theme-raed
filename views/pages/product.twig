@@ -43,11 +43,12 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main" x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }})"
+    <main id="main"
+          x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }})"
           x-cloak data-product-id="{{ product.id }}">
         <div class="container">
             {% component 'header.breadcrumbs' %}
-            <div class="flex flex-col items-start md:flex-row">
+            <div class="flex flex-col items-start md:flex-row" id="product_{{ product.id }}">
 
                 <div class="sidebar md:sticky top-24 w-full md:w-2/4  me-8 pb-16">
 
@@ -59,7 +60,7 @@
                         {% endif %}
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
-                                <a data-fslightbox="gallery"
+                                <a data-fslightbox="product_{{ product.id }}"
                                    data-img-id="{{ image.id }}"
                                    data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
                                    data-caption="{{ image.alt }}"
@@ -78,17 +79,19 @@
                         <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
                     </div>
 
-                    <div thumbsSlider="" class="swiper thumbs-slider">
-                        <div class="swiper-wrapper">
-                            {% for image in product.images %}
-                                <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
-                                    <img data-src="{{ image.url }}" class="object-cover w-full h-full lazy-load"
-                                         title="{{ image.alt }}"
-                                         alt="{{ image.alt }}"/>
-                                </div>
-                            {% endfor %}
+                    {% if product.images|length>1 %}
+                        <div thumbsSlider="" class="swiper thumbs-slider">
+                            <div class="swiper-wrapper">
+                                {% for image in product.images %}
+                                    <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
+                                        <img data-src="{{ image.url }}" class="object-cover w-full h-full lazy-load"
+                                             title="{{ image.alt }}"
+                                             alt="{{ image.alt }}"/>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="main-content flex-1 pb-20">
@@ -126,18 +129,16 @@
                     <div class="product__description leading-7 mb-6">
                         {% if product.show_read_more %}
                             <p class="pb-1">{{ product.description|raw }}</p>
-
                             <div class="relative overflow-hidden transition-all max-h-0 duration-300" id="moreContent"
-                                 x-bind:style="showMore  ? 'max-height: ' + document.getElementById('moreContent').scrollHeight + 'px' : ''">
+                                 x-bind:style="showReadMore  ?'':'max-height: ' + document.getElementById('moreContent').scrollHeight + 'px'">
                                 <p>
                                     {{ product.description|raw }}
                                 </p>
                             </div>
-
-                            <div x-show="!showMore" class="mt-2">
-                                <a href="#" @click="showMore = !showMore" data-linkText="show more"
+                            <div x-show="showReadMore" class="mt-2">
+                                <a href="#" @click="showReadMore = !showReadMore" data-linkText="show more"
                                    class="show-more text-primary"
-                                   x-text="showMore ? '' : '{{ trans('pages.products.read_more') }}' "></a>
+                                   x-text="showReadMore ? '{{ trans('pages.products.read_more') }}':'' "></a>
                             </div>
                         {% else %}
                             <p class="pb-1">{{ product.description|raw }}</p>
@@ -197,8 +198,9 @@
                                 {% else %}
                                     onClick="salla.error('{{ trans('common.messages.must_login') }}')"
                                 {% endif %}
-                                class="{{ in_wishlist ? 'text-white bg-primary' : 'bg-white text-theme-red' }} anime-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none">
-                            <i class="{{ in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
+                                :class="inFavorite? 'text-white bg-primary' : 'bg-white text-theme-red'"
+                                class="anime-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none">
+                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
                         </button>
                     </div>
 
@@ -306,16 +308,23 @@
 
                             <div class="flex justify-between space-s-4">
                                 {% if product.is_available or product.is_donation %}
-                                    <button type="button" class="btn btn-primary"
-                                            {% if not product.is_available %} disabled {% endif %}>
-                                        {% if product.is_available %}
-                                            {# <i class="sicon-shopping-bag"></i> #}
-                                            {{ trans('pages.cart.add_to_cart') }}
-                                        {% elseif product.is_donation %}
-                                            {{ trans('pages.products.donation_exceed') }}
-                                        {% else %}
-                                            {{ trans('pages.products.out_of_stock') }}
-                                        {% endif %}
+                                    <button type="button" class="btn btn-primary add-to-cart-btn"
+                                            {% if not product.is_available %}
+                                    disabled
+                                    {% else %}
+                                        data-on-click="cart::add-item"
+                                            {% endif %}>
+                                        <span class="loader loader--small"></span>
+                                        <span class="transition-transform duration-500 inline-block btn--text">
+                                            {% if product.is_available %}
+                                                {# <i class="sicon-shopping-bag"></i> #}
+                                                {{ trans('pages.cart.add_to_cart') }}
+                                            {% elseif product.is_donation %}
+                                                {{ trans('pages.products.donation_exceed') }}
+                                            {% else %}
+                                                {{ trans('pages.products.out_of_stock') }}
+                                            {% endif %}
+                                        </span>
                                     </button>
                                 {% else %}
                                     <button type="button" class="btn btn-outline">

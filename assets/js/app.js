@@ -1,5 +1,5 @@
 require('./partials/initate');
-require('./partials/product');
+require('./partials/cart-listeners');
 require('./partials/helpers');
 require('./partials/sliders');
 require('./partials/home-blocks');

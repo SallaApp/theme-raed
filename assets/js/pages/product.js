@@ -1,15 +1,20 @@
 import flatpickr from "flatpickr";
-// import Swiper from "swiper";
+import fslightbox from 'fslightbox';
+
+window.fslightbox = fslightbox;
 
 // window.Swiper = Swiper;
-window.initProductDetails = function (productId, inFavorite, showMore) {
+window.initProductDetails = function (productId, inFavorite, showReadMore) {
     window.productId = productId;
     return {
         reminderModal : false,
         inFavorite    : inFavorite,
-        showMore      : showMore,
+        showReadMore  : showReadMore,
         showShareMenu : false,
         toggleFavorite: function () {
+            this.inFavorite
+                ? salla.api.wishlist.remove(productId)
+                : salla.api.wishlist.add(productId);
             this.inFavorite = !this.inFavorite;
             anime({
                 targets : '.anime-favorite',
@@ -17,6 +22,24 @@ window.initProductDetails = function (productId, inFavorite, showMore) {
                 duration: 800,
                 scale   : [0.6, 1],
             });
+        },
+        addQty: function () {
+            salla.api.product.getPrice({ id: this.itemId, quantity: this.itemQty + 1 })
+                .then(res => {
+                    updateCartPageInfo(res);
+                    this.itemQty++;
+                });
+        },
+        subQty: function () {
+            if (this.itemQty <= 1) {
+                return;
+            }
+            salla.cart.api
+                .updateItem({ id: this.itemId, quantity: this.itemQty - 1 })
+                .then(res => {
+                    this.itemQty--;
+                    updateCartPageInfo(res);
+                });
         },
 
         openReminderModal: function () {
@@ -98,43 +121,43 @@ document.addEventListener('DOMContentLoaded', function () {
         noCalendar: true,
         dateFormat: "H:i",
     });
-    let isDetailsSlider = document.getElementsByClassName('details-slider');
-    if (!isDetailsSlider.length) {
-        return;
-    }
-    let thumbSwiper = new Swiper(".thumbs-slider", {
-        spaceBetween : 10,
-        slidesPerView: 3,
-        // loop: true,
-        freeMode           : true,
-        watchSlidesProgress: true,
-        // centeredSlides: true,
-    });
 
-    let swiper2 = new Swiper('.details-slider', {
-        // Optional parameters
-        // loop: true,
-        centeredSlides: true,
-        spaceBetween  : 30,
-
-        // Navigation arrows
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-
-        thumbs: {
-            swiper: thumbSwiper,
-        },
-    });
-
-    let Items = document.querySelectorAll('.go-to-slide')
-    Items.forEach(item => {
-        let slideindex = item.dataset.slideindex
-        item.addEventListener('click', function (e) {
-            swiper2.slideTo(slideindex, 0);
+    let thumbSwiper = !document.querySelector('.thumbs-slider')
+        ? null
+        : new Swiper(".thumbs-slider", {
+            spaceBetween : 10,
+            slidesPerView: 3,
+            // loop: true,
+            freeMode           : true,
+            watchSlidesProgress: true,
+            // centeredSlides: true,
         });
-    })
+    document.querySelectorAll('.details-slider').forEach(slider => {
+        let swiper2 = new Swiper('.details-slider', {
+            // Optional parameters
+            // loop: true,
+            centeredSlides: true,
+            spaceBetween  : 30,
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            thumbs: {
+                swiper: thumbSwiper,
+            },
+        });
+
+        let Items = document.querySelectorAll('.go-to-slide')
+        Items.forEach(item => {
+            let slideindex = item.dataset.slideindex
+            item.addEventListener('click', function (e) {
+                swiper2.slideTo(slideindex, 0);
+            });
+        })
+    });
 
 
 });

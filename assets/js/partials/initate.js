@@ -1,6 +1,4 @@
 require('@salla.sa/twilight');
-// require('./product');
-// require('./helpers');
 require('mmenu-light');
 const TelInput = require('intl-tel-input');
 window.anime = require('animejs').default;
