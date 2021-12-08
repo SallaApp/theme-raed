@@ -16,9 +16,7 @@ salla.cart.event.onItemAdded(function (response, productId) {
     // remove .cart-thumb el from body ---
     document.querySelectorAll('.cart-thumb').forEach(el => el.remove());
 
-    /*let parentNode = findAncestor(event.target, '.product-block');
-    console.log(parentNode);*/
-
+    /********** Start product addtion to cart animation **********/
     let
         cartBtn = document.querySelector('#main-cart-btn .cart-icon'),
         btnOffset = cartBtn.getBoundingClientRect(),
