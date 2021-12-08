@@ -74,12 +74,14 @@
                                 </a>
                             {% endfor %}
                         </div>
-
-                        <div class="w-10 h-10 shadow-sm bg-white text-primary text-lg swiper-button-prev rounded-full"></div>
-                        <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
+                        {% set has_images=product.images|length>1 %}
+                        {% if has_images %}
+                            <div class="w-10 h-10 shadow-sm bg-white text-primary text-lg swiper-button-prev rounded-full"></div>
+                            <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
+                        {% endif %}
                     </div>
 
-                    {% if product.images|length>1 %}
+                    {% if has_images %}
                         <div thumbsSlider="" class="swiper thumbs-slider">
                             <div class="swiper-wrapper">
                                 {% for image in product.images %}

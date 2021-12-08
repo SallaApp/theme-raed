@@ -4,7 +4,7 @@ const TelInput = require('intl-tel-input');
 window.anime = require('animejs').default;
 window.Alpine = require('alpinejs').default;
 Alpine.start();
-salla.init();
+salla.init({debug:true});
 
 salla.notify.setNotifier((...data) => salla.log(...data));
 // mobile menu
