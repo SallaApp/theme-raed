@@ -20,7 +20,7 @@
 					<h1 class="font-bold text-lg text-center  md:text-start mb-5">{{ trans('common.titles.wishlist') }}</h1>
 					<div class="space-y-5 mb-10" id="wishlist">
 						{% for product in products %}
-							<div class='product-entry rounded-md p-5 bg-white h-full transition duration-500 justify-between overflow-hidden flex flex-col md:flex-row' id="product_{{ product.id }}">
+							<div x-data="{isRemoveItem: false}" class='product-entry rounded-md p-5 bg-white h-full justify-between overflow-hidden flex flex-col md:flex-row' id="product_{{ product.id }}">
 								<div class="flex items-center">
 									<a href="{{ product.url }}" class='product-entry__image relative overflow-hidden w-20 h-16 md:w-24 md:h-20 rounded-md'>
 										<img class="h-full w-full object-cover" src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
@@ -47,8 +47,9 @@
 									<button class="transition duration-300 w-28 md:w-64 flex-1 border border-primary text-sm font-bold text-primary px-3 py-2.5 rounded-md hover:bg-primary hover:text-reverse" data-on-click="cart::quick-add" data-id="{{ product.product_id }}">
 										{{ trans('pages.cart.add_to_cart') }}
 									</button>
-									<button class="rounded-icon bg-red-500 text-white w-6 h-6" data-id="{{ product.product_id }}" data-on-click="wishlist::remove">
-										<i class="sicon-cancel text-base"></i>
+									<button class="relative rounded-icon bg-red-500 text-white w-6 h-6" data-id="{{ product.product_id }}" @click="isRemoveItem = true" data-on-click="wishlist::remove">
+										<i x-show="!isRemoveItem" class="sicon-cancel text-base"></i>
+										<span x-show="isRemoveItem" class="absolute spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full"></span>
 									</button>
 								</div>
 							</div>
@@ -70,12 +71,24 @@
 {% block scripts %}
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
-salla.wishlist.event.onRemoved((response, prodId) => {
-document.querySelector('#product_' + prodId).remove();
-if (!document.querySelector('#wishlist>*')) {
-window.location.reload();
-}
-});
-})
+        salla.wishlist.event.onRemoved((response, prodId) => {
+        let item = document.querySelector('#product_' + prodId);
+        anime({
+        targets: item,
+        height: '0', // -> from 'height' to '0',
+        opacity: '0',
+        'padding-bottom': 0,
+        'padding-top': 0,
+        easing: 'easeInOutQuad',
+        duration: 300,
+        complete: () => {
+            item.remove();
+            if (!document.querySelector('#wishlist>*')) {
+                window.location.reload();
+            }
+            }
+        });
+        });
+        })
 	</script>
 {% endblock %}

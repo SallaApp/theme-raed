@@ -108,7 +108,7 @@ window.initCartItem = function (itemId, quantity) {
                         height: '0', // -> from 'height' to '0',
                         margin: 0,
                         easing: 'easeInOutQuad',
-                        duration: 500,
+                        duration: 300,
                         opacity: 0,
                         'padding-bottom': 0,
                         'padding-top': 0,
