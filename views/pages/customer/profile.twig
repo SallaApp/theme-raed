@@ -1,8 +1,18 @@
 {#
-| Variable     | Type     | Description                  | @see |
-|--------------|----------|------------------------------|------|
-| customer     | Customer |                              | TODO |
-| country_code | String   | Customer country code ex. SA |      |
+| Variable            | Type     | Description                   |
+|---------------------|----------|-------------------------------|
+| customer            | Customer | TODO                          |
+| customer.first_name | string   |                               |
+| customer.last_name  | string   |                               |
+| customer.avatar     | string   |                               |
+| customer.city       | ?string  |                               |
+| customer.country    | ?string  |                               |
+| customer.full_name  | string   | link:`first_name` `last_name` |
+| customer.mobile     | string   |                               |
+| customer.email      | string   |                               |
+| customer.gender     | ?string  | 'male', 'female'              |
+| customer.birthday   | ?data    |                               |
+| country_code        | string   | Customer country code ex. SA  |
 #}
 {% extends "layouts.master" %}
 
@@ -61,7 +71,7 @@
                                 </label>
     
                                 <div class="mt-2.5 mb-5">
-                                    <input type="email" id="birthday" name="birthday" value="{{ user.birthday }}" class="form-input date-element" placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
+                                    <input type="email" id="birthday" name="birthday" value="{{ customer.birthday }}" class="form-input date-element" placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
                                 </div>
                             </div>
 
@@ -72,10 +82,10 @@
                                 <div class="mt-2.5 mb-5">
                                     <select class="form-input appearance-none" name="gender">
                                         <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
-                                        <option value="male" {{ user.gender=='male'?'selected':'' }}>
+                                        <option value="male" {{ customer.gender=='male'?'selected':'' }}>
                                             {{ trans('pages.profile.male') }}
                                         </option>
-                                        <option value="female" {{ user.gender=='female'?'selected':'' }}>
+                                        <option value="female" {{ customer.gender=='female'?'selected':'' }}>
                                             {{ trans('pages.profile.female') }}
                                         </option>
                                     </select>
