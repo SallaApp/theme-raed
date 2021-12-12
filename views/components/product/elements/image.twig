@@ -8,3 +8,27 @@
        {% endif %}
         {{ attirubtes|raw }}
        type="file"/>
+
+
+<div class="max-w-lg flex justify-center px-6 pt-8 pb-9 border border-border-color border-dashed rounded-md">
+    <div class="space-y-1 text-center">
+        <i class="sicon-camera text-primary text-xl"></i>
+        <div class="flex text-sm text-gray-600">
+            <p class="pe-1 text-gray-text">اسحب وافلت الصورة هنا او </p>
+            <label for="file-upload"
+                   class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
+                <span class="font-bold"> تصفح جهازك </span>
+                <input id="file-upload" name="options[{{ option.id }}]"
+                       type="file"
+                       data-max-file-size="3MB"
+                       data-url="{{ link('cart/option-image') }}"
+                       data-instant-upload
+                        {% if value %}
+                            data-default="{{ value }}"
+                        {% endif %}
+                        {{ attirubtes|raw }}
+                       class="sr-only">
+            </label>
+        </div>
+    </div>
+</div>
