@@ -1,3 +1,47 @@
+{############### Shared Variables in all views ################
+| Variable                                 | Type     | Description                                                                                              |
+|------------------------------------------|----------|----------------------------------------------------------------------------------------------------------|
+| is_home                                  | ?bool    |                                                                                                          |
+| from_salla_app                           | bool     |                                                                                                          |
+| current_route_name                       | string   |                                                                                                          |
+| currency                                 | string   | ex: "ر.س"                                                                                                |
+| is_rtl                                   | bool     |                                                                                                          |
+| error                                    | ?string  |                                                                                                          |
+|                                          |          |                                                                                                          |
+|                                          |          |                                                                                                          |
+| store                                    | Store    |                                                                                                          |
+| store.name                               | string   |                                                                                                          |
+| store.username                           | string   |                                                                                                          |
+| store.description                        | string   |                                                                                                          |
+| store.slogan                             | ?string  | * if feature in theme.json                                                                               |
+| store.logo                               | string   |                                                                                                          |
+| store.url                                | string   |                                                                                                          |
+| store.icon                               | string   | *fav icon url                                                                                            |
+| store.contacts                           | object   | [mobile, phone, email, whatsapp, telegram], ex. store.contacts.email                                     |
+| store.social                             | object   | [instagram, snapchat, twitter, youtube, facebook, pinterest, maroof, whatsapp], ex. store.social.twitter |
+|                                          |          |                                                                                                          |
+| store.settings                           | object   |                                                                                                          |
+| store.settings.auth.email_allowed        | bool     |                                                                                                          |
+| store.settings.auth.mobile_allowed       | bool     |                                                                                                          |
+| store.settings.auth.email_required       | bool     |                                                                                                          |
+| store.settings.cart.can_apply_coupon     | bool     |                                                                                                          |
+| store.settings.product.show_total_sold   | bool     |                                                                                                          |
+| store.settings.product.fit_type          | ?string  | null when equal product card size is off, or ['cover', 'contain']                                        |
+| store.settings.category.show_testimonial | bool     |                                                                                                          |
+| store.settings.tax.number                | ?string  |                                                                                                          |
+| store.settings.tax.certificate           | ?string  | certificate image url                                                                                    |
+| store.settings.tax.is_included           | bool     | Does tax included in the prices ex product_price 100 & tax is 15, price will be 115                      |
+| store.settings.rating.store              | bool     | User is allowed to rate the store                                                                        |
+| store.settings.rating.shipping           | bool     | User is allowed to rate the shipping companies in his order                                              |
+| store.settings.rating.products           | bool     | User is allowed to rate the products in his order                                                        |
+| store.settings.arabic_numbers            | bool     | Does the merchant wants the numbers to be shown as Arabic format                                         |
+|                                          |          |                                                                                                          |
+|                                          |          |                                                                                                          |
+| theme                                    | Theme    |                                                                                                          |
+| language                                 | Language |                                                                                                          |
+| user                                     | User     |                                                                                                          |
+#}
+{{ store.settings }}
 <!DOCTYPE html>
 <html lang="{{ language.code }}" dir="{{ language.dir }}">
 <!-- بسم الله الرحمن الرحيم -->
@@ -34,7 +78,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color }}">
     {{ store.theme.settings.custom_input }}
     <!-- fav icon -->
-    <link rel="icon" type="image/png" href="{{ store.fav_icon ?? store.logo }}"/>
+    <link rel="icon" type="image/png" href="{{ store.icon}}"/>
     <link rel="apple-touch-icon-precomposed" href="{{ store.logo }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ store.logo }}">
@@ -63,7 +107,6 @@
     <style>
         :root {
 
-            {#--color-main: {{ store.theme.color }};#}
             {#--color-main-d: {{ store.theme.darker_color(0.15) }};#}
             {#--color-main-l: {{ store.theme.lighter_color(0.15) }};#}
             {#--color-main-reverse: {{ store.theme.reverse_color }};#}
