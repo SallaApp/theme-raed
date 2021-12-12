@@ -1,3 +1,50 @@
+{#
+| Variable                         | Type                              | Description                                                                              |
+|----------------------------------|-----------------------------------|------------------------------------------------------------------------------------------|
+| order                            | Order                             | TODO                                                                                     |
+| order.id                         | integer                           |                                                                                          |
+| order.order_id                   | integer                           |                                                                                          |
+| order.created_at                 |                                   |                                                                                          |
+| order.sub_total                  | Money                             |                                                                                          |
+| order.total                      | Money                             |                                                                                          |
+| order.cod_cost                   | ?Money                            | * Cash On Delivery (null when payment method not cod)                                    |
+| order.shipping                   | ?object                           |                                                                                          |
+| order.shipping.id                | integer                           |                                                                                          |
+| order.shipping.name              | string                            |                                                                                          |
+| order.shipping.number            | string                            | number/string/link (..) for shipment number (tracking number)                            |
+| order.shipping.logo              | ?string                           |                                                                                          |
+| order.shipping.cost              | ?Money                            |                                                                                          |
+| order.tax                        | ?object                           |                                                                                          |
+| order.tax.amount                 | Money                             |                                                                                          |
+| order.tax.percent                | float                             |                                                                                          |
+| order.status                     | object                            |                                                                                          |
+| order.status.name                | string                            |                                                                                          |
+| order.status.icon                | string                            |                                                                                          |
+| order.status.color               | string                            |                                                                                          |
+| order.items                      | OrderItem[]                       | TODO                                                                                     |
+| order.items[].name               |                                   |                                                                                          |
+| order.items[].image              |                                   |                                                                                          |
+| order.items[].price              | TaxableMoney                      |                                                                                          |
+| order.items[].quantity           |                                   |                                                                                          |
+| order.items[].total              | TaxableMoney                      |                                                                                          |
+| order.items[].product            | ?Product                          | There are cases product is null, when merchant adds special product to the order         |
+| order.items[].sub_products       | ?Product[] *Collection            |                                                                                          |
+| order.items[].note               |                                   |                                                                                          |
+| order.items[].attachments        | OrderItemAttachment[] *Collection | if it's empty will be empty array so you can use it as check `{% if item.attachments %}` |
+| order.items[].attachments[].type | string                            |                                                                                          |
+| order.items[].attachments[].url  | string                            |                                                                                          |
+| order.items[].files              | array                             |                                                                                          |
+| order.items[].files[].name       |                                   |                                                                                          |
+| order.items[].files[].url        |                                   |                                                                                          |
+| order.items[].codes              | array                             | list of codes for item                                                                   |
+| order.items[].options            | OrderItemOption[] *Collection     |                                                                                          |
+| order.items[].options[].name     |                                   |                                                                                          |
+| order.items[].options[].value    |                                   |                                                                                          |
+| order.items[].options[].is_image |                                   |                                                                                          |
+| order.discounts                  | array                             |                                                                                          |
+| order.discounts[].name           | string                            |                                                                                          |
+| order.discounts[].discount       | integer                           | minus number                                                                             |
+#}
 {% extends "layouts.master" %}
 {% block content %}
 <main id="main">
@@ -40,7 +87,7 @@
                             </span>
                         </td>
                         <td class="w-full md:w-auto  px-6 pb-4 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            {% component 'reorder' with {order:order} %}
+                            {% component reorder with {order:order} %}
                         </td>
                     </tr>
                     </tbody>
@@ -70,14 +117,13 @@
                                 <td class="w-full md:w-auto  md:rounded-s-md px-5 py-5 md:py-5 md:h-20  text-sm">
                                     <div class="flex space-s-5">
                                         {% if item.product %}
-                                            <img src="{{ item.image ?? (asset('images/img_placeholder.png')) }}" alt="{{ item.name }}"
+                                            <img src="{{ item.image ?? asset('images/img_placeholder.png') }}" alt="{{ item.name }}"
                                                  class="w-18 h-14 object-cover rounded-md">
                                             <div>
                                                 <h3 class="leading-5 mb-1.5 md:text-base">{{ item.name }}</h3>
                                                 <b>{{ item.price }}</b>
                                             </div>
-
-                                            {#{% if item.options %}
+                                            {% if item.options %}
                                                 <div class="product-options-wrapper">
                                                     <h4 class="font-regular font-sm mb-10">{{trans('pages.cart.item_options')}}</h4>
                                                     <ul class="list list--vertical product-options">
@@ -101,7 +147,7 @@
                                                     </ul>
                                                 </div>
                                             {% endif %}
-                                            {% if item.has_sub_products %}
+                                            {% if item.sub_products %}
                                                 <div class="product-options-wrapper">
                                                     <h4 class="font-regular font-sm mb-10">{{ trans('pages.orders.sub_products') }}</h4>
                                                     <ul class="list list--vertical product-options">
@@ -113,17 +159,17 @@
                                                     </ul>
                                                 </div>
                                             {% endif %}
-                                            {% if item.has_attachments %}
+                                            {% if item.attachments or item.note %}
                                                 <div class="font-xsm font-color-grey padded-10 bg-grey b-radius--min">
                                                     {{ item.note }}
                                                     <div class="mt-5">
-                                                        {% for image in item.images %}
-                                                            <a href="{{ image.image_url }}" class="color-grey"
+                                                        {% for attachment in item.attachments %}
+                                                            <a href="{{ attachment.url }}" class="color-grey"
                                                                data-fslightbox="lightbox_{{ item.id }}">
-                                                                {% if image.type=='image' %}
+                                                                {% if attachment.type=='image' %}
                                                                     <span class="avatar-wrapper avatar-wrapper--bordered avatar-wrapper--circular avatar-wrapper--tiny no-m">
                                                         <img class="lazy-load"
-                                                             data-src="{{ image.image_url }}"
+                                                             data-src="{{ attachment.url }}"
                                                              alt="{{ item.name }}"/>
                                                     </span>
                                                                 {% else %}
@@ -134,37 +180,33 @@
                                                     </div>
                                                 </div>
                                             {% endif %}
-                                            {% if order.is_complete %}
-                                                {% if item.has_files %}
+                                                {% if item.files %}
                                                     <div class="product-options-wrapper">
                                                         <h4 class="font-regular font-sm mb-10">{{ trans('pages.orders.files') }}</h4>
                                                         <ul class="list list--vertical product-options">
                                                             {% for file in item.files %}
                                                                 <li>
                                                     <span>
-                                                        <a href="{{ file.url_for_order(order) }}"
+                                                        <a href="{{ file.url }}"
                                                            target="_blank">{{ file.name }}</a>
                                                     </span>
                                                                 </li>
                                                             {% endfor %}
                                                         </ul>
                                                     </div>
-                                                {% endif %}
-
-                                                {% if item.has_codes %}
+                                                {% elseif item.codes %}
                                                     <div class="product-options-wrapper">
                                                         <h4 class="font-regular font-sm mb-10">{{ trans('pages.orders.codes') }}</h4>
                                                         <ul class="list list--vertical product-options">
                                                             {% for code in item.codes %}
-                                                                <li><span>{{ code.code }}</span></li>
+                                                                <li><span>{{ code }}</span></li>
                                                             {% endfor %}
                                                         </ul>
                                                     </div>
                                                 {% endif %}
-                                            {% endif %}#}
                                         {% else %}
                                             <h3 class="leading-5 mb-1.5 md:text-base">{{ item.name }}</h3>
-                                            <b>{{ item.price }}</b>
+                                            <b>{{ item.price|money }}</b>
                                         {% endif %}
                                     </div>
                                 </td>
@@ -174,11 +216,11 @@
                                 </td>
                                 <td class="w-full md:w-auto  flex sm:table-cell justify-between px-5 py-2 md:py-5 md:h-20 whitespace-nowrap text-sm ">
                                     <span class="md:hidden w-40 inline-block font-normal">{{ trans('pages.products.price') }}:</span>
-                                    <b>{{ item.price }}</b>
+                                    <b>{{ item.price|money }}</b>
                                 </td>
                                 <td class="w-full md:w-auto flex sm:table-cell justify-between md:rounded-e-md px-5 pb-5 pt-2 md:py-5 md:h-20 whitespace-nowrap text-sm font-medium md:text-end">
                                     <span class="md:hidden w-40 inline-block font-normal text-sm">{{ trans('pages.orders.total') }}:</span>
-                                    <b>{{ item.total_price }}</b>
+                                    <b>{{ item.total|money }}</b>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -193,7 +235,7 @@
                                         {{ trans('pages.cart.items_total') }}
                                     </dt>
                                     <dd class="font-medium">
-                                        {{ order.amount_price }}
+                                        {{ order.sub_total|money }}
                                     </dd>
                                 </div>
 
@@ -207,23 +249,24 @@
                                         </dd>
                                     </div>
                                 {% endfor %}
+                                {# Cash On Delivery#}
                                 {% if order.cod_cost %}
                                     <div class="py-5 flex items-center justify-between">
                                         <dt class="">
                                             {{ trans('pages.orders.cod_cost') }}
                                         </dt>
                                         <dd class="font-medium">
-                                            {{ order.cod_cost }}
+                                            {{ order.cod_cost|money }}
                                         </dd>
                                     </div>
                                 {% endif %}
-                                {% if order.shipping_price %}
+                                {% if order.shipping.cost %}
                                     <div class="py-5 flex items-center justify-between">
                                         <dt class="shipping">
                                             {{ trans('pages.orders.shipping_cost') }}
                                         </dt>
                                         <dd class="font-medium">
-                                            {{ order.shipping_price }}
+                                            {{ order.shipping.cost|money }}
                                         </dd>
                                     </div>
                                 {% endif %}
@@ -233,7 +276,7 @@
                                             {{ trans('pages.cart.tax') }} ({{ order.tax.percent }}%)
                                         </dt>
                                         <dd class="font-medium text-gray-900">
-                                            {{ order.tax.amount }}
+                                            {{ order.tax.amount|money }}
                                         </dd>
                                     </div>
                                 {% endif %}
@@ -242,7 +285,7 @@
                                         {{ trans('pages.orders.final_total') }}
                                     </dt>
                                     <dd class="text-base font-medium ">
-                                        <b>{{ order.total_price }}</b>
+                                        <b>{{ order.total|money }}</b>
                                     </dd>
                                 </div>
                             </dl>
@@ -250,6 +293,7 @@
                     </div>
                 </div>
 
+                {# todo:: add settings.rating.is_enabled in it these three conditions, & they stay#}
                 {% if store.settings.rating.store or store.settings.rating.products or store.settings.rating.shipping %}
                     {% include 'pages.customer.orders.partials.rating' with {'order':order} %}
                 {% endif %}
