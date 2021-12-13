@@ -59,49 +59,70 @@ window.initCart = function (copoun) {
  *      sections:{'free-shipping-bar':string}
  *          }} res
  */
-function updateCartPageInfo(res) {
-    // TODO: items is not defined 
-    // res.data.items.forEach(item => {
-    // });
-    let shippingBar = res.sections['free-shipping-bar'];
-    let shippingBarEl = document.querySelector('#free-shipping-bar');
-    if (shippingBar && shippingBarEl) {
-        shippingBarEl.outerHTML = shippingBar;
-        //     animatedItem('.free-shipping');
-        //     animatedItem('.shipping-item');
-    }
-}
 
 //cart Item
-window.initCartItem = function (itemId, quantity) {
+window.initCartItem = function (itemId, quantity, total) {
     return {
         itemId: itemId,
         itemQty: quantity,
         isRemoveItem: false,
+        itemTotal: total,
+        qtyValidation: '',
         addQty: function () {
-            salla.cart.api
-                .updateItem({ id: this.itemId, quantity: this.itemQty + 1 })
-                .then(res => {
-                    updateCartPageInfo(res);
-                    this.itemQty++;
-                });
+            this.itemQty++;
+            this.updateQty();
+            // salla.cart.api
+            //     .updateItem({ id: this.itemId, quantity: this.itemQty })
+            //     .then(res => {
+            //         this.updateCartPageInfo(res);
+            //         // this.itemQty++; // cause issue when you send new request while old request not finish
+            //     }).catch(err => this.validateQty(err));
         },
         subQty: function () {
+            this.itemQty--;
+            this.updateQty();
+            // if (this.itemQty <= 1) {
+            //     return;
+            // }
+            // salla.cart.api
+            //     .updateItem({ id: this.itemId, quantity: this.itemQty })
+            //     .then(res => {
+            //         // this.itemQty--; // cause issue when you send new request while old request not finish
+            //         this.updateCartPageInfo(res);
+            //     }).catch(err => this.validateQty(err));
+        },
+
+        updateQty: function () {
             if (this.itemQty <= 1) {
                 return;
             }
             salla.cart.api
-                .updateItem({ id: this.itemId, quantity: this.itemQty - 1 })
+                .updateItem({ id: this.itemId, quantity: this.itemQty })
                 .then(res => {
-                    this.itemQty--;
-                    updateCartPageInfo(res);
-                });
+                    this.updateCartPageInfo(res);
+                }).catch(err => this.validateQty(err));
+        },
+        updateCartPageInfo: function (res) {
+            // remove validation message
+            this.qtyValidation = null;
+
+            let item = res.data.items?.find(item => item.id == this.itemId);
+            this.itemTotal = item?.total;
+
+            let shippingBar = res.sections['free-shipping-bar'];
+            let shippingBarEl = document.querySelector('#free-shipping-bar');
+            if (shippingBar && shippingBarEl) {
+                shippingBarEl.outerHTML = shippingBar;
+            }
+        },
+        validateQty(err) {
+            this.qtyValidation = err.response.data.error.fields.quantity[0];
         },
         removeItem: function () {
             this.isRemoveItem = true;
             salla.cart.api
                 .deleteItem(this.itemId).then(res => {
-                    updateCartPageInfo(res);
+                    this.updateCartPageInfo(res);
                     let item = document.querySelector('#item-' + itemId);
                     anime({
                         targets: item,
