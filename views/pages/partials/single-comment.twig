@@ -30,12 +30,12 @@
                 </div>
                 <p class="text-gray-400 text-sm">{{ comment.created_at|time_ago }}</p>
                 {% if comment.stars %}
-                    <div class="-mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-1">
+                    <div class="-mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-2.5 space-x-1">
                         <i class="sicon-star2 text-theme-yellow"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 2 ? 'text-theme-yellow' : '' }}"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 3 ? 'text-theme-yellow' : '' }}"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 4 ? 'text-theme-yellow' : '' }}"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 5 ? 'text-theme-yellow' : '' }}"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 2 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 3 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 4 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
+                        <i class="sicon-star2 {{ comment.stars >= 5 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
                     </div>
                 {% endif %}
             </div>
