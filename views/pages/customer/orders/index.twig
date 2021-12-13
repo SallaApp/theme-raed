@@ -44,10 +44,10 @@
                                 {% for order in orders.items %}
                                     <tr class="order-row border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
                                         <td class="w-full md:w-auto md:rounded-s-md px-6 py-6 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
-                                            <a href="{{ order.url }}">#{{ order.id }}</a>
+                                            <a href="{{ order.url }}">#{{ order.order_id }}</a>
                                         </td>
                                         <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                            {{ order.total_price }}
+                                            {{ order.total_price|money }}
                                         </td>
                                         <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
                                             {{ order.created_at|date("l j F Y") }}
