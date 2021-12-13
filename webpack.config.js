@@ -2,6 +2,7 @@ const path = require('path');
 const ThemeWatcher = require('@salla.sa/twilight/watcher');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const WatchExternalFilesPlugin = require("webpack-watch-files-plugin").default;
 
 module.exports = {
     entry  : {
@@ -48,6 +49,9 @@ module.exports = {
         ]
     },
     plugins: [
+        new WatchExternalFilesPlugin({
+            files: ["./views/**/*.twig"],
+        }),
         new ThemeWatcher(),
         new MiniCssExtractPlugin(),
         new WebpackBuildNotifierPlugin({
