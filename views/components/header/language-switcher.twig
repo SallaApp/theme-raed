@@ -30,15 +30,15 @@
          x-transition:leave-start="transform opacity-100 scale-100"
          x-transition:leave-end="transform opacity-0 scale-95"
          class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default  overflow-hidden
-         {{ store.theme.settings.topnav_bg ? '!bg-[color:var(--topnav-bg)]': 'bg-white ' }}
-         {{ store.theme.settings.topnav_is_dark ? 'dark:bg-gray-800': '' }}"
+         {{ theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]': 'bg-white ' }}
+         {{ theme.topnav_is_dark ? 'dark:bg-gray-800': '' }}"
          role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
         <ul>
             {% for lang in languages %}
                 <li>
                     <a href="{{ lang.url }}"
                        class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ current.code == lang.code ? 'is-active' : '' }}
-                          {{ store.theme.settings.topnav_is_dark == false and store.theme.settings.topnav_bg_gradient ? 'text-gray-800': '' }}
+                          {{ theme.topnav_is_dark == false and theme.topnav_bg_gradient ? 'text-gray-800': '' }}
                           ">
                         <div class="flag iti__flag iti__{{ lang.country_code }} me-1.5 rounded-sm"></div>
                         <span>{{ lang.name }}</span>

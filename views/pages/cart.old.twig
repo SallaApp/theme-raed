@@ -110,9 +110,9 @@
 									</li>
 								{% endfor %}
 								<!-- Cart subtotal -->
-								<li class="total padded-20 bg-white b-radius {{ store.settings.product.store.settings.tax.is_included?'mb-5':'mb-30' }}">
+								<li class="total padded-20 bg-white b-radius {{ store.settings.tax.taxable_prices_enabled?'mb-5':'mb-30' }}">
 									<div class="wide no-p summary">
-										{% if store.settings.cart.can_apply_coupon %}
+										{% if store.settings.cart.apply_coupon_enabled %}
 											<form class="form form--coupon {{ cart.coupon ? 'coupon-applied' : '' }}">
 												<div class="form-group">
 													<input type="hidden" name="cart_id" value="{{ cart.id }}" />
@@ -128,7 +128,7 @@
 										{% endif %}
 									</div>
 								</li>
-								{% if store.settings.product.store.settings.tax.is_included %}
+								{% if store.settings.tax.taxable_prices_enabled %}
 									<li class="hints bg-hover-none mb-30">
 										<small class="d-block font-xsm color-muted mt-10">
 											* {{ trans('pages.cart.prices_taxed') }}

@@ -42,7 +42,7 @@
                                 <b>{{ cart.real_shipping_cost|money }}</b>
                             </div>
 
-                            {% if store.settings.cart.can_apply_coupon %}
+                            {% if store.settings.cart.apply_coupon_enabled %}
                                 <div class="border-t border-border-color border-b py-5 mb-5">
                                     <label for="copounCode"
                                            class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
@@ -81,7 +81,7 @@
                                 <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
                                 <b>{{ cart.total|money }}</b>
                             </div>
-                            {% if store.settings.product.store.settings.tax.is_included %}
+                            {% if store.settings.tax.taxable_prices_enabled %}
                                 <div class="flex justify-between text-sm mb-5">
                                     <small class="text-gray-400">
                                         * {{ trans('pages.cart.prices_taxed') }}

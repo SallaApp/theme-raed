@@ -17,7 +17,7 @@
   <li class="{{ is_root_menu?'inline-block':'hover:bg-gray-200/20 dark:hover:bg-gray-200/10' }} {{ menu.mega_menu?'mega-menu': '' }}" {{ menu.attrs|raw }}>
       <a href="{{ menu.url }}"
         class="flex justify-between items-center transition duration-300 p-2 ps-3 text-sm hover:no-underline {{is_root_menu? 'font-bold py-8 whitespace-nowrap':''}}
-        {{store.theme.settings.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary'}}
+        {{theme.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary'}}
         ">
           <span>{{ menu.title }}</span>
           {% if menu.has_children %}
@@ -26,8 +26,8 @@
       </a>
       {% if menu.has_children %}
           <div class="sub-menu z-20 transition transition-delay-300 opacity-0 invisible absolute bg-white dark:bg-gray-700 {{ menu.mega_menu?'w-full left-0 flex': 'w-56 pb-2'}} transform -translate-y-3 shadow-default rounded-b-md after:border-t
-          {{store.theme.settings.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white '}}
-          {{store.theme.settings.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30'}}">
+          {{theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white '}}
+          {{theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30'}}">
             <ul class="{{ menu.mega_menu?'w-56 flex-shrink-0 m-8 me-0': ''}}">
                 {# <h2 class="pt-5 px-5 pb-2 font-bold text-base">{{ menu.title }}</h2> #}
                 {% for submenu in menu.children %}
@@ -52,7 +52,7 @@
                         <div class="flex-1 px-5 pt-5 pb-7 ">
                             <div class="flex  justify-between items-baseline">
                               <h3 class="product-entry__title  text-sm font-bold leading-6 mb-2.5">
-                                  <a class="{{store.theme.settings.mainnav_bg ? 'hover:opacity-80': 'hover:text-primary'}}" href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة</a>
+                                  <a class="{{theme.mainnav_bg ? 'hover:opacity-80': 'hover:text-primary'}}" href="/single">وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة</a>
                               </h3>
                             </div>
                             <div class="w-full flex justify-between items-center mb-5">

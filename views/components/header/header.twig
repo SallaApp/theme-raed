@@ -10,12 +10,12 @@
 {% component 'header.theme-preview-bar' %}
 
 {# Top nav ------------------------------------ #}
-<div class="{{ store.theme.settings.topnav_is_dark ? 'dark':'' }}">
+<div class="{{ theme.topnav_is_dark ? 'dark':'' }}">
     <div id="top-nav" class="py-2 lg:py-0
-    {{ store.theme.settings.topnav_bg ? '!bg-[color:var(--topnav-bg)]' : '' }}
-    {{ store.theme.settings.topnav_bg_gradient ? 'bg-gradient-to-r !from-[color:var(--topnav-gradient-from)] !to-[color:var(--topnav-gradient-to)]' : '' }}
-    {{ store.theme.settings.topnav_text_color ? '!text-[color:var(--topnav-text-color)]' : '' }}
-    {{ store.theme.settings.topnav_is_dark ? 'dark:bg-gray-800 dark:text-gray-300': '' }}
+    {{ theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]' : '' }}
+    {{ theme.topnav_bg_gradient ? 'bg-gradient-to-r !from-[color:var(--topnav-gradient-from)] !to-[color:var(--topnav-gradient-to)]' : '' }}
+    {{ theme.topnav_text_color ? '!text-[color:var(--topnav-text-color)]' : '' }}
+    {{ theme.topnav_is_dark ? 'dark:bg-gray-800 dark:text-gray-300': '' }}
     ">
         <div class="container">
             <div class="flex justify-center lg:justify-between">
@@ -33,11 +33,11 @@
 
 
 {# Main Nav --------------------------- #}
-<div class="{{ store.theme.settings.mainnav_is_dark ? 'dark': '' }}">
+<div class="{{ theme.mainnav_is_dark ? 'dark': '' }}">
     <header id="site-header-outer" class="site-header-container shadow-default
-    {{ store.theme.settings.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]' : '' }}
-    {{ store.theme.settings.mainnav_text_color ? '!text-[color:var(--mainnav-text-color)]' : '' }}
-    {{ store.theme.settings.mainnav_is_dark ? 'dark:bg-gray-700 dark:text-gray-300': 'bg-white' }}
+    {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]' : '' }}
+    {{ theme.mainnav_text_color ? '!text-[color:var(--mainnav-text-color)]' : '' }}
+    {{ theme.mainnav_is_dark ? 'dark:bg-gray-700 dark:text-gray-300': 'bg-white' }}
     ">
         <div class="site-header bg-inherit">
             <div class="container">
@@ -83,8 +83,8 @@
                                      x-transition:leave-start="transform opacity-100 scale-100"
                                      x-transition:leave-end="transform opacity-0 scale-95"
                                      class="origin-top-right absolute z-30 w-48 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full after:border-t
-                      {{ store.theme.settings.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }}
-                      {{ store.theme.settings.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}
+                      {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }}
+                      {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}
                       "
                                      role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
                                      tabindex="-1">
