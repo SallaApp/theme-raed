@@ -79,11 +79,11 @@ window.initCartItem = function (itemId, quantity, total) {
             //     }).catch(err => this.validateQty(err));
         },
         subQty: function () {
+            if (this.itemQty <= 1) {
+                return;
+            }
             this.itemQty--;
             this.updateQty();
-            // if (this.itemQty <= 1) {
-            //     return;
-            // }
             // salla.cart.api
             //     .updateItem({ id: this.itemId, quantity: this.itemQty })
             //     .then(res => {
@@ -93,9 +93,6 @@ window.initCartItem = function (itemId, quantity, total) {
         },
 
         updateQty: function () {
-            if (this.itemQty <= 1) {
-                return;
-            }
             salla.cart.api
                 .updateItem({ id: this.itemId, quantity: this.itemQty })
                 .then(res => {
