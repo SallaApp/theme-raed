@@ -51,18 +51,38 @@ window.initProductDetails = function (productId, inFavorite, showReadMore) {
             this.reminderModal = false;
         },
 
+        submitReminderModal: function () {
+            let product_id = document.querySelector('#notify_product_id').value,
+                email_input = document.querySelector('#notify-email'),
+                //country_code_input = document.querySelector('.iti__selected-dial-code'),
+                country_code_input = document.querySelector('#country_code'),
+                mobile_input = !document.querySelector('#notify-mobile');
+
+            salla.product.api
+                .availabilitySubscribe({
+                    id: product_id,
+                    email: email_input ? email_input.value : null,
+                    mobile: mobile_input ? mobile_input.value : null,
+                    //country_code:country_code_input ? country_code_input.innerText : null
+                    country_code:country_code_input ? country_code_input.value : null
+                })
+                .then(res => {
+                    this.reminderModal = false;
+                });
+        },
+
         animateCommonItems: function () {
             let that = this;
             anime({
-                targets   : '.common-anime',
-                opacity   : [0, 1],
-                translateY: [20, 0],
-                duration  : 600,
-                delay     : function (el, i) {
+                targets: '.common-anime-r',
+                opacity: [0, 1],
+                translateY: [40, 0],
+
+                delay: function (el, i) {
                     return i * 100;
                 },
-                begin     : function () {
-                    that.$refs['userPhone'].focus();
+                begin: function () {
+                    //that.$refs['userPhone'].focus();
                 }
             })
         },
