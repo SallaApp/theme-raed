@@ -29,21 +29,21 @@
         <section class="bg-white p-5 rounded-md mb-5">
             <h2 class="text-sm font-bold mb-4">{{ option.name }}</h2>
             <div class="radio-images"
-                 data-productid="0"
-                 data-option_id="0"
-                 data-product-name="0">
+                 data-productid="{{ product.id }}"
+                 data-option_id="{{ detail.id }}"
+                 data-product-name="{{ product.name }}">
                 {% for detail_index, detail in option.details %}
                     <input {{ option.is_selected(detail.id)?'checked':'' }}
                             type="radio"
                             class="image-option"
                             id="option_{{ detail.id }}-{{ product.id }}"
                             {{ detail.has_quantity(product)?'':'disabled' }}
-                            data-productid="1"
-                            data-itemid="1"
+                            data-productid="{{ product.id }}"
+                            data-itemid="{{ detail.id }}"
                             name="options[{{ option.id }}]"
                             data-img-id="{{ detail.option_value }}"
                             value="{{ detail.id }}"/>
-                    <label for="option_{{ detail.id }}-{{ product.id }}" data-slideIndex="{{ detail_index }}"
+                    <label for="option_{{ detail.id }}-{{ product.id }}" data-slideIndex="{{ detail_index + 1 }}"
                            class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
 
                         <img data-src="{{ detail.image }}" class="object-cover h-full lazy-load"

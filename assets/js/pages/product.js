@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let Items = document.querySelectorAll('.go-to-slide')
         Items.forEach(item => {
-            let slideindex = item.dataset.slideindex
+            let slideindex = item.dataset.slideindex;
             item.addEventListener('click', function (e) {
                 swiper2.slideTo(slideindex, 0);
             });
