@@ -1,3 +1,7 @@
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
+{% endblock %}
+
 <input name="options[{{ option.id }}]"
        class="filepond form-control"
        data-max-file-size="3MB"
@@ -10,7 +14,7 @@
        type="file"/>
 
 
-<div class="max-w-lg flex justify-center px-6 pt-8 pb-9 border border-border-color border-dashed rounded-md">
+{# <div class="max-w-lg flex justify-center px-6 pt-8 pb-9 border border-border-color border-dashed rounded-md">
     <div class="space-y-1 text-center">
         <i class="sicon-camera text-primary text-xl"></i>
         <div class="flex text-sm text-gray-600">
@@ -31,4 +35,8 @@
             </label>
         </div>
     </div>
-</div>
+</div> #}
+
+{% block scripts %}
+    <script defer src="{{ asset('/dist/filepond.js') }}"></script>
+{% endblock %}
