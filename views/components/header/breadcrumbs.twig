@@ -5,15 +5,14 @@
 | breadcrumbs[].title | string             | A title of breadcrumb                 |                                                        |
 | breadcrumbs[].url   | string             | A url of breadcrumb                   |                                                        |
 #}
-<nav class="w-full py-5">
-    <ol class="list-reset flex items-center text-sm {{ is_dark ? 'text-reverse' : '' }}">
-        {% for breadcrumb in breadcrumbs %}
-            {% if not loop.last %}
-                <li><a href="{{ breadcrumb.url }}" class="fix-align {{ is_dark ? 'text-reverse' : 'text-primary' }}">{{ breadcrumb.title }}</a></li>
-                <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-            {% else %}
-                <li><span class="fix-align">{{ breadcrumb.title|raw }}</span></li>
-            {% endif %}
-        {% endfor %}
-    </ol>
-</nav>
+<ol class="list-reset flex items-center text-sm {{ is_dark ? 'text-reverse' : '' }}">
+    {% for breadcrumb in breadcrumbs %}
+        {% if not loop.last %}
+            <li><a href="{{ breadcrumb.url }}" class="fix-align {{ is_dark ? 'text-reverse' : 'text-primary' }}">{{ breadcrumb.title }}</a></li>
+            <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+        {% else %}
+            <li><span class="fix-align">{{ breadcrumb.title|raw }}</span></li>
+        {% endif %}
+    {% endfor %}
+</ol>
+
