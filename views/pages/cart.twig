@@ -30,7 +30,7 @@
                 </div>
                 <!-- sidebar -->
                 {% if items|length %}
-                    <div x-data="initCart('{{ cart.coupon }}')" x-cloak class="sticky -top-24 w-full lg:w-96  lg:ms-8">
+                    <div x-data="initCart('{{ cart.id }}', '{{ cart.coupon }}')" x-cloak class="sticky -top-24 w-full lg:w-96  lg:ms-8">
                         {% component 'free-shipping' %}
                         <div
                                 class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
@@ -46,28 +46,27 @@
 
                             {% if store.settings.cart.apply_coupon_enabled %}
                                 <div class="border-t border-border-color border-b py-5 mb-5">
-                                    <label for="copounCode"
-                                           class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
+                                    <label for="couponCode" class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
                                     <div class="mt-2.5 relative">
-                                        <input type="text" @keyup="isShowCopounError = false" @keyup.enter="addCopoun()"
+                                        <input type="hidden" name="cart_id" value="{{ cart.id }}"/>
+                                        <input type="text" value="{{ cart.coupon }}" @keyup="isShowCouponError = false" @keyup.enter="addCoupon()"
                                                placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
-                                               x-model="copounCode" id="copounCode" name="copoun-code"
-                                               :class="{'has-error': isShowCopounError}" class="pe-24 form-input"
-                                               :disabled="isShowCopounDiscount">
-                                        <button @click="addCopoun();" type="button"
-                                                class="copoun-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn"
-                                                :class="isShowCopounDiscount ? 'btn-danger' : 'btn-default'">
-                                            <span x-show="!isShowCopounDiscount">{{ trans('pages.cart.save_coupon') }}</span>
-                                            <i x-show="isShowCopounDiscount" class="sicon-cancel text-xl w-8"></i>
+                                               x-model="couponCode" id="couponCode" name="coupon"
+                                               :class="{'has-error': isShowCouponError}" class="pe-24 form-input"
+                                               :disabled="isShowCouponDiscount">
+                                        <button @click="addCoupon();" type="button"
+                                                class="coupon-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn"
+                                                :class="isShowCouponDiscount ? 'btn-danger' : 'btn-default'">
+                                            <span x-show="!isShowCouponDiscount">{{ trans('pages.cart.save_coupon') }}</span>
+                                            <i x-show="isShowCouponDiscount" @click="removeCoupon();" class="sicon-cancel text-xl w-8"></i>
                                         </button>
                                     </div>
                                     <!-- error msg -->
-                                    <span x-show="isShowCopounError" class="text-xs text-red-700" id="validationHelp">مثال لرسالة
-                            الخطأ.</span>
+                                    <span x-show="isShowCouponError" x-text="couponErrorMessage" class="text-xs text-red-700" id="validationHelp"></span>
                                 </div>
                             {% endif %}
 
-                            <!-- copoun discount -->
+                            <!-- coupon discount -->
                             <div x-show="{{ cart.has_discount?"true":"false" }}"
                                  x-transition:enter="transition-height ease-out duration-300"
                                  x-transition:enter-start="opacity-0 transfor h-0"

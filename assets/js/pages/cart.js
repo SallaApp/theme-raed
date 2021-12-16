@@ -23,22 +23,58 @@ function animatedItem(selector) {
 }
 
 // cart
-window.initCart = function (copoun) {
+window.initCart = function (cart_id, coupon) {
     return {
-        copounCode: copoun,
-        isShowCopounDiscount: false,
-        isShowCopounError: false,
-        addCopoun: function () {
-            if (this.copounCode) {
-                this.isShowCopounError = false;
-                this.isShowCopounDiscount = !this.isShowCopounDiscount;
-                if (!this.isShowCopounDiscount) {
-                    this.copounCode = '';
+        cart_id: cart_id,
+        couponCode: coupon,
+        isShowCouponDiscount: !!coupon,
+        isShowCouponError: false,
+        couponErrorMessage: '',
+        addCoupon: function () {
+            this.isShowCouponError = false;
+
+            if (this.couponCode) {
+                salla.coupon.api
+                    .add({id: this.cart_id, coupon: this.couponCode})
+                    .then(res => {
+                        this.updateCartInfo(res);
+                    }).catch(err => {
+                        this.isShowCouponError = true;
+                        if (err) {
+                            salla.log(err.message || err);
+                            this.couponErrorMessage = err.message;
+                        }
+                    });
+
+                this.isShowCouponDiscount = !this.isShowCouponDiscount;
+                if (!this.isShowCouponDiscount) {
+                    this.couponCode = '';
                 }
             } else {
-                this.isShowCopounError = true;
+                this.isShowCouponError = true;
+                this.couponErrorMessage = 'يجب إدخال كوبون صالح';
             }
-        }
+        },
+        removeCoupon: function () {
+            if (this.couponCode) {
+                this.isShowCouponError = false;
+
+                salla.coupon.api
+                    .remove(this.cart_id)
+                    .then(res => {
+                        this.couponCode = '';
+                        this.updateCartInfo(res);
+                    }).catch(err => {
+                    this.isShowCouponError = true;
+                    this.couponErrorMessage = err.message;
+                });
+            }
+        },
+        updateCartInfo: function (res) {
+
+            //this.itemTotal = '';
+
+        },
     }
 }
 
