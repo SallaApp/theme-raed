@@ -43,34 +43,23 @@
                     {% endif %}
                     {% if product.can_upload_file %}
                         <div x-show="tab === 'showUpload'">
-                            <div class="animated animatedfadeInDown fadeInDown mt-1 sm:mt-0 sm:col-span-2 bg-coolGray-50 border border-border-color border-dashed rounded-md p-2.5">
-                                <div class="max-w-lg flex justify-center px-6 pt-2 pb-4">
-                                    <div class="space-y-1 text-center">
-                                        <i class="sicon-paperclip text-primary text-xl"></i>
-                                        <div class="flex text-sm text-gray-600">
-                                            <p class="pe-1 text-gray-400">اسحب وافلت الملف هنا او </p>
-                                            <label for="file-upload"
-                                                   class="relative cursor-pointer bg-white rounded-md font-medium text-primary focus-within:outline-none">
-                                                <span class="font-bold"> تصفح جهازك </span>
-                                                <input type="file"
-                                                       class="sr-only"
-                                                       id="attached_file_{{ product.id }}"
-                                                       name="{{ is_cart?'image_file':'file' }}"
-                                                       multiple
-                                                        {% if is_cart %}
-                                                            {# "product" here is presenter for cart_item, so {product.id} id {cart_item.id} #}
-                                                            data-url="{{ link('cart/image') }}"
-                                                            data-instant-upload
-                                                            data-files="{{ product.attached_files }}"
-                                                            data-item-id="{{ product.id }}"
-                                                            data-product-id="{{ product.product_id }}"
-                                                        {% endif %}
-                                                       data-max-file-size="3MB"
-                                                />
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+
+                            <div class="animated animatedfadeInDown fadeInDown">
+                                 <input type="file"
+                                    class="filepond form-control filepond--option-image"
+                                    id="attached_file_{{ product.id }}"
+                                    name="{{ is_cart?'image_file':'file' }}"
+                                    multiple
+                                    {% if is_cart %}
+                                        {# "product" here is presenter for cart_item, so {product.id} id {cart_item.id} #}
+                                        data-url="{{ link('cart/image') }}"
+                                        data-instant-upload
+                                        data-files="{{ product.attached_files }}"
+                                        data-item-id="{{ product.id }}"
+                                        data-product-id="{{ product.product_id }}"
+                                    {% endif %}
+                                    data-max-file-size="3MB"
+                                 />
                             </div>
                         </div>
                     {% endif %}
