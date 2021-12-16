@@ -53,24 +53,7 @@
     <script defer src="{{ asset('/dist/filepond.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // filepond
-            FilePond.registerPlugin(FilePondPluginImagePreview);
-            // Get a reference to the file input element
-            const inputElement = document.querySelector('input[type="file"]');
-            // Create a FilePond instance
-            const pond = FilePond.create(inputElement, {
-                labelIdle                     : `<img class="inline-block h-full w-full rounded-full object-cover" src="{{ user.avatar }}" alt="">`,
-                imagePreviewHeight            : 170,
-                imageCropAspectRatio          : '1:1',
-                imageResizeTargetWidth        : 200,
-                imageResizeTargetHeight       : 200,
-                stylePanelLayout              : 'compact circle',
-                styleLoadIndicatorPosition    : 'center bottom',
-                styleProgressIndicatorPosition: 'left bottom',
-                styleButtonRemoveItemPosition : 'center bottom',
-                styleButtonProcessItemPosition: 'right bottom',
-            });
-
+           
             let sidebarAnime = anime.timeline();
             sidebarAnime
                 .add({

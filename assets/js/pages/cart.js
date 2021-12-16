@@ -1,3 +1,6 @@
+import flatpickr from "flatpickr";
+
+
 document.addEventListener('DOMContentLoaded', () => {
     if (!cartItemsCount) {
         salla.cart.event.clearCartSummary();
@@ -22,6 +25,17 @@ function animatedItem(selector) {
     //document.querySelectorAll('.progress-bg').style.width = '200px';
 }
 
+// flatpickr
+flatpickr('#productCalendar', {
+    "enableTime": true,
+    "dateFormat": "Y-m-d H:i",
+});
+flatpickr('#receiveTime', {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+});
+
 // cart
 window.initCart = function (cart_id, coupon) {
     return {
@@ -35,7 +49,7 @@ window.initCart = function (cart_id, coupon) {
 
             if (this.couponCode) {
                 salla.coupon.api
-                    .add({id: this.cart_id, coupon: this.couponCode})
+                    .add({ id: this.cart_id, coupon: this.couponCode })
                     .then(res => {
                         this.updateCartSummary();
                     }).catch(err => {
@@ -65,9 +79,9 @@ window.initCart = function (cart_id, coupon) {
                         this.couponCode = '';
                         this.updateCartSummary();
                     }).catch(err => {
-                    this.isShowCouponError = true;
-                    this.couponErrorMessage = err.message;
-                });
+                        this.isShowCouponError = true;
+                        this.couponErrorMessage = err.message;
+                    });
             }
         },
         updateCartSummary: function () {
