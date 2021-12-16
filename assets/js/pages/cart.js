@@ -37,7 +37,7 @@ window.initCart = function (cart_id, coupon) {
                 salla.coupon.api
                     .add({id: this.cart_id, coupon: this.couponCode})
                     .then(res => {
-                        this.updateCartInfo(res);
+                        this.updateCartSummary();
                     }).catch(err => {
                         this.isShowCouponError = true;
                         if (err) {
@@ -63,17 +63,20 @@ window.initCart = function (cart_id, coupon) {
                     .remove(this.cart_id)
                     .then(res => {
                         this.couponCode = '';
-                        this.updateCartInfo(res);
+                        this.updateCartSummary();
                     }).catch(err => {
                     this.isShowCouponError = true;
                     this.couponErrorMessage = err.message;
                 });
             }
         },
-        updateCartInfo: function (res) {
+        updateCartSummary: function () {
 
-            //this.itemTotal = '';
-
+            salla.cart.api
+                .fetchSummary()
+                .then(res => {
+                    console.log(res);
+                });
         },
     }
 }
