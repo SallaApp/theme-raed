@@ -1,26 +1,8 @@
-{% set slides=[
-    {
-        "title": "وحدة تحكم لمشغل العاب الفيديو بلاي ستيشن",
-        "description": "يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم",
-        "img": asset("images/slider/slide1.jpg")
-    },
-    {
-        "title": "سماعات عالية الجوده بتقنية عزل الأصوات المزعجة",
-        "description": "يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم",
-        "img": asset("images/slider/slide2.jpg")
-    },
-    {
-        "title": "جهاز ألعاب بخاصة التحكم عن طريق الواي فاي",
-        "description": "يستخدم تقنية بلوتوث لتشغيل الألعاب اللاسلكية يمكن شحنها في أي وقت من خلال نظام بلاي ستيشن باستخدام كابل ميني يمكن لجهاز التحكم",
-        "img": asset("images/slider/slide3.jpg")
-    }] 
-%}
-<section class="s-block home-slider s-block--hero-slider wide-placeholder first-of-type:mt-0 {{ is_repeated?'repeated-block':'mt-8 sm:mt-16' }}">
+<section class="s-block home-slider s-block--hero-slider wide-placeholder first-of-type:mt-0">
   <div class="swiper main-slider">
     <div class="swiper-wrapper">
-        <!-- Slides -->
-        {% for slide in slides %}
-            <div class="swiper-slide h-80 sm:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background" data-src="{{ slide.img }}">
+        {% for slide in component.slides %}
+            <div class="swiper-slide h-80 sm:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background" data-src="{{ slide.image }}">
                 <div class="flex justify-center items-center container pb-16 sm:pb-0 home-slider__content relative h-full">
                     <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
                         <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-tight mb-4">{{ slide.title }}</h3>
@@ -31,8 +13,6 @@
             </div>
         {% endfor %}
     </div>
-
-    <!-- If we need navigation buttons -->
     <div class="w-10 h-10 shadow-sm bg-white transition swiper-button swiper-button-prev rounded-full"></div>
     <div class="w-10 h-10 shadow-sm bg-white transition swiper-button swiper-button-next rounded-full"></div>
   </div>
@@ -41,10 +21,7 @@
       document.addEventListener('DOMContentLoaded', function () {
           animateSliderItems()
           const swiper = new Swiper('.main-slider', {
-              // Optional parameters
               loop: true,
-
-              // Navigation arrows
               navigation: {
                   nextEl: '.swiper-button-next',
                   prevEl: '.swiper-button-prev',

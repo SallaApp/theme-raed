@@ -87,10 +87,20 @@ window.initCart = function (cart_id, coupon) {
         updateCartSummary: function () {
 
             salla.cart.api
-                .fetchSummary()
+                .fetchFullSummary()
                 .then(res => {
-                    console.log(res);
+                    this.updateCartPageInfo(res);
                 });
+        },
+        updateCartPageInfo: function (res) {
+            let item = res.data.items?.find(item => item.id == this.itemId);
+            this.itemTotal = item?.total;
+
+            let shippingBar = res.sections['free-shipping-bar'];
+            let shippingBarEl = document.querySelector('#free-shipping-bar');
+            if (shippingBar && shippingBarEl) {
+                shippingBarEl.outerHTML = shippingBar;
+            }
         },
     }
 }

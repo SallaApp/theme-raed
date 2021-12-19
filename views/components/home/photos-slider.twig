@@ -8,23 +8,17 @@
 | image.alt         | string  |                                                                  |       |
 | position          | Int     | Sorting number start from zero                                   |       |
 #}
-{% set pagination=pagination or pagination is not defined %}
-{% set navigation=navigation or navigation is not defined %}
-
 {% set blockId = random(0, 1000) %}
-<section id="photos-{{ blockId }}" class="s-block s-block--photos-slider {{ is_repeated?'repeated-block mt-4 sm:mt-8':'mt-8 sm:mt-16' }}">
+<section id="photos-{{ blockId }}" class="s-block s-block--photos-slider">
     <div class="swiper home-slider photos-slider" data-id="photos-{{ blockId }}">
         <div class="swiper-wrapper">
             {% for item in items %}
-              <div class="swiper-slide h-80 md:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background swiper-lazy" data-background="{{ item.image.url }}"></div>
+                <div class="swiper-slide h-80 md:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background swiper-lazy"
+                     data-background="{{ item.image.url }}"></div>
             {% endfor %}
         </div>
-        {% if pagination %}
-            <div class="swiper-pagination"></div>
-        {% endif %}
-        {% if navigation %}
-            <div class="h-10 w-10 bg-white shadow-sm hidden md:flex swiper-button-prev rounded-full"></div>
-            <div class="h-10 w-10 bg-white  shadow-sm hidden md:flex swiper-button-next rounded-full"></div>
-        {% endif %}
+        <div class="swiper-pagination"></div>
+        <div class="h-10 w-10 bg-white shadow-sm hidden md:flex swiper-button-prev rounded-full"></div>
+        <div class="h-10 w-10 bg-white  shadow-sm hidden md:flex swiper-button-next rounded-full"></div>
     </div>
 </section>
