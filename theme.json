@@ -26,7 +26,7 @@
       "label": "شريط علوي داكن",
       "id": "topnav_is_dark",
       "format": "switch",
-      "value": true
+      "selected": false
     }
   ],
   "components": [
@@ -41,7 +41,7 @@
           "type": "boolean",
           "text": "ملئ الشاشة",
           "format": "switch",
-          "value": true
+          "selected": true
         },
         {
           "id": "slides",
@@ -55,7 +55,8 @@
             {
               "id": "image",
               "type": "string",
-              "format": "image"
+              "format": "image",
+              "required": true
             },
             {
               "id": "title",
@@ -81,33 +82,51 @@
         {
           "id": "title",
           "type": "string",
-          "label": "test someThing",
-          "placeholder": "Placeholder text ..",
-          "minLength": 6,
-          "maxLength": 30,
+          "label": "العنوان",
+          "placeholder": "أدخل العنوان هنا...",
           "required": false
         },
         {
           "id": "links",
           "type": "collection",
+          "format": "collection",
+          "required": true,
+          "minLength": 3,
+          "maxLength": 6,
+          "label": "الأيقونات والروابط",
           "fields": [
             {
               "id": "icon",
               "type": "string",
-              "format": "image"
+              "format": "string",
+              "label": "أيقونة معبرة عن الرابط",
+              "placeholder": "TODO:: Icons List, for now just add icon class ex: sicon-star-o",
+              "required": true
+            },
+            {
+              "id": "title",
+              "type": "string",
+              "placeholder": "أدخل عنوان الرابط هنا...",
+              "label": "عنوان الرابط",
+              "required": true
             },
             {
               "id": "url",
               "type": "string",
               "format": "url",
-              "inputType": "url"
-            },
-            {
-              "id": "title",
-              "type": "string",
-              "label": "عنوان الرابط"
+              "label": "الرابط",
+              "placeholder": "أدخل الرابط هنا...",
+              "inputType": "url",
+              "required": true
             }
           ]
+        },
+        {
+          "type": "boolean",
+          "label": "دمج مع التصميم السابق",
+          "id": "merge_with_top_component",
+          "format": "switch",
+          "selected": true
         }
       ]
     },
@@ -147,19 +166,47 @@
       ]
     },
     {
-      "name": "enhanced-square-images",
+      "name": "enhanced-square-banners",
       "title": "صور ثابتة (محسنة)",
       "icon": "sicon-image",
       "path": "home.enhanced-square-images",
       "fields": [
         {
-          "id": "products",
-          "type": "items",
-          "icon": "sicon-list",
-          "label": "المنتجات",
-          "format": "dropdown-list",
+          "id": "banners",
+          "type": "collection",
+          "format": "collection",
           "required": true,
-          "source": "Products"
+          "minLength": 1,
+          "maxLength": 5,
+          "label": "قائمة الصور",
+          "fields": [
+            {
+              "id": "image",
+              "type": "string",
+              "format": "image",
+              "required": true
+            },
+            {
+              "id": "url",
+              "type": "string",
+              "format": "url",
+              "label": "الرابط",
+              "placeholder": "أدخل الرابط هنا...",
+              "inputType": "url",
+              "required": true
+            },
+            {
+              "id": "title",
+              "type": "string",
+              "label": "عنوان رئيسي (إختياري)"
+            },
+            {
+              "id": "description",
+              "type": "string",
+              "format": "textarea",
+              "label": "نص توضيحي (إختياري)"
+            }
+          ]
         }
       ]
     }
