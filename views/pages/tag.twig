@@ -18,22 +18,7 @@
                     {% if tag.products|length %}
                         <div class="mb-5 md:flex justify-between items-center">
                             <h2 class="font-bold mb-6 md:mb-0">{{ tag.name }}</h2>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="hidden md:flex items-center">
-                                        <a @click="toggleView('grid')"
-                                           :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                           id="gridButton" data-grid="grid"
-                                           class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
-                                                    class="sicon-grid"></i></a>
-                                        <a  @click="toggleView('list')"
-                                           :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                           id="listButton" data-grid="list"
-                                           class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
-                                                    class="sicon-list"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'pages.partials.sorting-list' with {grid_icons:true} %}
                         </div>
                         <div x-ref="productsContainer"
                              :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"

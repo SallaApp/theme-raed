@@ -1,11 +1,31 @@
-<div class="ms-4 md:ms-20 flex items-center">
-    <label class="hidden sm:block me-3" for="productFilter">{{trans('pages.categories.sorting')}}</label>
-    <select id="productFilter" name="sort-opt"
-            class="appearance-none form-input focus:ring-transparent focus:outline-none h-10 text-sm rounded-md  border border-border-color w-48 pt-0 pb-1">
-        <option value="ourSuggest">{{trans('pages.categories.sort_by_suggestions')}}</option>
-        <option value="bestSell">{{trans('pages.categories.sort_by_sales')}}</option>
-        <option value="topRated">{{trans('pages.categories.sort_by_rating')}}</option>
-        <option value="priceFromTopToLow">{{trans('pages.categories.sort_by_price_za')}}</option>
-        <option value="priceFromLowToTop">{{trans('pages.categories.sort_by_price_az')}}</option>
-    </select>
+<div class="flex items-center justify-between">
+    <div class="flex items-center">
+        {% if sort_list %}
+            <div class="flex items-center">
+                <label class="hidden sm:block me-3" for="productFilter">{{ trans('pages.categories.sorting') }}</label>
+                <select id="productFilter" name="sort-opt"
+                        class="appearance-none form-input focus:ring-transparent focus:outline-none h-10 text-sm rounded-md  border border-border-color w-48 pt-0 pb-1">
+                    <option value="ourSuggest">{{ trans('pages.categories.sort_by_suggestions') }}</option>
+                    <option value="bestSell">{{ trans('pages.categories.sort_by_sales') }}</option>
+                    <option value="topRated">{{ trans('pages.categories.sort_by_rating') }}</option>
+                    <option value="priceFromTopToLow">{{ trans('pages.categories.sort_by_price_za') }}</option>
+                    <option value="priceFromLowToTop">{{ trans('pages.categories.sort_by_price_az') }}</option>
+                </select>
+            </div>
+        {% endif %}
+        {% if grid_icons %}
+            <div class="flex items-center ms-2 md:ms-2">
+                <a @click="toggleView('grid')"
+                   :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
+                   id="gridButton" data-grid="grid"
+                   class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                            class="sicon-grid"></i></a>
+                <a @click="toggleView('list')"
+                   :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
+                   id="listButton" data-grid="list"
+                   class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                            class="sicon-list"></i></a>
+            </div>
+        {% endif %}
+    </div>
 </div>
