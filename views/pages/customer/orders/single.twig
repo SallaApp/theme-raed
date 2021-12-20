@@ -138,8 +138,10 @@
                                                 <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
                                                     {% if option.is_image %}
                                                         <div class="flex space-s-2.5">
+                                                        <a href="{{ option.value }}" target="_blank">
                                                             <img class="h-7 w-7 object-cover rounded-md"
                                                                  src="{{ option.value ?? asset('images/img_loader.png') }}" alt="{{ option.name }}"/>
+                                                        </a>
                                                         </div>
                                                     {% else %}
                                                         {{ option.value }}
@@ -158,11 +160,13 @@
                                         {% for product in item.sub_products %}
                                             <div class="py-3.5 md:flex items-center justify-between">
                                                 <dt class="mb-2 md:mb-0">
-                                                    {{ product.name }}
+                                                    <a href="{{product.url}}">
+                                                        {{ product.name }}
+                                                    </a>
                                                 </dt>
-                                                <dd class="font-medium text-xs">
+                                                {# <dd class="font-medium text-xs">
                                                     {{ product.total|money }}
-                                                </dd>
+                                                </dd> #}
                                             </div>
                                         {% endfor %}
                                     </dl>
@@ -182,8 +186,10 @@
                                                     <a href="{{ attachment.url }}">
                                                         {% if attachment.type == 'image' %}
                                                             <div class="flex space-s-2.5">
+                                                            <a href="{{ attachment.url }}" target="_blank">
                                                                 <img class="h-7 w-7 object-cover rounded-md"
                                                                      src="{{ attachment.url }}" alt="{{ item.name }}"/>
+                                                            </a>
                                                             </div>
                                                         {% else %}
                                                             {{ trans('pages.orders.file_url') }}
@@ -206,7 +212,7 @@
                                                 </dt>
                                                 <dd class="font-medium text-xs">
                                                     <a href="{{ file.url }}" target="_blank">
-                                                        {{ trans('pages.thank_you.download') }}
+                                                       <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
                                                     </a>
                                                 </dd>
                                             </div>
