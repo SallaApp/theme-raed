@@ -49,7 +49,7 @@
                                             <div x-data="{}"
                                                  class="border relative border-border-color bg-white text-center text-primary x-5 w-64 rounded-full">
                                                 <button class="absolute top-2 start-5 opacity-80 hover:opacity-100"
-                                                        @click="copyToClipboard('product_code_{{ code.id }}')"><i class="copy-icon sicon-copy"></i>
+                                                        @click="copyToClipboard('product_code_{{ code.id }}')"><i class="copy-icon sicon-swap-stroke"></i>
                                                 </button>
                                                 <h3 id="product_code_{{ code.id }}" class="font-bold text-sm leading-10 p">{{ code.code }}</h3>
                                             </div>
@@ -181,11 +181,11 @@
 
             document.body.removeChild(aux);
 
-            copyIcon.classList.remove('sicon-copy');
+            copyIcon.classList.remove('sicon-swap-stroke');
             copyIcon.classList.add('sicon-check');
 
             setTimeout(() => {
-                copyIcon.classList.add('sicon-copy');
+                copyIcon.classList.add('sicon-swap-stroke');
                 copyIcon.classList.remove('sicon-check');
             }, 1000);
         }

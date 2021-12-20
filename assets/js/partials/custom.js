@@ -155,11 +155,11 @@ window.copyToClipboard = function (elementId) {
     // Remove the input from the body
     document.body.removeChild(aux);
 
-    copyIcon.classList.remove('sicon-copy');
+    copyIcon.classList.remove('sicon-swap-stroke');
     copyIcon.classList.add('sicon-check');
 
     setTimeout(() => {
-        copyIcon.classList.add('sicon-copy');
+        copyIcon.classList.add('sicon-swap-stroke');
         copyIcon.classList.remove('sicon-check');
     }, 1000);
 }

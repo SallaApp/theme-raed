@@ -51,7 +51,9 @@
     <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
         <div class="container relative z-10 flex justify-between h-full items-center">
             <div class="self-start">
-                {% component 'header.breadcrumbs' with{is_dark:true} %}
+                <nav class="w-full py-5">
+                        {% component 'header.breadcrumbs' with{is_dark:true} %}
+                </nav>
             </div>
         </div>
     </div>
@@ -99,10 +101,14 @@
                             <div class="mb-5">
                                 {% if item.product %}
                                     <div class="flex space-s-5 mb-4">
-                                        <img src="{{ item.image ?? asset('images/img_placeholder.png') }}" alt="{{ item.name }}"
+                                        <a href="{{ item.product.url }}">
+                                            <img src="{{ item.image ?? asset('images/img_placeholder.png') }}" alt="{{ item.name }}"
                                              class="w-18 h-14 object-cover rounded-md">
+                                        </a>     
                                         <div>
-                                            <h3 class="leading-5 mb-1.5 md:text-base">{{ item.name }}</h3>
+                                            <a href="{{ item.product.url }}">
+                                                <h3 class="leading-5 mb-1.5 md:text-base">{{ item.name }}</h3>
+                                            </a>
                                             <b>{{ item.price|money }}</b>
                                         </div>
                                     </div>
@@ -211,7 +217,7 @@
                                                     {{ file.name }}
                                                 </dt>
                                                 <dd class="font-medium text-xs">
-                                                    <a href="{{ file.url }}" target="_blank">
+                                                    <a href="{{ file.url }}" target="_blank" class="font-bold text-gray-600 hover:text-black">
                                                        <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
                                                     </a>
                                                 </dd>
@@ -224,10 +230,14 @@
                                 <div class="flow-root rounded-md px-4 border border-border-color">
                                     <dl class="text-sm text-dark divide-y divide-border-color">
                                         {% for code in item.codes %}
-                                            <div class="py-3.5 md:flex items-center justify-between">
-                                                <dt class="mb-2 md:mb-0">
+                                            <div  x-data="{}" class="py-3.5 md:flex items-center justify-between">
+                                                <dt class="mb-2 md:mb-0" id="order_code_{{ code }}">
                                                     {{ code }}
                                                 </dt>
+                                                <button title="Copy to clipboard" class="opacity-80 hover:opacity-100" 
+                                                        @click="copyToClipboard('order_code_{{ code }}')"> 
+                                                        <i class="copy-icon sicon-swap-stroke text-primary"></i>
+                                                </button>
                                             </div>
                                         {% endfor %}
                                     </dl>
