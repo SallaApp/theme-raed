@@ -1,4 +1,5 @@
 import flatpickr from "flatpickr";
+require('../../dist/filepond.js');
 
 
 document.addEventListener('DOMContentLoaded', () => {

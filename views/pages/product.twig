@@ -42,6 +42,9 @@
 | in_wishlist               | Bool                                                                      |              |      |
 #}
 {% extends "layouts.master" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
+{% endblock %}
 {% block content %}
     <main id="main"
           x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }})"

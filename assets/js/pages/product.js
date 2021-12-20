@@ -1,5 +1,6 @@
 import flatpickr from "flatpickr";
 import fslightbox from 'fslightbox';
+require('../../dist/filepond.js');
 
 window.fslightbox = fslightbox;
 

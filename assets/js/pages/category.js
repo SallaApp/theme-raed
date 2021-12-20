@@ -26,9 +26,9 @@ if (filtersMenuItem) {
     })
 }
 
-document.querySelectorAll(".close-mobile-menu").forEach((elem) => {
-    elem.addEventListener("click", (evnt) => {
-        evnt.preventDefault();
-        drawer.close();
-    });
-})
+// document.querySelectorAll(".close-mobile-menu").forEach((elem) => {
+//     elem.addEventListener("click", (evnt) => {
+//         evnt.preventDefault();
+//         drawer.close();
+//     });
+// })
