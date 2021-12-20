@@ -11,7 +11,6 @@
 {% extends "layouts.master" %}
 {% block content %}
 	{% set without_filters = is_link('latest-products') %}
-
 	<main id="main" x-data="initCategory()" x-cloak>
 		<div class="container mb-10 md:mb-20">
 			<nav class="w-full py-5">
@@ -237,26 +236,7 @@
 				<div class="main-content flex-1 md:pb-20 ">
 					<div class="mb-5 md:flex justify-between items-center">
 						<h2 class="font-bold mb-6 md:mb-0">{{ page_title }}</h2>
-						<div class="flex items-center justify-between">
-							{% if not without_filters %}
-								<a class="lg:hidden mburger mburger--collapse" href="#filters-menu">
-									<span class="sicon-filter text-gray-400 text-2xl me-2.5"></span>
-								</a>
-							{% endif %}
-							<div class="flex items-center">
-								<div class="hidden md:flex items-center">
-									<a @click="toggleView('grid')" :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'" id="gridButton" data-grid="grid" class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
-										<i class="sicon-grid"></i>
-									</a>
-									<a @click="toggleView('list')" :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'" id="listButton" data-grid="list" class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
-										<i class="sicon-list"></i>
-									</a>
-								</div>
-								{% if not without_filters %}
-									{% include 'pages.partials.sorting-list' %}
-								{% endif %}
-							</div>
-						</div>
+						{% include 'pages.partials.sorting-list' with {grid_icons:true, sort_list:not without_filters} %}
 					</div>
 
 					{% if products|length %}

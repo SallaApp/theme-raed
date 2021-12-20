@@ -1,28 +1,28 @@
-<section class="page-wrapper bg-grey">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title title--primary title--x-large title--has-dash mb-30">{{ trans('blocks.home.latest_products') }}</div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                {% if products is not empty %}
-                    <div class="grid-block products-list-container">
-                        {% for product in products %}
-                            {% include 'pages.partials.product.card' %}
-                        {% endfor %}
-                    </div>
-                    {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
-                {% endif %}
-            </div>
-        </div>
+{#
+| Variable        | Type       | Description                    |
+|-----------------|------------|--------------------------------|
+| products        | Products[] |                                |
+| position        | Int        | Sorting number start from zero |
+#}
+<section class="s-block s-block--latestProducts container mt-8">
+    <div class="flex justify-between mb-6 sm:mb-8">
+        <h2 class="font-bold text-lg text-gray-500">{{ trans('blocks.home.latest_products') }}</h2>
     </div>
+    {% if products|length %}
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 products-list-container mb-6">
+            {% for product in products %}
+                {% include 'pages.partials.product.card' %}
+            {% endfor %}
+        </div>
+        {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
+    {% endif %}
 </section>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        salla.infiniteScroll.initiate('.products-list-container', '.product-block')
+        salla.infiniteScroll.initiate('.products-list-container', '.product-entry', {
+            history        : false,
+            scrollThreshold: false
+        })
     });
 </script>

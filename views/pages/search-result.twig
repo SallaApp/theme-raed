@@ -8,28 +8,14 @@
 {% block content %}
     <main id="main" x-data="initCategory()" x-cloak>
         <div class="container mb-10 md:mb-20">
-            {% component 'header.breadcrumbs' with {breadcrumbs:[{title:trans('common.titles.home'), url:link('/')}, {title:page_title}]} %}
+            <nav class="w-full py-5">
+                {% component 'header.breadcrumbs' with {breadcrumbs:[{title:trans('common.titles.home'), url:link('/')}, {title:page_title}]} %}
+            </nav>
             <div class="flex items-start flex-col md:flex-row">
                 <div class="main-content flex-1 md:pb-20 ">
                     <div class="mb-5 md:flex justify-between items-center">
                         <h2 class="font-bold mb-6 md:mb-0">{{ page_title|raw }}</h2>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="hidden md:flex items-center">
-                                    <a  @click="toggleView('grid')"
-                                       :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                       id="gridButton" data-grid="grid"
-                                       class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
-                                                class="sicon-grid"></i></a>
-                                    <a @click="toggleView('list')"
-                                       :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                       id="listButton" data-grid="list"
-                                       class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
-                                                class="sicon-list"></i></a>
-                                </div>
-                                {% include 'pages.partials.sorting-list' %}
-                            </div>
-                        </div>
+                        {% include 'pages.partials.sorting-list' with {grid_icons:true, sort_list:true} %}
                     </div>
 
                     {% if products is not empty %}
@@ -48,8 +34,8 @@
                         <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
                             <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
                             <p class="text-base text-gray-500">
-                                <span>{{trans('pages.categories.no_products')}}</span>
-                              {{ page_title }}
+                                <span>{{ trans('pages.categories.no_products') }}</span>
+                                {{ page_title }}
                             </p>
                         </div>
                     {% endif %}
@@ -61,15 +47,15 @@
 
 {% block scripts %}
     <script>
-        document.addEventListener( 'DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             salla.infiniteScroll.initiate('.products-container', '.product-entry')
         })
 
         function initCategory() {
             return {
                 showMoreLinks: false,
-                links: [{id: 1, label: 'رابط جديد'}, {id: 2, label: 'هواوي'}, {id: 3, label: 'سامسونج'}],
-                girdLayout: 'grid',
+                links        : [{id: 1, label: 'رابط جديد'}, {id: 2, label: 'هواوي'}, {id: 3, label: 'سامسونج'}],
+                girdLayout   : 'grid',
 
                 toggleView: function (layout) {
 
@@ -79,11 +65,11 @@
 
                 animateItems: function () {
                     anime({
-                        targets: '.product-entry',
-                        opacity: [0, 1],
-                        duration: 1200,
+                        targets   : '.product-entry',
+                        opacity   : [0, 1],
+                        duration  : 1200,
                         translateY: [20, 0],
-                        delay: function (el, i) {
+                        delay     : function (el, i) {
                             return i * 100;
                         },
                     })
