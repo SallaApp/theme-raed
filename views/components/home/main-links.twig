@@ -1,80 +1,57 @@
-{% set links= [
-    {
-        "title": "الإلكترونيات",
-        "icon": "sicon-plug-electric"
-    },
-    {
-        "title": "موبايلات",
-        "icon": "sicon-android-phone"
-    },
-    {
-        "title": "الأزياء",
-        "icon": "sicon-t-shirt"
-    },
-    {
-        "title": "المنزل",
-        "icon": "sicon-mailbox"
-    },
-    {
-        "title": "الجمال والعطور",
-        "icon": "sicon-macro"
-    },
-    {
-        "title": "سوبر ماركت",
-        "icon": "sicon-shipping-fast"
-    },
-    {
-        "title": "الجمال والعطور",
-        "icon": "sicon-macro"
-    },
-    {
-        "title": "سوبر ماركت",
-        "icon": "sicon-shipping-fast"
-    }
-] %}
-
-<section class="s-block s-block--categories relative z-10 overflow-hidden mt-8 {{ is_repeated?'repeated-block':'sm:mt-16' }}">
+{#
+| Variable                           | Type     | Description                                                               |
+|------------------------------------|----------|---------------------------------------------------------------------------|
+| component                          | object   | Contains merchant settings for fields from theme.json `component` section |
+| component.merge_with_top_component | bool     |                                                                           |
+| component.title                    | ?string  |                                                                           |
+| component.links                    | object[] | list of links                                                             |
+| component.links[].icon             | string   |                                                                           |
+| component.links[].title            | string   |                                                                           |
+| component.links[].url              | string   |                                                                           |
+| position                           | int      | Sorting number start from zero                                            |
+#}
+<section class="s-block s-block--categories relative z-10 overflow-hidden mt-8 {{ component.merge_with_top_component and position?'merge-with-top-component':'' }}">
     <div class="container">
-      <div class="s-block--categories__title flex justify-between mb-6 sm:mb-8">
-        <h2 class="font-bold text-lg">الأقسام</h2>
-      </div>
-      <div class="swiper category-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-2 lg:ps-0">
-          <div class="swiper-wrapper flex">
-              <!-- Slides -->
-              {% for link in links %}
-              <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-2 lg:px-3.75">
-                  <a href="#"
-                      class="bg-white rounded-md h-36 mb-5 flex flex-col items-center justify-center text-gray-400 transition-shadow duration-500 hover:shadow-default hover:text-gray-500">
-                      <i class="{{ link.icon }} text-primary text-icon-lg mb-4 cat-item"></i>
-                      <h4 class="font-bold text-sm cat-item">{{ link.title }}</h4>
-                  </a>
-              </div>
-              {% endfor %}
-          </div>
-      </div>
+        <div class="s-block--categories__title flex justify-between mb-6 sm:mb-8">
+            <h2 class="font-bold text-lg">{{ component.title }}</h2>
+        </div>
+        <div class="swiper category-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-2 lg:ps-0">
+            <div class="swiper-wrapper flex">
+                <!-- Slides -->
+                {% for link in component.links %}
+                    <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-2 lg:px-3.75">
+                        <a href="{{ link.url }}"
+                           class="bg-white rounded-md h-36 mb-5 flex flex-col items-center justify-center text-gray-400 transition-shadow duration-500 hover:shadow-default hover:text-gray-500">
+                            <i class="{{ link.icon }} text-primary text-icon-lg mb-4 cat-item"></i>
+                            <h4 class="font-bold text-sm cat-item">{{ link.title }}</h4>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
-  <script>
-      function animatedItems() {
-          anime({
-              targets   : '.cat-item',
-              opacity   : [0, 1],
-              translateY: [15, 0],
-              delay     : function (el, i) {
-                  return i * 70;
-              },
-          })
-      }
+    <script>
+        function animatedItems() {
+            anime({
+                targets   : '.cat-item',
+                opacity   : [0, 1],
+                translateY: [15, 0],
+                delay     : function (el, i) {
+                    return i * 70;
+                },
+            })
+        }
 
-      document.addEventListener('DOMContentLoaded', function () {
-          document.getElementsByClassName('category-slider')[0].style.display = 'block'
-          animatedItems();
-          const swiper = new Swiper('.category-slider', {
-              //spaceBetween : 30,
-              slidesPerView : 6,
-              slidesPerView: "auto",
-          });
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementsByClassName('category-slider')[0].style.display = 'block'
+            animatedItems();
+            const swiper = new Swiper('.category-slider', {
+                //spaceBetween : 30,
+                slidesPerView: 6,
+                slidesPerView: "auto",
+            });
 
-      });
-  </script>
+        });
+    </script>
 </section>

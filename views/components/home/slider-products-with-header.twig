@@ -1,83 +1,23 @@
-{% set products = [
-  {
-    id: 'product_1334908781',
-    title: 'وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة  ',
-    image: {
-      url: asset('images/products/product-3.jpg')
-    },
-    description: 'نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل',
-    price: '10,978.00 ر.س',
-    rating: '4',
-    offer: true
-  },
-  {
-    id: 'product_1334905681',
-    title: 'وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة  ',
-    image: {
-      url: asset('images/products/product-4.jpg')
-    },
-    description: 'نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل',
-    price: '10,978.00 ر.س',
-    rating: '4'
-  },
-  {
-    id: 'product_109834881',
-    title: ' S وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة  ',
-    image: {
-      url: asset('images/products/product-1.jpg')
-    },
-    description: 'نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل',
-    price: '10,978.00 ر.س',
-    rating: '4'
-  },
-  {
-    id: 'product_1334912334',
-    title: 'وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة  ',
-    image: {
-      url: asset('images/products/product-2.jpg')
-    },
-    description: 'نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل',
-    price: '10,978.00 ر.س',
-    rating: '4',
-    offer: true
-  },
-  {
-    id: 'product_1330364551',
-    title: 'وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة  ',
-    image: {
-      url: asset('images/products/product-1.jpg')
-    },
-    description: 'نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل',
-    price: '10,978.00 ر.س',
-    rating: '4'
-  },
-  {
-    id: 'product_342349043741',
-    title: 'L وحدات تحكم متوافق مع بلاي ستيشن 3 متوافقة مع جميع الأجهزة  ',
-    image: {
-      url: asset('images/products/product-3.jpg')
-    },
-    description: 'نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل نص بديل للتفاصيل',
-    price: '10,978.00 ر.س',
-    rating: '4'
-  }
-] %}
-{% set blockId = random(0, 1000) %}
-<section id="slider-with-bg-{{ blockId }}" class="s-block s-block--slider-with-bg bg-gray-100 pb-8 sm:pb-16 first-of-type:mt-0 {{
-  is_repeated
-    ? 'repeated-block'
-    : 'mt-8 sm:mt-16'
-  }}">
-
-  <div class="h-96 sm:h-116 transition-opacity hover:opacity-95 bg-center bg-cover text-white rounded-md relative" style="background-image: url('{{asset('images/banners/banner-1.jpg')}}');">
+{#
+| Variable              | Type                  | Description                                                               |
+|-----------------------|-----------------------|---------------------------------------------------------------------------|
+| component             | object                | Contains merchant settings for fields from theme.json `component` section |
+| component.background  | string                |                                                                           |
+| component.title       | ?string               |                                                                           |
+| component.description | ?string               |                                                                           |
+| component.products    | Product[] *Collection | @see views/pages/product.twig                                             |
+| position              | int                   | Sorting number start from zero                                            |
+#}
+<section id="slider-with-bg-{{ position }}" class="s-block s-block--slider-with-bg bg-gray-100 pb-8 sm:pb-16 first-of-type:mt-0">
+  <div class="h-96 sm:h-116 transition-opacity hover:opacity-95 bg-center bg-cover text-white rounded-md relative" style="background-image: url('{{component.background}}');">
     <div class="overlay h-full w-full bg-black opacity-60 absolute top-0 left-0"></div>
     <div class="container pt-8 sm:pt-20 relative">
       <div>
         <h3 class="text-lg font-bold leading-12">
-          وحدات تحكم متوافق مع بلاي ستيشن 3
+          {{component.title}}
         </h3>
         <p class="text-sm mb-8 line-clamp-2 max-w-lg">
-          تصميم مريح لبصمة اليد، استجابة بالاهتزاز Dualshock، تجربة لعب سهلة وممتعةتصميم مريح لبصمة اليد، استجابة بالاهتزاز Dualshock، تجربة لعب سهلة وممتعة
+          {{component.description}}
         </p>
       </div>
     </div>
@@ -86,12 +26,9 @@
   <div class="-mt-58 relative"> 
     <div class="container">
       <div class="flex justify-between mb-6 sm:mb-8 pe-5 md:px-0">
-        <a href="#"
-          class="inline-block text-white text-sm border rounded-full font-bold px-10 h-10 leading-10">
-          تصفح المنتجات
+        <a href="{{ link('latest-products') }}" class="inline-block text-white text-sm border rounded-full font-bold px-10 h-10 leading-10">
+          {{trans('blocks.home.display_all')}}
         </a>
-
-        <!-- slider arrows -->
         <div class="hidden md:block space-s-4" dir="rtl">
           <button class="slider-prev focus:outline-none border border-white text-gray-500 rounded-full w-10 h-10">
             <i class="text-white text-xl sicon-keyboard_arrow_right"></i>
@@ -106,7 +43,7 @@
     <div class="container pe-0 lg:px-5 overflow-hidden">
       <div class="swiper product-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="slider-with-bg-{{ blockId }}">
         <div class="swiper-wrapper flex">
-          {% for product in products %}
+          {% for product in component.products %}
             <div class="h-auto swiper-slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
               {% include 'pages.partials.product.card' %}
             </div>
