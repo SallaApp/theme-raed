@@ -33,15 +33,21 @@
         <div class="container mb-24">
             <div class="flex flex-col lg:flex-row ">
                 {% include 'pages.partials.customer.sidebar' %}
-                <div class="main-content flex-1 pt-10">
-                    <h1 class="font-bold text-lg mb-10">{{ trans('pages.profile.edit') }}</h1>
+                <div class="main-content flex-1 pt-5 lg:pt-10">
                     <div class="lg:hidden">
-                        <div class="text-center mb-9">
+                        <div class="text-center mb-6">
                             <div class=" h-24 w-24 m-auto">
-                                <input type="file">
+                                <input type="file"
+                                    class="filepond profile-img file-pond--circular"
+                                    name="filepond"
+                                    data-instantUpload="true"
+                                    id="profile_img"
+                                    data-default="{{ user.avatar }}"
+                                    data-max-file-size="3MB"/>
                             </div>
                         </div>
                     </div>
+                    <h1 class="font-bold text-lg mb-5 lg:mb-10">{{ trans('pages.profile.edit') }}</h1>
                     <form class="form form--user-profile ajax"
                         method="POST"
                         novalidate
@@ -164,11 +170,15 @@
         const saveBtn = document.getElementById('update-profile-btn');
         saveBtn.addEventListener('click', function(){
           saveBtn.classList.add('btn--is-loading');
+          setTimeout(()=>{
+            saveBtn.setAttribute('disabled', '');
+          })
         })
 
         salla.event.on("stores::profile.updated", function () {
             //window.location.reload();
             saveBtn.classList.remove('btn--is-loading');
+            saveBtn.removeAttribute('disabled');
         }) 
       });
     </Script>
