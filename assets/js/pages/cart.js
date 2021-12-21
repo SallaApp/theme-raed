@@ -1,6 +1,5 @@
-import flatpickr from "flatpickr";
 require('../../dist/filepond.js');
-
+let flatpickr = require("flatpickr").default;
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!cartItemsCount) {
@@ -8,19 +7,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animatedItem('.free-shipping');
     animatedItem('.shipping-item');
+    salla.cart.event.onItemUpdated(res => updateCartPageInfo(res));
 });
+/**
+ *
+ * @param  {{
+ *      data: {
+ *              total: string,
+ *              total_discount: string,
+ *              shipping_cost: number,
+ *              final_total: string,
+ *              count: number,
+ *              sub_total: string,
+ *              total_before_discount: string,
+ *              items: Array<Object>,
+ *              coupon_discount: number
+ *           }
+ * sections: {'free-shipping-bar':string}
+ *          }} res
+ */
+/**
+ * @typedef {{isAvailable: boolean, notes: string, has_special_price: boolean, product_image: string, product_price: {amount: string, currency: string}, source: null, type: string, orderItemImages: *[], product_quantity: number, options_data: {"18819": number, "18836": number, "18821": number}, total_product_price_formatted: string, total_special_price: {amount: string, currency: string}, offer: boolean, total: number, enable_upload_image: boolean, uploaded_files: null, special_price_formatted: string, product_id: number, product_currency: string, product_available_quantity: number, selectedOptions: number[], onSale: boolean, currency: string, id: number, hide_quantity: boolean, product_price_formatted: string, quantity: number, display_price: string, isCustomized: boolean, has_options: boolean, product_name: string, _total_product_price: number, url: string, product_maximum_quantity_per_order: null, product_advance_option: {}, active_advance: number, display_total_price: string, product_options: *[], special_price: {amount: string, currency: string}, total_special_price_formatted: string, _product_price: number, total_product_price: {amount: string, currency: string}, enable_note: boolean}} CartItem
+ */
+let updateCartPageInfo = function (res) {
+    res.data.items.forEach(item => document.querySelector(`#item-${item.id}`)._x_dataStack[0].updateItemInfo(item));
+
+    let shippingBar = res.sections['free-shipping-bar'];
+    let shippingBarEl = document.querySelector('#free-shipping-bar');
+    if (shippingBar && shippingBarEl) {
+        shippingBarEl.outerHTML = shippingBar;
+    }
+}
 window.hasApplePay = function () {
-    return { 'has_apple_pay': !!window.ApplePaySession };
+    return {'has_apple_pay': !!window.ApplePaySession};
 }
 
 // TODO: add timeline
 function animatedItem(selector) {
     anime({
-        targets: selector,
-        opacity: [0, 1],
-        duration: 2000,
+        targets   : selector,
+        opacity   : [0, 1],
+        duration  : 2000,
         translateX: [-20, 0],
-        delay: (el, i) => i * 100,
+        delay     : (el, i) => i * 100,
     });
     // change progress
     //document.querySelectorAll('.progress-bg').style.width = '200px';
@@ -37,29 +66,29 @@ flatpickr('#receiveTime', {
     dateFormat: "H:i",
 });
 
-// cart
+//======================= AlpainJs initate function for Cart & Cart Item =======================//
 window.initCart = function (cart_id, coupon) {
     return {
-        cart_id: cart_id,
-        couponCode: coupon,
+        cart_id             : cart_id,
+        couponCode          : coupon,
         isShowCouponDiscount: !!coupon,
-        isShowCouponError: false,
-        couponErrorMessage: '',
-        addCoupon: function () {
+        isShowCouponError   : false,
+        couponErrorMessage  : '',
+        addCoupon           : function () {
             this.isShowCouponError = false;
 
             if (this.couponCode) {
                 salla.coupon.api
-                    .add({ id: this.cart_id, coupon: this.couponCode })
+                    .add({id: this.cart_id, coupon: this.couponCode})
                     .then(res => {
                         this.updateCartSummary();
                     }).catch(err => {
-                        this.isShowCouponError = true;
-                        if (err) {
-                            salla.log(err.message || err);
-                            this.couponErrorMessage = err.message;
-                        }
-                    });
+                    this.isShowCouponError = true;
+                    if (err) {
+                        salla.log(err.message || err);
+                        this.couponErrorMessage = err.message;
+                    }
+                });
 
                 this.isShowCouponDiscount = !this.isShowCouponDiscount;
                 if (!this.isShowCouponDiscount) {
@@ -70,98 +99,57 @@ window.initCart = function (cart_id, coupon) {
                 this.couponErrorMessage = 'يجب إدخال كوبون صالح';
             }
         },
-        removeCoupon: function () {
+        removeCoupon        : function () {
             if (this.couponCode) {
                 this.isShowCouponError = false;
-
                 salla.coupon.api
                     .remove(this.cart_id)
                     .then(res => {
                         this.couponCode = '';
                         this.updateCartSummary();
                     }).catch(err => {
-                        this.isShowCouponError = true;
-                        this.couponErrorMessage = err.message;
-                    });
-            }
-        },
-        updateCartSummary: function () {
-
-            salla.cart.api
-                .fetchFullSummary()
-                .then(res => {
-                    this.updateCartPageInfo(res);
+                    this.isShowCouponError = true;
+                    this.couponErrorMessage = err.message;
                 });
-        },
-        updateCartPageInfo: function (res) {
-            let item = res.data.items?.find(item => item.id == this.itemId);
-            this.itemTotal = item?.total;
-
-            let shippingBar = res.sections['free-shipping-bar'];
-            let shippingBarEl = document.querySelector('#free-shipping-bar');
-            if (shippingBar && shippingBarEl) {
-                shippingBarEl.outerHTML = shippingBar;
             }
+        },
+        updateCartSummary   : function () {
+            salla.cart.api.fetchFullSummary().then(res => updateCartPageInfo(res));
         },
     }
 }
 
-/**
- *
- * @param  {{
- *      data:{
- *          total: string,
- *          total_discount: string,
- *          shipping_cost: number,
- *          final_total: string,
- *          count: number,
- *          sub_total: string,
- *          total_before_discount: string,
- *          items: Array<Object>,
- *          coupon_discount: number
- *          }
- *      sections:{'free-shipping-bar':string}
- *          }} res
- */
-
 //cart Item
-window.initCartItem = function (itemId, quantity, total) {
+window.initCartItem = function ({id, quantity, total, price, product_price, has_offer, offer}) {
     return {
-        itemId: itemId,
-        itemQty: quantity,
-        isRemoveItem: false,
-        itemTotal: total,
+        itemId       : id,
+        itemQty      : quantity,
+        isRemoveItem : false,
+        itemTotal    : total,
+        itemPrice    : price,
+        productPrice : product_price,
         qtyValidation: '',
-        addQty: function () {
+        discountName : offer ? offer.offer_names : '',
+        hasOffer     : has_offer,
+        addQty       : function () {
             this.itemQty++;
             this.updateQty();
-            // salla.cart.api
-            //     .updateItem({ id: this.itemId, quantity: this.itemQty })
-            //     .then(res => {
-            //         this.updateCartPageInfo(res);
-            //         // this.itemQty++; // cause issue when you send new request while old request not finish
-            //     }).catch(err => this.validateQty(err));
         },
-        subQty: function () {
+        subQty       : function () {
             if (this.itemQty <= 1) {
                 return;
             }
             this.itemQty--;
             this.updateQty();
-            // salla.cart.api
-            //     .updateItem({ id: this.itemId, quantity: this.itemQty })
-            //     .then(res => {
-            //         // this.itemQty--; // cause issue when you send new request while old request not finish
-            //         this.updateCartPageInfo(res);
-            //     }).catch(err => this.validateQty(err));
         },
 
-        updateQty: function () {
-            salla.cart.api
-                .updateItem({ id: this.itemId, quantity: this.itemQty })
-                .then(res => {
-                    this.updateCartPageInfo(res);
-                }).catch(err => this.validateQty(err));
+        updateQty         : function () {
+            //simulate native event on change, to fire salla event `cart::update-item`
+            setTimeout(() => {
+                document
+                    .querySelector(`#item-${this.itemId} > input[name=id]`)
+                    .dispatchEvent(new Event('change', {'bubbles': true}));
+            }, 100)
         },
         updateCartPageInfo: function (res) {
             // remove validation message
@@ -179,24 +167,38 @@ window.initCartItem = function (itemId, quantity, total) {
         validateQty(err) {
             this.qtyValidation = err.response.data.error.fields.quantity[0];
         },
+        /**
+         * @param {CartItem} item
+         */
+        updateItemInfo(item) {
+            this.itemTotal = item.display_total_price;
+            if (!(this.hasOffer = item.has_special_price)) {
+                this.itemPrice = item.product_price_formatted;
+                return;
+            }
+            this.itemPrice = item.display_price;
+            this.discountName = item.offer.offer_names;
+
+            // this.itemTotal = item.total_special_price_formatted;
+        },
         removeItem: function () {
             this.isRemoveItem = true;
             salla.cart.api
                 .deleteItem(this.itemId).then(res => {
-                    this.updateCartPageInfo(res);
-                    let item = document.querySelector('#item-' + itemId);
-                    anime({
-                        targets: item,
-                        height: '0', // -> from 'height' to '0',
-                        margin: 0,
-                        easing: 'easeInOutQuad',
-                        duration: 300,
-                        opacity: 0,
-                        'padding-bottom': 0,
-                        'padding-top': 0,
-                        complete: () => item.remove(),
-                    });
-                })
+                updateCartPageInfo(res);
+                let item = document.querySelector('#item-' + itemId);
+                anime({
+                    targets         : item,
+                    height          : '0', // -> from 'height' to '0',
+                    margin          : 0,
+                    easing          : 'easeInOutQuad',
+                    duration        : 300,
+                    opacity         : 0,
+                    'padding-bottom': 0,
+                    'padding-top'   : 0,
+                    complete        : () => item.remove(),
+                });
+            })
         },
     }
 }

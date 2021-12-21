@@ -4,16 +4,18 @@ const TelInput = require('intl-tel-input');
 window.anime = require('animejs').default;
 window.Alpine = require('alpinejs').default;
 Alpine.start();
-salla.init({ debug: true });
 
+salla.init({debug: true});//TODO:: remove it in production
 salla.notify.setNotifier((...data) => salla.log(...data));
+salla.currency.event.onChanged(event => window.location.reload())
+
 // mobile menu
 const menu = new MmenuLight(
     document.querySelector("#mobile-menu"),
     "(max-width: 1024px)", "( slidingSubmenus: false)"
 );
 
-const navigator = menu.navigation({ title: "التصنيفات" });
+const navigator = menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
 const drawer = menu.offcanvas({
     position: "right"
 });
@@ -72,12 +74,12 @@ function initTelInput() {
     if (intlInputs.length) {
         intlInputs.forEach(intlInput => {
             let iti = TelInput(intlInput, {
-                initialCountry: intlInput.dataset.code || 'sa',
+                initialCountry    : intlInput.dataset.code || 'sa',
                 preferredCountries: ['sa', 'ae', 'kw', 'bh', 'qa', 'iq', 'om', 'ye', 'eg', 'jo', 'sy', 'ps', 'sd', 'lb', 'dz', 'tn', 'ma', 'ly'],
-                formatOnDisplay: false,
-                separateDialCode: true,
-                autoPlaceholder: 'aggressive',
-                utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.min.js',
+                formatOnDisplay   : false,
+                separateDialCode  : true,
+                autoPlaceholder   : 'aggressive',
+                utilsScript       : 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.min.js',
             });
             intlInput.addEventListener("countrychange", () => {
                 let data = iti.getSelectedCountryData();
