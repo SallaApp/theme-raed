@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-{{component.brands|length }} grid-flow-row lg:grid-flow-col gap-4 md:gap-8">
+        <div class="grid grid-cols-2 md:grid-cols-3 {{component.brands|length > 4  ? 'lg:grid-cols-4' : 'lg:grid-cols-' ~ component.brands|length }} grid-flow-row lg:grid-flow-col gap-4 md:gap-8">
             {% for brand in component.brands %}
                 {% if loop.first or loop.index0%3==0 %}
                     <a href="{{ brand.url }}"
