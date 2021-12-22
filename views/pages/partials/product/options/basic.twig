@@ -18,6 +18,9 @@
                         <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ product.id }}">
                             <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
                             <p class="text-sm text-gray-400">{{ detail.name }}</p>
+                             {% if not detail.has_quantity(product) %}
+                                <small class=" text-gray-400">(نفذت الكمية)</small>
+                             {% endif %}
                         </label>
                     </div>
                 {% endfor %}
@@ -33,6 +36,7 @@
                  data-option_id="{{ detail.id }}"
                  data-product-name="{{ product.name }}">
                 {% for detail_index, detail in option.details %}
+                    <div class="relative inline-block">
                     <input {{ option.is_selected(detail.id)?'checked':'' }}
                             type="radio"
                             class="image-option"
@@ -50,6 +54,10 @@
                              title="{{ detail.name }}"
                              alt="{{ detail.name }}"/>
                     </label>
+                    {% if not detail.has_quantity(product) %}
+                        <small class="absolute bottom-6 left-2 rounded-full px-2.5 pb-1 bg-red-400 text-white ">نفذت الكمية</small>
+                     {% endif %}
+                    </div>
                 {% endfor %}
             </div>
         </section>
