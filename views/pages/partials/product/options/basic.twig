@@ -46,18 +46,18 @@
                             data-itemid="{{ detail.id }}"
                             name="options[{{ option.id }}]"
                             data-img-id="{{ detail.option_value }}"
-                            value="{{ detail.id }}"/>
+                            value="{{ detail.id }}" />
                     <label for="option_{{ detail.id }}-{{ product.id }}" data-slideIndex="{{ detail_index + 1 }}"
-                           class="go-to-slide inline-block me-3 mb-0.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
+                           class="go-to-slide inline-block me-3 mb-0.5 cursor-pointer rounded-md overflow-hidden h-20 w-32">
 
-                        <img data-src="{{ detail.image }}" class="object-cover h-full lazy-load"
+                        <img data-src="{{ detail.image }}" class="object-cover h-full w-full lazy-load"
                              title="{{ detail.name }}"
                              alt="{{ detail.name }}"/>
 
                     </label>
                     <p class="text-sm text-gray-400">{{ detail.name}}</p>
                     {% if not detail.has_quantity(product) %}
-                        <small class="absolute bottom-6 left-2 rounded-full px-2.5 pb-1 bg-red-400 text-white ">نفذت الكمية</small>
+                        <small class="block absolute bottom-10 start-6  rounded-full px-2.5 pb-1 bg-red-400 text-white ">نفذت الكمية</small>
                      {% endif %}
                     </div>
                 {% endfor %}
