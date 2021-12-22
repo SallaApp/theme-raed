@@ -14,7 +14,7 @@
                         {{ trans('pages.products.attachments') }}
                     </b>
                 </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end" x-data="{ tab: '{{ product.notes ? "showNote": (product.attached_files|length ? "showUpload":"") }}' }">
+                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end" x-data="{ tab: '{{ product.notes ? "showNote": (product.attachments|length ? "showUpload":"") }}' }">
                     <div class="flex space-s-3 mb-1">
                         {% if product.can_add_note %}
                             <button type="button" @click="tab = 'showNote'" data-show="#note_{{ product.id }}"
@@ -54,7 +54,7 @@
                                         {# "product" here is presenter for cart_item, so {product.id} id {cart_item.id} #}
                                         data-url="{{ link('cart/image') }}"
                                         data-instant-upload
-                                        data-files="{{ product.attached_files }}"
+                                        data-files="{{ product.attachments }}"
                                         data-item-id="{{ product.id }}"
                                         data-product-id="{{ product.product_id }}"
                                     {% endif %}
