@@ -176,3 +176,47 @@ body {
 		transform: rotate(360deg);
 	}
 }
+
+
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+.animated {
+  animation-duration: var(--animate-duration);
+  animation-fill-mode: both;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.15, 1.15, 1.15);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  animation-name: pulse;
+  animation-timing-function: ease-in-out;
+}
+
+.wishlist-btn{
+  &.is--loading{
+    .loader{
+      opacity: 1;
+      
+      &:before{
+        width: 14px;
+        height: 14px;
+        border-width: 1px;
+      }
+    }
+
+    i{
+      display: none;
+    }
+  }
+}

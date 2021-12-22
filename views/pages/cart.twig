@@ -18,9 +18,9 @@
                 <div class="main-content flex-1 w-full">
                     {% for item in items %}
                         {% set key_prefix=item.id %}
-                        <section x-data="initCartItem({{ item.id }},{{ item.quantity }}, {{ item.total }})"
+                        <section x-data="initCartItem({{ item.get('id', 'quantity', 'total', 'price', 'product_price', 'has_offer', 'offer')|json_encode }})"
                                  class="bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
-                                 id="item-{{ item.id }}" salla-form-data data-on-change="cart-update-item">
+                                 id="item-{{ item.id }}" salla-form-data data-on-change="cart::update-item">
                             <input type="hidden" name="id" value="{{ item.id }}">
                             <!-- product -->
                             <div class="md:flex md:space-s-12 items-center justify-between mb-8">
@@ -33,7 +33,14 @@
                                         <h3 class="text-gray-900 leading-6">
                                             <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
                                         </h3>
-                                        <p class="text-sm text-gray-400">{{ item.price|money }}</p>
+                                        <span class="text-sm text-gray-400 line-through"
+                                              x-text="productPrice"
+                                              x-show="hasOffer"></span>
+                                        <span :class="hasOffer?'text-theme-red':'text-sm text-gray-400'"
+                                              x-text="itemPrice"></span>
+                                        <i class="sicon-discount-calculator text-gray-400" x-show="hasOffer"></i>
+                                        <span x-text="discountName" class="text-sm text-gray-400"
+                                              x-show="hasOffer"></span>
                                     </div>
                                 </div>
 
@@ -78,12 +85,10 @@
                                         <span>{{ trans('pages.cart.total') }}:</span>
                                         {% if item.is_available %}
                                             <span x-text="itemTotal"></span>
-                                            <span x-text="'{{ item.currency }}'"></span>
                                         {% else %}
                                             <span x-text="'{{ trans('pages.cart.out_of_stock') }}'"></span>
                                         {% endif %}
                                     </p>
-                                    {# الإجمالي: {{item.total|money}}</p> #}
                                 </div>
                             </div>
 
