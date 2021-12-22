@@ -9,8 +9,8 @@ window.FilePondPluginFilePoster = require('filepond-plugin-file-poster');
 window.FilePond = FilePond;
 let isRTL = document.querySelector('html').getAttribute('dir') === 'rtl',
     uploadLabel = isRTL
-        ? `<i class="sicon-camera block text-primary text-xl"></i> اسحب او افلت الصورة هنا <span class="filepond--label-action"> او تصفح من جهازك </span>`
-        : `Drag and drop the image here <span class="filepond--label-action"> or browse your device </span>`;
+        ? `<i class="sicon-camera block !text-2xl opacity-75"></i> <span class="block">اسحب او افلت الصورة هنا</span><span class="filepond--label-action"> او تصفح من جهازك </span>`
+        : `<i class="sicon-camera block !text-2xl opacity-75"></i><span class="block">Drag and drop the image here </span><span class="filepond--label-action"> or browse your device </span>`;
 
 FilePond.registerPlugin(
     // encodes the file as base64 data
