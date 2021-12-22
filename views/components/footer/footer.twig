@@ -1,44 +1,44 @@
 {# * It's important to put all Footer components here, to be excluded in mobile apps #}
 <footer id="footer" class="relative mt-auto pt-16">
-	<div class="bg-gray-700 text-reverse">
-		<div aria-label="footer" class="py-11 lg:pt-28 lg:pb-40">
-			<div class="container lg:grid grid-cols-6 gap-6">
-				<div class="lg:col-span-2 pe-20">
-					<a href="{{ link('/') }}" class="flex mb-6">
-						<img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
-						<h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1>
-					</a>
-					{% if store.description %}
-						<p class="max-w-sm leading-6 mb-6">
-							{{ store.description|raw }}
-						</p>
-					{% endif %}
-					{% component 'footer.social' %}
+    <div class="bg-gray-700 text-reverse">
+        <div aria-label="footer" class="py-11 lg:pt-28 lg:pb-40">
+            <div class="container lg:grid grid-cols-6 gap-6">
+                <div class="lg:col-span-2 pe-20">
+                    <a href="{{ link('/') }}" class="flex mb-6">
+                        <img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
+                        <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1>
+                    </a>
+                    {% if store.description %}
+                        <p class="max-w-sm leading-6 mb-6">
+                            {{ store.description|raw }}
+                        </p>
+                    {% endif %}
+                    {% component 'footer.social' %}
 
-					{# vat #}
-					{% if store.settings.tax.number %}
-					<div class="flex  space-s-2 items-end">
-					{% if store.settings.tax.certificate %}
-						<a data-fslightbox="gallery" href="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}">
-							<img src="{{asset('images/tax.png')}}" class="w-10">
-						</a>
-					{% endif %}
-						<div>
-							<p class="text-sm text-text-grey mb-1">الرقم الضريبي</p>
-							<b class="text-sm">{{ store.settings.tax.number }}</b>
-						</div>
-					</div>
+                    {# vat #}
+                    {% if store.settings.tax.number %}
+                    <div class="flex  space-s-2 items-end">
+                    {% if store.settings.tax.certificate %}
+                        <a data-fslightbox="gallery" href="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}">
+                            <img src="{{asset('images/tax.png')}}" class="w-10">
+                        </a>
+                    {% endif %}
+                        <div>
+                            <p class="text-sm text-text-grey mb-1">الرقم الضريبي</p>
+                            <b class="text-sm">{{ store.settings.tax.number }}</b>
+                        </div>
+                    </div>
                 {% endif %}
-				</div>
+                </div>
 
-				{% component 'footer.pages' %}
-				{% component 'footer.contacts' %}
-				{% component 'footer.mobile-apps' %}
-			</div>
-		</div>
-	</div>
-	<div class="md:flex items-center justify-between py-2  lg:px-0 container text-center border-border-dark border-dashed">
-		{% component 'footer.copyright' %}
-		{% component 'footer.payment-methods' %}
-	</div>
+                {% component 'footer.pages' %}
+                {% component 'footer.contacts' %}
+                {% component 'footer.mobile-apps' %}
+            </div>
+        </div>
+    </div>
+    <div class="md:flex items-center justify-between py-2  lg:px-0 container text-center border-border-dark border-dashed">
+        {% component 'footer.copyright' %}
+        {% component 'footer.payment-methods' %}
+    </div>
 </footer>

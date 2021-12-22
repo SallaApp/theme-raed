@@ -10,50 +10,50 @@
 | article.author_name     | String        |             |      |
 | article.author_url      | String        |             |      |
 | article.description     | String *HTML  |             |      |
-| article.related         | Article[]	  |             |      |
+| article.related         | Article[]      |             |      |
 #}
 {% extends "layouts.master" %}
 
 {% block content %}
-	<main id="main">
-		<div class="container mb-24">
-			<div class="flex items-center justify-between">
-				 <nav class="w-full py-5">
+    <main id="main">
+        <div class="container mb-24">
+            <div class="flex items-center justify-between">
+                 <nav class="w-full py-5">
                     {% component 'header.breadcrumbs' %}
                 </nav>
-			</div>
+            </div>
 
-			<div class="md:flex items-start">
-				<div class="main-content blog-category md:w-96 flex-1 bg-white p-8 rounded-md mb-10 md:mb-0">
-					<h1 class="font-bold text-3xl mb-5 leading-10">{{ article.name }}</h1>
-					<div class="mb-10 text-gray-text rounded-md inline-flex text-sm space-s-5">
-						<div class=" flex items-center">
-							<i class="sicon-calendar-date me-1 text-md"></i>
-							<span class="">{{ article.created_at }}</span>
-						</div>
-						<a href="{{ article.author_url }}" class=" flex items-center hover:text-dark">
-							<i class="sicon-user me-1 text-md"></i>
-							<span class="">{{ article.author_name }}</span>
-						</a>
-					</div>
+            <div class="md:flex items-start">
+                <div class="main-content blog-category md:w-96 flex-1 bg-white p-8 rounded-md mb-10 md:mb-0">
+                    <h1 class="font-bold text-3xl mb-5 leading-10">{{ article.name }}</h1>
+                    <div class="mb-10 text-gray-text rounded-md inline-flex text-sm space-s-5">
+                        <div class=" flex items-center">
+                            <i class="sicon-calendar-date me-1 text-md"></i>
+                            <span class="">{{ article.created_at }}</span>
+                        </div>
+                        <a href="{{ article.author_url }}" class=" flex items-center hover:text-dark">
+                            <i class="sicon-user me-1 text-md"></i>
+                            <span class="">{{ article.author_name }}</span>
+                        </a>
+                    </div>
 
-					{% if article.has_image %}
-						<img src="{{ article.image }}" alt="{{ article.image_alt }}" title="{{ article.image_alt }}" class="h-80 mb-10 w-full object-cover rounded-md"/>
-					{% endif %}
+                    {% if article.has_image %}
+                        <img src="{{ article.image }}" alt="{{ article.image_alt }}" title="{{ article.image_alt }}" class="h-80 mb-10 w-full object-cover rounded-md"/>
+                    {% endif %}
 
-					<p class="leading-7 text-sm mb-10">{{ article.description|raw }}</p>
-				</div>
+                    <p class="leading-7 text-sm mb-10">{{ article.description|raw }}</p>
+                </div>
 
-				<aside aria-label="Sidebar" class="sticky flex-shrink-0 top-24 md:w-96 lg:ms-8 pb-11">
-					{% if related is not empty %}
-						<h2 class="font-bold mb-3">{{ trans('pages.blog_articles.related') }}</h2>
+                <aside aria-label="Sidebar" class="sticky flex-shrink-0 top-24 md:w-96 lg:ms-8 pb-11">
+                    {% if related is not empty %}
+                        <h2 class="font-bold mb-3">{{ trans('pages.blog_articles.related') }}</h2>
 
-						{% for article in related  %}
-							{% include 'pages.blog.partials.article' %}
-						{% endfor %}
-					{% endif %}
-				</aside>
-			</div>
-		</div>
-	</main>
+                        {% for article in related  %}
+                            {% include 'pages.blog.partials.article' %}
+                        {% endfor %}
+                    {% endif %}
+                </aside>
+            </div>
+        </div>
+    </main>
 {% endblock %}

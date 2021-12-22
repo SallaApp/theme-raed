@@ -11,68 +11,68 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-	<main id="main">
-		<div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
-			<div class="container relative z-10 flex justify-between h-full items-center">
-				<div class="self-start">
-					<nav class="w-full py-5">
+    <main id="main">
+        <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
+            <div class="container relative z-10 flex justify-between h-full items-center">
+                <div class="self-start">
+                    <nav class="w-full py-5">
                         {% component 'header.breadcrumbs' with{is_dark:true} %}
                     </nav>
-				</div>
-			</div>
-		</div>
-		<div class="container mb-24">
-			<div class="flex items-start flex-col lg:flex-row ">
-				{% include 'pages.partials.customer.sidebar' %}
-				<div class="main-content w-full flex-1 pt-6 md:pt-10 ">
-					<h1 class="font-bold text-lg md:mb-5">{{ trans('common.titles.notifications') }}</h1>
-					<div class=" overflow-hidden">
-						{% if notifications.count %}
-							<div class="notification-container space-y-2.5 md:space-y-5 mb-10">
-								{% for notification in notifications %}
-									<div class="notification-item {{  notification.is_new?'unread':'read text-gray-500' }} notification-anime bg-white p-5 rounded-md flex items-center justify-between space-s-4">
-										<a href="{{ notification.url }}" class="bg-white text-lg text-text-dark border border-border-color rounded-icon h-14 w-14">
-											<i class="{{  notification.is_new?'text-theme-red':'' }}  sicon-bell-ring"></i>
-										</a>
+                </div>
+            </div>
+        </div>
+        <div class="container mb-24">
+            <div class="flex items-start flex-col lg:flex-row ">
+                {% include 'pages.partials.customer.sidebar' %}
+                <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
+                    <h1 class="font-bold text-lg md:mb-5">{{ trans('common.titles.notifications') }}</h1>
+                    <div class=" overflow-hidden">
+                        {% if notifications.count %}
+                            <div class="notification-container space-y-2.5 md:space-y-5 mb-10">
+                                {% for notification in notifications %}
+                                    <div class="notification-item {{  notification.is_new?'unread':'read text-gray-500' }} notification-anime bg-white p-5 rounded-md flex items-center justify-between space-s-4">
+                                        <a href="{{ notification.url }}" class="bg-white text-lg text-text-dark border border-border-color rounded-icon h-14 w-14">
+                                            <i class="{{  notification.is_new?'text-theme-red':'' }}  sicon-bell-ring"></i>
+                                        </a>
 
-										<div class="flex-1 md:flex">
-											<a href="{{ notification.url }}" class="flex-1">
-												<h4 class="font-bold text-sm mb-1.5">{{ notification.title }}</h4>
-												<p class="text-sm font- text-gray-text mb-3 md:mb-0">{{ notification.sub_title }}</p>
-											</a>
+                                        <div class="flex-1 md:flex">
+                                            <a href="{{ notification.url }}" class="flex-1">
+                                                <h4 class="font-bold text-sm mb-1.5">{{ notification.title }}</h4>
+                                                <p class="text-sm font- text-gray-text mb-3 md:mb-0">{{ notification.sub_title }}</p>
+                                            </a>
 
-											<span class="inline-flex items-center text-gray-text justify-center text-sm">
-												<i class="sicon-time me-1.5 text-md"></i>
-												<a class="fix-align" href="{{ notification.url }}">{{ notification.date }}</a>
-											</span>
-										</div>
-									</div>
-								{% endfor %}
-							</div>
+                                            <span class="inline-flex items-center text-gray-text justify-center text-sm">
+                                                <i class="sicon-time me-1.5 text-md"></i>
+                                                <a class="fix-align" href="{{ notification.url }}">{{ notification.date }}</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
 
-							{% include 'pages.partials.loader-status' with {next_page:notifications.next_page} %}
-						{% else %}
-							<div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
-								<i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
-								<p class="text-base text-gray-500">
-									<span>{{ trans('blocks.header.no_notifications') }}</span>
-								</p>
-							</div>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
+                            {% include 'pages.partials.loader-status' with {next_page:notifications.next_page} %}
+                        {% else %}
+                            <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
+                                <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
+                                <p class="text-base text-gray-500">
+                                    <span>{{ trans('blocks.header.no_notifications') }}</span>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock %}
 
 {% block scripts %}
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 salla.infiniteScroll.initiate('.notification-container', '.notification-item', {
 history: false,
 scrollThreshold: false
 })
 });
-	</script>
+    </script>
 {% endblock %}
