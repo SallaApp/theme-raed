@@ -36,7 +36,7 @@
                  data-option_id="{{ detail.id }}"
                  data-product-name="{{ product.name }}">
                 {% for detail_index, detail in option.details %}
-                    <div class="relative inline-block">
+                    <div class="relative inline-block text-center mb-2.5">
                     <input {{ option.is_selected(detail.id)?'checked':'' }}
                             type="radio"
                             class="image-option"
@@ -48,12 +48,14 @@
                             data-img-id="{{ detail.option_value }}"
                             value="{{ detail.id }}"/>
                     <label for="option_{{ detail.id }}-{{ product.id }}" data-slideIndex="{{ detail_index + 1 }}"
-                           class="go-to-slide inline-block me-3 mb-2.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
+                           class="go-to-slide inline-block me-3 mb-0.5 cursor-pointer rounded-md overflow-hidden h-20 w-24">
 
                         <img data-src="{{ detail.image }}" class="object-cover h-full lazy-load"
                              title="{{ detail.name }}"
                              alt="{{ detail.name }}"/>
+
                     </label>
+                    <p class="text-sm text-gray-400">{{ detail.name}}</p>
                     {% if not detail.has_quantity(product) %}
                         <small class="absolute bottom-6 left-2 rounded-full px-2.5 pb-1 bg-red-400 text-white ">نفذت الكمية</small>
                      {% endif %}
