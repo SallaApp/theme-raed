@@ -180,6 +180,12 @@
             saveBtn.classList.remove('btn--is-loading');
             saveBtn.removeAttribute('disabled');
         }) 
+
+        salla.document.event.onRequestFailed((requestInfo, error)=>{
+            saveBtn.classList.remove('btn--is-loading');
+            saveBtn.removeAttribute('disabled');
+        });
+
       });
     </Script>
 {% endblock %}
