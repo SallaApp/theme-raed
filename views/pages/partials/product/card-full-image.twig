@@ -51,8 +51,14 @@ rounded-lg justify-around overflow-hidden'>
                 {{ trans('pages.cart.add_to_cart') }}
             </button>
             <div class="text-white">
-                <button class="w-10 h-10 focus:outline-none">
-                    <i class="sicon-heart-off"></i>
+                <button class="relative justify-center items-center w-10 h-10 focus:outline-none wishlist-btn animated"
+                    {% if user %}
+                        data-on-click="wishlist::add" data-id="{{ product.id }}"
+                    {% else %}
+                        onClick="salla.error('{{ trans('common.messages.must_login') }}')"
+                    {% endif %}>
+                    <i class="sicon-heart"></i>
+                    <span class="loader loader--small absolute transition inset-x-0 inset-y-0 opacity-0 flex justify-center items-center"></span>
                 </button>
             </div>
         </div>

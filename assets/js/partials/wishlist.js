@@ -12,7 +12,7 @@
   })
 
   let wishlist = JSON.parse(localStorage.getItem("salla-wishlist"));
-  wishlist.forEach((id)=>{
+  wishlist?.forEach((id)=>{
     setFavorites(id);
   })
 
