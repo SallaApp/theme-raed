@@ -170,20 +170,17 @@
         const saveBtn = document.getElementById('update-profile-btn');
         saveBtn.addEventListener('click', function(){
           saveBtn.classList.add('btn--is-loading');
-          setTimeout(()=>{
-            saveBtn.setAttribute('disabled', '');
-          })
+          saveBtn.classList.add('pointer-events-none');
         })
 
         salla.event.on("stores::profile.updated", function () {
-            //window.location.reload();
             saveBtn.classList.remove('btn--is-loading');
-            saveBtn.removeAttribute('disabled');
+            saveBtn.classList.remove('pointer-events-none');
         }) 
 
         salla.document.event.onRequestFailed((requestInfo, error)=>{
             saveBtn.classList.remove('btn--is-loading');
-            saveBtn.removeAttribute('disabled');
+            saveBtn.classList.remove('pointer-events-none');
         });
 
       });

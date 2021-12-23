@@ -21,7 +21,7 @@
             <div class="flex items-start flex-col lg:flex-row ">
                 {% include 'pages.partials.customer.sidebar' %}
                 <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
-                    <h1 class="font-bold text-lg md:mb-5">{{ is_pending_orders ? trans('common.titles.pending_orders') : trans('common.titles.orders') }}</h1>
+                    <h1 class="font-bold text-lg mb-5">{{ is_pending_orders ? trans('common.titles.pending_orders') : trans('common.titles.orders') }}</h1>
                     <div class="overflow-hidden">
                         {% if orders.items is not empty %}
                             <table class="min-w-full border-separate" style="border-spacing: 0 20px;">
@@ -57,7 +57,7 @@
                                             {{ order.created_at|date("l j F Y") }}
                                         </td>
                                         <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                            <span class="text-primary bg-primary-light px-4 pt-0.5 pb-1.5 inline-block rounded-2xl" style="color: {{ order.status.color }}">
+                                            <span class="px-4 pt-0.5 pb-1.5 inline-block rounded-2xl bg-[color:{{ order.status.color }}]">
                                                 <i class="{{ order.status.icon }}"></i>
                                                 {{ order.status.name }}
                                             </span>
