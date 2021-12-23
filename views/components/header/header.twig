@@ -68,7 +68,7 @@
                         {# User Menu #}
                         {% if user %}
 
-                            <div class="relative inline-flex items-center h-full w-10 mx-1 md:mx-2 text-gray-400"
+                            <div class="relative inline-flex items-center h-full w-10 mx-1 md:mx-2 text-gray-500"
                                  x-data="{toggleMenu: false}">
                                 <button @click="toggleMenu = !toggleMenu" type="button"
                                         class="dropdown-trigger  border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent"
@@ -82,7 +82,7 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="transform opacity-100 scale-100"
                                      x-transition:leave-end="transform opacity-0 scale-95"
-                                     class="origin-top-right absolute z-30 w-52 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full after:border-t
+                                     class="origin-top-right absolute z-30 w-56 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full after:border-t
                       {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }}
                       {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}
                       "
@@ -93,14 +93,14 @@
                                         {% component 'header.notifications' %}
                                         <li>
                                             <a href="{{ link('orders') }}"
-                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-500 ' }}">
+                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
                                                 <i class="sicon-packed-box me-3"></i>
                                                 <span>{{ trans('common.titles.orders') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ link('wishlist') }}"
-                                               class="block px-4 py-2 text-sm transition-colors duration-200 er:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-500 ' }}">
+                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
                                                 <i class="sicon-heart me-3"></i>
                                                 {{ trans('common.titles.wishlist') }}
                                             </a>
@@ -108,7 +108,7 @@
 
                                         <li>
                                             <a href="{{ link('profile') }}"
-                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-500' }}">
+                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
                                                 <i class="sicon-settings me-3"></i>
                                                 {{ trans('common.titles.profile') }}
                                             </a>
