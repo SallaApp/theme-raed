@@ -87,9 +87,11 @@
                                 {{ order.status.name }}
                             </span>
                         </td>
-                        <td class="w-full md:w-auto  px-6 pb-4 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            {% component reorder with {order:order} %}
-                        </td>
+                        {% if order.reorder_enabled %}
+                            <td class="w-full md:w-auto  px-6 pb-4 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                                {% component reorder with {order:order} %}
+                            </td>
+                        {% endif %}
                     </tr>
                     </tbody>
                 </table>
