@@ -23,7 +23,7 @@
 
     <a href="{{ link('orders') }}"
        aria-current="page"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('orders')?  'text-primary bg-gray-200/20':'text-gray-400 hover:text-gray-500' }}">
+       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'text-gray-400 hover:text-gray-500' }}">
         <i class="sicon-packed-box me-3 text-lg"></i>
         <span class="truncate">{{ trans('common.titles.orders') }}</span>
     </a>

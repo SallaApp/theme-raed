@@ -93,7 +93,7 @@
                                         {% component 'header.notifications' %}
                                         <li>
                                             <a href="{{ link('orders') }}"
-                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders')?  'text-primary bg-gray-200/20':'hover:text-gray-500 ' }}">
+                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-500 ' }}">
                                                 <i class="sicon-packed-box me-3"></i>
                                                 <span>{{ trans('common.titles.orders') }}</span>
                                             </a>
