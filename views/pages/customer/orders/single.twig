@@ -93,9 +93,6 @@
                                 <span class=""> {{ order.status.name }}</span>
                             </span>
                         </td>
-                        <td class="w-full md:w-auto  px-6 pb-4 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            {% component reorder with {order:order} %}
-                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -318,6 +315,9 @@
                         </div>
                     </div>
                 </div>
+
+                 <!-- cancel / reorder -->
+                {% component reorder with {order:order} %}
 
                 {# todo:: add settings.rating.is_enabled in it these three conditions, & they stay#}
                 {% if store.settings.rating.store or store.settings.rating.products or store.settings.rating.shipping %}
