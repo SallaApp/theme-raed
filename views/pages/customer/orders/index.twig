@@ -36,19 +36,19 @@
                                         <th scope="col" class="px-6 text-start text-sm font-medium uppercase tracking-wider">
                                             {{trans('pages.orders.date')}}
                                         </th>
-                                        <th scope="col" class="px-6 text-start text-sm font-medium  uppercase tracking-wider">
+                                        <th scope="col" class="px-6 text-end text-sm font-medium  uppercase tracking-wider">
                                             {{trans('pages.orders.status')}}
                                         </th>
-                                        <th scope="col" class="px-6 relative">
+                                        {# <th scope="col" class="px-6 relative">
                                             <span class="sr-only">--</span>
-                                        </th>
+                                        </th> #}
                                     </tr>
                                 </thead>
                                 <tbody class="orders-container">
                                 {% for order in orders.items %}
-                                    <tr class="order-row border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
+                                    <tr @click="window.location = '{{ order.url }}'"  class=" cursor-pointer order-row border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
                                         <td class="w-full md:w-auto md:rounded-s-md px-6 py-6 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
-                                            <a href="{{ order.url }}">#{{ order.order_id }}</a>
+                                           #{{ order.order_id }}
                                         </td>
                                         <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
                                             {{ order.total|money }}
@@ -56,18 +56,18 @@
                                         <td class="w-full md:w-auto px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
                                             {{ order.created_at|date("l j F Y") }}
                                         </td>
-                                        <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                            <span class="px-4 pt-0.5 pb-1.5 inline-block rounded-2xl bg-[color:{{ order.status.color }}]">
-                                                <i class="{{ order.status.icon }}"></i>
-                                                {{ order.status.name }}
+                                        <td class="w-full md:w-auto text-end  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
+                                            <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl" style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
+                                                <i class="mt-1 {{ order.status.icon }}"></i>
+                                                <span class=""> {{ order.status.name }}</span>
                                             </span>
                                         </td>
-                                        <td class="w-full md:w-auto md:rounded-e-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-lg font-medium md:text-end">
+                                        {# <td class="w-full md:w-auto md:rounded-e-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-lg font-medium md:text-end">
                                             <span class="md:hidden w-32 inline-block font-normal text-sm"></span>
                                             <a href="{{ order.url }}" class="text-gray-400 hover:text-gray-500 mx-2">
                                                 <i class="sicon-eye"></i>
                                             </a>
-                                        </td>
+                                        </td> #}
                                     </tr>
                                 {% endfor %}
                                 </tbody>
