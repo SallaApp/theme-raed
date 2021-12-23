@@ -11,6 +11,7 @@ module.exports = {
         cart     : './assets/js/pages/cart.js',
         product  : './assets/js/pages/product.js',
         category : './assets/js/pages/category.js',
+        comments : './assets/js/partials/comments.js',
         filepond : ['./assets/js/partials/filepond.js', './assets/styles/filepond.scss'],
         flatpickr: ['./node_modules/flatpickr/dist/flatpickr.js', './assets/styles/main_inc/plugins/flatpicker.scss'],
     },
