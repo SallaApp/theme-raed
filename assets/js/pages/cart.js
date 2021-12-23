@@ -1,4 +1,5 @@
 require('../../dist/filepond.js');
+require('../partials/pages/product-options')
 let flatpickr = require("flatpickr").default;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -201,24 +202,4 @@ window.initCartItem = function ({id, quantity, total, price, product_price, has_
             })
         },
     }
-}
-
-window.verifyDataBeforeSend = function (formData, element, event) {
-    if (!element) {
-        return;
-    }
-
-    element.querySelectorAll('[required]:not(:disabled)').forEach(input => {
-        //get the value for option, if it's empty return
-        let inputValue = formData
-            ? input.name.replace(']', '').split('[').reduce((data, key) => data[key], formData)
-            : undefined;
-        if (inputValue === undefined || inputValue === '') {
-            input.classList.add('border', 'border-red-400');
-            //TODO:: add error
-            return formData = false;
-        }
-        input.classList.remove('border', 'border-red-400');
-    });
-    return formData;
 }
