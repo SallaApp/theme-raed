@@ -72,16 +72,16 @@
                         </td>
                         <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                             <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.orders.date') }}</span>
-                            <b>{{ order.created_at }}</b>
+                            <b>{{ order.created_at|date }}</b>
                         </td>
                         {% if order.shipping %}
                             <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.orders.shipment_details') }}</span>
                                {% if order.shipping.logo %}
                                 <div class="inline-block h-10 w-26">
                                     <img class="inline-block w-full h-full object-contain" src="{{ order.shipping.logo }}">
                                 </div>
                                 {% else %}
+                                    <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.orders.shipment_details') }}</span>
                                     <b>{{ order.shipping.name }}</b>
                                 {% endif %}
                             </td>
@@ -96,6 +96,12 @@
                     </tr>
                     </tbody>
                 </table>
+
+                {# rating message #}
+                <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue p-5 text-white rounded-md mb-10">
+                    <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
+                    <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
+                </div>
 
                 <div class="overflow-hidden mb-10">
 
