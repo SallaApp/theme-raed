@@ -10,7 +10,7 @@
                                 {% if not is_cart %}
                                     data-on-change="product-price" data-allow-default
                                 {% endif %}
-                                {{ detail.has_quantity(product) ? '':'disabled' }}
+                                {{ detail.has_quantity(product) ? '' : 'disabled' }}
                                 name="options[{{ option.id }}]"
                                 value="{{ detail.id }}"
                                 id="color_option_{{ detail.id }}-{{ product.id }}"
@@ -19,7 +19,7 @@
                             <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
                             <p class="text-sm text-gray-400">{{ detail.name }}</p>
                              {% if not detail.has_quantity(product) %}
-                                <small class=" text-gray-400">(نفذت الكمية)</small>
+                                <small class=" text-gray-400">({{ trans('pages.products.out_of_stock') }})</small>
                              {% endif %}
                         </label>
                     </div>
@@ -57,7 +57,7 @@
                     </label>
                     <p class="text-sm text-gray-400">{{ detail.name}}</p>
                     {% if not detail.has_quantity(product) %}
-                        <small class="block absolute bottom-10 left-1/2 transform -translate-x-1/2  rounded-full px-2.5 pb-1 bg-red-400 text-white whitespace-nowrap">نفذت الكمية</small>
+                        <small class="block absolute bottom-10 left-1/2 transform -translate-x-1/2  rounded-full px-2.5 pb-1 bg-red-400 text-white whitespace-nowrap">{{ trans('pages.products.out_of_stock') }}</small>
                      {% endif %}
                     </div>
                 {% endfor %}

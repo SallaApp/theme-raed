@@ -93,3 +93,7 @@ function initTelInput() {
 }
 
 initTelInput();
+
+
+// Add loading icon
+salla.document.event.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading'))

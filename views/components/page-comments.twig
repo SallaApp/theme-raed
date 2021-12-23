@@ -16,61 +16,41 @@
 | can_comment           | Bool                       |             |      |
 | id                    | Integer                    | PageId      |      |
 #}
-<div class="mb-20 pt-20 pb-20">
-    <div class="container">
-        {% if can_comment %}
-            <div class="form form--add-comment" salla-form-data>
-                {% honeypot %}
-                <h2 class="mb-5 text-lg font-bold text-gray-500">{{trans('blocks.comments.title')}}</h2>
-                <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
-                          class="form-input h-24 mb-5"
-                          name="ask_textarea"
-                          maxlength="500" cols="30"
-                          rows="30"></textarea>
+<div class="pt-16">
+  {% if can_comment %}
+      <div class="form form--add-comment" salla-form-data>
+          {% honeypot %}
+          <h2 class="mb-5 text-lg font-bold text-gray-500">{{trans('blocks.comments.title')}}</h2>
+          <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
+                    class="form-input h-24 mb-5"
+                    name="ask_textarea"
+                    maxlength="500" cols="30"
+                    rows="30"></textarea>
 
-                <div class="text-end">
-                    <button type="button" class="btn btn-primary h-10"
-                            data-on-click="comment-product-add"
-                            id="add-new-comment-btn"
-                            data-id="{{ id }}">{{ trans('blocks.comments.submit') }}</button>
-                </div>
-            </div>
-        {% endif %}
+          <div class="text-end mb-4">
+              <button type="button" class="btn btn-primary inline-flex items-center justify-center"
+                      id="add-new-comment-btn"
+                      data-on-click="comment::page-add"
+                      data-id="{{ id }}">
+                <span class="loader loader--small"></span>
+                <span class="fix-align transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('blocks.comments.submit') }}</span>
+              </button>
+          </div>
+      </div>
+  {% endif %}
 
-        {% if comments.count %}
-            <div class="comments-container">
-                <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
-                {% for comment in comments %}
-                    {% include 'pages.partials.single-comment' %}
-                {% endfor %}
-            </div>
+  {% if comments.count %}
+      <div class="comments-container">
+          <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
+          {% for comment in comments %}
+              {% include 'pages.partials.single-comment' %}
+          {% endfor %}
+      </div>
 
-            {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
-        {% endif %}
-    </div>
+      {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
+  {% endif %}
 </div>
 
-
-<script>
-    {# ADD Comment Validations & Loading #}
-    var add_btn = document.getElementById('add-new-comment-btn'),
-        ask_textarea = document.querySelector('textarea[name="ask_textarea"]');
-
-    if (add_btn) {
-        add_btn.addEventListener('click', function(){
-            if(ask_textarea.value !== '' && ask_textarea.value.length >= 3 ){
-                add_btn.classList.add('btn--has-loading');
-                add_btn.setAttribute('disabled',true);
-            }
-            else {
-                ask_textarea.parentElement.classList.add('error');
-            }
-        })
-    }
-
-    if (ask_textarea) {
-        ask_textarea.addEventListener('keyup', function(){
-            ask_textarea.parentElement.classList.remove('error');
-        });
-    }
-</script>
+{% block scripts %}
+    <script type="text/javascript" defer src="{{ asset('dist/comments.js') }}"></script>
+{% endblock %}

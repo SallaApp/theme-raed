@@ -1,23 +1,27 @@
 {% if next_page %}
     <div class="text-center loading-status-wrapper">
-        <div class="loader-status loader" style="display: none">
+        <div class="loader-status" style="display: none">
             <p class="infinite-scroll-last font-sm color-grey no-m center">{{ trans('common.elements.end_of_content') }}</p>
             <p class="infinite-scroll-error font-sm color-grey no-m center">{{ trans('common.elements.failed_to_load_more') }}</p>
         </div>
 
-        <a href="{{ next_page }}" class="btn btn-outline-dark pagination__next px-11 py-2.5 relative">
-            <span class="fix-align">{{ trans('common.elements.load_more') }}</span>
+        <a href="{{ next_page }}" id="next-page-btn" class="btn btn-primary btn--has-loading  pagination__next px-11 py-2.5 relative inline-flex items-center justify-center">
+            <span class="loader loader--small"></span>
+            <span class="fix-align transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('common.elements.load_more') }}</span>
         </a>
     </div>
 {% endif %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const nextPageBtn = document.getElementById('next-page-btn')
+
         salla.event.on('infiniteScroll::request', function () {
             //document.querySelector('.loading-status-wrapper .spinner-loader-wrap').classList.remove('hidden');
         })
 
         salla.event.on('infiniteScroll::load', function () {
+            nextPageBtn.classList.remove('btn--is-loading');
             document.querySelector('.loading-status-wrapper .loader-status').style.display='none';
         })
     });

@@ -315,13 +315,13 @@
 
                             <div class="flex justify-between space-s-4">
                                 {% if product.is_available or product.is_donation %}
-                                    <button type="button" class="btn btn-primary add-to-cart-btn"
+                                    <button type="button" class="btn btn-primary add-to-cart-btn btn--has-loading"
                                             {% if not product.is_available %}
                                                 disabled
                                                 {% else %}
                                             data-on-click="cart::add-item"{% endif %}>
                                         <span class="loader loader--small"></span>
-                                        <span class="transition-transform duration-500 inline-block btn--text">
+                                        <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">
                                             {% if product.is_available %}
                                                 {# <i class="sicon-shopping-bag"></i> #}
                                                 {{ trans('pages.cart.add_to_cart') }}

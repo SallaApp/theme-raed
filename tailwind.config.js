@@ -7,6 +7,7 @@ module.exports = {
         enabled: true,
         content: [
             "views/**/*.twig",
+            "assets/js/**/*.js",
             // require('@salla.sa/twilight/tailwind_css_list')
         ]
     },

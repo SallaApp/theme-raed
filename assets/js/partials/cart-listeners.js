@@ -81,6 +81,3 @@ salla.cart.event.onItemAdded(function (response, productId) {
 salla.cart.event.onItemAddedFailed(function (response, productId) {
     document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading'));
 })
-
-// Add loading icon
-salla.document.event.onClick('.add-to-cart-btn', event => event.target.classList.add('btn--is-loading'))
