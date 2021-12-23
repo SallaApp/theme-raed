@@ -30,23 +30,23 @@
                         {% if notifications.count %}
                             <div class="notification-container space-y-2.5 md:space-y-5 mb-10">
                                 {% for notification in notifications %}
-                                    <div class="notification-item {{  notification.is_new?'unread':'read text-gray-500' }} notification-anime bg-white p-5 rounded-md flex items-center justify-between space-s-4">
-                                        <a href="{{ notification.url }}" class="bg-white text-lg text-text-dark border border-border-color rounded-icon h-14 w-14">
+                                    <a href="{{ notification.url }}" class="notification-item {{  notification.is_new?'unread':'read text-gray-500' }} notification-anime bg-white p-5 rounded-md flex items-center justify-between space-s-4 group">
+                                        <span class="bg-white text-lg text-text-dark border border-border-color rounded-icon h-14 w-14">
                                             <i class="{{  notification.is_new?'text-theme-red':'' }}  sicon-bell-ring"></i>
-                                        </a>
+                                        </span>
 
                                         <div class="flex-1 md:flex">
-                                            <a href="{{ notification.url }}" class="flex-1">
-                                                <h4 class="font-bold text-sm mb-1.5">{{ notification.title }}</h4>
+                                            <div class="flex-1">
+                                                <h4 class="font-bold text-sm mb-1.5 group-hover:text-primary">{{ notification.title }}</h4>
                                                 <p class="text-sm font- text-gray-text mb-3 md:mb-0">{{ notification.sub_title }}</p>
-                                            </a>
+                                            </div>
 
                                             <span class="inline-flex items-center text-gray-text justify-center text-sm">
                                                 <i class="sicon-time me-1.5 text-md"></i>
-                                                <a class="fix-align" href="{{ notification.url }}">{{ notification.date }}</a>
+                                                <span class="fix-align">{{ notification.date }}</span>
                                             </span>
                                         </div>
-                                    </div>
+                                    </a>
                                 {% endfor %}
                             </div>
 
