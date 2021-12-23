@@ -26,24 +26,6 @@
 | cart.items[].is_available                            | bool                       |                                                                                |
 | cart.items[].is_donation                             | bool                       |                                                                                |
 | cart.items[].can_donate                              | bool                       |                                                                                |
-| cart.items[].options                                 | ?ProductOption *Collection |                                                                                |
-| cart.items[].options[].id                            | int                        |                                                                                |
-| cart.items[].options[].name                          | string                     |                                                                                |
-| cart.items[].options[].required                      | bool                       |                                                                                |
-| cart.items[].options[].type                          | string                     | radio, date, datetime, time, image, text, textarea, number, checkbox, splitter |
-| cart.items[].options[].placeholder                   | ?string                    |                                                                                |
-| cart.items[].options[].option_type                   | ?string                    | color, image, text                                                             |
-| cart.items[].options[].not_same_day_order            | bool                       |                                                                                |
-| cart.items[].options[].availability_range            | bool                       |                                                                                |
-| cart.items[].options[].from_date_time                | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                |
-| cart.items[].options[].to_date_time                  | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                |
-| cart.items[].options[].visibility_condition          | ?object                    |                                                                                |
-| cart.items[].options[].visibility_condition.option   |                            |                                                                                |
-| cart.items[].options[].visibility_condition.operator |                            |                                                                                |
-| cart.items[].options[].visibility_condition.value    |                            |                                                                                |
-|                                                      |                            |                                                                                |
-| cart.items[].options[].details                       | OptionDetails *Collection  |                                                                                |
-| cart.items[].options[].details                       | OptionDetails *Collection  |                                                                                |
 | cart.items[].offer                                   |                            |                                                                                |
 | cart.items[].donation                                |                            | TODO::                                                                         |
 | cart.items[].attachments                             |                            |                                                                                |
@@ -70,6 +52,8 @@
                     {% for item in cart.items %}
                         {% set key_prefix=item.id %}
                         <section x-data="initCartItem({{ item.get('id', 'quantity', 'total', 'price', 'product_price', 'has_offer', 'offer')|json_encode }})"
+                                {# verifyDataBeforeSend function existed in assets/js/pages/cart.js #}
+                                 data-filter-before-submit="verifyDataBeforeSend"
                                  class="bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
                                  id="item-{{ item.id }}" salla-form-data data-on-change="cart::update-item">
                             <input type="hidden" name="id" value="{{ item.id }}">
