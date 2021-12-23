@@ -28,11 +28,14 @@
                           maxlength="500" cols="30"
                           rows="30"></textarea>
 
-                <div class="text-end">
-                    <button type="button" class="btn btn-primary h-10"
-                            data-on-click="comment-product-add"
+                <div class="text-end mb-4">
+                    <button type="button" class="btn btn-primary inline-flex items-center justify-center"
                             id="add-new-comment-btn"
-                            data-id="{{ id }}">{{ trans('blocks.comments.submit') }}</button>
+                            data-on-click="comment::page-add"
+                            data-id="{{ id }}">
+                      <span class="loader loader--small"></span>
+                      <span class="fix-align transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('blocks.comments.submit') }}</span>
+                    </button>
                 </div>
             </div>
         {% endif %}
@@ -51,26 +54,6 @@
 </div>
 
 
-<script>
-    {# ADD Comment Validations & Loading #}
-    var add_btn = document.getElementById('add-new-comment-btn'),
-        ask_textarea = document.querySelector('textarea[name="ask_textarea"]');
-
-    if (add_btn) {
-        add_btn.addEventListener('click', function(){
-            if(ask_textarea.value !== '' && ask_textarea.value.length >= 3 ){
-                add_btn.classList.add('btn--has-loading');
-                add_btn.setAttribute('disabled',true);
-            }
-            else {
-                ask_textarea.parentElement.classList.add('error');
-            }
-        })
-    }
-
-    if (ask_textarea) {
-        ask_textarea.addEventListener('keyup', function(){
-            ask_textarea.parentElement.classList.remove('error');
-        });
-    }
-</script>
+{% block scripts %}
+    <script type="text/javascript" defer src="{{ asset('dist/comments.js') }}"></script>
+{% endblock %}
