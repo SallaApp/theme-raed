@@ -7,7 +7,8 @@
 
 * It's important to put all Header components here, to be excluded in mobile apps
 #}
-{% component 'header.theme-preview-bar' %}
+{#TODO:: Support it from js#}
+{#{% component 'header.theme-preview-bar' %}#}
 
 {# Top nav ------------------------------------ #}
 <div class="{{ theme.topnav_is_dark ? 'dark':'' }}">
@@ -53,83 +54,10 @@
                             {# <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1> #}
                             <h1 class="hidden">{{ store.name }}</h1>
                         </a>
-
-                        {% component 'header.main-menu' %}
-
-                        <ul class="hidden lg:flex flex-wrap main-menu items-center mx-6">
-                            {% for menu_id, menu in menus %}
-                                {% include 'components.header._menu-item' with {is_root_menu:true} %}
-                            {% endfor %}
-                        </ul>
-
+                        {% component 'header.menu' %}
                     </div>
                     <div class="flex items-center">
-
-                        {# User Menu #}
-                        {% if user %}
-
-                            <div class="relative inline-flex items-center h-full w-10 mx-1 md:mx-2 text-gray-500"
-                                 x-data="{toggleMenu: false}">
-                                <button @click="toggleMenu = !toggleMenu" type="button"
-                                        class="dropdown-trigger  border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent"
-                                        id="menu-button" aria-expanded="true" aria-haspopup="true">
-                                    <img class="h-10 w-10 object-cover" src="{{ user.avatar }}" alt="">
-                                </button>
-                                <div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
-                                     x-transition:enter="transition ease-out duration-100"
-                                     x-transition:enter-start="transform opacity-0 scale-95"
-                                     x-transition:enter-end="transform opacity-100 scale-100"
-                                     x-transition:leave="transition ease-in duration-75"
-                                     x-transition:leave-start="transform opacity-100 scale-100"
-                                     x-transition:leave-end="transform opacity-0 scale-95"
-                                     class="origin-top-right absolute z-30 w-56 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full after:border-t
-                      {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }}
-                      {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}
-                      "
-                                     role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
-                                     tabindex="-1">
-
-                                    <ul class="py-2 space-y-px">
-                                        {% component 'header.notifications' %}
-                                        <li>
-                                            <a href="{{ link('orders') }}"
-                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
-                                                <i class="sicon-packed-box me-3"></i>
-                                                <span>{{ trans('common.titles.orders') }}</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ link('wishlist') }}"
-                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
-                                                <i class="sicon-heart me-3"></i>
-                                                {{ trans('common.titles.wishlist') }}
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ link('profile') }}"
-                                               class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
-                                                <i class="sicon-settings me-3"></i>
-                                                {{ trans('common.titles.profile') }}
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#"
-                                               data-on-click="auth-logout"
-                                               class="block px-4 py-2 text-sm text-red-500 transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10">
-                                                <i class="sicon-send-out me-3"></i>
-                                                {{ trans('blocks.header.logout') }}
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        {% else %}
-                            <salla-login></salla-login>
-                        {% endif %}
-
+                        {% component 'header.user-menu' %}
                         <div class="flex items-center ms-4" id="main-cart-btn">
                             <a href="{{ link('cart') }}" class="me-1 relative ">
                                 <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
@@ -142,31 +70,10 @@
                                 <b class="leading-3" data-cart-total>{{ cart.total }}</b>
                             </div>
                         </div>
-
-                        <script>
-                            document.addEventListener('DOMContentLoaded', () => {
-                                animateCount()
-                            })
-
-                            function animateCount() {
-                                anime({
-                                    targets : '.anime-count',
-                                    opacity : [0, 1],
-                                    duration: 2000,
-                                    scale   : [0.5, 1],
-                                    delay   : function (el, i) {
-                                        return i * 100;
-                                    },
-                                });
-                            }
-                        </script>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 </div>
-
-
-{# Main Mobiel Menu --------------------------- #}
-{% component 'header.main-menu' with {is_mobile:true} %}
+{% component 'header.menu' with {is_mobile:true} %}

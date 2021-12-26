@@ -18,35 +18,7 @@
             </div>
         </div>
     </div>
-
-    {% component 'header.notifications' with{is_profile_sidebar:true} %}
-
-    <a href="{{ link('orders') }}"
-       aria-current="page"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
-        <i class="sicon-packed-box me-3 text-lg"></i>
-        <span class="truncate">{{ trans('common.titles.orders') }}</span>
-    </a>
-
-    <a href="{{ link('wishlist') }}"
-       aria-current="page"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
-        <i class="sicon-heart me-3 text-lg"></i>
-        {{ trans('common.titles.wishlist') }}
-    </a>
-
-    <a href="{{ link('profile') }}"
-       class="menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('profile')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
-        <i class="sicon-settings me-3 text-lg"></i>
-        {{ trans('common.titles.profile') }}
-    </a>
-
-    <a href="#"
-       data-on-click="auth-logout"
-       class="text-theme-red  menu-item opacity-0 flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30">
-        <i class="sicon-send-out me-3 text-lg"></i>
-        {{ trans('blocks.header.logout') }}
-    </a>
+    {% component 'header.user-menu' with{is_profile_sidebar:true} %}
 </nav>
 
 {% block scripts %}
