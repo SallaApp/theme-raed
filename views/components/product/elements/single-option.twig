@@ -1,13 +1,13 @@
 {#
 | Variable   | Type          | Description                                             |
 |------------|---------------|---------------------------------------------------------|
-| option     | ProductOption | @see views/pages/partials/product/options/advanced.twig |
+| option     | ProductOption | @see views/pages/partials/product/fields.twig           |
 | attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `       |
 | disabled   | bool          |                                                         |
 | required   | bool          |                                                         |
 | value      | ?string       |                                                         |
 #}
-<select class="form-input appearance-none visibility_condition"
+<select class="form-input appearance-none visibility_condition{{ required?' required':'' }}"
         name="options[{{ option.id }}]"
         data-option="{{ option.id }}"
         {{ attirubtes|raw }}>

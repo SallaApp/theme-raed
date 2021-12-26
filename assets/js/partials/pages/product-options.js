@@ -24,12 +24,15 @@ window.verifyDataBeforeSend = function (formData, element, event) {
 
 function toggleError(element, isHideError = true) {
     let classes = ['border', 'border-red-400'];
+    let isRadioOrCheckbox = element.checked !== undefined && element.dataset.isAdvanced;
+    let selector = '';
     //is checkbox or radio, toggle error to their labels
-    if (element.checked !== undefined) {
-        element = document.querySelector(`[for="${element.name}"]`);
-        classes = ['text-red-400'];
+    if (!isRadioOrCheckbox) {
+        isHideError ? element.classList.add(...classes) : element.classList.remove(...classes);
     }
-    isHideError ? element.classList.add(...classes) : element.classList.remove(...classes);
+
+    document.querySelectorAll(`[for="${element.name}"]`)
+        .forEach(label => label.classList[isHideError ? 'add' : 'remove']('text-red-400'));
     //TODO:: add show error message.
     return isHideError;
 }
