@@ -8,7 +8,17 @@ Alpine.start();
 salla.init({debug: true});//TODO:: remove it in production
 salla.notify.setNotifier((...data) => salla.log(...data));
 salla.currency.event.onChanged(event => window.location.reload())
-
+salla.onReady(() => {
+    anime({
+        targets : '.anime-count',
+        opacity : [0, 1],
+        duration: 2000,
+        scale   : [0.5, 1],
+        delay   : function (el, i) {
+            return i * 100;
+        },
+    });
+});
 // mobile menu
 const menu = new MmenuLight(
     document.querySelector("#mobile-menu"),
