@@ -1,160 +1,150 @@
 {% extends "layouts.master" %}
 
 {% block content %}
-    <main id="main">
-        <div class="relative mb-20">
-            <div class="h-80 w-full bg-primary absolute top-0 start-0 z-0">
-                <div class="h-52"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                    <path fill="#5cd5c4" fill-opacity="1" d="M0,96L120,112C240,128,480,160,720,165.3C960,171,1200,149,1320,138.7L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path>
-                </svg>
-            </div>
-            <div class="container relative z-1">
-                <nav class="w-full py-5">
-                    <ol class="list-reset flex items-center text-sm text-reverse">
-                        <li><a href="{{ link('/') }}" class="fix-align text-primary text-reverse">{{ trans('common.titles.home') }}</a></li>
-                        <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
-                        <li><span class="fix-align">{{ thank_you }}</span></li>
-                    </ol>
-                </nav>
-                <div class="bg-white p-7 rounded-md mb-8">
-                    <div class="flex flex-col items-center pt-16 pb-10">
-                        <img src="{{ asset('images/delivery-bro.svg') }}" alt="" class="thanks-item opacity-0 w- w-56 mb-8">
-                        <h1 class="font-bold text-lg mb-2.5 thanks-item opacity-0">{{ thank_you }}</h1>
-                        <p class="thanks-item opacity-0 text-gray-text max-w-xs text-center text-sm leading-6">
-                            {{ trans('pages.thank_you.order_id') }} <b class="text-text-dark">#{{ order.order_id }}</b>
-                        </p>
-                        {% if not is_deepLinking %}
-                            <button class="btn btn--oval btn--padded less btn--primary mt-20"
-                                    onclick="goToOrderDetailsWithEvent()">
-                                <i class="sicon-newspaper mr-1"></i>
-                                {{ trans('pages.thank_you.order_details') }}
-                            </button>
-                        {% endif %}
-                    </div>
+    <main id="main mb-20"> 
+      <div class="h-60 -mb-52 w-full bg-primary start-0 relative -z-1">
+        <svg class="text-primary absolute top-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <path class="fill-current" fill-opacity="1" d="M0,96L120,112C240,128,480,160,720,165.3C960,171,1200,149,1320,138.7L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path>
+        </svg>
+      </div>
+      <div class="container">
+          <nav class="w-full py-5">
+              <ol class="list-reset flex items-center text-sm text-reverse">
+                  <li><a href="{{ link('/') }}" class="fix-align text-primary text-reverse">{{ trans('common.titles.home') }}</a></li>
+                  <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+                  <li><span class="fix-align">{{ thank_you }}</span></li>
+              </ol>
+          </nav>
+          <div class="bg-white p-7 rounded-md mb-8">
+              <div class="flex flex-col items-center pt-16 pb-10">
+                  <img src="{{ asset('images/delivery-bro.svg') }}" alt="" class="thanks-item opacity-0 w- w-56 mb-8">
+                  <h1 class="font-bold text-lg mb-2.5 thanks-item opacity-0">{{ thank_you }}</h1>
+                  <p class="thanks-item opacity-0 text-gray-text max-w-xs text-center text-sm leading-6">
+                      {{ trans('pages.thank_you.order_id') }} <b class="text-text-dark">#{{ order.order_id }}</b>
+                  </p>
+                  {% if not is_deepLinking %}
+                      <button class="btn btn--oval btn--padded less btn--primary mt-20"
+                              onclick="goToOrderDetailsWithEvent()">
+                          <i class="sicon-newspaper me-1"></i>
+                          {{ trans('pages.thank_you.order_details') }}
+                      </button>
+                  {% endif %}
+              </div>
 
-                    {% if order.can_show_content %}
-                        {% for item in order.items %}
-                            {% if item.has_codes %}
-                                <div class="bg-light-gray p-5 rounded-md text-start mb-2.5">
-                                    <h2 class="font-bold mb-5 unicode">
-                                        {{ trans('pages.thank_you.codes') }} ({{ item.name }})
-                                    </h2>
-                                    {% for code in item.codes %}
-                                        <div class="md:flex justify-between">
-                                            <p class="unicode flex items-center mb-4 md:mb-0">
-                                                <i class=" sicon-debit-card-back text-lg"></i>
-                                                <span class="fix-align mx-2">{{ code.name }}</span>
-                                            </p>
-                                            <div x-data="{}"
-                                                 class="border relative border-border-color bg-white text-center text-primary x-5 w-64 rounded-full">
-                                                <button class="absolute top-2 start-5 opacity-80 hover:opacity-100"
-                                                        @click="copyToClipboard('product_code_{{ code.id }}')"><i class="copy-icon sicon-swap-stroke"></i>
-                                                </button>
-                                                <h3 id="product_code_{{ code.id }}" class="font-bold text-sm leading-10 p">{{ code.code }}</h3>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            {% if item.has_files %}
-                                <div class="bg-light-gray p-5 rounded-md text-start">
-                                    <h2 class="font-bold mb-5 unicode">
-                                        {{ trans('pages.thank_you.files') }} ({{ item.name }})
-                                    </h2>
-                                    <div class="divide-y divide-border-color">
-                                        {% for file in item.files %}
-                                            <div class="flex justify-between py-4">
-                                                <div class="text-sm">
-                                                    <i class="sicon-file-archive"></i>
-                                                    <span class="fix-align mx-3">{{ file.name }}</span>
-                                                </div>
-                                                <a href="{{ file.url_for_order(order) }}"
-                                                   class="text-primary text-sm font-bold">
-                                                    <i class="sicon-download text-lg"></i>
-                                                    <span class="fix-align">{{ trans('pages.thank_you.download') }}</span>
-                                                </a>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
+              {% if order.can_show_content %}
+                  {% for item in order.items %}
+                      {% if item.has_codes %}
+                          <div class="bg-light-gray p-5 rounded-md text-start mb-2.5">
+                              <h2 class="font-bold mb-5 unicode">
+                                  {{ trans('pages.thank_you.codes') }} ({{ item.name }})
+                              </h2>
+                              {% for code in item.codes %}
+                                  <div class="md:flex justify-between">
+                                      <p class="unicode flex items-center mb-4 md:mb-0">
+                                          <i class=" sicon-debit-card-back text-lg"></i>
+                                          <span class="fix-align mx-2">{{ code.name }}</span>
+                                      </p>
+                                      <div x-data="{}"
+                                            class="border relative border-border-color bg-white text-center text-primary x-5 w-64 rounded-full">
+                                          <button class="absolute top-2 start-5 opacity-80 hover:opacity-100"
+                                                  @click="copyToClipboard('product_code_{{ code.id }}')"><i class="copy-icon sicon-swap-stroke"></i>
+                                          </button>
+                                          <h3 id="product_code_{{ code.id }}" class="font-bold text-sm leading-10 p">{{ code.code }}</h3>
+                                      </div>
+                                  </div>
+                              {% endfor %}
+                          </div>
+                      {% endif %}
+                      {% if item.has_files %}
+                          <div class="bg-light-gray p-5 rounded-md text-start">
+                              <h2 class="font-bold mb-5 unicode">
+                                  {{ trans('pages.thank_you.files') }} ({{ item.name }})
+                              </h2>
+                              <div class="divide-y divide-border-color">
+                                  {% for file in item.files %}
+                                      <div class="flex justify-between py-4">
+                                          <div class="text-sm">
+                                              <i class="sicon-file-archive"></i>
+                                              <span class="fix-align mx-3">{{ file.name }}</span>
+                                          </div>
+                                          <a href="{{ file.url_for_order(order) }}"
+                                              class="text-primary text-sm font-bold">
+                                              <i class="sicon-download text-lg"></i>
+                                              <span class="fix-align">{{ trans('pages.thank_you.download') }}</span>
+                                          </a>
+                                      </div>
+                                  {% endfor %}
+                              </div>
+                          </div>
+                      {% endif %}
+                  {% endfor %}
+              {% endif %}
+          </div>
 
-                <div class="md:flex md:space-s-8">
-                    {% if order.email_sent %}
-                        <div class="duration-500 hover:shadow-default flex-1 bg-white p-8 pb-14  rounded-md mb-10 flex flex-col items-center">
-                            <div class="bg-gray-bg rounded-icon w-12 h-12 mb-2.5">
-                                <i class="sicon-newspaper-alt text-xl"></i>
-                            </div>
-                            <p class="text-sm mb-2.5">{{ trans('pages.thank_you.email_sent') }}</p>
-                            <b class="text-sm">{{ order.customer.email }}</b>
-                        </div>
-                    {% else %}
-                        <div class="duration-500 hover:shadow-default flex-1 bg-white p-8 pb-14  rounded-md mb-10 flex flex-col items-center">
-                            <div class="bg-gray-bg rounded-icon w-12 h-12 mb-2.5">
-                                <i class="sicon-newspaper-alt text-xl"></i>
-                            </div>
-                            <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
-                            <form id="resend_invoice"
-                                  action="{{ order.send_invoice_url }}"
-                                  class="form ajax"
-                                  data-filter-before-submit="beforeSubmit"
-                                  method="post"
-                                  data-on-success="onSuccess"
-                                  data-on-fail="onFail"
-                                  novalidate
-                                  data-resendcounter="1"
-                                  data-nonconfirm="true">
-                                {{ csrf_field() }}
-                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="your@email.com"
-                                           id="resend_invoice-email"
-                                           name="email">
-                                    <button type="submit"
-                                            id="resend_invoice-submit"
-                                            class="btn btn--padded less btn--primary btn--oval">
-                                        <span class="btn__text">{{ trans('pages.thank_you.sent_invoice') }}</span>
-                                        <div class="line-scale">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                        </div>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    {% endif %}
+          <div class="md:flex md:space-s-8">
+              {% if order.email_sent %}
+                  <div class="duration-500 hover:shadow-default flex-1 bg-white p-8 rounded-md mb-10 flex flex-col items-center justify-center">
+                      <div class="bg-gray-bg rounded-icon w-12 h-12 mb-2.5">
+                          <i class="sicon-newspaper-alt text-xl"></i>
+                      </div>
+                      <p class="text-sm mb-2.5">{{ trans('pages.thank_you.email_sent') }}</p>
+                      <b class="text-sm">{{ order.customer.email }}</b>
+                  </div>
+              {% else %}
+                  <div class="duration-500 hover:shadow-default flex-1 bg-white p-8  rounded-md mb-10 flex flex-col items-center justify-cente">
+                      <div class="bg-gray-bg rounded-icon w-12 h-12 mb-2.5">
+                          <i class="sicon-newspaper-alt text-xl"></i>
+                      </div>
+                      <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
+                      <form id="resend_invoice"
+                            action="{{ order.send_invoice_url }}"
+                            class="form ajax"
+                            data-filter-before-submit="beforeSubmit"
+                            method="post"
+                            data-on-success="onSuccess"
+                            data-on-fail="onFail"
+                            novalidate
+                            data-resendcounter="1"
+                            data-nonconfirm="true">
+                          {{ csrf_field() }}
+                          <div class="flex max-w-3xl w-full">
+                              <input type="email" class="form-control form-input" placeholder="your@email.com"
+                                      id="resend_invoice-email"
+                                      name="email">
 
-                    <div class="duration-500 hover:shadow-default flex-1 bg-white p-8 pb-14  rounded-md mb-10 flex flex-col items-center">
-                        <div class="bg-gray-bg rounded-icon w-12 h-12 mb-2.5">
-                            <i class="sicon-mail-letter text-xl"></i>
-                        </div>
-                        <p class="text-sm mb-2.5">{{ trans('common.titles.support') }}</p>
+                              <button type="submit" id="resend_invoice-submit" class="btn btn--has-loading btn-primary inline-flex items-center justify-center px-3 whitespace-nowrap ms-2">
+                                <span class="loader loader--small overflow-hidden"></span>
+                                <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('pages.thank_you.sent_invoice') }}</span>
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+              {% endif %}
 
-                        <div class="flex space-s-6">
-                            {% if store.contacts.mobile %}
-                                <div class="text-sm unicode flex items-center">
-                                    <i class="sicon-phone"></i>
-                                    <a href="tel:{{ store.contacts.mobile }}"><b class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
-                                </div>
-                            {% endif %}
+              <div class="duration-500 hover:shadow-default flex-1 bg-white p-8  rounded-md mb-10 flex flex-col items-center justify-center">
+                  <div class="bg-gray-bg rounded-icon w-12 h-12 mb-2.5">
+                      <i class="sicon-mail-letter text-xl"></i>
+                  </div>
+                  <p class="text-sm mb-2.5">{{ trans('common.titles.support') }}</p>
 
-                            {% if store.social.whatsapp %}
-                            <div class="text-sm unicode flex items-center">
-                                <i class="sicon-whatsapp"></i>
-                                <a href="tel:{{ store.contacts.whatsapp }}"><b class="unicode mx-1.5">{{ store.contacts.whatsapp }}</b></a>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                  <div class="flex space-s-6">
+                      {% if store.contacts.mobile %}
+                          <div class="text-sm unicode flex items-center">
+                              <i class="sicon-phone"></i>
+                              <a href="tel:{{ store.contacts.mobile }}" class="hover:text-primary transition"><b class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
+                          </div>
+                      {% endif %}
+
+                      {% if store.social.whatsapp %}
+                      <div class="text-sm unicode flex items-center">
+                          <i class="sicon-whatsapp"></i>
+                          <a href="tel:{{ store.contacts.whatsapp }}"><b class="unicode mx-1.5">{{ store.contacts.whatsapp }}</b></a>
+                      </div>
+                      {% endif %}
+                  </div>
+              </div>
+          </div>
+      </div> 
     </main>
 {% endblock %}
 
