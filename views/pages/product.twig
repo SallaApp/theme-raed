@@ -44,9 +44,7 @@
 | product.hide_zero_price    | bool                        |                                                                  |
 | product.has_options        | bool                        |                                                                  |
 | product.has_discount       | bool                        |                                                                  |
-| product.hide_zero_price    | bool                        |                                                                  |
 | product.hide_quantity      | bool                        |                                                                  |
-| product.hide_zero_price    | bool                        |                                                                  |
 | product.is_available       | bool                        |                                                                  |
 | product.is_donation        | bool                        |                                                                  |
 | in_wishlist                | bool                        |                                                                  |
@@ -135,10 +133,10 @@
                     <div class="mb-2">
                         <div class="space-s-1">
                             {% if product.on_sale %}
-                                <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                                <span class="text-sm text-gray-400 line-through">{{ product.regular_price }}</span>
+                                <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                             {% else %}
-                                <span>{{ product.price }}</span>
+                                <span>{{ product.price|money }}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -294,7 +292,7 @@
                                                    data-max_quantity="{{ product.max_quantity }}"
                                                    value="1"
                                                    class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                                   data-on-keyup="product-price"
+                                                   data-on-keyup="product::get.price"
                                                    aria-label="Product Quantity"
                                                    min="1"/>
 
@@ -315,10 +313,10 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2 text-end space-s-1">
                                     <div class="space-s-1">
                                         {% if product.on_sale %}
-                                            <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                                            <span class="text-sm text-gray-400 line-through">{{ product.regular_price }}</span>
+                                            <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                            <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                                         {% else %}
-                                            <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.price }}</h4>
+                                            <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.price|money }}</h4>
                                         {% endif %}
                                     </div>
                                 </div>
