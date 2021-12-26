@@ -1,24 +1,3 @@
-{#
-| Variable                                        | Type                       | Description                                                                    |
-|-------------------------------------------------|----------------------------|--------------------------------------------------------------------------------|
-| product.options                                 | ?ProductOption *Collection |                                                                                |
-| product.options[].id                            | int                        |                                                                                |
-| product.options[].name                          | string                     |                                                                                |
-| product.options[].required                      | bool                       |                                                                                |
-| product.options[].type                          | string                     | radio, date, datetime, time, image, text, textarea, number, checkbox, splitter |
-| product.options[].placeholder                   | ?string                    |                                                                                |
-| product.options[].option_type                   | ?string                    | color, image, text                                                             |
-| product.options[].not_same_day_order            | bool                       |                                                                                |
-| product.options[].availability_range            | bool                       |                                                                                |
-| product.options[].from_date_time                | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                |
-| product.options[].to_date_time                  | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                |
-| product.options[].visibility_condition          | ?object                    |                                                                                |
-| product.options[].visibility_condition.option   |                            |                                                                                |
-| product.options[].visibility_condition.operator |                            |                                                                                |
-| product.options[].visibility_condition.value    |                            |                                                                                |
-| product.options[].details                       | OptionDetails *Collection  |                                                                                |
-| product.options[].details                       | OptionDetails *Collection  |                                                                                |
-#}
 <section class="bg-white p-5 rounded-md mb-5">
     {% for key, option in product.options %}
         {% if option.type == "splitter" %}
