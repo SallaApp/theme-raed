@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
  *              count: number,
  *              sub_total: string,
  *              total_before_discount: string,
- *              items: Array<Object>,
+ *              items: null|Array<Object>,
  *              coupon_discount: number
  *           }
  * sections: {'free-shipping-bar':string}
@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
  * @typedef {{isAvailable: boolean, notes: string, has_special_price: boolean, product_image: string, product_price: {amount: string, currency: string}, source: null, type: string, orderItemImages: *[], product_quantity: number, options_data: {"18819": number, "18836": number, "18821": number}, total_product_price_formatted: string, total_special_price: {amount: string, currency: string}, offer: boolean, total: number, enable_upload_image: boolean, uploaded_files: null, special_price_formatted: string, product_id: number, product_currency: string, product_available_quantity: number, selectedOptions: number[], onSale: boolean, currency: string, id: number, hide_quantity: boolean, product_price_formatted: string, quantity: number, display_price: string, isCustomized: boolean, has_options: boolean, product_name: string, _total_product_price: number, url: string, product_maximum_quantity_per_order: null, product_advance_option: {}, active_advance: number, display_total_price: string, product_options: *[], special_price: {amount: string, currency: string}, total_special_price_formatted: string, _product_price: number, total_product_price: {amount: string, currency: string}, enable_note: boolean}} CartItem
  */
 let updateCartPageInfo = function (res) {
-    res.data.items.forEach(item => document.querySelector(`#item-${item.id}`)._x_dataStack[0].updateItemInfo(item));
+    res.data.items?.forEach(item => document.querySelector(`#item-${item.id}`)._x_dataStack[0].updateItemInfo(item));
 
     let shippingBar = res.sections['free-shipping-bar'];
-    let shippingBarEl = document.querySelector('#free-shipping-bar');
-    if (shippingBar && shippingBarEl) {
-        shippingBarEl.outerHTML = shippingBar;
+    if (!shippingBar) {
+        return;
     }
+    document.querySelectorAll('#free-shipping-bar').forEach(shippingBarEl => shippingBarEl.outerHTML = shippingBar);
 }
 window.hasApplePay = function () {
     return {'has_apple_pay': !!window.ApplePaySession};
@@ -57,11 +57,15 @@ function animatedItem(selector) {
 }
 
 // flatpickr
-flatpickr('#productCalendar', {
+flatpickr('.date-element', {
+    // "enableTime": true,
+    "dateFormat": "Y-m-d H:i",
+});
+flatpickr('.date-time-element', {
     "enableTime": true,
     "dateFormat": "Y-m-d H:i",
 });
-flatpickr('#receiveTime', {
+flatpickr('.time-element', {
     enableTime: true,
     noCalendar: true,
     dateFormat: "H:i",
@@ -187,7 +191,7 @@ window.initCartItem = function ({id, quantity, total, price, product_price, has_
             salla.cart.api
                 .deleteItem(this.itemId).then(res => {
                 updateCartPageInfo(res);
-                let item = document.querySelector('#item-' + itemId);
+                let item = document.querySelector('#item-' + this.itemId);
                 anime({
                     targets         : item,
                     height          : '0', // -> from 'height' to '0',

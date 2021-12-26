@@ -1,9 +1,14 @@
-{# {% block styles %}
-    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
-{% endblock %} #}
-
+{#
+| Variable   | Type          | Description                                             |
+|------------|---------------|---------------------------------------------------------|
+| option     | ProductOption | @see views/pages/partials/product/fields.twig           |
+| attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `       |
+| disabled   | bool          |                                                         |
+| required   | bool          |                                                         |
+| value      | ?string       |                                                         |
+#}
 <input name="options[{{ option.id }}]"
-       class="filepond form-control filepond--option-image"
+       class="filepond form-control filepond--option-image{{ required?' required':'' }}"
        data-max-file-size="3MB"
        data-url="{{ link('cart/option-image') }}"
        data-instant-upload
@@ -12,7 +17,3 @@
        {% endif %}
         {{ attirubtes|raw }}
        type="file"/>
-
-{# {% block scripts %}
-    <script defer src="{{ asset('/dist/filepond.js') }}"></script>
-{% endblock %} #}

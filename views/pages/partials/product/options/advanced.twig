@@ -1,38 +1,17 @@
-{#
-| Variable                                        | Type                       | Description                                                                    |
-|-------------------------------------------------|----------------------------|--------------------------------------------------------------------------------|
-| product.options                                 | ?ProductOption *Collection |                                                                                |
-| product.options[].id                            | int                        |                                                                                |
-| product.options[].name                          | string                     |                                                                                |
-| product.options[].required                      | bool                       |                                                                                |
-| product.options[].type                          | string                     | radio, date, datetime, time, image, text, textarea, number, checkbox, splitter |
-| product.options[].placeholder                   | ?string                    |                                                                                |
-| product.options[].option_type                   | ?string                    | color, image, text                                                             |
-| product.options[].not_same_day_order            | bool                       |                                                                                |
-| product.options[].availability_range            | bool                       |                                                                                |
-| product.options[].from_date_time                | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                |
-| product.options[].to_date_time                  | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                |
-| product.options[].visibility_condition          | ?object                    |                                                                                |
-| product.options[].visibility_condition.option   |                            |                                                                                |
-| product.options[].visibility_condition.operator |                            |                                                                                |
-| product.options[].visibility_condition.value    |                            |                                                                                |
-| product.options[].details                       | OptionDetails *Collection  |                                                                                |
-| product.options[].details                       | OptionDetails *Collection  |                                                                                |
-#}
 <section class="bg-white p-5 rounded-md mb-5">
     {% for key, option in product.options %}
         {% if option.type == "splitter" %}
             <div class="product-section splitter"></div>
         {% else %}
             <div class="{{ option.visibility_condition?'hidden':'' }}"
-                {% if option.visibility_condition %}
-                    data-visibility-option="{{ option.visibility_condition.option }}"
-                    data-visibility-operator="{{ option.visibility_condition.operator }}"
-                    data-visibility-value="{{ option.visibility_condition.value }}"
-                    data-key-prefix="{{ key_prefix }}"
-                {% endif %}>
+                    {% if option.visibility_condition %}
+                data-visibility-option="{{ option.visibility_condition.option }}"
+                data-visibility-operator="{{ option.visibility_condition.operator }}"
+                data-visibility-value="{{ option.visibility_condition.value }}"
+                data-key-prefix="{{ key_prefix }}"
+                    {% endif %}>
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                    <label for="product-color" class="form-label">
+                    <label for="options[{{ option.id }}]" class="form-label">
                         <b class="block">
                             {{ option.name }}
                             {% if option.required %}<span class="text-red-500">*</span>{% endif %}

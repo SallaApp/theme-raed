@@ -1,3 +1,33 @@
+{#
+| Variable                                        | Type                       | Description                                                                                    |
+|-------------------------------------------------|----------------------------|------------------------------------------------------------------------------------------------|
+| product.options                                 | ?ProductOption *Collection |                                                                                                |
+| product.options[].id                            | int                        |                                                                                                |
+| product.options[].name                          | string                     |                                                                                                |
+| product.options[].required                      | bool                       |                                                                                                |
+| product.options[].type                          | string                     | radio, date, datetime, time, image, text, textarea, number, checkbox, splitter                 |
+| product.options[].placeholder                   | ?string                    |                                                                                                |
+| product.options[].option_type                   | ?string                    | color, image, text                                                                             |
+| product.options[].not_same_day_order            | bool                       |                                                                                                |
+| product.options[].availability_range            | bool                       |                                                                                                |
+| product.options[].from_date_time                | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                                |
+| product.options[].to_date_time                  | ?string                    | Date, ex: `2021-12-21 21:21:21`                                                                |
+| product.options[].visibility_condition          | ?object                    |                                                                                                |
+| product.options[].visibility_condition.option   | int                        | An id of another option from the types (`checkbox`, `radio`)                                   |
+| product.options[].visibility_condition.operator | string                     | `=` or `!=`                                                                                    |
+| product.options[].visibility_condition.value    | int                        | An id of optionDetail                                                                          |
+| product.options[].field                         | string                     | Html content from files `views/components/product/elements/*.twig`                             |
+| product.options[].details                       | OptionDetail *Collection   |                                                                                                |
+| product.options[].details[].id                  | int                        |                                                                                                |
+| product.options[].details[].name                | string                     | Name only ex `Red`                                                                             |
+| product.options[].details[].full_name           | string                     | Includes name, additional price, and outOfStock ex `Red (+100SAR) - Out Of Stock`              |
+| product.options[].details[].additional_price    | float                      | ex: `100`                                                                                      |
+| product.options[].details[].option_value        | ?string                    | The value of `product.options[].option_type`, hexColor or image url for types `color`, `image` |
+| product.options[].details[].image               | ?string                    | An alias for `.option_value`, should be use when `product.options[].option_type` = `image`     |
+| product.options[].details[].color               | ?string                    | Hex Color, should be use when `product.options[].option_type` = `color`                        |
+| product.options[].details[].is_selected         | bool                       | Does current option selected? (useful in cart page)                                            |
+| product.options[].details[].is_out              | bool                       | Does current option out of stock?                                                              |
+#}
 {% if product.type in ['service', 'food'] %}
     {% include 'pages.partials.product.options.advanced' %}
 {% elseif product.type == 'donating' %}

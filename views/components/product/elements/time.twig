@@ -1,6 +1,15 @@
+{#
+| Variable   | Type          | Description                                             |
+|------------|---------------|---------------------------------------------------------|
+| option     | ProductOption | @see views/pages/partials/product/fields.twig           |
+| attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `       |
+| disabled   | bool          |                                                         |
+| required   | bool          |                                                         |
+| value      | ?string       |                                                         |
+#}
 <input placeholder="{{ option.placeholder }}"
        id="receiveTime"
-       class="form-input time-element"
+       class="form-input time-element{{ required?' required':'' }}"
        name="options[{{ option.id }}]"
         {{ attirubtes|raw }}
        readonly="readonly"
