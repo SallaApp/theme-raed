@@ -178,9 +178,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let Items = document.querySelectorAll('.go-to-slide')
         Items.forEach(item => {
-            let slideindex = item.dataset.slideindex;
+            let imageId = item?.dataset.dataImgId
+            let slideIndex = document.querySelector(`[data-img-id *= "${imageId}"]`).dataset.slidIndex;
             item.addEventListener('click', function (e) {
-                swiper2.slideTo(slideindex, 0);
+                swiper2.slideTo(slideIndex, 0);
             });
         })
     });

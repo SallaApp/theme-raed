@@ -20,13 +20,13 @@
             {% for brand in component.brands %}
                 {% if loop.first or loop.index0%3==0 %}
                     <a href="{{ brand.url }}"
-                       class="duration-300 hover:shadow-default {{component.brands|length > 4  ? 'sm:row-span-2': '' }} flex justify-center items-center bg-white transition hover:opacity-95 h-40 sm:h-auto bg-cover text-white text-center md:px-20 p-5 rounded-md overflow-hidden relative">
+                       class="duration-300 hover:shadow-default {{component.brands|length > 4  ? 'sm:row-span-2 sm:h-auto': 'md:h-banner' }} flex justify-center items-center bg-white transition hover:opacity-95 h-40 bg-cover  md:px-20 p-5 rounded-md overflow-hidden relative">
                         <img class="max-h-full" src="{{ brand.logo }}" alt=""/>
                     </a>
                 {% else %}
 
                     <a href="{{ brand.url }}"
-                       class="duration-300 hover:shadow-default flex justify-center items-center bg-white transition hover:opacity-95 bg-cover h-40 md:h-banner text-white text-center md:px-10 p-5 rounded-md overflow-hidden relative">
+                       class="duration-300 hover:shadow-default flex justify-center items-center bg-white transition hover:opacity-95 bg-cover h-40 md:h-banner text-center md:px-10 p-5 rounded-md overflow-hidden relative">
                         <img class="max-h-full" src="{{ brand.logo }}" alt=""/>
                     </a>
                 {% endif %}
