@@ -81,7 +81,7 @@
                                     name="{{ is_cart?'image_file':'file' }}"
                                     multiple
                                     {% if is_cart %}
-                                        {# "product" here is presenter for cart_item, so {product.id} id {cart_item.id} #}
+                                        {# "product" here is actually cart.items[*], so {product.id} is {item.id} #}
                                         data-url="{{ link('cart/image') }}"
                                         data-instant-upload
                                         data-files="{{ product.attachments }}"
