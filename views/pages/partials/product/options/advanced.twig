@@ -4,14 +4,14 @@
             <div class="product-section splitter"></div>
         {% else %}
             <div class="{{ option.visibility_condition?'hidden':'' }}"
-                {% if option.visibility_condition %}
-                    data-visibility-option="{{ option.visibility_condition.option }}"
-                    data-visibility-operator="{{ option.visibility_condition.operator }}"
-                    data-visibility-value="{{ option.visibility_condition.value }}"
-                    data-key-prefix="{{ key_prefix }}"
-                {% endif %}>
+                    {% if option.visibility_condition %}
+                data-visibility-option="{{ option.visibility_condition.option }}"
+                data-visibility-operator="{{ option.visibility_condition.operator }}"
+                data-visibility-value="{{ option.visibility_condition.value }}"
+                data-key-prefix="{{ key_prefix }}"
+                    {% endif %}>
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                    <label for="product-color" class="form-label">
+                    <label for="options[{{ option.id }}]" class="form-label">
                         <b class="block">
                             {{ option.name }}
                             {% if option.required %}<span class="text-red-500">*</span>{% endif %}

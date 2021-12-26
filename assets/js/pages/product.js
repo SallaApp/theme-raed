@@ -134,11 +134,15 @@ document.addEventListener('DOMContentLoaded', function () {
         scrollThreshold: false
     })
 
-    flatpickr('#productCalendar', {
+    flatpickr('.date-element', {
+        // "enableTime": true,
+        "dateFormat": "Y-m-d H:i",
+    });
+    flatpickr('.date-time-element', {
         "enableTime": true,
         "dateFormat": "Y-m-d H:i",
     });
-    flatpickr('#receiveTime', {
+    flatpickr('.time-element', {
         enableTime: true,
         noCalendar: true,
         dateFormat: "H:i",
