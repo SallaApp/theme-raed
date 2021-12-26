@@ -7,7 +7,7 @@ Alpine.start();
 
 salla.init({debug: true});//TODO:: remove it in production
 salla.notify.setNotifier((...data) => salla.log(...data));
-salla.currency.event.onChange(event => window.location.reload())
+salla.currency.event.onChanged(event => window.location.reload())
 
 // mobile menu
 const menu = new MmenuLight(
