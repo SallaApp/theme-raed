@@ -327,8 +327,8 @@
                 {# {% if order.reorder_enabled %} #}
                 {% component reorder with {order:order} %}
 
-                {# todo:: add settings.rating.is_enabled in it these three conditions, & they stay#}
-                {% if store.settings.rating.store or store.settings.rating.products or store.settings.rating.shipping %}
+                
+                {% if store.settings.rating.is_enabled %}
                     {% include 'pages.partials.rating' with {'order':order} %}
                 {% endif %}
             </div>

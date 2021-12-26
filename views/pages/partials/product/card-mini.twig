@@ -13,11 +13,11 @@ flex flex-col md:flex-row'>
         <div class="w-full flex justify-between items-center mb-4">
             {% if product.on_sale %}
                 <div class="space-s-1">
-                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price }}</h4>
-                    <span class="text-sm text-gray-400 line-through">{{ product.regular_price }}</span>
+                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                    <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                 </div>
             {% else %}
-                <h4 class="text-primary font-bold text-sm">{{ product.price }}</h4>
+                <h4 class="text-primary font-bold text-sm">{{ product.price|money }}</h4>
             {% endif %}
             {% if product.rating %}
                 <div class="text-gray-400">
