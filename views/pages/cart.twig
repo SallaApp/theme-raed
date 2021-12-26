@@ -52,7 +52,7 @@
                     {% for item in cart.items %}
                         {% set key_prefix=item.id %}
                         <section x-data="initCartItem({{ item.get('id', 'quantity', 'total', 'price', 'product_price', 'has_offer', 'offer')|json_encode }})"
-                                {# verifyDataBeforeSend function existed in assets/js/pages/cart.js #}
+                                {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
                                  data-filter-before-submit="verifyDataBeforeSend"
                                  class="bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
                                  id="item-{{ item.id }}" salla-form-data data-on-change="cart::update-item">

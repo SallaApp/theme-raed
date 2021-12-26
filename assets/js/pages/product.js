@@ -1,6 +1,8 @@
 import flatpickr from "flatpickr";
 import fslightbox from 'fslightbox';
+
 require('../../dist/filepond.js');
+require('../partials/pages/product-options');
 
 window.fslightbox = fslightbox;
 
@@ -24,19 +26,19 @@ window.initProductDetails = function (productId, inFavorite, showReadMore) {
                 scale   : [0.6, 1],
             });
         },
-        addQty: function () {
-            salla.api.product.getPrice({ id: this.itemId, quantity: this.itemQty + 1 })
+        addQty        : function () {
+            salla.api.product.getPrice({id: this.itemId, quantity: this.itemQty + 1})
                 .then(res => {
                     updateCartPageInfo(res);
                     this.itemQty++;
                 });
         },
-        subQty: function () {
+        subQty        : function () {
             if (this.itemQty <= 1) {
                 return;
             }
             salla.cart.api
-                .updateItem({ id: this.itemId, quantity: this.itemQty - 1 })
+                .updateItem({id: this.itemId, quantity: this.itemQty - 1})
                 .then(res => {
                     this.itemQty--;
                     updateCartPageInfo(res);
@@ -61,11 +63,11 @@ window.initProductDetails = function (productId, inFavorite, showReadMore) {
 
             salla.product.api
                 .availabilitySubscribe({
-                    id: product_id,
-                    email: email_input ? email_input.value : null,
+                    id    : product_id,
+                    email : email_input ? email_input.value : null,
                     mobile: mobile_input ? mobile_input.value : null,
                     //country_code:country_code_input ? country_code_input.innerText : null
-                    country_code:country_code_input ? country_code_input.value : null
+                    country_code: country_code_input ? country_code_input.value : null
                 })
                 .then(res => {
                     this.reminderModal = false;
@@ -75,8 +77,8 @@ window.initProductDetails = function (productId, inFavorite, showReadMore) {
         animateCommonItems: function () {
             let that = this;
             anime({
-                targets: '.common-anime-r',
-                opacity: [0, 1],
+                targets   : '.common-anime-r',
+                opacity   : [0, 1],
                 translateY: [40, 0],
 
                 delay: function (el, i) {
@@ -118,13 +120,12 @@ window.initProductDetails = function (productId, inFavorite, showReadMore) {
     }
 }
 
-window.append_image = function (form_data, that, event) {
+window.append_image = function (formData, element, event) {
     let fileInput = window.fileponds ? window.fileponds["attached_file_" + window.productId] : undefined;
-    if (!fileInput) {
-        return form_data;
+    if (fileInput) {
+        fileInput.getFiles().forEach(filepond => formData.append('file[]', filepond.file))
     }
-    fileInput.getFiles().forEach(filepond => form_data.append('file[]', filepond.file))
-    return form_data;
+    return window.verifyDataBeforeSend(formData, element, event);
 };
 
 document.addEventListener('DOMContentLoaded', function () {

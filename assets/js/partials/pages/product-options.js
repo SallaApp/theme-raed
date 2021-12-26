@@ -3,25 +3,48 @@ document.addEventListener('DOMContentLoaded', () => {
     salla.document.event.onChange('.visibility_condition', event => visibilityConditionCheck(event.target));
 //lets call event to show correct fields in cart page
     document.querySelectorAll('.visibility_condition').forEach(input => visibilityConditionCheck(input));
+    initateOptions = false;
 });
 window.verifyDataBeforeSend = function (formData, element, event) {
     if (!element) {
         return;
     }
+    let shouldPass = true;
 
     element.querySelectorAll('[required]:not(:disabled)').forEach(input => {
         //get the value for option, if it's empty return
-        let inputValue = formData
-            ? input.name.replace(']', '').split('[').reduce((data, key) => data[key], formData)
-            : undefined;
-        if (inputValue === undefined || inputValue === '') {
-            input.classList.add('border', 'border-red-400');
-            //TODO:: add error
-            return formData = false;
+        let inputValue = getDataUsingKeyPath(formData, input.name);
+        //we may accept 0, '0'
+        if (toggleError(input, inputValue === undefined || inputValue === '' || inputValue === null)) {
+            return shouldPass = false;
         }
-        input.classList.remove('border', 'border-red-400');
     });
-    return formData;
+    return shouldPass ? formData : false;
+}
+
+function toggleError(element, isHideError = true) {
+    let classes = ['border', 'border-red-400'];
+    //is checkbox or radio, toggle error to their labels
+    if (element.checked !== undefined) {
+        element = document.querySelector(`[for="${element.name}"]`);
+        classes = ['text-red-400'];
+    }
+    isHideError ? element.classList.add(...classes) : element.classList.remove(...classes);
+    //TODO:: add show error message.
+    return isHideError;
+}
+
+function getDataUsingKeyPath(objectData, keyPath) {
+    if (!objectData) {
+        return objectData;
+    }
+
+    return objectData instanceof FormData
+        ? objectData.get(keyPath)
+        : keyPath.replace(']', '')
+            .replace('[', '.')
+            .split('.')
+            .reduce((data, key) => data[key], objectData);
 }
 
 function visibilityConditionCheck(input) {
@@ -70,5 +93,4 @@ function toggleElement(field, showIt) {
             salla.document.event.fireEvent(input, 'change', {'bubbles': true});
         }
     });
-    initateOptions = false;
 }

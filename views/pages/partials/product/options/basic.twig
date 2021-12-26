@@ -1,24 +1,24 @@
 {% for option_index, option in product.options %}
     {% if option.option_type=='color' %}
-
         <section class="bg-white p-5 rounded-md mb-5">
-            <h2 class="text-sm font-bold mb-4">{{ option.name }}</h2>
+            <h2 class="text-sm font-bold mb-4" for="options[{{ option.id }}]">{{ option.name }}</h2>
             <div class="custom-radios custom-radios--rounded">
-                {% for  detail in  option.details %}
+                {% for detail in option.details %}
                     <div class="me-8 mb-8">
-                        <input {{ option.is_selected(detail.id)?'checked':'' }}
+                        <input {{ detail.is_selected?'checked':'' }}
                                 {% if not is_cart %}
-                                    data-on-change="product-price" data-allow-default
+                                    data-on-change="product::get.price" data-allow-default
                                 {% endif %}
-                                {{ detail.has_quantity(product) ? '' : 'disabled' }}
+                                {{ detail.is_out?"disabled":"" }}
                                 name="options[{{ option.id }}]"
                                 value="{{ detail.id }}"
+                                required
                                 id="color_option_{{ detail.id }}-{{ product.id }}"
                                 type="radio"/>
                         <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ product.id }}">
                             <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
                             <p class="text-sm text-gray-400">{{ detail.name }}</p>
-                             {% if not detail.has_quantity(product) %}
+                             {% if detail.is_out %}
                                 <small class=" text-gray-400">({{ trans('pages.products.out_of_stock') }})</small>
                              {% endif %}
                         </label>
@@ -30,18 +30,19 @@
     {% elseif option.option_type=='image' %}
 
         <section class="bg-white p-5 rounded-md mb-5">
-            <h2 class="text-sm font-bold mb-4">{{ option.name }}</h2>
+            <h2 class="text-sm font-bold mb-4" for="options[{{ option.id }}]">{{ option.name }}</h2>
             <div class="radio-images grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-3"
                  data-productid="{{ product.id }}"
                  data-option_id="{{ detail.id }}"
                  data-product-name="{{ product.name }}">
                 {% for detail_index, detail in option.details %}
                     <div class="relative inline-block text-center w-full">
-                    <input {{ option.is_selected(detail.id)?'checked':'' }}
+                    <input {{ detail.is_selected?'checked':'' }}
+                            required
                             type="radio"
                             class="image-option"
                             id="option_{{ detail.id }}-{{ product.id }}"
-                            {{ detail.has_quantity(product)?'':'disabled' }}
+                            {{ detail.is_out?"disabled":"" }}
                             data-productid="{{ product.id }}"
                             data-itemid="{{ detail.id }}"
                             name="options[{{ option.id }}]"
@@ -56,7 +57,7 @@
 
                     </label>
                     <p class="text-sm text-gray-400">{{ detail.name}}</p>
-                    {% if not detail.has_quantity(product) %}
+                    {% if detail.is_out %}
                         <small class="block absolute bottom-10 left-1/2 transform -translate-x-1/2  rounded-full px-2.5 pb-1 bg-red-400 text-white whitespace-nowrap">{{ trans('pages.products.out_of_stock') }}</small>
                      {% endif %}
                     </div>
@@ -77,11 +78,12 @@
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <select class="form-input appearance-none"
                             name="options[{{ option.id }}]"
+                            required
                             data-option="{{ option.id }}"
                             {{ attirubtes|raw }}>
                         {% for key,detail in option.details %}
-                            <option {{ option.is_selected(detail.id) ? "selected" : "" }} value="{{ detail.id }}">
-                                {{ detail.full_name(option.product) }}
+                            <option {{ detail.is_selected ? "selected" : "" }} value="{{ detail.id }}">
+                                {{ detail.full_name}}
                             </option>
                         {% endfor %}
                     </select>
