@@ -1,34 +1,44 @@
 {#
-| Variable                                             | Type                       | Description                                                                    |
-|------------------------------------------------------|----------------------------|--------------------------------------------------------------------------------|
-| is_cart                                              | bool                       | `true`: shared variable for all views                                          |
-| cart                                                 | Cart                       |                                                                                |
-| cart.id                                              | string                     | Unique string for current cart                                                 |
-| cart.is_require_shipping                             | bool                       | Does one of cart items require shipping?                                       |
-| cart.has_shipping                                    | bool                       | Does shipping company selected?                                                |
-| cart.real_shipping_cost                              | float                      | Shipping cost can become free by an offer, coupon                              |
-| cart.real_discount                                   | float                      | real discount considering tax (this for show only)                             |
-| cart.sub_total                                       | float                      | The sum of items price without shipping or other costs                         |
-| cart.discount                                        | float                      | final discount                                                                 |
-| cart.coupon                                          | ?string                    |                                                                                |
-| cart.total                                           | float                      |                                                                                |
-| cart.items                                           | CartItem[]                 |                                                                                |
-| cart.items[].id                                      | int                        |                                                                                |
-| cart.items[].url                                     | string                     | Product url                                                                    |
-| cart.items[].quantity                                | int                        |                                                                                |
-| cart.items[].type                                    | string                     | product type                                                                   |
-| cart.items[].product_price                           | MoneyTaxable               |                                                                                |
-| cart.items[].price                                   | Money\|MoneyTaxable        |                                                                                |
-| cart.items[].total                                   | Money                      |                                                                                |
-| cart.items[].product_id                              | int                        |                                                                                |
-| cart.items[].can_add_note                            | bool                       |                                                                                |
-| cart.items[].can_upload_file                         | bool                       |                                                                                |
-| cart.items[].is_available                            | bool                       |                                                                                |
-| cart.items[].is_donation                             | bool                       |                                                                                |
-| cart.items[].can_donate                              | bool                       |                                                                                |
-| cart.items[].offer                                   |                            |                                                                                |
-| cart.items[].donation                                |                            | TODO::                                                                         |
-| cart.items[].attachments                             |                            |                                                                                |
+| Variable                                | Type                | Description                                            |
+|-----------------------------------------|---------------------|--------------------------------------------------------|
+| is_cart                                 | bool                | `true`: shared variable for all views                  |
+| cart                                    | Cart                |                                                        |
+| cart.id                                 | string              | Unique string for current cart                         |
+| cart.is_require_shipping                | bool                | Does one of cart items require shipping?               |
+| cart.has_shipping                       | bool                | Does shipping company selected?                        |
+| cart.real_shipping_cost                 | float               | Shipping cost can become free by an offer, coupon      |
+| cart.real_discount                      | float               | real discount considering tax (this for show only)     |
+| cart.sub_total                          | float               | The sum of items price without shipping or other costs |
+| cart.discount                           | float               | final discount                                         |
+| cart.coupon                             | ?string             |                                                        |
+| cart.total                              | float               |                                                        |
+| cart.items                              | CartItem[]          |                                                        |
+| cart.items[].id                         | int                 |                                                        |
+| cart.items[].url                        | string              | Product url                                            |
+| cart.items[].quantity                   | int                 |                                                        |
+| cart.items[].type                       | string              | product type                                           |
+| cart.items[].product_price              | MoneyTaxable        |                                                        |
+| cart.items[].price                      | Money\|MoneyTaxable |                                                        |
+| cart.items[].total                      | Money               |                                                        |
+| cart.items[].product_id                 | int                 |                                                        |
+| cart.items[].notes                      | string              |                                                        |
+| cart.items[].can_add_note               | bool                |                                                        |
+| cart.items[].can_upload_file            | bool                |                                                        |
+| cart.items[].is_available               | bool                |                                                        |
+| cart.items[].is_donation                | bool                |                                                        |
+| cart.items[].can_donate                 | bool                |                                                        |
+| cart.items[].offer                      | ?object             |                                                        |
+| cart.items[].offer.discount             | float               |                                                        |
+| cart.items[].offer.is_free              | bool                |                                                        |
+| cart.items[].offer.names                | ?string             | ex: `Buy 3 and the 4th on us, National Day`            |
+| cart.items[].offer.price_after_discount | float               |                                                        |
+| cart.items[].donation                   | ?object             | TODO::                                                 |
+| cart.items[].attachments                | ?array              |                                                        |
+| cart.items[].attachments[].id           | int                 | image id, to be attache with the formData              |
+| cart.items[].attachments[].url          | string              | image url                                              |
+| cart.items[].attachments[].product_id   | int                 |                                                        |
+| cart.items[].attachments[].item_id      | int                 |                                                        |
+| cart.items[].attachments[].name         | int                 | image file name                                        |
 #}
 
 {% extends "layouts.master" %}
@@ -50,6 +60,7 @@
             <div class="flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
                 <div class="main-content flex-1 w-full">
                     {% for item in cart.items %}
+                        {{ item.attachments?'':dump(item.attachments) }}
                         {% set key_prefix=item.id %}
                         <section x-data="initCartItem({{ item.get('id', 'quantity', 'total', 'price', 'product_price', 'has_offer', 'offer')|json_encode }})"
                                 {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
