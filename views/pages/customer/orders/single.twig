@@ -368,10 +368,10 @@
 {% endif %} #}
 
                     <!-- cancel && reorder -->
-                    {% if order.can_reorder %}
+                    {% if order.can_reorder || order.can_cancel %}
                         <div x-data="{openReorderModal: false, openCancelOrderModal:false}">
                             <div class="bg-white my-10 p-5 divide-y divide-border-color space-y-5 rounded-md">
-
+                                {% if order.can_reorder %}
                                 <div class="flex justify-between">
                                     <div class="text-sm">
                                         <h3 class="font-bold">إعادة الطلب</h3>
@@ -391,6 +391,7 @@
                                         </button>
                                     {% endif %}
                                 </div>
+                                {% endif %}
 
                                 {% if order.can_cancel %}
                                     <div class="flex justify-between pt-2">
@@ -407,10 +408,9 @@
                                 {% endif %}
                             </div>
                         </div>
-
-
+                        S
                         <!-- Reorder Popup  -->
-                        {% if not order.is_pending_payment %}
+                        {% if order.can_reorder and not order.is_pending_payment %}
                             <div x-show="openReorderModal" x-cloak class="fixed z-10 inset-0 overflow-y-auto"
                                  aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                 <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -525,7 +525,6 @@
                         </div>
                     {% endif %}
                     <!-- End Cancel order Popup -->
-
 
                     {% if store.settings.rating.is_enabled %}
                         {% include 'pages.partials.rating' with {'order':order} %}

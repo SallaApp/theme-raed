@@ -41,7 +41,20 @@
                         <img src="{{ article.image }}" alt="{{ article.image_alt }}" title="{{ article.image_alt }}" class="h-80 mb-10 w-full object-cover rounded-md"/>
                     {% endif %}
 
-                    <p class="leading-7 text-sm mb-10">{{ article.description|raw }}</p>
+                    <article class="leading-7 text-sm mb-10">{{ article.description|raw }}</article>
+
+                    {% if article.tags is not empty %}
+
+                        <div class="p-4 flex flex-wrap items-center border-t border-border-color">
+                            {% for tag in article.tags %}
+                                <a href="{{ tag.url }}" class="py-2 px-4 rounded-large inline-flex items-center text-gray-text hover:text-dark justify-center text-sm">
+                                    <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                                    <span class="fix-align whitespace-nowrap">{{ tag.name }}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
                 </div>
 
                 <aside aria-label="Sidebar" class="sticky flex-shrink-0 top-24 md:w-96 lg:ms-8 pb-11">
