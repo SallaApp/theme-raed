@@ -7,11 +7,11 @@
 | required   | bool          |                                                         |
 | value      | ?string       |                                                         |
 #}
-<section class="bg-white p-5 rounded-md mb-5">
+<section class="bg-white p-5 rounded-md mb-5 pb-1">
     <h2 class="text-sm font-bold mb-4" for="options[{{ option.id }}]">{{ option.name }}</h2>
     <div class="custom-radios custom-radios--rounded">
         {% for detail in option.details %}
-            <div class="me-8 mb-8">
+            <div class="me-8 mb-5">
                 <input {{ detail.is_selected?'checked':'' }}
                         {% if not is_cart %}
                             data-on-change="product::get.price" data-allow-default
