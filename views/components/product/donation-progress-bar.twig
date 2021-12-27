@@ -1,11 +1,28 @@
-<div class="progress-bar progress-bar--primary progress-bar--oval">
-    <span>{{trans('pages.products.target')}}</span>
-    <div class="list list--horizontal list--auto-width list--s-between mb-10">
-        <span>{{ donation.total_price }}</span>
-        <span>{{ donation.target_price }}</span>
+{#
+| Variable                          | Type            | Description                                                            |
+|-----------------------------------|-----------------|------------------------------------------------------------------------|
+| product.donation                  | ProductDonation |                                                                        |
+| product.donation.target_message   | ?string         | Message if reached to target or target expired                         |
+| product.donation.collected_amount | Money           |                                                                        |
+| product.donation.target_amount    | Money           |                                                                        |
+| product.donation.target_percent   | float           |                                                                        |
+| product.donation.target_end_date  | ?Date           |                                                                        |
+| product.donation.can_donate       | bool            | `true` When there is no campaign or (target not reached & not expired) |
+#}
+{% if product.donation.target_message %}
+    <span>{{ product.donation.target_message }}</span>
+{% else %}
+    <h2 class="text-sm mb-4">{{ trans('pages.products.target') }}</h2>
+    <div class="flex justify-between text-sm mb-2.5">
+        <span>{{ product.donation.collected_amount|money }}</span>
+        <span>{{ product.donation.target_amount|money }}</span>
     </div>
-    <div class="progress-bar__bg">
-        <span class="progress-bar__progress" style="width: {{ target_percent }}%"></span>
+    <div class="bg-border-color rounded-full  mb-1.5">
+        <div class="progress-bg transition-all duration-500 opacity0 h-4 bg-primary relative rounded-full flex justify-end"
+             style="width: {{ product.donation.target_percent }}%">
+        </div>
     </div>
-    <hr/>
-</div>
+    {% if product.donation.target_end_date %}
+        <small class="text-xs text-gray-400">{{ trans('pages.products.donation_target_date') }} {{ product.donation.target_end_date|date }}</small>
+    {% endif %}
+{% endif %}
