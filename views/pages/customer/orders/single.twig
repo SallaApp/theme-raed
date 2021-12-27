@@ -92,12 +92,12 @@
                                 </td>
                             {% endif %}
 
-                             <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                <div class="me-2 font-normal text-gray-400">رقم الشحنة</div>
-                                <b>CRDSAL0043182320</b>
-                                <a class="text-primary font-bold" href="#"> (تتبع الطلب) </a>
-                                
-                            </td>
+                            {% if order.shipping.number %}
+                                <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                                    <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.shipment_no') }}</div>
+                                    <b>{{ order.shipping.number|raw }}</b>
+                                </td>
+                            {% endif %}
 
                             <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                             <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl"
@@ -272,6 +272,29 @@
                                         </dl>
                                     </div>
                                 {% endif %}
+
+                                {# Rating #}
+                                <div class="border-t mt-10 pt-8">
+                                    <h2 class="mb-3 text-sm font-bold">تقييم المنتج</h2>
+                                    <textarea class="form-input h-20" placeholder="تقييمك للمنتج ..."></textarea>
+
+                                    <div x-data="{ temp: 0, orig: 0 }" x-cloak class="flex items-center cursor-pointer mt-3" @click="orig = temp">
+                                    <input type="number" :value="orig" class="hidden"/>
+                                    <template x-for="item in [1,2,3,4,5]">
+                                    <span @mouseenter="temp = item" 
+                                            @mouseleave="temp = orig"
+                                            class="text-gray-300 sicon-star2 me-2 text-lg"
+                                            :class="{'text-theme-yellow': (temp >= item)}"></span>
+                                    </template>
+                                    <template x-cloak>
+                                        <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
+                                        <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
+                                        <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
+                                        <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
+                                        <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
+                                    </template>
+                                    </div>
+                                </div>
                             </div>
                         {% endfor %}
 
@@ -402,7 +425,28 @@
                                 {% endif %}
                             </div>
                         </div>
-                        S
+
+                        {# Rating Store and Shipping #}
+                        <section class="bg-white my-10 p-5 rounded-md mb-5">
+                            <h2 class="text-xl font-bold mb-5">ما رأيك في المتجر؟</h2>
+                            <textarea class="form-input h-20 mb-4" placeholder="تقييمك للمتجر ..."></textarea>
+                                    <div x-data="{ temp: 0, orig: 0 }" class="flex items-center cursor-pointer" @click="orig = temp">
+                                    <input type="number" :value="orig" class="hidden"/>
+                                    <template x-for="item in [1,2,3,4,5]">
+                                    <span @mouseenter="temp = item" 
+                                            @mouseleave="temp = orig"
+                                            class="text-gray-300 sicon-star2 me-2 text-lg"
+                                            :class="{'text-theme-yellow': (temp >= item)}"></span>
+                                    </template>
+                                    <template x-cloak>
+                                        <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
+                                        <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
+                                        <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
+                                        <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
+                                        <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
+                                    </template>
+                            </section>
+                        
                         <!-- Reorder Popup  -->
                         {% if order.can_reorder and not order.is_pending_payment %}
                             <div x-show="openReorderModal" x-cloak class="fixed z-10 inset-0 overflow-y-auto"
