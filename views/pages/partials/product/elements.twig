@@ -28,58 +28,113 @@
 | product.options[].details[].is_selected         | bool                       | Does current option selected? (useful in cart page)                                            |
 | product.options[].details[].is_out              | bool                       | Does current option out of stock?                                                              |
 #}
-{% if product.type in ['service', 'food'] %}
-    {% include 'pages.partials.product.options.advanced' %}
-{% elseif product.type == 'donating' %}
-    {% include 'pages.partials.product.options.donation' %}
+{% if product.is_donation %}
+    <div id="cart_donating_form">
+        {% component 'product.donation-progress-bar' with {product:product} %}
+        <div class="product-section product-section--has-label">
+            <div>
+                <label>{{ trans('pages.products.donation_amount') }}</label>
+            </div>
+            <div class="form-group">
+                {% if product.can_donate %}
+                    {{ csrf_field() }}
+                    <div class="input-group input-group--end">
+                        <input placeholder="{{ trans('pages.products.donation_placeholder') }}"
+                               type="text"
+                               id="donating_amount"
+                               name="{{ is_cart?'amount_donating':'donating_amount' }}"
+                               class="form-control _parseArabicNumbers"
+                               value="{{ is_cart?product.price:'' }}"
+                               data-digits-with-decimal
+                               data-digits/>
+                        <span class="input-group-addon"> {{ currency }} </span>
+                    </div>
+                {% else %}
+                    <h4 class="d-block wide font-xsm color-danger">
+                        {% if product.donation.completed %}
+                            {{ trans('pages.products.donation_exceed_target_amount') }}
+                        {% else %}
+                            {{ trans('pages.products.donation_exceed_target_date') }}
+                        {% endif %}
+                    </h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% elseif product.has_custom_form %}
+    <section class="bg-white p-5 rounded-md mb-5">
+        {% for option_index, option in product.options %}
+            {% if option.type == "splitter" %}
+                <div class="product-section splitter"></div>
+            {% else %}
+                <div class="{{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                        <label for="options[{{ option.id }}]" class="form-label">
+                            <b class="block">
+                                {{ option.name }}
+                                {% if option.required %}<span class="text-red-500">*</span>{% endif %}
+                            </b>
+                            <small class="text-gray-text">{{ option.placeholder }}</small>
+                        </label>
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            {{ option.element|raw }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </section>
 {% else %}
-    {% include 'pages.partials.product.options.basic' %}
+    {% for option_index, option in product.options %}
+        {{ option.element|raw }}
+    {% endfor %}
 {% endif %}
 
 {% if product.can_add_note or product.can_upload_file %}
     <section class="bg-white p-5 rounded-md mb-5">
         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                <label class="form-label">
-                    <b class="block">
-                        {{ trans('pages.products.attachments') }}
-                    </b>
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end" x-data="{ tab: '{{ product.notes ? "showNote": (product.attachments|length ? "showUpload":"") }}' }">
-                    <div class="flex space-s-3 mb-1">
-                        {% if product.can_add_note %}
-                            <button type="button" @click="tab = 'showNote'" data-show="#note_{{ product.id }}"
-                                    class="w-full focus:outline-none  bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-gray-500 justify-center text-sm mb-2.5">
-                                <i class="font-medium sicon-chat-conversation-alt me-1.5 text-md"></i>
-                                <span class="fix-align">{{ trans('pages.products.add_note') }} </span>
-                            </button>
-                        {% endif %}
-                        {% if product.can_upload_file %}
-                            <button @click="tab = 'showUpload' " type="button" data-show="#upload_file_{{ product.id }}"
-                                    class="w-full  focus:outline-none bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-gray-500 justify-center text-sm mb-2.5">
-                                <i class="font-medium sicon-paperclip me-1.5 text-md"></i>
-                                <span class="fix-align">{{ trans('pages.products.add_file') }}</span>
-                            </button>
-                        {% endif %}
-                    </div>
-
+            <label class="form-label">
+                <b class="block">
+                    {{ trans('pages.products.attachments') }}
+                </b>
+            </label>
+            <div class="mt-1 sm:mt-0 sm:col-span-2 text-end"
+                 x-data="{ tab: '{{ product.notes ? "showNote": (product.attachments|length ? "showUpload":"") }}' }">
+                <div class="flex space-s-3 mb-1">
                     {% if product.can_add_note %}
-                        <div x-show="tab === 'showNote'" data-show-content
-                             id="note_{{ product.id }}">
+                        <button type="button" @click="tab = 'showNote'" data-show="#note_{{ product.id }}"
+                                class="w-full focus:outline-none  bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-gray-500 justify-center text-sm mb-2.5">
+                            <i class="font-medium sicon-chat-conversation-alt me-1.5 text-md"></i>
+                            <span class="fix-align">{{ trans('pages.products.add_note') }} </span>
+                        </button>
+                    {% endif %}
+                    {% if product.can_upload_file %}
+                        <button @click="tab = 'showUpload' " type="button" data-show="#upload_file_{{ product.id }}"
+                                class="w-full  focus:outline-none bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-gray-500 justify-center text-sm mb-2.5">
+                            <i class="font-medium sicon-paperclip me-1.5 text-md"></i>
+                            <span class="fix-align">{{ trans('pages.products.add_file') }}</span>
+                        </button>
+                    {% endif %}
+                </div>
+
+                {% if product.can_add_note %}
+                    <div x-show="tab === 'showNote'" data-show-content
+                         id="note_{{ product.id }}">
                             <textarea placeholder="{{ trans('pages.products.notes_placeholder') }}"
                                       name="notes"
                                       class="animated animatedfadeInDown fadeInDown form-input h-16 bg-coolGray-50"
                                       cols="30" rows="10">{{ product.notes }}</textarea>
-                        </div>
-                    {% endif %}
-                    {% if product.can_upload_file %}
-                        <div x-show="tab === 'showUpload'">
+                    </div>
+                {% endif %}
+                {% if product.can_upload_file %}
+                    <div x-show="tab === 'showUpload'">
 
-                            <div class="animated animatedfadeInDown fadeInDown">
-                                 <input type="file"
-                                    class="filepond form-control filepond--option-multiple"
-                                    id="attached_file_{{ product.id }}"
-                                    name="{{ is_cart?'image_file':'file' }}"
-                                    multiple
+                        <div class="animated animatedfadeInDown fadeInDown">
+                            <input type="file"
+                                   class="filepond form-control filepond--option-multiple"
+                                   id="attached_file_{{ product.id }}"
+                                   name="{{ is_cart?'image_file':'file' }}"
+                                   multiple
                                     {% if is_cart %}
                                         {# "product" here is actually cart.items[*], so {product.id} is {item.id} #}
                                         data-url="{{ link('cart/image') }}"
@@ -88,12 +143,12 @@
                                         data-item-id="{{ product.id }}"
                                         data-product-id="{{ product.product_id }}"
                                     {% endif %}
-                                    data-max-file-size="3MB"
-                                 />
-                            </div>
+                                   data-max-file-size="3MB"
+                            />
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
+        </div>
     </section>
 {% endif %}

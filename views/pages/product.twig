@@ -238,35 +238,6 @@
 
                         {% include 'pages.partials.product.elements' %}
 
-                        {# is_donation must be here #}
-                        {% if not product.is_donation %}
-                            {# <div class="product-section product-section--has-label product-section--totals">
-                                <div>
-                                    <label>{{ trans('pages.products.price') }}</label>
-                                </div>
-                                <div class="text-left">
-                                    <div class="price-wrapper price-wrapper--large">
-                                        {% if product.on_sale %}
-                                            <span class="color-danger">{{ product.sale_price }}</span>
-                                            <small>{{ product.regular_price }}</small>
-                                        {% else %}
-                                            <span>
-                                                         {% if product.showPriceAsDash() %}
-                                                             —
-                                                         {% elseif ((not hideStartingPric or not hideStartingPrice)
-                                                             and product.price_start_enabled) %}
-                                                             يبدأ من
-                                                             {{ product.starting_price }}
-                                                         {% else %}
-                                                             {{ product.regular_price }}
-                                                         {% endif %}
-                                                    </span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div> #}
-                        {% endif %}
-
                         <section class="bg-white p-5 rounded-md mb-5">
 
                             {% if product.hide_quantity or not product.is_available %}
@@ -313,10 +284,12 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2 text-end space-s-1">
                                     <div class="space-s-1">
                                         {% if product.on_sale %}
-                                            <h4 class="text-theme-red font-bold text-sm inline-block" x-model="itemTotal">{{ product.sale_price|money }}</h4>
+                                            <h4 class="text-theme-red font-bold text-sm inline-block"
+                                                x-model="itemTotal">{{ product.sale_price|money }}</h4>
                                             <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                                         {% else %}
-                                            <h4 class="text-theme-red font-bold text-sm inline-block" x-model="itemTotal">{{ product.price|money }}</h4>
+                                            <h4 class="text-theme-red font-bold text-sm inline-block"
+                                                x-model="itemTotal">{{ product.price|money }}</h4>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -326,9 +299,9 @@
                                 {% if product.is_available or product.is_donation %}
                                     <button type="button" class="btn btn-primary add-to-cart-btn btn--has-loading"
                                             {% if not product.is_available %}
-                                                disabled
-                                                {% else %}
-                                            data-on-click="cart::add-item"{% endif %}>
+                                    disabled
+                                    {% else %}
+                                        data-on-click="cart::add-item"{% endif %}>
                                         <span class="loader loader--small"></span>
                                         <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">
                                             {% if product.is_available %}
