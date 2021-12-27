@@ -64,32 +64,40 @@
             <div class="flex items-start flex-col lg:flex-row ">
                 {% include 'pages.partials.customer.sidebar' %}
                 <div class="main-content w-full flex-1 pt-10 ">
-                    <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }}</h1>
+                    <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }} <span class="unicode">(#{{order.order_id}})</span> </h1>
                     <table class="min-w-full mb-10">
                         <tbody>
 
                         <tr class="bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
-                            <td class="w-full md:w-auto  md:rounded-s-md px-6 pt-4 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                            {# <td class="w-full md:w-auto  md:rounded-s-md px-6 pt-4 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                                 <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.thank_you.order_id') }}</span>
                                 <b>#{{ order.order_id }}</b>
-                            </td>
+                            </td> #}
                             <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.orders.date') }}</span>
+                                <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
                                 <b>{{ order.created_at|date }}</b>
                             </td>
                             {% if order.shipping %}
                                 <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                    {% if order.shipping.logo %}
-                                        <div class="inline-block h-10 w-26">
-                                            <img class="inline-block w-full h-full object-contain"
-                                                 src="{{ order.shipping.logo }}">
-                                        </div>
-                                    {% else %}
-                                        <span class="me-2 inline-block font-normal text-gray-400">{{ trans('pages.orders.shipment_details') }}</span>
+                                    <div class="me-2  font-normal text-gray-400">{{ trans('pages.orders.shipment_details') }}</div>
+                                    <div>
+                                        {% if order.shipping.logo %}
+                                            <div class="inline-block h-6 w-8">
+                                                <img class="inline-block w-full h-full object-contain"
+                                                    src="{{ order.shipping.logo }}">
+                                            </div>
+                                        {% endif %}
                                         <b>{{ order.shipping.name }}</b>
-                                    {% endif %}
+                                    </div>
                                 </td>
                             {% endif %}
+
+                             <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                                <div class="me-2 font-normal text-gray-400">رقم الشحنة</div>
+                                <b>CRDSAL0043182320</b>
+                                <a class="text-primary font-bold" href="#"> (تتبع الطلب) </a>
+                                
+                            </td>
 
                             <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                             <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl"
