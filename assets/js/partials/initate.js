@@ -53,10 +53,10 @@ var headerWrapper = document.getElementById('site-header-outer'),
 var headerHeight = headerContent.clientHeight;
 headerWrapper.style.height = headerHeight + 'px';
 
-// window.addEventListener('resize', function () {
-//     headerHeight = headerContent.clientHeight;
-//     headerWrapper.style.height = headerHeight + 'px';
-// });
+window.addEventListener('resize', function () {
+    headerHeight = headerContent.clientHeight;
+    headerWrapper.style.height = headerHeight + 'px';
+});
 
 window.addEventListener('scroll', function () {
     var headerOffsetTop = headerWrapper.offsetTop;
