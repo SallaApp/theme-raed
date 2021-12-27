@@ -51,7 +51,7 @@
 {% extends "layouts.master" %}
 {% block content %}
     <main id="main">
-        <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue lg:h-48 overflow-hidden">
+        <div class="relative  profile-header bg-gradient-to-r from-primary to-primary-d lg:h-48 overflow-hidden">
             <div class="container relative z-10 flex justify-between h-full items-center">
                 <div class="self-start">
                     <nav class="w-full py-5">
@@ -92,12 +92,12 @@
                                 </td>
                             {% endif %}
 
-                             <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                <div class="me-2 font-normal text-gray-400">رقم الشحنة</div>
-                                <b>CRDSAL0043182320</b>
-                                <a class="text-primary font-bold" href="#"> (تتبع الطلب) </a>
-                                
-                            </td>
+                            {% if order.shipping.number %}
+                                <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                                    <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.shipment_no') }}</div>
+                                    <b>{{ order.shipping.number|raw }}</b>
+                                </td>
+                            {% endif %}
 
                             <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                             <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl"
@@ -111,7 +111,7 @@
                     </table>
 
                     {# rating message #}
-                    <div class="relative  profile-header bg-gradient-to-r from-primary to-theme-blue p-5 text-white rounded-md mb-10">
+                    <div class="relative  profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
                         <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                         <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                     </div>

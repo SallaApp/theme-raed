@@ -1,0 +1,35 @@
+{#
+| Variable   | Type          | Description                                             |
+|------------|---------------|---------------------------------------------------------|
+| option     | ProductOption | @see views/pages/partials/product/elements.twig         |
+| attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `       |
+| disabled   | bool          |                                                         |
+| required   | bool          |                                                         |
+| value      | ?string       |                                                         |
+#}
+<section class="bg-white p-5 rounded-md mb-5">
+    <h2 class="text-sm font-bold mb-4" for="options[{{ option.id }}]">{{ option.name }}</h2>
+    <div class="custom-radios custom-radios--rounded">
+        {% for detail in option.details %}
+            <div class="me-8 mb-8">
+                <input {{ detail.is_selected?'checked':'' }}
+                        {% if not is_cart %}
+                            data-on-change="product::get.price" data-allow-default
+                        {% endif %}
+                        {{ detail.is_out?"disabled":"" }}
+                        name="options[{{ option.id }}]"
+                        value="{{ detail.id }}"
+                        required
+                        id="color_option_{{ detail.id }}-{{ product.id }}"
+                        type="radio"/>
+                <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ product.id }}">
+                    <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
+                    <p class="text-sm text-gray-400">{{ detail.name }}</p>
+                    {% if detail.is_out %}
+                        <small class=" text-gray-400">({{ trans('pages.products.out_of_stock') }})</small>
+                    {% endif %}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+</section>
