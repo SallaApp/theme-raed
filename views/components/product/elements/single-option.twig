@@ -8,17 +8,7 @@
 | is_for_custom_form | bool          | Is it for  `Food` or `Custom Service` product     |
 | value              | ?string       |                                                   |
 #}
-{% if not is_for_custom_form %} {# // if true, add full block with label, other wise just add `select` element #}
-<section class="bg-white p-5 rounded-md mb-5">
-    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
-        <label for="product-color" class="form-label">
-            <b class="block">
-                {{ option.name }}
-                <span class="text-red-500">*</span>
-            </b>
-        </label>
-        <div class="mt-1 sm:mt-0 sm:col-span-2">
-            {% endif %}
+
             <select class="form-input appearance-none visibility_condition{{ required?' required':'' }}"
                     name="options[{{ option.id }}]"
                     data-option="{{ option.id }}"
@@ -30,8 +20,3 @@
                     </option>
                 {% endfor %}
             </select>
-            {% if not is_for_custom_form %}
-        </div>
-    </div>
-</section>
-{% endif %}

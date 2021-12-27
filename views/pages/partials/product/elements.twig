@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-{% elseif product.has_custom_form %}
+{% else%}
     <section class="bg-white p-5 rounded-md mb-5">
         {% for option_index, option in product.options %}
             {% if option.type == "splitter" %}
@@ -84,10 +84,6 @@
             {% endif %}
         {% endfor %}
     </section>
-{% else %}
-    {% for option_index, option in product.options %}
-        {{ option.element|raw }}
-    {% endfor %}
 {% endif %}
 
 {% if product.can_add_note or product.can_upload_file %}
