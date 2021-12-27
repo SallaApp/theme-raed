@@ -286,13 +286,13 @@
                                             class="text-gray-300 sicon-star2 me-2 text-lg"
                                             :class="{'text-theme-yellow': (temp >= item)}"></span>
                                     </template>
-                                    <template x-cloak>
+                                    <div x-cloak>
                                         <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
                                         <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
                                         <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
                                         <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
                                         <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
-                                    </template>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -426,10 +426,10 @@
                             </div>
                         </div>
 
-                        {# Rating Store and Shipping #}
+                        {# Store Rating #}
                         <section class="bg-white my-10 p-5 rounded-md mb-5">
                             <h2 class="text-xl font-bold mb-5">ما رأيك في المتجر؟</h2>
-                            <textarea class="form-input h-20 mb-4" placeholder="تقييمك للمتجر ..."></textarea>
+                            <textarea class="form-input h-20 mb-2" placeholder="تقييمك للمتجر ..."></textarea>
                                     <div x-data="{ temp: 0, orig: 0 }" class="flex items-center cursor-pointer" @click="orig = temp">
                                     <input type="number" :value="orig" class="hidden"/>
                                     <template x-for="item in [1,2,3,4,5]">
@@ -438,14 +438,35 @@
                                             class="text-gray-300 sicon-star2 me-2 text-lg"
                                             :class="{'text-theme-yellow': (temp >= item)}"></span>
                                     </template>
-                                    <template x-cloak>
+                                    <div x-cloak>
                                         <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
                                         <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
                                         <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
                                         <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
                                         <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
-                                    </template>
+                                    </div>
                             </section>
+                            {# Shipping Rating #}
+                             <section class="bg-white my-10 p-5 rounded-md mb-5">
+                            <h2 class="text-xl font-bold mb-5">ما رأيك في شركة الشحن؟</h2>
+                            <textarea class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..."></textarea>
+                                    <div x-data="{ temp: 0, orig: 0 }" class="flex items-center cursor-pointer" @click="orig = temp">
+                                    <input type="number" :value="orig" class="hidden"/>
+                                    <template x-for="item in [1,2,3,4,5]">
+                                    <span @mouseenter="temp = item" 
+                                            @mouseleave="temp = orig"
+                                            class="text-gray-300 sicon-star2 me-2 text-lg"
+                                            :class="{'text-theme-yellow': (temp >= item)}"></span>
+                                    </template>
+                                    <div x-cloak>
+                                        <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
+                                        <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
+                                        <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
+                                        <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
+                                        <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
+                                    </div>
+                            </section>
+                            <button class="btn btn-primary w-full">نشر التقييم</button>
                         
                         <!-- Reorder Popup  -->
                         {% if order.can_reorder and not order.is_pending_payment %}
@@ -564,9 +585,9 @@
                     {% endif %}
                     <!-- End Cancel order Popup -->
 
-                    {% if store.settings.rating.is_enabled %}
+                    {# {% if store.settings.rating.is_enabled %}
                         {% include 'pages.partials.rating' with {'order':order} %}
-                    {% endif %}
+                    {% endif %} #}
                 </div>
             </div>
         </div>
