@@ -33,31 +33,33 @@ view options:
             {% endif %}
         </div>
 
-
-        <div x-data="initDonation()">
-            {% component 'product.donation-progress-bar' with {product:product} %}
-            <div class="border-color py-5 mt-5 mb-2.5">
-                <label for="donationAmount" class="block text-sm ">مبلغ التبرع <span class="text-red-500">*</span>
-                </label>
-                <div class="mt-2.5 relative">
-                    <input type="number" @keyup="isShowCouponError = false" @keyup.enter="addDonation()"
-                           x-model="donationAmount" id="donationAmount" name="coupon-code"
-                           :class="{'has-error': isShowCouponError}" class="pe-24 h-9 form-input"
-                           :disabled="isDonationAdded">
-                    <button x-show="isDonationAdded" @click="addDonation();" type="button"
-                            class="coupon-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn px-4"
-                            :class="isDonationAdded ? 'btn-danger' : 'btn-default'">
-                        <!-- <span x-show="!isDonationAdded">تفعيل</span> -->
-                        <i x-show="isDonationAdded" class="sicon-cancel text-xl w-8"></i>
-                    </button>
-                    <!-- error msg -->
-                    <p x-show="isShowCouponError" class="absolute -bottom-5 text-xs text-red-700" id="validationHelp">
-                        مثال
-                        لرسالة
-                        الخطأ.</p>
+        {% if product.is_donation %}
+            <div x-data="initDonation()">
+                {% component 'product.donation-progress-bar' with {product:product} %}
+                <div class="border-color py-5 mt-5 mb-2.5">
+                    <label for="donationAmount" class="block text-sm ">مبلغ التبرع <span class="text-red-500">*</span>
+                    </label>
+                    <div class="mt-2.5 relative">
+                        <input type="number" @keyup="isShowCouponError = false" @keyup.enter="addDonation()"
+                               x-model="donationAmount" id="donationAmount" name="coupon-code"
+                               :class="{'has-error': isShowCouponError}" class="pe-24 h-9 form-input"
+                               :disabled="isDonationAdded">
+                        <button x-show="isDonationAdded" @click="addDonation();" type="button"
+                                class="coupon-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn px-4"
+                                :class="isDonationAdded ? 'btn-danger' : 'btn-default'">
+                            <!-- <span x-show="!isDonationAdded">تفعيل</span> -->
+                            <i x-show="isDonationAdded" class="sicon-cancel text-xl w-8"></i>
+                        </button>
+                        <!-- error msg -->
+                        <p x-show="isShowCouponError" class="absolute -bottom-5 text-xs text-red-700"
+                           id="validationHelp">
+                            مثال
+                            لرسالة
+                            الخطأ.</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
         {% if product.subtitle %}
             <p class="text-sm text-gray-400 leading-6 mb-2.5">{{ product.subtitle }}</p>
         {% endif %}
