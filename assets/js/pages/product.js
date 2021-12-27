@@ -30,11 +30,12 @@ window.initProductDetails = function (productId, inFavorite, showReadMore, quant
             });
         },
         addQty        : function () {
-            if (! this.productOptions) {
-                salla.api.product.getPrice({prodId: this.productId, quantity: this.itemQty + 1, options: this.productOptions})
+            this.itemQty++;
+            this.itemTotal = '...';
+            if (! this.productOptions.length) {
+                salla.api.product.getPrice({id: productId, quantity: this.itemQty, options: this.productOptions})
                     .then(res => {
                         this.updatePrice(res);
-                        this.itemQty++;
                     });
             }
         },
@@ -42,14 +43,15 @@ window.initProductDetails = function (productId, inFavorite, showReadMore, quant
             if (this.itemQty <= 1) {
                 return;
             }
-            salla.api.product.getPrice({prodId: this.productId, quantity: this.itemQty - 1, options: this.productOptions})
+            this.itemQty--;
+            this.itemTotal = '...';
+            salla.api.product.getPrice({id: productId, quantity: this.itemQty, options: this.productOptions})
                 .then(res => {
-                    this.itemQty--;
                     this.updatePrice(res);
                 });
         },
         updatePrice: function (res) {
-            this.itemTotal = res.data.msg;
+            this.itemTotal = res.data.after;
         },
         openReminderModal: function () {
             this.reminderModal = true

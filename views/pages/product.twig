@@ -57,7 +57,7 @@
 {% endblock %}
 {% block content %}
     <main id="main"
-          x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }}, 1, {{ product.on_sale ? product.sale_price : product.price }}, {{ product.options }})"
+          x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }}, 1, '{{ product.on_sale ? product.sale_price|money : product.price|money }}', {{ product.options }})"
           x-cloak data-product-id="{{ product.id }}">
         <div class="container">
             <nav class="w-full py-5">
@@ -287,11 +287,11 @@
                                     <div class="space-s-1">
                                         {% if product.on_sale %}
                                             <h4 class="text-theme-red font-bold text-sm inline-block"
-                                                x-model="itemTotal">{{ product.sale_price|money }}</h4>
+                                                x-text="itemTotal">{{ product.sale_price|money }}</h4>
                                             <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                                         {% else %}
                                             <h4 class="text-theme-red font-bold text-sm inline-block"
-                                                x-model="itemTotal">{{ product.price|money }}</h4>
+                                                x-text="itemTotal">{{ product.price|money }}</h4>
                                         {% endif %}
                                     </div>
                                 </div>
