@@ -1,14 +1,14 @@
 {#
 | Variable           | Type          | Description                                       |
 |--------------------|---------------|---------------------------------------------------|
-| option             | ProductOption | @see views/pages/partials/product/fields.twig     |
+| option             | ProductOption | @see views/pages/partials/product/elements.twig   |
 | attirubtes         | string        | ex: ` id="field_1819067185_562106943"  required ` |
 | disabled           | bool          |                                                   |
 | required           | bool          |                                                   |
 | is_for_custom_form | bool          | Is it for  `Food` or `Custom Service` product     |
 | value              | ?string       |                                                   |
 #}
-{% if not is_for_custom_form %}
+{% if not is_for_custom_form %} {# // if true, add full block with label, other wise just add `select` element #}
 <section class="bg-white p-5 rounded-md mb-5">
     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
         <label for="product-color" class="form-label">
@@ -30,7 +30,7 @@
                     </option>
                 {% endfor %}
             </select>
-            {% if  not is_for_custom_form %}
+            {% if not is_for_custom_form %}
         </div>
     </div>
 </section>
