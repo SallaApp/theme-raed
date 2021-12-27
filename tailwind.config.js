@@ -36,7 +36,8 @@ module.exports = {
             colors             : {
                 'inherit'      : 'inherit',
                 'primary'      : 'var(--main-color)',
-                'primary-light': "#eefbf9",
+                'primary-d'    : 'var(--color-main-d)',
+                'primary-l'    : 'var(--color-main-l)',
                 'dark-gray'    : '#A6B3BA',
                 'secondary'    : 'var(--color-main-reverse)',
                 'transparent'  : 'transparent',
