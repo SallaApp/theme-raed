@@ -7,13 +7,16 @@ require('../partials/pages/product-options');
 window.fslightbox = fslightbox;
 
 // window.Swiper = Swiper;
-window.initProductDetails = function (productId, inFavorite, showReadMore) {
+window.initProductDetails = function (productId, inFavorite, showReadMore, quantity, total, productOptions) {
     window.productId = productId;
     return {
         reminderModal : false,
         inFavorite    : inFavorite,
         showReadMore  : showReadMore,
         showShareMenu : false,
+        itemQty       : quantity,
+        itemTotal     : total,
+        productOptions: productOptions,
         toggleFavorite: function () {
             this.inFavorite
                 ? salla.api.wishlist.remove(productId)
@@ -27,24 +30,27 @@ window.initProductDetails = function (productId, inFavorite, showReadMore) {
             });
         },
         addQty        : function () {
-            salla.api.product.getPrice({id: this.itemId, quantity: this.itemQty + 1})
-                .then(res => {
-                    updateCartPageInfo(res);
-                    this.itemQty++;
-                });
+            if (! this.productOptions) {
+                salla.api.product.getPrice({prodId: this.productId, quantity: this.itemQty + 1, options: this.productOptions})
+                    .then(res => {
+                        this.updatePrice(res);
+                        this.itemQty++;
+                    });
+            }
         },
         subQty        : function () {
             if (this.itemQty <= 1) {
                 return;
             }
-            salla.cart.api
-                .updateItem({id: this.itemId, quantity: this.itemQty - 1})
+            salla.api.product.getPrice({prodId: this.productId, quantity: this.itemQty - 1, options: this.productOptions})
                 .then(res => {
                     this.itemQty--;
-                    updateCartPageInfo(res);
+                    this.updatePrice(res);
                 });
         },
-
+        updatePrice: function (res) {
+            this.itemTotal = res.data.msg;
+        },
         openReminderModal: function () {
             this.reminderModal = true
             this.animateCommonItems();
