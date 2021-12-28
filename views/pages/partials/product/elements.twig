@@ -5,7 +5,7 @@
 | product.options[].id                            | int                        |                                                                                                |
 | product.options[].name                          | string                     |                                                                                                |
 | product.options[].required                      | bool                       |                                                                                                |
-| product.options[].type                          | string                     | radio, date, datetime, time, image, text, textarea, number, checkbox, splitter                 |
+| product.options[].type                          | string                     | radio,date,datetime,time,image,text,textarea,number,checkbox,splitter,color,thumbnail,donation |
 | product.options[].placeholder                   | ?string                    |                                                                                                |
 | product.options[].option_type                   | ?string                    | color, image, text                                                                             |
 | product.options[].not_same_day_order            | bool                       |                                                                                                |
@@ -31,8 +31,9 @@
 #}
 <section class="bg-white p-5 rounded-md mb-5">
     {% for option_index, option in product.options %}
-        {% if option.type == "splitter" %}
-            <div class="product-section splitter"></div>
+        {# if there is no need for a label, or it needs special handling in the element file #}
+        {% if option.type in ["splitter"] %}
+            {{ option.element|raw }}
         {% else %}
             <div class="{{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
