@@ -7,26 +7,26 @@
 | required   | bool          |                                                         |
 | value      | ?string       |                                                         |
 #}
-    <div class="custom-radios custom-radios--rounded">
-        {% for detail in option.details %}
-            <div class="me-8 mb-5">
-                <input {{ detail.is_selected?'checked':'' }}
-                        {% if not is_cart %}
-                            data-on-change="product::get.price" data-allow-default
-                        {% endif %}
-                        {{ detail.is_out?"disabled":"" }}
-                        name="options[{{ option.id }}]"
-                        value="{{ detail.id }}"
-                        required
-                        id="color_option_{{ detail.id }}-{{ product.id }}"
-                        type="radio"/>
-                <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ product.id }}">
-                    <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
-                    <p class="text-sm text-gray-400">{{ detail.name }}</p>
-                    {% if detail.is_out %}
-                        <small class=" text-gray-400">({{ trans('pages.products.out_of_stock') }})</small>
+<div class="custom-radios custom-radios--rounded">
+    {% for detail in option.details %}
+        <div class="me-8 mb-5">
+            <input {{ detail.is_selected?'checked':'' }}
+                    {% if not is_cart %}
+                        data-on-change="product::get.price" data-allow-default
                     {% endif %}
-                </label>
-            </div>
-        {% endfor %}
-    </div>
+                    {{ detail.is_out?"disabled":"" }}
+                    name="options[{{ option.id }}]"
+                    value="{{ detail.id }}"
+                    required
+                    id="color_option_{{ detail.id }}-{{ product.id }}"
+                    type="radio"/>
+            <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ product.id }}">
+                <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
+                <p class="text-sm text-gray-400">{{ detail.name }}</p>
+                {% if detail.is_out %}
+                    <small class=" text-gray-400">({{ trans('pages.products.out_of_stock') }})</small>
+                {% endif %}
+            </label>
+        </div>
+    {% endfor %}
+</div>

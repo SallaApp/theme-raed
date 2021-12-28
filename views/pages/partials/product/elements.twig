@@ -5,7 +5,7 @@
 | product.options[].id                            | int                        |                                                                                                |
 | product.options[].name                          | string                     |                                                                                                |
 | product.options[].required                      | bool                       |                                                                                                |
-| product.options[].type                          | string                     | radio, date, datetime, time, image, text, textarea, number, checkbox, splitter                 |
+| product.options[].type                          | string                     | radio,date,datetime,time,image,text,textarea,number,checkbox,splitter,color,thumbnail,donation |
 | product.options[].placeholder                   | ?string                    |                                                                                                |
 | product.options[].option_type                   | ?string                    | color, image, text                                                                             |
 | product.options[].not_same_day_order            | bool                       |                                                                                                |
@@ -16,6 +16,7 @@
 | product.options[].visibility_condition.option   | int                        | An id of another option from the types (`checkbox`, `radio`)                                   |
 | product.options[].visibility_condition.operator | string                     | `=` or `!=`                                                                                    |
 | product.options[].visibility_condition.value    | int                        | An id of optionDetail                                                                          |
+| product.options[].condition_attributes          | ?string                    | ex `data-visibility-option="*" data-visibility-operator="=" data-visibility-value="*"`         |
 | product.options[].element                       | string                     | Html content from files `views/components/product/elements/*.twig`                             |
 | product.options[].details                       | OptionDetail *Collection   |                                                                                                |
 | product.options[].details[].id                  | int                        |                                                                                                |
@@ -28,63 +29,29 @@
 | product.options[].details[].is_selected         | bool                       | Does current option selected? (useful in cart page)                                            |
 | product.options[].details[].is_out              | bool                       | Does current option out of stock?                                                              |
 #}
-{% if product.is_donation %}
-    <div id="cart_donating_form">
-        {% component 'product.donation-progress-bar' with {product:product} %}
-        <div class="product-section product-section--has-label">
-            <div>
-                <label>{{ trans('pages.products.donation_amount') }}</label>
-            </div>
-            <div class="form-group">
-                {% if product.can_donate %}
-                    {{ csrf_field() }}
-                    <div class="input-group input-group--end">
-                        <input placeholder="{{ trans('pages.products.donation_placeholder') }}"
-                               type="text"
-                               id="donating_amount"
-                               name="{{ is_cart?'amount_donating':'donating_amount' }}"
-                               class="form-control _parseArabicNumbers"
-                               value="{{ is_cart?product.price:'' }}"
-                               data-digits-with-decimal
-                               data-digits/>
-                        <span class="input-group-addon"> {{ currency }} </span>
-                    </div>
-                {% else %}
-                    <h4 class="d-block wide font-xsm color-danger">
-                        {% if product.donation.completed %}
-                            {{ trans('pages.products.donation_exceed_target_amount') }}
-                        {% else %}
-                            {{ trans('pages.products.donation_exceed_target_date') }}
-                        {% endif %}
-                    </h4>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-{% else%}
-    <section class="bg-white p-5 rounded-md mb-5">
-        {% for option_index, option in product.options %}
-            {% if option.type == "splitter" %}
-                <div class="product-section splitter"></div>
-            {% else %}
-                <div class="{{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
-                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                        <label for="options[{{ option.id }}]" class="form-label">
-                            <b class="block">
-                                {{ option.name }}
-                                {% if option.required %}<span class="text-red-500">*</span>{% endif %}
-                            </b>
-                            <small class="text-gray-text">{{ option.placeholder }}</small>
-                        </label>
-                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            {{ option.element|raw }}
-                        </div>
+<section class="bg-white p-5 rounded-md mb-5">
+    {% for option_index, option in product.options %}
+        {# if there is no need for a label, or it needs special handling in the element file #}
+        {% if option.type in ["splitter"] %}
+            {{ option.element|raw }}
+        {% else %}
+            <div class="{{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                    <label for="options[{{ option.id }}]" class="form-label">
+                        <b class="block">
+                            {{ option.name }}
+                            {% if option.required %}<span class="text-red-500">*</span>{% endif %}
+                        </b>
+                        <small class="text-gray-text">{{ option.placeholder }}</small>
+                    </label>
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        {{ option.element|raw }}
                     </div>
                 </div>
-            {% endif %}
-        {% endfor %}
-    </section>
-{% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</section>
 
 {% if product.can_add_note or product.can_upload_file %}
     <section class="bg-white p-5 rounded-md mb-5">
