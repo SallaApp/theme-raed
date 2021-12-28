@@ -9,14 +9,14 @@
 | value              | ?string       |                                                   |
 #}
 
-            <select class="form-input appearance-none visibility_condition{{ required?' required':'' }}"
-                    name="options[{{ option.id }}]"
-                    data-option="{{ option.id }}"
-                    {{ attirubtes|raw }}>
-                <option placeholder value="">{{ option.placeholder }}</option>
-                {% for key,detail in option.details %}
-                    <option {{ detail.is_selected ? "selected" : "" }} value="{{ detail.id }}">
-                        {{ detail.full_name }}
-                    </option>
-                {% endfor %}
-            </select>
+<select class="form-input appearance-none visibility_condition{{ required?' required':'' }}"
+        name="options[{{ option.id }}]"
+        data-option="{{ option.id }}"
+        {{ attirubtes|raw }}>
+    <option placeholder value="">{{ option.placeholder }}</option>
+    {% for key,detail in option.details %}
+        <option {{ detail.is_selected ? "selected" : "" }} value="{{ detail.id }}">
+            {{ detail.full_name }}
+        </option>
+    {% endfor %}
+</select>

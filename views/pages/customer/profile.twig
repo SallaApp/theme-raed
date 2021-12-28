@@ -1,18 +1,18 @@
 {#
-| Variable            | Type     | Description                   |
-|---------------------|----------|-------------------------------|
-| customer            | Customer | TODO                          |
-| customer.first_name | string   |                               |
-| customer.last_name  | string   |                               |
-| customer.avatar     | string   |                               |
-| customer.city       | ?string  |                               |
-| customer.country    | ?string  |                               |
-| customer.full_name  | string   | link:`first_name` `last_name` |
-| customer.mobile     | string   |                               |
-| customer.email      | string   |                               |
-| customer.gender     | ?string  | 'male', 'female'              |
-| customer.birthday   | ?data    |                               |
-| country_code        | string   | Customer country code ex. SA  |
+| Variable              | Type     | Description                   |
+|-----------------------|----------|-------------------------------|
+| customer              | Customer | TODO                          |
+| customer.first_name   | string   |                               |
+| customer.last_name    | string   |                               |
+| customer.avatar       | string   |                               |
+| customer.city         | ?string  |                               |
+| customer.country      | ?string  |                               |
+| customer.full_name    | string   | link:`first_name` `last_name` |
+| customer.mobile       | string   |                               |
+| customer.email        | string   |                               |
+| customer.gender       | ?string  | 'male', 'female'              |
+| customer.birthday     | ?data    |                               |
+| customer.country_code | string   | Customer country code ex. SA  |
 #}
 {% extends "layouts.master" %}
 
@@ -117,9 +117,9 @@
                                     <b class="block">{{trans('common.elements.mobile')}}</b>
                                 </label>
                                 <div class="mt-2.5 mb-5">
-                                    <input type="text" name="international_mobile" value="{{ customer.mobile }}" id="international-mobile" class="tel-input form-input" data-code="{{ country_code }}" data-digits="true">
+                                    <input type="text" name="international_mobile" value="{{ customer.mobile }}" id="international-mobile" class="tel-input form-input" data-code="{{ customer.country_code }}" data-digits="true">
 
-                                    <input type="hidden" name="_country_iso2" class="country_code" value="{{ country_code }}">
+                                    <input type="hidden" name="_country_iso2" class="country_code" value="{{ customer.country_code }}">
                                 </div>
                             </div>
                         </div>
