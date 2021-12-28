@@ -637,24 +637,6 @@
        
     {% if order.can_cancel %}
         <script>
-            {# document.querySelector("#button_delete_order").addEventListener('click', function (e) {
-                Swal.fire({
-                    title             : "{{ trans('common.elements.warning') }}",
-                    text              : '{{ trans('common.elements.confirm') }}',
-                    showCancelButton  : true,
-                    confirmButtonColor: "#2196F3",
-                    confirmButtonText : "{{ trans('common.elements.ok') }}",
-                    cancelButtonText  : "{{ trans('common.elements.cancel') }}"
-                }).then(function (data) {
-                    if (data.isConfirmed) {
-                        salla.order.api.cancel("{{ order.id }}").then(function (response) {
-                            window.location.reload();
-                        });
-                    }
-                });
-            }); #}
-
-
             function cancelOrder() {
                 salla.order.api.cancel("{{ order.id }}").then(function (response) {
                     window.location.reload();
