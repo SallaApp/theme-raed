@@ -9,11 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: npm production && publish 
+      # @see https://github.com/anothrNick/github-tag-action#bumping
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ secrets.NODE_VERSION }}
+      - name: npm run production
         run: |
+          node -v
+          npm -v
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" >> ~/.npmrc
           npm install cross-env
-          npm install 
+          npm install
           npm run production
       - name: Commit Assets If Different
         run: |
@@ -35,3 +41,4 @@ jobs:
           WITH_V: false
           RELEASE_BRANCHES: master
           DEFAULT_BUMP: patch
+ 
