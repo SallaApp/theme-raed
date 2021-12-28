@@ -547,7 +547,10 @@
                         {# Store Rating #}
                         <section x-data="{ temp: 0, orig: 0 }" class="bg-white my-10 p-5 rounded-md mb-5">
                             <h2 class="text-xl font-bold mb-5">ما رأيك في المتجر؟</h2>
-                            <textarea x-model="$store.orderRating.storeRating.comment" :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.validation}" class="form-input h-20 mb-2" placeholder="تقييمك للمتجر ..."></textarea>
+                            <div class="mb-2">
+                                <textarea x-model="$store.orderRating.storeRating.comment"  :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.isSubmit}" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
+                                <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.storeRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
+                            </div>
                             <div  class="flex items-center cursor-pointer" @click="orig = temp">
                                 <input x-model="$store.orderRating.storeRating.rate = orig" type="number" :value="orig" class="hidden" />
                                 <template x-for="item in [1,2,3,4,5]">
@@ -564,12 +567,16 @@
                                     <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
                                 </div>
                             </div>
+                            <small class="text-red-400" x-show="!$store.orderRating.storeRating.rate && $store.orderRating.isSubmit">تقييم المتجر مطلوب</small>
                         </section>
 
                         {# Shipping Rating #}
                         <section x-data="{ temp: 0, orig: 0,}" class="bg-white my-10 p-5 rounded-md mb-5">
                             <h2 class="text-xl font-bold mb-5">ما رأيك في شركة الشحن؟</h2>
-                            <textarea x-model="$store.orderRating.shippingRating.comment"  class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..."></textarea>
+                             <div class="mb-2">
+                                <textarea x-model="$store.orderRating.shippingRating.comment"  class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..." :class="{'has-error': !$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit}"></textarea>
+                                <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
+                            </div>
                             <div  class="flex items-center cursor-pointer" @click="orig = temp">
                                 <input x-model="$store.orderRating.shippingRating.rate = orig" type="number" :value="orig" class="hidden"/>
                                 <template x-for="item in [1,2,3,4,5]">
@@ -586,6 +593,7 @@
                                     <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
                                 </div>
                             </div>
+                            <small class="text-red-400" x-show="!$store.orderRating.shippingRating.rate && $store.orderRating.isSubmit">تقييم شركة الشحن مطلوب</small>
                         </section>
 
                         
@@ -604,7 +612,7 @@
         // Order Rating
         document.addEventListener('alpine:init', () => {
             Alpine.store('orderRating', {
-                validation: false,
+                isSubmit: false,
                 productsRating: {}, // {'productId': {comment: '', rate: null}}
                 storeRating:  {comment: '', rate: null},
                 shippingRating: {comment: '',rate: null},
@@ -618,10 +626,8 @@
                 
                 sendRate: function(){
                     {# this.validation(); #}
-                    this.validation = true
-                    console.log('productsRating:', {...this.productsRating});
-                    console.log('storeRating:', this.storeRating);
-                    console.log('shippingRating', this.shippingRating);
+                    this.isSubmit = true
+                    //console.log('Rating:', {...this.productsRating});
                 },
             })
         })
