@@ -11,7 +11,7 @@
 		<div class="relative  profile-header bg-gradient-to-r from-primary to-primary-d lg:h-48 overflow-hidden">
 			<div class="container relative z-10 flex justify-between h-full items-center">
 				<div class="self-start">
-					<nav class="w-full py-5">
+					<nav class="w-full py-5 mt-2.5">
 						{% component 'header.breadcrumbs' with{is_dark:true} %}
 					</nav>
 				</div>
@@ -64,7 +64,7 @@
 											</td>
 											<td class="w-full md:w-auto md:text-end  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
                                                 <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{trans('pages.orders.status')}}:</span>
-												<span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl" style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
+												<span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl" style="border-color: {{ theme.lighter_color(0.5, order.status.color) }} !important; color: {{ order.status.color }}">
 													<i class="mt-1 {{ order.status.icon }}"></i>
 													<span class="">
 														{{ order.status.name }}</span>
