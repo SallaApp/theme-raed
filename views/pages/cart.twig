@@ -143,10 +143,9 @@
                                     {% include 'pages.partials.product.elements' with {product:item} %}
                                 </form>
                             {% endif %}
-                            <button @click="removeItem()" data-delete-item="item-{{ item.id }}"
-                                    class="remove-item-btn bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
-                                <span x-show="isRemoveItem" class="spinner-loader-wrap start-1 w-4 h-4 absolute">
-                                <span class="block -z-1 spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full"></span></span>
+                            <button @click="removeItem()" data-delete-item="item-{{ item.id }}" class="btn--has-loading btn--delete bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
+                                <i class="sicon-cancel icon"></i>
+                                <span class="loader loader--small absolute transition inset-x-0 inset-y-0 opacity-0 flex justify-center items-center"></span>
                             </button>
                         </section>
 
@@ -163,16 +162,18 @@
                 </div>
                 <!-- sidebar -->
                 {% if cart.items|length %}
-                    <div x-data="initCart('{{ cart.id }}', '{{ cart.coupon }}')" x-cloak
+                    <div x-data="initCart('{{ cart.id }}', '{{ cart.coupon }}')" 
                          class="sticky top-24 w-full lg:w-96  lg:ms-8">
                         {% component 'free-shipping' %}
-                        <div
-                                class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
+                        
+                        <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
                             <h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
+                            
                             <div class="flex justify-between text-sm mb-5">
                                 <span class="text-gray-400 cart-items-count">{{ trans("pages.cart.items_total") }}</span>
                                 <b>{{ cart.sub_total|money }}</b>
                             </div>
+
                             <div class="flex justify-between text-sm mb-5 shipping {{ cart.has_shipping?'':'hidden' }}">
                                 <span class="text-gray-400">{{ trans('pages.cart.shipping_cost') }}</span>
                                 <b>{{ cart.real_shipping_cost|money }}</b>
@@ -205,16 +206,18 @@
                             {% endif %}
 
                             <!-- coupon discount -->
-                            <div x-show="{{ cart.discount?"true":"false" }}"
-                                 x-transition:enter="transition-height ease-out duration-300"
-                                 x-transition:enter-start="opacity-0 transfor h-0"
-                                 x-transition:enter-end="opacity-100 transform h-10"
-                                 x-transition:leave="transition-height ease-in duration-300"
-                                 x-transition:leave-start="opacity-100 transform h-10"
-                                 x-transition:leave-end="opacity-0 transform h-0" class="flex justify-between text-sm">
-                                <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
-                                <b>- {{ cart.real_discount|money }}</b>
-                            </div>
+                            {% if cart.discount %}
+                              <div x-show="{{ cart.discount?"true":"false" }}"
+                                  x-transition:enter="transition-height ease-out duration-300"
+                                  x-transition:enter-start="opacity-0 transfor h-0"
+                                  x-transition:enter-end="opacity-100 transform h-10"
+                                  x-transition:leave="transition-height ease-in duration-300"
+                                  x-transition:leave-start="opacity-100 transform h-10"
+                                  x-transition:leave-end="opacity-0 transform h-0" class="flex justify-between text-sm">
+                                  <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
+                                  <b>- {{ cart.real_discount|money }}</b>
+                              </div>
+                            {% endif %}
 
                             <div class="flex justify-between text-sm mb-5">
                                 <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
