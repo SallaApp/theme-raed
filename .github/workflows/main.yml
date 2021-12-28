@@ -28,6 +28,7 @@ jobs:
           if git diff --cached --name-only ./assets | grep .; then
            git config --global user.name ${{secrets.GIT_DEVOPS_USERNAME}}
            git config --global user.email "${{secrets.GIT_DEVOPS_EMAIL}}@users.noreply.github.com"
+           git remote set-url origin https://x-access-token:${{ secrets.PERSIONAL_TOKEN }}@github.com/$GITHUB_REPOSITORY
            git commit -m "Auto Build Assets 😎"
            git push
           else
