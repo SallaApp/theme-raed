@@ -86,6 +86,7 @@ window.initCart = function (cart_id, coupon) {
                 salla.coupon.api
                     .add({id: this.cart_id, coupon: this.couponCode})
                     .then(res => {
+                        this.isShowCouponDiscount = !this.isShowCouponDiscount;
                         this.updateCartSummary();
                     }).catch(err => {
                     this.isShowCouponError = true;
@@ -95,7 +96,7 @@ window.initCart = function (cart_id, coupon) {
                     }
                 });
 
-                this.isShowCouponDiscount = !this.isShowCouponDiscount;
+                // this.isShowCouponDiscount = !this.isShowCouponDiscount;
                 if (!this.isShowCouponDiscount) {
                     this.couponCode = '';
                 }
