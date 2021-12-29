@@ -14,7 +14,7 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main" x-data="initCategory()" x-cloak>
+    <main id="main">
         <div class="container mb-10 md:mb-20">
             <nav class="w-full py-5">
                 {% component 'header.breadcrumbs' %}
@@ -38,15 +38,11 @@
                                     </div>
                                 {% endif %}
                                 <div class="hidden md:flex items-center ms-2 md:ms-2">
-                                    <a @click="toggleView('grid')"
-                                       :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                       id="gridButton" data-grid="grid"
-                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                                    <a  href="#" data-type="grid"
+                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center bg-border-color text-primary"><i
                                                 class="sicon-grid"></i></a>
-                                    <a @click="toggleView('list')"
-                                       :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                       id="listButton" data-grid="list"
-                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
+                                    <a href="#" data-type="list"
+                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center text-gray-400"><i
                                                 class="sicon-list"></i></a>
                                 </div>
                             </div>
@@ -54,9 +50,7 @@
                     </div>
 
                     {% if products|length %}
-                        <div x-ref="productsContainer"
-                             :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
-                             class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
+                        <div class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6 md:grid-cols-auto-fill">
                             {% for product in products %}
                                 {% include 'pages.partials.product.card' %}
                             {% endfor %}
@@ -79,10 +73,4 @@
 
 {% block scripts %}
     <script src="{{ asset('dist/category.js') }}"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            salla.infiniteScroll.initiate('.products-container', '.product-entry')
-        })
-    </script>
 {% endblock %}
