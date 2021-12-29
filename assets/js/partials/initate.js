@@ -5,7 +5,6 @@ window.anime = require('animejs').default;
 window.Alpine = require('alpinejs').default;
 Alpine.start();
 
-salla.init({debug: true});//TODO:: remove it in production
 salla.notify.setNotifier((...data) => salla.log(...data));
 salla.currency.event.onChanged(event => window.location.reload())
 salla.onReady(() => {
