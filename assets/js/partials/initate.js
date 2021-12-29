@@ -49,14 +49,19 @@ document.querySelectorAll(".close-mobile-menu").forEach((elem) => {
  * Sticky Menu  ---------------------------------
  */
 var headerWrapper = document.getElementById('site-header-outer'),
-    headerContent = document.querySelector('.site-header');
-var headerHeight = headerContent.clientHeight;
-headerWrapper.style.height = headerHeight + 'px';
+    headerContent = document.querySelector('.site-header'),
+    headerHeight = headerContent.clientHeight;
 
-// window.addEventListener('resize', function () {
-//     headerHeight = headerContent.clientHeight;
-//     headerWrapper.style.height = headerHeight + 'px';
-// });
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(()=>{
+    headerWrapper.style.height = headerHeight + 'px';
+  }, 1000)
+});
+
+window.addEventListener('resize', function () {
+    headerHeight = headerContent.clientHeight;
+    headerWrapper.style.height = headerHeight + 'px';
+});
 
 window.addEventListener('scroll', function () {
     var headerOffsetTop = headerWrapper.offsetTop;
@@ -106,4 +111,8 @@ initTelInput();
 
 
 // Add loading icon
-salla.document.event.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading'))
+document.querySelectorAll('.btn--has-loading').forEach(btn => {
+  btn.addEventListener('click', ()=>{
+    btn.classList.add('btn--is-loading')
+  })
+})
