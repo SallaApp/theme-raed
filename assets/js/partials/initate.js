@@ -50,11 +50,11 @@ document.querySelectorAll(".close-mobile-menu").forEach((elem) => {
  */
 var headerWrapper = document.getElementById('site-header-outer'),
     headerContent = document.querySelector('.site-header'),
-    headerHeight = headerContent.clientHeight;
+    headerHeight;
 
 document.addEventListener('DOMContentLoaded', function () {
   setTimeout(()=>{
-    headerWrapper.style.height = headerHeight + 'px';
+    headerWrapper.style.height = headerContent.clientHeight + 'px';
   }, 1000)
 });
 
