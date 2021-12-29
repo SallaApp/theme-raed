@@ -96,10 +96,6 @@ window.initCart = function (cart_id, coupon) {
                     }
                 });
 
-                // this.isShowCouponDiscount = !this.isShowCouponDiscount;
-                if (!this.isShowCouponDiscount) {
-                    this.couponCode = '';
-                }
             } else {
                 this.isShowCouponError = true;
                 this.couponErrorMessage = 'يجب إدخال كوبون صالح';
