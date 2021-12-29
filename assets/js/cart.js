@@ -1,5 +1,5 @@
-require('../../dist/filepond.js');
-require('../partials/pages/product-options')
+require('../dist/filepond.js');
+require('./partials/product-options')
 let flatpickr = require("flatpickr").default;
 
 document.addEventListener('DOMContentLoaded', () => {
