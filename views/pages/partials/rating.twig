@@ -1,3 +1,46 @@
+{% if store.settings.rating.is_enabled %}
+
+    {# oreder store rate #}
+    {% if store.settings.rating.store %}
+        {# Store Rating #}
+        <section x-data="{ temp: 0, orig: 0 }" class="bg-white my-10 p-5 rounded-md mb-5">
+            <h2 class="text-xl font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
+            <div class="mb-2">
+                <textarea x-model="$store.orderRating.storeRating.comment"  :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.isSubmit}" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
+                <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.storeRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
+            </div>
+            <div  class="flex items-center cursor-pointer" @click="orig = temp">
+                <input x-model="$store.orderRating.storeRating.rate = orig" type="number" :value="orig" class="hidden" />
+                {% include 'pages.partials.rating-stars' with {'stars':testimonial.stars} %}
+            </div>
+            <small class="text-red-400" x-show="!$store.orderRating.storeRating.rate && $store.orderRating.isSubmit">تقييم المتجر مطلوب</small>
+        </section>
+    {% endif %}
+
+    {# order shipping company rate #}
+    {% if order.has_shipping and store.settings.rating.shipping %}
+        {# Shipping Rating #}
+        <section x-data="{ temp: 0, orig: 0,}" class="bg-white my-10 p-5 rounded-md mb-5">
+        <h2 class="text-xl font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
+        <div class="mb-2">
+            <textarea x-model="$store.orderRating.shippingRating.comment"  class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..." :class="{'has-error': !$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit}"></textarea>
+            <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
+        </div>
+        <div  class="flex items-center cursor-pointer" @click="orig = temp">
+            <input x-model="$store.orderRating.shippingRating.rate = orig" type="number" :value="orig" class="hidden"/>
+            {% include 'pages.partials.rating-stars' with {'stars':shippingRate.stars} %}
+        </div>
+        <small class="text-red-400" x-show="!$store.orderRating.shippingRating.rate && $store.orderRating.isSubmit">تقييم شركة الشحن مطلوب</small>
+    </section>
+    {% endif %}
+
+    <button x-data @click="$store.orderRating.sendRate()" class="btn btn-primary w-full">نشر التقييم</button>
+{% endif %}
+
+
+
+{#
+
 <div x-data="ratingInit()" x-init="currentStep = Object.keys(review)[step-1];">
     <div class="panel bg-white rounded-md">
         <div class="panel__header border-b border-border-color p-5">
@@ -10,7 +53,9 @@
         </div>
 
         <div class="panel__body pt-14 h-72 overflow-hidden">
-            {# oreder store rate #}
+            #}
+{# oreder store rate #}{#
+
             {% if store.settings.rating.store %}
                 <div class="step1 flex flex-col items-center" x-show.transition.in="step === 1"
                      x-transition.duration.300ms>
@@ -21,7 +66,9 @@
                 </div>
             {% endif %}
 
-            {# order products rate #}
+            #}
+{# order products rate #}{#
+
             {% if store.settings.rating.products %}
                 <div class="step2 flex flex-col items-center" x-show.transition.in="step === 2"
                      x-transition.duration.300ms>
@@ -31,7 +78,9 @@
                 </div>
             {% endif %}
 
-            {# order shipping company rate #}
+            #}
+{# order shipping company rate #}{#
+
             {% if order.has_shipping and store.settings.rating.shipping %}
                 <div class="step3 flex flex-col items-center" x-show.transition.in="step === 3"
                      x-transition.duration.300ms>
@@ -98,7 +147,9 @@
                     </div>
                     <div class="mt-3 text-center sm:mt-5">
                         <h3 class="message-item text-base leading-6 font-bold" id="modal-title">
-                            {#تم إرسال تقييمك بنجاح#}
+                            #}
+{#تم إرسال تقييمك بنجاح#}{#
+
                         </h3>
                         <div class="mt-2">
                             <p class="message-item text-sm leading-6">
@@ -185,3 +236,5 @@
         }
     }
 </script>
+
+#}

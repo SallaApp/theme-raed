@@ -276,28 +276,7 @@
                                     </div>
                                 {% endif %}
 
-                                {# Rating #}
-                                <div x-data="{ temp: 0, orig: 0 }"  class="border-t mt-10 pt-8">
-                                    <h2 class="mb-3 text-sm font-bold">تقييم المنتج</h2>
-                                    <textarea x-model="$store.orderRating.productsRating[{{item.id}}]['comment']" class="form-input h-20" placeholder="تقييمك للمنتج ..."></textarea>
-
-                                    <div x-cloak class="flex items-center cursor-pointer mt-3" @click="orig = temp">
-                                    <input x-model="$store.orderRating.productsRating[{{item.id}}]['rate'] = orig" type="number" :value="orig" class="hidden"/>
-                                    <template x-for="item in [1,2,3,4,5]">
-                                    <span @mouseenter="temp = item" 
-                                            @mouseleave="temp = orig"
-                                            class="text-gray-300 sicon-star2 me-2 text-lg"
-                                            :class="{'text-theme-yellow': (temp >= item)}"></span>
-                                    </template>
-                                    <div x-cloak>
-                                        <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
-                                        <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
-                                        <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
-                                        <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
-                                        <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
-                                    </div>
-                                    </div>
-                                </div>
+                                {% include 'pages.partials.product-rating' with {'order':order, 'item':item} %}
                             </div>
                         {% endfor %}
 
@@ -546,64 +525,7 @@
                     {% endif %}
                     <!-- End Cancel order Popup -->
 
-                    {% if store.settings.rating.is_enabled %}
-                        {# Store Rating #}
-                        <section x-data="{ temp: 0, orig: 0 }" class="bg-white my-10 p-5 rounded-md mb-5">
-                            <h2 class="text-xl font-bold mb-5">ما رأيك في المتجر؟</h2>
-                            <div class="mb-2">
-                                <textarea x-model="$store.orderRating.storeRating.comment"  :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.isSubmit}" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
-                                <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.storeRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
-                            </div>
-                            <div  class="flex items-center cursor-pointer" @click="orig = temp">
-                                <input x-model="$store.orderRating.storeRating.rate = orig" type="number" :value="orig" class="hidden" />
-                                <template x-for="item in [1,2,3,4,5]">
-                                        <span @mouseenter="temp = item"
-                                              @mouseleave="temp = orig"
-                                              class="text-gray-300 sicon-star2 me-2 text-lg"
-                                              :class="{'text-theme-yellow': (temp >= item)}"></span>
-                                </template>
-                                <div x-cloak>
-                                    <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
-                                    <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
-                                    <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
-                                    <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
-                                    <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
-                                </div>
-                            </div>
-                            <small class="text-red-400" x-show="!$store.orderRating.storeRating.rate && $store.orderRating.isSubmit">تقييم المتجر مطلوب</small>
-                        </section>
-
-                        {# Shipping Rating #}
-                        <section x-data="{ temp: 0, orig: 0,}" class="bg-white my-10 p-5 rounded-md mb-5">
-                            <h2 class="text-xl font-bold mb-5">ما رأيك في شركة الشحن؟</h2>
-                             <div class="mb-2">
-                                <textarea x-model="$store.orderRating.shippingRating.comment"  class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..." :class="{'has-error': !$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit}"></textarea>
-                                <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
-                            </div>
-                            <div  class="flex items-center cursor-pointer" @click="orig = temp">
-                                <input x-model="$store.orderRating.shippingRating.rate = orig" type="number" :value="orig" class="hidden"/>
-                                <template x-for="item in [1,2,3,4,5]">
-                                    <span @mouseenter="temp = item"
-                                          @mouseleave="temp = orig"
-                                          class="text-gray-300 sicon-star2 me-2 text-lg"
-                                          :class="{'text-theme-yellow': (temp >= item)}"></span>
-                                </template>
-                                <div x-cloak>
-                                    <span x-show="orig == 1" class="text-sm text-gray-400 mx-5"> 😡 منزعج </span>
-                                    <span x-show="orig == 2" class="text-sm text-gray-400 mx-5"> 😒 ماعجبني </span>
-                                    <span x-show="orig == 3" class="text-sm text-gray-400 mx-5"> 🙂 جيد </span>
-                                    <span x-show="orig == 4" class="text-sm text-gray-400 mx-5"> 😃 أعجبني </span>
-                                    <span x-show="orig == 5" class="text-sm text-gray-400 mx-5"> 😍 أحبيته </span>
-                                </div>
-                            </div>
-                            <small class="text-red-400" x-show="!$store.orderRating.shippingRating.rate && $store.orderRating.isSubmit">تقييم شركة الشحن مطلوب</small>
-                        </section>
-
-                        
-                        <button x-data @click="$store.orderRating.sendRate()" class="btn btn-primary w-full">نشر التقييم</button>
-                        
-                        {#{% include 'pages.partials.rating' with {'order':order} %}#}
-                    {% endif %}
+                    {% include 'pages.partials.rating' with {'order':order} %}
                 </div>
             </div>
         </div>

@@ -1,3 +1,17 @@
+<template x-for="item in [1,2,3,4,5]">
+    <span @mouseenter="temp = item"
+          @mouseleave="temp = orig"
+          class="text-gray-300 sicon-star2 me-2 text-lg"
+          :class="{'text-theme-yellow': (temp >= item)}"></span>
+</template>
+<div x-cloak>
+    {% for star in 1..5 %}
+        <span x-show="orig == {{ star }}" class="text-sm text-gray-400 mx-5 {{ star<=stars?' text-theme-yellow':'' }}">{{ trans('pages.rating.'~star~'_stars')|raw }}</span>
+    {% endfor %}
+</div>
+
+
+{#
 {% if stars and not editable %}
     {% for star in 1..5 %}
         <button class="btn btn--transparent btn--star {{ large?'large':'' }} {{ star<=stars?'selected':'' }}" disabled>
@@ -13,4 +27,4 @@
             <i class="sicon-star2"></i>
         </button>
     {% endfor %}
-{% endif %}
+{% endif %}#}
