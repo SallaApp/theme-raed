@@ -1,6 +1,9 @@
 {#
 | Variable          | Type                 | Description                                               |
 |-------------------|----------------------|-----------------------------------------------------------|
+| page              | object               |                                                           |
+| page.title        | string               |                                                           |
+| page.name         | string               |                                                           |
 | products          | Product[] *Paginator |                                                           |
 | brand             | Brand *              |                                                           |
 | brand.id          | Integer              |                                                           |
@@ -19,12 +22,11 @@
             </nav>
             <div
                 class="brand__header">
-                {# TODO: Remove not from if statement #}
-                {% if not brand.banner %}
+                {% if brand.banner %}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="brand__banner">
-                                <img class="lazy-load w-full max-h-96 object-cover rounded-md " data-src="https://images.unsplash.com/photo-1596558450255-7c0b7be9d56a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="{{ brand.name }}"/>
+                                <img class="lazy-load w-full max-h-96 object-cover rounded-md " data-src="{{brand.banner}}" alt="{{ brand.name }}"/>
                             </div>
                         </div>
                     </div>

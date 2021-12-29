@@ -2,9 +2,10 @@
 | Variable     | Type                  | Description |
 |--------------|-----------------------|-------------|
 | page         | Page                  |             |
-| page.title   | String                |             |
-| page.content | String                |             |
-| page.url     | String                |             |
+| page.title   | string                |             |
+| page.content | string                |             |
+| page.url     | string                |             |
+| page.name    | string                |             |
 | comments     | Feedback[] *Paginator |             |
 #}
 {% extends "layouts.master" %}
@@ -15,13 +16,13 @@
                 {% component 'header.breadcrumbs' with {breadcrumbs:[{url:link('/'),title:trans('common.titles.home')},{title:page.title}]} %}
             </nav>
             <div class="flex justify-center">
-              <div class="content content--single-page lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
-                <h1 class="font-bold text-2xl mb-6">{{ page.title }}</h1>
-                <div class="content-entry">
-                  {{ page.content|raw }}
+                <div class="content content--single-page lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
+                    <h1 class="font-bold text-2xl mb-6">{{ page.title }}</h1>
+                    <div class="content-entry">
+                        {{ page.content|raw }}
+                    </div>
+                    {% component 'page-comments' with {comments:comments, id:page.id} %}
                 </div>
-                {% component 'page-comments' with {comments:comments, id:page.id} %}
-              </div>
             </div>
         </div>
     </main>
