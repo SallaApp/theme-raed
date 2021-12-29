@@ -4,6 +4,8 @@ const TelInput = require('intl-tel-input');
 window.anime = require('animejs').default;
 window.Alpine = require('alpinejs').default;
 Alpine.start();
+
+salla.init({debug: true});//TODO:: remove it in production
 salla.notify.setNotifier((...data) => salla.log(...data));
 salla.currency.event.onChanged(event => window.location.reload())
 salla.onReady(() => {
@@ -49,13 +51,13 @@ document.querySelectorAll(".close-mobile-menu").forEach((elem) => {
  */
 var headerWrapper = document.getElementById('site-header-outer'),
     headerContent = document.querySelector('.site-header');
-var headerHeight = originalHeaderHeight = headerContent.clientHeight;
+var headerHeight = headerContent.clientHeight;
 headerWrapper.style.height = headerHeight + 'px';
 
-window.addEventListener('resize', function () {
-    headerHeight = headerContent.clientHeight;
-    headerWrapper.style.height = headerHeight + 'px';
-});
+// window.addEventListener('resize', function () {
+//     headerHeight = headerContent.clientHeight;
+//     headerWrapper.style.height = headerHeight + 'px';
+// });
 
 window.addEventListener('scroll', function () {
     var headerOffsetTop = headerWrapper.offsetTop;
@@ -65,14 +67,12 @@ window.addEventListener('scroll', function () {
         headerWrapper.classList.add('fixed-pinned', 'animated');
     } else {
         headerWrapper.classList.remove('fixed-pinned');
-        headerWrapper.style.height = originalHeaderHeight + 'px';
     }
 
     if (scrollY >= 200) {
         headerWrapper.classList.add('fixed-header');
     } else {
         headerWrapper.classList.remove('fixed-header', 'animated');
-        headerWrapper.style.height = originalHeaderHeight + 'px';
     }
 }, {
     passive: true
@@ -107,12 +107,4 @@ initTelInput();
 
 
 // Add loading icon
-// salla.document.event.onClick('.btn--has-loading', event => {
-//   event.target.classList.add('btn--is-loading')
-// })
-
-document.querySelectorAll('.btn--has-loading').forEach(btn => {
-  btn.addEventListener('click', ()=>{
-    btn.classList.add('btn--is-loading')
-  })
-})
+salla.document.event.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading'))
