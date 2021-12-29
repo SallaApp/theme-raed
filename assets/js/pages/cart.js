@@ -191,6 +191,7 @@ window.initCartItem = function ({id, quantity, total, price, product_price, has_
             salla.cart.api
                 .deleteItem(this.itemId).then(res => {
                 updateCartPageInfo(res);
+                let items = document.querySelectorAll('.cart-item');
                 let item = document.querySelector('#item-' + this.itemId);
                 anime({
                     targets         : item,
@@ -201,7 +202,12 @@ window.initCartItem = function ({id, quantity, total, price, product_price, has_
                     opacity         : 0,
                     'padding-bottom': 0,
                     'padding-top'   : 0,
-                    complete        : () => item.remove(),
+                    complete        : () => {
+                        item.remove();
+                        if (items.length == 1) {
+                            window.location.reload();
+                        }
+                    },
                 });
             })
         },

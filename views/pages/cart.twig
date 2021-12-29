@@ -65,7 +65,7 @@
                         <section x-data="initCartItem({{ item.get('id', 'quantity', 'total', 'price', 'product_price', 'has_offer', 'offer')|json_encode }})"
                                 {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
                                  data-filter-before-submit="verifyDataBeforeSend"
-                                 class="bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
+                                 class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
                                  id="item-{{ item.id }}" salla-form-data data-on-change="cart::update-item">
                             <input type="hidden" name="id" value="{{ item.id }}">
                             <!-- product -->
@@ -192,7 +192,7 @@
                                                :class="{'has-error': isShowCouponError}" class="pe-24 form-input"
                                                :disabled="isShowCouponDiscount">
                                         <button @click="addCoupon();" type="button"
-                                                class="coupon-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn"
+                                                class="coupon-btn absolute top-px end-px rounded-s-none rounded-e-md flex-shrink-0 btn"
                                                 :class="isShowCouponDiscount ? 'btn-danger' : 'btn-default'">
                                             <span x-show="!isShowCouponDiscount">{{ trans('pages.cart.save_coupon') }}</span>
                                             <i x-show="isShowCouponDiscount" @click="removeCoupon();"

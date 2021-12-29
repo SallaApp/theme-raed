@@ -23,9 +23,10 @@ const menu = new MmenuLight(
     "(max-width: 1024px)", "( slidingSubmenus: false)"
 );
 
+let dir = document.querySelector('html').getAttribute("dir");
 const navigator = menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
 const drawer = menu.offcanvas({
-    position: "right"
+    position: dir == 'rtl' ? "right" : ""
 });
 
 document.querySelector("a[href='#mobile-menu']")
