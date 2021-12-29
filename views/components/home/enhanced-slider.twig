@@ -9,53 +9,22 @@
 | position                       | int      | Sorting number start from zero                                            |
 #}
 <section class="s-block home-slider s-block--hero-slider wide-placeholder first-of-type:mt-0">
-  <div  class="swiper home-slider main-slider">
-    <div class="swiper-wrapper">
-        {% for slide in component.slides %}
-            <div class="swiper-slide h-80 sm:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background" data-src="{{ slide.image }}">
-                <div class="flex justify-center items-center container pb-16 sm:pb-0 home-slider__content relative h-full">
-                    <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
-                        <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-tight mb-4">{{ slide.title }}</h3>
-                        <p class="line-clamp-2 main-slide-anime opacity-0 description">{{ slide.description }}</p>
+    <div class="swiper home-slider main-slider" id="main-slider-{{ position }}">
+        <div class="swiper-wrapper">
+            {% for slide in component.slides %}
+                <div class="swiper-slide h-80 sm:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background"
+                     data-src="{{ slide.image }}">
+                    <div class="flex justify-center items-center container pb-16 sm:pb-0 home-slider__content relative h-full">
+                        <div class="z-20 w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
+                            <h3 class="main-slide-anime opacity-0 lg:text-title-size font-bold leading-tight mb-4">{{ slide.title }}</h3>
+                            <p class="line-clamp-2 main-slide-anime opacity-0 description">{{ slide.description }}</p>
+                        </div>
                     </div>
+                    <div class="overlay absolute transition top-0 z-0 bg-black opacity-60 w-full h-full"></div>
                 </div>
-                <div class="overlay absolute transition top-0 z-0 bg-black opacity-60 w-full h-full"></div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="w-10 h-10 shadow-sm bg-white transition swiper-button swiper-button-prev rounded-full"></div>
+        <div class="w-10 h-10 shadow-sm bg-white transition swiper-button swiper-button-next rounded-full"></div>
     </div>
-    <div class="w-10 h-10 shadow-sm bg-white transition swiper-button swiper-button-prev rounded-full"></div>
-    <div class="w-10 h-10 shadow-sm bg-white transition swiper-button swiper-button-next rounded-full"></div>
-  </div>
-
-  <script>
-      document.addEventListener('DOMContentLoaded', function () {
-          animateSliderItems()
-          const swiper = new Swiper('.main-slider', {
-              loop: true,
-              navigation: {
-                  nextEl: '.swiper-button-next',
-                  prevEl: '.swiper-button-prev',
-              },
-          });
-
-
-          swiper.on('slideChange', function () {
-              animateSliderItems()
-          });
-
-          function animateSliderItems() {
-              setTimeout(() => {
-                  anime({
-                    targets   : '.swiper-slide-active .main-slide-anime',
-                    opacity   : [0, 1],
-                    duration  : 2500,
-                    translateX: [50, 0],
-                    delay     : function (el, i) {
-                        return i * 100;
-                    },
-                  })
-              }, 100);
-          }
-      });
-  </script>
 </section>
