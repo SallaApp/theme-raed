@@ -9,54 +9,54 @@
 | category.name           | string      |                |
 | category.sub_categories | ?Category[] |                |
 | category.url            | string      |                |
-| sort_by                 | ?array      |                |
+| sort_by                 | ?string     |                |
+| sort_list               | ?array      | key=>value     |
 | search_word             | ?string     |                |
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main" x-data="initCategory()" x-cloak>
+    <main id="main">
         <div class="container mb-10 md:mb-20">
-            <nav class="w-full py-5">
-                {% component 'header.breadcrumbs' %}
-            </nav>
+            <nav class="w-full py-5">{% component 'header.breadcrumbs' %}</nav>
             <div class="flex items-start flex-col md:flex-row">
                 <div class="main-content flex-1 md:pb-20 ">
                     <div class="mb-5 md:flex justify-between items-center">
                         <h2 class="font-bold mb-6 md:mb-0">{{ page.title|raw }}</h2>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                {% if sort_by|length %}
+                                {% if sort_list|length %}
                                     <div class="flex items-center">
                                         <label class="hidden sm:block me-3"
                                                for="productFilter">{{ trans('pages.categories.sorting') }}</label>
-                                        <select id="productFilter" name="sort-opt"
-                                                class="appearance-none form-input focus:ring-transparent focus:outline-none h-10 text-sm rounded-md  border border-border-color w-48 pt-0 pb-1">
-                                            {% for key,value in sort_by %}
-                                                <option value="{{ key }}">{{ value }}</option>
+                                        <select id="productFilter"
+                                                class="appearance-none form-input focus:ring-transparent
+                                                       focus:outline-none h-10 text-sm rounded-md  border
+                                                       border-border-color w-48 pt-0 pb-1">
+                                            {% for key,value in sort_list %}
+                                                <option value="{{key}}" {{sort_by==key?'selected':''}}>{{ value }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                 {% endif %}
-                                <div class="hidden md:flex items-center ms-2 md:ms-2">
-                                    <a @click="toggleView('grid')"
-                                       :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                       id="gridButton" data-grid="grid"
-                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
-                                                class="sicon-grid"></i></a>
-                                    <a @click="toggleView('list')"
-                                       :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                       id="listButton" data-grid="list"
-                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10 rounded-md flex items-center justify-center"><i
-                                                class="sicon-list"></i></a>
+                                <div class="hidden {# md:flex #} items-center ms-2 md:ms-2">
+                                    <a  href="#" data-type="grid"
+                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
+                                              rounded-md flex items-center justify-center
+                                              bg-border-color text-primary">
+                                      <i class="sicon-grid"></i>
+                                    </a>
+                                    <a href="#" data-type="list"
+                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
+                                              rounded-md flex items-center justify-center
+                                              text-gray-400">
+                                       <i class="sicon-list"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {% if products|length %}
-                        <div x-ref="productsContainer"
-                             :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
-                             class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
+                        <div class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6 md:grid-cols-auto-fill">
                             {% for product in products %}
                                 {% include 'pages.partials.product.card' %}
                             {% endfor %}
@@ -79,10 +79,4 @@
 
 {% block scripts %}
     <script src="{{ asset('dist/category.js') }}"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            salla.infiniteScroll.initiate('.products-container', '.product-entry')
-        })
-    </script>
 {% endblock %}
