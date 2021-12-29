@@ -6,7 +6,7 @@ class Category extends BasePage {
     }
 
     registerEvents() {
-        salla.document.event.onChange('[name="sort-opt"]', event => this.sortAction(event));
+        salla.document.event.onChange('#productFilter', event => this.sortAction(event));
         salla.document.event.onClick('.grid-trigger', event => this.toggleView(event));
     }
 
