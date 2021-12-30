@@ -70,7 +70,7 @@ class Home extends BasePage {
 
     //used in views/components/home/featured-products-style*.twig
     animateTabsItems(sel) {
-        document.querySelectorAll(sel).forEach(({style}) => style.removeProperty("opacity") && style.removeProperty("transform"))
+        document.querySelectorAll(sel).forEach(({style}) => style.removeProperty("opacity") || style.removeProperty("transform"))
         this.anime(sel, false)
             .stagger(70)
             .translateY([30, 0])
