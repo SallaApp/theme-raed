@@ -124,22 +124,19 @@ class Product extends BasePage {
             },
 
             toggleShareMenu() {
-                this.showShareMenu = !this.showShareMenu
-                if (this.showShareMenu) {
-                    this.animateShareList();
+                if (!(this.showShareMenu = !this.showShareMenu)) {
+                    return;
                 }
-            },
 
-            animateShareList: function () {
-                const shareListAnime = new anime.timeline();
-                shareListAnime.add({
-                    targets   : '.share-btns-list',
-                    translateY: [-50, 0],
-                    opacity   : [0, 1],
-                    duration  : 300,
-                    podding   : '0',
-                    easing    : 'easeInOutSine'
-                }).add({
+                (new anime.timeline())
+                    .add({
+                        targets   : '.share-btns-list',
+                        translateY: [-50, 0],
+                        opacity   : [0, 1],
+                        duration  : 300,
+                        podding   : '0',
+                        easing    : 'easeInOutSine'
+                    }).add({
                     targets   : '.share-btns-list li',
                     translateZ: 0,
                     translateY: [-30, 0],
@@ -148,7 +145,7 @@ class Product extends BasePage {
                     duration  : 1200,
                     delay     : anime.stagger(100),
                 }, '-=200');
-            }
+            },
 
         }
     }
