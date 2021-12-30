@@ -8,6 +8,9 @@ window.Swiper = Swiper;
  * @param pagination
  */
 export default function (selector, otherOptions, navigation = false, pagination = false) {
+    if (!selector) {
+        return null;
+    }
     if (typeof selector === 'object') {
         return initSlider(selector, otherOptions, navigation, pagination);
     }

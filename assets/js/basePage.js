@@ -15,11 +15,16 @@ import WishlistButtons from './partials/wishlist-buttons';
 class BasePage extends Helpers {
     constructor() {
         super();
-        document.addEventListener('DOMContentLoaded', () => this.boot());
+        this.boot();
+        document.addEventListener('DOMContentLoaded', () => this.load());
     }
 
     boot() {
+        this.onBoot && this.onBoot();
         this.registerWindowProperties();
+    }
+
+    load() {
         this.initiatePlugins();
         this.initiateCommons();
 
@@ -49,14 +54,12 @@ class BasePage extends Helpers {
         salla.document.event.onClick('.btn--has-loading', ({target}) => target.classList.add('btn--is-loading'));
 
         //TODO:: enhance this part:
-        salla.onReady(() => {
-            anime({
-                targets : '.anime-count',
-                opacity : [0, 1],
-                duration: 2000,
-                scale   : [0.5, 1],
-                delay   : (el, i) => i * 100,
-            });
+        anime({
+            targets : '.anime-count',
+            opacity : [0, 1],
+            duration: 2000,
+            scale   : [0.5, 1],
+            delay   : (el, i) => i * 100,
         });
     }
 }

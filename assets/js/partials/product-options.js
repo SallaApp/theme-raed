@@ -1,54 +1,11 @@
 let initateOptions = true;
-document.addEventListener('DOMContentLoaded', () => {
-    salla.document.event.onChange('.visibility_condition', event => visibilityConditionCheck(event.target));
-//lets call event to show correct fields in cart page
+export default function () {
+    salla.document.event.onChange('.visibility_condition', ({target}) => visibilityConditionCheck(target));
+    //lets call event to show correct fields in cart page
     document.querySelectorAll('.visibility_condition').forEach(input => visibilityConditionCheck(input));
     initateOptions = false;
-});
-window.verifyDataBeforeSend = function (formData, element, event) {
-    if (!element) {
-        return;
-    }
-    let shouldPass = true;
-
-    element.querySelectorAll('[required]:not(:disabled)').forEach(input => {
-        //get the value for option, if it's empty return
-        let inputValue = getDataUsingKeyPath(formData, input.name);
-        //we may accept 0, '0'
-        if (toggleError(input, inputValue === undefined || inputValue === '' || inputValue === null)) {
-            return shouldPass = false;
-        }
-    });
-    return shouldPass ? formData : false;
 }
 
-function toggleError(element, isHideError = true) {
-    let classes = ['border', 'border-red-400'];
-    let isRadioOrCheckbox = element.checked !== undefined && element.dataset.isAdvanced;
-    let selector = '';
-    //is checkbox or radio, toggle error to their labels
-    if (!isRadioOrCheckbox) {
-        isHideError ? element.classList.add(...classes) : element.classList.remove(...classes);
-    }
-
-    document.querySelectorAll(`[for="${element.name}"]`)
-        .forEach(label => label.classList[isHideError ? 'add' : 'remove']('text-red-400'));
-    //TODO:: add show error message.
-    return isHideError;
-}
-
-function getDataUsingKeyPath(objectData, keyPath) {
-    if (!objectData) {
-        return objectData;
-    }
-
-    return objectData instanceof FormData
-        ? objectData.get(keyPath)
-        : keyPath.replace(']', '')
-            .replace('[', '.')
-            .split('.')
-            .reduce((data, key) => data[key], objectData);
-}
 
 function visibilityConditionCheck(input) {
     let isMultiple = input.type == 'checkbox';
@@ -65,6 +22,21 @@ function visibilityConditionCheck(input) {
         });
 }
 
+
+function toggleError(element, isHideError = true) {
+    let classes = ['border', 'border-red-400'];
+    let isRadioOrCheckbox = element.checked !== undefined && element.dataset.isAdvanced;
+    let selector = '';
+    //is checkbox or radio, toggle error to their labels
+    if (!isRadioOrCheckbox) {
+        isHideError ? element.classList.add(...classes) : element.classList.remove(...classes);
+    }
+
+    document.querySelectorAll(`[for="${element.name}"]`)
+        .forEach(label => label.classList[isHideError ? 'add' : 'remove']('text-red-400'));
+    //TODO:: add show error message.
+    return isHideError;
+}
 
 /**
  * @param {Element} field
@@ -96,4 +68,26 @@ function toggleElement(field, showIt) {
             salla.document.event.fireEvent(input, 'change', {'bubbles': true});
         }
     });
+}
+
+//register verifyDataBeforeSend function
+window.verifyDataBeforeSend = function (formData, element, event) {
+    if (!element) {
+        return;
+    }
+    let shouldPass = true;
+
+    element.querySelectorAll('[required]:not(:disabled)').forEach(input => {
+        //get the value for option, if it's empty return
+        let inputValue = formData
+            ? (formData instanceof FormData
+                ? formData.get(input.name)
+                : input.name.replace(']', '').replace('[', '.').split('.').reduce((data, key) => data[key], formData))
+            : formData;
+        //we may accept 0, '0'
+        if (toggleError(input, inputValue === undefined || inputValue === '' || inputValue === null)) {
+            return shouldPass = false;
+        }
+    });
+    return shouldPass ? formData : false;
 }
