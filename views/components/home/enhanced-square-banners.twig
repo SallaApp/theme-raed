@@ -9,8 +9,8 @@
 | component.banners[].description | ?string  |                                                                           |
 | position                        | int      | Sorting number start from zero                                            |
 #}
-<section class="s-block s-block--banners container ">
-    <div class="grid grid-cols-2 md:grid-cols-3 grid-flow-row gap-3 sm:gap-8">
+<section class="s-block s-block--banners container mt-8 sm:mt-16">
+    <div class="grid grid-cols-2 {{ component.banners|length <= 3 ? 'md:grid-cols-' ~ component.banners|length : 'md:grid-cols-3' }} grid-flow-row gap-3 sm:gap-8">
         <div class="col-span-2 sm:col-span-1 sm:row-span-2  bg-warmGray-200 transition-opacity hover:opacity-95 bg-cover h-lg-banner text-white text-center p-5 rounded-md overflow-hidden relative" style="background-image: url('{{ component.banners[0].image }}');">
             <a href="{{component.banners[0].url}}"
                class="flex flex-col justify-center  h-full p-11 relative z-20 xs:border border-dashed border-border-color rounded-md">
@@ -19,9 +19,8 @@
             </a>
             <div class="overlay h-full w-full bg-black opacity-60 absolute top-0 left-0 z-10"></div>
         </div>
-        {% for banner in component.banners|slice(3) %}
-            <div class="banner relative p-2 xs:p-4 overflow-hidden transition-opacity hover:opacity-95 text-white text-center  bg-warmGray-200  rounded-md h-banner bg-cover"
-                 style="background-image: url('{{banner.image}}');">
+        {% for banner in component.banners|slice(1,4) %}
+            <div class="banner relative p-2 xs:p-4 overflow-hidden transition-opacity hover:opacity-95 text-white text-center  bg-warmGray-200  rounded-md bg-cover lazy-background {{ component.banners|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-src="{{ banner.image }}">
                 <a href="{{banner.url}}"
                    class="bannerــtext flex md:opacity-0 hover:opacity-100 transition-opacity duration-500 flex-col justify-center  h-full p-0 xs:p-6 relative z-20 xs:border border-dashed border-border-color rounded-md">
                     <h3 class="banner__title text-md font-bold  mb-1 leading-6">{{banner.title}}</h3>
