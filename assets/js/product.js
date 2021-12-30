@@ -1,6 +1,5 @@
 import 'lite-youtube-embed';
 import BasePage from './basePage';
-import Flatpickr from 'flatpickr';
 import Fslightbox from 'fslightbox';
 import Slider from './partials/slider'
 import ProductOptions from './partials/product-options';
@@ -17,7 +16,6 @@ class Product extends BasePage {
 
     onReady() {
         this.initSliders();
-        this.initDateTimeInputes();
         ProductOptions();
     }
 
@@ -26,12 +24,6 @@ class Product extends BasePage {
             history        : false,
             scrollThreshold: false
         });
-    }
-
-    initDateTimeInputes() {
-        Flatpickr('.date-element', {"dateFormat": "Y-m-d H:i"});
-        Flatpickr('.date-time-element', {"enableTime": true, "dateFormat": "Y-m-d H:i",});
-        Flatpickr('.time-element', {enableTime: true, noCalendar: true, dateFormat: "H:i",});
     }
 
     //TODO:: enhance it

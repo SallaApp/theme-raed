@@ -1,9 +1,12 @@
+import Flatpickr from "flatpickr";
+
 let initateOptions = true;
 export default function () {
     salla.document.event.onChange('.visibility_condition', ({target}) => visibilityConditionCheck(target));
     //lets call event to show correct fields in cart page
     document.querySelectorAll('.visibility_condition').forEach(input => visibilityConditionCheck(input));
     initateOptions = false;
+    initDateTimeInputes();
 }
 
 
@@ -68,6 +71,12 @@ function toggleElement(field, showIt) {
             salla.document.event.fireEvent(input, 'change', {'bubbles': true});
         }
     });
+}
+
+function initDateTimeInputes() {
+    Flatpickr('.date-element', {"dateFormat": "Y-m-d H:i"});
+    Flatpickr('.date-time-element', {"enableTime": true, "dateFormat": "Y-m-d H:i",});
+    Flatpickr('.time-element', {enableTime: true, noCalendar: true, dateFormat: "H:i",});
 }
 
 //register verifyDataBeforeSend function
