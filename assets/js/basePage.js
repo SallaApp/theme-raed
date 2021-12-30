@@ -36,6 +36,7 @@ class BasePage extends Helpers {
         window.copyToClipboard = this.copyToClipboard;
         window.anime = AnimeJS;
         window.Alpine = AlpineJS;
+        window.LazyLoad = LazyLoad;
     }
 
     initiatePlugins() {
