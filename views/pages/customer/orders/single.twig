@@ -115,7 +115,7 @@
                     <div class="overflow-hidden mb-10">
 
                         {% for item in order.items %}
-                            <div data-order-item-id="{{item.id}}" class="order-item bg-white mb-5 p-5 rounded-md">
+                            <div data-order-item-id="{{item.id}}" data-order-item-product-id="{{item.product.id}}" class="order-item bg-white mb-5 p-5 rounded-md">
                                 <div class="mb-5">
                                     {% if item.product %}
                                         <div class="flex space-s-5 mb-4">
@@ -526,33 +526,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        // Order Rating
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('orderRating', {
-                isSubmit: false,
-                productsRating: {}, // {'productId': {comment: '', rate: null}}
-                storeRating:  {comment: '', rate: null},
-                shippingRating: {comment: '',rate: null},
-
-                init(){
-                    let orderItems = document.querySelectorAll('.order-item');
-                    orderItems.forEach(item => {
-                       this.productsRating[item.dataset.orderItemId] = {comment: '', rate: null}
-                    });
-                },
-                
-                sendRate: function(){
-                    {# this.validation(); #}
-                    this.isSubmit = true
-                    //console.log('Rating:', {...this.productsRating});
-                },
-            })
-        })
-        // End::Order Rating
-    </script>
-    
-       
     {% if order.can_cancel %}
         <script>
             function cancelOrder() {

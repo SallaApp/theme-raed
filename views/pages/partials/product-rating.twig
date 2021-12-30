@@ -4,7 +4,7 @@
     <textarea x-model="$store.orderRating.productsRating[{{item.id}}]['comment']" class="form-input h-20" placeholder="تقييمك للمنتج ..."></textarea>
 
     <div x-cloak class="flex items-center cursor-pointer mt-3" @click="orig = temp">
-        <input x-model="$store.orderRating.productsRating[{{item.id}}]['rate'] = orig" type="number" :value="orig" class="hidden"/>
+        <input x-model="$store.orderRating.productsRating[{{item.id}}]['rating'] = orig" type="number" :value="orig" class="hidden"/>
         {% include 'pages.partials.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
     </div>
 </div>

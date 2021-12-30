@@ -1,23 +1,23 @@
 {% if store.settings.rating.is_enabled %}
 
-    {# oreder store rate #}
+    {# oreder store rating #}
     {% if store.settings.rating.store %}
         {# Store Rating #}
         <section x-data="{ temp: 0, orig: 0 }" class="bg-white my-10 p-5 rounded-md mb-5">
             <h2 class="text-xl font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
             <div class="mb-2">
-                <textarea x-model="$store.orderRating.storeRating.comment"  :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.isSubmit}" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
+                <textarea x-model="$store.orderRating.storeRating.comment" :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.isSubmit}" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
                 <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.storeRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
             </div>
             <div  class="flex items-center cursor-pointer" @click="orig = temp">
-                <input x-model="$store.orderRating.storeRating.rate = orig" type="number" :value="orig" class="hidden" />
+                <input x-model="$store.orderRating.storeRating.rating = orig" type="number" :value="orig" class="hidden" />
                 {% include 'pages.partials.rating-stars' with {'stars':testimonial.stars} %}
             </div>
-            <small class="text-red-400" x-show="!$store.orderRating.storeRating.rate && $store.orderRating.isSubmit">تقييم المتجر مطلوب</small>
+            <small class="text-red-400" x-show="!$store.orderRating.storeRating.rating && $store.orderRating.isSubmit">تقييم المتجر مطلوب</small>
         </section>
     {% endif %}
 
-    {# order shipping company rate #}
+    {# order shipping company rating #}
     {% if order.has_shipping and store.settings.rating.shipping %}
         {# Shipping Rating #}
         <section x-data="{ temp: 0, orig: 0,}" class="bg-white my-10 p-5 rounded-md mb-5">
@@ -26,18 +26,46 @@
             <textarea x-model="$store.orderRating.shippingRating.comment"  class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..." :class="{'has-error': !$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit}"></textarea>
             <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
         </div>
-        <div  class="flex items-center cursor-pointer" @click="orig = temp">
-            <input x-model="$store.orderRating.shippingRating.rate = orig" type="number" :value="orig" class="hidden"/>
+        <div class="flex items-center cursor-pointer" @click="orig = temp">
+            <input x-model="$store.orderRating.shippingRating.rating = orig" type="number" :value="orig" class="hidden"/>
             {% include 'pages.partials.rating-stars' with {'stars':shippingRate.stars} %}
         </div>
-        <small class="text-red-400" x-show="!$store.orderRating.shippingRating.rate && $store.orderRating.isSubmit">تقييم شركة الشحن مطلوب</small>
+        <small class="text-red-400" x-show="!$store.orderRating.shippingRating.rating && $store.orderRating.isSubmit">تقييم شركة الشحن مطلوب</small>
     </section>
     {% endif %}
 
-    <button x-data @click="$store.orderRating.sendRate()" class="btn btn-primary w-full">نشر التقييم</button>
+    <button x-data @click="$store.orderRating.sendRate()" class="btn btn-primary w-full">{{ trans('pages.rating.send_ratings') }}</button>
 {% endif %}
 
+<script>
+    // Order Rating
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('orderRating', {
+            isSubmit: false,
+            productsRating: {}, // {'productId': {comment: '', rating: null}}
+            storeRating:  {comment: '', rating: null},
+            shippingRating: {comment: '',rating: null},
 
+            init(){
+                let orderItems = document.querySelectorAll('.order-item');
+                orderItems.forEach(item => {
+                    this.productsRating[item.dataset.orderItemId] = {product_id: item.dataset.orderItemProductId, comment: null, rating: null}
+                });
+            },
+
+            sendRate: function(){
+                {# this.validation(); #}
+                this.isSubmit = true
+                console.log('productsRating:', {...this.productsRating});
+
+                salla.feedback.api.store({order_id: {{ order.id }}, comment: this.storeRating.comment, rating: this.storeRating.rating});
+                salla.feedback.api.shipping({order_id: {{ order.id }}, comment: this.shippingRating.comment, rating: this.shippingRating.rating});
+                salla.feedback.api.product({order_id: {{ order.id }}, products: this.productsRating});
+            },
+        })
+    })
+    // End::Order Rating
+</script>
 
 {#
 
