@@ -1,8 +1,9 @@
+require('lite-youtube-embed');
 import flatpickr from "flatpickr";
 import fslightbox from 'fslightbox';
 
-require('../../dist/filepond.js');
-require('../partials/pages/product-options');
+require('../dist/filepond.js');
+require('./partials/product-options');
 
 window.fslightbox = fslightbox;
 
