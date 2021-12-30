@@ -44,10 +44,8 @@ class Home extends BasePage {
             spaceBetween  : 15,
             breakpoints   : {1024: {slidesPerView: 2, spaceBetween: 30}}
         });
-        this.initEnhancedSlider();
-    }
 
-    initEnhancedSlider() {
+        //enhanced slider
         let animate = () => setTimeout(() => this.anime('.swiper-slide-active .main-slide-anime', {translateX: [50, 0]}), 100);
         Slider('.main-slider', {loop: true, on: {slideChange: animate}});
         animate();
