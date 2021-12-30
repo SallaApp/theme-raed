@@ -16,7 +16,7 @@
 | main_product.product     | Product   | #TODO                                                               |
 | position                 | int       | sorting block                                                       |
 #}
-{% set component_id='featured-products-style1-'~position %}
+{% set component_id='featured-products-style1-' ~ position %}
 <section class="s-block s-block--specialProducts container mt-8 sm:mt-16" id="{{ component_id }}">
     <div class="grid grid-cols-1  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-1 {% endif %} gap-8">
         {% if main_product %}
@@ -33,6 +33,7 @@
                     <button type="button"
                             data-target="{{ component_id }}-{{ section.id }}"
                             data-component-id="{{ component_id }}"
+                            data-type="style1"
                             class="tab-trigger cursor-pointer border-0 font-bold leading-7">
                         <h2>{{ section.title }}</h2>
                     </button>
@@ -44,10 +45,10 @@
                     <div id="{{ component_id }}-{{ section.id }}"
                          class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3
                                 {{ main_product?'lg:grid-cols-2':'lg:grid-cols-4' }}
-                                {{ loop.first?'active-tab':'' }}
+                                {{ loop.first?'active-tab':'hidden' }}
                                  gap-4 sm:gap-8">
                         {% for product in section.products|slice(0,main_product?4:8) %}
-                            {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item-style1'} %}
+                            {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item featured-item-style1'} %}
                         {% endfor %}
                     </div>
                 {% endfor %}
