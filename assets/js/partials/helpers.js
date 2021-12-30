@@ -1,3 +1,5 @@
+import Anime from "./anime";
+
 export default class Helpers {
     copyToClipboard(elementId) {
         let copyIcon = document.querySelector('.copy-icon');
@@ -28,5 +30,19 @@ export default class Helpers {
             element.classList.remove(...(isClasses1 ? classes2 : classes1));
             element.classList.add(...(isClasses1 ? classes1 : classes2));
         });
+    }
+
+    /**
+     * Workaround for seeking to simplify & clean, There are three ways to use this method:
+     * 1- direct call: `this.anime('.my-selector')` - will use default values
+     * 2- direct call with overriding defaults: `this.anime('.my-selector', {duration:3000})`
+     * 3- return object to play it leter: `this.anime('.my-selector', false).duration(3000).play()` - will not play animation unless calling play method.
+     * @param {string} selector
+     * @param {object|undefined|null|null} options - in case there is need to set attributes one by one set it `false`;
+     * @return {Anime|*}
+     */
+    anime(selector, options = null) {
+        let anime = new Anime(selector, options);
+        return options === false ? anime : anime.play();
     }
 }

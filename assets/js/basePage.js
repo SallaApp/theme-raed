@@ -1,7 +1,6 @@
 import '@salla.sa/twilight';
 import '@salla.sa/twilight/components';
 
-import AnimeJS from 'animejs';
 import AlpineJS from 'alpinejs';
 import Notify from './partials/notify';
 import Helpers from './partials/helpers';
@@ -34,7 +33,6 @@ class BasePage extends Helpers {
 
     registerWindowProperties() {
         window.copyToClipboard = this.copyToClipboard;
-        window.anime = AnimeJS;
         window.Alpine = AlpineJS;
         window.LazyLoad = LazyLoad;
     }
@@ -54,14 +52,7 @@ class BasePage extends Helpers {
         salla.currency.event.onChanged(() => window.location.reload());
         salla.document.event.onClick('.btn--has-loading', ({target}) => target.classList.add('btn--is-loading'));
 
-        //TODO:: enhance this part:
-        anime({
-            targets : '.anime-count',
-            opacity : [0, 1],
-            duration: 2000,
-            scale   : [0.5, 1],
-            delay   : (el, i) => i * 100,
-        });
+        this.anime('.anime-count', {scale: [0.5, 1]});
     }
 }
 

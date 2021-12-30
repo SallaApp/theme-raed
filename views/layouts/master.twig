@@ -170,7 +170,6 @@
     {% block content %}{% endblock %}
     {% component 'footer.footer' %}
 </div>
-<script defer src="{{ link("languages/assets/#{theme.translations_hash}.js") }}"></script>
 
 {% if not user %}
     <script type="module" defer src="{{ asset('dist/salla_login.js') }}"></script>
@@ -179,6 +178,7 @@
 {% hook 'body:end' %}
 {% hook 'scripts' %}
 
+<script src="{{ link("languages/assets/#{theme.translations_hash}.js") }}"></script>
 {% block scripts %}{% endblock %}
 {% if error %}
     <script>

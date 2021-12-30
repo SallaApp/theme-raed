@@ -62,12 +62,10 @@ class Cart extends BasePage {
     }
 
     onReady() {
-        this.animatedItem('.free-shipping');
-        this.animatedItem('.shipping-item');
+        this.anime('.free-shipping', {translateX: [-20, 0]});
+        this.anime('.shipping-item', {translateX: [-20, 0]});
         ProductOptions();
-        window.hasApplePay = function () {
-            return {'has_apple_pay': !!window.ApplePaySession};
-        }
+        window.hasApplePay = () => ({'has_apple_pay': !!window.ApplePaySession});
     }
 
     registerEvents() {
@@ -87,20 +85,6 @@ class Cart extends BasePage {
             return;
         }
         document.querySelectorAll('#free-shipping-bar').forEach(shippingBarEl => shippingBarEl.outerHTML = shippingBar);
-    }
-
-// TODO:Enhance it
-// TODO: add timeline
-    animatedItem(selector) {
-        anime({
-            targets   : selector,
-            opacity   : [0, 1],
-            duration  : 2000,
-            translateX: [-20, 0],
-            delay     : (el, i) => i * 100,
-        });
-        // change progress
-        //document.querySelectorAll('.progress-bg').style.width = '200px';
     }
 
 // TODO:Enhance it
@@ -157,6 +141,7 @@ class Cart extends BasePage {
 // TODO:Enhance it
 //cart Item
     initCartItem({id, quantity, total, price, product_price, has_offer, offer}) {
+        let cartClass = this;
         return {
             itemId       : id,
             itemQty      : quantity,
@@ -224,23 +209,18 @@ class Cart extends BasePage {
                     updateCartPageInfo(res);
                     let items = document.querySelectorAll('.cart-item');
                     let item = document.querySelector('#item-' + this.itemId);
-                    anime({
-                        targets         : item,
-                        height          : '0', // -> from 'height' to '0',
-                        margin          : 0,
-                        easing          : 'easeInOutQuad',
-                        duration        : 300,
-                        opacity         : 0,
-                        'padding-bottom': 0,
-                        'padding-top'   : 0,
-                        complete        : () => {
-                            item.remove();
-                            if (items.length == 1) {
-                                window.location.reload();
-                            }
-                        },
-                    });
-                })
+
+                    cartClass.anime(item, false)
+                        .complete(() => item.remove() || items.length == 1 && window.location.reload())
+                        .easing('easeInOutQuad')
+                        .paddingBottom(0)
+                        .duration(300)
+                        .paddingTop(0)
+                        .opacity(0)
+                        .height(0)
+                        .margin(0)
+                        .play();
+                });
             },
         }
     }

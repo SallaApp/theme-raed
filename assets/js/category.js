@@ -32,14 +32,7 @@ class Category extends BasePage {
 
         this.toggle('.grid-trigger', ['bg-border-color', 'text-primary'], ['text-gray-400'], e => e.dataset.type === type);
         this.toggle('.products-container', ['list', 'md:grid-cols-1'], ['md:grid-cols-auto-fill'], () => type === 'list');
-
-        anime({
-            targets   : '.product-entry',
-            opacity   : [0, 1],
-            duration  : 1200,
-            translateY: [20, 0],
-            delay     : (el, i) => i * 100,
-        });
+        this.anime('.product-entry', {duration: 1200, translateY: [20, 0]});
     }
 }
 

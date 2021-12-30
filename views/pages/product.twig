@@ -70,7 +70,7 @@
 
                 <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-16">
 
-                    <div class="swiper relative my-gallery details-slider rounded-md mb-2.5">
+                    <div class="swiper relative my-gallery details-slider rounded-md mb-2.5" id="details-slider-{{ product.id }}">
                         {% if(product.promotion_title) %}
                             <div class="absolute z-10 top-4 start-0">
                                 <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
@@ -100,7 +100,7 @@
                     </div>
 
                     {% if has_images %}
-                        <div thumbsSlider="" class="swiper thumbs-slider">
+                        <div thumbsSlider="" class="swiper thumbs-slider" id="thumbs-slider-{{ product.id }}">
                             <div class="swiper-wrapper">
                                 {% for image in product.images %}
                                     <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">

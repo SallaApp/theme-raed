@@ -40,11 +40,7 @@ class Product extends BasePage {
                     slidesPerView : 1,
                     centeredSlides: true,
                     spaceBetween  : 30,
-                    navigation    : {
-                        nextEl: slider.querySelector('.swiper-button-next'),
-                        prevEl: slider.querySelector('.swiper-button-prev'),
-                    },
-                    thumbs        : {swiper: thumbSlider,},
+                    thumbs        : {swiper: thumbSlider},
                 });
 
                 document.querySelectorAll('.go-to-slide')
@@ -57,6 +53,7 @@ class Product extends BasePage {
 
     //TODO:: enhance it
     initProductDetails(productId, inFavorite, showReadMore, quantity, total, productOptions) {
+        let that = this;
         window.productId = productId;
         return {
             reminderModal    : false,
@@ -71,12 +68,7 @@ class Product extends BasePage {
                     ? salla.api.wishlist.remove(productId)
                     : salla.api.wishlist.add(productId);
                 this.inFavorite = !this.inFavorite;
-                anime({
-                    targets : '.anime-favorite',
-                    opacity : [0, 1],
-                    duration: 800,
-                    scale   : [0.6, 1],
-                });
+                that.anime('.anime-favorite', {duration: 800, scale: [0.6, 1]});
             },
             addQty           : function () {
                 this.itemQty++;
@@ -103,8 +95,8 @@ class Product extends BasePage {
                 this.itemTotal = res.data.after;
             },
             openReminderModal: function () {
-                this.reminderModal = true
-                this.animateCommonItems();
+                this.reminderModal = true;
+                that.anime('.common-anime-r', {translateY: [40, 0]});
             },
 
             closeReminderModal: function () {
@@ -129,22 +121,6 @@ class Product extends BasePage {
                     .then(res => {
                         this.reminderModal = false;
                     });
-            },
-
-            animateCommonItems: function () {
-                let that = this;
-                anime({
-                    targets   : '.common-anime-r',
-                    opacity   : [0, 1],
-                    translateY: [40, 0],
-
-                    delay: function (el, i) {
-                        return i * 100;
-                    },
-                    begin: function () {
-                        //that.$refs['userPhone'].focus();
-                    }
-                })
             },
 
             toggleShareMenu() {
