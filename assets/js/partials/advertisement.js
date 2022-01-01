@@ -1,3 +1,5 @@
+import anime from "animejs";
+
 export default function () {
   let ad = document.getElementById("s-theme_ad");
 
@@ -14,20 +16,13 @@ export default function () {
       event.preventDefault();
       localStorage.setItem( 'statusAdId-' + adId , 'dismissed');
 
-      const adAnime = anime.timeline();
-      adAnime.add({
-        targets: '#s-theme_ad h2, #s-theme_ad a',
-        opacity: [1,0],
-        translateY: [0, -20],
-        delay: anime.stagger(100),
-      })
-      .add({
+      anime({
         targets: '#s-theme_ad',
         opacity: [1,0],
         duration: 300,
         height: [ad.clientHeight, 0],
         easing: 'easeInOutQuad',
-      }, '-=700');
+      });
     });
   }
 }
