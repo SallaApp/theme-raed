@@ -71,7 +71,7 @@
     {{ theme.set('topnav_bg_gradient', false) }}
     {{ theme.set('topnav_bg_gradient_from', '#0093E9') }}
     {{ theme.set('topnav_bg_gradient_to', '#80D0C7') }}
-    
+
     {# MainNav #}
     {{ theme.set('mainnav_is_dark', false) }}
     {{ theme.set('mainnav_bg', '') }}
@@ -96,16 +96,6 @@
     {% hook 'head' %}
     {# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
     {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
-    {% if is_rtl %}
-        {% if is_home %}
-        {% else %}
-        {% endif %}
-
-    {% else %}
-        {% if is_home %}
-        {% else %}
-        {% endif %}
-    {% endif %}
     {# {% set font_name=theme.font.name?:'DINNextLTArabic-Regular' %} #}
 
     {# <link rel="stylesheet" href="{{ asset(theme.font.path) }}"/> #}
@@ -120,9 +110,6 @@
           --main-color:{{ theme.color }};
           --color-main-d: {{ theme.darker_color(0.25) }};
           --color-main-l: {{ theme.lighter_color(0.15) }};
-          {#--color-main-reverse: {{ theme.reverse_color }};#}
-          {#--color-text: {{ theme.text_color }};#}
-          {#--color-text-reverse: {{ theme.reverse_text_color }};#}
 
         /*Topnav*/
         {% if theme.topnav_bg %}
@@ -181,11 +168,7 @@
 <script src="{{ link("languages/assets/#{theme.translations_hash}.js") }}"></script>
 {% block scripts %}{% endblock %}
 {% if error %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            salla.error('{{ error }}');
-        })
-    </script>
+    <script> document.addEventListener('DOMContentLoaded', function () {salla.error('{{ error }}');}) </script>
 {% endif %}
 </body>
 </html>

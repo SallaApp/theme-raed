@@ -17,6 +17,7 @@ class Product extends BasePage {
     onReady() {
         this.initSliders();
         ProductOptions();
+        
     }
 
     registerEvents() {
@@ -26,7 +27,6 @@ class Product extends BasePage {
         });
     }
 
-    //TODO:: enhance it
     initSliders() {
         let thumbSlider = Slider(document.querySelector('.thumbs-slider'), {
             spaceBetween       : 10,
@@ -34,21 +34,21 @@ class Product extends BasePage {
             freeMode           : true,
             watchSlidesProgress: true,
         });
-        document.querySelectorAll('.details-slider')
-            .forEach(slider => {
-                let swiper2 = Slider(slider, {
-                    slidesPerView : 1,
-                    centeredSlides: true,
-                    spaceBetween  : 30,
-                    thumbs        : {swiper: thumbSlider},
-                });
+        let swiper2 = Slider(document.querySelector('.details-slider'), {
+            slidesPerView : 1,
+            centeredSlides: true,
+            spaceBetween  : 30,
+            thumbs        : {swiper: thumbSlider},
+        });
 
-                document.querySelectorAll('.go-to-slide')
-                    .forEach(item => {
-                        let slideIndex = document.querySelector(`[data-img-id *= "${item.dataset.dataImgId}"]`);
-                        item.addEventListener('click', e => swiper2.slideTo(slideIndex.dataset.slidIndex, 0));
-                    })
+        document.querySelectorAll('.go-to-slide')
+            .forEach(item => {
+                let slideIndex = document.querySelector(`[data-img-id *= "${item.dataset.dataImgId}"]`);
+                item.addEventListener('click', e => swiper2.slideTo(slideIndex.dataset.slidIndex, 0));
             });
+
+        //usage in (similar-products.twig)
+        Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
     }
 
     //TODO:: enhance it
