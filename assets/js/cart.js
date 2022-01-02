@@ -59,6 +59,7 @@ class Cart extends BasePage {
     onBoot() {
         window.initCart = this.initCart;
         window.initCartItem = this.initCartItem;
+        window.cartClass = this;
     }
 
     onReady() {
@@ -133,7 +134,7 @@ class Cart extends BasePage {
                 }
             },
             updateCartSummary   : function () {
-                salla.cart.api.fetchFullSummary().then(res => updateCartPageInfo(res));
+                salla.cart.api.fetchFullSummary().then(res => this.updateCartPageInfo(res));
             },
         }
     }
@@ -141,7 +142,6 @@ class Cart extends BasePage {
 // TODO:Enhance it
 //cart Item
     initCartItem({id, quantity, total, price, product_price, has_offer, offer}) {
-        let cartClass = this;
         return {
             itemId       : id,
             itemQty      : quantity,
@@ -206,7 +206,7 @@ class Cart extends BasePage {
                 this.isRemoveItem = true;
                 salla.cart.api
                     .deleteItem(this.itemId).then(res => {
-                    updateCartPageInfo(res);
+                    this.updateCartPageInfo(res);
                     let items = document.querySelectorAll('.cart-item');
                     let item = document.querySelector('#item-' + this.itemId);
 
