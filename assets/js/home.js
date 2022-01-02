@@ -8,19 +8,19 @@ window.fslightbox = Lightbox;
 
 class Home extends BasePage {
     onReady() {
+        this.initMainLinks();
         this.initiateSliders();
         this.initFeaturedTabs();
-        this.initMainLinks();
+        this.loadMoreLatestProducts();
     }
 
     initMainLinks() {
         document.querySelectorAll('.category-slider').forEach(slider => {
             slider.style.display = 'block';
-            Slider(slider, {slidesPerView: "auto",/*spaceBetween : 30, centeredSlides: true,*/});
+            Slider(slider, {slidesPerView: "auto"});
             this.anime('.cat-item', {translateY: [15, 0]});
         })
     }
-
 
     initiateSliders() {
         // Used in: [products_slider.twig, featured_products_style2.twig, slider_products_with_header.twig]
@@ -38,6 +38,7 @@ class Home extends BasePage {
             },
         });
 
+        //Used in: [testimonials.twig, random-testimonials.twig]
         Slider('.testimonials-slider', {
             loop          : true,
             centeredSlides: true,
@@ -45,15 +46,20 @@ class Home extends BasePage {
             breakpoints   : {1024: {slidesPerView: 2, spaceBetween: 30}}
         });
 
-        //enhanced slider
+
+        //Used in: [photos_slider.twig]
         let animate = () => setTimeout(() => this.anime('.swiper-slide-active .main-slide-anime', {translateX: [50, 0]}), 100);
         Slider('.main-slider', {loop: true, on: {slideChange: animate}});
         animate();
     }
 
+    /**
+     * used in views/components/home/featured-products-style*.twig
+     */
     initFeaturedTabs() {
         salla.document.event.onClick('.tab-trigger', event => {
             event.preventDefault();
+            let btn = event.target;
             let css = {
                 style1: {active: 'text-title-color', inActive: 'text-gray-400'},
                 style2: {active: 'btn btn-primary text-white', inActive: 'btn'},
@@ -68,7 +74,6 @@ class Home extends BasePage {
         this.animateTabsItems('.tabs-wrapper>div:first-child .featured-item');
     }
 
-    //used in views/components/home/featured-products-style*.twig
     animateTabsItems(sel) {
         document.querySelectorAll(sel).forEach(({style}) => style.removeProperty("opacity") || style.removeProperty("transform"))
         this.anime(sel, false)
@@ -76,6 +81,16 @@ class Home extends BasePage {
             .translateY([30, 0])
             .duration(1200)
             .play();
+    }
+
+    loadMoreLatestProducts() {
+        if (!document.querySelector('.s-block--latestProducts')) {
+            return;
+        }
+        salla.infiniteScroll.initiate('.products-list-container', '.product-entry', {
+            history        : false,
+            scrollThreshold: false
+        });
     }
 }
 

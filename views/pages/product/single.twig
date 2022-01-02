@@ -38,7 +38,7 @@
 | product.brand.logo         | string                      |                                                                  |
 | product.comments           | Feedback[] *Paginator       | @see views/components/page-comments.twig                         |
 | product.tags               | Tags[] *Collection          | @see views/pages/tag.twig                                        |
-| product.options            | ProductOption[] *Collection | @see views/pages/partials/product/elements.twig                  |
+| product.options            | ProductOption[] *Collection | @see views/pages/partials/product/options.twig                   |
 | product.donation           | ?ProductDonation            | @see views/components/product/donation-progress-bar.twig         |
 | product.show_read_more     | bool                        |                                                                  |
 | product.can_add_note       | bool                        |                                                                  |
@@ -241,7 +241,7 @@
                     >
                         <input type="hidden" name="id" value="{{ product.id }}">
 
-                        {% include 'pages.partials.product.elements' %}
+                        {% include 'pages.partials.product.options' %}
 
                         <section class="bg-white p-5 rounded-md mb-5">
 
@@ -334,7 +334,7 @@
                 </div>
             </div>
         </div>
-        {% component 'product.comments' with {comments: comments, id: product.id} %}
+        {% component comments with {comments: comments, id: product.id} %}
 
         {% component 'product.similar-products' %}
     </main>

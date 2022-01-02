@@ -18,14 +18,6 @@ class Category extends BasePage {
         window.location.href = url.replace(/&$|\?$/, '');
     }
 
-    sortAction(event) {
-        var regex = new RegExp("([?;&])by[^&;]*[;&]?");
-        let url = window.location.href.replace(regex, "$1").replace(/&$/, '');
-        url = (url.includes('?') ? url + "&" : "?") + (event.target.value ? "by=" + event.target.value : '');
-
-        window.location.href = url.replace(/&$|\?$/, '');
-    }
-
     toggleView(event) {
         event.preventDefault();
         let type = event.target.dataset.type;//list|grid
