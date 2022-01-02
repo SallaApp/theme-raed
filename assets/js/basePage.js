@@ -10,6 +10,7 @@ import StickyMenu from './partials/sticky-menu';
 import MobileInputs from './partials/mobile-inputs';
 import CartListeners from './partials/cart-listeners';
 import WishlistButtons from './partials/wishlist-buttons';
+import Advertisement from './partials/advertisement';
 
 class BasePage extends Helpers {
     constructor() {
@@ -46,6 +47,7 @@ class BasePage extends Helpers {
         CartListeners();
         AlpineJS.start();
         WishlistButtons();
+        Advertisement();
     }
 
     initiateCommons() {

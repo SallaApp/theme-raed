@@ -13,8 +13,10 @@
 | advertisement.colors.text   | string        | Hex Color ex: #ffffff                         |
 | advertisement.target        | string        | `_self`, `_blank`                             |
 #}
-<div id="s-theme_preview_bar" class="s-theme-preview-bar py-2.5" style="background-color:{{ advertisement.colors.bg }}; color:{{ advertisement.colors.text }}">
-    <div class="container flex justify-between items-center">
+<div id="s-theme_ad" class="s-theme-ad hidden" 
+  style="background-color:{{ advertisement.colors.bg }}; color:{{ advertisement.colors.text }}" 
+  data-id="{{ advertisement.id }}">
+    <div class="container flex justify-between items-center py-2.5">
         <h2 class="font-bold text-sm">
             {% if advertisement.icon %}
                 <span class="{{ advertisement.icon }}"></span>
@@ -27,7 +29,7 @@
                 {{ advertisement.description }}
             {% endif %}
         </h2>
-        <a href="#" class="px-1">
+        <a href="#" class="px-1 ad-close">
             <i class="sicon-cancel"></i>
         </a>
     </div>
