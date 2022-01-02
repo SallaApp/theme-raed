@@ -29,7 +29,7 @@
         <div class="container mb-24">
             <div class="flex flex-col lg:flex-row ">
                 {% include 'pages.partials.customer.sidebar' %}
-                <div class="main-content flex-1 pt-5 lg:pt-10">
+                <div class="main-content flex-1 pt-5 lg:pt-10" id="profile_info">
                     <div class="lg:hidden">
                         <div class="text-center mb-6">
                             <div class=" h-24 w-24 m-auto">
@@ -49,6 +49,7 @@
                           novalidate
                           action="{{ link('profile') }}"
                           data-filter-before-submit="update_profile_form">
+                        {{ csrf_field() }}
                         <div class="sm:flex w-full sm:space-s-8">
                             <div class="flex-1">
                                 <label for="first-name" class="block text-sm font-medium text-gray-700">
@@ -77,7 +78,7 @@
                                 </label>
 
                                 <div class="mt-2.5 mb-5">
-                                    <input type="email" id="birthday" name="birthday" value="{{ customer.birthday }}"
+                                    <input type="text" id="birthday" name="birthday" value="{{ customer.birthday }}"
                                            class="form-input date-element"
                                            placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
                                 </div>
