@@ -54,7 +54,9 @@ class BasePage extends Helpers {
 
     initiateCommons() {
         salla.currency.event.onChanged(() => window.location.reload());
-        salla.document.event.onClick('.btn--has-loading', ({target}) => target.classList.add('btn--is-loading'));
+        document.querySelectorAll('.btn--has-loading').forEach(btn => {
+          btn.addEventListener('click', ()=> btn.classList.add('btn--is-loading'));
+        });
 
         this.anime('.anime-count', {scale: [0.5, 1]});
     }
