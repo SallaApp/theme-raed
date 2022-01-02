@@ -9,34 +9,34 @@
 | product    | Product       |                                                         |
 #}
 <div id="cart_donating_form">
-    {% component 'product.donation-progress-bar' with {product:product} %}
-    <div class="product-section product-section--has-label">
-        <div>
-            <label>{{ trans('pages.products.donation_amount') }}</label>
-        </div>
-        <div class="form-group">
-            {% if product.can_donate %}
-                {{ csrf_field() }}
-                <div class="input-group input-group--end">
-                    <input placeholder="{{ trans('pages.products.donation_placeholder') }}"
-                           type="text"
-                           id="donating_amount"
-                           name="{{ is_cart?'amount_donating':'donating_amount' }}"
-                           class="form-control _parseArabicNumbers"
-                           value="{{ is_cart?product.price:'' }}"
-                           data-digits-with-decimal
-                           data-digits/>
-                    <span class="input-group-addon"> {{ currency }} </span>
-                </div>
-            {% else %}
-                <h4 class="d-block wide font-xsm color-danger">
-                    {% if product.donation.completed %}
-                        {{ trans('pages.products.donation_exceed_target_amount') }}
-                    {% else %}
-                        {{ trans('pages.products.donation_exceed_target_date') }}
-                    {% endif %}
-                </h4>
-            {% endif %}
-        </div>
-    </div>
+	{% component 'product.donation-progress-bar' with {product:product} %}
+	<div class="product-section product-section--has-label">
+		<div class="form-group">
+			{% if product.can_donate %}
+				{{ csrf_field() }}
+				<div class="border-t border-border-color py-5 space-x-4 space-x-reverse mt-5 mb-2.5 flex justify-between items-center">
+					<label for="donating_amount" class="block text-sm "> {{ trans('pages.products.donation_amount') }}
+						<span class="text-red-500">*</span>
+					</label>
+					<div class="mt-2.5 relative flex-1">
+						{# <input type="number" id="donating_amount" name="copoun-code" class="pe-24 form-input"> #}
+                        <input placeholder="{{ trans('pages.products.donation_placeholder') }}" type="text" id="donating_amount" name="{{ is_cart?'amount_donating':'donating_amount' }}" class="form-control _parseArabicNumbers form-input w-full" value="{{ is_cart?product.price:'' }}" data-digits-with-decimal data-digits/>
+                        <span class="input-group-addon absolute top-2 left-4 text-gray-400">
+						    {{ currency }}
+					    </span>
+					</div>
+				</div>
+
+
+			{% else %}
+				<h4 class="d-block wide font-xsm color-danger">
+					{% if product.donation.completed %}
+						{{ trans('pages.products.donation_exceed_target_amount') }}
+					{% else %}
+						{{ trans('pages.products.donation_exceed_target_date') }}
+					{% endif %}
+				</h4>
+			{% endif %}
+		</div>
+	</div>
 </div>
