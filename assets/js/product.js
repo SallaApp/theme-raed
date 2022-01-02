@@ -3,9 +3,7 @@ import BasePage from './basePage';
 import Fslightbox from 'fslightbox';
 import Slider from './partials/slider'
 import ProductOptions from './partials/product-options';
-
-
-import './partials/filepond';
+import Comments from './partials/comments';
 
 window.fslightbox = Fslightbox;
 
@@ -17,14 +15,7 @@ class Product extends BasePage {
     onReady() {
         this.initSliders();
         ProductOptions();
-        
-    }
-
-    registerEvents() {
-        salla.infiniteScroll.initiate('.comments-container', '.comment-block', {
-            history        : false,
-            scrollThreshold: false
-        });
+        Comments();
     }
 
     initSliders() {
@@ -34,7 +25,7 @@ class Product extends BasePage {
             freeMode           : true,
             watchSlidesProgress: true,
         });
-        let swiper2 = Slider(document.querySelector('.details-slider'), {
+        let productImages = Slider(document.querySelector('.details-slider'), {
             slidesPerView : 1,
             centeredSlides: true,
             spaceBetween  : 30,
@@ -43,8 +34,8 @@ class Product extends BasePage {
 
         document.querySelectorAll('.go-to-slide')
             .forEach(item => {
-                let slideIndex = document.querySelector(`[data-img-id *= "${item.dataset.dataImgId}"]`);
-                item.addEventListener('click', e => swiper2.slideTo(slideIndex.dataset.slidIndex, 0));
+                let slideIndex = document.querySelector(`[data-img-id *= "${item.dataset.imgId}"]`).dataset.slidIndex;
+                item.addEventListener('click', e => productImages.slideTo(slideIndex, 0));
             });
 
         //usage in (similar-products.twig)
