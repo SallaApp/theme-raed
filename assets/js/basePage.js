@@ -11,6 +11,7 @@ import MobileInputs from './partials/mobile-inputs';
 import CartListeners from './partials/cart-listeners';
 import WishlistButtons from './partials/wishlist-buttons';
 import Advertisement from './partials/advertisement';
+import Dropdwons from './partials/dropdwons';
 
 class BasePage extends Helpers {
     constructor() {
@@ -48,6 +49,7 @@ class BasePage extends Helpers {
         AlpineJS.start();
         WishlistButtons();
         Advertisement();
+        Dropdwons();
     }
 
     initiateCommons() {

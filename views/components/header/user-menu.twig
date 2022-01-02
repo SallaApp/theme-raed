@@ -49,31 +49,34 @@
         {{ trans('blocks.header.logout') }}
     </a>
 {% elseif user %}
-    <div class="inline-flex items-center h-full w-10 mx-1 md:mx-2 text-gray-500"
-         x-data="{toggleMenu: false}">
-        <button @click="toggleMenu = !toggleMenu" type="button"
-                class="dropdown-trigger  border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent"
-                id="menu-button" aria-expanded="true" aria-haspopup="true">
-            <img class="h-10 w-10 object-cover" src="{{ user.avatar }}" alt="">
-        </button>
-        <div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
-             x-transition:enter="transition ease-out duration-100"
-             x-transition:enter-start="transform opacity-0 scale-95"
-             x-transition:enter-end="transform opacity-100 scale-100"
-             x-transition:leave="transition ease-in duration-75"
-             x-transition:leave-start="transform opacity-100 scale-100"
-             x-transition:leave-end="transform opacity-0 scale-95"
-             class="origin-top-right absolute rtl:left-0 ltr:right-0 z-30 w-56 rounded-b-md shadow-default bg-white dark:bg-gray-700  inset-top-shadow top-full after:border-t
-                      {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }}
-                      {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}
-                      "
-             role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
-             tabindex="-1">
 
-            <ul class="py-2 space-y-px">
+    <div class="dropdown-toggler inline-flex items-center lg:h-full w-10 mx-1 md:mx-2 text-gray-500 absolute top-[-47px] end-8 lg:static">
+        <button type="button"
+                class="dropdown__trigger border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent"
+                id="menu-button" aria-expanded="true" aria-haspopup="true">
+            <img class="h-10 w-10 object-cover pointer-events-none" src="{{ user.avatar }}" alt="">
+        </button>
+        <div 
+          class="dropdown__menu origin-top-right inset-top-shadow duration-200 transition-all scale-y-90 absolute opacity-0 -translate-y-4 invisible rtl:left-0 ltr:right-0 z-30 w-80 lg:w-56 rounded-t-md lg:rounded-t-none rounded-b-md shadow-default bg-white dark:bg-gray-700 top-full after:border-t {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white '}} {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}"
+          role="menu" 
+          aria-orientation="vertical" 
+          aria-labelledby="menu-button"
+          tabindex="-1">
+
+            <div class="flex items-center p-4 border-b mb-1 lg:hidden relative">
+              <img class="h-12 w-12 rounded-full object-cover pointer-events-none me-3" src="{{ user.avatar }}" alt="">
+              <div>
+                <span>{{'مرحباً'}}</span>
+                <p class="text-gray-700 font-bold text-lg">{{user.full_name}}</p>
+              </div>
+              <button class="dropdown__close h-12 w-12 text-red-500 text-2xl rounded-full absolute top-2 end-1 z-50">
+                <i class="sicon-cancel pointer-events-none"></i>
+              </button>
+            </div>
+            <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
                 <li class="{{ new_notifications_count ? 'has-badge' : '' }}">
                     <a href="{{ link('notifications') }}"
-                       class="flex justify-between  items-center px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('notifications')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="flex justify-between  items-center px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('notifications')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
                        <span>
                         <i class="sicon-bell-ring me-3"></i>
                         <span>{{ trans('common.titles.notifications') }}</span>
@@ -86,11 +89,11 @@
                 </li>
                 <li class="{{ pending_orders_count ? 'has-badge' : '' }}">
                     <a href="{{ link('pending_orders') }}"
-                       class="flex items-center justify-between px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
-            <span>
-                <i class="sicon-cart me-3"></i>
-                <span> {{ trans('common.titles.pending_orders') }}</span>
-            </span>
+                       class="flex items-center justify-between px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                        <span>
+                            <i class="sicon-cart me-3"></i>
+                            <span> {{ trans('common.titles.pending_orders') }}</span>
+                        </span>
                         {% if pending_orders_count %}
                             <span class="bg-theme-red rounded-full inline-block text-center w-6 h-6 text-white pt-0.5 text-xs">{{ pending_orders_count }}</span>
                         {% endif %}
@@ -98,39 +101,36 @@
                 </li>
                 <li>
                     <a href="{{ link('orders') }}"
-                       class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
+                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
                         <i class="sicon-packed-box me-3"></i>
                         <span>{{ trans('common.titles.orders') }}</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ link('wishlist') }}"
-                       class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
+                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
                         <i class="sicon-heart me-3"></i>
                         {{ trans('common.titles.wishlist') }}
                     </a>
                 </li>
-
                 <li>
                     <a href="{{ link('profile') }}"
-                       class="block px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
                         <i class="sicon-settings me-3"></i>
                         {{ trans('common.titles.profile') }}
                     </a>
                 </li>
-
                 <li>
                     <a href="#"
                        data-on-click="auth-logout"
-                       class="block px-4 py-2 text-sm text-red-500 transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10">
+                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm text-red-500 transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10">
                         <i class="sicon-send-out me-3"></i>
                         {{ trans('blocks.header.logout') }}
                     </a>
                 </li>
-
             </ul>
         </div>
     </div>
-    {% else %}
-        <salla-login></salla-login>
+{% else %}
+  <salla-login></salla-login>
 {% endif %}

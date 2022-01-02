@@ -16,11 +16,13 @@
     {{ theme.topnav_is_dark ? 'dark:bg-gray-800 dark:text-gray-300': '' }}
     ">
         <div class="container">
-            <div class="flex justify-center lg:justify-between">
-                <div class="flex items-center">
-                    {% component 'footer.pages' with {is_header:true} %}
-                    {% component 'header.language-switcher' %}
-                    {% component 'header.currency-switcher' %}
+            <div class="flex justify-between">
+                <div class="flex items-center w-full lg:w-auto justify-between">
+                    <div class="flex items-center">
+                      {% component 'footer.pages' with {is_header:true} %}
+                      {% component 'header.language-switcher' %}
+                      {% component 'header.currency-switcher' %}
+                    </div>
                     <salla-search-modal></salla-search-modal>
                 </div>
                 {% component 'footer.contacts' with {is_header:true} %}
@@ -31,7 +33,7 @@
 
 
 {# Main Nav --------------------------- #}
-<div class="relative z-10 {{ theme.mainnav_is_dark ? 'dark': '' }}">
+<div class="{{ theme.mainnav_is_dark ? 'dark': '' }}">
     <header id="site-header-outer" class="site-header-container shadow-default
     {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]' : '' }}
     {{ theme.mainnav_text_color ? '!text-[color:var(--mainnav-text-color)]' : '' }}

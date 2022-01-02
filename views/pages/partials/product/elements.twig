@@ -35,8 +35,8 @@
         {% if option.type in ["splitter"] %}
             {{ option.element|raw }}
         {% else %}
-            <div class="{{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
-                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+            <div class="mb-5 last:mb-0 {{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
                     <label for="options[{{ option.id }}]" class="form-label">
                         <b class="block">
                             {{ option.name }}
