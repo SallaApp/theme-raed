@@ -2,6 +2,7 @@ const path = require('path');
 const ThemeWatcher = require('@salla.sa/twilight/watcher');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 
 module.exports = {
@@ -68,7 +69,7 @@ module.exports = {
                     "sass-loader",
                 ]
             },
-        ]
+        ],
     },
     plugins: [
         new ThemeWatcher(),
@@ -79,5 +80,15 @@ module.exports = {
             // suppressSuccess: true, // don't spam success notifications
             successSound: false,
         }),
+        new FileManagerPlugin({
+            events: {
+                onEnd: {
+                    copy: [
+                        { source: path.resolve("./assets/fonts"), destination: path.resolve("./assets/dist/fonts") },
+                    ],
+                },
+            },
+        })
     ],
-};
+}
+;
