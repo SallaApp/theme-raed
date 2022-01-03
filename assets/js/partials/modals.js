@@ -10,7 +10,7 @@ export default function () {
 	modalTriggers.forEach(trigger => {
 		trigger.addEventListener('click', () => {
       const 
-        modal = document.querySelector(`[data-modal="${trigger.dataset.modalTrigger}"]`),
+        modal = document.getElementById(trigger.dataset.modalTrigger),
         modalBody = modal.querySelector('.modal__body'),
         modalOverlay = modal.querySelector('.modal__overlay');
 
@@ -40,7 +40,7 @@ window.openModal = function (modalBody, modalOverlay) {
 
 window.closeModal = function(modalName) {
   const 
-    modal = document.querySelector(`[data-modal="${modalName}"]`),
+    modal = document.getElementById(modalName),
     modalBody = modal.querySelector('.modal__body'),
     modalOverlay = modal.querySelector('.modal__overlay');
 
