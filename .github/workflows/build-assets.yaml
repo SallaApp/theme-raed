@@ -9,8 +9,8 @@ jobs:
         token: ${{ secrets.PROTECTED_BRANCH_TOKEN }}
     - name: Setup Node Version 1
       uses: actions/setup-node@v2
-        with:
-          node-version: ${{ secrets.NODE_VERSION }}
+      with:
+         node-version: ${{ secrets.NODE_VERSION }}
     - name: Build 
       run: |
         echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" >> ~/.npmrc
