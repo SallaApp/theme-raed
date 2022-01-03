@@ -1,4 +1,4 @@
-import BasePage from './basePage';
+import BasePage from '../basePage';
 
 class Notifications extends BasePage {
     onReady() {

@@ -1,6 +1,6 @@
-import BasePage from './basePage';
+import BasePage from '../basePage';
 
-class Category extends BasePage {
+class Index extends BasePage {
     onReady() {
         salla.infiniteScroll.initiate('.products-container', '.product-entry');
     }
@@ -28,4 +28,4 @@ class Category extends BasePage {
     }
 }
 
-new Category;
+new Index;

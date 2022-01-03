@@ -1,7 +1,7 @@
-import './partials/filepond';
-import BasePage from './basePage';
-import Flatpickr from "flatpickr";
-import Filepond from "./partials/filepond";
+import '../partials/filepond';
+import Flatpickr from 'flatpickr';
+import BasePage from '../basePage';
+import Filepond from '../partials/filepond';
 
 class Profile extends BasePage {
     onReady() {

@@ -5,7 +5,7 @@
 | page.title | string       |                                                            |
 | page.name  | string       |                                                            |
 | brands     | Collection[] | Brands grouped by char, ex:{b:[{'name':'brand1',...},...]} |
-| title      | String       |                                                            |
+| title      | string       |                                                            |
 #}
 {% extends "layouts.master" %}
 {% block content %}
@@ -15,17 +15,7 @@
                 {% component 'header.breadcrumbs' %}
             </nav>
             <div class="flex justify-between pt-2 pb-6">
-                <h2 class="font-bold mb-6 md:mb-0">{{ page_title }}</h2>
-                {# <div class="ms-4  md:ms-20 flex items-center"> #}
-                {# <label class="hidden sm:block me-3 text-sm" for="productFilter">فرز </label> #}
-                {# <select #}
-                {# class="appearance-none text-sm focus:ring-transparent focus:outline-none h-10 rounded-md  border border-border-color w-44 "> #}
-                {# <option>العلامات الأكثر شهرة</option> #}
-                {# <option>العلامات المحلية</option> #}
-                {# <option>الأكثر مبيعاً</option> #}
-                {# </select> #}
-                {# <!-- <i class="sicon-keyboard_arrow_down absolute end-1.5 text-lg top-2/4 transform -translate-y-2/4"></i> --> #}
-                {# </div> #}
+                <h2 class="font-bold mb-6 md:mb-0">{{ page.title }}</h2>
             </div>
             {% if brands|length %}
                 <!-- brands nav -->

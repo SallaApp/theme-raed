@@ -1,6 +1,6 @@
-import BasePage from './basePage';
+import BasePage from '../../basePage';
 
-class Orders extends BasePage {
+class Index extends BasePage {
     onReady() {
         this.initiateLoadingMore();
     }
@@ -13,4 +13,4 @@ class Orders extends BasePage {
     }
 }
 
-new Orders;
+new Index;

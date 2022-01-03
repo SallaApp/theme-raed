@@ -1,6 +1,5 @@
-import BasePage from './basePage';
-class Order extends BasePage {
-
+import BasePage from '../../basePage';
+class Single extends BasePage {
     onReady() {
         this.highlightSelectedStars();
         this.starsRating();
@@ -160,4 +159,4 @@ class Order extends BasePage {
 
 }
 
-new Order;
+new Single;
