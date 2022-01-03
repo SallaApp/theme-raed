@@ -3,12 +3,16 @@
     <div class="text-center mb-9">
         <div class="text-center mb-9">
             <div class="h-20 w-20 m-auto avatar-wrap bg-color-gray rounded-full">
-                <input type="file"
-                       class="filepond profile-img file-pond--circular"
-                       name="filepond"
-                       id="profile_img"
-                       data-default="{{ user.avatar }}"
-                       data-max-file-size="3MB"/>
+                {% if is_link('profile') %}
+                    <input type="file"
+                           class="filepond profile-img file-pond--circular"
+                           name="filepond"
+                           id="profile_img"
+                           data-default="{{ user.avatar }}"
+                           data-max-file-size="3MB"/>
+                {% else %}
+                    <img src="{{ user.avatar }}" class="rounded-full" alt="">
+                {% endif %}
             </div>
         </div>
     </div>

@@ -1,7 +1,6 @@
 import '@salla.sa/twilight';
 import '@salla.sa/twilight/components';
 
-import AlpineJS from 'alpinejs';
 import Notify from './partials/notify';
 import Helpers from './partials/helpers';
 import LazyLoad from './partials/lazy-load';
@@ -29,14 +28,24 @@ class BasePage extends Helpers {
     load() {
         this.initiatePlugins();
         this.initiateCommons();
+        this.onReady();
+        this.registerEvents();
+    }
 
-        this.onReady && this.onReady();
-        this.registerEvents && this.registerEvents();
+    /**
+     * For Overriding
+     */
+    onReady() {
+    }
+
+    /**
+     * For Overriding
+     */
+    registerEvents() {
     }
 
     registerWindowProperties() {
         window.copyToClipboard = this.copyToClipboard;
-        window.Alpine = AlpineJS;
         window.LazyLoad = LazyLoad;
     }
 
@@ -47,7 +56,6 @@ class BasePage extends Helpers {
         StickyMenu();
         MobileInputs();
         CartListeners();
-        AlpineJS.start();
         WishlistButtons();
         Advertisement();
         Dropdwons();
@@ -57,7 +65,7 @@ class BasePage extends Helpers {
     initiateCommons() {
         salla.currency.event.onChanged(() => window.location.reload());
         document.querySelectorAll('.btn--has-loading').forEach(btn => {
-          btn.addEventListener('click', ()=> btn.classList.add('btn--is-loading'));
+            btn.addEventListener('click', () => btn.classList.add('btn--is-loading'));
         });
 
         this.anime('.anime-count', {scale: [0.5, 1]});
