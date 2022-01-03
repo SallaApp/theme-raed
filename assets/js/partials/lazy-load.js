@@ -22,6 +22,5 @@ function preloadImg(entry) {
 }
 
 export default function LazyLoad() {
-    salla.log('lazyLoad');
     document.querySelectorAll("[data-src]").forEach(entry => imgObserver.observe(entry));
 };

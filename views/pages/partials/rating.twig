@@ -6,7 +6,7 @@
         <section x-data="{ temp: 0, orig: 0 }" class="bg-white my-10 p-5 rounded-md mb-5">
             <h2 class="text-xl font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
             <div class="mb-2">
-                <textarea x-model="$store.orderRating.storeRating.comment" :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.isSubmit}" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
+                <textarea id="storeReview" x-model="$store.orderRating.storeRating.comment" :class="{'has-error': !$store.orderRating.storeRating.comment && $store.orderRating.isSubmit}" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
                 <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.storeRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
             </div>
             <div  class="flex items-center cursor-pointer" @click="orig = temp">
@@ -23,7 +23,7 @@
         <section x-data="{ temp: 0, orig: 0,}" class="bg-white my-10 p-5 rounded-md mb-5">
         <h2 class="text-xl font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
         <div class="mb-2">
-            <textarea x-model="$store.orderRating.shippingRating.comment"  class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..." :class="{'has-error': !$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit}"></textarea>
+            <textarea id="shippingReview" x-model="$store.orderRating.shippingRating.comment"  class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..." :class="{'has-error': !$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit}"></textarea>
             <small class="block text-red-400 text-tiny text-end" x-show="!$store.orderRating.shippingRating.comment && $store.orderRating.isSubmit"> التعليق  مطلوب</small>
         </div>
         <div class="flex items-center cursor-pointer" @click="orig = temp">
@@ -38,6 +38,11 @@
 {% endif %}
 
 <script>
+    let storeReview = document.querySelector("#storeReview").value
+    let shippingReview = document.querySelector("#shippingReview").value
+    let productsReviews = document.querySelectorAll(".product-review");
+
+
     // Order Rating
     document.addEventListener('alpine:init', () => {
         Alpine.store('orderRating', {
@@ -65,6 +70,80 @@
         })
     })
     // End::Order Rating
+</script>
+
+<script>
+
+// for hovered star ---
+function highlightSelectedStars() {
+    let rateElements = document.querySelectorAll('.rate-element');
+    rateElements.forEach(rateElement => {
+        let starElements = rateElement.querySelectorAll('.btn--star');
+        rateElement.addEventListener('mouseout', () => {
+
+            // remove hovered state from stars ---
+            rateElement.querySelectorAll('.btn--star').forEach(star => {
+                star.classList.remove('text-theme-yellow');
+            })
+        })
+
+        starElements.forEach((starElement, index) => {
+            starElement.addEventListener('mouseover', () => {
+                starElement.classList.add('text-theme-yellow');
+                if (index <= 1) {
+                    starElement.previousElementSibling.tagName === 'BUTTON' ? starElement.previousElementSibling.classList.add('text-theme-yellow') : null;
+                } else {
+                    for (let i = 0; i < index; i++) {
+                        starElements[i].classList.add('text-theme-yellow');
+                    }
+                }
+            })
+            starElement.addEventListener('mouseout', () => {
+                starElement.classList.contains('text-theme-yellow') ? starElement.classList.remove('text-theme-yellow') : null;
+            })
+        })
+    })
+}
+highlightSelectedStars();
+
+ // Listen for form submissions
+        salla.document.event.onSubmit('.rate-element', function (event) {
+            // Prevent form from submitting
+            event.preventDefault();
+
+            // Get the selected star - activeElement is not supported in safari
+          var activeStars = event.target.querySelectorAll('.btn--star.hovered');
+          var selected = activeStars[activeStars.length - 1];
+          if (!selected) return;
+          var selectedIndex = parseInt(selected.dataset.star, 10),
+            selectedText = selected.dataset.text;
+          event.target.nextElementSibling.innerHTML = selectedText;
+          event.target.querySelector('.rating_hidden_input').value = selectedIndex;
+
+            // Get all stars in this form (only search in the form, not the whole document)
+            // Loop through each star, and add or remove the `.selected` class to toggle highlighting
+            event.target
+                .querySelectorAll('.btn--star')
+                .forEach(function (star, index) {
+
+                    if (index < selectedIndex) {
+                        // Selected star or before it, Add highlighting
+                        star.classList.add('selected');
+                        return;
+                    }
+                    // After selected star, Remove highlight
+                    star.classList.remove('selected');
+                });
+
+            // Remove aria-pressed from any previously selected star
+            var previousRating = event.target.querySelector('.star[aria-pressed="true"]');
+            if (previousRating) {
+                previousRating.removeAttribute('aria-pressed');
+            }
+
+            // Add aria-pressed role to the selected button
+            selected.setAttribute('aria-pressed', true);
+        });
 </script>
 
 {#

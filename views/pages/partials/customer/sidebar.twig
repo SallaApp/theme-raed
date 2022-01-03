@@ -1,17 +1,11 @@
-{% block styles %}
-    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
-{% endblock %}
-
 <nav aria-label="Sidebar"
      class="hidden lg:block flex-shrink-0 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar space-y-px">
-
     <div class="text-center mb-9">
         <div class="text-center mb-9">
             <div class="h-20 w-20 m-auto avatar-wrap bg-color-gray rounded-full">
                 <input type="file"
                        class="filepond profile-img file-pond--circular"
                        name="filepond"
-                       data-instantUpload="true"
                        id="profile_img"
                        data-default="{{ user.avatar }}"
                        data-max-file-size="3MB"/>
@@ -20,33 +14,3 @@
     </div>
     {% component 'header.user-menu' with{is_profile_sidebar:true} %}
 </nav>
-
-{% block scripts %}
-    <script defer src="{{ asset('/dist/filepond.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-           /*
-            let sidebarAnime = anime.timeline();
-            sidebarAnime
-                .add({
-                    targets   : '.sidebar',
-                    opacity   : [0, 1],
-                    translateY: [30, 0],
-                }, '+=200')
-                .add({
-                    targets: '.avatar-wrap',
-                    opacity: [0, 1],
-                    scale  : [0, 1],
-                }, '-=900')
-                .add({
-                    targets   : '.menu-item',
-                    opacity   : [0, 1],
-                    translateY: [20, 0],
-                    delay     : function (el, i) {
-                        return i * 100;
-                    },
-                }, '-=700')
-                */
-        });
-    </Script>
-{% endblock %}

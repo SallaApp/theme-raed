@@ -1,12 +1,14 @@
+import Filepond from './filepond';
 import Flatpickr from "flatpickr";
 
-let initateOptions = true;
+let optionsAlreadyInitiated = false;
 export default function () {
     salla.document.event.onChange('.visibility_condition', ({target}) => visibilityConditionCheck(target));
     //lets call event to show correct fields in cart page
     document.querySelectorAll('.visibility_condition').forEach(input => visibilityConditionCheck(input));
-    initateOptions = false;
+    optionsAlreadyInitiated = true;
     initDateTimeInputes();
+    Filepond();
 }
 
 
@@ -67,7 +69,8 @@ function toggleElement(field, showIt) {
             input.checked = false;
         }
 
-        if (!initateOptions) {
+        //firing this event will show errors, so don't run it when pageLoading.
+        if (optionsAlreadyInitiated) {
             salla.document.event.fireEvent(input, 'change', {'bubbles': true});
         }
     });

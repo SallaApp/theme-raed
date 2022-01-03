@@ -1,41 +1,24 @@
+export default function () {
+    //infiniteScroll (Load more comments)
+    salla.infiniteScroll.initiate('.comments-container', '.comment-block', {history: false, scrollThreshold: false});
 
-/**
- * ADD Comment Validations & Loading
- */
+    //Add Loading when adding new comment
+    let btn = document.getElementById('add-new-comment-btn');
+    if (!btn) {
+        return;
+    }
+    let input = document.querySelector('textarea[name="ask_textarea"]');
+    let removeLoading = () => btn.classList.remove('btn--is-loading', 'pointer-events-none');
 
- document.addEventListener('DOMContentLoaded', () => {
-  var add_btn = document.getElementById('add-new-comment-btn'),
-     
-  ask_textarea = document.querySelector('textarea[name="ask_textarea"]');
+    btn.addEventListener('click', function () {
+        if (input.value.length >= 3) {
+            btn.classList.add('btn--has-loading', 'pointer-events-none');
+        } else {
+            input.classList.add('!border-red-400');
+        }
+    });
 
-  if (add_btn) {
-      add_btn.addEventListener('click', function(){
-          if(ask_textarea.value !== '' && ask_textarea.value.length >= 3 ){
-              add_btn.classList.add('btn--has-loading');
-              add_btn.classList.add('pointer-events-none');
-          }
-          else {
-              ask_textarea.classList.add('!border-red-400');
-          }
-      })
-  }
-
-  if (ask_textarea) {
-      ask_textarea.addEventListener('keyup', function(){
-          ask_textarea.classList.remove('!border-red-400');
-      });
-  } 
-
-  salla.comment.event.onAdded((...data) => {
-    // salla.log(data)
-    add_btn.classList.remove('btn--is-loading');
-    add_btn.classList.remove('pointer-events-none');
-  })
-
-  salla.comment.event.onAdditionFailed((...data) => {
-    // salla.log(data)
-    add_btn.classList.remove('btn--is-loading');
-    add_btn.classList.remove('pointer-events-none');
-  })
-
-}); 
+    input.addEventListener('keyup', () => input.classList.remove('!border-red-400'));
+    salla.comment.event.onAdded(removeLoading)
+    salla.comment.event.onAdditionFailed(removeLoading)
+}

@@ -34,28 +34,19 @@ view options:
         </div>
 
         {% if product.is_donation %}
-            <div x-data="initDonation()">
+            <div>
                 {% component 'product.donation-progress-bar' with {product:product} %}
                 <div class="border-color py-5 mt-5 mb-2.5">
                     <label for="donationAmount" class="block text-sm ">مبلغ التبرع <span class="text-red-500">*</span>
                     </label>
                     <div class="mt-2.5 relative">
-                        <input type="number" @keyup="isShowCouponError = false" @keyup.enter="addDonation()"
-                               x-model="donationAmount" id="donationAmount" name="coupon-code"
-                               :class="{'has-error': isShowCouponError}" class="pe-24 h-9 form-input"
-                               :disabled="isDonationAdded">
-                        <button x-show="isDonationAdded" @click="addDonation();" type="button"
-                                class="coupon-btn absolute rounded-s-none rounded-e-md flex-shrink-0 btn px-4"
-                                :class="isDonationAdded ? 'btn-danger' : 'btn-default'">
-                            <!-- <span x-show="!isDonationAdded">تفعيل</span> -->
-                            <i x-show="isDonationAdded" class="sicon-cancel text-xl w-8"></i>
-                        </button>
+                        <input type="number" id="donationAmount" name="donation-amount" class="pe-24 h-9 form-input">
+                        {# <button type="button" class="absolute top-0 h-full end-0 rounded-s-none rounded-e-md flex-shrink-0 btn px-4 btn-danger">
+                            <!-- <span>تفعيل</span> -->
+                            <i class="sicon-cancel text-xl w-8"></i>
+                        </button> #}
                         <!-- error msg -->
-                        <p x-show="isShowCouponError" class="absolute -bottom-5 text-xs text-red-700"
-                           id="validationHelp">
-                            مثال
-                            لرسالة
-                            الخطأ.</p>
+                        {# <p  class="absolute -bottom-5 text-xs text-red-700" id="validationHelp">مثال لرسالةالخطأ.</p> #}
                     </div>
                 </div>
             </div>
@@ -89,7 +80,7 @@ view options:
                 <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('pages.cart.add_to_cart') }}</span>
             </button>
             <div class="text-gray-400">
-                <button class="relative justify-center items-center w-10 h-10 focus:outline-none wishlist-btn animated"
+                <button class="relative lg:ms-2.5 justify-center items-center w-10 h-10 focus:outline-none wishlist-btn animated"
                         {% if user %}
                     data-on-click="wishlist::add" data-id="{{ product.id }}"
                 {% else %}
