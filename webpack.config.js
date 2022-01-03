@@ -9,6 +9,7 @@ module.exports = {
         app     : './assets/styles/app.scss',
         brand   : './assets/js/brand.js',
         brands  : './assets/js/brands.js',
+        order   : './assets/js/order.js',
         cart    : './assets/js/cart.js',
         category: './assets/js/category.js',
         home    : './assets/js/home.js',

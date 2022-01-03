@@ -1,14 +1,14 @@
 {# Rating #}
-<div x-data="{ temp: 0, orig: 0 }"  class="border-t mt-10 pt-8">
-    <h2 class="mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
-    <textarea data-product-id="{{item.id}}" id="productReview_{{item.id}}" x-model="$store.orderRating.productsRating[{{item.id}}]['comment']" class="form-input h-20 product-review" placeholder="تقييمك للمنتج ..."></textarea>
+<div x-data="{ temp: 0, orig: 0 }" class="border-t mt-10 pt-8">
+	<h2 class="mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
+	<textarea data-product-id="{{item.id}}" id="productReview_{{item.id}}"  class="form-input h-20 product-review" placeholder="تقييمك للمنتج ..."></textarea>
 
-    {# <div x-cloak class="flex items-center cursor-pointer mt-3" @click="orig = temp"> #}
-    <div class="rating-wrap">
-<form class="rate-element rate-element--has-label">
-        <input x-model="$store.orderRating.productsRating[{{item.id}}]['rating'] = orig" type="number" :value="orig" class="hidden"/>
-        {% include 'pages.partials.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
-    {# </div> #}
-    </form>
-    </div>
+	<div class="rw-product-entry__rate">
+		<div class="rating-wrap flex items-center space-s-4">
+			<form class="rate-element rate-element--has-label">
+				{% include 'pages.partials.rating-stars' with {stars:item.feedback.stars, rating_name:'products['~loop.index0~'][rating]'} %}
+			</form>
+			<p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+		</div>
+	</div>
 </div>
