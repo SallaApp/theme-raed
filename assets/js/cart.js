@@ -150,7 +150,6 @@ class Cart extends BasePage {
             itemTotal    : total,
             itemPrice    : price,
             productPrice : product_price,
-            qtyValidation: '',
             discountName : offer ? offer.offer_names : '',
             hasOffer     : has_offer,
             addQty       : function () {
@@ -174,8 +173,6 @@ class Cart extends BasePage {
                 }, 100)
             },
             updateCartPageInfo: function (res) {
-                // remove validation message
-                this.qtyValidation = null;
 
                 let item = res.data.items?.find(item => item.id == this.itemId);
                 this.itemTotal = item?.total;
@@ -185,9 +182,6 @@ class Cart extends BasePage {
                 if (shippingBar && shippingBarEl) {
                     shippingBarEl.outerHTML = shippingBar;
                 }
-            },
-            validateQty(err) {
-                this.qtyValidation = err.response.data.error.fields.quantity[0];
             },
             /**
              * @param {CartItem} item
