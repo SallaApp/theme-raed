@@ -1,14 +1,14 @@
 import 'lite-youtube-embed';
 import AlpineJS from 'alpinejs';
-import BasePage from './basePage';
+import BasePage from '../basePage';
 import Fslightbox from 'fslightbox';
-import Slider from './partials/slider'
-import Comments from './partials/comments';
-import ProductOptions from './partials/product-options';
+import Slider from '../partials/slider'
+import Comments from '../partials/comments';
+import ProductOptions from '../partials/product-options';
 
 window.fslightbox = Fslightbox;
 
-class Product extends BasePage {
+class Single extends BasePage {
     onBoot() {
         window.initProductDetails = this.initProductDetails;
     }
@@ -144,4 +144,4 @@ class Product extends BasePage {
     }
 }
 
-new Product;
+new Single;

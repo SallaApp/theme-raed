@@ -3,13 +3,18 @@
 |-------------------------|---------------|-------------|
 | slides                  | Article[]     |             |
 | articles                | Article[]     |             |
-| page_title              | String        |             |
-| article.name            | String        |             |
-| article.image           | String        |             |
-| article.image_alt       | String        |             |
+| page                    | object        |             |
+| page.title              | string        |             |
+| page.name               | string        |             |
+| article.name            | string        |             |
+| article.image           | object        |             |
+| article.image.url       | string        |             |
+| article.image.alt       | string        |             |
 | article.created_at      | ?Date *Carbon |             |
-| article.author_name     | String        |             |
-| article.summary         | String        |             |
+| article.author          | object        |             |
+| article.author.name     | string        |             |
+| article.author.url      | string        |             |
+| article.summary         | string        |             |
 #}
 {% extends "layouts.master" %}
 
@@ -28,30 +33,31 @@
             </div>
 
             <div class="flex items-start">
-
                 {% include 'pages.partials.blog.sidebar' %}
-
                 <div class="main-content w-96 flex-1">
                     {% if slides is not empty %}
                         <div class="mb-8">
-                            <div class="swiper blog-slider  rounded-md overflow-hidden">
-
+                            <div class="swiper blog-slider rounded-md overflow-hidden" id="blog-slider">
                                 <div class="swiper-wrapper">
                                     {% for article in slides  %}
                                         <div class="swiper-slide blog-slider__slide h-460 relative bg-border-color flex justify-center {{article.has_image ? '' : 'no-thumb' }}">
-                                            <img src="{{ article.image }}" alt="{{ article.image_alt }}" class="object-cover h-full w-full">
+                                            {% if article.has_image %}
+                                                <img src="{{ article.image.url }}" alt="{{ article.image.alt }}" class="object-cover h-full w-full">
+                                            {% else %}
+                                                <img class="sm:h-full w-20  object-contain opacity-50" src="{{ asset('images/img-placeholder.svg') }}" alt="post image">
+                                            {% endif %}
                                             <div class="absolute z-10 bottom-0 start-0 ps-10 pb-20">
                                                 <div class="blog-slider__content relative">
-                                                    <div class="z-20 w-5/6 lg:w-6/12 text-white">
+                                                    <div class="z-20 w-5/6 lg:w-6/12 {{ article.has_image ? 'text-white' : '' }}">
                                                         <div class="block-slide-anime">
                                                             <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
                                                                 <div class="flex items-center">
                                                                     <i class="sicon-calendar-date me-1 text-md"></i>
-                                                                    <span class="">{{ article.created_at }}</span>
+                                                                    <span class="whitespace-nowrap">{{ article.created_at|date }}</span>
                                                                 </div>
-                                                                <a href="{{ article.url }}" class=" flex items-center hover:underline">
+                                                                <a href="{{ article.author.url }}" class=" flex items-center hover:underline">
                                                                     <i class="sicon-user me-1 text-md"></i>
-                                                                    <span class="">{{ article.author_name }}</span>
+                                                                    <span class="">{{ article.author.name }}</span>
                                                                 </a>
                                                             </div>
                                                             <h3 class="text-sm font-bold leading-normal mb-4">{{ article.name }}</h3>
@@ -66,73 +72,16 @@
                                 </div>
                                 <div class="swiper-pagination text-start px-10 pb-8  bottom-10"></div>
                             </div>
-
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    const swiper = new Swiper('.blog-slider', {
-
-                                        slidesPerView: 1,
-                                        loop: true,
-                                        centeredSlides: true,
-                                        spaceBetween: 30,
-                                        effect: "fade",
-
-                                        pagination: {
-                                            el: '.swiper-pagination',
-                                            clickable: true,
-                                        },
-                                        breakpoints: {
-                                            320: {
-                                                spaceBetween: 10,
-                                            },
-                                            768: {
-                                                spaceBetween: 15,
-                                            },
-                                            980: {
-                                                paceBetween: 30,
-                                            },
-                                        }
-                                    });
-
-                                    swiper.on('slideChange', function () {
-                                        animateSliderItems()
-                                    });
-
-                                    function animateSliderItems() {
-                                        setTimeout(() => {
-                                            anime({
-                                                targets: '.swiper-slide-active .block-slide-anime',
-                                                opacity: [0, 1],
-                                                duration: 2500,
-                                                translateX: [20, 0],
-                                                delay: function (el, i) {
-                                                    return i * 200;
-                                                },
-                                            })
-                                        }, 10);
-                                    }
-                                });
-                            </script>
                         </div>
                     {% endif %}
 
-                    {% if articles is not empty %}
+                    {% if articles|length %}
                         <div class="grid md:grid-cols-2 gap-8 articles-container">
                             {% for article in articles  %}
                                 {% include 'pages.partials.blog.article-with-summary' %}
                             {% endfor %}
                         </div>
-
                         {% include 'pages.partials.loader-status' with {next_page:articles.next_page} %}
-                    {% else %}
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <div class="text-center pt-8">
-                                <p>
-                                    <span>{{ trans('pages.blog_categories.no_articles') }}</span>
-                                    {{ page_title }}
-                                </p>
-                            </div>
-                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -141,9 +90,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        document.addEventListener( 'DOMContentLoaded', function () {
-            salla.infiniteScroll.initiate('.articles-container', '.post-entry')
-        })
-    </script>
+    <script src="{{ asset('dist/blog.js') }}"></script>
 {% endblock %}

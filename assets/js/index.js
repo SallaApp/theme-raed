@@ -3,10 +3,9 @@ import BasePage from "./basePage";
 import Slider from "./partials/slider"
 import Lightbox from "fslightbox";
 
-
 window.fslightbox = Lightbox;
 
-class Home extends BasePage {
+class Index extends BasePage {
     onReady() {
         this.initMainLinks();
         this.initiateSliders();
@@ -94,4 +93,4 @@ class Home extends BasePage {
     }
 }
 
-new Home
+new Index

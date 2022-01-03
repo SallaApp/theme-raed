@@ -2,9 +2,10 @@
 | Variable                | Type        | Description |
 |-------------------------|-------------|-------------|
 | articles                | Article[]   |             |
-| page_title              | String      |             |
+| page.title              | string      |             |
+| page.name               | string      |             |
 | category                | BlogCategory|             |
-| category.name           | String      |             |
+| category.name           | string      |             |
 #}
 {% extends "layouts.master" %}
 
@@ -15,20 +16,15 @@
                  <nav class="w-full py-5">
                     {% component 'header.breadcrumbs' %}
                 </nav>
-
                 <a class="lg:hidden  space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary"
                    href="#filters-menu">
                     <i class="sicon-filter text-xs"></i>
                     <span class="fix-align">{{ trans('pages.blog_categories.categories') }}</span>
                 </a>
             </div>
-
             <div class="flex items-start">
-
                 {% include 'pages.partials.blog.sidebar' %}
-
                 <div class="main-content blog-category w-96 flex-1">
-
                     <div class="sr-only lg:not-sr-only ">
                         <h1 class="blog-category__title font-bold text-lg mb-8">{{ category.name }}</h1>
                     </div>
@@ -39,14 +35,13 @@
                                 {% include 'pages.partials.blog.article-with-summary' %}
                             {% endfor %}
                         </div>
-
                         {% include 'pages.partials.loader-status' with {next_page:articles.next_page} %}
                     {% else %}
                         <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
                             <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
                             <p class="text-base text-gray-500">
                                 <span>{{ trans('pages.blog_categories.no_articles') }}</span>
-                                {{ page_title }}
+                                {{ page.title }}
                             </p>
                         </div>
                     {% endif %}
@@ -58,9 +53,5 @@
 
 
 {% block scripts %}
-<script>
-    document.addEventListener( 'DOMContentLoaded', function () {
-        salla.infiniteScroll.initiate('.articles-container', '.post-entry')
-    })
-</script>
+    <script src="{{ asset('dist/blog_list.js') }}"></script>
 {% endblock %}
