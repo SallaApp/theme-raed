@@ -1,15 +1,11 @@
 import BasePage from './basePage';
 class Order extends BasePage {
 
-    load() {
+    onReady() {
         this.highlightSelectedStars();
         this.starsRating();
-        document.querySelector('#submitRating').addEventListener("click", () => {
-            this.sendRating();
-        });
+        document.querySelector('#submitRating').addEventListener("click", () => this.sendRating());
     }
-
-
 
     sendRating() {
         // salla.feedback.api.store({ order_id: order.id, comment: this.storeRating.comment, rating: this.storeRating.rating });
@@ -87,7 +83,6 @@ class Order extends BasePage {
             throw new Error(errorMsg);
         }
     }
-
 
     // for hovered star ---
     highlightSelectedStars() {
