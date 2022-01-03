@@ -21,7 +21,7 @@ jobs:
       run: |
         git add -f ./dist
         git diff --cached --name-only
-        if git diff --cached --name-only ./dist | grep .; then
+        if git diff --cached --name-only ./assets | grep .; then
         git config --global user.name ${{secrets.GIT_DEVOPS_USERNAME}}
         git config --global user.email "${{secrets.GIT_DEVOPS_EMAIL}}@users.noreply.github.com"
         git commit -m "Auto build assest 😎"
