@@ -83,7 +83,8 @@
     {% hook 'head' %}
     {# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
     {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
-    {# {% set font_name=theme.font.name?:'DINNextLTArabic-Regular' %} #}
+
+    {% set font_name=theme.font.name?:'DINNextLTArabic-Regular' %}
 
     {# <link rel="stylesheet" href="{{ asset(theme.font.path) }}"/> #}
 
@@ -127,6 +128,8 @@
           --mainnav-gradient-from: {{theme.mainnav_bg_gradient_from}};
           --mainnav-gradient-to: {{theme.mainnav_bg_gradient_to}};
         {% endif %}
+
+        --font-main: '{{font_name}}';
         }
     </style>
 </head>

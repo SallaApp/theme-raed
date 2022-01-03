@@ -22,7 +22,7 @@ module.exports = {
         },
         fontFamily: {
             sans: [
-                'DINNextLTArabic',
+                'var(--font-main)',
                 '-apple-system',
                 'BlinkMacSystemFont',
             ],
