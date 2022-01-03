@@ -5,6 +5,90 @@ class Order extends BasePage {
     load() {
         this.highlightSelectedStars();
         this.starsRating();
+        document.querySelector('#submitRating').addEventListener("click", () => {
+            this.sendRating();
+        });
+    }
+
+
+
+    sendRating() {
+        // // this.validation();
+        // salla.feedback.api.store({ order_id: order.id, comment: this.storeRating.comment, rating: this.storeRating.rating });
+        // salla.feedback.api.shipping({ order_id: order.id, comment: this.shippingRating.comment, rating: this.shippingRating.rating });
+        // salla.feedback.api.product({ order_id: order.id, products: this.productsRating });
+        this.ratingValidation()
+        document.querySelectorAll('.rating-section')
+            .forEach((ratingSection) => {
+                let type = ratingSection.dataset.type;
+                let formsData = [];
+                ratingSection.querySelectorAll('.rating-outer-form')
+                    .forEach(function (form) {
+                        let formData = {};
+                        form.querySelectorAll('[name]')
+                            .forEach(function (input) {
+                                let inputData = salla.helpers.inputData(input.name, input.value, formData);
+                                formData[inputData.name] = inputData.value;
+                            });
+                        formsData.push(formData);
+                    });
+                this.sendFeedback(type, formsData);
+            });
+        return;
+
+    }
+
+    sendFeedback(type, formsData) {
+        console.log("🚀 ~ file: order.js ~ line 43 ~ Order ~ sendFeedback ~ formsData", formsData)
+        if (!formsData || formsData.length == 0) {
+            return;
+        }
+        salla.config.canLeave = false;
+        salla.feedback.api[type](formsData[0])
+            .then(function () {
+                salla.config.canLeave = true;
+                if (formsData.length > 1) {
+                    sendFeedback(type, formsData.slice(1));
+                }
+            }).catch(error => salla.config.canLeave = true);
+    }
+
+    ratingValidation() {
+        let errorMsg = '';
+        document.querySelectorAll('.rating-section')
+            .forEach((ratingSection) => {
+                ratingSection.querySelectorAll('.rating-outer-form')
+                    .forEach(rating => {
+                        let ratingInput = rating.querySelector('.rating_hidden_input');
+                        let commentInput = rating.querySelector('.comment');
+                        let sectionTitle = rating.querySelector('.section-title');
+                        let validationMessage = rating.querySelector('.validation-message');
+                        if (ratingInput.value && commentInput.value && commentInput.value.length > 3) {
+                            commentInput.classList.remove('has-error');
+                            sectionTitle.classList.remove('has-error', 'text-red-400');
+                            validationMessage.innerHTML = '';
+                            return;
+                        }
+                        else if (commentInput.value && commentInput.value.length > 3) {
+                            commentInput.classList.remove('has-error');
+                        }else{
+                            commentInput.classList.add('has-error');
+                        } 
+                        
+                        sectionTitle.classList.add('has-error', 'text-red-400');
+
+                        errorMsg = ratingInput.value
+                            ? (salla.lang.get('common.errors.not_less_than_chars', { chars: 4 }) + ' ' + commentInput.getAttribute('placeholder'))
+                            : (rating.dataset.starsError || salla.lang.get('pages.rating.rate_store_stars'));
+
+                        validationMessage.innerHTML = errorMsg;
+                    });
+
+            });
+        //Fire error to prevent sending rating
+        if (errorMsg) {
+            throw new Error(errorMsg);
+        }
     }
 
 

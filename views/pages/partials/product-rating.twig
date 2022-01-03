@@ -1,14 +1,21 @@
 {# Rating #}
-<div x-data="{ temp: 0, orig: 0 }" class="border-t mt-10 pt-8">
-	<h2 class="mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
-	<textarea data-product-id="{{item.id}}" id="productReview_{{item.id}}"  class="form-input h-20 product-review" placeholder="تقييمك للمنتج ..."></textarea>
+<section class="border-t mt-10 pt-8">
+	<div class="{{ item.feedback?'':'rating-outer-form' }}" data-stars-error="{{ trans('pages.rating.rate_product_stars', {'item':item.name}) }}">
+		<input type="hidden" name="order_id" value="{{ order.order_id }}">
+		<input type="hidden" name="products[{{ loop.index0 }}][product_id]" value="{{ item.product.getOptimusRouteKey() }}">
+		<input type="hidden" name="type" value="products">
 
-	<div class="rw-product-entry__rate">
-		<div class="rating-wrap flex items-center space-s-4">
-			<form class="rate-element rate-element--has-label">
-				{% include 'pages.partials.rating-stars' with {stars:item.feedback.stars, rating_name:'products['~loop.index0~'][rating]'} %}
-			</form>
-			<p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+		<h2 class="section-title mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
+		<textarea data-product-id="{{item.id}}" name="products[{{ loop.index0 }}][comment]" id="productReview_{{item.id}}" class="comment form-input h-20 product-review" placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"></textarea>
+
+		<div class="rw-product-entry__rate">
+			<div class="rating-wrap flex items-center space-s-4">
+				<form class="rate-element rate-element--has-label">
+					{% include 'pages.partials.rating-stars' with {stars:item.feedback.stars, rating_name:'products['~loop.index0~'][rating]'} %}
+				</form>
+				<p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+			</div>
+			<small class="text-red-400 validation-message"></small>
 		</div>
 	</div>
-</div>
+</section>
