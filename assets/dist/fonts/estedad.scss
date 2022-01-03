@@ -1,0 +1,96 @@
+@font-face {
+    font-family: 'Estedad';
+    src: url('lib/estedad/Estedad-Medium.woff2') format('woff2'),
+    url('lib/estedad/Estedad-Medium.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Estedad-Medium';
+    src: url('lib/estedad/Estedad-Medium.woff2') format('woff2'),
+    url('lib/estedad/Estedad-Medium.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Estedad-Bold';
+    src: url('lib/estedad/Estedad-Bold.woff2') format('woff2'),
+    url('lib/estedad/Estedad-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+[class*=" sicon-"], [class^=sicon-] {
+    line-height: unset !important;
+}
+
+:root {
+    --font-base: 14px;
+    --font-sm: 13px;
+    --font-xsm: 12px;
+    --font-xxsm: 10px;
+    --font-lg: 16px;
+    --font-xlg: 17px;
+    --font-xxlg: 20px;
+    --font-xxxlg: 33px;
+    --font-line-height: 1.4;
+}
+
+body {
+    &.font-estedad {
+        .swal2-container {
+            .swal2-popup {
+                .swal2-header {
+                    .swal2-title {
+                        font-size: var(--font-sm);
+                    }
+                }
+            }
+        }
+        .article {
+            &--main {
+                line-height: 2;
+            }
+        }
+        .btn {
+            &--padded {
+                &.less {
+                    padding: 6px 15px;
+                }
+            }
+            &--circular {
+                i {
+                    transform: translateY(1px);
+                }
+            }
+        }
+
+        .checkbox {
+            input[type=checkbox],
+            input[type=radio] {
+
+                + label {
+                    &:after {
+                        top: 2px;
+                    }
+                }
+            }
+
+            &--large {
+                input[type=checkbox],
+                input[type=radio] {
+                    + label {
+                        &:after {
+                            top: 3px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
