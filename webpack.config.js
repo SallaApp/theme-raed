@@ -19,6 +19,12 @@ module.exports = {
         //plugins
         filepond : './assets/styles/filepond.scss',
         flatpickr: './assets/styles/main_inc/plugins/flatpicker.scss',
+
+        //fonts
+        // amazon_ember: './assets/fonts/amazon_ember.scss',
+        // apple: './assets/fonts/apple.scss',
+        // dubai: './assets/fonts/dubai.scss',
+        // estedad: './assets/fonts/estedad.scss',
     },
     output : {
         path : path.resolve(__dirname, "assets", "dist"),
