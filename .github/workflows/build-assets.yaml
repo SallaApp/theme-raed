@@ -19,7 +19,7 @@ jobs:
         npm run production
     - name: Push to repo  
       run: |
-        git add -f ./dist
+        git add -f ./assets
         git diff --cached --name-only
         if git diff --cached --name-only ./assets | grep .; then
         git config --global user.name ${{secrets.GIT_DEVOPS_USERNAME}}
