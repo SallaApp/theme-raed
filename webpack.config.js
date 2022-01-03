@@ -6,14 +6,19 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
 module.exports = {
     entry  : {
-        app      : './assets/styles/app.scss',
-        home     : './assets/js/home.js',
-        cart     : './assets/js/cart.js',
-        product  : './assets/js/product.js',
-        category : './assets/js/category.js',
-        comments : './assets/js/partials/comments.js',
-        filepond : ['./assets/js/partials/filepond.js', './assets/styles/filepond.scss'],
-        flatpickr: ['./node_modules/flatpickr/dist/flatpickr.js', './assets/styles/main_inc/plugins/flatpicker.scss'],
+        app     : './assets/styles/app.scss',
+        brand   : './assets/js/brand.js',
+        brands  : './assets/js/brands.js',
+        cart    : './assets/js/cart.js',
+        category: './assets/js/category.js',
+        home    : './assets/js/home.js',
+        page    : './assets/js/page.js',
+        product : './assets/js/product.js',
+        profile : './assets/js/profile.js',
+
+        //plugins
+        filepond : './assets/styles/filepond.scss',
+        flatpickr: './assets/styles/main_inc/plugins/flatpicker.scss',
     },
     output : {
         path : path.resolve(__dirname, "assets", "dist"),

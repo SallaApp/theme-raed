@@ -21,10 +21,11 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{{ asset('dist/flatpickr.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/filepond.css') }}">
 {% endblock %}
 {% block content %}
     <main id="main">
-        {% include 'pages.partials.customer.profile-header-area' %}
+        {% include 'pages.partials.customer.breadcrumbs' %}
 
         <div class="container mb-24">
             <div class="flex flex-col lg:flex-row ">
@@ -48,7 +49,7 @@
                           method="POST"
                           novalidate
                           action="{{ link('profile') }}"
-                          data-filter-before-submit="update_profile_form">
+                          data-filter-before-submit="appendAvtar">
                         {{ csrf_field() }}
                         <div class="sm:flex w-full sm:space-s-8">
                             <div class="flex-1">
@@ -141,53 +142,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ asset('dist/flatpickr.js') }}"></script>
-    <script>
-        // window.update_profile_form = function handleFile(form_data, that, event) {
-        //   let fileInput = window.fileponds ? window.fileponds.profile_img : undefined;
-        //   if (!fileInput) {
-        //       return form_data;
-        //   }
-        //   fileInput.getFiles()
-        //     .forEach(function (filepondFile) {
-        //         form_data.append('image_file', filepondFile.file);
-        //     })
-        //   return form_data;
-        // };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            flatpickr('.date-element', {
-                "dateFormat": "Y-m-d",
-            });
-
-            salla.document.event.onKeyup('#verify-mobile-field', function (event) {
-                salla.helpers.digitsOnly('verify-mobile-field');
-                var btn = document.querySelector('#verify-mobile-btn');
-                if (event.target.value.length == 4) {
-                    btn.removeAttribute('disabled');
-                } else {
-                    btn.setAttribute('disabled', '');
-                }
-            });
-
-
-            // loading state
-            const saveBtn = document.getElementById('update-profile-btn');
-            saveBtn.addEventListener('click', function () {
-                saveBtn.classList.add('btn--is-loading');
-                saveBtn.classList.add('pointer-events-none');
-            })
-
-            salla.event.on("stores::profile.updated", function () {
-                saveBtn.classList.remove('btn--is-loading');
-                saveBtn.classList.remove('pointer-events-none');
-            })
-
-            salla.document.event.onRequestFailed((requestInfo, error) => {
-                saveBtn.classList.remove('btn--is-loading');
-                saveBtn.classList.remove('pointer-events-none');
-            });
-
-        });
-    </Script>
+    <script defer src="{{ asset('dist/profile.js') }}"></script>
 {% endblock %}

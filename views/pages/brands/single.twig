@@ -21,18 +21,20 @@
                 {% component 'header.breadcrumbs' %}
             </nav>
             <div
-                class="brand__header">
+                    class="brand__header">
                 {% if brand.banner %}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="brand__banner">
-                                <img class="lazy-load w-full max-h-96 object-cover rounded-md " data-src="{{brand.banner}}" alt="{{ brand.name }}"/>
+                                <img class="lazy-load w-full max-h-96 object-cover rounded-md "
+                                     data-src="{{ brand.banner }}" alt="{{ brand.name }}"/>
                             </div>
                         </div>
                     </div>
                 {% endif %}
                 <article class="brand__content flex py-5">
-                    <img class="rounded-md w-40 h-24 object-contain  shadow-md p-4 bg-white lazy-load" data-src="{{ brand.logo }}" src="{{asset('images/s-empty.png')}}" alt="{{ brand.name }}">
+                    <img class="rounded-md w-40 h-24 object-contain  shadow-md p-4 bg-white lazy-load"
+                         data-src="{{ brand.logo }}" src="{{ asset('images/s-empty.png') }}" alt="{{ brand.name }}">
                     <div class="px-5 pt-3">
                         <h3 class="brand__title text-2xl font-bold mb-1">{{ brand.name }}</h3>
                         <p class="text-base text-gray-500">{{ brand.description|raw }}</p>
@@ -47,10 +49,16 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
                                     <div class="hidden md:flex items-center">
-                                        <a @click="toggleView('grid')" :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'" id="gridButton" data-grid="grid" class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
+                                        <a @click="toggleView('grid')"
+                                           :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
+                                           id="gridButton" data-grid="grid"
+                                           class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
                                             <i class="sicon-grid"></i>
                                         </a>
-                                        <a @click="toggleView('list')" :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'" id="listButton" data-grid="list" class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
+                                        <a @click="toggleView('list')"
+                                           :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
+                                           id="listButton" data-grid="list"
+                                           class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
                                             <i class="sicon-list"></i>
                                         </a>
                                     </div>
@@ -59,7 +67,9 @@
                         </div>
 
 
-                        <div x-ref="productsContainer" :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }" class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
+                        <div x-ref="productsContainer"
+                             :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
+                             class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
 
                             {% for product in products %}
                                 {% include 'pages.partials.product.card' %}
@@ -72,7 +82,7 @@
                                 <i class="sicon-award-ribbon text-6xl block text-reverse-dark"></i>
                             </span>
                             <p class="text-sm mb-5 text-center">
-                                <span>{{trans('pages.brands.non_products')}}</span>
+                                <span>{{ trans('pages.brands.non_products') }}</span>
                                 {{ brand.name }}</p>
                         </div>
                     {% endif %}
@@ -83,34 +93,35 @@
 {% endblock %}
 
 {% block scripts %}
+    <script defer src="{{ asset('dist/brand.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-salla.infiniteScroll.initiate('.products-container', '.product-entry')
-})
+            salla.infiniteScroll.initiate('.products-container', '.product-entry')
+        })
 
-function initBrand() {
-return {
-girdLayout: 'grid',
-toggleView: function (layout) {
-this.girdLayout = layout;
-this.animateItems()
-},
-animateItems: function () {
-anime({
-targets: '.product-entry',
-opacity: [
-0, 1
-],
-duration: 1200,
-translateY: [
-20, 0
-],
-delay: function (el, i) {
-return i * 100;
-}
-})
-}
-}
-}
+        function initBrand() {
+            return {
+                girdLayout  : 'grid',
+                toggleView  : function (layout) {
+                    this.girdLayout = layout;
+                    this.animateItems()
+                },
+                animateItems: function () {
+                    anime({
+                        targets   : '.product-entry',
+                        opacity   : [
+                            0, 1
+                        ],
+                        duration  : 1200,
+                        translateY: [
+                            20, 0
+                        ],
+                        delay     : function (el, i) {
+                            return i * 100;
+                        }
+                    })
+                }
+            }
+        }
     </script>
 {% endblock %}
