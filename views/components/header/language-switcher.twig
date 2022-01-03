@@ -11,40 +11,31 @@
 | current.order        | Integer    | Sort language in menu           |
 | languages            | Language[] | List of the supported languages |
 #}
-<div class="relative inline-block mx-3" x-data="{toggleMenu: false}">
-    <div>
-        <button @click="toggleMenu = !toggleMenu" type="button"
-                class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center hover:bg-gray-200/20 text-sm font-medium focus:ring-offset-transparent transition duration-300"
-                :class="toggleMenu ? 'btn-is-opened bg-gray-200/20' : 'bg-gray-200/10'"
-                id="menu-button" aria-expanded="true" aria-haspopup="true">
-            <div class="flag iti__flag iti__{{ current.country_code }} me-1.5 rounded-md"></div>
-            <span class="">{{ current.name }}</span>
 
-            <i class="sicon-keyboard_arrow_down inline-block self-end mx-0.5 me-0 opacity-50 text-lg leading-4 transition duration-300"></i>
-        </button>
+<div class="mb-8">
+  <label class="text-base font-medium text-gray-900">اللغة</label>
+  {# <p class="text-sm leading-5 text-gray-500">اختر اللغة</p> #}
+  <fieldset class="mt-4">
+    <legend class="sr-only">اختيار اللغة</legend>
+    <div class="space-y-4">
+      {% for lang in languages %}
+        <div class="flex items-center">
+          <input id="lang-{{ lang.code|lower| slice(0, -1) }}" name="lang" type="radio" value="{{ lang.code }}" {{ current.code == lang.code ? 'checked':'' }} class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
+          <label for="lang-{{ lang.code|lower| slice(0, -1) }}" class="ms-3 flex items-center justify-between text-sm font-medium text-gray-700 flex-grow cursor-pointer">
+            <span>{{ lang.name }}</span>
+            <div class="flag iti__flag iti__{{ lang.country_code }} rounded-sm"></div>
+          </label>
+        </div>
+      {% endfor %}
     </div>
+  </fieldset>
 
-    <div x-cloak x-show="toggleMenu" @click.away="toggleMenu = false"
-         x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
-         x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
-         x-transition:leave-start="transform opacity-100 scale-100"
-         x-transition:leave-end="transform opacity-0 scale-95"
-         class="origin-top-right absolute z-30 start-0 mt-2 w-48 rounded-b-md shadow-default  overflow-hidden
-         {{ theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]': 'bg-white ' }}
-         {{ theme.topnav_is_dark ? 'dark:bg-gray-800': '' }}"
-         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-        <ul>
-            {% for lang in languages %}
-                <li>
-                    <a href="{{ lang.url }}"
-                       class="flex items-center px-4 py-2 text-sm transition-colors duration-300 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ current.code == lang.code ? 'is-active' : '' }}
-                          {{ theme.topnav_is_dark == false and theme.topnav_bg_gradient ? 'text-gray-800': '' }}
-                          ">
-                        <div class="flag iti__flag iti__{{ lang.country_code }} me-1.5 rounded-sm"></div>
-                        <span>{{ lang.name }}</span>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+  <select class="form-input appearance-none visibility_condition mt-6 hidden" name="currency">
+      <option placeholder value="">{{ lang.name }}</option>
+      {% for lang in languages %}
+          <option {{ current.code == lang.code ? "selected" : "" }} value="{{ lang.code }}">
+            <div class="flag iti__flag iti__{{ lang.code|lower| slice(0, -1) }} me-1.5"></div> {{ lang.name }}
+          </option>
+      {% endfor %}
+  </select>
 </div>

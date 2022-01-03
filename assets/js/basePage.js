@@ -12,6 +12,7 @@ import CartListeners from './partials/cart-listeners';
 import WishlistButtons from './partials/wishlist-buttons';
 import Advertisement from './partials/advertisement';
 import Dropdwons from './partials/dropdwons';
+import Modals from './partials/modals';
 
 class BasePage extends Helpers {
     constructor() {
@@ -50,6 +51,7 @@ class BasePage extends Helpers {
         WishlistButtons();
         Advertisement();
         Dropdwons();
+        Modals();
     }
 
     initiateCommons() {
