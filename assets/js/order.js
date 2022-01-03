@@ -1,5 +1,4 @@
 import BasePage from './basePage';
-
 class Order extends BasePage {
 
     load() {
@@ -13,7 +12,6 @@ class Order extends BasePage {
 
 
     sendRating() {
-        // // this.validation();
         // salla.feedback.api.store({ order_id: order.id, comment: this.storeRating.comment, rating: this.storeRating.rating });
         // salla.feedback.api.shipping({ order_id: order.id, comment: this.shippingRating.comment, rating: this.shippingRating.rating });
         // salla.feedback.api.product({ order_id: order.id, products: this.productsRating });
@@ -39,7 +37,6 @@ class Order extends BasePage {
     }
 
     sendFeedback(type, formsData) {
-        console.log("🚀 ~ file: order.js ~ line 43 ~ Order ~ sendFeedback ~ formsData", formsData)
         if (!formsData || formsData.length == 0) {
             return;
         }
