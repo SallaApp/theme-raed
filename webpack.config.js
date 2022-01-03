@@ -6,16 +6,19 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
 module.exports = {
     entry  : {
-        app     : './assets/styles/app.scss',
-        brand   : './assets/js/brand.js',
-        brands  : './assets/js/brands.js',
-        order   : './assets/js/order.js',
-        cart    : './assets/js/cart.js',
-        category: './assets/js/category.js',
-        home    : './assets/js/home.js',
-        page    : './assets/js/page.js',
-        product : './assets/js/product.js',
-        profile : './assets/js/profile.js',
+        app          : './assets/styles/app.scss',
+        brand        : './assets/js/brand.js',
+        brands       : './assets/js/brands.js',
+        cart         : './assets/js/cart.js',
+        category     : './assets/js/category.js',
+        home         : './assets/js/home.js',
+        page         : './assets/js/page.js',
+        product      : './assets/js/product.js',
+        profile      : './assets/js/profile.js',
+        notifications: './assets/js/notifications.js',
+        order        : './assets/js/order.js',
+        orders       : './assets/js/orders.js',
+        wishlist     : './assets/js/wishlist.js',
 
         //plugins
         filepond : './assets/styles/filepond.scss',
@@ -65,7 +68,7 @@ module.exports = {
                     "sass-loader",
                 ]
             },
-        ]
+        ],
     },
     plugins: [
         new ThemeWatcher(),
@@ -77,4 +80,5 @@ module.exports = {
             successSound: false,
         }),
     ],
-};
+}
+;

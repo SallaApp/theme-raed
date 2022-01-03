@@ -1,90 +1,65 @@
-@use "sass:math";
-
 @font-face {
-  font-family: 'Dubai';
-  src: url('lib/dubai/DubaiW23-Regular.woff2') format('woff2'),
-  url('lib/dubai/DubaiW23-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Dubai';
+    src: url('lib/dubai/DubaiW23-Regular.woff2') format('woff2'),
+    url('lib/dubai/DubaiW23-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Dubai-Medium';
-  src: url('lib/dubai/DubaiW23-Regular.woff2') format('woff2'),
-  url('lib/dubai/DubaiW23-Regular.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Dubai-Medium';
+    src: url('lib/dubai/DubaiW23-Regular.woff2') format('woff2'),
+    url('lib/dubai/DubaiW23-Regular.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Dubai-Bold';
-  src: url('lib/dubai/DubaiW23-Bold.woff2') format('woff2'),
-  url('lib/dubai/DubaiW23-Bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Dubai-Bold';
+    src: url('lib/dubai/DubaiW23-Bold.woff2') format('woff2'),
+    url('lib/dubai/DubaiW23-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
 }
 
-$font-base: 16;
 
 :root {
-  --font-base: #{$font-base}px;
-  --font-md: #{math.div(17,$font-base)+rem};
-  --font-sm: #{math.div(15,$font-base)+rem};
-  --font-xsm: #{math.div(13,$font-base)+rem};
-  --font-xxsm: #{math.div(11,$font-base)+rem};
-  --font-lg: #{math.div(18,$font-base)+rem};
-  --font-xlg: #{math.div(20,$font-base)+rem};
-  --font-xxlg: #{math.div(25,$font-base)+rem};
-  --font-xxxlg: #{math.div(40,$font-base)+rem};
-  --font-line-height: 1.7;
+    --font-base: 15px;
+    --font-sm: 14px;
+    --font-xsm: 12px;
+    --font-xxsm: 10px;
+    --font-lg: 18px;
+    --font-xlg: 20px;
+    --font-xxlg: 25px;
+    --font-xxxlg: 40px;
 }
 
 body {
-  &.font-dubai {
-    .checkbox {
-      input[type=checkbox],
-      input[type=radio] {
+    &.font-dubai {
+        .checkbox {
+            input[type=checkbox],
+            input[type=radio] {
 
-        + label {
-          &:after {
-            top: 2px;
-          }
-        }
-      }
-
-      &--large {
-        input[type=checkbox],
-        input[type=radio] {
-          + label {
-            &:after {
-              top: 2px;
+                + label {
+                    &:after {
+                        top: 2px;
+                    }
+                }
             }
-          }
-        }
-      }
-    }
 
-    .qty {
-      &--large {
-        @media (max-width: 767px) {
-          input {
-            line-height: 40px;
-          }
-          button {
-            line-height: 44px;
-          }
+            &--large {
+                input[type=checkbox],
+                input[type=radio] {
+                    + label {
+                        &:after {
+                            top: 2px;
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-
-    .btn {
-      &--add-to-cart {
-        padding-top: 6px;
-        padding-bottom: 4px;
-      }
-    }
-  }
 }

@@ -51,8 +51,8 @@
  *          }} UpdateCartResponse
  */
 
+import AlpineJS from 'alpinejs';
 import BasePage from "./basePage";
-import './partials/filepond.js';
 import ProductOptions from './partials/product-options';
 
 class Cart extends BasePage {
@@ -67,6 +67,7 @@ class Cart extends BasePage {
         this.anime('.shipping-item', {translateX: [-20, 0]});
         ProductOptions();
         window.hasApplePay = () => ({'has_apple_pay': !!window.ApplePaySession});
+        AlpineJS.start();
     }
 
     registerEvents() {

@@ -20,8 +20,8 @@
 
       {% for currency in currencies %}
         <div class="flex items-center">
-          <input id="currency-{{ currency.code|lower| slice(0, -1) }}" name="currency" type="radio" value="{{ currency.code }}" {{ current.code == currency.code ? 'checked':'' }} class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
-          <label for="currency-{{ currency.code|lower| slice(0, -1) }}" class="ms-3 flex items-center justify-between text-sm font-medium text-gray-700 flex-grow cursor-pointer">
+          <input id="currency-{{ currency.code }}" name="currency" type="radio" value="{{ currency.code }}" {{ current.code == currency.code ? 'checked':'' }} class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
+          <label for="currency-{{ currency.code }}" class="ms-3 flex items-center justify-between text-sm font-medium text-gray-700 flex-grow cursor-pointer">
             <span>{{ currency.name }}</span>
             <small class="text-gray-400">{{currency.code}}</small>
           </label>

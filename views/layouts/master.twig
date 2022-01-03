@@ -1,4 +1,4 @@
-{############### Shared Variables in all views ################
+{# ############## Shared Variables in all views ################
 | Variable                                           | Type     | Description                                                                                              |
 |----------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------|
 | is_home                                            | ?bool    |                                                                                                          |
@@ -64,7 +64,7 @@
         window.locale = "{{ language.code }}";
     </script>
     {% hook 'head:inner' %}
-    
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -75,7 +75,7 @@
     <meta name="msapplication-navbutton-color" content="{{ theme.color }}">
     <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color }}">
     <!-- fav icon -->
-    <link rel="icon" type="image/png" href="{{ store.icon}}"/>
+    <link rel="icon" type="image/png" href="{{ store.icon }}"/>
     <link rel="apple-touch-icon-precomposed" href="{{ store.logo }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ store.logo }}">
@@ -83,9 +83,7 @@
     {% hook 'head' %}
     {# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
     {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
-
-    {% set font_name=theme.font.name?:'DINNextLTArabic-Regular' %}
-    <link rel="stylesheet" href="{{ asset(theme.font.path) }}"/>
+    <link rel="stylesheet" href="{{ theme.font.url }}"/>
 
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
@@ -94,41 +92,25 @@
     <style>
         :root {
 
-          --main-color:{{ theme.color }};
-          --color-main-d: {{ theme.darker_color(0.25) }};
-          --color-main-l: {{ theme.lighter_color(0.15) }};
+            --main-color: {{ theme.color }};
+            --color-main-d: {{ theme.darker_color(0.25) }};
+            --color-main-l: {{ theme.lighter_color(0.15) }};
 
-        /*Topnav*/
-        {% if theme.topnav_bg %}
-          --topnav-bg: {{theme.topnav_bg}};
-        {% endif %}
-        {% if theme.topnav_text_color %}
-          --topnav-text-color: {{theme.topnav_text_color}};
-        {% endif %}
-        {% if theme.topnav_link_hover %}
-          --topnav-link-hover: {{theme.topnav_link_hover}};
-        {% endif %}
-        {% if theme.topnav_bg_gradient %}
-          --topnav-gradient-from: {{theme.topnav_bg_gradient_from}};
-          --topnav-gradient-to: {{theme.topnav_bg_gradient_to}};
+            /*Topnav*/
+        {% if theme.topnav_bg %} --topnav-bg: {{theme.topnav_bg}};
+        {% endif %}{% if theme.topnav_text_color %} --topnav-text-color: {{theme.topnav_text_color}};
+        {% endif %}{% if theme.topnav_link_hover %} --topnav-link-hover: {{theme.topnav_link_hover}};
+        {% endif %}{% if theme.topnav_bg_gradient %} --topnav-gradient-from: {{theme.topnav_bg_gradient_from}};
+            --topnav-gradient-to: {{theme.topnav_bg_gradient_to}};
         {% endif %}
 
-        /*Mainnav*/
-        {% if theme.mainnav_bg %}
-          --mainnav-bg: {{theme.mainnav_bg}};
-        {% endif %}
-        {% if theme.mainnav_text_color %}
-          --mainnav-text-color: {{theme.mainnav_text_color}};
-        {% endif %}
-        {% if theme.mainnav_link_hover %}
-          --mainnav-link-hover: {{theme.mainnav_link_hover}};
-        {% endif %}
-        {% if theme.mainnav_bg_gradient %}
-          --mainnav-gradient-from: {{theme.mainnav_bg_gradient_from}};
-          --mainnav-gradient-to: {{theme.mainnav_bg_gradient_to}};
-        {% endif %}
-
-        --font-main: '{{font_name}}';
+            /*Mainnav*/
+        {% if theme.mainnav_bg %} --mainnav-bg: {{theme.mainnav_bg}};
+        {% endif %}{% if theme.mainnav_text_color %} --mainnav-text-color: {{theme.mainnav_text_color}};
+        {% endif %}{% if theme.mainnav_link_hover %} --mainnav-link-hover: {{theme.mainnav_link_hover}};
+        {% endif %}{% if theme.mainnav_bg_gradient %} --mainnav-gradient-from: {{theme.mainnav_bg_gradient_from}};
+            --mainnav-gradient-to: {{theme.mainnav_bg_gradient_to}};
+        {% endif %} --font-main: '{{theme.font.name}}';
         }
     </style>
 </head>
@@ -157,7 +139,11 @@
 <script src="{{ link("languages/assets/#{theme.translations_hash}.js") }}"></script>
 {% block scripts %}{% endblock %}
 {% if error %}
-    <script> document.addEventListener('DOMContentLoaded', function () {salla.error('{{ error }}');}) </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            salla.error('{{ error }}');
+        })
+    </script>
 {% endif %}
 </body>
 </html>
