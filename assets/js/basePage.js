@@ -12,6 +12,7 @@ import CartListeners from './partials/cart-listeners';
 import WishlistButtons from './partials/wishlist-buttons';
 import Advertisement from './partials/advertisement';
 import Dropdwons from './partials/dropdwons';
+import Modals from './partials/modals';
 
 class BasePage extends Helpers {
     constructor() {
@@ -50,11 +51,14 @@ class BasePage extends Helpers {
         WishlistButtons();
         Advertisement();
         Dropdwons();
+        Modals();
     }
 
     initiateCommons() {
         salla.currency.event.onChanged(() => window.location.reload());
-        salla.document.event.onClick('.btn--has-loading', ({target}) => target.classList.add('btn--is-loading'));
+        document.querySelectorAll('.btn--has-loading').forEach(btn => {
+          btn.addEventListener('click', ()=> btn.classList.add('btn--is-loading'));
+        });
 
         this.anime('.anime-count', {scale: [0.5, 1]});
     }

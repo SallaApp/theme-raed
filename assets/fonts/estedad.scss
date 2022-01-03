@@ -1,0 +1,110 @@
+@use "sass:math";
+@font-face {
+  font-family: 'Estedad';
+  src: url('lib/estedad/Estedad-Medium.woff2') format('woff2'),
+  url('lib/estedad/Estedad-Medium.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Estedad-Medium';
+  src: url('lib/estedad/Estedad-Medium.woff2') format('woff2'),
+  url('lib/estedad/Estedad-Medium.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Estedad-Bold';
+  src: url('lib/estedad/Estedad-Bold.woff2') format('woff2'),
+  url('lib/estedad/Estedad-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+[class*=" sicon-"], [class^=sicon-] {
+  line-height: unset !important;
+}
+
+$font-base: 14;
+
+:root {
+  --font-base: #{$font-base}px;
+  --font-md: #{math.div(15,$font-base)+rem};
+  --font-sm: #{math.div(13,$font-base)+rem};
+  --font-xsm: #{math.div(11,$font-base)+rem};
+  --font-xxsm: #{math.div(10,$font-base)+rem};
+  --font-lg: #{math.div(18,$font-base)+rem};
+  --font-xlg: #{math.div(20,$font-base)+rem};
+  --font-xxlg: #{math.div(25,$font-base)+rem};
+  --font-xxxlg: #{math.div(40,$font-base)+rem};
+  --font-line-height: 1.4;
+}
+
+body {
+  &.font-estedad {
+    .swal2-container {
+      .swal2-popup {
+        .swal2-header {
+          .swal2-title {
+            font-size: var(--font-sm);
+          }
+        }
+      }
+    }
+
+    .article {
+      &--main {
+        line-height: 2;
+      }
+    }
+
+    .btn {
+      &--padded {
+        &.less {
+          padding: 6px 15px;
+        }
+      }
+
+      &--circular {
+        i {
+          transform: translateY(1px);
+        }
+      }
+    }
+
+    .checkbox {
+      &--large {
+        input[type=checkbox],
+        input[type=radio] {
+          + label {
+            &:after {
+              top: 6px;
+            }
+          }
+        }
+      }
+    }
+    .switcher-toggler .btn {
+      padding-bottom: 3px !important;
+    }
+    #currency_switcher {
+      .btn-value {
+        transform: translateY(-2px);
+      }
+    }
+    .qty {
+      &--large {
+        @media (max-width: 767px) {
+          button, input {
+            line-height: 40px;
+          }
+        }
+      }
+    }
+  }
+}
