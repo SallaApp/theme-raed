@@ -151,6 +151,6 @@ module.exports = {
       require('@tailwindcss/forms'),
       require('@tailwindcss/line-clamp'),
       require('@tailwindcss/jit'),
-      require('@salla.sa/twilight-components/src/plugins/tailwind-theme/index.js')
+      require('@salla.sa/twilight/tailwind.js')
     ],
 }

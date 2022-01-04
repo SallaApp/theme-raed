@@ -1,5 +1,4 @@
 import 'lite-youtube-embed';
-import AlpineJS from 'alpinejs';
 import BasePage from '../basePage';
 import Fslightbox from 'fslightbox';
 import Slider from '../partials/slider'
@@ -14,10 +13,21 @@ class Single extends BasePage {
     }
 
     onReady() {
-        AlpineJS.start();
         this.initSliders();
         ProductOptions();
         Comments();
+        this.quantityInput = document.querySelector('#product-quantity');
+        this.totalPrice = document.querySelector('#total-price');
+        this.beforePrice = document.querySelector('#before-price');
+    }
+
+    registerEvents() {
+        salla.document.event.onClick('.btn--share', event => this.toggleShareMenu(event.target));
+        salla.document.event.onClick('#btn-favorite', event => this.toggleFavorite(event.target));
+        salla.document.event.onClick('#btn-show-more', event => this.showMore(event.target));
+        salla.document.event.onClick('#btn-increase', () => this.addQty());
+        salla.document.event.onClick('#btn-decrease', () => this.subQty());
+        salla.product.event.onPriceUpdated(res => this.updatePrice(res));
     }
 
     initSliders() {
@@ -44,103 +54,85 @@ class Single extends BasePage {
         Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
     }
 
-    //TODO:: enhance it
-    initProductDetails(productId, inFavorite, showReadMore, quantity, total, productOptions) {
-        let that = this;
-        window.productId = productId;
-        return {
-            reminderModal    : false,
-            inFavorite       : inFavorite,
-            showReadMore     : showReadMore,
-            showShareMenu    : false,
-            itemQty          : quantity,
-            itemTotal        : total,
-            productOptions   : productOptions,
-            toggleFavorite   : function () {
-                this.inFavorite
-                    ? salla.api.wishlist.remove(productId)
-                    : salla.api.wishlist.add(productId);
-                this.inFavorite = !this.inFavorite;
-                that.anime('.anime-favorite', {duration: 800, scale: [0.6, 1]});
-            },
-            addQty           : function () {
-                this.itemQty++;
-                this.itemTotal = '...';
-                if (!this.productOptions.length) {
-                    salla.api.product.getPrice({id: productId, quantity: this.itemQty, options: this.productOptions})
-                        .then(res => {
-                            this.updatePrice(res);
-                        });
-                }
-            },
-            subQty           : function () {
-                if (this.itemQty <= 1) {
-                    return;
-                }
-                this.itemQty--;
-                this.itemTotal = '...';
-                salla.api.product.getPrice({id: productId, quantity: this.itemQty, options: this.productOptions})
-                    .then(res => {
-                        this.updatePrice(res);
-                    });
-            },
-            updatePrice      : function (res) {
-                this.itemTotal = res.data.after;
-            },
-            openReminderModal: function () {
-                this.reminderModal = true;
-                that.anime('.common-anime-r', {translateY: [40, 0]});
-            },
-
-            closeReminderModal: function () {
-                this.reminderModal = false;
-            },
-
-            submitReminderModal: function () {
-                let product_id = document.querySelector('#notify_product_id').value,
-                    email_input = document.querySelector('#notify-email'),
-                    //country_code_input = document.querySelector('.iti__selected-dial-code'),
-                    country_code_input = document.querySelector('#country_code'),
-                    mobile_input = !document.querySelector('#notify-mobile');
-
-                salla.product.api
-                    .availabilitySubscribe({
-                        id    : product_id,
-                        email : email_input ? email_input.value : null,
-                        mobile: mobile_input ? mobile_input.value : null,
-                        //country_code:country_code_input ? country_code_input.innerText : null
-                        country_code: country_code_input ? country_code_input.value : null
-                    })
-                    .then(res => {
-                        this.reminderModal = false;
-                    });
-            },
-
-            toggleShareMenu() {
-                if (!(this.showShareMenu = !this.showShareMenu)) {
-                    return;
-                }
-
-                (new anime.timeline())
-                    .add({
-                        targets   : '.share-btns-list',
-                        translateY: [-50, 0],
-                        opacity   : [0, 1],
-                        duration  : 300,
-                        podding   : '0',
-                        easing    : 'easeInOutSine'
-                    }).add({
-                    targets   : '.share-btns-list li',
-                    translateZ: 0,
-                    translateY: [-30, 0],
-                    scaleY    : [0, 1],
-                    opacity   : [0, 1],
-                    duration  : 1200,
-                    delay     : anime.stagger(100),
-                }, '-=200');
-            },
-
+    /**
+     * @param {HTMLElement} btn
+     */
+    toggleFavorite(btn) {
+        if (!this.isUser()) {
+            return salla.error(salla.lang.get('common.messages.must_login'));
         }
+        let addToFavorite = !btn.classList.contains('favorited');
+        addToFavorite ? salla.api.wishlist.add(this.pageData('id')) : salla.api.wishlist.remove(this.pageData('id'));
+        this.toggleElement(btn, 'text-white bg-primary favorited', 'bg-white text-theme-red', () => addToFavorite)
+            .toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => addToFavorite)
+        this.anime('.btn-favorite', {duration: 800, scale: [0.6, 1]});
+    }
+
+    /**
+     * @param {HTMLElement} btn
+     */
+    toggleShareMenu(btn) {
+        let showShareMenu = !btn.classList.contains('opened');
+        this.toggleElement(btn, 'opened', 'closed', () => showShareMenu)
+            .toggleElement(btn.querySelector('i'), 'sicon-cancel', 'sicon-share-alt', () => showShareMenu)
+            .toggleElement(btn.nextElementSibling, 'h-auto', 'h-0 opacity-0', () => showShareMenu);
+
+        if (!showShareMenu) {
+            return;
+        }
+
+        (new anime.timeline())
+            .add({
+                targets   : '.share-btns-list',
+                translateY: [-50, 0],
+                opacity   : [0, 1],
+                duration  : 300,
+                podding   : '0',
+                easing    : 'easeInOutSine'
+            }).add({
+            targets   : '.share-btns-list li',
+            translateZ: 0,
+            translateY: [-30, 0],
+            scaleY    : [0, 1],
+            opacity   : [0, 1],
+            duration  : 1200,
+            delay     : anime.stagger(100),
+        }, '-=200');
+    }
+
+    showMore(btn) {
+        document.querySelectorAll('#moreContent').forEach(div => div.style = `max-height:${div.scrollHeight}px`);
+        btn.remove();
+    }
+
+    addQty() {
+        this.quantityInput.value++;
+        this.qunatityChanged();
+    }
+
+    subQty() {
+        if (this.quantityInput.value <= 1) {
+            return;
+        }
+        this.quantityInput.value--;
+        this.qunatityChanged();
+    }
+
+    /**
+     * Workaround to fire data-on-change="product::get.price"
+     */
+    qunatityChanged() {
+        salla.document.event.fireEvent(this.quantityInput, 'change', {'bubbles': true});
+    }
+
+    updatePrice(res) {
+        this.totalPrice.innerText = res.data.after;
+        if (res.data.before) {
+            this.beforePrice.style.display = 'inline';
+            this.beforePrice.innerText = res.data.before;
+            return;
+        }
+        this.beforePrice.style.display = 'none';
     }
 }
 

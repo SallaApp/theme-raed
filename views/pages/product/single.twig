@@ -59,9 +59,7 @@
     <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
 {% endblock %}
 {% block content %}
-    <main id="main"
-          x-data="initProductDetails({{ product.id }}, {{ in_wishlist?1:0 }}, {{ product.show_read_more?1:0 }}, 1, '{{ product.on_sale ? product.sale_price|money : product.price|money }}', {{ product.options }})"
-          x-cloak data-product-id="{{ product.id }}">
+    <main id="main" data-product-id="{{ product.id }}">
         <div class="container">
             <nav class="w-full py-5">
                 {% component 'header.breadcrumbs' %}
@@ -70,7 +68,8 @@
 
                 <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-16">
 
-                    <div class="swiper relative my-gallery details-slider rounded-md mb-2.5" id="details-slider-{{ product.id }}">
+                    <div class="swiper relative my-gallery details-slider rounded-md mb-2.5"
+                         id="details-slider-{{ product.id }}">
                         {% if(product.promotion_title) %}
                             <div class="absolute z-10 top-4 start-0">
                                 <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
@@ -87,24 +86,26 @@
                                    href="{{ image.video_url?image.video_url:image.url }}"
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide h-500 homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
-                                    <img data-src="{{ image.url }}" src="{{asset('images/s-empty.png')}}" alt="{{ image.alt }}"
+                                    <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
+                                         alt="{{ image.alt }}"
                                          class="h-full object-cover lazy-load w-full">
                                 </a>
                             {% endfor %}
                         </div>
-                        {% set has_images=product.images|length>1 %}
-                        {% if has_images %}
+                        {% set has_many_images=product.images|length>1 %}
+                        {% if has_many_images %}
                             <div class="w-10 h-10 shadow-sm bg-white text-primary text-lg swiper-button-prev rounded-full"></div>
                             <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
                         {% endif %}
                     </div>
 
-                    {% if has_images %}
+                    {% if has_many_images %}
                         <div thumbsSlider="" class="swiper thumbs-slider" id="thumbs-slider-{{ product.id }}">
                             <div class="swiper-wrapper">
                                 {% for image in product.images %}
                                     <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
-                                        <img data-src="{{ image.url }}" src="{{asset('images/s-empty.png')}}" class="object-cover w-full h-full lazy-load"
+                                        <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
+                                             class="object-cover w-full h-full lazy-load"
                                              title="{{ image.alt }}"
                                              alt="{{ image.alt }}"/>
                                     </div>
@@ -148,17 +149,13 @@
 
                     <div class="product__description leading-7 mb-6">
                         {% if product.show_read_more %}
-                            {# <p class="pb-1">{{ product.description|raw }}</p> #}
-                            <div class="relative overflow-hidden transition-all max-h-0 duration-300" id="moreContent"
-                                 x-bind:style="showReadMore  ?'max-height:5.25rem':'max-height: ' + document.getElementById('moreContent').scrollHeight + 'px'">
-                                <p>
-                                    {{ product.description|raw }}
-                                </p>
+                            <div class="relative overflow-hidden transition-all max-h-0 duration-300"
+                                 style="max-height:5.25rem"
+                                 id="moreContent">
+                                <p>{{ product.description|raw }}</p>
                             </div>
-                            <div x-show="showReadMore" class="mt-2 cursor-pointer">
-                                <a @click="showReadMore = !showReadMore" data-linkText="show more"
-                                   class="show-more text-primary"
-                                   x-text="showReadMore ? '{{ trans('pages.products.read_more') }}':'' "></a>
+                            <div class="mt-2 cursor-pointer" id="btn-show-more">
+                                <a class="show-more text-primary">{{ trans('pages.products.read_more') }}</a>
                             </div>
                         {% else %}
                             <p class="pb-1">{{ product.description|raw }}</p>
@@ -166,14 +163,13 @@
                     </div>
 
                     <div class="flex mb-7 space-s-3 ">
-                        <div class="share-wrapper relative" @click.away="showShareMenu = false">
-                            <button type="button" @click="toggleShareMenu()"
-                                    class="btn--share shadow-md hover:shadow-default transition-shadow bg-white text-primary rounded-full w-10 h-10 focus:outline-none"
+                        <div class="share-wrapper relative">
+                            <button type="button"
+                                    class="btn--share shadow-md hover:shadow-default transition-shadow bg-white text-primary rounded-full w-10 h-10 focus:outline-none cursor-pointer"
                                     aria-label="Share">
-                                <i :class="showShareMenu ? 'sicon-cancel' :'sicon-share-alt'"></i>
+                                <i class="sicon-share-alt"></i>
                             </button>
-                            <ul class="absolute z-10 h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share"
-                                :class="showShareMenu? 'h-auto' : 'h-0 opacity-0' ">
+                            <ul class="absolute z-10 h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share">
                                 <li>
                                     <a class="a2a_button_whatsapp block p-2.5" aria-label="Share Via Whatsapp">
                                         <i class="sicon-whatsapp"></i>
@@ -212,16 +208,17 @@
                             <script async src="https://static.addtoany.com/menu/page.js"></script>
                         </div>
 
-                        <button
-                                {% if user %}
-                                    @click="toggleFavorite()"
-                                {% else %}
-                                    onClick="salla.error('{{ trans('common.messages.must_login') }}')"
-                                {% endif %}
-                                :class="inFavorite? 'text-white bg-primary' : 'bg-white text-theme-red'"
-                                class="anime-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none">
-                            <i :class="inFavorite ? 'sicon-heart-off' : 'sicon-heart'"></i>
-                        </button>
+                        {% if in_wishlist %}
+                            <button id="btn-favorite"
+                                    class="text-white bg-primary favorited shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none cursor-pointer">
+                                <i class="sicon-heart-off"></i>
+                            </button>
+                        {% else %}
+                            <button id="btn-favorite"
+                                    class="bg-white text-theme-red btn-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none cursor-pointer">
+                                <i class="sicon-heart"></i>
+                            </button>
+                        {% endif %}
                     </div>
 
                     {% component 'product.tags' with {product: product} %}
@@ -256,11 +253,11 @@
                                     </label>
                                     <div class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
                                         <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                                            <button type="button" @click="addQty()"
-                                                    class="text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                            <button class="text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
+                                                    id="btn-increase"
+                                                    type="button">
                                                 <i class="sicon-add"></i></button>
                                             <input id="product-quantity"
-                                                   x-model="itemQty"
                                                    data-digits="1"
                                                    name="quantity"
                                                    type="number"
@@ -272,8 +269,9 @@
                                                    aria-label="Product Quantity"
                                                    min="1"/>
 
-                                            <button type="button" @click="subQty()"
-                                                    class="text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                            <button class="text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
+                                                    id="btn-decrease"
+                                                    type="button">
                                                 <i class="sicon-minus"></i></button>
                                         </div>
                                     </div>
@@ -289,39 +287,32 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2 text-end space-s-1">
                                     <div class="space-s-1">
                                         {% if product.on_sale %}
-                                            <h4 class="text-theme-red font-bold text-sm inline-block"
-                                                x-text="itemTotal">{{ product.sale_price|money }}</h4>
-                                            <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                                            <h4 id="total-price" class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                            <span id="before-price" class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                                         {% else %}
-                                            <h4 class="text-theme-red font-bold text-sm inline-block"
-                                                x-text="itemTotal">{{ product.price|money }}</h4>
+                                            <h4 id="total-price" class="text-theme-red font-bold text-sm inline-block">{{ product.price|money }}</h4>
                                         {% endif %}
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flex justify-between space-s-4">
-                                {% if product.is_available or product.is_donation %}
-                                    <button type="button" class="btn btn-primary add-to-cart-btn btn--has-loading"
-                                            {% if not product.is_available %}
-                                    disabled
-                                    {% else %}
-                                        data-on-click="cart::add-item"{% endif %}>
+                                {% if product.is_available %}
+                                    <button class="btn btn-primary add-to-cart-btn btn--has-loading"
+                                            data-on-click="cart::add-item"
+                                            type="button">
                                         <span class="loader loader--small"></span>
                                         <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">
-                                            {% if product.is_available %}
-                                                {# <i class="sicon-shopping-bag"></i> #}
-                                                {{ trans('pages.cart.add_to_cart') }}
-                                            {% elseif product.is_donation %}
-                                                {{ trans('pages.products.donation_exceed') }}
-                                            {% else %}
-                                                {{ trans('pages.products.out_of_stock') }}
-                                            {% endif %}
+                                            {{ trans('pages.cart.add_to_cart') }}
                                         </span>
                                     </button>
                                 {% else %}
                                     <button type="button" class="btn btn-outline">
-                                        {{ trans('pages.products.out_of_stock') }}
+                                        {% if product.is_donation %}
+                                            {{ trans('pages.products.donation_exceed') }}
+                                        {% else %}
+                                            {{ trans('pages.products.out_of_stock') }}
+                                        {% endif %}
                                     </button>
                                     {% component 'product.notify-availability' with {product:product} %}
                                 {% endif %}
