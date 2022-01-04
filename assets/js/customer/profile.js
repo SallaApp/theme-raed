@@ -5,7 +5,7 @@ import Filepond from '../partials/filepond';
 
 class Profile extends BasePage {
     onReady() {
-        Flatpickr('.date-element', {"dateFormat": "Y-m-d"});
+        Flatpickr('.date-element', { "dateFormat": "Y-m-d" });
         this.initiateProfileImage();
         this.initiateVerifyMobile();
         this.appendAvtar();
@@ -20,17 +20,17 @@ class Profile extends BasePage {
     initiateProfileImage() {
 
         this.avatarFilepond = Filepond('#profile_img', {
-            labelIdle                     : this.getProfileLabel(),
-            instantUpload                 : false,
-            multiple                      : false,
-            imagePreviewHeight            : 80,
-            imageCropAspectRatio          : '1:1',
-            imageResizeTargetWidth        : 200,
-            imageResizeTargetHeight       : 200,
-            stylePanelLayout              : 'compact circle',
-            styleLoadIndicatorPosition    : 'center bottom',
+            labelIdle: this.getProfileLabel(),
+            instantUpload: false,
+            multiple: false,
+            imagePreviewHeight: 80,
+            imageCropAspectRatio: '1:1',
+            imageResizeTargetWidth: 200,
+            imageResizeTargetHeight: 200,
+            stylePanelLayout: 'compact circle',
+            styleLoadIndicatorPosition: 'center bottom',
             styleProgressIndicatorPosition: 'center center',
-            styleButtonRemoveItemPosition : 'center bottom',
+            styleButtonRemoveItemPosition: 'center bottom',
             styleButtonProcessItemPosition: 'center bottom',
         });
         const btn = document.getElementById('update-profile-btn');
@@ -42,7 +42,11 @@ class Profile extends BasePage {
         salla.document.event.onRequestFailed(removeLoading);
     }
 
+    // otp
     initiateVerifyMobile() {
+        this.tabChange();
+        this.handlePaste();
+
         salla.document.event.onKeyup('#verify-mobile-field', function (event) {
             var btn = document.querySelector('#verify-mobile-btn');
             if (!btn) {
@@ -55,6 +59,38 @@ class Profile extends BasePage {
             }
         });
     }
+
+    digitValidate(ele) {
+        console.log(ele.value);
+        ele.value = ele.value.replace(/[^0-9]/g, '');
+    }
+
+    tabChange() {
+        let otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs[0].focus();
+        otpInputs.forEach(ele => {
+            ele.addEventListener("keyup", () => {
+                if (ele.value) { ele.nextElementSibling?.focus(); }
+                else { ele.previousElementSibling?.focus(); }
+            })
+        })
+    }
+
+    handlePaste(e) {
+        let otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach(ele => {
+            ele.addEventListener("paste", (e) => {
+                const paste = e.clipboardData.getData('text');
+                const inputs = Array.from(Array(4));
+                inputs.forEach((element, i) => {
+                    otpInputs[i].value = paste[i] || '';
+                });
+            })
+        })
+    }
+
+    // end otp
+
 
     appendAvtar() {
         /** @type {FilePond} */
