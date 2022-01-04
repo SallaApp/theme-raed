@@ -46,7 +46,7 @@ class Index extends BasePage {
         });
 
 
-        //Used in: [photos_slider.twig]
+        //Used in: [enhanced-slider.twig]
         let animate = () => setTimeout(() => this.anime('.swiper-slide-active .main-slide-anime', {translateX: [50, 0]}), 100);
         Slider('.main-slider', {loop: true, on: {slideChange: animate}});
         animate();
