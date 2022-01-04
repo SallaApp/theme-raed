@@ -44,49 +44,68 @@ class Profile extends BasePage {
 
     // otp
     initiateVerifyMobile() {
-        this.tabChange();
-        this.handlePaste();
-
-        salla.document.event.onKeyup('#verify-mobile-field', function (event) {
-            var btn = document.querySelector('#verify-mobile-btn');
-            if (!btn) {
-                return;
-            }
-            if (event.target.value.length == 4) {
-                btn.removeAttribute('disabled');
-            } else {
-                btn.setAttribute('disabled', '');
-            }
-        });
+        salla.event.on('profile::verify.mobile', ()=> { 
+            const btn = document.getElementById('verify-mobile-btn');
+            btn.addEventListener('click', () => btn.classList.add('btn--is-loading'));
+            // let removeLoading = () => btn.classList.remove('btn--is-loading');
+            
+            let otpInputs = document.querySelectorAll('.otp-input');
+            this.handleInput(otpInputs);
+            this.handlePaste(otpInputs);
+        }) 
     }
 
-    digitValidate(ele) {
-        console.log(ele.value);
-        ele.value = ele.value.replace(/[^0-9]/g, '');
-    }
-
-    tabChange() {
-        let otpInputs = document.querySelectorAll('.otp-input');
+    handleInput(otpInputs) {
         otpInputs[0].focus();
-        otpInputs.forEach(ele => {
-            ele.addEventListener("keyup", () => {
-                if (ele.value) { ele.nextElementSibling?.focus(); }
-                else { ele.previousElementSibling?.focus(); }
+        otpInputs.forEach(otpInput => {
+            otpInput.addEventListener("keyup", (event) => {
+                let key = event.keyCode || event.charCode;
+                otpInput.value = this.digitValidate(otpInput.value);
+                if (otpInput.value) { 
+                    otpInput.nextElementSibling?.focus();
+                }
+                else if( key == 8 || key == 46 ){ otpInput.previousElementSibling?.focus(); }
+                this.hanleSubmitBtn(otpInputs)
             })
         })
     }
 
-    handlePaste(e) {
-        let otpInputs = document.querySelectorAll('.otp-input');
-        otpInputs.forEach(ele => {
-            ele.addEventListener("paste", (e) => {
-                const paste = e.clipboardData.getData('text');
+    handlePaste(otpInputs) {
+        otpInputs.forEach(otpInput => {
+            otpInput.addEventListener("paste", (event) => {
+                const paste = event.clipboardData.getData('text');
                 const inputs = Array.from(Array(4));
                 inputs.forEach((element, i) => {
-                    otpInputs[i].value = paste[i] || '';
+                    otpInputs[i].value = this.digitValidate(paste[i] || '');
+                    this.hanleSubmitBtn(otpInputs)
                 });
+                setTimeout(() => otpInput.focus(), 100);
             })
         })
+    }
+
+    hanleSubmitBtn(otpInputs){
+        let otpValue=[]
+        var btn = document.querySelector('#verify-mobile-btn');
+        var otpField = document.querySelector('#verify-mobile-field');
+
+        otpInputs.forEach((optInput) => {
+            if(optInput.value){
+                otpValue.push(optInput.value)
+            }
+        })
+
+        otpField.value = otpValue.join('');
+        
+        if (otpValue.length == 4) {
+            btn?.removeAttribute('disabled');
+        } else {
+            btn?.setAttribute('disabled', '');
+        }
+    }
+
+    digitValidate(value) {        
+       return value.replace(/[^0-9\u0660-\u0669]/g, '');
     }
 
     // end otp

@@ -7,14 +7,12 @@ class Single extends BasePage {
     }
 
     sendRating() {
-        // salla.feedback.api.store({ order_id: order.id, comment: this.storeRating.comment, rating: this.storeRating.rating });
-        // salla.feedback.api.shipping({ order_id: order.id, comment: this.shippingRating.comment, rating: this.shippingRating.rating });
-        // salla.feedback.api.product({ order_id: order.id, products: this.productsRating });
         this.ratingValidation()
         document.querySelectorAll('.rating-section')
             .forEach((ratingSection) => {
                 let type = ratingSection.dataset.type;
                 let formsData = [];
+                debugger;
                 ratingSection.querySelectorAll('.rating-outer-form')
                     .forEach(function (form) {
                         let formData = {};
@@ -40,7 +38,7 @@ class Single extends BasePage {
             .then(function () {
                 salla.config.canLeave = true;
                 if (formsData.length > 1) {
-                    sendFeedback(type, formsData.slice(1));
+                    this.sendFeedback(type, formsData.slice(1));
                 }
             }).catch(error => salla.config.canLeave = true);
     }
