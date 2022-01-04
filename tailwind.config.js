@@ -8,7 +8,7 @@ module.exports = {
         content: [
             "views/**/*.twig",
             "assets/js/**/*.js",
-            // require('@salla.sa/twilight/tailwind_css_list')
+            // require('@salla.sa/twilight-components/src/plugins/tailwind-theme/safe-list-css.txt')
         ]
     },
     darkMode: 'class', // or 'media' or 'class'
@@ -151,6 +151,6 @@ module.exports = {
       require('@tailwindcss/forms'),
       require('@tailwindcss/line-clamp'),
       require('@tailwindcss/jit'),
-      require('@salla.sa/twilight/tailwind')
+      require('@salla.sa/twilight-components/src/plugins/tailwind-theme/index.js')
     ],
 }
