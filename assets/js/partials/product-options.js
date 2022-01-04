@@ -8,9 +8,24 @@ export default function () {
     document.querySelectorAll('.visibility_condition').forEach(input => visibilityConditionCheck(input));
     optionsAlreadyInitiated = true;
     initDateTimeInputes();
+    initiateTabs();
     Filepond();
 }
 
+function initDateTimeInputes() {
+    Flatpickr('.date-element', {"dateFormat": "Y-m-d H:i"});
+    Flatpickr('.date-time-element', {"enableTime": true, "dateFormat": "Y-m-d H:i",});
+    Flatpickr('.time-element', {enableTime: true, noCalendar: true, dateFormat: "H:i",});
+}
+
+function initiateTabs() {
+    document.querySelectorAll('.btn-tab').forEach(btn => btn.addEventListener('click', toggleTabForBtn));
+}
+
+function toggleTabForBtn({target: btn}) {
+    let tab = document.querySelector(btn.dataset.show);
+    pageClass.toggleElement(tab, 'opened', 'hidden', () => tab.classList.contains('hidden'))
+}
 
 function visibilityConditionCheck(input) {
     let isMultiple = input.type == 'checkbox';
@@ -74,12 +89,6 @@ function toggleElement(field, showIt) {
             salla.document.event.fireEvent(input, 'change', {'bubbles': true});
         }
     });
-}
-
-function initDateTimeInputes() {
-    Flatpickr('.date-element', {"dateFormat": "Y-m-d H:i"});
-    Flatpickr('.date-time-element', {"enableTime": true, "dateFormat": "Y-m-d H:i",});
-    Flatpickr('.time-element', {enableTime: true, noCalendar: true, dateFormat: "H:i",});
 }
 
 //register verifyDataBeforeSend function

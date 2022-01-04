@@ -23,13 +23,17 @@ export default class Helpers {
      * @param callback
      */
     toggle(selector, classes1, classes2, callback) {
+        document.querySelectorAll(selector).forEach(element => this.toggleElement(element, classes1, classes2, callback));
+        return this;
+    }
+
+    toggleElement(element, classes1, classes2, callback) {
         classes1 = Array.isArray(classes1) ? classes1 : classes1.split(' ');
         classes2 = Array.isArray(classes2) ? classes2 : classes2.split(' ');
-        document.querySelectorAll(selector).forEach(element => {
-            let isClasses1 = callback(element);
-            element.classList.remove(...(isClasses1 ? classes2 : classes1));
-            element.classList.add(...(isClasses1 ? classes1 : classes2));
-        });
+        let isClasses1 = callback(element);
+        element.classList.remove(...(isClasses1 ? classes2 : classes1));
+        element.classList.add(...(isClasses1 ? classes1 : classes2));
+        return this;
     }
 
     /**

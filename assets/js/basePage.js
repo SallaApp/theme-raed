@@ -18,11 +18,25 @@ class BasePage extends Helpers {
         super();
         this.boot();
         document.addEventListener('DOMContentLoaded', () => this.load());
+        window.pageClass = this;
+    }
+
+    /**
+     * @param key
+     * @return {*}
+     */
+    pageData(key) {
+        let data = salla.config.page || {};
+        return key ? data[key] : data;
     }
 
     boot() {
         this.onBoot && this.onBoot();
         this.registerWindowProperties();
+    }
+
+    isUser() {
+        return salla.config.is_user;
     }
 
     load() {

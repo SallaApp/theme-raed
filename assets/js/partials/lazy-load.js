@@ -11,12 +11,16 @@ let imgObserver = new IntersectionObserver((entries, observer) => {
 salla.infiniteScroll.event.onAppend(LazyLoad);
 
 function preloadImg(entry) {
-    const entrySrc = entry.getAttribute('data-src');
-    if (!entrySrc) {
+    const src = entry.dataset.src;
+    if (!src) {
         return;
     }
     // assign image source to src attribute
-    entry.classList.contains('lazy-background') ? entry.style.backgroundImage = "url('" + entrySrc + "')" : entry.src = entrySrc;
+    try {
+        entry.classList.contains('lazy-background') ? entry.style.backgroundImage = `url('${src}')` : entry.src = src;
+    } catch (e) {
+        salla.log(`Failed to load image (${src})!`, e.message);
+    }
     entry.classList.remove('lazy-load', 'lazy-background');
     entry.classList.add('loaded');
 }
