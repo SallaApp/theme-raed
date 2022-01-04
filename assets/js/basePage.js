@@ -1,5 +1,5 @@
 import '@salla.sa/twilight';
-import '@salla.sa/twilight/components';
+import '@salla.sa/twilight-components';
 
 import Notify from './partials/notify';
 import Helpers from './partials/helpers';
