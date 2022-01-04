@@ -113,7 +113,7 @@
                     </div>
 
                     <div class="overflow-hidden mb-10">
-
+                        <section class="rating-section products-section" data-type="product">
                         {% for item in order.items %}
                             <div data-order-item-id="{{item.id}}" data-order-item-product-id="{{item.product.id}}" class="order-item bg-white mb-5 p-5 rounded-md">
                                 <div class="mb-5">
@@ -272,6 +272,7 @@
                                 {% include 'pages.partials.product-rating' with {'order':order, 'item':item} %}
                             </div>
                         {% endfor %}
+                        </section> {# end products section#}
 
                         <div class="bg-white rounded-md px-6">
                             <h2 id="summary-heading" class="sr-only">Order summary</h2>
@@ -528,6 +529,7 @@
 {% block scripts %}
     <script src="{{ asset('dist/order.js') }}"></script>
 
+    {# TODO:: move it to Js#}
     {% if order.can_cancel %}
         <script>
             function cancelOrder() {

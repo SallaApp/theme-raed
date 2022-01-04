@@ -26,8 +26,8 @@ export default function (input = '.filepond', options = {}) {
     }
     //return latest filepond instance
     let filepond;
-    document.querySelectorAll(input).forEach(input => filePond = initFilepond(input, options));
-    return filePond;
+    document.querySelectorAll(input).forEach(input => filepond = initFilepond(input, options));
+    return filepond;
 }
 
 /**

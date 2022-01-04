@@ -1,52 +1,50 @@
 {% if store.settings.rating.is_enabled %}
 	{% if store.settings.rating.store %}
 		{# Store Rating #}
-		<section x-data="{ temp: 0, orig: 0 }" class="bg-white my-10 p-5 rounded-md mb-5">
-			<h2 class="text-xl font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
-			<div class="mb-2">
-				<textarea id="storeReview" class="form-input h-20" placeholder="تقييمك للمتجر ..."></textarea>
-				{# <small class="block text-red-400 text-tiny text-end"> التعليق  مطلوب</small> #}
+		<section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="store">
+			<div class="{{ testimonial?'':'rating-outer-form' }}" data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
+				<input type="hidden" name="order_id" value="{{ order.order_id }}">
+				<input type="hidden" name="type" value="store">
+				<h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
+				<div class="mb-2">
+					<textarea id="storeReview" name="comment" class="form-input comment h-20" placeholder="{{ trans('pages.rating.write_store_rate') }}"></textarea>
+					{# <small class="block text-red-400 text-tiny text-end"> التعليق  مطلوب</small> #}
+				</div>
+				<div class="rating-wrap flex items-center space-s-4">
+					<form class="rate-element rate-element--has-label">
+						{% include 'pages.partials.rating-stars' with {large:true, stars:testimonial.stars} %}
+					</form>
+					<p class="rate-label fix-align font-sm center mb-0">{{ (testimonial.stars?trans('pages.rating.'~testimonial.stars~'_stars'):'')|raw }}</p>
+				</div>
+				<small class="text-red-400 validation-message"></small>
 			</div>
-			<div class="rating-wrap flex items-center space-s-4">
-				<form class="rate-element rate-element--has-label">
-					{% include 'pages.partials.rating-stars' with {stars:testimonial.stars} %}
-				</form>
-				<p class="rate-label fix-align font-sm center mb-0">{{ (testimonial.stars?trans('pages.rating.'~testimonial.stars~'_stars'):'')|raw }}</p>
-			</div>
-			<small class="text-red-400" x-show="!$store.orderRating.storeRating.rating && $store.orderRating.isSubmit">تقييم المتجر مطلوب</small>
 		</section>
 	{% endif %}
 
 	{% if order.has_shipping and store.settings.rating.shipping %}
 		{# Shipping Rating #}
-		<section x-data="{ temp: 0, orig: 0,}" class="bg-white my-10 p-5 rounded-md mb-5">
-			<h2 class="text-xl font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
-			<div class="mb-2">
-				<textarea id="shippingReview" class="form-input h-20 mb-2" placeholder="تقييمك لشركة الشحن ..."></textarea>
-				{# <small class="block text-red-400 text-tiny text-end"> التعليق  مطلوب</small> #}
+		<section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="shipping">
+			<div class="{{ testimonial?'':'rating-outer-form' }}" data-stars-error="{{ trans('pages.rating.rate_shipping_stars') }}">
+
+				<input type="hidden" name="order_id" value="{{ order.order_id }}">
+				<input type="hidden" name="shipping_company_id" value="{{ order.shipping.id }}">
+				<input type="hidden" name="type" value="shipping">
+
+				<h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
+				<div class="mb-2">
+					<textarea id="shippingReview" name="comment" class="form-input comment h-20 mb-2" placeholder="{{ trans('pages.rating.write_shipping_rate') }}"></textarea>
+					{# <small class="block text-red-400 text-tiny text-end"> التعليق  مطلوب</small> #}
+				</div>
+				<div class="rating-wrap flex items-center space-s-4">
+					<form class="rate-element ratFeedbackPresentere-element--has-label">
+						{% include 'pages.partials.rating-stars' with {large:true, stars:shippingRate.stars} %}
+					</form>
+					<p class="rate-label fix-align font-sm center mb-0">{{ (shippingRate.stars?trans('pages.rating.'~shippingRate.stars~'_stars'):'')|raw }}</p>
+				</div>
+				<small class="text-red-400 validation-message"></small>
 			</div>
-			<div class="rating-wrap flex items-center space-s-4">
-				<form class="rate-element ratFeedbackPresentere-element--has-label">
-					{% include 'pages.partials.rating-stars' with {stars:shippingRate.stars} %}
-				</form>
-				<p class="rate-label fix-align font-sm center mb-0">{{ (shippingRate.stars?trans('pages.rating.'~shippingRate.stars~'_stars'):'')|raw }}</p>
-			</div>
-			{# <small class="text-red-400">تقييم شركة الشحن مطلوب</small> #}
 		</section>
 	{% endif %}
 
-	<button class="btn btn-primary w-full">{{ trans('pages.rating.send_ratings') }}</button>
+	<button id="submitRating" class="btn btn-primary w-full">{{ trans('pages.rating.send_ratings') }}</button>
 {% endif %}
-
-<script>
-    let storeReview = document.querySelector("#storeReview").value
-    let shippingReview = document.querySelector("#shippingReview").value
-    let productsReviews = document.querySelectorAll(".product-review");
-
-    function sendRate() {
-        // this.validation();
-        salla.feedback.api.store({order_id: {{ order.id }}, comment: this.storeRating.comment, rating: this.storeRating.rating});
-        salla.feedback.api.shipping({order_id: {{ order.id }}, comment: this.shippingRating.comment, rating: this.shippingRating.rating});
-        salla.feedback.api.product({order_id: {{ order.id }}, products: this.productsRating});
-    },
-</script>

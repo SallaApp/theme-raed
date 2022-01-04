@@ -6,22 +6,21 @@
 | page.name         | string               |                                                           |
 | products          | Product[] *Paginator |                                                           |
 | brand             | Brand *              |                                                           |
-| brand.id          | Integer              |                                                           |
-| brand.name        | String               |                                                           |
-| brand.url         | String               |                                                           |
-| brand.logo        | String               |                                                           |
-| brand.banner      | ?String              | Null when is not set, or merchant doesn't want to show it |
-| brand.description | String               |                                                           |
+| brand.id          | int                  |                                                           |
+| brand.name        | string               |                                                           |
+| brand.url         | string               |                                                           |
+| brand.logo        | string               |                                                           |
+| brand.banner      | ?string              | Null when is not set, or merchant doesn't want to show it |
+| brand.description | string               |                                                           |
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main" x-data="initBrand()" x-cloak>
+    <main id="main">
         <div class="container">
             <nav class="w-full py-5">
                 {% component 'header.breadcrumbs' %}
             </nav>
-            <div
-                    class="brand__header">
+            <div class="brand__header">
                 {% if brand.banner %}
                     <div class="row">
                         <div class="col-md-12">
@@ -45,31 +44,27 @@
                 <div class="main-content w-full">
                     {% if products is not empty %}
                         <div class="mb-5 md:flex justify-between items-center">
-                            <h2 class="font-bold mb-6 md:mb-0">{{ page_title|raw }}</h2>
+                            <h2 class="font-bold mb-6 md:mb-0">{{ page.title|raw }}</h2>
                             <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="hidden md:flex items-center">
-                                        <a @click="toggleView('grid')"
-                                           :class=" girdLayout == 'grid' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                           id="gridButton" data-grid="grid"
-                                           class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
-                                            <i class="sicon-grid"></i>
-                                        </a>
-                                        <a @click="toggleView('list')"
-                                           :class="girdLayout == 'list' ? 'bg-border-color text-primary' : 'text-gray-400'"
-                                           id="listButton" data-grid="list"
-                                           class="grid-trigger cursor-pointer mx-2 text-xl w-10 h-10 rounded-md flex items-center justify-center">
-                                            <i class="sicon-list"></i>
-                                        </a>
-                                    </div>
+                                <div class="hidden {#md:flex#} items-center ms-2 md:ms-2">
+                                    <a href="#" data-type="grid"
+                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
+                                              rounded-md flex items-center justify-center
+                                              bg-border-color text-primary">
+                                        <i class="sicon-grid"></i>
+                                    </a>
+                                    <a href="#" data-type="list"
+                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
+                                              rounded-md flex items-center justify-center
+                                              text-gray-400">
+                                        <i class="sicon-list"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
 
 
-                        <div x-ref="productsContainer"
-                             :class="{'list md:grid-cols-1' : girdLayout == 'list','md:grid-cols-auto-fill' :  girdLayout == 'grid' }"
-                             class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
+                        <div class="md:grid-cols-auto-fill mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
 
                             {% for product in products %}
                                 {% include 'pages.partials.product.card' %}
@@ -83,7 +78,8 @@
                             </span>
                             <p class="text-sm mb-5 text-center">
                                 <span>{{ trans('pages.brands.non_products') }}</span>
-                                {{ brand.name }}</p>
+                                {{ brand.name }}
+                            </p>
                         </div>
                     {% endif %}
                 </div>
@@ -94,34 +90,4 @@
 
 {% block scripts %}
     <script defer src="{{ asset('dist/brand.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            salla.infiniteScroll.initiate('.products-container', '.product-entry')
-        })
-
-        function initBrand() {
-            return {
-                girdLayout  : 'grid',
-                toggleView  : function (layout) {
-                    this.girdLayout = layout;
-                    this.animateItems()
-                },
-                animateItems: function () {
-                    anime({
-                        targets   : '.product-entry',
-                        opacity   : [
-                            0, 1
-                        ],
-                        duration  : 1200,
-                        translateY: [
-                            20, 0
-                        ],
-                        delay     : function (el, i) {
-                            return i * 100;
-                        }
-                    })
-                }
-            }
-        }
-    </script>
 {% endblock %}

@@ -1,15 +1,15 @@
 {#
-| Variable                | Type          | Description |
-|-------------------------|---------------|-------------|
-| slides                  | Article[]     |             |
-| articles                | Article[]     |             |
-| page_title              | String        |             |
-| article.name            | String        |             |
-| article.image           | String        |             |
-| article.image_alt       | String        |             |
-| article.created_at      | ?Date *Carbon |             |
-| article.author_name     | String        |             |
-| article.summary         | String        |             |
+| Variable                | Type          | Description                 |
+|-------------------------|---------------|-----------------------------|
+| slides                  | ?Article[]    | @see pages/blog/single.twig |
+| articles                | Article[]     |                             |
+| page                    | object        |                             |
+| page.title              | string        |                             |
+| page.name               | string        |                             |
+| categories              | BlogCategory[]|                             |
+| category.is_current     | bool          |                             |
+| category.name           | string        |                             |
+| category.url            | string        |                             |
 #}
 {% extends "layouts.master" %}
 
@@ -17,44 +17,56 @@
     <main id="main">
         <div class="container mb-24">
             <div class="flex items-center justify-between">
-                 <nav class="w-full py-5">
+                <nav class="w-full py-5">
                     {% component 'header.breadcrumbs' %}
                 </nav>
-
-                <a class="lg:hidden  space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary" href="#filters-menu">
+                <a class="lg:hidden  space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary"
+                   href="#filters-menu">
                     <i class="sicon-filter text-xs"></i>
                     <span class="fix-align">{{ trans('pages.blog_categories.categories') }}</span>
                 </a>
             </div>
-
             <div class="flex items-start">
-
-                {% include 'pages.partials.blog.sidebar' %}
-
+                <nav aria-label="Sidebar" class="lg:sticky flex-shrink-0 top-24 md:w-44 p-8 lg:p-0 lg:me-8 pb-11" id="filters-menu">
+                    <h2 class="font-bold mb-3">{{ trans('pages.blog_categories.categories') }}</h2>
+                    <ul>
+                        {% for category in categories  %}
+                            <li {{ category.is_current ? ' class="color-main"' : '' }}>
+                                <a class="py-3 block text-sm hover:text-primary" href="{{ category.url }}">{{ category.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
                 <div class="main-content w-96 flex-1">
-                    {% if slides is not empty %}
+                    {% if slides.count %}
                         <div class="mb-8">
-                            <div class="swiper blog-slider  rounded-md overflow-hidden">
-
+                            <div class="swiper blog-slider rounded-md overflow-hidden" id="blog-slider">
                                 <div class="swiper-wrapper">
-                                    {% for article in slides  %}
-                                        <div class="swiper-slide blog-slider__slide h-460 relative bg-border-color flex justify-center {{article.has_image ? '' : 'no-thumb' }}">
-                                            <img src="{{ article.image }}" alt="{{ article.image_alt }}" class="object-cover h-full w-full">
+                                    {% for article in slides %}
+                                        <div class="swiper-slide blog-slider__slide h-460 relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
+                                            {% if article.has_image %}
+                                                <img src="{{ article.image.url }}" alt="{{ article.image.alt }}"
+                                                     class="object-cover h-full w-full">
+                                            {% else %}
+                                                <img class="sm:h-full w-20  object-contain opacity-50"
+                                                     src="{{ asset('images/img-placeholder.svg') }}" alt="post image">
+                                            {% endif %}
                                             <div class="absolute z-10 bottom-0 start-0 ps-10 pb-20">
                                                 <div class="blog-slider__content relative">
-                                                    <div class="z-20 w-5/6 lg:w-6/12 text-white">
+                                                    <div class="z-20 w-5/6 lg:w-6/12 {{ article.has_image ? 'text-white' : '' }}">
                                                         <div class="block-slide-anime">
                                                             <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
                                                                 <div class="flex items-center">
                                                                     <i class="sicon-calendar-date me-1 text-md"></i>
-                                                                    <span class="">{{ article.created_at }}</span>
+                                                                    <span class="whitespace-nowrap">{{ article.created_at|date }}</span>
                                                                 </div>
-                                                                <a href="{{ article.url }}" class=" flex items-center hover:underline">
+                                                                <a href="{{ article.author.url }}"
+                                                                   class=" flex items-center hover:underline">
                                                                     <i class="sicon-user me-1 text-md"></i>
-                                                                    <span class="">{{ article.author_name }}</span>
+                                                                    <span class="">{{ article.author.name }}</span>
                                                                 </a>
                                                             </div>
-                                                            <h3 class="text-sm font-bold leading-normal mb-4">{{ article.name }}</h3>
+                                                            <h3 class="text-sm font-bold leading-normal mb-4">{{ article.title }}</h3>
                                                         </div>
                                                         <p class="block-slide-anime description">{{ article.summary }}</p>
                                                     </div>
@@ -66,72 +78,65 @@
                                 </div>
                                 <div class="swiper-pagination text-start px-10 pb-8  bottom-10"></div>
                             </div>
-
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    const swiper = new Swiper('.blog-slider', {
-
-                                        slidesPerView: 1,
-                                        loop: true,
-                                        centeredSlides: true,
-                                        spaceBetween: 30,
-                                        effect: "fade",
-
-                                        pagination: {
-                                            el: '.swiper-pagination',
-                                            clickable: true,
-                                        },
-                                        breakpoints: {
-                                            320: {
-                                                spaceBetween: 10,
-                                            },
-                                            768: {
-                                                spaceBetween: 15,
-                                            },
-                                            980: {
-                                                paceBetween: 30,
-                                            },
-                                        }
-                                    });
-
-                                    swiper.on('slideChange', function () {
-                                        animateSliderItems()
-                                    });
-
-                                    function animateSliderItems() {
-                                        setTimeout(() => {
-                                            anime({
-                                                targets: '.swiper-slide-active .block-slide-anime',
-                                                opacity: [0, 1],
-                                                duration: 2500,
-                                                translateX: [20, 0],
-                                                delay: function (el, i) {
-                                                    return i * 200;
-                                                },
-                                            })
-                                        }, 10);
-                                    }
-                                });
-                            </script>
+                        </div>
+                    {% else %}
+                        <div class="sr-only lg:not-sr-only ">
+                            <h1 class="blog-category__title font-bold text-lg mb-8">{{ page.title }}</h1>
                         </div>
                     {% endif %}
-
-                    {% if articles is not empty %}
+                    {% if articles|length %}
                         <div class="grid md:grid-cols-2 gap-8 articles-container">
-                            {% for article in articles  %}
-                                {% include 'pages.partials.blog.article-with-summary' %}
+                            {% for article in articles %}
+                                <div id="" class='post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
+                                    <a href="{{ article.url }}" class='post-entry__image relative overflow-hidden hover:opacity-90 w-full h-56 bg-border-color flex items-center justify-center'>
+                                        {% if article.has_image %}
+                                            <img class="h-full w-full object-cover" src="{{ article.image.url }}" alt="{{ article.image.alt }}"/>
+                                        {% else %}
+                                            <img class="sm:h-full w-20 object-contain opacity-60" src="{{ asset('images/img-placeholder.svg') }}" alt="{{ article.image.alt }}">
+                                        {% endif %}
+                                    </a>
+
+                                    <div class="flex-1 px-5 pt-5 pb-7">
+                                        <div class="mb-2.5 text-gray-text rounded-md inline-flex text-sm space-s-5">
+                                            <div class="flex items-center">
+                                                <i class="sicon-calendar-date me-1 text-md"></i>
+                                                <span class="">{{ article.created_at|date }}</span>
+                                            </div>
+                                            <a href="{{ article.author.url }}" class="flex items-center hover:text-dark">
+                                                <i class="sicon-user me-1 text-md"></i>
+                                                <span class="">{{ article.author.name }}</span>
+                                            </a>
+                                        </div>
+
+                                        <h3 class="post-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                                            <a href="{{ article.url }}">{{ article.title }}</a>
+                                        </h3>
+                                        <p class="text-sm text-gray-text leading-6 mb-2.5">
+                                            {{ article.summary }}
+                                        </p>
+                                    </div>
+
+                                    {% if article.tags is not empty %}
+                                        <div class="p-4 flex flex-wrap items-center border-t border-border-color">
+                                            {% for tag in article.tags %}
+                                                <a href="{{ tag.url }}" class="py-2 px-4 rounded-large inline-flex items-center text-gray-text hover:text-dark justify-center text-sm">
+                                                    <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                                                    <span class="fix-align whitespace-nowrap">{{ tag.name }}</span>
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             {% endfor %}
                         </div>
-
                         {% include 'pages.partials.loader-status' with {next_page:articles.next_page} %}
-                    {% else %}
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <div class="text-center pt-8">
-                                <p>
-                                    <span>{{ trans('pages.blog_categories.no_articles') }}</span>
-                                    {{ page_title }}
-                                </p>
-                            </div>
+                    {% elseif not slides.count %}
+                        <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
+                            <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
+                            <p class="text-base text-gray-500">
+                                <span>{{ trans('pages.blog_categories.no_articles') }}</span>
+                                {{ page.title }}
+                            </p>
                         </div>
                     {% endif %}
                 </div>
@@ -141,9 +146,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        document.addEventListener( 'DOMContentLoaded', function () {
-            salla.infiniteScroll.initiate('.articles-container', '.post-entry')
-        })
-    </script>
+    <script src="{{ asset('dist/blog.js') }}"></script>
 {% endblock %}

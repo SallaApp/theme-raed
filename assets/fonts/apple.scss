@@ -1,4 +1,3 @@
-@use "sass:math";
 @font-face {
   font-family: 'Apple';
   src: url('lib/apple/AppleGulf-Medium.woff2') format('woff2'),
@@ -26,46 +25,38 @@
   font-display: swap;
 }
 
-$font-base: 15;
-
 :root {
-  --font-base: #{$font-base}px;
-  --font-md: #{math.div(16,$font-base)+rem};
-  --font-sm: #{math.div(14,$font-base)+rem};
-  --font-xsm: #{math.div(12,$font-base)+rem};
-  --font-xxsm: #{math.div(10,$font-base)+rem};
-  --font-lg: #{math.div(18,$font-base)+rem};
-  --font-xlg: #{math.div(20,$font-base)+rem};
-  --font-xxlg: #{math.div(23,$font-base)+rem};
-  --font-xxxlg: #{math.div(38,$font-base)+rem};
+  --font-base: 13px;
+  --font-sm: 12px;
+  --font-xsm: 11px;
+  --font-xxsm: 10px;
+  --font-lg: 16px;
+  --font-xlg: 17px;
+  --font-xxlg: 20px;
+  --font-xxxlg: 33px;
   --font-line-height: 1.4;
 }
 
 body {
   &.font-apple {
-    .qty {
-      &--large {
-        @media (max-width: 767px) {
-          input {
-            line-height: 40px;
-          }
-          button {
-            line-height: 44px;
+    .checkbox {
+      input[type=checkbox],
+      input[type=radio] {
+
+        + label {
+          &:after {
+            top: 3px;
           }
         }
       }
-    }
-    .btn {
-      &--add-to-cart {
-        padding-top: 7px;
-        padding-bottom: 4px;
-      }
-    }
-    .product-block--inline {
-      .product-block__info {
-        .delete-entry {
-          .btn {
-            padding-top: 2px !important;
+
+      &--large {
+        input[type=checkbox],
+        input[type=radio] {
+          + label {
+            &:after {
+              top: 3px;
+            }
           }
         }
       }
