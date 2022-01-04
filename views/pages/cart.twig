@@ -57,7 +57,6 @@
             <div class="flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
                 <div class="main-content flex-1 w-full">
                     {% for item in cart.items %}
-                        {{ item.attachments?'':dump(item.attachments) }}
                         {% set key_prefix=item.id %}
                         <section x-data="initCartItem({{ item.get('id', 'quantity', 'total', 'price', 'product_price', 'has_offer', 'offer')|json_encode }})"
                                 {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}

@@ -1,56 +1,4 @@
-/** @typedef {{amount: string, currency: string}} Money
- /**
- * @typedef {{
- *  isAvailable                     : boolean,
- *  has_special_price               : boolean,
- *  product_price                   : {amount: string, currency: string},
- *  type                            : string,
- *  product_quantity                : number,
- *  options_data                    : {number: number},
- *  total_product_price_formatted   : string,
- *  total_special_price             : Money,
- *  offer                           : boolean|{"discount": number, "price_after_discount": Money, "is_free": boolean, "names": String},
- *  total                           : number,
- *  special_price_formatted         : string,
- *  product_id                      : number,
- *  product_available_quantity      : number,
- *  selectedOptions                 : number[],
- *  onSale                          : boolean,
- *  currency                        : string,
- *  id                              : number,
- *  product_price_formatted         : string,
- *  quantity                        : number,
- *  display_price                   : string,
- *  has_options                     : boolean,
- *  product_name                    : string,
- *  url                             : string,
- *  product_advance_option          : {},
- *  active_advance                  : number,
- *  display_total_price             : string,
- *  product_options                 : *[],
- *  special_price                   : Money,
- *  total_special_price_formatted   : string,
- *  _product_price                  : number,
- *  total_product_price             : Money,
- *  enable_note                     : boolean}} CartItem
- */
-/**
- * @typedef {{
- *      data: {
- *              total: string,
- *              total_discount: string,
- *              shipping_cost: number,
- *              final_total: string,
- *              count: number,
- *              sub_total: string,
- *              total_before_discount: string,
- *              items: null|Array<CartItem>,
- *              coupon_discount: number
- *           }
- * sections: {'free-shipping-bar':string}
- *          }} UpdateCartResponse
- */
-
+import './dataTypes/updateCartItemResponse'
 import AlpineJS from 'alpinejs';
 import BasePage from "./basePage";
 import ProductOptions from './partials/product-options';
@@ -78,7 +26,7 @@ class Cart extends BasePage {
     }
 
     /**
-     * @param  {UpdateCartResponse} res
+     * @param  {UpdateCartItemResponse} res
      */
     updateCartPageInfo(res) {
         res.data.items?.forEach(item => document.querySelector(`#item-${item.id}`)._x_dataStack[0].updateItemInfo(item));
