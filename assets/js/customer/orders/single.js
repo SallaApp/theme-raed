@@ -12,21 +12,20 @@ class Single extends BasePage {
             .forEach((ratingSection) => {
                 let type = ratingSection.dataset.type;
                 let formsData = [];
-                debugger;
                 ratingSection.querySelectorAll('.rating-outer-form')
-                    .forEach(function (form) {
+                    .forEach((form) => {
                         let formData = {};
                         form.querySelectorAll('[name]')
                             .forEach(function (input) {
                                 let inputData = salla.helpers.inputData(input.name, input.value, formData);
                                 formData[inputData.name] = inputData.value;
                             });
+                        formsData = [];
                         formsData.push(formData);
+                        this.sendFeedback(type, formsData);
                     });
-                this.sendFeedback(type, formsData);
             });
         return;
-
     }
 
     sendFeedback(type, formsData) {
@@ -37,9 +36,6 @@ class Single extends BasePage {
         salla.feedback.api[type](formsData[0])
             .then(function () {
                 salla.config.canLeave = true;
-                if (formsData.length > 1) {
-                    this.sendFeedback(type, formsData.slice(1));
-                }
             }).catch(error => salla.config.canLeave = true);
     }
 
