@@ -7,7 +7,7 @@
 				<input type="hidden" name="type" value="store">
 				<h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
 				<div class="mb-2">
-					{% if order.store_feedback %}
+					{% if order.store_feedback.content %}
 						<p>
 							{{ order.store_feedback.content|raw }}
 						</p>
@@ -38,7 +38,7 @@
 
 				<h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
 				<div class="mb-2">
-					{% if order.shipping_feedback %}
+					{% if order.shipping_feedback.content %}
 						<p>
 							{{ order.shipping_feedback.content|raw }}
 						</p>
