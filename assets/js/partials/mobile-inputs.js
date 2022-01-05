@@ -1,9 +1,9 @@
 import TelInput from 'intl-tel-input';
 
 export default function initTelInput() {
-    salla.document.event.onKeyup('.tel-input', event => salla.helpers.digitsOnly(event.target.id));
+    salla.document.event.onKeyup('.tel-input', event => salla.helpers.digitsOnly(event.target));
     document.querySelectorAll('.tel-input').forEach(intlInput => {
-        salla.helpers.digitsOnly(intlInput.id);
+        salla.helpers.digitsOnly(intlInput);
         let iti = TelInput(intlInput, {
             initialCountry    : intlInput.dataset.code || 'sa',
             preferredCountries: ['sa', 'ae', 'kw', 'bh', 'qa', 'iq', 'om', 'ye', 'eg', 'jo', 'sy', 'ps', 'sd', 'lb', 'dz', 'tn', 'ma', 'ly'],
