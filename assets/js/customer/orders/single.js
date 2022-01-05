@@ -38,7 +38,7 @@ class Single extends BasePage {
             .then(function () {
                 salla.config.canLeave = true;
                 if (formsData.length > 1) {
-                    this.sendFeedback(type, formsData.slice(1));
+                    self.sendFeedback(type, formsData.slice(1));
                 }
             }).catch(error => salla.config.canLeave = true);
     }
