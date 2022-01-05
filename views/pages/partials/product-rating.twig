@@ -6,12 +6,20 @@
 		<input type="hidden" name="type" value="products">
 
 		<h2 class="section-title mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
-		<textarea data-product-id="{{item.id}}" name="products[{{ loop.index0 }}][comment]" id="productReview_{{item.id}}" class="comment form-input h-20 product-review" placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"></textarea>
-
+		{% if item.feedback %}
+			<p>
+				{{ item.feedback.content|raw }}
+			</p>
+			{% if item.feedback.is_pending %}
+				<span>{{ trans('pages.rating.pending') }}</span>
+			{% endif %}
+		{% else %}
+			<textarea data-product-id="{{item.id}}" name="products[{{ loop.index0 }}][comment]" id="productReview_{{item.id}}" class="comment form-input h-20 product-review" placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"></textarea>
+		{% endif %}
 		<div class="rw-product-entry__rate">
 			<div class="rating-wrap flex items-center space-s-4">
 				<form class="rate-element rate-element--has-label">
-					{% include 'pages.partials.rating-stars' with {stars:item.feedback.stars, rating_name:'products['~loop.index0~'][rating]'} %}
+					{% include 'pages.partials.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
 				</form>
 				<p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
 			</div>

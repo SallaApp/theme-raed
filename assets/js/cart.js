@@ -1,4 +1,4 @@
-import './dataTypes/updateCartItemResponse'
+//import './dataTypes/updateCartItemResponse';
 import AlpineJS from 'alpinejs';
 import BasePage from "./basePage";
 import ProductOptions from './partials/product-options';
