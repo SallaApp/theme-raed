@@ -2,7 +2,7 @@
 	{% if store.settings.rating.store %}
 		{# Store Rating #}
 		<section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="store">
-			<div class="{{ order.store_feedback?'':'rating-outer-form' }}" data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
+			<div class="{{ order.store_feedback.stars?'':'rating-outer-form' }}" data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
 				<input type="hidden" name="order_id" value="{{ order.order_id }}">
 				<input type="hidden" name="type" value="store">
 				<h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
@@ -30,7 +30,7 @@
 	{% if order.has_shipping and store.settings.rating.shipping %}
 		{# Shipping Rating #}
 		<section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="shipping">
-			<div class="{{ store.settings.rating.store?'':'rating-outer-form' }}" data-stars-error="{{ trans('pages.rating.rate_shipping_stars') }}">
+			<div class="{{ order.shipping_feedback.stars?'':'rating-outer-form' }}" data-stars-error="{{ trans('pages.rating.rate_shipping_stars') }}">
 
 				<input type="hidden" name="order_id" value="{{ order.order_id }}">
 				<input type="hidden" name="shipping_company_id" value="{{ order.shipping.id }}">
