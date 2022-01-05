@@ -17,7 +17,7 @@ import ProductOptions from './partials/product-options';
  */
 class Cart extends BasePage {
     onReady() {
-        this.initiateSummary();
+        this.initiateSubmit();
         this.initiateCartItems();
         this.anime('.free-shipping,.shipping-item', {translateX: [-20, 0]});
         this.watchElements({subTotal: '#sub-total', totalDiscount: '#total-discount', shippingCost: '#shipping-cost'});
@@ -27,10 +27,6 @@ class Cart extends BasePage {
 
     registerEvents() {
         salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
-    }
-
-    initiateSummary() {
-        this.initiateSubmit();
     }
 
     initiateSubmit() {
