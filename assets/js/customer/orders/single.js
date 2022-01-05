@@ -70,6 +70,10 @@ class Single extends BasePage {
                         validationMessage.innerHTML = errorMsg;
                     });
 
+                    // scroll to first error
+                    let firstError = document.querySelectorAll('.has-error')[0].offsetTop
+                    window.scrollTo({top: firstError - 80}); // 80 = fixed nav height
+
             });
         //Fire error to prevent sending rating
         if (errorMsg) {
