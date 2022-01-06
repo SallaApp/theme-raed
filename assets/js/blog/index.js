@@ -12,7 +12,7 @@ class Index extends BasePage {
         if (!slider) {
             return;
         }
-        Slider(slider, {
+        new Slider(slider, {
             slidesPerView : 1,
             loop          : true,
             centeredSlides: true,
@@ -28,7 +28,7 @@ class Index extends BasePage {
     }
 
     animateSliderItems() {
-        setTimeout(() => this.anime('.swiper-slide-active .block-slide-anime', {translateX: [20, 0]}), 10);
+        setTimeout(() => app.anime('.swiper-slide-active .block-slide-anime', {translateX: [20, 0]}), 10);
     }
 }
 

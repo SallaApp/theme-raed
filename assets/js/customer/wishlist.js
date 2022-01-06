@@ -13,7 +13,7 @@ class Wishlist extends BasePage {
 
     removeItem(response, prodId) {
         let item = document.querySelector('#product_' + prodId);
-        this.anime(item, false)
+        app.anime(item, false)
             .height(0)// -> from 'height' to '0',
             .paddingBottom(0)
             .paddingTop(0)

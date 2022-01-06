@@ -31,17 +31,17 @@ class Single extends BasePage {
     }
 
     initSliders() {
-        let thumbSlider = Slider(document.querySelector('.thumbs-slider'), {
+        let thumbSlider = new Slider('.thumbs-slider', {
             spaceBetween       : 10,
             slidesPerView      : 3,
             freeMode           : true,
             watchSlidesProgress: true,
         });
-        let productImages = Slider(document.querySelector('.details-slider'), {
+        let productImages = new Slider('.details-slider', {
             slidesPerView : 1,
             centeredSlides: true,
             spaceBetween  : 30,
-            thumbs        : {swiper: thumbSlider},
+            thumbs        : {swiper: thumbSlider.getSlider()},
         });
 
         document.querySelectorAll('.go-to-slide')
@@ -51,21 +51,21 @@ class Single extends BasePage {
             });
 
         //usage in (similar-products.twig)
-        Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
+        new Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
     }
 
     /**
      * @param {HTMLElement} btn
      */
     toggleFavorite(btn) {
-        if (!this.isUser()) {
+        if (!app.isUser()) {
             return salla.error(salla.lang.get('common.messages.must_login'));
         }
         let addToFavorite = !btn.classList.contains('favorited');
-        addToFavorite ? salla.api.wishlist.add(this.pageData('id')) : salla.api.wishlist.remove(this.pageData('id'));
-        this.toggleElement(btn, 'text-white bg-primary favorited', 'bg-white text-theme-red', () => addToFavorite)
+        addToFavorite ? salla.api.wishlist.add(app.pageData('id')) : salla.api.wishlist.remove(app.pageData('id'));
+        app.toggleElement(btn, 'text-white bg-primary favorited', 'bg-white text-theme-red', () => addToFavorite)
             .toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => addToFavorite)
-        this.anime('.btn-favorite', {duration: 800, scale: [0.6, 1]});
+        app.anime('.btn-favorite', {duration: 800, scale: [0.6, 1]});
     }
 
     /**
@@ -73,7 +73,7 @@ class Single extends BasePage {
      */
     toggleShareMenu(btn) {
         let showShareMenu = !btn.classList.contains('opened');
-        this.toggleElement(btn, 'opened', 'closed', () => showShareMenu)
+        app.toggleElement(btn, 'opened', 'closed', () => showShareMenu)
             .toggleElement(btn.querySelector('i'), 'sicon-cancel', 'sicon-share-alt', () => showShareMenu)
             .toggleElement(btn.nextElementSibling, 'h-auto', 'h-0 opacity-0', () => showShareMenu);
 

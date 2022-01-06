@@ -1,24 +1,16 @@
-import '@salla.sa/twilight';
 import '@salla.sa/twilight-components';
-
-import Helpers from './partials/helpers';
-import StickyMenu from './partials/sticky-menu';
-import MobileInputs from './partials/mobile-inputs';
+import '@salla.sa/twilight';
 import CartListeners from './partials/cart-listeners';
-import WishlistButtons from './partials/wishlist-buttons';
-import Advertisement from './partials/advertisement';
-import Dropdwons from './partials/dropdwons';
-import Modals from './partials/modals';
 import MobileMenu from 'mmenu-light';
 import Swal from "sweetalert2";
+import Anime from './partials/anime';
 
-class App extends Helpers {
+class App extends salla.AppHelpers {
     constructor() {
         super();
         this.isThemeApp = true;//to make sure that window.app, is this class
         this.registerWindowProperties();
-        document.addEventListener('DOMContentLoaded', () => this.initiatePlugins() || this.initiateCommons());
-
+        salla.onReady(() => this.loadTheApp());
     }
 
     /**
@@ -36,20 +28,26 @@ class App extends Helpers {
 
     registerWindowProperties() {
         window.app = this;
-        window.copyToClipboard = this.copyToClipboard;
     }
 
-    initiatePlugins() {
+    loadTheApp() {
+        this.log('Initiating...');
         this.initiateNotifier();
         this.initiateLazyLoad();
         this.initiateMobileMenu();
-        StickyMenu();
-        MobileInputs();
+        this.initiateStickyMenu();
         CartListeners();
-        WishlistButtons();
-        Advertisement();
-        Dropdwons();
-        Modals();
+        this.initiateWishlistButtons();
+        this.initiateAdAlert();
+        this.initiateDropdowns();
+        this.initiateModals();
+        this.initiateCommons();
+        this.log('Loaded 🎉');
+    }
+
+    log(message) {
+        salla.log(`ThemeApp(${salla.config.theme.name})::${message}`);
+        return this;
     }
 
     initiateCommons() {
@@ -64,10 +62,7 @@ class App extends Helpers {
         //     //document.querySelector('.loading-status-wrapper .spinner-loader-wrap').classList.remove('hidden');
         // })
 
-        salla.event.on('infiniteScroll::load', function () {
-            nextPageBtn.classList.remove('btn--is-loading');
-            document.querySelector('.loading-status-wrapper .loader-status').style.display = 'none';
-        })
+        salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
 
         this.anime('.anime-count', {scale: [0.5, 1]});
     }
@@ -108,7 +103,7 @@ class App extends Helpers {
         let imgObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 let src;
-                if (!entry.isIntersecting && !(src = entry.target.dataset.src)) {
+                if (!entry.isIntersecting || !(src = entry.target.dataset.src)) {
                     return;
                 }
                 // assign image source to src attribute
@@ -119,15 +114,127 @@ class App extends Helpers {
                 } catch (e) {
                     salla.log(`Failed to load image (${src})!`, e.message);
                 }
-                this.toggleElement(entry.target, 'loaded', 'lazy-load lazy-background', () => true);
+                app.toggleElement(entry.target, 'loaded', 'lazy-load lazy-background', () => true);
                 observer.unobserve(entry.target);
             });
         }, {threshold: 0, trackVisibility: true, delay: 100, rootMargin: "250px 250px 250px 250px"});
         window.LazyLoad = () => document.querySelectorAll(".lazy-load, .lazy-background").forEach(entry => imgObserver.observe(entry));
         LazyLoad(); //fire it for the first time;
-        salla.infiniteScroll.event.onAppend(LazyLoad);  //fire it after each load more request;
+        salla.infiniteScroll.event.onAppend(LazyLoad); //fire it after each load more request;
+    }
 
+    initiateStickyMenu() {
+        let header = this.element('#site-header-outer');
+        let height = this.element('.site-header').clientHeight;
+        header.style.height = height + 'px';
+
+        window.addEventListener('scroll', () => {
+            window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
+            window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
+        }, {passive: true});
+    }
+
+    initiateAdAlert() {
+        let ad = this.element("#s-theme_ad");
+
+        if (!ad) {
+            return;
+        }
+
+        if (!localStorage.getItem('statusAd-' + ad.dataset.id)) {
+            ad.classList.remove('hidden');
+        }
+
+        this.onClick('.ad-close', function (event) {
+            event.preventDefault();
+            localStorage.setItem('statusAd-' + ad.dataset.id, 'dismissed');
+
+            anime({
+                targets : '#s-theme_ad',
+                opacity : [1, 0],
+                duration: 300,
+                height  : [ad.clientHeight, 0],
+                easing  : 'easeInOutQuad',
+            });
+        });
+    }
+
+    initiateDropdowns() {
+        this.onClick('.dropdown__trigger', ({target: btn}) => {
+            btn.parentElement.classList.toggle('is-opened');
+            document.body.classList.toggle('dropdown--is-opened');
+            // Click Outside || Click on close btn
+            window.addEventListener('click', ({target: element}) => {
+                if (!element.closest('.dropdown__menu') && element !== btn || element.classList.contains('dropdown__close')) {
+                    btn.parentElement.classList.remove('is-opened');
+                    document.body.classList.remove('dropdown--is-opened');
+                }
+            });
+        });
+    }
+
+    initiateModals() {
+        this.onClick('[data-modal-trigger]', event => {
+            let id = '#' + event.target.dataset.modalTrigger;
+            this.removeClass(id, 'hidden');
+            setTimeout(() => this.toggleModal(id, true)); //small amont of time to running toggle After adding hidden
+        });
+        this.onClick("[data-close-modal]", event => this.toggleModal('#' + event.target.dataset.closeModal, false));
+    }
+
+    toggleModal(id, isOpen) {
+        this.toggle(`${id} .modal__overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen);
+        this.toggle(`${id} .modal__body`,
+            'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
+            'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
+            () => isOpen);
+        app.toggleElement(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
+        if (!isOpen) {
+            setTimeout(() => this.addClass(id, 'hidden'), 350);
+        }
+    }
+
+    /**
+     * Workaround for seeking to simplify & clean, There are three ways to use this method:
+     * 1- direct call: `this.anime('.my-selector')` - will use default values
+     * 2- direct call with overriding defaults: `this.anime('.my-selector', {duration:3000})`
+     * 3- return object to play it leter: `this.anime('.my-selector', false).duration(3000).play()` - will not play animation unless calling play method.
+     * @param {string} selector
+     * @param {object|undefined|null|null} options - in case there is need to set attributes one by one set it `false`;
+     * @return {Anime|*}
+     */
+    anime(selector, options = null) {
+        let anime = new Anime(selector, options);
+        return options === false ? anime : anime.play();
+    }
+
+
+    // ======================= Wishlist Icons in Product Cards ======================= //
+    initiateWishlistButtons() {
+        app.onClick('.wishlist-btn', event => event.target.classList.add('is--loading'));
+        localStore.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
+
+        salla.wishlist.event.onAdded((event, id) => this.updateWishlist(id, true));
+        salla.wishlist.event.onRemoved((event, id) => this.updateWishlist(id, false));
+    }
+
+    updateWishlist(id, isAdded) {
+        let wishlist = localStore.get("salla-wishlist", []);
+        isAdded ? wishlist.push(id) : wishlist.splice(wishlist.indexOf(id), 1);
+        localStore.set("salla-wishlist", wishlist);
+        toggalFavorites(id, isAdded);
+    }
+
+    toggalFavorites(id, isAdded) {
+        document.querySelectorAll('.wishlist-btn[data-id="' + id + '"]')
+            .forEach(btn => {
+                app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
+                app.toggleElement(btn, ['text-primary', 'pulse'], 'un-favorited', () => isAdded);
+                btn.dataset.onClick = isAdded ? 'wishlist::remove' : 'wishlist::add';
+                btn.classList.remove('is--loading');
+            });
     }
 }
+
 
 new App;
