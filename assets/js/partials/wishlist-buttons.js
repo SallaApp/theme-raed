@@ -1,41 +1,35 @@
 /**
+ * @return {number[]}
+ */
+function getWishlist() {
+    return JSON.parse(localStorage.getItem("salla-wishlist") || '[]');
+}
+
+/**
  * Wishlist
  * save items in localstorage
  */
 export default function () {
-    document.querySelectorAll('.wishlist-btn').forEach(btn => {
-        btn.addEventListener('click', (event) => btn.classList.add('is--loading'))
-    })
+    pageClass.onClick('.wishlist-btn', event => event.target.classList.add('is--loading'));
+    getWishlist().forEach(id => toggalFavorites(id, true));
 
-    JSON.parse(localStorage.getItem("salla-wishlist") || '[]')?.forEach(id => toggalFavorites(id))
+    salla.wishlist.event.onAdded((event, id) => updateWishlist(id, true));
+    salla.wishlist.event.onRemoved((event, id) => updateWishlist(id, false));
+}
 
-    salla.event.on("wishlist::added", (event, id) => {
-        const storeWishlist = JSON.parse(localStorage.getItem("salla-wishlist") || "[]");
-        storeWishlist.push(id);
-        localStorage.setItem('salla-wishlist', JSON.stringify(storeWishlist));
-        toggalFavorites(id, true);
-    })
-
-    salla.event.on("wishlist::removed", (event, id) => {
-        const storeWishlist = JSON.parse(localStorage.getItem("salla-wishlist") || "[]");
-        const index = storeWishlist.indexOf(id);
-        storeWishlist.splice(index, 1);
-        localStorage.setItem('salla-wishlist', JSON.stringify(storeWishlist));
-        toggalFavorites(id);
-    })
-};
+function updateWishlist(id, isAdded) {
+    let wishlist = getWishlist();
+    isAdded ? wishlist.push(id) : wishlist.splice(wishlist.indexOf(id), 1);
+    localStorage.setItem('salla-wishlist', JSON.stringify(wishlist));
+    toggalFavorites(id, isAdded);
+}
 
 function toggalFavorites(id, isAdded) {
-    let classes = isAdded
-        ? {add: 'sicon-heart-off', remove: 'sicon-heart', action: 'wishlist::remove'}
-        : {add: 'sicon-heart-off', remove: 'sicon-heart', action: 'wishlist::add'};
     document.querySelectorAll('.wishlist-btn[data-id="' + id + '"]')
         .forEach(btn => {
-            const icon = btn.querySelector('i');
-            btn.classList[isAdded ? 'add' : 'remove'](['text-primary', 'pulse']);
-            icon.classList.add(classes.add);
-            icon.classList.remove(classes.remove);
-            btn.dataset.onClick = classes.action;
+            pageClass.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
+            pageClass.toggleElement(btn, ['text-primary', 'pulse'], 'un-favorited', () => isAdded);
+            btn.dataset.onClick = isAdded ? 'wishlist::remove' : 'wishlist::add';
             btn.classList.remove('is--loading');
         });
 }

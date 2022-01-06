@@ -58,11 +58,13 @@
                 <div class="main-content flex-1 w-full">
                     {% for item in cart.items %}
                         {% set key_prefix=item.id %}
-                        <section x-data="initCartItem({{ item.get('id', 'quantity', 'total', 'price', 'product_price', 'has_offer', 'offer')|json_encode }})"
+                        <section class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
                                 {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
                                  data-filter-before-submit="verifyDataBeforeSend"
-                                 class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
-                                 id="item-{{ item.id }}" salla-form-data data-on-change="cart::update-item">
+                                 data-on-change="cart::update-item"
+                                 data-id="{{ item.id }}"
+                                 id="item-{{ item.id }}"
+                                 salla-form-data>
                             <input type="hidden" name="id" value="{{ item.id }}">
                             <!-- product -->
                             <div class="md:flex md:space-s-12 items-center justify-between mb-8">
@@ -75,14 +77,10 @@
                                         <h3 class="text-gray-900 leading-6">
                                             <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
                                         </h3>
-                                        <span class="text-sm text-gray-400 line-through"
-                                              x-text="productPrice"
-                                              x-show="hasOffer"></span>
-                                        <span :class="hasOffer?'text-theme-red':'text-sm text-gray-400'"
-                                              x-text="itemPrice"></span>
-                                        <i class="sicon-discount-calculator text-gray-400" x-show="hasOffer"></i>
-                                        <span x-text="discountName" class="text-sm text-gray-400"
-                                              x-show="hasOffer"></span>
+                                        <span class="text-sm text-gray-400 line-through product-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
+                                        <span class="item-price {{ item.offer?'text-theme-red':'text-sm text-gray-400' }}">{{ item.price|money }}</span>
+                                        <i class="sicon-discount-calculator text-gray-400 offer-icon {{ item.offer?'':'hidden' }}"></i>
+                                        <span class="text-sm text-gray-400 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
                                     </div>
                                 </div>
 
@@ -90,30 +88,26 @@
                                     <div class="relative">
                                         <div class="flex items-center h-10 py-2 border  rounded-md text-sm transtion transition-color duration-300">
                                             {% if item.is_donation %}
-                                                <span>--</span>
+                                                <span></span>
                                             {% elseif item.hide_quantity or not item.is_available %}
                                                 <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
                                                 <span>{{ item.quantity }}</span>
                                             {% else %}
-                                                <button @click="addQty()"
-                                                        class="text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                                <button class="add-qty text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
+                                                        type="button">
                                                     <i class="sicon-add"></i>
                                                 </button>
-                                                <input x-model="itemQty"
-                                                       class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                                       type="number"
-                                                       value="{{ item.quantity }}"
-                                                       @input.debounce.400ms="updateQty()"
+                                                <input class="item-quantity focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
                                                        data-max_quantity="{{ product.max_quantity }}"
-                                                       max="{{ product.max_quantity }}"
                                                        data-quantity="{{ item.quantity }}"
+                                                       max="{{ product.max_quantity }}"
+                                                       value="{{ item.quantity }}"
+                                                       id="qty-{{ item.id }}"
                                                        data-digits="1"
                                                        name="quantity"
-                                                       id="qty-{{ item.id }}"
-                                                       min="1"
-                                                >
-                                                <button @click="subQty()"
-                                                        class="text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300">
+                                                       min="1">
+                                                <button class="sub-qty text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
+                                                        type="button">
                                                     <i class="sicon-minus"></i>
                                                 </button>
                                             {% endif %}
@@ -122,11 +116,7 @@
 
                                     <p class="text-primary flex-none font-bold text-sm">
                                         <span>{{ trans('pages.cart.total') }}:</span>
-                                        {% if item.is_available %}
-                                            <span x-text="itemTotal"></span>
-                                        {% else %}
-                                            <span x-text="'{{ trans('pages.cart.out_of_stock') }}'"></span>
-                                        {% endif %}
+                                        <span class="item-total">{{ item.is_available?item.total|money: trans('pages.cart.out_of_stock') }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -136,7 +126,7 @@
                                     {% include 'pages.partials.product.options' with {product:item} %}
                                 </form>
                             {% endif %}
-                            <button @click="removeItem()" data-delete-item="item-{{ item.id }}" class="btn--has-loading btn--delete bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
+                            <button class="btn--has-loading btn--delete bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
                                 <i class="sicon-cancel icon"></i>
                                 <span class="loader loader--small absolute transition inset-x-0 inset-y-0 opacity-0 flex justify-center items-center"></span>
                             </button>
@@ -155,66 +145,56 @@
                 </div>
                 <!-- sidebar -->
                 {% if cart.items|length %}
-                    <div x-data="initCart('{{ cart.id }}', '{{ cart.coupon }}')" 
-                         class="sticky top-24 w-full lg:w-96  lg:ms-8">
-                        {% component 'free-shipping' %}
-                        
+                    <div class="sticky top-24 w-full lg:w-96  lg:ms-8">
+                        <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative"
+                             id="free-shipping-bar">
+                            {% component 'free-shipping' %}
+                        </div>
+
                         <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
                             <h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
-                            
+
                             <div class="flex justify-between text-sm mb-5">
-                                <span class="text-gray-400 cart-items-count">{{ trans("pages.cart.items_total") }}</span>
-                                <b>{{ cart.sub_total|money }}</b>
+                                <span class="text-gray-400">{{ trans("pages.cart.items_total") }}</span>
+                                <b id="sub-total">{{ cart.sub_total|money }}</b>
                             </div>
 
-                            <div class="flex justify-between text-sm mb-5 shipping {{ cart.has_shipping?'':'hidden' }}">
+                            <div id="shipping-cost" class="flex justify-between text-sm mb-5 {{ cart.has_shipping?'':'hidden' }}">
                                 <span class="text-gray-400">{{ trans('pages.cart.shipping_cost') }}</span>
                                 <b>{{ cart.real_shipping_cost|money }}</b>
                             </div>
 
                             {% if store.settings.cart.apply_coupon_enabled %}
                                 <div class="border-t border-border-color border-b py-5 mb-5">
-                                    <label for="couponCode"
+                                    <label for="coupon"
                                            class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
                                     <div class="mt-2.5 relative">
-                                        <input type="hidden" name="cart_id" value="{{ cart.id }}"/>
-                                        <input type="text" value="{{ cart.coupon }}" @keyup="isShowCouponError = false"
-                                               @keyup.enter="addCoupon()"
-                                               placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
-                                               x-model="couponCode" id="couponCode" name="coupon"
-                                               :class="{'has-error': isShowCouponError}" class="pe-24 form-input"
-                                               :disabled="isShowCouponDiscount">
-                                        <button @click="addCoupon();" type="button"
-                                                class="coupon-btn absolute top-px end-px rounded-s-none rounded-e-md flex-shrink-0 btn"
-                                                :class="isShowCouponDiscount ? 'btn-danger' : 'btn-default'">
-                                            <span x-show="!isShowCouponDiscount">{{ trans('pages.cart.save_coupon') }}</span>
-                                            <i x-show="isShowCouponDiscount" @click="removeCoupon();"
-                                               class="sicon-cancel text-xl w-8"></i>
+                                        <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
+                                               class="pe-24 form-input"
+                                               value="{{ cart.coupon }}"
+                                               id="coupon"
+                                               name="coupon"
+                                               type="text">
+                                        <button class="coupon-btn absolute top-px end-px rounded-s-none rounded-e-md flex-shrink-0 btn cursor-pointer {{ cart.coupon?'btn-danger':'btn-default' }}"
+                                                id="btn-add-coupon"
+                                                type="button">
+                                            <span class="{{ cart.coupon?'hidden':'' }}">{{ trans('pages.cart.save_coupon') }}</span>
+                                            <i class="sicon-cancel text-xl w-8 {{ cart.coupon?'':'hidden' }}"></i>
                                         </button>
                                     </div>
-                                    <!-- error msg -->
-                                    <span x-show="isShowCouponError" x-text="couponErrorMessage"
-                                          class="text-xs text-red-700" id="validationHelp"></span>
+                                    <span class="text-xs text-red-700" id="coupon-error"></span>
                                 </div>
                             {% endif %}
 
                             <!-- coupon discount -->
-                            {% if cart.discount %}
-                              <div x-show="{{ cart.discount?"true":"false" }}"
-                                  x-transition:enter="transition-height ease-out duration-300"
-                                  x-transition:enter-start="opacity-0 transfor h-0"
-                                  x-transition:enter-end="opacity-100 transform h-10"
-                                  x-transition:leave="transition-height ease-in duration-300"
-                                  x-transition:leave-start="opacity-100 transform h-10"
-                                  x-transition:leave-end="opacity-0 transform h-0" class="flex justify-between text-sm">
-                                  <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
-                                  <b>- {{ cart.real_discount|money }}</b>
-                              </div>
-                            {% endif %}
+                            <div id="total-discount" class="flex justify-between text-sm {{ cart.discount?'':'hidden' }}">
+                                <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
+                                <b>- {{ cart.real_discount|money }}</b>
+                            </div>
 
                             <div class="flex justify-between text-sm mb-5">
                                 <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
-                                <b>{{ cart.total|money }}</b>
+                                <b data-cart-total>{{ cart.total|money }}</b>
                             </div>
                             {% if store.settings.tax.taxable_prices_enabled %}
                                 <div class="flex justify-between text-sm mb-5">
@@ -223,13 +203,11 @@
                                     </small>
                                 </div>
                             {% endif %}
-                            <button class="w-full btn btn-primary" data-function="hasApplePay"
-                                    data-on-click="cart::submit">
+                            <button class="w-full btn btn-primary" id="btn-submit" data-on-click="cart::submit">
                                 {{ trans('pages.cart.complete_order') }}
                             </button>
                         </div>
                     </div>
-
                     <div class="fixed md:hidden space-s-2 flex justify-center items-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-50">
                         <span class="text-gray-400">{{ trans('pages.cart.final_total') }}:</span>
                         <b>{{ cart.total|money }}</b>

@@ -58,4 +58,130 @@ export default class Helpers {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
+
+    /**
+     * @param {string|HTMLElement} selector
+     * @return {null|HTMLElement}
+     */
+    element(selector) {
+        if (typeof selector == 'object') {
+            return selector;
+        }
+        return document.querySelector(selector);
+    }
+
+    /**
+     * @param {string} name
+     * @param {string} selector
+     * @return {Helpers}
+     */
+    watchElement(name, selector) {
+        this[name] = this.element(selector);
+        return this;
+    }
+
+    /**
+     * @param {Object.<string, string>} elements
+     */
+    watchElements(elements) {
+        Object.entries(elements).forEach(element => this.watchElement(element[0], element[1]));
+        return this;
+    }
+
+    /**
+     * @param {string} action
+     * @param {string|HTMLElement} element
+     * @param {function} callback
+     * @param {object|undefined} options
+     * @return {Helpers}
+     */
+    on(action, element, callback, options = {}) {
+        if (typeof element == 'object') {
+            this.element(element).addEventListener(action, callback, options);
+            return this;
+        }
+
+        //if it's selector loop through all of the elements
+        document.querySelectorAll(element).forEach(el => el.addEventListener(action, callback, options));
+        return this;
+    }
+
+    /**
+     * @param {string|HTMLElement} element
+     * @param {function} callback
+     * @return {Helpers}
+     */
+    onClick(element, callback) {
+        return this.on('click', element, callback);
+    }
+
+    /**
+     * @param {string|HTMLElement} element
+     * @param {function} callback
+     * @return {Helpers}
+     */
+    onKeyUp(element, callback) {
+        return this.on('keyup', element, callback);
+    }
+
+    /**
+     * @param {string|HTMLElement} element
+     * @param {function} callback
+     * @return {Helpers}
+     */
+    onEnter(element, callback) {
+        this.onKeyUp(element, event => event.keyCode === 13 && callback(event));
+        return this;
+    }
+
+    /**
+     * @param {string|HTMLElement} element
+     * @return {Helpers}
+     */
+    hideElement(element) {
+        this.element(element).style.display = 'none';
+        return this;
+    }
+
+    /**
+     * @param {string|HTMLElement} element
+     * @return {Helpers}
+     */
+    showElement(element, display = 'block') {
+        this.element(element).style.display = display;
+        return this;
+    }
+
+    /**
+     * 💡 you can pass multi classes: this.removeClass(element, 'class_1', 'class_2', ...)
+     * @param {string|HTMLElement} element
+     * @param {string} className
+     * @return {Helpers}
+     */
+    removeClass(element, className) {
+        this.element(element).classList.remove(...Array.from(arguments).slice(1));
+        return this;
+    }
+
+    /**
+     * 💡 you can pass multi classes: this.addClass(element, 'class_1', 'class_2', ...)
+     * @param {string|HTMLElement} element
+     * @param {string} className
+     * @return {Helpers}
+     */
+    addClass(element, className) {
+        this.element(element).classList.add(...Array.from(arguments).slice(1));
+        return this;
+    }
+
+    /**
+     * @param {function} fn
+     * @return {(function(...[*]): Promise<unknown>)|*}
+     */
+    debounce(fn) {
+        if (!this.debounce_) {
+            this.debounce_ = salla.helpers.debounce((fn, ...data) => fn(...data), 500);
+        }
+        return this.debounce_(fn, ...Array.from(arguments).slice(1));
+    }
 }

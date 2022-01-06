@@ -6,35 +6,34 @@
 | has_free_shipping | Boolean |                               |
 | percent           | int     | 0-100                         |
 #}
-<div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative" id="free-shipping-bar">
-    <div class="flex space-s-3">
-        <div class="bg-primary text-white rounded-icon">
-            <i class="free-shipping sicon-shipping-fast"></i>
-        </div>
-        <div class="flex-1">
-            <h4 class="shipping-item font-bold text-sm mb-1.5">{{trans('pages.cart.free_shipping')}}</h4>
-            {% if has_free_shipping %}
-                <p class="shipping-item text-sm font- text-gray-400 free-shipping-applied">
-                    {{ trans('pages.cart.has_free_shipping')| raw }}
-                    <span class="emoji">🎉</span>
-                </p>
-            {% else %}
-                <p class="shipping-item text-sm font- text-gray-400">
-                    {{ trans('pages.cart.free_shipping_alert', {'amount': remaining|money})| raw }}
-                </p>
-            {% endif %}
-        </div>
+
+<div class="flex space-s-3">
+    <div class="bg-primary text-white rounded-icon">
+        <i class="free-shipping sicon-shipping-fast"></i>
     </div>
-    {% if not has_free_shipping %}
-        <div class="mt-6" aria-hidden="true">
-            <div class="bg-border-color rounded-full  mb-1.5">
-                <div class="progress-bg transition-all duration-500 h-4 bg-primary relative rounded-full flex justify-end"
-                     style="width: {{ percent }}%">
-                    {% if percent %}
-                        <p class="text-sm absolute -bottom-7 -end-6"><i class="sicon-shipping-fast"></i></p>
-                    {% endif %}
-                </div>
+    <div class="flex-1">
+        <h4 class="shipping-item font-bold text-sm mb-1.5">{{ trans('pages.cart.free_shipping') }}</h4>
+        {% if has_free_shipping %}
+            <p class="shipping-item text-sm font- text-gray-400 free-shipping-applied">
+                {{ trans('pages.cart.has_free_shipping')| raw }}
+                <span class="emoji">🎉</span>
+            </p>
+        {% else %}
+            <p class="shipping-item text-sm font- text-gray-400">
+                {{ trans('pages.cart.free_shipping_alert', {'amount': remaining|money})| raw }}
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% if not has_free_shipping %}
+    <div class="mt-6" aria-hidden="true">
+        <div class="bg-border-color rounded-full  mb-1.5">
+            <div class="progress-bg transition-all duration-500 h-4 bg-primary relative rounded-full flex justify-end"
+                 style="width: {{ percent }}%">
+                {% if percent %}
+                    <p class="text-sm absolute -bottom-7 -end-6"><i class="sicon-shipping-fast"></i></p>
+                {% endif %}
             </div>
         </div>
-    {% endif %}
-</div>
+    </div>
+{% endif %}
