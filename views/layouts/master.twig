@@ -136,7 +136,8 @@
 {% hook 'body:end' %}
 {% hook 'scripts' %}
 
-<script src="{{ link("languages/assets/#{theme.translations_hash}.js") }}"></script>
+<script defer src="{{ link("languages/assets/#{theme.translations_hash}.js") }}"></script>
+<script defer src="{{ asset('dist/app.js') }}"></script>
 {% block scripts %}{% endblock %}
 {% if error %}
     <script>
