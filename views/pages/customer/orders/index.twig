@@ -66,6 +66,8 @@
                                         </td>
                                         <td class="w-full md:w-auto md:text-end  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
                                             <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.orders.status') }}:</span>
+                                            {# Rating Flag #}
+                                            <i class="sicon-star2 text-lg mx-5 text-gray-200 text-theme-yellow"></i>
                                             <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl"
                                                   style="border-color: {{ theme.lighter_color(0.5, order.status.color) }} !important; color: {{ order.status.color }}">
 													<i class="mt-1 {{ order.status.icon }}"></i>
@@ -73,12 +75,6 @@
 														{{ order.status.name }}</span>
 												</span>
                                         </td>
-                                        {# <td class="w-full md:w-auto md:rounded-e-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-lg font-medium md:text-end">
-																																	                                            <span class="md:hidden w-32 inline-block font-normal text-sm"></span>
-																																	                                            <a href="{{ order.url }}" class="text-gray-400 hover:text-gray-500 mx-2">
-																																	                                                <i class="sicon-eye"></i>
-																																	                                            </a>
-																																	                                        </td> #}
                                     </tr>
                                 {% endfor %}
                                 </tbody>
