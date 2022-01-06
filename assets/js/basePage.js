@@ -1,49 +1,25 @@
-import '@salla.sa/twilight';
-import '@salla.sa/twilight-components';
-
-import Notify from './partials/notify';
-import Helpers from './partials/helpers';
-import LazyLoad from './partials/lazy-load';
-import MobileMenu from './partials/mobile-menu';
-import StickyMenu from './partials/sticky-menu';
-import MobileInputs from './partials/mobile-inputs';
-import CartListeners from './partials/cart-listeners';
-import WishlistButtons from './partials/wishlist-buttons';
-import Advertisement from './partials/advertisement';
-import Dropdwons from './partials/dropdwons';
-import Modals from './partials/modals';
-
-class BasePage extends Helpers {
+class BasePage {
     constructor() {
-        super();
-        this.boot();
-        document.addEventListener('DOMContentLoaded', () => this.load());
-        window.pageClass = this;
+        window.page = this;
+        document.addEventListener('DOMContentLoaded', () => this.loadApp().then(() => this.onReady() || this.registerEvents()));
     }
 
-    /**
-     * @param key
-     * @return {*}
-     */
-    pageData(key) {
-        let data = salla.config.page || {};
-        return key ? data[key] : data;
-    }
-
-    boot() {
-        this.onBoot && this.onBoot();
-        this.registerWindowProperties();
-    }
-
-    isUser() {
-        return salla.config.is_user;
-    }
-
-    load() {
-        this.initiatePlugins();
-        this.initiateCommons();
-        this.onReady();
-        this.registerEvents();
+    loadApp() {
+        let tries = 0;
+        //check if theme app is initiated each 0.1 sec for one sec otherwise don't load current page class
+        return new Promise((resolve, reject) =>
+            setInterval(function () {
+                if (window.app && window.app.isThemeApp) {
+                    resolve(true);
+                    clearInterval(this);
+                }
+                if (tries > 10) {
+                    reject('Failed to Find `window.app`😢');
+                    clearInterval(this);
+                }
+                tries++;
+            }, 100)
+        );
     }
 
     /**
@@ -56,33 +32,6 @@ class BasePage extends Helpers {
      * For Overriding
      */
     registerEvents() {
-    }
-
-    registerWindowProperties() {
-        window.copyToClipboard = this.copyToClipboard;
-        window.LazyLoad = LazyLoad;
-    }
-
-    initiatePlugins() {
-        Notify();
-        LazyLoad();
-        MobileMenu();
-        StickyMenu();
-        MobileInputs();
-        CartListeners();
-        WishlistButtons();
-        Advertisement();
-        Dropdwons();
-        Modals();
-    }
-
-    initiateCommons() {
-        salla.currency.event.onChanged(() => window.location.reload());
-        document.querySelectorAll('.btn--has-loading').forEach(btn => {
-            btn.addEventListener('click', () => btn.classList.add('btn--is-loading'));
-        });
-
-        this.anime('.anime-count', {scale: [0.5, 1]});
     }
 }
 

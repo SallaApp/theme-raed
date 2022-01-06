@@ -109,7 +109,7 @@ class Cart extends BasePage {
             let items = document.querySelectorAll('.cart-item');
             let item = document.querySelector('#item-' + itemId);
 
-            pageClass.anime(item, false)
+            app.anime(item, false)
                 .complete(() => item.remove() || items.length == 1 && window.location.reload())
                 .easing('easeInOutQuad')
                 .paddingBottom(0)

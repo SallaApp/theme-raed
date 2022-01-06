@@ -24,7 +24,7 @@ function initiateTabs() {
 
 function toggleTabForBtn({target: btn}) {
     let tab = document.querySelector(btn.dataset.show);
-    pageClass.toggleElement(tab, 'opened', 'hidden', () => tab.classList.contains('hidden'))
+    app.toggleElement(tab, 'opened', 'hidden', () => tab.classList.contains('hidden'))
 }
 
 function visibilityConditionCheck(input) {
