@@ -1,6 +1,6 @@
-import BasePage from './basePage';
+import BasePage from './base-page';
 
-class Brand extends BasePage {
+class ThankYou extends BasePage {
     onReady() {
         this.initiateForm();
         app.anime('.thanks-item', {translateX: [20, 0]});
@@ -51,4 +51,4 @@ class Brand extends BasePage {
     }
 }
 
-new Brand;
+new ThankYou;

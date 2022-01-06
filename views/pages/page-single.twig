@@ -10,23 +10,18 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main">
-        <div class="container">
-            <nav class="w-full py-5">
-                {% component 'header.breadcrumbs' with {breadcrumbs:[{url:link('/'),title:trans('common.titles.home')},{title:page.title}]} %}
-            </nav>
-            <div class="flex justify-center">
-                <div class="content content--single-page lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
-                    <h1 class="font-bold text-2xl mb-6">{{ page.title }}</h1>
-                    <div class="content-entry">
-                        {{ page.content|raw }}
-                    </div>
-                    {% component comments with {comments:comments, id:page.id, classes:'pt-16'} %}
+    <div class="container">
+        <nav class="w-full py-5">
+            {% component 'header.breadcrumbs' with {breadcrumbs:[{url:link('/'),title:trans('common.titles.home')},{title:page.title}]} %}
+        </nav>
+        <div class="flex justify-center">
+            <div class="content content--single-page lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
+                <h1 class="font-bold text-2xl mb-6">{{ page.title }}</h1>
+                <div class="content-entry">
+                    {{ page.content|raw }}
                 </div>
+                {% component comments with {comments:comments, id:page.id, classes:'pt-16'} %}
             </div>
         </div>
-    </main>
-{% endblock %}
-{% block scripts %}
-    <script src="{{ asset('dist/page.js') }}"></script>
+    </div>
 {% endblock %}

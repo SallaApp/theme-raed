@@ -1,4 +1,3 @@
-import Filepond from './filepond';
 import Flatpickr from "flatpickr";
 
 let optionsAlreadyInitiated = false;
@@ -9,7 +8,6 @@ export default function () {
     optionsAlreadyInitiated = true;
     initDateTimeInputes();
     initiateTabs();
-    Filepond();
 }
 
 function initDateTimeInputes() {

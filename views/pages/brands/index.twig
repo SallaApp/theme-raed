@@ -9,71 +9,69 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main">
-        <div class="container mb-20 px-7 xl:px-0" x-data="initBrands()">
-            <nav class="w-full py-5">
-                {% component 'header.breadcrumbs' %}
-            </nav>
-            <div class="flex justify-between pt-2 pb-6">
-                <h2 class="font-bold mb-6 md:mb-0">{{ page.title }}</h2>
-            </div>
-            {% if brands|length %}
-                <!-- brands nav -->
-                <ul x-ref="brandsNav" class="flex flex-wrap justify-center"
-                    :class="scrolAtTop ? 'px-18 lg:px-44 space-s-2 space-y-2' : 'flex-col flex-wrap h-full fixed z-10 top-9 start-3 space-y-0.5 pt-16 pb-10 '"
-                    @scroll.window="scrolAtTop = (window.pageYOffset > 200) ? false : true">
-                    <li></li>
-                    {% for char,brands_group in brands %}
-                        <li>
-                            <a href="#brandSection_{{ loop.index }}"
-                               @click="currentSection = 'section_{{ loop.index }}'"
-                               :class="{'bg-primary lg:bg-primary text-reverse opacity-100':  currentSection == 'section_{{ loop.index }}','w-10 h-10 bg-white': scrolAtTop, 'px-1 pb-1 lg:opacity-100 bg-white': !scrolAtTop } "
-                               class="fix-align rounded-md flex items-center justify-center hover:shadow-sm focus:border-primary text-sm">{{ char }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <div x-show="!scrolAtTop" :style="'height: ' + $refs.brandsNav.offsetHeight + 'px'"></div>
-                <!-- end:: brands nav -->
+    <div class="container mb-20 px-7 xl:px-0" x-data="initBrands()">
+        <nav class="w-full py-5">
+            {% component 'header.breadcrumbs' %}
+        </nav>
+        <div class="flex justify-between pt-2 pb-6">
+            <h2 class="font-bold mb-6 md:mb-0">{{ page.title }}</h2>
+        </div>
+        {% if brands|length %}
+            <!-- brands nav -->
+            <ul x-ref="brandsNav" class="flex flex-wrap justify-center"
+                :class="scrolAtTop ? 'px-18 lg:px-44 space-s-2 space-y-2' : 'flex-col flex-wrap h-full fixed z-10 top-9 start-3 space-y-0.5 pt-16 pb-10 '"
+                @scroll.window="scrolAtTop = (window.pageYOffset > 200) ? false : true">
+                <li></li>
+                {% for char,brands_group in brands %}
+                    <li>
+                        <a href="#brandSection_{{ loop.index }}"
+                           @click="currentSection = 'section_{{ loop.index }}'"
+                           :class="{'bg-primary lg:bg-primary text-reverse opacity-100':  currentSection == 'section_{{ loop.index }}','w-10 h-10 bg-white': scrolAtTop, 'px-1 pb-1 lg:opacity-100 bg-white': !scrolAtTop } "
+                           class="fix-align rounded-md flex items-center justify-center hover:shadow-sm focus:border-primary text-sm">{{ char }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div x-show="!scrolAtTop" :style="'height: ' + $refs.brandsNav.offsetHeight + 'px'"></div>
+            <!-- end:: brands nav -->
 
-                {% for char,brandGroup in brands %}
-                    <section
-                            id="brandSection_{{ loop.index }}" class="pt-24">
-                        <!-- separator -->
-                        <div class="flex items-center mb-10">
+            {% for char,brandGroup in brands %}
+                <section
+                        id="brandSection_{{ loop.index }}" class="pt-24">
+                    <!-- separator -->
+                    <div class="flex items-center mb-10">
                             <span :class="currentSection == 'section_{{ loop.index }}' ? 'bg-primary text-reverse' : '' "
                                   class="me-5 md:me-12 fix-align bg-white rounded-md
                                                            w-10 h-10 flex items-center
                                                            justify-center hover:shadow-sm
                                                            border border-transparent
                                                            focus:border-primary text-sm">{{ char }}</span>
-                            <div class="bg-border-color h-px flex-1"></div>
-                        </div>
+                        <div class="bg-border-color h-px flex-1"></div>
+                    </div>
 
-                        <div class="grid grid-cols-2 sm:grid-cols-auto-fill-6 grid-flow-row  gap-5 md:gap-8">
-                            {% for brand in brandGroup %}
-                                <div class=" flex justify-center items-center  bg-white transition-opacity hover:opacity-95 bg-cover h-32  text-white text-center md:px-10  p-5 rounded-md overflow-hidden relative">
-                                    <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
-                                    <a href="{{ brand.url }}"
-                                       class="overlay h-full w-full bg-dark opacity-0 absolute top-0 left-0 z-10"></a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </section>
-                {% endfor %}
-            {% else %}
-                <div class="h-full content-placeholder content-placeholder--cart text-gray-400 pt-10 pb-20 flex items-center flex-col justify-center">
+                    <div class="grid grid-cols-2 sm:grid-cols-auto-fill-6 grid-flow-row  gap-5 md:gap-8">
+                        {% for brand in brandGroup %}
+                            <div class=" flex justify-center items-center  bg-white transition-opacity hover:opacity-95 bg-cover h-32  text-white text-center md:px-10  p-5 rounded-md overflow-hidden relative">
+                                <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
+                                <a href="{{ brand.url }}"
+                                   class="overlay h-full w-full bg-dark opacity-0 absolute top-0 left-0 z-10"></a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+        {% else %}
+            <div class="h-full content-placeholder content-placeholder--cart text-gray-400 pt-10 pb-20 flex items-center flex-col justify-center">
                     <span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
                         <i class="sicon-award-ribbon text-6xl block text-reverse-dark"></i>
                     </span>
-                    <h1 class="font-bold text-sm mb-1">{{ trans('pages.brands.non_brands') }}</h1>
-                    <small>{{ trans('pages.brands.try_again') }}</small>
-                </div>
-            {% endif %}
-        </div>
-    </main>
+                <h1 class="font-bold text-sm mb-1">{{ trans('pages.brands.non_brands') }}</h1>
+                <small>{{ trans('pages.brands.try_again') }}</small>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
 {% block scripts %}
-    <script src="{{ asset('dist/brands.js') }}"></script>
+    <script src="{{ asset('dist/pages.js') }}"></script>
     <script>
         function initBrands() {
             return {currentSection: '', scrolAtTop: true}

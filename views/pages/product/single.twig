@@ -59,279 +59,279 @@
     <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
 {% endblock %}
 {% block content %}
-    <main id="main" data-product-id="{{ product.id }}">
-        <div class="container">
-            <nav class="w-full py-5">
-                {% component 'header.breadcrumbs' %}
-            </nav>
-            <div class="flex flex-col items-start md:flex-row" id="product_{{ product.id }}">
+    <div class="container">
+        <nav class="w-full py-5">
+            {% component 'header.breadcrumbs' %}
+        </nav>
+        <div class="flex flex-col items-start md:flex-row" id="product_{{ product.id }}">
 
-                <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-16">
+            <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-16">
 
-                    <div class="swiper relative my-gallery details-slider rounded-md mb-2.5"
-                         id="details-slider-{{ product.id }}">
-                        {% if(product.promotion_title) %}
-                            <div class="absolute z-10 top-4 start-0">
-                                <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
-                            </div>
-                        {% endif %}
+                <div class="swiper relative my-gallery details-slider rounded-md mb-2.5"
+                     id="details-slider-{{ product.id }}">
+                    {% if(product.promotion_title) %}
+                        <div class="absolute z-10 top-4 start-0">
+                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
+                        </div>
+                    {% endif %}
+                    <div class="swiper-wrapper">
+                        {% for image in product.images %}
+                            <a data-fslightbox="product_{{ product.id }}"
+                               data-img-id="{{ image.id }}"
+                               data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                               data-caption="{{ image.alt }}"
+                               data-infinite="false"
+                               data-type="{{ image.video_url?'youtube':'image' }}"
+                               href="{{ image.video_url?image.video_url:image.url }}"
+                               aria-label="{{ product.name }}"
+                               class="swiper-slide h-500 homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
+                                <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
+                                     alt="{{ image.alt }}"
+                                     class="h-full object-cover lazy-load w-full">
+                            </a>
+                        {% endfor %}
+                    </div>
+                    {% set has_many_images=product.images|length>1 %}
+                    {% if has_many_images %}
+                        <div class="w-10 h-10 shadow-sm bg-white text-primary text-lg swiper-button-prev rounded-full"></div>
+                        <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
+                    {% endif %}
+                </div>
+
+                {% if has_many_images %}
+                    <div thumbsSlider="" class="swiper thumbs-slider" id="thumbs-slider-{{ product.id }}">
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
-                                <a data-fslightbox="product_{{ product.id }}"
-                                   data-img-id="{{ image.id }}"
-                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
-                                   data-caption="{{ image.alt }}"
-                                   data-infinite="false"
-                                   data-type="{{ image.video_url?'youtube':'image' }}"
-                                   href="{{ image.video_url?image.video_url:image.url }}"
-                                   aria-label="{{ product.name }}"
-                                   class="swiper-slide h-500 homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
+                                <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
                                     <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
-                                         alt="{{ image.alt }}"
-                                         class="h-full object-cover lazy-load w-full">
-                                </a>
+                                         class="object-cover w-full h-full lazy-load"
+                                         title="{{ image.alt }}"
+                                         alt="{{ image.alt }}"/>
+                                </div>
                             {% endfor %}
                         </div>
-                        {% set has_many_images=product.images|length>1 %}
-                        {% if has_many_images %}
-                            <div class="w-10 h-10 shadow-sm bg-white text-primary text-lg swiper-button-prev rounded-full"></div>
-                            <div class="w-10 h-10 shadow-sm bg-white swiper-button-next rounded-full"></div>
-                        {% endif %}
                     </div>
+                {% endif %}
+            </div>
 
-                    {% if has_many_images %}
-                        <div thumbsSlider="" class="swiper thumbs-slider" id="thumbs-slider-{{ product.id }}">
-                            <div class="swiper-wrapper">
-                                {% for image in product.images %}
-                                    <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
-                                        <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
-                                             class="object-cover w-full h-full lazy-load"
-                                             title="{{ image.alt }}"
-                                             alt="{{ image.alt }}"/>
-                                    </div>
-                                {% endfor %}
+            <div class="main-content w-full md:w-2/4  pb-20">
+                {% component 'product.brand' with {product: product} %}
+
+                <div class="flex">
+                    <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
+                    {% if product.rating %}
+                        <div class="mt-5">
+                            <div class="text-sm">
+                                <i class="sicon-star2 text-theme-yellow"></i>
+                                <span>{{ product.rating }}</span>
                             </div>
                         </div>
                     {% endif %}
                 </div>
 
-                <div class="main-content w-full md:w-2/4  pb-20">
-                    {% component 'product.brand' with {product: product} %}
+                {% if product.subtitle %}
+                    <h3 class="product-entry__sub-title  text-sm text-gray-400 leading-6 mb-2.5">
+                        {{ product.subtitle }}
+                    </h3>
+                {% endif %}
 
-                    <div class="flex">
-                        <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
-                        {% if product.rating %}
-                            <div class="mt-5">
-                                <div class="text-sm">
-                                    <i class="sicon-star2 text-theme-yellow"></i>
-                                    <span>{{ product.rating }}</span>
-                                </div>
-                            </div>
+                <div class="mb-2">
+                    <div class="space-s-1">
+                        {% if product.on_sale %}
+                            <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                            <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                        {% else %}
+                            <span>{{ product.price|money }}</span>
                         {% endif %}
                     </div>
+                </div>
 
-                    {% if product.subtitle %}
-                        <h3 class="product-entry__sub-title  text-sm text-gray-400 leading-6 mb-2.5">
-                            {{ product.subtitle }}
-                        </h3>
+                <div class="product__description leading-7 mb-6">
+                    {% if product.show_read_more %}
+                        <div class="relative overflow-hidden transition-all max-h-0 duration-300"
+                             style="max-height:5.25rem"
+                             id="moreContent">
+                            <p>{{ product.description|raw }}</p>
+                        </div>
+                        <div class="mt-2 cursor-pointer" id="btn-show-more">
+                            <a class="show-more text-primary">{{ trans('pages.products.read_more') }}</a>
+                        </div>
+                    {% else %}
+                        <p class="pb-1">{{ product.description|raw }}</p>
                     {% endif %}
+                </div>
 
-                    <div class="mb-2">
-                        <div class="space-s-1">
-                            {% if product.on_sale %}
-                                <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                            {% else %}
-                                <span>{{ product.price|money }}</span>
-                            {% endif %}
-                        </div>
+                <div class="flex mb-7 space-s-3 ">
+                    <div class="share-wrapper relative">
+                        <button type="button"
+                                class="btn--share shadow-md hover:shadow-default transition-shadow bg-white text-primary rounded-full w-10 h-10 focus:outline-none cursor-pointer"
+                                aria-label="Share">
+                            <i class="sicon-share-alt"></i>
+                        </button>
+                        <ul class="absolute z-10 h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share">
+                            <li>
+                                <a class="a2a_button_whatsapp block p-2.5" aria-label="Share Via Whatsapp">
+                                    <i class="sicon-whatsapp"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="a2a_button_facebook block p-2.5 hover:text-primary"
+                                   aria-label="Share Via Facebook">
+                                    <i class="sicon-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="a2a_button_twitter block p-2.5 hover:text-primary"
+                                   aria-label="Share Via Twitter">
+                                    <i class="sicon-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="a2a_button_email block p-2.5 hover:text-primary"
+                                   aria-label="Share Via Email">
+                                    <i class="sicon-mail"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="a2a_button_copy_link block p-2.5 hover:text-primary"
+                                   aria-label="Copy Product Link">
+                                    <i class="sicon-link"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <script type="text/javascript">
+                            var a2a_config = a2a_config || {};
+                            a2a_config.linkurl = "{{ product.url }}";
+                            a2a_config.locale = "{{ language.code }}";
+                        </script>
+                        <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
 
-                    <div class="product__description leading-7 mb-6">
-                        {% if product.show_read_more %}
-                            <div class="relative overflow-hidden transition-all max-h-0 duration-300"
-                                 style="max-height:5.25rem"
-                                 id="moreContent">
-                                <p>{{ product.description|raw }}</p>
-                            </div>
-                            <div class="mt-2 cursor-pointer" id="btn-show-more">
-                                <a class="show-more text-primary">{{ trans('pages.products.read_more') }}</a>
-                            </div>
+                    {% if in_wishlist %}
+                        <button id="btn-favorite"
+                                class="text-white bg-primary favorited shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none cursor-pointer">
+                            <i class="sicon-heart-off"></i>
+                        </button>
+                    {% else %}
+                        <button id="btn-favorite"
+                                class="bg-white text-theme-red btn-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none cursor-pointer">
+                            <i class="sicon-heart"></i>
+                        </button>
+                    {% endif %}
+                </div>
+
+                {% component 'product.tags' with {product: product} %}
+
+                <div class="grid gap-5 mb-5">
+                    {% hook 'product:after-description' %}
+                </div>
+
+                <form class="form form--product-optins product-details__options"
+                        {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
+                      data-filter-before-submit="verifyDataBeforeSend"
+                      data-on-change="product::get.price"
+                      enctype="multipart/form-data"
+                      action="{{ link('cart/item/%s/add'|format(product.id)) }}"
+                      data-on-success="itemAdded"
+                      data-on-fail="itemFailedTobeAdded"
+                >
+                    <input type="hidden" name="id" value="{{ product.id }}">
+
+                    {% include 'pages.partials.product.options' %}
+
+                    <section class="bg-white p-5 rounded-md mb-5">
+
+                        {% if product.hide_quantity or not product.is_available %}
+                            <input type="hidden" value="1" name="quantity"/>
                         {% else %}
-                            <p class="pb-1">{{ product.description|raw }}</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="flex mb-7 space-s-3 ">
-                        <div class="share-wrapper relative">
-                            <button type="button"
-                                    class="btn--share shadow-md hover:shadow-default transition-shadow bg-white text-primary rounded-full w-10 h-10 focus:outline-none cursor-pointer"
-                                    aria-label="Share">
-                                <i class="sicon-share-alt"></i>
-                            </button>
-                            <ul class="absolute z-10 h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share">
-                                <li>
-                                    <a class="a2a_button_whatsapp block p-2.5" aria-label="Share Via Whatsapp">
-                                        <i class="sicon-whatsapp"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="a2a_button_facebook block p-2.5 hover:text-primary"
-                                       aria-label="Share Via Facebook">
-                                        <i class="sicon-facebook"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="a2a_button_twitter block p-2.5 hover:text-primary"
-                                       aria-label="Share Via Twitter">
-                                        <i class="sicon-twitter"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="a2a_button_email block p-2.5 hover:text-primary"
-                                       aria-label="Share Via Email">
-                                        <i class="sicon-mail"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="a2a_button_copy_link block p-2.5 hover:text-primary"
-                                       aria-label="Copy Product Link">
-                                        <i class="sicon-link"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                            <script type="text/javascript">
-                                var a2a_config = a2a_config || {};
-                                a2a_config.linkurl = "{{ product.url }}";
-                                a2a_config.locale = "{{ language.code }}";
-                            </script>
-                            <script async src="https://static.addtoany.com/menu/page.js"></script>
-                        </div>
-
-                        {% if in_wishlist %}
-                            <button id="btn-favorite"
-                                    class="text-white bg-primary favorited shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none cursor-pointer">
-                                <i class="sicon-heart-off"></i>
-                            </button>
-                        {% else %}
-                            <button id="btn-favorite"
-                                    class="bg-white text-theme-red btn-favorite shadow-md hover:shadow-default transition-shadow  rounded-full w-10 h-10 focus:outline-none cursor-pointer">
-                                <i class="sicon-heart"></i>
-                            </button>
-                        {% endif %}
-                    </div>
-
-                    {% component 'product.tags' with {product: product} %}
-
-                    <div class="grid gap-5 mb-5">
-                        {% hook 'product:after-description' %}
-                    </div>
-
-                    <form class="form form--product-optins product-details__options"
-                            {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
-                          data-filter-before-submit="verifyDataBeforeSend"
-                          data-on-change="product::get.price"
-                          enctype="multipart/form-data"
-                          action="{{ link('cart/item/%s/add'|format(product.id)) }}"
-                          data-on-success="itemAdded"
-                          data-on-fail="itemFailedTobeAdded"
-                    >
-                        <input type="hidden" name="id" value="{{ product.id }}">
-
-                        {% include 'pages.partials.product.options' %}
-
-                        <section class="bg-white p-5 rounded-md mb-5">
-
-                            {% if product.hide_quantity or not product.is_available %}
-                                <input type="hidden" value="1" name="quantity"/>
-                            {% else %}
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                    <label class="form-label">
-                                        <b class="block">
-                                            الكمية
-                                        </b>
-                                    </label>
-                                    <div class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
-                                        <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                                            <button class="text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
-                                                    id="btn-increase"
-                                                    type="button">
-                                                <i class="sicon-add"></i></button>
-                                            <input id="product-quantity"
-                                                   data-digits="1"
-                                                   name="quantity"
-                                                   type="number"
-                                                   max="{{ product.max_quantity }}"
-                                                   data-max_quantity="{{ product.max_quantity }}"
-                                                   value="1"
-                                                   class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                                   data-on-keyup="product::get.price"
-                                                   aria-label="Product Quantity"
-                                                   min="1"/>
-
-                                            <button class="text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
-                                                    id="btn-decrease"
-                                                    type="button">
-                                                <i class="sicon-minus"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
                                 <label class="form-label">
                                     <b class="block">
-                                        السعر
+                                        الكمية
                                     </b>
                                 </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end space-s-1">
-                                    <div class="space-s-1">
-                                        {% if product.on_sale %}
-                                            <h4 id="total-price" class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                            <span id="before-price" class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                                        {% else %}
-                                            <h4 id="total-price" class="text-theme-red font-bold text-sm inline-block">{{ product.price|money }}</h4>
-                                        {% endif %}
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
+                                    <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
+                                        <button class="text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
+                                                id="btn-increase"
+                                                type="button">
+                                            <i class="sicon-add"></i></button>
+                                        <input id="product-quantity"
+                                               data-digits="1"
+                                               name="quantity"
+                                               type="number"
+                                               max="{{ product.max_quantity }}"
+                                               data-max_quantity="{{ product.max_quantity }}"
+                                               value="1"
+                                               class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
+                                               data-on-keyup="product::get.price"
+                                               aria-label="Product Quantity"
+                                               min="1"/>
+
+                                        <button class="text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
+                                                id="btn-decrease"
+                                                type="button">
+                                            <i class="sicon-minus"></i></button>
                                     </div>
                                 </div>
                             </div>
+                        {% endif %}
 
-                            <div class="flex justify-between space-s-4">
-                                {% if product.is_available %}
-                                    <button class="btn btn-primary add-to-cart-btn btn--has-loading"
-                                            data-on-click="cart::add-item"
-                                            type="button">
-                                        <span class="loader loader--small"></span>
-                                        <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                            <label class="form-label">
+                                <b class="block">
+                                    السعر
+                                </b>
+                            </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2 text-end space-s-1">
+                                <div class="space-s-1">
+                                    {% if product.on_sale %}
+                                        <h4 id="total-price"
+                                            class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                        <span id="before-price"
+                                              class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                                    {% else %}
+                                        <h4 id="total-price"
+                                            class="text-theme-red font-bold text-sm inline-block">{{ product.price|money }}</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between space-s-4">
+                            {% if product.is_available %}
+                                <button class="btn btn-primary add-to-cart-btn btn--has-loading"
+                                        data-on-click="cart::add-item"
+                                        type="button">
+                                    <span class="loader loader--small"></span>
+                                    <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">
                                             {{ trans('pages.cart.add_to_cart') }}
                                         </span>
-                                    </button>
-                                {% else %}
-                                    <button type="button" class="btn btn-outline">
-                                        {% if product.is_donation %}
-                                            {{ trans('pages.products.donation_exceed') }}
-                                        {% else %}
-                                            {{ trans('pages.products.out_of_stock') }}
-                                        {% endif %}
-                                    </button>
-                                    {% component 'product.notify-availability' with {product:product} %}
-                                {% endif %}
-                            </div>
-                        </section>
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-outline">
+                                    {% if product.is_donation %}
+                                        {{ trans('pages.products.donation_exceed') }}
+                                    {% else %}
+                                        {{ trans('pages.products.out_of_stock') }}
+                                    {% endif %}
+                                </button>
+                                {% component 'product.notify-availability' with {product:product} %}
+                            {% endif %}
+                        </div>
+                    </section>
 
-                        {# {% component 'product.quick-buy' with {product: product} %} #} {# frontend TODO:: support this section #}
-                        {% component 'product.offer' with {product:product} %}
-                    </form>
-                </div>
+                    {# {% component 'product.quick-buy' with {product: product} %} #} {# frontend TODO:: support this section #}
+                    {% component 'product.offer' with {product:product} %}
+                </form>
             </div>
         </div>
-        {% component comments with {comments: comments, id: product.id} %}
+    </div>
+    {% component comments with {comments: comments, id: product.id} %}
 
-        {% component 'product.similar-products' %}
-    </main>
-
+    {% component 'product.similar-products' %}
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('dist/product.js') }}"></script>
+    <script src="{{ asset('dist/products.js') }}"></script>
 {% endblock %}

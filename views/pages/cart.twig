@@ -49,175 +49,174 @@
     <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
 {% endblock %}
 {% block content %}
-    <main id="main">
-        <div class="container px-3 xs:px-5">
-            <nav class="w-full py-5">
-                {% component 'header.breadcrumbs' %}
-            </nav>
-            <div class="flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
-                <div class="main-content flex-1 w-full">
-                    {% for item in cart.items %}
-                        {% set key_prefix=item.id %}
-                        <section class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
-                                {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
-                                 data-filter-before-submit="verifyDataBeforeSend"
-                                 data-on-change="cart::update-item"
-                                 data-id="{{ item.id }}"
-                                 id="item-{{ item.id }}"
-                                 salla-form-data>
-                            <input type="hidden" name="id" value="{{ item.id }}">
-                            <!-- product -->
-                            <div class="md:flex md:space-s-12 items-center justify-between mb-8">
-                                <div class="flex flex-1 space-s-4">
-                                    <a href="{{ item.url }}" class="flex-shrink-0">
-                                        <img src="{{ item.product_image }}" alt="{{ item.product_name }}"
-                                             class="flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
-                                    </a>
-                                    <div class=" space-y-1">
-                                        <h3 class="text-gray-900 leading-6">
-                                            <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
-                                        </h3>
-                                        <span class="text-sm text-gray-400 line-through product-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
-                                        <span class="item-price {{ item.offer?'text-theme-red':'text-sm text-gray-400' }}">{{ item.price|money }}</span>
-                                        <i class="sicon-discount-calculator text-gray-400 offer-icon {{ item.offer?'':'hidden' }}"></i>
-                                        <span class="text-sm text-gray-400 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="flex-1 border-t border-b border-border-color py-3 md:p-0 md:border-none mt-5 md:mt-1 flex justify-between items-center ">
-                                    <div class="relative">
-                                        <div class="flex items-center h-10 py-2 border  rounded-md text-sm transtion transition-color duration-300">
-                                            {% if item.is_donation %}
-                                                <span></span>
-                                            {% elseif item.hide_quantity or not item.is_available %}
-                                                <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
-                                                <span>{{ item.quantity }}</span>
-                                            {% else %}
-                                                <button class="add-qty text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
-                                                        type="button">
-                                                    <i class="sicon-add"></i>
-                                                </button>
-                                                <input class="item-quantity focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                                       data-max_quantity="{{ product.max_quantity }}"
-                                                       data-quantity="{{ item.quantity }}"
-                                                       max="{{ product.max_quantity }}"
-                                                       value="{{ item.quantity }}"
-                                                       id="qty-{{ item.id }}"
-                                                       data-digits="1"
-                                                       name="quantity"
-                                                       min="1">
-                                                <button class="sub-qty text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
-                                                        type="button">
-                                                    <i class="sicon-minus"></i>
-                                                </button>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-
-                                    <p class="text-primary flex-none font-bold text-sm">
-                                        <span>{{ trans('pages.cart.total') }}:</span>
-                                        <span class="item-total">{{ item.is_available?item.total|money: trans('pages.cart.out_of_stock') }}</span>
-                                    </p>
+    <div class="container px-3 xs:px-5">
+        <nav class="w-full py-5">
+            {% component 'header.breadcrumbs' %}
+        </nav>
+        <div class="flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
+            <div class="main-content flex-1 w-full">
+                {% for item in cart.items %}
+                    {% set key_prefix=item.id %}
+                    <section class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
+                            {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
+                             data-filter-before-submit="verifyDataBeforeSend"
+                             data-on-change="cart::update-item"
+                             data-id="{{ item.id }}"
+                             id="item-{{ item.id }}"
+                             salla-form-data>
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                        <!-- product -->
+                        <div class="md:flex md:space-s-12 items-center justify-between mb-8">
+                            <div class="flex flex-1 space-s-4">
+                                <a href="{{ item.url }}" class="flex-shrink-0">
+                                    <img src="{{ item.product_image }}" alt="{{ item.product_name }}"
+                                         class="flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
+                                </a>
+                                <div class=" space-y-1">
+                                    <h3 class="text-gray-900 leading-6">
+                                        <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
+                                    </h3>
+                                    <span class="text-sm text-gray-400 line-through product-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
+                                    <span class="item-price {{ item.offer?'text-theme-red':'text-sm text-gray-400' }}">{{ item.price|money }}</span>
+                                    <i class="sicon-discount-calculator text-gray-400 offer-icon {{ item.offer?'':'hidden' }}"></i>
+                                    <span class="text-sm text-gray-400 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
                                 </div>
                             </div>
 
-                            {% if item.options|length %}
-                                <form>
-                                    {% include 'pages.partials.product.options' with {product:item} %}
-                                </form>
-                            {% endif %}
-                            <button class="btn--has-loading btn--delete bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
-                                <i class="sicon-cancel icon"></i>
-                                <span class="loader loader--small absolute transition inset-x-0 inset-y-0 opacity-0 flex justify-center items-center"></span>
-                            </button>
-                        </section>
+                            <div class="flex-1 border-t border-b border-border-color py-3 md:p-0 md:border-none mt-5 md:mt-1 flex justify-between items-center ">
+                                <div class="relative">
+                                    <div class="flex items-center h-10 py-2 border  rounded-md text-sm transtion transition-color duration-300">
+                                        {% if item.is_donation %}
+                                            <span></span>
+                                        {% elseif item.hide_quantity or not item.is_available %}
+                                            <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
+                                            <span>{{ item.quantity }}</span>
+                                        {% else %}
+                                            <button class="add-qty text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
+                                                    type="button">
+                                                <i class="sicon-add"></i>
+                                            </button>
+                                            <input class="item-quantity focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
+                                                   data-max_quantity="{{ product.max_quantity }}"
+                                                   data-quantity="{{ item.quantity }}"
+                                                   max="{{ product.max_quantity }}"
+                                                   value="{{ item.quantity }}"
+                                                   id="qty-{{ item.id }}"
+                                                   data-digits="1"
+                                                   name="quantity"
+                                                   min="1">
+                                            <button class="sub-qty text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
+                                                    type="button">
+                                                <i class="sicon-minus"></i>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
 
-                    {% else %}
-                        <div class="h-full content-placeholder content-placeholder--cart text-gray-400 pt-36 pb-20 flex items-center flex-col justify-center">
+                                <p class="text-primary flex-none font-bold text-sm">
+                                    <span>{{ trans('pages.cart.total') }}:</span>
+                                    <span class="item-total">{{ item.is_available?item.total|money: trans('pages.cart.out_of_stock') }}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        {% if item.options|length %}
+                            <form>
+                                {% include 'pages.partials.product.options' with {product:item} %}
+                            </form>
+                        {% endif %}
+                        <button class="btn--has-loading btn--delete bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
+                            <i class="sicon-cancel icon"></i>
+                            <span class="loader loader--small absolute transition inset-x-0 inset-y-0 opacity-0 flex justify-center items-center"></span>
+                        </button>
+                    </section>
+
+                {% else %}
+                    <div class="h-full content-placeholder content-placeholder--cart text-gray-400 pt-36 pb-20 flex items-center flex-col justify-center">
                         <span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
                             <i class="sicon-shopping-bag text-6xl block text-reverse-dark"></i>
                         </span>
-                            <p class="text-sm mb-5">{{ trans('pages.cart.empty_cart') }}</p>
-                            <a href="{{ link('/') }}"
-                               class="btn btn-outline-primary">{{ trans('common.elements.back_home') }}</a>
-                        </div>
-                    {% endfor %}
-                </div>
-                <!-- sidebar -->
-                {% if cart.items|length %}
-                    <div class="sticky top-24 w-full lg:w-96  lg:ms-8">
-                        <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative"
-                             id="free-shipping-bar">
-                            {% component 'free-shipping' %}
-                        </div>
-
-                        <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
-                            <h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
-
-                            <div class="flex justify-between text-sm mb-5">
-                                <span class="text-gray-400">{{ trans("pages.cart.items_total") }}</span>
-                                <b id="sub-total">{{ cart.sub_total|money }}</b>
-                            </div>
-
-                            <div id="shipping-cost" class="flex justify-between text-sm mb-5 {{ cart.has_shipping?'':'hidden' }}">
-                                <span class="text-gray-400">{{ trans('pages.cart.shipping_cost') }}</span>
-                                <b>{{ cart.real_shipping_cost|money }}</b>
-                            </div>
-
-                            {% if store.settings.cart.apply_coupon_enabled %}
-                                <div class="border-t border-border-color border-b py-5 mb-5">
-                                    <label for="coupon"
-                                           class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
-                                    <div class="mt-2.5 relative">
-                                        <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
-                                               class="pe-24 form-input"
-                                               value="{{ cart.coupon }}"
-                                               id="coupon"
-                                               name="coupon"
-                                               type="text">
-                                        <button class="coupon-btn absolute top-px end-px rounded-s-none rounded-e-md flex-shrink-0 btn cursor-pointer {{ cart.coupon?'btn-danger':'btn-default' }}"
-                                                id="btn-add-coupon"
-                                                type="button">
-                                            <span class="{{ cart.coupon?'hidden':'' }}">{{ trans('pages.cart.save_coupon') }}</span>
-                                            <i class="sicon-cancel text-xl w-8 {{ cart.coupon?'':'hidden' }}"></i>
-                                        </button>
-                                    </div>
-                                    <span class="text-xs text-red-700" id="coupon-error"></span>
-                                </div>
-                            {% endif %}
-
-                            <!-- coupon discount -->
-                            <div id="total-discount" class="flex justify-between text-sm {{ cart.discount?'':'hidden' }}">
-                                <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
-                                <b>- {{ cart.real_discount|money }}</b>
-                            </div>
-
-                            <div class="flex justify-between text-sm mb-5">
-                                <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
-                                <b data-cart-total>{{ cart.total|money }}</b>
-                            </div>
-                            {% if store.settings.tax.taxable_prices_enabled %}
-                                <div class="flex justify-between text-sm mb-5">
-                                    <small class="text-gray-400">
-                                        * {{ trans('pages.cart.prices_taxed') }}
-                                    </small>
-                                </div>
-                            {% endif %}
-                            <button class="w-full btn btn-primary" id="btn-submit" data-on-click="cart::submit">
-                                {{ trans('pages.cart.complete_order') }}
-                            </button>
-                        </div>
+                        <p class="text-sm mb-5">{{ trans('pages.cart.empty_cart') }}</p>
+                        <a href="{{ link('/') }}"
+                           class="btn btn-outline-primary">{{ trans('common.elements.back_home') }}</a>
                     </div>
-                    <div class="fixed md:hidden space-s-2 flex justify-center items-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-50">
-                        <span class="text-gray-400">{{ trans('pages.cart.final_total') }}:</span>
-                        <b>{{ cart.total|money }}</b>
-                    </div>
-                {% endif %}
+                {% endfor %}
             </div>
+            <!-- sidebar -->
+            {% if cart.items|length %}
+                <div class="sticky top-24 w-full lg:w-96  lg:ms-8">
+                    <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative"
+                         id="free-shipping-bar">
+                        {% component 'free-shipping' %}
+                    </div>
+
+                    <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
+                        <h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
+
+                        <div class="flex justify-between text-sm mb-5">
+                            <span class="text-gray-400">{{ trans("pages.cart.items_total") }}</span>
+                            <b id="sub-total">{{ cart.sub_total|money }}</b>
+                        </div>
+
+                        <div id="shipping-cost"
+                             class="flex justify-between text-sm mb-5 {{ cart.has_shipping?'':'hidden' }}">
+                            <span class="text-gray-400">{{ trans('pages.cart.shipping_cost') }}</span>
+                            <b>{{ cart.real_shipping_cost|money }}</b>
+                        </div>
+
+                        {% if store.settings.cart.apply_coupon_enabled %}
+                            <div class="border-t border-border-color border-b py-5 mb-5">
+                                <label for="coupon"
+                                       class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
+                                <div class="mt-2.5 relative">
+                                    <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
+                                           class="pe-24 form-input"
+                                           value="{{ cart.coupon }}"
+                                           id="coupon"
+                                           name="coupon"
+                                           type="text">
+                                    <button class="coupon-btn absolute top-px end-px rounded-s-none rounded-e-md flex-shrink-0 btn cursor-pointer {{ cart.coupon?'btn-danger':'btn-default' }}"
+                                            id="btn-add-coupon"
+                                            type="button">
+                                        <span class="{{ cart.coupon?'hidden':'' }}">{{ trans('pages.cart.save_coupon') }}</span>
+                                        <i class="sicon-cancel text-xl w-8 {{ cart.coupon?'':'hidden' }}"></i>
+                                    </button>
+                                </div>
+                                <span class="text-xs text-red-700" id="coupon-error"></span>
+                            </div>
+                        {% endif %}
+
+                        <!-- coupon discount -->
+                        <div id="total-discount" class="flex justify-between text-sm {{ cart.discount?'':'hidden' }}">
+                            <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
+                            <b>- {{ cart.real_discount|money }}</b>
+                        </div>
+
+                        <div class="flex justify-between text-sm mb-5">
+                            <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
+                            <b data-cart-total>{{ cart.total|money }}</b>
+                        </div>
+                        {% if store.settings.tax.taxable_prices_enabled %}
+                            <div class="flex justify-between text-sm mb-5">
+                                <small class="text-gray-400">
+                                    * {{ trans('pages.cart.prices_taxed') }}
+                                </small>
+                            </div>
+                        {% endif %}
+                        <button class="w-full btn btn-primary" id="btn-submit" data-on-click="cart::submit">
+                            {{ trans('pages.cart.complete_order') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="fixed md:hidden space-s-2 flex justify-center items-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-50">
+                    <span class="text-gray-400">{{ trans('pages.cart.final_total') }}:</span>
+                    <b>{{ cart.total|money }}</b>
+                </div>
+            {% endif %}
         </div>
-    </main>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('dist/cart.js') }}"></script>
+    <script src="{{ asset('dist/checkout.js') }}"></script>
 {% endblock %}

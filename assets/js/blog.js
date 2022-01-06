@@ -1,13 +1,8 @@
-import BasePage from '../basePage';
-import Slider from '../partials/slider';
+import BasePage from './base-page';
+import Slider from './partials/slider';
 
-class Index extends BasePage {
+class Blog extends BasePage {
     onReady() {
-        salla.infiniteScroll.initiate('.articles-container', '.post-entry');
-        this.initiateSlider();
-    }
-
-    initiateSlider() {
         let slider = document.querySelector('#blog-slider');
         if (!slider) {
             return;
@@ -32,4 +27,4 @@ class Index extends BasePage {
     }
 }
 
-new Index;
+new Blog;

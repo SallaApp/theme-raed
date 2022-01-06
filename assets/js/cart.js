@@ -1,4 +1,4 @@
-import BasePage from './basePage';
+import BasePage from './base-page';
 import ProductOptions from './partials/product-options';
 
 class Cart extends BasePage {

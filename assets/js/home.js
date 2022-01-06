@@ -1,11 +1,11 @@
 import "lite-youtube-embed";
-import BasePage from "./basePage";
+import BasePage from "./base-page";
 import Slider from "./partials/slider"
 import Lightbox from "fslightbox";
 
 window.fslightbox = Lightbox;
 
-class Index extends BasePage {
+class Home extends BasePage {
     onReady() {
         this.initiateSliders();
         this.initFeaturedTabs();
@@ -88,4 +88,4 @@ class Index extends BasePage {
     }
 }
 
-new Index
+new Home

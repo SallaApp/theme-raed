@@ -1,6 +1,5 @@
 import '@salla.sa/twilight-components';
 import '@salla.sa/twilight';
-import CartListeners from './partials/cart-listeners';
 import MobileMenu from 'mmenu-light';
 import Swal from "sweetalert2";
 import Anime from './partials/anime';
@@ -32,39 +31,29 @@ class App extends salla.AppHelpers {
 
     loadTheApp() {
         this.log('Initiating...');
+
         this.initiateNotifier();
         this.initiateLazyLoad();
         this.initiateMobileMenu();
         this.initiateStickyMenu();
-        CartListeners();
+        this.initAddToCart();
         this.initiateWishlistButtons();
         this.initiateAdAlert();
         this.initiateDropdowns();
         this.initiateModals();
-        this.initiateCommons();
+        this.initiateComments();
+
+        salla.currency.event.onChanged(() => window.location.reload());
+        this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading'));
+        salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
+        this.anime('.anime-count', {scale: [0.5, 1]});
+
         this.log('Loaded 🎉');
     }
 
     log(message) {
         salla.log(`ThemeApp(${salla.config.theme.name})::${message}`);
         return this;
-    }
-
-    initiateCommons() {
-        salla.currency.event.onChanged(() => window.location.reload());
-        document.querySelectorAll('.btn--has-loading').forEach(btn => {
-            btn.addEventListener('click', () => btn.classList.add('btn--is-loading'));
-        });
-
-        const nextPageBtn = document.getElementById('next-page-btn');
-
-        // salla.event.on('infiniteScroll::request', function () {
-        //     //document.querySelector('.loading-status-wrapper .spinner-loader-wrap').classList.remove('hidden');
-        // })
-
-        salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
-
-        this.anime('.anime-count', {scale: [0.5, 1]});
     }
 
     initiateNotifier() {
@@ -233,6 +222,42 @@ class App extends salla.AppHelpers {
                 btn.dataset.onClick = isAdded ? 'wishlist::remove' : 'wishlist::add';
                 btn.classList.remove('is--loading');
             });
+    }
+
+    /**
+     * These actions are responsable for pressing "add to cart" button,
+     * they can be from any page, espacially when megamenu is enabled
+     */
+    initAddToCart() {
+        salla.cart.event.onUpdated(cartSummary => {
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = cartSummary.final_total);
+            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = cartSummary.count);
+        });
+        salla.cart.event.onItemAdded(Anime.addToCart);
+        salla.cart.event.onItemAddedFailed(() => document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading')))
+
+    }
+
+    initiateComments() {
+        //infiniteScroll (Load more comments)
+        salla.infiniteScroll.initiate('.comments-container', '.comment-block', {
+            history        : false,
+            scrollThreshold: false
+        });
+        //Add Loading when adding new comment
+        let btn = document.getElementById('add-new-comment-btn');
+        if (!btn) {
+            return;
+        }
+        let input = document.querySelector('textarea[name="ask_textarea"]');
+        this.onClick(btn, () => input.value.length >= 3 ? btn.classList.add('btn--has-loading', 'pointer-events-none') : input.classList.add('!border-red-400'));
+        this.onKeyUp(input, () => input.classList.remove('!border-red-400'));
+        salla.comment.event.onAdded(btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+        salla.comment.event.onAdditionFailed(btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+    }
+
+    initiateInfiniteScroll() {
+        salla.infiniteScroll.initiate('.list-container', '.list-item', {history: false, scrollThreshold: false});
     }
 }
 
