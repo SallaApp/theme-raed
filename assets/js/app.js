@@ -173,21 +173,21 @@ class App extends salla.AppHelpers {
     }
 
     initiateModals() {
-        this.onClick('[data-modal-trigger]', event => {
-            let id = '#' + event.target.dataset.modalTrigger;
+        this.onClick('[data-modal-trigger]', e => {
+            let id = '#' + e.target.dataset.modalTrigger;
             this.removeClass(id, 'hidden');
             setTimeout(() => this.toggleModal(id, true)); //small amont of time to running toggle After adding hidden
         });
-        this.onClick("[data-close-modal]", event => this.toggleModal('#' + event.target.dataset.closeModal, false));
+        this.onClick("[data-close-modal]", e => this.toggleModal('#' + e.target.dataset.closeModal, false));
     }
 
     toggleModal(id, isOpen) {
-        this.toggle(`${id} .modal__overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen);
-        this.toggle(`${id} .modal__body`,
-            'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
-            'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
-            () => isOpen);
-        app.toggleElement(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
+        this.toggle(`${id} .modal__overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
+            .toggle(`${id} .modal__body`,
+                'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
+                'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
+                () => isOpen)
+            .toggleElement(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
         if (!isOpen) {
             setTimeout(() => this.addClass(id, 'hidden'), 350);
         }

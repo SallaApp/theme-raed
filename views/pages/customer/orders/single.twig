@@ -50,6 +50,7 @@
 | order.discounts                  | array                             |                                                                                          |
 | order.discounts[].name           | string                            |                                                                                          |
 | order.discounts[].discount       | float                             | minus number                                                                             |
+| order.has_feedback               | bool                              | minus number                                                                             |
 #}
 {% extends "layouts.master" %}
 {% block content %}
@@ -191,9 +192,6 @@
                                                             {{ product.name }}
                                                         </a>
                                                     </dt>
-                                                    {# <dd class="font-medium text-xs">
-                                                    {{ product.total|money }}
-                                                </dd> #}
                                                 </div>
                                             {% endfor %}
                                         </dl>
@@ -209,7 +207,7 @@
                                             {% for attachment in item.attachments %}
                                                 <div class="py-3.5 md:flex items-center justify-between">
                                                     <dt class="mb-2 md:mb-0">
-                                                        {{ item.note }}
+                                                        {{ trans('pages.products.attachments') }}
                                                     </dt>
                                                     <dd class="font-medium {{ attachment.type == 'image' ? 'text-gray-900' : 'text-xs' }}">
                                                         <a href="{{ attachment.url }}">
@@ -270,7 +268,42 @@
                                     </div>
                                 {% endif %}
 
-                                {% include 'pages.partials.product-rating' with {'order':order, 'item':item} %}
+                                {# =================== Start Rating Product =================== #}
+                                <section class="border-t mt-10 pt-8">
+                                    <div class="{{ item.feedback?'':'rating-outer-form' }}"
+                                         data-stars-error="{{ trans('pages.rating.rate_product_stars', {'item':item.name}) }}">
+                                        <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                        <input type="hidden" name="products[{{ loop.index0 }}][product_id]"
+                                               value="{{ item.product.getOptimusRouteKey() }}">
+                                        <input type="hidden" name="type" value="products">
+
+                                        <h2 class="section-title mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
+                                        {% if item.feedback %}
+                                            <p>
+                                                {{ item.feedback.content|raw }}
+                                            </p>
+                                            {% if item.feedback.is_pending %}
+                                                <span>{{ trans('pages.rating.pending') }}</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <textarea data-product-id="{{ item.id }}"
+                                                      name="products[{{ loop.index0 }}][comment]"
+                                                      id="productReview_{{ item.id }}"
+                                                      class="comment form-input h-20 product-review"
+                                                      placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"></textarea>
+                                        {% endif %}
+                                        <div class="rw-product-entry__rate">
+                                            <div class="rating-wrap flex items-center space-s-4">
+                                                <form class="rate-element rate-element--has-label">
+                                                    {% include 'pages.partials.customer.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
+                                                </form>
+                                                <p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+                                            </div>
+                                            <small class="text-red-400 validation-message"></small>
+                                        </div>
+                                    </div>
+                                </section>
+                                {# =================== End Rating Product =================== #}
                             </div>
                         {% endfor %}
                     </section> {# end products section #}
@@ -341,99 +374,64 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- cancel / reorder -->
-                {# {% if order.is_pending_payment %}
-                        <a href="{{ order.payment_url }}" class="btn btn-primary flex  items-center space-s-1.5">
-                            <span class="fix-align">{{ trans('pages.orders.finish_payment') }}</span>
-                        </a>
-                    {% else %}
-                        <button type="button" class="btn btn-primary flex items-center space-s-1.5 popup-trigger" data-popup-trigger="re-order-modal">
-                            <i class="text-base sicon-history"></i>
-                            <span class="fix-align">{{ trans('pages.orders.reorder') }}</span>
-                        </button>
-                    {% endif %}
-
-                    {% if order.can_cancel %}
-                        <button type="button" class="btn btn-primary flex items-center space-s-1.5" id="button_delete_order">
-                            <i class="text-base sicon-trash-2"></i>
-                            <span class="fix-align">{{ trans('pages.orders.cancel') }}</span>
-                        </button>
-                    {% endif %} #}
-
-                <!-- cancel && reorder -->
+                {# ==================== Start Cancel && reorder ==================== #}
                 {% if order.can_reorder or order.can_cancel %}
-                    <div x-data="{openReorderModal: false, openCancelOrderModal:false}">
-                        <div class="bg-white my-10 p-5 divide-y divide-border-color space-y-5 rounded-md">
-                            {% if order.can_reorder %}
-                                <div class="flex justify-between">
-                                    <div class="text-sm">
-                                        <h3 class="font-bold">إعادة الطلب</h3>
-                                        <p class="text-gray-text">تستطيع إعادة نفس منتجات الطلب</p>
-                                    </div>
-                                    {% if order.is_pending_payment %}
-                                        <a href="{{ order.payment_url }}"
-                                           class="text-sm font-bold text-primary flex items-center">
-                                            <i class="sicon sicon-wallet me-2"></i>
-                                            <span class="fix-align">{{ trans('pages.orders.finish_payment') }}</span>
-                                        </a>
-                                    {% else %}
-                                        <button type="button" class="text-sm font-bold text-primary"
-                                                @click="openReorderModal = true">
-                                            <i class="sicon sicon-rotate me-2"></i>
-                                            <span class="fix-align">{{ trans('pages.orders.reorder') }}</span>
-                                        </button>
-                                    {% endif %}
+                    <div class="bg-white my-10 p-5 divide-y divide-border-color space-y-5 rounded-md">
+                        {% if order.can_reorder %}
+                            <div class="flex justify-between">
+                                <div class="text-sm">
+                                    <h3 class="font-bold">{{ trans('pages.orders.reorder') }}</h3>
+                                    <p class="text-gray-text">{{ trans('pages.orders.reorder_description') }}</p>
                                 </div>
-                            {% endif %}
-
-                            {% if order.can_cancel %}
-                                <div class="flex justify-between pt-2">
-                                    <div class="text-sm">
-                                        <h3 class="font-bold">إلغاء الطلب</h3>
-                                        <p class="text-gray-text">تستطيع إلغاء الطلب</p>
-                                    </div>
-                                    <button type="button" @click="openCancelOrderModal = true"
-                                            class="text-sm font-bold text-theme-red" id="button_delete_order">
-                                        <i class="sicon sicon-cancel-circle me-2"></i>
-                                        <span class="fix-align">{{ trans('pages.orders.cancel') }}</span>
+                                {% if order.is_pending_payment %}
+                                    <a href="{{ order.payment_url }}"
+                                       class="text-sm font-bold text-primary flex items-center">
+                                        <i class="sicon sicon-wallet me-2"></i>
+                                        <span class="fix-align">{{ trans('pages.orders.finish_payment') }}</span>
+                                    </a>
+                                {% else %}
+                                    <button type="button" class="text-sm font-bold text-primary cursor-pointer"
+                                            data-modal-trigger="modal-reorder">
+                                        <i class="sicon sicon-rotate me-2"></i>
+                                        <span class="fix-align">{{ trans('pages.orders.reorder') }}</span>
                                     </button>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if order.can_cancel %}
+                            <div class="flex justify-between pt-2">
+                                <div class="text-sm">
+                                    <h3 class="font-bold">{{ trans('pages.orders.cancel') }}</h3>
+                                    <p class="text-gray-text">{{ trans('pages.order.order_cancelation_desc') }}</p>
                                 </div>
-                            {% endif %}
-                        </div>
+                                <button type="button" class="text-sm font-bold text-theme-red cursor-pointer"
+                                        data-modal-trigger="modal-cancel">
+                                    <i class="sicon sicon-cancel-circle me-2"></i>
+                                    <span class="fix-align">{{ trans('pages.orders.cancel') }}</span>
+                                </button>
+                            </div>
+                        {% endif %}
                     </div>
 
-                    <!-- Reorder Popup  -->
+                    {# Reorder Popup #}
                     {% if order.can_reorder and not order.is_pending_payment %}
-                        <div x-show="openReorderModal" x-cloak class="fixed z-10 inset-0 overflow-y-auto"
-                             aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <div class="modal__wrap fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title"
+                             role="dialog" aria-modal="true" id="modal-reorder">
                             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                <!-- Background overlay, show/hide based on modal state.-->
-                                <div x-show="openReorderModal" x-transition:enter="transition ease-out duration-300"
-                                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                                     x-transition:leave="transition ease-in duration-200"
-                                     x-transition:leave-start="opacity-100 "
-                                     x-transition:leave-end="opacity-0"
-                                     class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                                     aria-hidden="true"></div>
-
-                                <!-- This element is to trick the browser into centering the modal contents. -->
-                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-                                <!-- Modal panel, show/hide based on modal state. -->
-                                <div x-show="openReorderModal" @click.away="openReorderModal = false"
-                                     x-transition:enter="transition ease-out duration-300"
-                                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                     x-transition:leave="transition ease-in duration-200"
-                                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                     class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                                <div class="modal__overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-in duration-200 opacity-0"
+                                     aria-hidden="true" data-close-modal="modal-reorder"></div>
+                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                                      aria-hidden="true">&#8203;</span>
+                                <div class="modal__body relative inline-block align-bottom bg-white rounded-lg px-4 pt-12 pb-4 text-start overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-full w-96 sm:p-8 sm:pt-16 ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                                    <button class="absolute end-6 top-6 text-gray-400 hover:text-gray-500 transition cursor-pointer"
+                                            data-close-modal="modal-reorder"
+                                            type="button">
+                                        <span class="sicon-cancel"></span>
+                                    </button>
                                     <div>
                                         <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                                            <!-- Heroicon name: outline/check -->
                                             <i class="sicon sicon-rotate text-green-600"></i>
-
                                         </div>
                                         <div class="mt-3 text-center sm:mt-5">
                                             <h3 class="title title--medium text-lg leading-6 font-medium text-gray-900"
@@ -441,16 +439,16 @@
                                                 {{ trans('pages.orders.reorder') }}
                                             </h3>
                                             <div class="mt-2">
-                                                <p class="text-sm text-gray-500">{{ trans('pages.orders.reorder_description')|raw }}</p>
+                                                <p class="text-sm text-gray-500">{{ trans('pages.orders.reorder_confirmation')|raw }}</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                        <a href="{{ order.reorder_url }}" data-nonconfirm="true"
+                                        <a href="{{ order.reorder_url }}"
                                            class="btn btn-primary w-full inline-flex justify-center ajax">
                                             {{ trans('common.elements.ok') }}
                                         </a>
-                                        <button @click="openReorderModal = false" type="button"
+                                        <button type="button"
                                                 class=" w-full inline-flex justify-center btn btn-outline">
                                             {{ trans('common.elements.cancel') }}
                                         </button>
@@ -459,69 +457,122 @@
                             </div>
                         </div>
                     {% endif %}
-                    <!-- End Reorder Popup -->
-                {% endif %}
+                    {# End Reorder Popup #}
 
-                <!-- Cancel order Popup  -->
-                {% if not order.is_pending_payment %}
-                    <div x-show="openCancelOrderModal" x-cloak class="fixed z-10 inset-0 overflow-y-auto"
-                         aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                            <!-- Background overlay, show/hide based on modal state.-->
-                            <div x-show="openCancelOrderModal" x-transition:enter="transition ease-out duration-300"
-                                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                                 x-transition:leave="transition ease-in duration-200"
-                                 x-transition:leave-start="opacity-100 "
-                                 x-transition:leave-end="opacity-0"
-                                 class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                                 aria-hidden="true"></div>
-
-                            <!-- This element is to trick the browser into centering the modal contents. -->
-                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                                  aria-hidden="true">&#8203;</span>
-
-                            <!-- Modal panel, show/hide based on modal state. -->
-                            <div x-show="openCancelOrderModal" @click.away="openCancelOrderModal = false"
-                                 x-transition:enter="transition ease-out duration-300"
-                                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                 x-transition:leave="transition ease-in duration-200"
-                                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                 class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-                                <div>
-                                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                                        <!-- Heroicon name: outline/check -->
-                                        <i class="sicon sicon-cancel text-red-600"></i>
-
-                                    </div>
-                                    <div class="mt-3 text-center sm:mt-5">
-                                        <h3 class="title title--medium text-lg leading-6 font-medium text-gray-900"
-                                            id="modal-title">
-                                            {{ trans('common.elements.warning') }}
-                                        </h3>
-                                        <div class="mt-2">
-                                            <p class="text-sm text-gray-500">{{ trans('common.elements.confirm') }}</p>
+                    {# Cancel order Popup #}
+                    {% if order.can_cancel %}
+                        <div class="modal__wrap fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title"
+                             role="dialog" aria-modal="true" id="modal-cancel">
+                            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                <div class="modal__overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-in duration-200 opacity-0"
+                                     aria-hidden="true" data-close-modal="modal-cancel"></div>
+                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                                      aria-hidden="true">&#8203;</span>
+                                <div class="modal__body relative inline-block align-bottom bg-white rounded-lg px-4 pt-12 pb-4 text-start overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-full w-96 sm:p-8 sm:pt-16 ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                                    <button type="button"
+                                            class="absolute end-6 top-6 text-gray-400 hover:text-gray-500 transition cursor-pointer"
+                                            data-close-modal="modal-cancel">
+                                        <span class="sicon-cancel"></span>
+                                    </button>
+                                    <div>
+                                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                                            <i class="sicon sicon-cancel text-red-600"></i>
+                                        </div>
+                                        <div class="mt-3 text-center sm:mt-5">
+                                            <h3 class="title title--medium text-lg leading-6 font-medium text-gray-900"
+                                                id="modal-title">
+                                                {{ trans('common.elements.warning') }}
+                                            </h3>
+                                            <div class="mt-2">
+                                                <p class="text-sm text-gray-500">{{ trans('pages.orders.cancel_confirmation') }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                    <button type="button" @click="cancelOrder()"
-                                            class="btn btn-danger w-full inline-flex justify-center">
-                                        {{ trans('common.elements.ok') }}
-                                    </button>
-                                    <button @click="openCancelOrderModal = false" type="button"
-                                            class=" w-full inline-flex justify-center btn btn-outline">
-                                        {{ trans('common.elements.cancel') }}
-                                    </button>
+                                    <div class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                                        <button type="button" id="confirm-cancel"
+                                                class="btn btn-danger w-full inline-flex justify-center">
+                                            {{ trans('common.elements.ok') }}
+                                        </button>
+                                        <button class=" w-full inline-flex justify-center btn btn-outline"
+                                                data-close-modal="modal-cancel">
+                                            {{ trans('common.elements.cancel') }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
+                    {# End Cancel order Popup #}
                 {% endif %}
-                <!-- End Cancel order Popup -->
+                {# ==================== End cancel && reorder ==================== #}
 
-                {% include 'pages.partials.rating' with {'order':order} %}
+                {# ==================== Start Rating ==================== #}
+
+                {% if store.settings.rating.store %}
+                    {# Store Rating #}
+                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="store">
+                        <div class="{{ order.feedback.store.stars?'':'rating-outer-form' }}"
+                             data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
+                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                            <input type="hidden" name="type" value="store">
+                            <h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
+                            <div class="mb-2">
+                                {% if order.feedback.store.content %}
+                                    <p>
+                                        {{ order.feedback.store.content|raw }}
+                                    </p>
+                                {% else %}
+                                    <textarea id="storeReview" name="comment" class="form-input comment h-20"
+                                              placeholder="{{ trans('pages.rating.write_store_rate') }}"></textarea>
+                                    {# <small class="block text-red-400 text-tiny text-end"> التعليق  مطلوب</small> #}
+                                {% endif %}
+                            </div>
+                            <div class="rating-wrap flex items-center space-s-4">
+                                <form class="rate-element rate-element--has-label">
+                                    {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.store.stars} %}
+                                </form>
+                                <p class="rate-label fix-align font-sm center mb-0">{{ (order.feedback.store.stars?trans('pages.rating.'~order.feedback.store.stars~'_stars'):'')|raw }}</p>
+                            </div>
+                            <small class="text-red-400 validation-message"></small>
+                        </div>
+                    </section>
+                {% endif %}
+                {% if order.has_shipping and store.settings.rating.shipping %}
+                    {# Shipping Rating #}
+                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="shipping">
+                        <div class="{{ order.feedback.shipping.stars?'':'rating-outer-form' }}"
+                             data-stars-error="{{ trans('pages.rating.rate_shipping_stars') }}">
+                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                            <input type="hidden" name="shipping_company_id" value="{{ order.shipping.id }}">
+                            <input type="hidden" name="type" value="shipping">
+
+                            <h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
+                            <div class="mb-2">
+                                {% if order.feedback.shipping.content %}
+                                    <p>
+                                        {{ order.feedback.shipping.content|raw }}
+                                    </p>
+                                {% else %}
+                                    <textarea id="shippingReview" name="comment"
+                                              class="form-input comment h-20 mb-2"
+                                              placeholder="{{ trans('pages.rating.write_shipping_rate') }}"></textarea>
+                                {% endif %}
+                            </div>
+                            <div class="rating-wrap flex items-center space-s-4">
+                                <form class="rate-element ratFeedbackPresentere-element--has-label">
+                                    {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.shipping.stars} %}
+                                </form>
+                                <p class="rate-label fix-align font-sm center mb-0">{{ (order.feedback.shipping.stars?trans('pages.rating.'~order.feedback.shipping.stars~'_stars'):'')|raw }}</p>
+                            </div>
+                            <small class="text-red-400 validation-message"></small>
+                        </div>
+                    </section>
+                {% endif %}
+                <button id="submitRating" class="btn btn-primary w-full hidden">
+                    <span class="loader loader--small"></span>
+                    <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('pages.rating.send_ratings') }}</span>
+                </button>
+                {# ==================== EN Rating ==================== #}
             </div>
         </div>
     </div>
@@ -529,15 +580,4 @@
 
 {% block scripts %}
     <script src="{{ asset('dist/customer.js') }}"></script>
-
-    {# TODO:: move it to Js #}
-    {% if order.can_cancel %}
-        <script>
-            function cancelOrder() {
-                salla.order.api.cancel("{{ order.id }}").then(function (response) {
-                    window.location.reload();
-                });
-            }
-        </script>
-    {% endif %}
 {% endblock %}

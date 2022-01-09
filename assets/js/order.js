@@ -1,31 +1,45 @@
 import BasePage from './base-page';
+
 class Order extends BasePage {
     onReady() {
+        this.initiateOrderCancelation();
+        this.initiateRating();
+    }
+
+    initiateOrderCancelation() {
+        app.onClick('#confirm-cancel', () => salla.order.api.cancel(app.pageData('id'))
+            .then(() => window.location.reload())
+            .catch(() => app.toggleModal('#modal-cancel', false))
+        );
+    }
+
+    //========================= Start Rating Logic =========================//
+    initiateRating() {
         this.highlightSelectedStars();
         this.starsRating();
-        document.querySelector('#submitRating').addEventListener("click", () => this.sendRating());
+        //show submitRating Button Only When there is a comment field
+        app.toggle('#submitRating', 'btn', 'hidden', () => app.element('#shippingReview,#storeReview,.product-review'))
+        app.onClick('#submitRating', () => this.sendRating());
     }
 
     sendRating() {
         this.ratingValidation()
-        document.querySelectorAll('.rating-section')
-            .forEach((ratingSection) => {
-                let type = ratingSection.dataset.type;
-                let formsData = [];
-                ratingSection.querySelectorAll('.rating-outer-form')
-                    .forEach((form) => {
-                        let formData = {};
-                        form.querySelectorAll('[name]')
-                            .forEach(function (input) {
-                                let inputData = salla.helpers.inputData(input.name, input.value, formData);
-                                formData[inputData.name] = inputData.value;
-                            });
-                        formsData = [];
-                        formsData.push(formData);
-                        this.sendFeedback(type, formsData);
-                    });
-            });
-        return;
+        app.all('.rating-section', ratingSection => {
+            let type = ratingSection.dataset.type;
+            let formsData = [];
+            ratingSection.querySelectorAll('.rating-outer-form')
+                .forEach((form) => {
+                    let formData = {};
+                    form.querySelectorAll('[name]')
+                        .forEach(function (input) {
+                            let inputData = salla.helpers.inputData(input.name, input.value, formData);
+                            formData[inputData.name] = inputData.value;
+                        });
+                    formsData = [];
+                    formsData.push(formData);
+                    this.sendFeedback(type, formsData);
+                });
+        });
     }
 
     sendFeedback(type, formsData) {
@@ -54,28 +68,27 @@ class Order extends BasePage {
                             sectionTitle.classList.remove('has-error', 'text-red-400');
                             validationMessage.innerHTML = '';
                             return;
-                        }
-                        else if (commentInput.value && commentInput.value.length > 3) {
+                        } else if (commentInput.value && commentInput.value.length > 3) {
                             commentInput.classList.remove('has-error');
-                        }else{
+                        } else {
                             commentInput.classList.add('has-error');
-                        } 
-                        
+                        }
+
                         sectionTitle.classList.add('has-error', 'text-red-400');
 
                         errorMsg = ratingInput.value
-                            ? (salla.lang.get('common.errors.not_less_than_chars', { chars: 4 }) + ' ' + commentInput.getAttribute('placeholder'))
+                            ? (salla.lang.get('common.errors.not_less_than_chars', {chars: 4}) + ' ' + commentInput.getAttribute('placeholder'))
                             : (rating.dataset.starsError || salla.lang.get('pages.rating.rate_store_stars'));
 
                         validationMessage.innerHTML = errorMsg;
                     });
 
-                    // scroll to first error
-                    let ratingErrors = document.querySelectorAll('.has-error');
-                    if(ratingErrors.length){
-                        let firstError = ratingErrors[0].offsetTop;
-                        window.scrollTo({top: firstError - 80}); // 80 = fixed nav height
-                    }
+                // scroll to first error
+                let ratingErrors = document.querySelectorAll('.has-error');
+                if (ratingErrors.length) {
+                    let firstError = ratingErrors[0].offsetTop;
+                    window.scrollTo({top: firstError - 80}); // 80 = fixed nav height
+                }
 
             });
         //Fire error to prevent sending rating
@@ -86,31 +99,26 @@ class Order extends BasePage {
 
     // for hovered star ---
     highlightSelectedStars() {
-        let hoverClasses = ['hovered', 'text-theme-yellow']
-        let rateElements = document.querySelectorAll('.rate-element');
-        rateElements.forEach(rateElement => {
-            let starElements = rateElement.querySelectorAll('.btn--star');
-            rateElement.addEventListener('mouseout', () => {
+        let hover = ['hovered', 'text-theme-yellow'];
+        app.all('.rate-element', el => {
+            let starElements = el.querySelectorAll('.btn--star');
 
-                // remove hovered state from stars ---
-                rateElement.querySelectorAll('.btn--star').forEach(star => {
-                    star.classList.remove(...hoverClasses);
-                })
-            })
+            // remove hovered state from stars ---
+            el.addEventListener('mouseout', () => el.querySelectorAll('.btn--star').forEach(star => star.classList.remove(...hover)));
 
             starElements.forEach((starElement, index) => {
                 starElement.addEventListener('mouseover', () => {
-                    starElement.classList.add(...hoverClasses);
+                    starElement.classList.add(...hover);
                     if (index <= 1) {
-                        starElement.previousElementSibling.tagName === 'BUTTON' ? starElement.previousElementSibling.classList.add(...hoverClasses) : null;
+                        starElement.previousElementSibling.tagName === 'BUTTON' ? starElement.previousElementSibling.classList.add(...hover) : null;
                     } else {
                         for (let i = 0; i < index; i++) {
-                            starElements[i].classList.add(...hoverClasses);
+                            starElements[i].classList.add(...hover);
                         }
                     }
                 })
                 starElement.addEventListener('mouseout', () => {
-                    starElement.classList.contains(...hoverClasses) ? starElement.classList.remove(...hoverClasses) : null;
+                    starElement.classList.contains(...hover) ? starElement.classList.remove(...hover) : null;
                 })
             })
         })
@@ -157,6 +165,7 @@ class Order extends BasePage {
             selected.setAttribute('aria-pressed', true);
         });
     }
+    //========================= End Rating Logic =========================//
 
 }
 

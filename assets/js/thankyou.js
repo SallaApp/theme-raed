@@ -8,8 +8,12 @@ class ThankYou extends BasePage {
     }
 
     registerEvents() {
-        salla.document.event.onClick('.copy-btn', ({target: {dataset: {selector}}}) => app.copyToClipboard(selector));
-        salla.document.event.onClick('#btn-open-order', this.btnActionOpenOrder);
+        app.onClick('.copy-btn', e => app.copyToClipboard(e.target.dataset.selector));
+        app.onClick('#btn-open-order', event => {
+            //important for mobile apps
+            salla.event.dispatch('mobile::order.placed', {order_id: event.target.dataset.orderId});
+            location.href = event.target.dataset.orderUrl;
+        });
     }
 
     initiateForm() {
@@ -22,32 +26,21 @@ class ThankYou extends BasePage {
 
         email.addEventListener('keyup', () => this.isValidEmail(email.value) && email.parentElement.classList.remove('error'));
 
-        //added By data-filter-before-submit="beforeSubmit"
-        window.beforeSubmit = this.verifyBeforeSubmit(email, btn);
-
         //added By data-on-success="onSuccess", data-on-fail="onFail"
         window.onFail = window.onSuccess = () => btn.classList.remove('btn--has-loading');
-    }
 
-    verifyBeforeSubmit(email, btn) {
-        let thisClass = this;
-        return function (form_data, that, event) {
-            if (!thisClass.isValidEmail(email.value)) {
+        //added By data-filter-before-submit="beforeSubmit"
+        window.beforeSubmit = (form_data, that, event) => {
+            if (!app.isValidEmail(email.value)) {
                 email.parentElement.classList.add('error');
                 throw 'Not Valid';
             }
 
-            email && email.parentElement.classList.remove('error');
+            email.parentElement.classList.remove('error');
             btn.classList.add('btn--has-loading');
             btn.setAttribute('disabled', true);
             return form_data;
         };
-    }
-
-    btnActionOpenOrder(event) {
-        //important for mobile apps
-        salla.event.dispatch('mobile::order.placed', {order_id: event.target.dataset.orderId});
-        location.href = event.target.dataset.orderUrl;
     }
 }
 

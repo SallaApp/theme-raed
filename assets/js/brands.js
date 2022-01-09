@@ -1,9 +1,9 @@
 import BasePage from './base-page';
 class Brands extends BasePage {
     onReady() {
-        app.onClick('.btn-brand', e => {
-            app.all('.btn-brand', btn => app.toggleElement(btn, 'bg-primary lg:bg-primary text-reverse opacity-100', 'unselected', () => btn == e.target));
-            app.all('.brand-char', el => app.toggleElement(el, 'bg-primary text-reverse', 'bg-white', () => el.dataset.id == e.target.dataset.id));
+        app.onClick('.btn-brand', ({target:btn}) => {
+            app.all('.btn-brand', el => app.toggleElement(el, 'bg-primary lg:bg-primary text-reverse opacity-100', 'unselected', () => el == btn));
+            app.all('.brand-char', el => app.toggleElement(el, 'bg-primary text-reverse', 'bg-white', () => el.dataset.id == btn.dataset.id));
         });
         window.addEventListener('scroll', () => {
             let scrolAtTop = window.pageYOffset <= 200;

@@ -29,31 +29,33 @@
 | product.options[].details[].is_selected         | bool                       | Does current option selected? (useful in cart page)                                            |
 | product.options[].details[].is_out              | bool                       | Does current option out of stock?                                                              |
 #}
-<section class="bg-white p-5 rounded-md mb-5">
-    {% for option_index, option in product.options %}
-        {# if there is no need for a label, or it needs special handling in the element file #}
-        {% if option.type in ["splitter"] %}
-            {{ option.element|raw }}
-        {% else %}
-            <div class="mb-5 last:mb-0 {{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
-                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
-                    {% if option.type != "donation" %}
-                    <label for="options[{{ option.id }}]" class="form-label">
-                        <b class="block">
-                            {{ option.name }}
-                            {% if option.required %}<span class="text-red-500">*</span>{% endif %}
-                        </b>
-                        <small class="text-gray-text">{{ option.placeholder }}</small>
-                    </label>
-                    {% endif %}
-                    <div class="mt-1 sm:mt-0 {{ option.type != "donation" ? 'sm:col-span-2' : 'sm:col-span-3' }}">
-                        {{ option.element|raw }}
+{% if product.options|length %}
+    <section class="bg-white p-5 rounded-md mb-5">
+        {% for option_index, option in product.options %}
+            {# if there is no need for a label, or it needs special handling in the element file #}
+            {% if option.type in ["splitter"] %}
+                {{ option.element|raw }}
+            {% else %}
+                <div class="mb-5 last:mb-0 {{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
+                        {% if option.type != "donation" %}
+                            <label for="options[{{ option.id }}]" class="form-label">
+                                <b class="block">
+                                    {{ option.name }}
+                                    {% if option.required %}<span class="text-red-500">*</span>{% endif %}
+                                </b>
+                                <small class="text-gray-text">{{ option.placeholder }}</small>
+                            </label>
+                        {% endif %}
+                        <div class="mt-1 sm:mt-0 {{ option.type != "donation" ? 'sm:col-span-2' : 'sm:col-span-3' }}">
+                            {{ option.element|raw }}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-</section>
+            {% endif %}
+        {% endfor %}
+    </section>
+{% endif %}
 
 {% if product.can_add_note or product.can_upload_file %}
     <section class="bg-white p-5 rounded-md mb-5">
@@ -76,7 +78,7 @@
                     {% if product.can_upload_file %}
                         <button class="btn-tab w-full focus:outline-none bg-gray-bg  py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-gray-500 justify-center text-sm cursor-pointer"
                                 data-show="#file_{{ product.id }}"
-                                type="button" >
+                                type="button">
                             <i class="font-medium sicon-paperclip me-1.5 text-md"></i>
                             <span class="fix-align">{{ trans('pages.products.add_file') }}</span>
                         </button>
@@ -85,11 +87,12 @@
 
                 {% if product.can_add_note %}
                     <div class="mt-4 {{ product.notes?'':'hidden' }}" data-show-content id="note_{{ product.id }}">
-                            <textarea class="animated animatedfadeInDown fadeInDown form-input h-16 bg-coolGray-50 block"
-                                      placeholder="{{ trans('pages.products.notes_placeholder') }}"
-                                      name="notes"
-                                      cols="30"
-                                      rows="10">{{ product.notes }}</textarea>
+                            <textarea
+                                    class="animated animatedfadeInDown fadeInDown form-input h-16 bg-coolGray-50 block"
+                                    placeholder="{{ trans('pages.products.notes_placeholder') }}"
+                                    name="notes"
+                                    cols="30"
+                                    rows="10">{{ product.notes }}</textarea>
                     </div>
                 {% endif %}
                 {% if product.can_upload_file %}

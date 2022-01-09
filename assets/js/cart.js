@@ -5,6 +5,7 @@ class Cart extends BasePage {
     onReady() {
         this.initiateSubmit();
         this.initiateCartItems();
+        salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
         app.anime('.free-shipping,.shipping-item', {translateX: [-20, 0]});
         app.watchElements({
             couponCode   : '#coupon',
@@ -18,10 +19,6 @@ class Cart extends BasePage {
         new ProductOptions();
     }
 
-    registerEvents() {
-        salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
-    }
-
     initiateSubmit() {
         app.watchElement('submit', '#btn-submit');
         if (!app.submit) {
@@ -30,10 +27,6 @@ class Cart extends BasePage {
         }
         //important for safari & iphone browsers
         app.submit.dataset.has_apple_pay = !!window.ApplePaySession;
-    }
-
-    updateCartSummary() {
-        salla.cart.api.fetchFullSummary().then(res => this.updateCartPageInfo(res));
     }
 
     /**
@@ -71,7 +64,7 @@ class Cart extends BasePage {
                     btnSub      : btnSub,
                 };
                 app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
-                app.onClick(btnSub, () => this.subQty(quantity));
+                app.onClick(btnSub, () => this.reduceQuantity(quantity));
                 app.onClick(cartItem.querySelector('.btn--delete'), () => this.removeItem(itemId))
             });
     }
@@ -79,7 +72,7 @@ class Cart extends BasePage {
     /**
      * @param {HTMLElement} quantity
      */
-    subQty(quantity) {
+    reduceQuantity(quantity) {
         if (quantity.value <= 1) {
             return;
         }
@@ -182,6 +175,10 @@ class Cart extends BasePage {
 
             salla.api.coupon.add({id: app.pageData('id'), coupon: app.couponCode.value});
         });
+    }
+
+    updateCartSummary() {
+        salla.cart.api.fetchFullSummary().then(res => this.updateCartPageInfo(res));
     }
 
     showCouponError(message, isApplying = true) {
