@@ -7,14 +7,10 @@ import ProductOptions from './partials/product-options';
 window.fslightbox = Fslightbox;
 
 class Product extends BasePage {
-    onBoot() {
-        window.initProductDetails = this.initProductDetails;
-    }
-
     onReady() {
         this.initSliders();
         this.initShareAndFavoriteBtns();
-        ProductOptions();
+        new ProductOptions();
         app.watchElements({
             quantityInput: '#product-quantity',
             totalPrice   : '#total-price',
@@ -23,9 +19,11 @@ class Product extends BasePage {
     }
 
     registerEvents() {
-        app.onClick('#btn-show-more', ({target: btn}) => document.querySelectorAll('#moreContent').forEach(div => div.style = `max-height:${div.scrollHeight}px`) && btn.remove());
-        app.onClick('#btn-increase', () => app.quantityInput.value++ && this.qunatityChanged());
-        app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && this.qunatityChanged()));
+        //Workaround to fire data-on-change="product::get.price"
+        let qunatityChanged = () => salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
+        app.onClick('#btn-increase', () => app.quantityInput.value++ && qunatityChanged());
+        app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && qunatityChanged()));
+        app.onClick('#btn-show-more', e => app.all('#moreContent', div => div.style = `max-height:${div.scrollHeight}px`) || e.target.remove());
 
         salla.product.event.onPriceUpdated(res => {
             app.totalPrice.innerText = res.data.after;
@@ -39,24 +37,22 @@ class Product extends BasePage {
     }
 
     initSliders() {
-        let thumbSlider = new Slider('.thumbs-slider', {
-            spaceBetween       : 10,
-            slidesPerView      : 3,
-            freeMode           : true,
-            watchSlidesProgress: true,
-        });
-        let productImages = new Slider('.details-slider', {
+        let mini = new Slider('.mini', {spaceBetween: 10, slidesPerView: 3, freeMode: true, watchSlidesProgress: true});
+        let main = new Slider('.details-slider', {
             slidesPerView : 1,
             centeredSlides: true,
             spaceBetween  : 30,
-            thumbs        : {swiper: thumbSlider.getSlider()},
+            thumbs        : {swiper: mini.getSlider()},
         });
 
         //when clicking product option form type image, move slider to same image
-        app.onClick('.go-to-slide', ({target: item}) => productImages.slideTo(app.element(`[data-img-id *= "${item.dataset.imgId}"]`).dataset.slidIndex, 0));
+        app.onClick('.go-to-slide', e => main.slideTo(app.element(`[data-img-id*="${e.target.dataset.imgId}"]`).dataset.slidIndex, 0));
 
-        //usage in (similar-products.twig)
+        //used in (similar-products.twig)
         new Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
+
+        //used in (components/product/offer.twig)
+        new Slider('#offer-slider', {spaceBetween: 20, breakpoints: {640: {slidesPerView: 2, slidesPerGroup: 2}}});
     }
 
 
@@ -102,13 +98,6 @@ class Product extends BasePage {
                     delay     : anime.stagger(100)
                 }, '-=200');
         });
-    }
-
-    /**
-     * Workaround to fire data-on-change="product::get.price"
-     */
-    qunatityChanged() {
-        salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
     }
 }
 

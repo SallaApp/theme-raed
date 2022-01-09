@@ -101,7 +101,7 @@
                 </div>
 
                 {% if has_many_images %}
-                    <div thumbsSlider="" class="swiper thumbs-slider" id="thumbs-slider-{{ product.id }}">
+                    <div thumbsSlider="" class="swiper thumbs-slider mini" id="thumbs-slider-{{ product.id }}">
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
                                 <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
@@ -345,5 +345,6 @@
 {% endblock %}
 
 {% block scripts %}
+    <script defer src="{{ asset('dist/filepond.js') }}"></script>
     <script src="{{ asset('dist/product.js') }}"></script>
 {% endblock %}
