@@ -74,7 +74,7 @@ class Profile extends BasePage {
     }
 
     appendAvtar() {
-        /** @type {FilePond} */
+        /** @type {FileUploader} */
         let avatarFilepond = this.avatarFilepond;
         window.appendAvtar = function handleFile(formData, that, event) {
             let filepondFile = avatarFilepond.getFile();

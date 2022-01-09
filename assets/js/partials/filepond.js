@@ -109,8 +109,15 @@ class FileUploader {
     /**
      * @return {FilePond}
      */
-    getFile() {
+    getFilepond() {
         return this.fileponds[0];
+    }
+
+    /**
+     * @return {FilePond}
+     */
+    getFile() {
+        return this.getFilepond()?.getFile();
     }
 }
 
