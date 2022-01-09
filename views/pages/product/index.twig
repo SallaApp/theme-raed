@@ -15,67 +15,65 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <main id="main">
-        <div class="container mb-10 md:mb-20">
-            <nav class="w-full py-5">{% component 'header.breadcrumbs' %}</nav>
-            <div class="flex items-start flex-col md:flex-row">
-                <div class="main-content flex-1 md:pb-20 ">
-                    <div class="mb-5 md:flex justify-between items-center">
-                        <h2 class="font-bold mb-6 md:mb-0">{{ page.title|raw }}</h2>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                {% if sort_list|length %}
-                                    <div class="flex items-center">
-                                        <label class="hidden sm:block me-3"
-                                               for="productFilter">{{ trans('pages.categories.sorting') }}</label>
-                                        <select id="productFilter"
-                                                class="appearance-none form-input focus:ring-transparent
+    <div class="container mb-10 md:mb-20">
+        <nav class="w-full py-5">{% component 'header.breadcrumbs' %}</nav>
+        <div class="flex items-start flex-col md:flex-row">
+            <div class="main-content flex-1 md:pb-20 ">
+                <div class="mb-5 md:flex justify-between items-center">
+                    <h2 class="font-bold mb-6 md:mb-0">{{ page.title|raw }}</h2>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            {% if sort_list|length %}
+                                <div class="flex items-center">
+                                    <label class="hidden sm:block me-3"
+                                           for="productFilter">{{ trans('pages.categories.sorting') }}</label>
+                                    <select id="productFilter"
+                                            class="appearance-none form-input focus:ring-transparent
                                                        focus:outline-none h-10 text-sm rounded-md  border
                                                        border-border-color w-48 pt-0 pb-1">
-                                            {% for key,value in sort_list %}
-                                                <option value="{{key}}" {{sort_by==key?'selected':''}}>{{ value }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                {% endif %}
-                                <div class="hidden {# md:flex #} items-center ms-2 md:ms-2">
-                                    <a href="#" data-type="grid"
-                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
+                                        {% for key,value in sort_list %}
+                                            <option value="{{ key }}" {{ sort_by==key?'selected':'' }}>{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
+                            <div class="hidden {# md:flex #} items-center ms-2 md:ms-2">
+                                <a href="#" data-type="grid"
+                                   class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
                                               rounded-md flex items-center justify-center
                                               bg-border-color text-primary">
-                                      <i class="sicon-grid"></i>
-                                    </a>
-                                    <a href="#" data-type="list"
-                                       class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
+                                    <i class="sicon-grid"></i>
+                                </a>
+                                <a href="#" data-type="list"
+                                   class="grid-trigger cursor-pointer mx-1 text-xl w-10 h-10
                                               rounded-md flex items-center justify-center
                                               text-gray-400">
-                                       <i class="sicon-list"></i>
-                                    </a>
-                                </div>
+                                    <i class="sicon-list"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    {% if products|length %}
-                        <div class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6 md:grid-cols-auto-fill">
-                            {% for product in products %}
-                                {% include 'pages.partials.product.card' %}
-                            {% endfor %}
-                        </div>
-                        {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
-                    {% else %}
-						<div class="h-full content-placeholder content-placeholder--category text-gray-400 pt-36 pb-20 flex items-center flex-col justify-center">
+                </div>
+                {% if products|length %}
+                    <div class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6 md:grid-cols-auto-fill">
+                        {% for product in products %}
+                            {% include 'pages.partials.product.card' %}
+                        {% endfor %}
+                    </div>
+                    {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
+                {% else %}
+                    <div class="h-full content-placeholder content-placeholder--category text-gray-400 pt-36 pb-20 flex items-center flex-col justify-center">
 							<span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
 								<i class="sicon-inbox text-6xl block text-reverse-dark"></i>
 							</span>
-							<p class="text-sm mb-5"><span>{{ trans('pages.categories.no_products') }}</span>
-                                {{ page.title|raw }}</p>
-                        </div>
+                        <p class="text-sm mb-5"><span>{{ trans('pages.categories.no_products') }}</span>
+                            {{ page.title|raw }}</p>
+                    </div>
 
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
         </div>
-    </main>
+    </div>
 {% endblock %}
 
 {% block scripts %}

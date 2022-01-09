@@ -1,14 +1,14 @@
-import BasePage from './basePage';
+import BasePage from './base-page';
 
-class Brand extends BasePage {
+class ThankYou extends BasePage {
     onReady() {
         this.initiateForm();
-        this.anime('.thanks-item', {translateX: [20, 0]});
+        app.anime('.thanks-item', {translateX: [20, 0]});
         salla.cart.event.clearCartSummary();
     }
 
     registerEvents() {
-        salla.document.event.onClick('.copy-btn', ({target: {dataset: {selector}}}) => this.copyToClipboard(selector));
+        salla.document.event.onClick('.copy-btn', ({target: {dataset: {selector}}}) => app.copyToClipboard(selector));
         salla.document.event.onClick('#btn-open-order', this.btnActionOpenOrder);
     }
 
@@ -51,4 +51,4 @@ class Brand extends BasePage {
     }
 }
 
-new Brand;
+new ThankYou;

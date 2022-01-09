@@ -1,28 +1,21 @@
-import BasePage from './basePage';
-import Coupon from './partials/coupon';
+import BasePage from './base-page';
 import ProductOptions from './partials/product-options';
 
-/**
- * These are watched in Coupon initiateCoupon() method
- * @see Coupon
- * @property {HTMLElement} couponCode
- * @property {HTMLElement} couponBtn
- * @property {HTMLElement} couponError
- *
- * @property {HTMLElement} submit
- * @property {HTMLElement} freeShipping
- * @property {HTMLElement} subTotal
- * @property {HTMLElement} totalDiscount
- * @property {HTMLElement} shippingCost
- */
 class Cart extends BasePage {
     onReady() {
         this.initiateSubmit();
         this.initiateCartItems();
-        this.anime('.free-shipping,.shipping-item', {translateX: [-20, 0]});
-        this.watchElements({subTotal: '#sub-total', totalDiscount: '#total-discount', shippingCost: '#shipping-cost'});
+        app.anime('.free-shipping,.shipping-item', {translateX: [-20, 0]});
+        app.watchElements({
+            couponCode   : '#coupon',
+            couponBtn    : '#btn-add-coupon',
+            couponError  : '#coupon-error',
+            subTotal     : '#sub-total',
+            totalDiscount: '#total-discount',
+            shippingCost : '#shipping-cost',
+        });
+        this.initiateCoupon();
         ProductOptions();
-        Coupon();
     }
 
     registerEvents() {
@@ -30,13 +23,13 @@ class Cart extends BasePage {
     }
 
     initiateSubmit() {
-        this.watchElement('submit', '#btn-submit');
-        if (!this.submit) {
+        app.watchElement('submit', '#btn-submit');
+        if (!app.submit) {
             salla.cart.event.clearCartSummary();
             throw 'Stopping processing JS logic, because there is no items, or summary.'
         }
         //important for safari & iphone browsers
-        this.submit.dataset.has_apple_pay = !!window.ApplePaySession;
+        app.submit.dataset.has_apple_pay = !!window.ApplePaySession;
     }
 
     updateCartSummary() {
@@ -48,12 +41,12 @@ class Cart extends BasePage {
      */
     updateCartPageInfo(res) {
         res.data.items?.forEach(item => this.updateItemInfo(item));
-        this.anime('.shipping-item', {translateX: [-10, 0]});
-        this.subTotal.innerText = res.data.sub_total;
-        this.toggleElement(this.totalDiscount, 'discounted', 'hidden', () => res.data.total_discount)
-            .toggleElement(this.shippingCost, 'has_shipping', 'hidden', () => res.data.shipping_cost);
-        this.totalDiscount.querySelector('b').innerText = '- ' + res.data.total_discount;
-        this.shippingCost.querySelector('b').innerText = res.data.shipping_cost;
+        app.anime('.shipping-item', {translateX: [-10, 0]});
+        app.subTotal.innerText = res.data.sub_total;
+        app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => res.data.total_discount)
+            .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => res.data.shipping_cost);
+        app.totalDiscount.querySelector('b').innerText = '- ' + res.data.total_discount;
+        app.shippingCost.querySelector('b').innerText = res.data.shipping_cost;
     }
 
     // ========================== Cart Items ========================== //
@@ -65,7 +58,7 @@ class Cart extends BasePage {
                     btnAdd = cartItem.querySelector('.add-qty'),
                     btnSub = cartItem.querySelector('.sub-qty'),
                     quantity = cartItem.querySelector('.item-quantity');
-                this.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target))
+                app.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target))
                 this.items[itemId] = {
                     item        : cartItem,
                     total       : cartItem.querySelector('.item-total'),
@@ -77,9 +70,9 @@ class Cart extends BasePage {
                     btnAdd      : btnAdd,
                     btnSub      : btnSub,
                 };
-                this.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
-                this.onClick(btnSub, () => this.subQty(quantity));
-                this.onClick(cartItem.querySelector('.btn--delete'), () => this.removeItem(itemId))
+                app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
+                app.onClick(btnSub, () => this.subQty(quantity));
+                app.onClick(cartItem.querySelector('.btn--delete'), () => this.removeItem(itemId))
             });
     }
 
@@ -100,7 +93,7 @@ class Cart extends BasePage {
      * @param {HTMLElement} quantity
      */
     qunatityChanged(quantity) {
-        this.debounce(() => salla.document.event.fireEvent(quantity, 'change', {'bubbles': true}));
+        app.debounce(() => salla.document.event.fireEvent(quantity, 'change', {'bubbles': true}));
     }
 
     removeItem(itemId) {
@@ -132,7 +125,7 @@ class Cart extends BasePage {
         let cartItem = this.items[item.id];
         cartItem.total.innerText = item.display_total_price;
 
-        this.toggleElement(cartItem.offer, 'offer-applied', 'hidden', () => item.has_special_price)
+        app.toggleElement(cartItem.offer, 'offer-applied', 'hidden', () => item.has_special_price)
             .toggleElement(cartItem.offerIcon, 'offer-applied', 'hidden', () => item.has_special_price)
             .toggleElement(cartItem.productPrice, 'offer-applied', 'hidden', () => item.has_special_price)
             .toggleElement(cartItem.price, 'text-theme-red', 'text-sm text-gray-400', () => item.has_special_price);
@@ -142,6 +135,58 @@ class Cart extends BasePage {
         }
         cartItem.price.innerText = item.display_price;
         cartItem.offer.innerText = item.offer.names;
+    }
+
+
+    //=================== Coupon Method ========================//
+    initiateCoupon() {
+        salla.coupon.event.onAdded(res => {
+            app.couponCode.setAttribute('disabled', true);
+            app.toggleElement(app.couponBtn, 'btn-default', 'btn-danger', () => false)
+                .hideElement(app.couponBtn.querySelector('span'))
+                .showElement(app.couponBtn.querySelector('i'))
+                .removeClass(app.couponCode, 'has-error');
+            app.couponError.innerText = '';
+            app.updateCartSummary();
+        });
+
+        salla.coupon.event.onRemoved(res => {
+            app.couponCode.removeAttribute('disabled');
+            app.couponCode.value = '';
+            app.toggleElement(app.couponBtn, 'btn-default', 'btn-danger', () => true)
+                .hideElement(app.couponBtn.querySelector('i'))
+                .showElement(app.couponBtn.querySelector('span'))
+                .removeClass(app.couponCode, 'has-error');
+            app.couponError.innerText = '';
+            app.updateCartSummary();
+        });
+
+        salla.coupon.event.onAddedFailed(err => this.showCouponError(err.response.data.error.message));
+        salla.coupon.event.onRemovedFailed(err => this.showCouponError(err.response.data.error.message, false));
+        app.onKeyUp(app.couponCode, event => {
+            event.keyCode === 13 && app.couponBtn.click();
+            app.couponError.value = '';
+            app.removeClass(app.couponCode, 'has-error');
+        });
+        app.onClick(app.couponBtn, event => {
+            event.preventDefault();
+            //if it's remove coupon, will have `btn-danger` class
+            if (app.couponBtn.classList.contains('btn-danger')) {
+                return salla.api.coupon.remove(app.pageData('id'));
+            }
+
+            if (!app.couponCode.value.length) {
+                this.showCouponError('* ' + salla.lang.get('pages.checkout.enter_coupon'));
+                return;
+            }
+
+            salla.api.coupon.add({id: app.pageData('id'), coupon: app.couponCode.value});
+        });
+    }
+
+    showCouponError(message, isApplying = true) {
+        app.couponError.innerText = message || salla.lang.get('pages.checkout.error_occurred');
+        isApplying ? app.addClass(app.couponCode, 'has-error') : null;
     }
 }
 

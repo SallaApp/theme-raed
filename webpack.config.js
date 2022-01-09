@@ -6,25 +6,19 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
 module.exports = {
     entry  : {
-        app          : ['./assets/styles/app.scss', './assets/js/app.js'],
-        blog         : './assets/js/blog/index.js',
-        blog_single  : './assets/js/blog/single.js',
-        brand        : './assets/js/brands/single.js',
-        brands       : './assets/js/brands/index.js',
-        cart         : './assets/js/cart.js',
-        index        : './assets/js/index.js',
-        notifications: './assets/js/customer/notifications.js',
-        order        : './assets/js/customer/orders/single.js',
-        orders       : './assets/js/customer/orders/index.js',
-        page         : './assets/js/page.js',
-        product      : './assets/js/product/single.js',
-        products     : './assets/js/product/index.js',
-        profile      : './assets/js/customer/profile.js',
-        thankyou     : './assets/js/thankyou.js',
-        wishlist     : './assets/js/customer/wishlist.js',
+        app     : ['./assets/styles/app.scss', './assets/js/app.js'],
+        home    : './assets/js/home.js',
+        checkout: ['./assets/js/cart.js', './assets/js/thankyou.js'],
+        pages   : ['./assets/js/blog.js', './assets/js/brands.js',],
+        products: ['./assets/js/product.js', './assets/js/products-list.js',],
+        customer: [
+            './assets/js/profile.js',
+            './assets/js/wishlist.js',
+            './assets/js/order.js',
+        ],
 
         //plugins
-        filepond : './assets/styles/filepond.scss',
+        filepond : ['./assets/styles/filepond.scss', './assets/js/partials/filepond.js'],
         flatpickr: './assets/styles/main_inc/plugins/flatpicker.scss',
 
         //fonts
