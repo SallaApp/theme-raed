@@ -22,6 +22,12 @@
 				<label for="verify-mobile-field " class="block mb-4 text-center text-sm">{{ trans('pages.profile.verify_placeholder') }}</label>
 				{# <input type="text" id="verify-mobile-field" name="code" maxlength="4" data-digits class="form-control center verify input-verify_code" required> #}
 				<input type="hidden" id="verify-mobile-field" name="code" maxlength="4" data-digits required>
+				<input type="hidden" name="type" value="mobile"  required>
+                
+                <input type="hidden" name="phone" value="{{ international_mobile }}">
+                <input type="hidden" name="country_code" value="{{ _country_iso2 }}">
+                <input type="hidden" name="country_key" value="+966">
+
 				<div class="flex justify-between mb-5 space-s-2" dir="ltr">
 					{% for i in [1,2,3,4] %}
 						<input type="text" maxlength="1" class="otp-input font-bold appearance-none text-lg form-input h-10 rounded-md text-center" required/>
@@ -29,12 +35,15 @@
 				</div>
 			</div>
 			<div class="form-group align-center">
-				<button type="submit" id="verify-mobile-btn" class="w-full btn btn-primary mb-5 h-10submit-btn" disabled>
+				<button type="submit" id="verify-mobile-btn"  class="w-full btn btn-primary mb-5 h-10submit-btn" disabled>
 					<span class="loader loader--small"></span>
 					<span class="transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('pages.profile.verify') }}</span>
 				</button>
-				<p class="text-center text-xs text-gray-400 mb-3"> إعادة الارسال بعد 01:00</p>
-				<a href="#" class="text-sm text-primary block text-center">
+				<p id="resend-message" class="text-center text-gray-400">
+                إعادة الارسال بعد
+                <b  class="text-gray-700 mx-1" id="resend-timer"></b>
+                </p>
+				<a href="#" id="resend-link" data-on-click="auth::login" class="hidden text-sm text-primary text-center">
 					إعادة إرسال
 				</a>
 			</div>

@@ -4,7 +4,7 @@ import TelInput from "intl-tel-input";
 
 class Profile extends BasePage {
     onReady() {
-        Flatpickr('.date-element', {"dateFormat": "Y-m-d"});
+        Flatpickr('.date-element', { "dateFormat": "Y-m-d" });
         this.initiateProfileImage();
         this.initiateVerifyOTP();
         this.appendAvtar();
@@ -13,19 +13,19 @@ class Profile extends BasePage {
 
     initiateProfileImage() {
         this.avatarFilepond = new FileUploader('#profile_img', {
-            labelIdle                     : document.querySelector('html').getAttribute('dir') === 'rtl'
+            labelIdle: document.querySelector('html').getAttribute('dir') === 'rtl'
                 ? '<span class="avatar-placeholder flex justify-center items-center flex-col"><span class="sicon-user"></span><span class="text">اختر صورة مناسبة</span></span>'
                 : '<span class="avatar-placeholder flex justify-center items-center flex-col"><span class="sicon-user"></span><span class="text">Choose your image</span></span>',
-            instantUpload                 : false,
-            multiple                      : false,
-            imagePreviewHeight            : 80,
-            imageCropAspectRatio          : '1:1',
-            imageResizeTargetWidth        : 200,
-            imageResizeTargetHeight       : 200,
-            stylePanelLayout              : 'compact circle',
-            styleLoadIndicatorPosition    : 'center bottom',
+            instantUpload: false,
+            multiple: false,
+            imagePreviewHeight: 80,
+            imageCropAspectRatio: '1:1',
+            imageResizeTargetWidth: 200,
+            imageResizeTargetHeight: 200,
+            stylePanelLayout: 'compact circle',
+            styleLoadIndicatorPosition: 'center bottom',
             styleProgressIndicatorPosition: 'center center',
-            styleButtonRemoveItemPosition : 'center bottom',
+            styleButtonRemoveItemPosition: 'center bottom',
             styleButtonProcessItemPosition: 'center bottom',
         });
         let btn = app.element('#update-profile-btn');
@@ -38,6 +38,7 @@ class Profile extends BasePage {
     // otp
     initiateVerifyOTP() {
         salla.event.on('profile::verify.mobile', () => {
+            this.resendTimer();
             this.otpInputs = document.querySelectorAll('.otp-input');
             this.otpInputs[0].focus();
             app.onClick('#verify-mobile-btn', event => event.target.classList.add('btn--is-loading'));
@@ -58,6 +59,18 @@ class Profile extends BasePage {
                 this.toggelOTPSubmit();
                 setTimeout(() => event.target.focus(), 100);
             });
+
+
+            // After send code
+            salla.event.on('stores::profile.updated', () => {
+                window.location.reload();
+            })
+
+            salla.event.on('document::request.failed', () => {
+                app.element('#verify-mobile-btn').classList.remove('btn--is-loading');
+            })
+
+
         })
     }
 
@@ -71,6 +84,32 @@ class Profile extends BasePage {
         otp.length == 4
             ? btn?.removeAttribute('disabled')
             : btn?.setAttribute('disabled', '');
+
+        if (otp.length == 4) {
+            btn.click();
+        }
+    }
+
+    resendTimer() {
+        app.element('#resend-message').style.display = 'block'
+        app.element('#resend-link').style.display = 'none'
+        let resendAfter = 30;
+        let timerId = setInterval(() => {
+            if (resendAfter == -1) {
+                clearTimeout(timerId);
+                app.element('#resend-message').style.display = 'none'
+                app.element('#resend-link').style.display = 'block'
+            } else {
+                app.element('#resend-timer').innerHTML = `${resendAfter >= 10 ? resendAfter : '0' + resendAfter} : 00`
+                resendAfter--
+            }
+        }, 1000);
+
+
+        // TODO: @jamal - change event to suceess case
+        salla.event.auth.onCodeNotSent(() => {
+            this.resendTimer()
+        })
     }
 
     appendAvtar() {
@@ -91,12 +130,12 @@ class Profile extends BasePage {
         document.querySelectorAll('.tel-input').forEach(intlInput => {
             salla.helpers.digitsOnly(intlInput);
             let iti = TelInput(intlInput, {
-                initialCountry    : intlInput.dataset.code || 'sa',
+                initialCountry: intlInput.dataset.code || 'sa',
                 preferredCountries: ['sa', 'ae', 'kw', 'bh', 'qa', 'iq', 'om', 'ye', 'eg', 'jo', 'sy', 'ps', 'sd', 'lb', 'dz', 'tn', 'ma', 'ly'],
-                formatOnDisplay   : false,
-                separateDialCode  : true,
-                autoPlaceholder   : 'aggressive',
-                utilsScript       : 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.min.js',
+                formatOnDisplay: false,
+                separateDialCode: true,
+                autoPlaceholder: 'aggressive',
+                utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.min.js',
             });
             intlInput.addEventListener("countrychange", () => {
                 let data = iti.getSelectedCountryData();
