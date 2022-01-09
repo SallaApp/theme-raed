@@ -24,7 +24,7 @@ class FileUploader {
         let elements = typeof input == 'object' ? [input] : document.querySelectorAll(input);
         //return latest filepond instance
         this.fileponds = [];
-        elements.forEach(input => thisinitFilepond(input, options));
+        elements.forEach(input => this.initFilepond(input, options));
     }
 
     /**

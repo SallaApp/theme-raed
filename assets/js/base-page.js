@@ -2,6 +2,14 @@ class BasePage {
     constructor() {
         //
     }
+
+    onReady() {
+        //
+    }
+
+    registerEvents() {
+        //
+    }
 }
 
 BasePage.allowedPages = [];//override it on the class;
@@ -32,8 +40,8 @@ BasePage.intiateWhenReady = function () {
                 return;
             }
             window.pageClass = new this;
-            pageClass.onReady && pageClass.onReady();
-            pageClass.registerEvents && pageClass.registerEvents();
+            pageClass.onReady();
+            pageClass.registerEvents();
             app.log(`${this.className} Loaded🎉`);
         });
     });

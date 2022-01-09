@@ -37,7 +37,9 @@
 | product.brand.name         | string                      |                                                                  |
 | product.brand.logo         | string                      |                                                                  |
 | product.comments           | Feedback[] *Paginator       | @see views/components/page-comments.twig                         |
-| product.tags               | Tags[] *Collection          | @see views/pages/tag.twig                                        |
+| product.tags               | ?Tags[] *Collection         |                                                                  |
+| product.tags[].name        | string                      |                                                                  |
+| product.tags[].url         | string                      |                                                                  |
 | product.options            | ProductOption[] *Collection | @see views/pages/partials/product/options.twig                   |
 | product.donation           | ?ProductDonation            | @see views/components/product/donation-progress-bar.twig         |
 | product.show_read_more     | bool                        |                                                                  |
@@ -220,7 +222,17 @@
                     {% endif %}
                 </div>
 
-                {% component 'product.tags' with {product: product} %}
+                {% if product.tags|length %}
+                    <div class="mb-4">
+                        {% for tag in product.tags %}
+                            <a href="{{ tag.url }}"
+                               class="me-2.5 bg-white  py-2.5 px-4 rounded-large inline-flex items-center text-dark hover:text-primary justify-center text-sm mb-2.5">
+                                <i class="font-medium sicon-tag me-1.5 text-md"></i>
+                                <span class="fix-align">{{ tag.name }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
                 <div class="grid gap-5 mb-5">
                     {% hook 'product:after-description' %}
