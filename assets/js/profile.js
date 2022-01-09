@@ -109,4 +109,6 @@ class Profile extends BasePage {
     }
 }
 
-new Profile;
+Profile.className = 'Profile';
+Profile.allowedPages = ['store.myprofile'];
+Profile.intiateWhenReady();

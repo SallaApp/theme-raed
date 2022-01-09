@@ -160,4 +160,6 @@ class Order extends BasePage {
 
 }
 
-new Order;
+Order.className = 'Order';
+Order.allowedPages = ['store.my_order'];
+Order.intiateWhenReady();

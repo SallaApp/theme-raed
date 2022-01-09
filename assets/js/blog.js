@@ -27,4 +27,6 @@ class Blog extends BasePage {
     }
 }
 
-new Blog;
+Blog.className = 'Blog';
+Blog.allowedPages = ['blog.article.index'];
+Blog.intiateWhenReady();

@@ -88,4 +88,6 @@ class Home extends BasePage {
     }
 }
 
-new Home
+Home.className = 'Home';
+Home.allowedPages = ['store.home'];
+Home.intiateWhenReady();

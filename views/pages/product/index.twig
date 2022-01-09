@@ -55,9 +55,9 @@
                     </div>
                 </div>
                 {% if products|length %}
-                    <div class="mb-8 products-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6 md:grid-cols-auto-fill">
+                    <div class="mb-8 products-container list-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6 md:grid-cols-auto-fill" data-auto-load>
                         {% for product in products %}
-                            {% include 'pages.partials.product.card' %}
+                            {% include 'pages.partials.product.card' with{block_classes:'list-block'} %}
                         {% endfor %}
                     </div>
                     {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
@@ -74,8 +74,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block scripts %}
-    <script src="{{ asset('dist/products.js') }}"></script>
 {% endblock %}

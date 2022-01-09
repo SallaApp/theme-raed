@@ -112,4 +112,6 @@ class Product extends BasePage {
     }
 }
 
-new Product;
+Product.className = 'Product';
+Product.allowedPages = ['product.show', 'product.showWithSlug'];
+Product.intiateWhenReady();

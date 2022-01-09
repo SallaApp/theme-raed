@@ -51,4 +51,6 @@ class ThankYou extends BasePage {
     }
 }
 
-new ThankYou;
+ThankYou.className = 'ThankYou';
+ThankYou.allowedPages = ['store.thankyou'];
+ThankYou.intiateWhenReady();

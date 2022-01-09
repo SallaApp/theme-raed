@@ -10,7 +10,7 @@ module.exports = {
         home    : './assets/js/home.js',
         checkout: ['./assets/js/cart.js', './assets/js/thankyou.js'],
         pages   : ['./assets/js/blog.js', './assets/js/brands.js',],
-        products: ['./assets/js/product.js', './assets/js/products-list.js',],
+        product : './assets/js/product.js',
         customer: [
             './assets/js/profile.js',
             './assets/js/wishlist.js',

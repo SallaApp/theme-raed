@@ -1,16 +1,22 @@
 class BasePage {
     constructor() {
-        window.page = this;
-        document.addEventListener('DOMContentLoaded', () => this.loadApp().then(() => this.onReady() || this.registerEvents() || app.log('Page Class Loaded🎉')));
+        //
     }
+}
 
-    loadApp() {
+BasePage.allowedPages = [];//override it on the class;
+BasePage.className = 'BasePage';//override it on the class;
+
+/**
+ * Because we merged multi classes into one file, there is no need to initiate all of them
+ */
+BasePage.intiateWhenReady = function () {
+    document.addEventListener('DOMContentLoaded', () => {
         let tries = 0, inerval;
         //check if theme app is initiated each 0.1 sec for one sec otherwise don't load current page class
-        return new Promise((resolve, reject) =>
+        (new Promise((resolve, reject) =>
             inerval = setInterval(function () {
                 if (window.app && window.app.isThemeApp) {
-                    app.log('Loading Page Class...');
                     resolve(true);
                     clearInterval(inerval);
                 }
@@ -20,20 +26,17 @@ class BasePage {
                 }
                 tries++;
             }, 100)
-        );
-    }
-
-    /**
-     * For Overriding
-     */
-    onReady() {
-    }
-
-    /**
-     * For Overriding
-     */
-    registerEvents() {
-    }
+        )).then(() => {
+            if (!this.allowedPages.includes(app.pageData('name'))) {
+                app.log(this.className + ' Skiped.');
+                return;
+            }
+            window.pageClass = new this;
+            pageClass.onReady && pageClass.onReady();
+            pageClass.registerEvents && pageClass.registerEvents();
+            app.log(`${this.className} Loaded🎉`);
+        });
+    });
 }
 
 export default BasePage;

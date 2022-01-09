@@ -8,7 +8,7 @@ class App extends salla.AppHelpers {
     constructor() {
         super();
         this.isThemeApp = true;//to make sure that window.app, is this class
-        this.registerWindowProperties();
+        window.app = this;
         salla.onReady(() => this.loadTheApp());
     }
 
@@ -25,13 +25,7 @@ class App extends salla.AppHelpers {
         return salla.config.is_user;
     }
 
-    registerWindowProperties() {
-        window.app = this;
-    }
-
     loadTheApp() {
-        this.log('Initiating...');
-
         this.initiateNotifier();
         this.initiateLazyLoad();
         this.initiateMobileMenu();
@@ -42,13 +36,29 @@ class App extends salla.AppHelpers {
         this.initiateDropdowns();
         this.initiateModals();
         this.initiateComments();
+        this.initiateInfiniteScroll();
 
         salla.currency.event.onChanged(() => window.location.reload());
         this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading'));
         salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
         this.anime('.anime-count', {scale: [0.5, 1]});
+        this.onClick('#productFilter', event => {
+            let url = window.location.href.replace(/([?;&])by[^&;]*[;&]?/g, "$1").replace(/&$/, '');
+            url += (url.includes('?') ? "&" : "?") + (event.target.value ? "by=" + event.target.value : '');
 
-        this.log('Loaded 🎉');
+            window.location.href = url.replace(/&$|\?$/, '');
+        });
+
+        // this.onClick('.grid-trigger', event => {
+        //     event.preventDefault();
+        //     let type = event.target.dataset.type;//list|grid
+        //
+        //     this.toggle('.grid-trigger', 'bg-border-color text-primary', 'text-gray-400', e => e.dataset.type === type)
+        //         .toggle('.products-container', 'list md:grid-cols-1', 'md:grid-cols-auto-fill', () => type === 'list');
+        //     this.anime('.product-entry', {duration: 1200, translateY: [20, 0]});
+        // });
+
+        this.log('App Loaded 🎉');
     }
 
     log(message) {
@@ -239,25 +249,25 @@ class App extends salla.AppHelpers {
     }
 
     initiateComments() {
-        //infiniteScroll (Load more comments)
-        salla.infiniteScroll.initiate('.comments-container', '.comment-block', {
-            history        : false,
-            scrollThreshold: false
-        });
         //Add Loading when adding new comment
         let btn = document.getElementById('add-new-comment-btn');
         if (!btn) {
             return;
         }
-        let input = document.querySelector('textarea[name="ask_textarea"]');
+        let input = this.element('textarea[name="ask_textarea"]');
         this.onClick(btn, () => input.value.length >= 3 ? btn.classList.add('btn--has-loading', 'pointer-events-none') : input.classList.add('!border-red-400'));
         this.onKeyUp(input, () => input.classList.remove('!border-red-400'));
-        salla.comment.event.onAdded(btn.classList.remove('btn--is-loading', 'pointer-events-none'))
-        salla.comment.event.onAdditionFailed(btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+        salla.comment.event.onAdded(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+        salla.comment.event.onAdditionFailed(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
     }
 
     initiateInfiniteScroll() {
-        salla.infiniteScroll.initiate('.list-container', '.list-item', {history: false, scrollThreshold: false});
+        let container = this.element('.list-container');
+        if (!container) {
+            return;
+        }
+        let options = ['', 'true'].includes(container.dataset.autoLoad) ? {} : {history: false, scrollThreshold: false};
+        salla.infiniteScroll.initiate('.list-container', '.list-block', options);
     }
 }
 

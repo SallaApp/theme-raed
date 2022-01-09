@@ -149,7 +149,6 @@ Anime.addToCart = function (response, productId) {
     document.querySelectorAll('.cart-thumb').forEach(el => el.remove());
     let
         cartBtn = document.querySelector('#main-cart-btn .cart-icon'),
-        cartThumb = document.querySelector('.cart-thumb'),
         btnOffset = cartBtn.getBoundingClientRect(),
         btnTop = btnOffset.top + window.scrollY,
         btnLeft = btnOffset.left + window.scrollX;
@@ -172,6 +171,7 @@ Anime.addToCart = function (response, productId) {
     img.style = "object-fit:cover; width:" + width + '; height:' + height + '; top:' + top + 'px; left:' + left + 'px;';
     document.body.append(img);
 
+    let cartThumb = document.querySelector('.cart-thumb');
     cartBtn.classList.remove('animated', 'rubberBand');
 
     // start timeline ---

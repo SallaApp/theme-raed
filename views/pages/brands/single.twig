@@ -61,9 +61,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="md:grid-cols-auto-fill mb-8 products-container list-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6">
+                    <div class="md:grid-cols-auto-fill mb-8 products-container list-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6" data-auto-load>
                         {% for product in products %}
-                            {% include 'pages.partials.product.card' with {block_classes:'list-item'} %}
+                            {% include 'pages.partials.product.card' with {block_classes:'list-block'} %}
                         {% endfor %}
                     </div>
                     {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
@@ -81,8 +81,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block scripts %}
-    <script defer src="{{ asset('dist/pages.js') }}"></script>
 {% endblock %}
