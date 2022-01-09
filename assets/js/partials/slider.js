@@ -30,6 +30,13 @@ export default class Slider {
         return this.getSlider().on(...data);
     }
 
+    /**
+     * @return {NavigationMethods}
+     */
+    navigation() {
+        return this.getSlider().navigation;
+    }
+
     initSlider(slider, options) {
         let sliderId;
         if (!(sliderId = slider.dataset.id || slider.id)) {

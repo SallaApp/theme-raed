@@ -15,7 +15,7 @@ class Cart extends BasePage {
             shippingCost : '#shipping-cost',
         });
         this.initiateCoupon();
-        ProductOptions();
+        new ProductOptions();
     }
 
     registerEvents() {

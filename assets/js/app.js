@@ -221,7 +221,7 @@ class App extends salla.AppHelpers {
         let wishlist = localStore.get("salla-wishlist", []);
         isAdded ? wishlist.push(id) : wishlist.splice(wishlist.indexOf(id), 1);
         localStore.set("salla-wishlist", wishlist);
-        toggalFavorites(id, isAdded);
+        this.toggalFavorites(id, isAdded);
     }
 
     toggalFavorites(id, isAdded) {
