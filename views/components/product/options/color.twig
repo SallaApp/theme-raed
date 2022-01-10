@@ -1,12 +1,14 @@
 {#
 | Variable   | Type          | Description                                             |
 |------------|---------------|---------------------------------------------------------|
-| option     | ProductOption | @see views/pages/partials/product/elements.twig         |
+| option     | ProductOption | @see views/pages/partials/product/options.twig          |
 | attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `       |
 | disabled   | bool          |                                                         |
 | required   | bool          |                                                         |
 | value      | ?string       |                                                         |
+| key_prefix | ?string       |                                                         |
 #}
+
 <div class="custom-radios custom-radios--rounded">
     {% for detail in option.details %}
         <div class="me-8 mb-5">
@@ -18,9 +20,9 @@
                     name="options[{{ option.id }}]"
                     value="{{ detail.id }}"
                     required
-                    id="color_option_{{ detail.id }}-{{ product.id }}"
+                    id="color_option_{{ detail.id }}-{{ key_prefix }}"
                     type="radio"/>
-            <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ product.id }}">
+            <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ key_prefix }}">
                 <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
                 <p class="text-sm text-gray-400">{{ detail.name }}</p>
                 {% if detail.is_out %}
