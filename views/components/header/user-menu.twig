@@ -51,27 +51,26 @@
 {% elseif user %}
 
     <div class="dropdown-toggler inline-flex items-center lg:h-full w-10 mx-1 md:mx-2 text-gray-500 absolute top-[-47px] end-8 lg:static">
-        <button  aria-label="User Menu Trigger" type="button"
+        <button aria-label="User Menu Trigger" type="button"
                 class="dropdown__trigger border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
             <img class="h-10 w-10 object-cover pointer-events-none" src="{{ user.avatar }}" alt="">
         </button>
-        <div 
-          class="dropdown__menu origin-top-right inset-top-shadow duration-200 transition-all scale-y-90 absolute opacity-0 -translate-y-4 invisible rtl:left-0 ltr:right-0 z-30 w-80 lg:w-56 rounded-t-md lg:rounded-t-none rounded-b-md shadow-default bg-white dark:bg-gray-700 top-full after:border-t {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white '}} {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}"
-          role="menu" 
-          aria-orientation="vertical" 
-          aria-labelledby="menu-button"
-          tabindex="-1">
+        <div class="dropdown__menu origin-top-right inset-top-shadow duration-200 transition-all scale-y-90 absolute opacity-0 -translate-y-4 invisible rtl:left-0 ltr:right-0 z-30 w-80 lg:w-56 rounded-t-md lg:rounded-t-none rounded-b-md shadow-default bg-white dark:bg-gray-700 top-full after:border-t {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }} {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="menu-button"
+            tabindex="-1">
 
             <div class="flex items-center p-4 border-b mb-1 lg:hidden relative">
-              <img class="h-12 w-12 rounded-full object-cover pointer-events-none me-3" src="{{ user.avatar }}" alt="">
-              <div>
-                <span>{{'مرحباً'}}</span>
-                <p class="text-gray-700 font-bold text-lg">{{user.full_name}}</p>
-              </div>
-              <button class="dropdown__close h-12 w-12 text-red-500 text-2xl rounded-full absolute top-2 end-1 z-50">
-                <i class="sicon-cancel pointer-events-none"></i>
-              </button>
+                <img class="h-12 w-12 rounded-full object-cover pointer-events-none me-3" src="{{ user.avatar }}" alt="">
+                <div>
+                    <span>{{ trans('pages.checkout.hello') }}</span>
+                    <p class="text-gray-700 font-bold text-lg">{{ user.full_name }}</p>
+                </div>
+                <button class="dropdown__close h-12 w-12 text-red-500 text-2xl rounded-full absolute top-2 end-1 z-50">
+                    <i class="sicon-cancel pointer-events-none"></i>
+                </button>
             </div>
             <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
                 <li class="{{ new_notifications_count ? 'has-badge' : '' }}">
@@ -132,5 +131,5 @@
         </div>
     </div>
 {% else %}
-  <salla-login></salla-login>
+    <salla-login></salla-login>
 {% endif %}
