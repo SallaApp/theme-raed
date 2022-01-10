@@ -239,9 +239,9 @@ class App extends salla.AppHelpers {
      * they can be from any page, espacially when megamenu is enabled
      */
     initAddToCart() {
-        salla.cart.event.onUpdated(cartSummary => {
-            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = cartSummary.final_total);
-            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = cartSummary.count);
+        salla.cart.event.onUpdated(summary => {
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total||summary.total);
+            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.count);
         });
         salla.cart.event.onItemAdded(Anime.addToCart);
         salla.cart.event.onItemAddedFailed(() => document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading')))
