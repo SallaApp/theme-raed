@@ -22,7 +22,7 @@
         {% if can_comment %}
             <div class="form form--add-comment" salla-form-data>
                 {% honeypot %}
-                <h2 class="mb-5 text-lg font-bold text-gray-500">{{ trans('blocks.comments.title') }}</h2>
+                <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
                 <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
                           class="form-input h-24 mb-5"
                           name="ask_textarea"
@@ -30,12 +30,9 @@
                           rows="30"></textarea>
 
                 <div class="text-end mb-4">
-                    <button type="button" class="btn btn-primary inline-flex items-center justify-center"
-                            id="add-new-comment-btn"
-                            data-on-click="comment::{{ type }}-add"
-                            data-id="{{ id }}">
+                    <button class="btn btn-primary btn--has-loading" id="add-new-comment-btn" data-on-click="comment::{{ type }}-add" data-id="{{ id }}" type="button">
                         <span class="loader loader--small"></span>
-                        <span class="fix-align transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('blocks.comments.submit') }}</span>
+                        <span class="transition-transform duration-500 inline-block btn--text pointer-events-none"> {{ trans('blocks.comments.submit') }} </span>
                     </button>
                 </div>
             </div>
@@ -50,6 +47,13 @@
             </div>
 
             {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
+        {% else %}
+              <!-- no comments placeholder -->
+            <div class="content-placeholder content-placeholder--comments text-center text-gray-400 pt-10">
+                <i class="sicon-chat-bubbles text-5xl block mb-2.5 text-reverse-dark"></i>
+                <p class="text-sm">لا يوجد تعليقات حتي الآن, قم بإضافة اول تعليق</p>
+            </div>
+            <!-- end::no comments placeholder -->
         {% endif %}
     </div>
 </div>

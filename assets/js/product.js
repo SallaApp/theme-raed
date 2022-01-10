@@ -16,6 +16,7 @@ class Product extends BasePage {
             totalPrice   : '#total-price',
             beforePrice  : '#before-price',
         });
+        salla.event.on('comment::added', () => document.location.reload());
     }
 
     registerEvents() {
@@ -24,7 +25,6 @@ class Product extends BasePage {
         app.onClick('#btn-increase', () => app.quantityInput.value++ && qunatityChanged());
         app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && qunatityChanged()));
         app.onClick('#btn-show-more', e => app.all('#moreContent', div => div.style = `max-height:${div.scrollHeight}px`) || e.target.remove());
-
         salla.product.event.onPriceUpdated(res => {
             app.totalPrice.innerText = res.data.after;
             if (res.data.before) {
