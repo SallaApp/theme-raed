@@ -9,47 +9,47 @@
 | position              | int                   | Sorting number start from zero                                            |
 #}
 <section id="slider-with-bg-{{ position }}" class="s-block s-block--slider-with-bg bg-gray-100 pb-8 sm:pb-16 first-of-type:mt-0">
-  <div class="h-96 sm:h-116 transition-opacity hover:opacity-95 bg-center bg-cover text-white rounded-md relative" style="background-image: url('{{component.background}}');">
-    <div class="overlay h-full w-full bg-black opacity-60 absolute top-0 left-0"></div>
-    <div class="container pt-8 sm:pt-20 relative">
-      <div>
-        <h3 class="text-lg font-bold leading-12">
-          {{component.title}}
-        </h3>
-        <p class="text-sm mb-8 line-clamp-2 max-w-lg">
-          {{component.description}}
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="-mt-58 relative"> 
-    <div class="container">
-      <div class="flex justify-between mb-6 sm:mb-8 pe-5 md:px-0">
-        <a href="{{ link('latest-products') }}" class="inline-block text-white text-sm border rounded-full font-bold px-10 h-10 leading-10">
-          {{trans('blocks.home.display_all')}}
-        </a>
-        <div class="hidden md:block space-s-4" dir="rtl">
-          <button class="slider-prev focus:outline-none border border-white text-gray-500 rounded-full w-10 h-10">
-            <i class="text-white text-xl sicon-keyboard_arrow_right"></i>
-          </button>
-          <button class="slider-next focus:outline-none border border-white text-gray-500 rounded-full w-10 h-10">
-            <i class="text-white text-xl sicon-keyboard_arrow_left"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="container pe-0 lg:px-5 overflow-hidden">
-      <div class="swiper product-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="slider-with-bg-{{ blockId }}">
-        <div class="swiper-wrapper flex">
-          {% for product in component.products %}
-            <div class="h-auto swiper-slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
-              {% include 'pages.partials.product.card' %}
+    <div class="h-96 sm:h-116 transition-opacity hover:opacity-95 bg-center bg-cover text-white rounded-md relative" style="background-image: url('{{ component.background }}');">
+        <div class="overlay h-full w-full bg-black opacity-60 absolute top-0 left-0"></div>
+        <div class="container pt-8 sm:pt-20 relative">
+            <div>
+                <h3 class="text-lg font-bold leading-12">
+                    {{ component.title }}
+                </h3>
+                <p class="text-sm mb-8 line-clamp-2 max-w-lg">
+                    {{ component.description }}
+                </p>
             </div>
-          {% endfor %}
         </div>
-      </div>
     </div>
-  </div>
+
+    <div class="-mt-58 relative">
+        <div class="container">
+            <div class="flex justify-between mb-6 sm:mb-8 pe-5 md:px-0">
+                <a href="{{ link('latest-products') }}" class="inline-block text-white text-sm border rounded-full font-bold px-10 h-10 leading-10">
+                    {{ trans('blocks.home.display_all') }}
+                </a>
+                <div class="hidden md:block space-s-4" dir="rtl">
+                    <button class="slider-prev focus:outline-none border border-white text-gray-500 rounded-full w-10 h-10">
+                        <i class="text-white text-xl sicon-keyboard_arrow_right"></i>
+                    </button>
+                    <button class="slider-next focus:outline-none border border-white text-gray-500 rounded-full w-10 h-10">
+                        <i class="text-white text-xl sicon-keyboard_arrow_left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container pe-0 lg:px-5 overflow-hidden">
+            <div class="swiper product-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="slider-with-bg-{{ blockId }}">
+                <div class="swiper-wrapper flex">
+                    {% for product in component.products %}
+                        <div class="h-auto swiper-slide featured-item-style2 w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
+                            {% include 'pages.partials.product.card' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
