@@ -19,7 +19,8 @@ class Order extends BasePage {
         this.starsRating();
         //show submitRating Button Only When there is a comment field
         app.toggle('#submitRating', 'btn', 'hidden', () => app.element('#shippingReview,#storeReview,.product-review'))
-        app.onClick('#submitRating', () => this.sendRating());
+        this.ratingChain = Promise.resolve();
+        app.onClick('#submitRating', () => this.sendRating().then(() => window.location.reload()));
     }
 
     sendRating() {
@@ -40,6 +41,7 @@ class Order extends BasePage {
                     this.sendFeedback(type, formsData);
                 });
         });
+        return this.ratingChain;
     }
 
     sendFeedback(type, formsData) {
@@ -47,7 +49,7 @@ class Order extends BasePage {
             return;
         }
         salla.config.canLeave = false;
-        salla.feedback.api[type](formsData[0])
+        this.ratingChain = salla.feedback.api[type](formsData[0])
             .then(function () {
                 salla.config.canLeave = true;
             }).catch(error => salla.config.canLeave = true);
@@ -77,22 +79,22 @@ class Order extends BasePage {
                         sectionTitle.classList.add('has-error', 'text-red-400');
 
                         errorMsg = ratingInput.value
-                            ? (salla.lang.get('common.errors.not_less_than_chars', {chars: 4}) + ' ' + commentInput.getAttribute('placeholder'))
+                            ? (salla.lang.get('common.errors.not_less_than_chars', { chars: 4 }) + ' ' + commentInput.getAttribute('placeholder'))
                             : (rating.dataset.starsError || salla.lang.get('pages.rating.rate_store_stars'));
 
                         validationMessage.innerHTML = errorMsg;
                     });
 
-                // scroll to first error
-                let ratingErrors = document.querySelectorAll('.has-error');
-                if (ratingErrors.length) {
-                    let firstError = ratingErrors[0].offsetTop;
-                    window.scrollTo({top: firstError - 80}); // 80 = fixed nav height
-                }
-
             });
         //Fire error to prevent sending rating
         if (errorMsg) {
+            // scroll to first error
+            let ratingErrors = document.querySelectorAll('.has-error');
+            if (ratingErrors.length) {
+                let firstError = ratingErrors[0].offsetTop;
+                window.scrollTo({ top: firstError - 80 }); // 80 = fixed nav height
+            }
+
             throw new Error(errorMsg);
         }
     }
