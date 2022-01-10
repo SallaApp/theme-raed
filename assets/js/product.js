@@ -32,7 +32,8 @@ class Product extends BasePage {
                 app.beforePrice.innerText = res.data.before;
                 return;
             }
-            app.beforePrice.style.display = 'none';
+            app.anime('#total-price', {scale: [0.88, 1]});
+            app.beforePrice && (app.beforePrice.style.display = 'none')
         });
     }
 

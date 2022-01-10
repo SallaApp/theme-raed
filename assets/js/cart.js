@@ -34,7 +34,7 @@ class Cart extends BasePage {
      */
     updateCartPageInfo(res) {
         res.data.items?.forEach(item => this.updateItemInfo(item));
-        app.anime('.shipping-item', {translateX: [-10, 0]});
+        // app.anime('.shipping-item', {translateX: [-10, 0]});
         app.subTotal.innerText = res.data.sub_total;
         app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => res.data.total_discount)
             .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => res.data.shipping_cost);
@@ -51,7 +51,7 @@ class Cart extends BasePage {
                     btnAdd = cartItem.querySelector('.add-qty'),
                     btnSub = cartItem.querySelector('.sub-qty'),
                     quantity = cartItem.querySelector('.item-quantity');
-                app.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target))
+                    quantity && app.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target)),
                 this.items[itemId] = {
                     item        : cartItem,
                     total       : cartItem.querySelector('.item-total'),
@@ -63,8 +63,8 @@ class Cart extends BasePage {
                     btnAdd      : btnAdd,
                     btnSub      : btnSub,
                 };
-                app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
-                app.onClick(btnSub, () => this.reduceQuantity(quantity));
+                btnAdd && app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
+                btnSub && app.onClick(btnSub, () => this.reduceQuantity(quantity));
                 app.onClick(cartItem.querySelector('.btn--delete'), () => this.removeItem(itemId))
             });
     }
@@ -111,13 +111,15 @@ class Cart extends BasePage {
     /**
      * @param {CartItem} item
      */
-    updateItemInfo(item) {
+    updateItemInfo(item) {       
         /**
          * @type {{offer: HTMLElement, item: HTMLElement, total: HTMLElement, quantity: HTMLElement, btnSub: HTMLElement, btnAdd: HTMLElement, price: HTMLElement, offerIcon: HTMLElement, productPrice: HTMLElement}}
          */
         let cartItem = this.items[item.id];
-        cartItem.total.innerText = item.display_total_price;
-
+        if(item.display_total_price != cartItem.total.innerText){
+            cartItem.total.innerText = item.display_total_price;
+            app.anime(cartItem.total, {scale: [.88, 1]});
+        }
         app.toggleElement(cartItem.offer, 'offer-applied', 'hidden', () => item.has_special_price)
             .toggleElement(cartItem.offerIcon, 'offer-applied', 'hidden', () => item.has_special_price)
             .toggleElement(cartItem.productPrice, 'offer-applied', 'hidden', () => item.has_special_price)
