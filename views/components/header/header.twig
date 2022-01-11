@@ -25,7 +25,8 @@
                             <button type="button"
                                     class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
                                     id="menu-button" data-modal-trigger="lang-currency-modal">
-                                <div class="flag iti__flag iti__ar me-1.5 rounded-sm"></div> | <span class="ms-2">{{ language.name }}</span>
+                                {# TODO:: Handle scenarios when there is only languages or only currencies #}
+                                <div class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></div> | <span class="ms-2">{{ language.name }}</span>
                             </button>
                         </div>
                         <salla-modal id="lang-currency-modal" class="hidden">
