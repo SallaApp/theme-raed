@@ -1,14 +1,16 @@
+//todo:: use import {tailwind} from "@salla.sa/twilight-components"
 const colors = require('tailwindcss/colors');
 delete colors['lightBlue']
 
 module.exports = {
     mode: 'jit',
-    purge   : {
+    purge: {
         enabled: true,
         content: [
             "views/**/*.twig",
             "assets/js/**/*.js",
-            // require('@salla.sa/twilight-components/src/plugins/tailwind-theme/safe-list-css.txt')
+            //todo:: inject it via the plugin or easier way
+            'node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt',
         ]
     },
     darkMode: 'class', // or 'media' or 'class'
@@ -151,6 +153,6 @@ module.exports = {
       require('@tailwindcss/forms'),
       require('@tailwindcss/line-clamp'),
       require('@tailwindcss/jit'),
-      // require('@salla.sa/twilight/tailwind.js')
+      require('@salla.sa/twilight-tailwind-theme'),
     ],
 }
