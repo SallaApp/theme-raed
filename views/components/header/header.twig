@@ -21,19 +21,19 @@
                       {% component 'footer.pages' with {is_header:true} %}
                       {# {% component 'header.language-switcher' %}
                       {% component 'header.currency-switcher' %} #}
-                        <div class="relative inline-block me-6">
+                        <div class="relative inline-block">
                             <button type="button"
-                                    class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center hover:bg-gray-200/20 text-sm font-medium  focus:ring-offset-transparent transition duration-300"
+                                    class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
                                     id="menu-button" data-modal-trigger="lang-currency-modal">
-                                <div class="flag iti__flag iti__ar me-1.5 rounded-md"></div> | <span class="ms-2">{{ language.name }}</span>
+                                <div class="flag iti__flag iti__ar me-1.5 rounded-sm"></div> | <span class="ms-2">{{ language.name }}</span>
                             </button>
                         </div>
                         <salla-modal id="lang-currency-modal" class="hidden">
                             {% component 'header.language-switcher' %}
                             {% component 'header.currency-switcher' %}
                         </salla-modal>
+                        <salla-search-modal></salla-search-modal>
                     </div>
-                    <salla-search-modal></salla-search-modal>
                 </div>
                 {% component 'footer.contacts' with {is_header:true} %}
             </div>
