@@ -28,7 +28,6 @@ class Profile extends BasePage {
             styleButtonProcessItemPosition: 'center bottom',
         });
         let btn = app.element('#update-profile-btn');
-        app.onClick(btn, () => btn.classList.add('btn--is-loading', 'pointer-events-none'));
 
         salla.event.on("stores::profile.updated", () => btn.classList.remove('btn--is-loading', 'pointer-events-none'));
         salla.document.event.onRequestFailed(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'));

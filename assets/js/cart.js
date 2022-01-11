@@ -34,8 +34,7 @@ class Cart extends BasePage {
      */
     updateCartPageInfo(res) {
         res.data.items?.forEach(item => this.updateItemInfo(item));
-        // app.anime('.shipping-item', {translateX: [-10, 0]});
-        app.subTotal.innerText = res.data.sub_total;
+        app.subTotal.innerText = res.data.sub_total || res.data.cart.sub_total ;
         app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => res.data.total_discount)
             .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => res.data.shipping_cost);
         app.totalDiscount.querySelector('b').innerText = '- ' + res.data.total_discount;
@@ -90,10 +89,12 @@ class Cart extends BasePage {
     }
 
     removeItem(itemId) {
+        let item = document.querySelector('#item-' + itemId);
+        item.querySelector('.spinner-loader').removeAttribute('style');
+
         salla.cart.api.deleteItem(itemId).then(res => {
             this.updateCartPageInfo(res);
             let items = document.querySelectorAll('.cart-item');
-            let item = document.querySelector('#item-' + itemId);
 
             app.anime(item, false)
                 .complete(() => item.remove() || items.length == 1 && window.location.reload())
@@ -142,7 +143,7 @@ class Cart extends BasePage {
                 .showElement(app.couponBtn.querySelector('i'))
                 .removeClass(app.couponCode, 'has-error');
             app.couponError.innerText = '';
-            app.updateCartSummary();
+            this.updateCartSummary();
         });
 
         salla.coupon.event.onRemoved(res => {
@@ -153,11 +154,11 @@ class Cart extends BasePage {
                 .showElement(app.couponBtn.querySelector('span'))
                 .removeClass(app.couponCode, 'has-error');
             app.couponError.innerText = '';
-            app.updateCartSummary();
+            this.updateCartSummary();
         });
 
-        salla.coupon.event.onAddedFailed(err => this.showCouponError(err.response.data.error.message));
-        salla.coupon.event.onRemovedFailed(err => this.showCouponError(err.response.data.error.message, false));
+        salla.coupon.event.onAddedFailed(err => this.showCouponError(err.response?.data?.error.message));
+        salla.coupon.event.onRemovedFailed(err => this.showCouponError(err.response?.data?.error.message, false));
         app.onKeyUp(app.couponCode, event => {
             event.keyCode === 13 && app.couponBtn.click();
             app.couponError.value = '';

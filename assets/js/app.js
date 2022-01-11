@@ -39,7 +39,7 @@ class App extends salla.AppHelpers {
         this.initiateInfiniteScroll();
 
         salla.currency.event.onChanged(() => window.location.reload());
-        this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading'));
+        this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading', 'pointer-events-none'));
         salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
         this.anime('.anime-count', {scale: [0.5, 1]});
         this.onClick('#productFilter', event => {

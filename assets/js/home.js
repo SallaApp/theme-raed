@@ -43,7 +43,7 @@ class Home extends BasePage {
 
         //Used in: [enhanced-slider.twig]
         let animate = () => setTimeout(() => app.anime('.swiper-slide-active .main-slide-anime', {translateX: [50, 0]}), 100);
-        new Slider('.main-slider', {loop: true, on: {slideChange: animate}});
+        new Slider('.main-slider', {loop: true,}).on('slideChange', () => animate());
         animate();
     }
 
