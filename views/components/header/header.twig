@@ -18,21 +18,22 @@
             <div class="flex justify-between">
                 <div class="flex items-center w-full lg:w-auto justify-between">
                     <div class="flex items-center">
-                      {% component 'footer.pages' with {is_header:true} %}
-                      {# {% component 'header.language-switcher' %}
-                      {% component 'header.currency-switcher' %} #}
-                        <div class="relative inline-block">
-                            <button type="button"
-                                    class="inline-flex justify-center w-full rounded-full  cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
-                                    id="menu-button" data-modal-trigger="lang-currency-modal">
-                                {# TODO:: Handle scenarios when there is only languages or only currencies #}
-                                <div class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></div> | <span class="ms-2">{{ language.name }}</span>
-                            </button>
-                        </div>
-                        <salla-modal id="lang-currency-modal" class="hidden">
-                            {% component 'header.language-switcher' %}
-                            {% component 'header.currency-switcher' %}
-                        </salla-modal>
+                        {% component 'footer.pages' with {is_header:true} %}
+                        {% if store.settings.languages_enabled or store.settings.currencies_enabled %}
+                            <div class="relative inline-block">
+                                <button type="button"
+                                        class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
+                                        id="btn-currencies">
+                                    <div class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></div>
+                                    | <span class="ms-2">{{ language.name }}</span>
+                                </button>
+                            </div>
+                            <salla-currency-language></salla-currency-language>
+                        {% endif %}
+                        {# <salla-modal id="lang-currency-modal" class="hidden"> #}
+                        {# {% component 'header.language-switcher' %} #}
+                        {# {% component 'header.currency-switcher' %} #}
+                        {# </salla-modal> #}
                         <salla-search-modal></salla-search-modal>
                     </div>
                 </div>
@@ -67,7 +68,7 @@
                     </div>
                     <div class="flex items-center justify-end min-w-[200px]">
                         {% if user %}
-                        {% component 'header.user-menu' %}
+                            {% component 'header.user-menu' %}
                         {% else %}
                             <button class="cursor-pointer mx-1 dropdown-trigger border text-dark rounded-full w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent"
                                     data-modal-trigger="salla-login"

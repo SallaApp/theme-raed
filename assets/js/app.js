@@ -39,6 +39,7 @@ class App extends salla.AppHelpers {
         this.initiateInfiniteScroll();
 
         salla.currency.event.onChanged(() => window.location.reload());
+        this.onClick('#btn-currencies', ()=>this.element('salla-currency-language').show());
         this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading', 'pointer-events-none'));
         salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
         this.anime('.anime-count', {scale: [0.5, 1]});
@@ -73,7 +74,7 @@ class App extends salla.AppHelpers {
             }
             return Swal.mixin({
                 toast            : true,
-                position         : window.is_rtl ? 'top-start' : 'top-end',
+                position         : salla.config.language.is_rtl ? 'top-start' : 'top-end',
                 showConfirmButton: false,
                 timer            : 3500,
                 didOpen          : (toast) => {
@@ -92,7 +93,7 @@ class App extends salla.AppHelpers {
     initiateMobileMenu() {
         const menu = new MobileMenu(this.element("#mobile-menu"), "(max-width: 1024px)", "( slidingSubmenus: false)");
         menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
-        const drawer = menu.offcanvas({position: salla.config.is_rtl ? "right" : 'left'});
+        const drawer = menu.offcanvas({position: salla.config.language.is_rtl ? "right" : 'left'});
 
         this.onClick("a[href='#mobile-menu']", event => event.preventDefault() || drawer.close() || drawer.open());
         this.onClick(".close-mobile-menu", event => event.preventDefault() || drawer.close());
