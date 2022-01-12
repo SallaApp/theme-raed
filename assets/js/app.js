@@ -38,7 +38,6 @@ class App extends salla.AppHelpers {
         this.initiateComments();
         this.initiateInfiniteScroll();
 
-        salla.currency.event.onChanged(() => window.location.reload());
         this.onClick('#btn-currencies', ()=>this.element('salla-currency-language').show());
         this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading', 'pointer-events-none'));
         salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
