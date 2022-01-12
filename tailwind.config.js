@@ -9,9 +9,9 @@ module.exports = {
         content: [
             "views/**/*.twig",
             "assets/js/**/*.js",
-            //todo:: inject it via the plugin or easier way
-            'node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt',
-        ]
+            // 'node_modules/@salla.sa/twilight-components/src/components/**/*.tsx',
+        ],
+        safelist: [/^s-/],
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {

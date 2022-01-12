@@ -178,12 +178,12 @@ class App extends salla.AppHelpers {
             this.removeClass(id, 'hidden');
             setTimeout(() => this.toggleModal(id, true)); //small amont of time to running toggle After adding hidden
         });
-        this.onClick("[data-close-modal]", e => this.toggleModal('#' + e.target.dataset.closeModal, false));
+        salla.event.document.onClick("[data-close-modal]", e => this.toggleModal('#' + e.target.dataset.closeModal, false));
     }
 
     toggleModal(id, isOpen) {
-        this.toggle(`${id} .modal__overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
-            .toggle(`${id} .modal__body`,
+        this.toggle(`${id} .s-salla-modal-overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
+            .toggle(`${id} .s-salla-modal-body`,
                 'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
                 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
                 () => isOpen)
