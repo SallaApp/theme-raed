@@ -27,7 +27,14 @@
                     </div>
                     <salla-search-modal></salla-search-modal>
 
+                    <multi-warehouse
+                      position="header"
+                      current="3"             {# current branch id #}
+                      browse-products-from="city"   {# all || branch || city || country #}
+                      display-as="popup"    {# default || popup #}
+                      ></multi-warehouse>
 
+                    <salla-modal auto-open="false"></salla-modal>
                 </div>
                 {% component 'footer.contacts' with {is_header:true} %}
             </div>
@@ -79,3 +86,11 @@
     </header>
 </div>
 {% component 'header.menu' with {is_mobile:true} %}
+
+{# fix unreadable tailwind class in twilight-components  #}
+<div class="hidden 
+  text-indigo-100 
+  hover:bg-gray-200/30
+  text-green-500
+  space-y-5
+"></div>
