@@ -22,13 +22,13 @@
                         {% if store.settings.languages_enabled or store.settings.currencies_enabled %}
                             <div class="relative inline-block">
                                 <button type="button"
-                                        class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
-                                        id="btn-currencies">
-                                    <div class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></div>
+                                        data-on-click="localization::show"
+                                        class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent">
+                                    <span class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></span>
                                     | <span class="ms-2">{{ language.name }}</span>
                                 </button>
                             </div>
-                            <salla-currency-language></salla-currency-language>
+                            <salla-localization></salla-localization>
                         {% endif %}
                         {# <salla-modal id="lang-currency-modal" class="hidden"> #}
                         {# {% component 'header.language-switcher' %} #}
