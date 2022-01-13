@@ -12,7 +12,8 @@ module.exports = {
             'node_modules/@salla.sa/twilight-components/src/components/**/*.tsx',
             //todo:: inject it via the plugin or easier way
             'node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt',
-        ]
+            'node_modules/@salla.sa/twilight-components/src/components/**/*.tsx',
+        ],
     },
     darkMode: 'class', // or 'media' or 'class'
     theme   : {

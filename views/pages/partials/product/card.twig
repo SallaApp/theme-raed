@@ -77,10 +77,10 @@ view options:
                     data-id="{{ product.id }}" {% if not product.is_available %} disabled {% endif %}
                     class="btn add-to-cart-btn btn--has-loading whitespace-nowrap flex items-center justify-center transition duration-300 {{ product.is_available ? 'btn-outline-primary':'' }}">
                 <span class="loader loader--small"></span>
-                <span class="transition-transform duration-500 inline-block btn--text pointer-events-none">{{ trans('pages.cart.add_to_cart') }}</span>
+                <span class="btn__text">{{ trans('pages.cart.add_to_cart') }}</span>
             </button>
             <div class="text-gray-400">
-                <button aria-label="Add or Remove To Wishlist" class="relative lg:ms-2.5 justify-center items-center w-10 h-10 focus:outline-none wishlist-btn animated"
+                <button aria-label="Add or Remove To Wishlist" class="wishlist-btn animated"
                         {% if user %}
                     data-on-click="wishlist::add" data-id="{{ product.id }}"
                 {% else %}

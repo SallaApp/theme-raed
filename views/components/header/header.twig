@@ -7,7 +7,6 @@
 
 * It's important to put all Header components here, to be excluded in mobile apps
 #}
-{# Top nav ------------------------------------ #}
 <div class="{{ theme.topnav_is_dark ? 'dark':'' }}">
     <div id="top-nav" class="py-2 lg:py-0
     {{ theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]' : '' }}
@@ -19,11 +18,23 @@
             <div class="flex justify-between">
                 <div class="flex items-center w-full lg:w-auto justify-between">
                     <div class="flex items-center">
-                      {% component 'footer.pages' with {is_header:true} %}
-                      {# {% component 'header.language-switcher' %}
-                      {% component 'header.currency-switcher' %} #}
-
-                      {% include 'components.modals.currency-lang-modal' %}
+                        {% component 'footer.pages' with {is_header:true} %}
+                        {% if store.settings.languages_enabled or store.settings.currencies_enabled %}
+                            <div class="relative inline-block">
+                                <button type="button"
+                                        class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center bg-gray-bg2 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
+                                        id="btn-currencies">
+                                    <div class="flag iti__flag iti__{{ language.country_code }} me-1.5 rounded-sm"></div>
+                                    | <span class="ms-2">{{ language.name }}</span>
+                                </button>
+                            </div>
+                            <salla-currency-language></salla-currency-language>
+                        {% endif %}
+                        {# <salla-modal id="lang-currency-modal" class="hidden"> #}
+                        {# {% component 'header.language-switcher' %} #}
+                        {# {% component 'header.currency-switcher' %} #}
+                        {# </salla-modal> #}
+                        <salla-search-modal></salla-search-modal>
                     </div>
                     <salla-search-modal></salla-search-modal>
 
@@ -66,7 +77,16 @@
                         {% component 'header.menu' %}
                     </div>
                     <div class="flex items-center justify-end min-w-[200px]">
-                        {% component 'header.user-menu' %}
+                        {% if user %}
+                            {% component 'header.user-menu' %}
+                        {% else %}
+                            <button class="cursor-pointer mx-1 dropdown-trigger border text-dark rounded-full w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent"
+                                    data-modal-trigger="salla-login"
+                                    type="button">
+                                <i class="sicon-user-circle"></i>
+                            </button>
+                            <salla-login></salla-login>
+                        {% endif %}
                         <div class="flex items-center ms-4" id="main-cart-btn">
                             <a href="{{ link('cart') }}" class="me-1 relative ">
                                 <i class="cart-icon block sicon-shopping-bag text-3xl"></i>

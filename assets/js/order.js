@@ -67,7 +67,7 @@ class Order extends BasePage {
                         let validationMessage = rating.querySelector('.validation-message');
                         if (ratingInput.value && commentInput.value && commentInput.value.length > 3) {
                             commentInput.classList.remove('has-error');
-                            sectionTitle.classList.remove('has-error', 'text-red-400');
+                            sectionTitle?.classList.remove('has-error', 'text-red-400');
                             validationMessage.innerHTML = '';
                             return;
                         } else if (commentInput.value && commentInput.value.length > 3) {
@@ -76,7 +76,7 @@ class Order extends BasePage {
                             commentInput.classList.add('has-error');
                         }
 
-                        sectionTitle.classList.add('has-error', 'text-red-400');
+                        sectionTitle?.classList.add('has-error', 'text-red-400');
 
                         errorMsg = ratingInput.value
                             ? (salla.lang.get('common.errors.not_less_than_chars', { chars: 4 }) + ' ' + commentInput.getAttribute('placeholder'))
@@ -132,7 +132,7 @@ class Order extends BasePage {
         salla.document.event.onSubmit('.rate-element', function (event) {
             // Prevent form from submitting
             event.preventDefault();
-
+debugger;
             // Get the selected star - activeElement is not supported in safari
             var activeStars = event.target.querySelectorAll('.btn--star.hovered');
             var selected = activeStars[activeStars.length - 1];

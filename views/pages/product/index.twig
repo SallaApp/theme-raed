@@ -63,15 +63,24 @@
                     {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
                 {% else %}
                     <div class="h-full content-placeholder content-placeholder--category text-gray-400 pt-36 pb-20 flex items-center flex-col justify-center">
-							<span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
-								<i class="sicon-inbox text-6xl block text-reverse-dark"></i>
-							</span>
-                        <p class="text-sm mb-5"><span>{{ trans('pages.categories.no_products') }}</span>
-                            {{ page.title|raw }}</p>
+                        <span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
+                            <i class="sicon-inbox text-6xl block text-reverse-dark"></i>
+                        </span>
+                        <p class="text-sm mb-5">
+                            <span>{{ trans('pages.categories.no_products') }}</span>
+                            {{ page.title|raw }}
+                        </p>
                     </div>
-
                 {% endif %}
             </div>
         </div>
     </div>
+
+    {% if store.settings.category.testimonial_enabled %}
+        {% component 'home.random-testimonials' %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ asset('dist/home.js') }}"></script>
 {% endblock %}

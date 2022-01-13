@@ -1,7 +1,7 @@
 import * as FilePond from 'filepond';
 
 let label = [['Drag and drop the image here', 'or browse your device'], ['اسحب او افلت الصورة هنا', 'او تصفح من جهازك']];
-label = label[salla.config.is_rtl ? 1 : 0];
+label = label[salla.config.language.is_rtl ? 1 : 0];
 
 FilePond.registerPlugin(
     require('filepond-plugin-image-preview'),
