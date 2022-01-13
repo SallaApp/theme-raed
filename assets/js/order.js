@@ -7,9 +7,16 @@ class Order extends BasePage {
     }
 
     initiateOrderCancelation() {
-        app.onClick('#confirm-cancel', () => salla.order.api.cancel(app.pageData('id'))
+        app.onClick('salla-button#btn-reorder', e => e.target.load()
+            .then(sallaBtn => salla.twilight.api.request(sallaBtn.dataset.url, {}, 'get'))
+            .then(() => e.target.stop())
+            .then(() => app.element('#reorder-modal').hide()));
+
+        app.onClick('#confirm-cancel', e => e.target.load()
+            .then(() => salla.order.api.cancel(app.pageData('id')))
+            .then(() => e.target.stop() && app.element('#modal-cancel').hide())
             .then(() => window.location.reload())
-            .catch(() => app.toggleModal('#modal-cancel', false))
+            .catch(() => e.target.stop() && app.element('#modal-cancel').hide())
         );
     }
 
@@ -79,7 +86,7 @@ class Order extends BasePage {
                         sectionTitle?.classList.add('has-error', 'text-red-400');
 
                         errorMsg = ratingInput.value
-                            ? (salla.lang.get('common.errors.not_less_than_chars', { chars: 4 }) + ' ' + commentInput.getAttribute('placeholder'))
+                            ? (salla.lang.get('common.errors.not_less_than_chars', {chars: 4}) + ' ' + commentInput.getAttribute('placeholder'))
                             : (rating.dataset.starsError || salla.lang.get('pages.rating.rate_store_stars'));
 
                         validationMessage.innerHTML = errorMsg;
@@ -92,7 +99,7 @@ class Order extends BasePage {
             let ratingErrors = document.querySelectorAll('.has-error');
             if (ratingErrors.length) {
                 let firstError = ratingErrors[0].offsetTop;
-                window.scrollTo({ top: firstError - 80 }); // 80 = fixed nav height
+                window.scrollTo({top: firstError - 80}); // 80 = fixed nav height
             }
 
             throw new Error(errorMsg);
@@ -132,7 +139,7 @@ class Order extends BasePage {
         salla.document.event.onSubmit('.rate-element', function (event) {
             // Prevent form from submitting
             event.preventDefault();
-debugger;
+            debugger;
             // Get the selected star - activeElement is not supported in safari
             var activeStars = event.target.querySelectorAll('.btn--star.hovered');
             var selected = activeStars[activeStars.length - 1];
@@ -167,6 +174,7 @@ debugger;
             selected.setAttribute('aria-pressed', true);
         });
     }
+
     //========================= End Rating Logic =========================//
 
 }

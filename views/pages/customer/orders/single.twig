@@ -389,7 +389,8 @@
                                     </a>
                                 {% else %}
                                     <button type="button" class="text-sm font-bold text-primary cursor-pointer"
-                                            data-modal-trigger="modal-reorder">
+                                            data-target="reorder-modal"
+                                            data-on-click="modal::open">
                                         <i class="sicon sicon-rotate me-2"></i>
                                         <span class="fix-align">{{ trans('pages.orders.reorder') }}</span>
                                     </button>
@@ -404,7 +405,8 @@
                                     <p class="text-gray-text">{{ trans('pages.order.order_cancelation_desc') }}</p>
                                 </div>
                                 <button type="button" class="text-sm font-bold text-theme-red cursor-pointer"
-                                        data-modal-trigger="modal-cancel">
+                                        data-target="modal-cancel"
+                                        data-on-click="modal::open">
                                     <i class="sicon sicon-cancel-circle me-2"></i>
                                     <span class="fix-align">{{ trans('pages.orders.cancel') }}</span>
                                 </button>
@@ -414,91 +416,41 @@
 
                     {# Reorder Popup #}
                     {% if order.can_reorder and not order.is_pending_payment %}
-                        <div class="modal__wrap fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title"
-                             role="dialog" aria-modal="true" id="modal-reorder">
-                            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                <div class="modal__overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-in duration-200 opacity-0"
-                                     aria-hidden="true" data-close-modal="modal-reorder"></div>
-                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                                      aria-hidden="true">&#8203;</span>
-                                <div class="modal__body relative inline-block align-bottom bg-white rounded-lg px-4 pt-12 pb-4 text-start overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-full w-96 sm:p-8 sm:pt-16 ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-                                    <button class="absolute end-6 top-6 text-gray-400 hover:text-gray-500 transition cursor-pointer"
-                                            data-close-modal="modal-reorder"
-                                            type="button">
-                                        <span class="sicon-cancel"></span>
-                                    </button>
-                                    <div>
-                                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                                            <i class="sicon sicon-rotate text-green-600"></i>
-                                        </div>
-                                        <div class="mt-3 text-center sm:mt-5">
-                                            <h3 class="title title--medium text-lg leading-6 font-medium text-gray-900"
-                                                id="modal-title">
-                                                {{ trans('pages.orders.reorder') }}
-                                            </h3>
-                                            <div class="mt-2">
-                                                <p class="text-sm text-gray-500">{{ trans('pages.orders.reorder_confirmation')|raw }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                        <a href="{{ order.reorder_url }}"
-                                           class="btn btn-primary w-full inline-flex justify-center ajax">
-                                            {{ trans('common.elements.ok') }}
-                                        </a>
-                                        <button type="button"
-                                                class=" w-full inline-flex justify-center btn btn-outline">
-                                            {{ trans('common.elements.cancel') }}
-                                        </button>
-                                    </div>
-                                </div>
+                        <salla-modal sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}"
+                                     icon="sicon-rotate" id="reorder-modal" success
+                                     title="{{ trans('pages.orders.reorder') }}">
+                            <div slot="footer"
+                                 class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                                <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder"
+                                              class="cursor-pointer w-full">
+                                    {{ trans('common.elements.ok') }}
+                                </salla-button>
+                                <button class="w-full inline-flex justify-center btn btn-outline"
+                                        data-on-click="modal::close" data-target="reorder-modal" type="button">
+                                    {{ trans('common.elements.cancel') }}
+                                </button>
                             </div>
-                        </div>
+                        </salla-modal>
                     {% endif %}
                     {# End Reorder Popup #}
 
                     {# Cancel order Popup #}
                     {% if order.can_cancel %}
-                        <div class="modal__wrap fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title"
-                             role="dialog" aria-modal="true" id="modal-cancel">
-                            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                <div class="modal__overlay fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-in duration-200 opacity-0"
-                                     aria-hidden="true" data-close-modal="modal-cancel"></div>
-                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                                      aria-hidden="true">&#8203;</span>
-                                <div class="modal__body relative inline-block align-bottom bg-white rounded-lg px-4 pt-12 pb-4 text-start overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-full w-96 sm:p-8 sm:pt-16 ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-                                    <button type="button"
-                                            class="absolute end-6 top-6 text-gray-400 hover:text-gray-500 transition cursor-pointer"
-                                            data-close-modal="modal-cancel">
-                                        <span class="sicon-cancel"></span>
-                                    </button>
-                                    <div>
-                                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                                            <i class="sicon sicon-cancel text-red-600"></i>
-                                        </div>
-                                        <div class="mt-3 text-center sm:mt-5">
-                                            <h3 class="title title--medium text-lg leading-6 font-medium text-gray-900"
-                                                id="modal-title">
-                                                {{ trans('common.elements.warning') }}
-                                            </h3>
-                                            <div class="mt-2">
-                                                <p class="text-sm text-gray-500">{{ trans('pages.orders.cancel_confirmation') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                        <button type="button" id="confirm-cancel"
-                                                class="btn btn-danger w-full inline-flex justify-center">
-                                            {{ trans('common.elements.ok') }}
-                                        </button>
-                                        <button class=" w-full inline-flex justify-center btn btn-outline"
-                                                data-close-modal="modal-cancel">
-                                            {{ trans('common.elements.cancel') }}
-                                        </button>
-                                    </div>
-                                </div>
+                        <salla-modal sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
+                                     icon="sicon-cancel" id="modal-cancel" error
+                                     title="{{ trans('common.elements.warning') }}">
+                            <div slot="footer"
+                                 class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                                <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
+                                    {{ trans('common.elements.ok') }}
+                                </salla-button>
+                                <button class="w-full inline-flex justify-center btn btn-outline"
+                                        data-on-click="modal::close"
+                                        data-target="modal-cancel">
+                                    {{ trans('common.elements.cancel') }}
+                                </button>
                             </div>
-                        </div>
+                        </salla-modal>
                     {% endif %}
                     {# End Cancel order Popup #}
                 {% endif %}
@@ -569,7 +521,7 @@
                 <button id="submitRating" class="btn btn-primary w-full hidden">
                     <span class="loader loader--small"></span>
                     <span class="btn__text">{{ trans('pages.rating.send_ratings') }}</span>
-                </button>                
+                </button>
                 {# ==================== EN Rating ==================== #}
             </div>
         </div>
