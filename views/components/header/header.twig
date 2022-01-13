@@ -17,7 +17,7 @@
         <div class="container">
             <div class="flex justify-between">
                 <div class="flex items-center w-full lg:w-auto justify-between">
-                    <div class="flex items-center">
+                    <div class="flex items-center space-s-2">
                         {% component 'footer.pages' with {is_header:true} %}
                         {% if store.settings.languages_enabled or store.settings.currencies_enabled %}
                             <div class="relative inline-block">
@@ -30,20 +30,31 @@
                             </div>
                             <salla-currency-language></salla-currency-language>
                         {% endif %}
-                        {# <salla-modal id="lang-currency-modal" class="hidden"> #}
-                        {# {% component 'header.language-switcher' %} #}
-                        {# {% component 'header.currency-switcher' %} #}
-                        {# </salla-modal> #}
+
+
+
+                        {% set displayAs = 'default' %}
+                        {% if displayAs != 'in-product' %}
+                          <div class="relative inline-block">
+                              <button type="button"
+                                      class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium focus:outline-none focus:ring-offset-transparent"
+                                      id="btn-multi-warehouse">
+                                  <span class="sicon-location me-1"></span>
+                                  <span>فرع الرياض</span>
+                              </button>
+                          </div>
+                          
+                          <multi-warehouse
+                            position="header"
+                            current="3"  
+                            browse-products-from="city" 
+                            display-as="popup"          
+                            ></multi-warehouse>
+                        {% endif %}
+
                         <salla-search-modal></salla-search-modal>
                     </div>
                     <salla-search-modal></salla-search-modal>
-
-                    <multi-warehouse
-                      position="header"
-                      current="3"             {# current branch id #}
-                      browse-products-from="city"   {# all || branch || city || country #}
-                      display-as="popup"    {# default || popup #}
-                      ></multi-warehouse>
 
                     <salla-modal auto-open="false"></salla-modal>
                 </div>
@@ -113,4 +124,5 @@
   hover:bg-gray-200/30
   text-green-500
   space-y-5
+  !w-116
 "></div>
