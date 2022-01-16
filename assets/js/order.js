@@ -3,7 +3,6 @@ import BasePage from './base-page';
 class Order extends BasePage {
     onReady() {
         this.initiateOrderCancelation();
-        // this.initiateRating();
     }
 
     initiateOrderCancelation() {
