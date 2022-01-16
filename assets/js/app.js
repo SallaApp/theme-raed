@@ -242,9 +242,16 @@ class App extends salla.AppHelpers {
             document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total||summary.total);
             document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.count);
         });
-        salla.cart.event.onItemAdded(Anime.addToCart);
-        salla.cart.event.onItemAddedFailed(() => document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading')))
+        salla.cart.event.onItemAdded(()=>{
+          Anime.addToCart
+          this.removeLoading();
+        });
 
+        salla.cart.event.onItemAddedFailed(() => this.removeLoading())
+    }
+
+    removeLoading() {
+      document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
     }
 
     initiateComments() {

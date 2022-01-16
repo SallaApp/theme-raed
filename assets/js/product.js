@@ -27,12 +27,12 @@ class Product extends BasePage {
         app.onClick('#btn-show-more', e => app.all('#moreContent', div => div.style = `max-height:${div.scrollHeight}px`) || e.target.remove());
         salla.product.event.onPriceUpdated(res => {
             app.totalPrice.innerText = res.data.after;
+            app.anime('#total-price', {scale: [0.88, 1]});
             if (res.data.before) {
                 app.beforePrice.style.display = 'inline';
                 app.beforePrice.innerText = res.data.before;
                 return;
             }
-            app.anime('#total-price', {scale: [0.88, 1]});
             app.beforePrice && (app.beforePrice.style.display = 'none')
         });
     }
@@ -53,7 +53,7 @@ class Product extends BasePage {
         new Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
 
         //used in (components/product/offer.twig)
-        new Slider('#offer-slider', {spaceBetween: 20, breakpoints: {640: {slidesPerView: 2, slidesPerGroup: 2}}});
+        new Slider('#offer-slider', {breakpoints: {640: {slidesPerView: 2, slidesPerGroup: 2}}});
     }
 
 
