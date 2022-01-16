@@ -105,3 +105,19 @@ class Product extends BasePage {
 Product.className = 'Product';
 Product.allowedPages = ['product.show', 'product.showWithSlug'];
 Product.intiateWhenReady();
+
+
+class Products extends BasePage {
+    onReady() {
+        //Used in: [random-testimonials.twig]
+        new Slider('.testimonials-slider', {
+            loop          : true,
+            centeredSlides: true,
+            spaceBetween  : 15,
+            breakpoints   : {1024: {slidesPerView: 2, spaceBetween: 30}}
+        });
+    }
+}
+Products.className = 'Products';
+Products.allowedPages = ['cat.showWithSlug', 'cat.show'];
+Products.intiateWhenReady();
