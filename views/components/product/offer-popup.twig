@@ -109,18 +109,18 @@
                                     </ul>
                                 </div>
                             {% else %}
-                                <div class="swiper offer-slider mb-8">
+                                <div class="swiper offer-slider mb-8 -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)]">
                                     <div class="swiper-wrapper">
                                         {% for product in offer.products %}
-                                            <div class="swiper-slide h-auto offer-slider__slide w-10/12 md:w-auto">
+                                            <div class="swiper-slide h-auto offer-slider__slide w-1/2 px-2 lg:px-3.75">
                                                 {% include 'pages.partials.product.card' with {block_classes:'product-block--small'} %}
                                             </div>
                                         {% endfor %}
                                     </div>
 
                                     <div class="hidden md:block">
-                                        <button class="offer-prev swiper-button-prev"></button>
-                                        <button class="offer-next swiper-button-next"></button>
+                                        <button class="offer-prev swiper-button swiper-button-prev"></button>
+                                        <button class="offer-next swiper-button swiper-button-next"></button>
                                     </div>
                                 </div>
                             {% endif %}
@@ -157,31 +157,21 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            const swiper = new Swiper('.offer-slider', {
-
-
-                spaceBetween : 20,
-                slidesPerView: "auto",
-
-
-                navigation: {
-                    nextEl: '.offer-next',
-                    prevEl: '.offer-prev',
-                },
-
-                breakpoints: {
-
-                    640: {
-                        slidesPerView: 2,
-                    },
-
-                    768: {
-                        slidesPerView: 3,
-                    },
-                }
-
-            });
-
+          const swiper = new Swiper('.offer-slider', {
+            slidesPerView: "auto",
+            navigation: {
+              nextEl: '.offer-next',
+              prevEl: '.offer-prev',
+            },
+            breakpoints: {
+              640: {
+                slidesPerView: 2,
+              },
+              768: {
+                slidesPerView: 3,
+              },
+            }
+          });
         });
     </script>
 </section>

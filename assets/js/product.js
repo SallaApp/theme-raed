@@ -53,7 +53,7 @@ class Product extends BasePage {
         new Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
 
         //used in (components/product/offer.twig)
-        new Slider('#offer-slider', {spaceBetween: 20, breakpoints: {640: {slidesPerView: 2, slidesPerGroup: 2}}});
+        new Slider('#offer-slider', {breakpoints: {640: {slidesPerView: 2, slidesPerGroup: 2}}});
     }
 
 
