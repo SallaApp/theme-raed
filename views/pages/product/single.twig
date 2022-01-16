@@ -251,6 +251,41 @@
 
                     {% include 'pages.partials.product.options' %}
 
+                    {% set browseProductsFrom = 'city' %}
+                    {% set displayAs = 'popup' %}
+
+                    {% if displayAs == 'in-product' %}
+                      <section class="bg-white p-5 rounded-md mb-5">
+                        <div class="flex items-center justify-between">
+                          <label class="flex items-center text-base">
+                            <span class="sicon-location me-1"></span>
+                            {{ browseProductsFrom != 'all' ?
+                              '<span class="inline-block">الشحن من فرع مكة (<span class="text-green-500">متوفر</span>)</span>'
+                            : 
+                              '<span class="inline-block">التوفر في الفروع</span>'
+                            }}
+                          </label>
+                          <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                            <div class="flex space-s-3">
+                              <a href="#!" id="btn-multi-warehouse" class="group text-primary flex items-center justify-center">
+                                <span>{{browseProductsFrom == 'all' ? 
+                                  'تحديد الفرع' : 'تغيير الفرع'
+                                }}</span>
+                                <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+
+                      <multi-warehouse 
+                        position="single"
+                        current="3"
+                        browse-products-from="{{browseProductsFrom}}"
+                        display-as="in-product"
+                        ></multi-warehouse>
+                    {% endif %}
+
                     <section class="bg-white p-5 rounded-md mb-5">
 
                         {% if product.hide_quantity or not product.is_available %}

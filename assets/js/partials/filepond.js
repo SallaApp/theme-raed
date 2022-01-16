@@ -1,7 +1,6 @@
 import * as FilePond from 'filepond';
 
 let label = [['Drag and drop the image here', 'or browse your device'], ['اسحب او افلت الصورة هنا', 'او تصفح من جهازك']];
-label = label[salla.config.language.is_rtl ? 1 : 0];
 
 FilePond.registerPlugin(
     require('filepond-plugin-image-preview'),
@@ -21,35 +20,30 @@ class FileUploader {
      * @param options
      */
     constructor(input = '.filepond', options = {}) {
+        label = label[salla.config.language.is_rtl ? 1 : 0];
         let elements = typeof input == 'object' ? [input] : document.querySelectorAll(input);
         //return latest filepond instance
         this.fileponds = [];
-        elements.forEach(input => this.initFilepond(input, options));
-    }
-
-    /**
-     * @param {HTMLInputElement} input
-     * @return {FilePond}
-     */
-    initFilepond(input, options) {
-        //todo:: expline why this
-        if (input.disabled) {
-            input.removeAttribute('disabled');
-            if (input.hasAttribute('required')) {
-                input.removeAttribute('required');
+        elements.forEach(input => {
+            //todo:: expline why this
+            if (input.disabled) {
+                input.removeAttribute('disabled');
+                if (input.hasAttribute('required')) {
+                    input.removeAttribute('required');
+                }
             }
-        }
 
-        this.fileponds.push(FilePond.create(input, {
-            allowBrowse     : true,
-            allowDrop       : true,
-            files           : this.getFilesFromInput(input),
-            server          : this.requestProperties(input),
-            instantUpload   : input.dataset.hasOwnProperty('instantUpload'),
-            beforeRemoveFile: ({getMetadata: file}) => file('id') && salla.cart.api.deleteFile(file('id')) || salla.log(file()),
-            labelIdle       : `<i class="sicon-camera block !text-2xl opacity-75"></i><span class="block">${label[0]}</span><span class="filepond--label-action">${label[1]}</span>`,
-            ...options,
-        }));
+            this.fileponds.push(FilePond.create(input, {
+                allowBrowse     : true,
+                allowDrop       : true,
+                files           : this.getFilesFromInput(input),
+                server          : this.requestProperties(input),
+                instantUpload   : input.dataset.hasOwnProperty('instantUpload'),
+                beforeRemoveFile: ({getMetadata: file}) => file('id') && salla.cart.api.deleteFile(file('id')) || salla.log(file()),
+                labelIdle       : `<i class="sicon-camera block !text-2xl opacity-75"></i><span class="block">${label[0]}</span><span class="filepond--label-action">${label[1]}</span>`,
+                ...options,
+            }));
+        });
     }
 
     /**
