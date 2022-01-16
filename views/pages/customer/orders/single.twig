@@ -60,7 +60,8 @@
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10">
-                {# <order-rating> </order-rating> #}
+
+                <order-rating> </order-rating>
 
                 <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }} <span
                             class="unicode">(#{{ order.order_id }})</span></h1>
@@ -106,9 +107,12 @@
                 </table>
 
                 {% if not order.has_feedback %}
-                    <div class="relative  profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
-                        <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
-                        <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
+                    <div class="relative flex justify-between  profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
+                        <div>
+                            <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
+                            <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
+                        </div>
+                        <button data-on-click="order-rating::show" class="btn btn-primary flex-none">تقييم</button>
                     </div>
                 {% endif %}
 
@@ -526,6 +530,10 @@
             </div>
         </div>
     </div>
+
+
+    {# to remove : for compile tailwind classes in component #}
+    <div class ="w-200 w-28 w-7/12 max-w-md hidden cursor-pointer w-2.5 h-2.5 bg-gray-200 rounded-full transition-colors duration-300 bg-primary"></div>
 {% endblock %}
 
 {% block scripts %}
