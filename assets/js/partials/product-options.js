@@ -8,10 +8,6 @@ export default class ProductOptions {
         document.querySelectorAll('.visibility_condition').forEach(input => this.visibilityConditionCheck(input));
         this.optionsAlreadyInitiated = true;
         window.verifyDataBeforeSend = (...data) => this.verifyDataBeforeSend(...data);
-        app.onClick('.btn-tab', ({target: btn}) => {
-            let tab = document.querySelector(btn.dataset.show);
-            app.toggleElement(tab, 'opened', 'hidden', () => tab.classList.contains('hidden'))
-        });
         new FileUploader();
     }
 

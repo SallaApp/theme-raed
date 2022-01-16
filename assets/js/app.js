@@ -35,6 +35,7 @@ class App extends salla.AppHelpers {
         this.initiateAdAlert();
         this.initiateDropdowns();
         this.initiateModals();
+        this.initiateCollabse();
         this.initiateComments();
         this.initiateInfiniteScroll();
 
@@ -191,6 +192,52 @@ class App extends salla.AppHelpers {
             setTimeout(() => this.addClass(id, 'hidden'), 350);
         }
     }
+
+    initiateCollabse() {
+      const collapseButtons = document.querySelectorAll('.btn--collapse');
+      collapseButtons.forEach((trigger)=>{
+        const content = document.querySelector('#'+trigger.dataset.show);
+        this.makeCollapsible(trigger, content, 'easeOutQuart')
+      })
+    }
+
+    makeCollapsible(trigger, content, easing, duration = 225){
+      const state = {isOpen: false}
+
+      const onOpen = () => {
+        const height = content.scrollHeight
+        anime({
+          targets: content,
+          duration: duration,
+          height: height,
+          opacity: [0, 1],
+          easing: easing,
+        })
+      }
+      
+      const onClose = () => {
+        anime({
+          targets: content,
+          duration: duration,
+          height: 0,
+          opacity: [1, 0],
+          easing: easing,
+        })
+      }
+
+      const toggleState = (isOpen) => {
+        state.isOpen = !isOpen
+        this.toggleElement(content, 'is-closed', 'is-opened', ()=> isOpen);
+      }
+            
+      trigger.addEventListener('click', () => {
+        const { isOpen } = state
+        toggleState(isOpen)
+        isOpen ? onClose() : onOpen();
+      })
+    }
+
+
 
     /**
      * Workaround for seeking to simplify & clean, There are three ways to use this method:
