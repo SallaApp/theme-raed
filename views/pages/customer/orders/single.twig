@@ -60,8 +60,13 @@
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10">
-
-                <order-rating> </order-rating>
+                {# settings='{"isStoreRating":"{{store.settings.rating.store}}","url":"www.stenciljs.com"}' #}
+                <order-rating 
+                    is-store-rating="{{store.settings.rating.store}}"
+                    is-shipping-rating="{{store.settings.rating.shipping}}"
+                    is-products-rating="{{store.settings.rating.products}}"
+                    order-id="{{order.order_id}}"
+                > </order-rating>
 
                 <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }} <span
                             class="unicode">(#{{ order.order_id }})</span></h1>
