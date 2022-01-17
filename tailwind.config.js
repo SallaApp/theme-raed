@@ -33,6 +33,9 @@ module.exports = {
         },
         colors    : colors,
         extend    : {
+            transitionTimingFunction: {
+              'elastic': 'cubic-bezier(0.55, 0, 0.1, 1)',
+            },
             gridTemplateColumns: {
                 'auto-fill'  : 'repeat(auto-fill, 290px)',
                 'auto-fill-6': 'repeat(auto-fill, 180px)',
