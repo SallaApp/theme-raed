@@ -255,34 +255,33 @@
                     {% set displayAs = 'popup' %}
 
                     {% if displayAs == 'in-product' %}
-                      <section class="bg-white p-5 rounded-md mb-5">
-                        <div class="flex items-center justify-between">
-                          <label class="flex items-center text-base">
-                            <span class="sicon-location me-1"></span>
-                            {{ browseProductsFrom != 'all' ?
-                              '<span class="inline-block">الشحن من فرع مكة (<span class="text-green-500">متوفر</span>)</span>'
-                            : 
-                              '<span class="inline-block">التوفر في الفروع</span>'
-                            }}
-                          </label>
-                          <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
-                            <div class="flex space-s-3">
-                              <a href="#!" id="btn-multi-warehouse" class="group text-primary flex items-center justify-center">
-                                <span>{{browseProductsFrom == 'all' ? 
-                                  'تحديد الفرع' : 'تغيير الفرع'
-                                }}</span>
-                                <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
-                              </a>
+                        <section class="bg-white p-5 rounded-md mb-5">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center text-base">
+                                    <span class="sicon-location me-1"></span>
+                                    {{ browseProductsFrom != 'all' ?
+                                    '<span class="inline-block">الشحن من فرع مكة (<span class="text-green-500">متوفر</span>)</span>'
+                                    :
+                                    '<span class="inline-block">التوفر في الفروع</span>' }}
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                                    <div class="flex space-s-3">
+                                        <a href="#!" id="btn-multi-warehouse"
+                                           class="group text-primary flex items-center justify-center">
+                                <span>{{ browseProductsFrom == 'all' ?
+                                    'تحديد الفرع' : 'تغيير الفرع' }}</span>
+                                            <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
-                        </div>
-                      </section>
+                        </section>
 
-                      <multi-warehouse 
-                        position="single"
-                        current="3"
-                        browse-products-from="{{browseProductsFrom}}"
-                        display-as="in-product"
+                        <multi-warehouse
+                                position="single"
+                                current="3"
+                                browse-products-from="{{ browseProductsFrom }}"
+                                display-as="in-product"
                         ></multi-warehouse>
                     {% endif %}
 
@@ -344,7 +343,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="flex justify-between space-s-4">
                             {% if product.is_available %}
                                 <button class="btn btn-primary add-to-cart-btn btn--has-loading"
@@ -355,6 +353,11 @@
                                             {{ trans('pages.cart.add_to_cart') }}
                                         </span>
                                 </button>
+                            {% elseif product.notify_availability %}
+                                <salla-product-availability
+                                        channels="{{ product.notify_availability.channels|join(',') }}"
+                                        {{ product.notify_availability.subscribed?'is-subscribed':'' }}
+                                        class="w-full"></salla-product-availability>
                             {% else %}
                                 <button type="button" class="btn btn-outline">
                                     {% if product.is_donation %}
@@ -363,7 +366,6 @@
                                         {{ trans('pages.products.out_of_stock') }}
                                     {% endif %}
                                 </button>
-                                {% component 'product.notify-availability' with {product:product} %}
                             {% endif %}
                         </div>
                     </section>
