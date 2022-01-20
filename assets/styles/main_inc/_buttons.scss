@@ -38,39 +38,41 @@
       }
     }
   }
+}
 
-  // .btn--star
-  &--star {
-    opacity: 0.5;
+// .btn--star
+.s-rating-btn-star {
+  opacity: 0.5;
+  &.selected {
+    @apply text-theme-yellow;
+    opacity: 1;
+  }
+
+  &[disabled] {
+    border: unset;
+    background-color: transparent !important;
+
     &.selected {
       @apply text-theme-yellow;
+    }
+  }
+
+  &:hover,
+  &.hovered {
+    &:not([disabled]):not(.selected) {
       opacity: 1;
-    }
-
-    &[disabled] {
-      border: unset;
-      background-color: transparent !important;
-
-      &.selected {
-        @apply text-theme-yellow;
-      }
-    }
-
-    &:hover,
-    &.hovered {
-      &:not([disabled]):not(.selected) {
-        opacity: 1;
-      }
+      @apply text-theme-yellow;
     }
   }
 }
 
 .wishlist-btn {
-  i{
+  i {
     line-height: 2;
   }
-  
-  i, .loader {
+
+  i,
+  .loader {
     pointer-events: none;
   }
 
