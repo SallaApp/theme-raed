@@ -1,60 +1,63 @@
 {#
-| Variable                   | Type                        | Description                                                      |
-|----------------------------|-----------------------------|------------------------------------------------------------------|
-| page                       | object                      |                                                                  |
-| page.title                 | string                      | *could be html                                                   |
-| page.name                  | string                      | ex: "cat.show"                                                   |
-| product                    | Product                     |                                                                  |
-| product.id                 | int                         |                                                                  |
-| product.product_id         | int                         | Alias For id                                                     |
-| product.name               | string                      |                                                                  |
-| product.description        | string                      | HTML                                                             |
-| product.url                | string                      |                                                                  |
-| product.promotion_title    | string                      |                                                                  |
-| product.subtitle           | string                      |                                                                  |
-| product.type               | string                      | product, service, group_products, codes, digital, food, donating |
-| product.status             | string                      | sale, out                                                        |
-| product.rating             | int                         |                                                                  |
-| product.price              | MoneyTaxable                | can be string too `-`, when merchant doesn't want to show zero   |
-| product.sale_price         | MoneyTaxable                |                                                                  |
-| product.regular_price      | MoneyTaxable                |                                                                  |
-| product.starting_price     | ?float                      |                                                                  |
-| product.quantity           | ?int                        | if it's null, means it's unlimited                               |
-| product.sold_quantity      | int                         |                                                                  |
-| product.max_quantity       | int                         |                                                                  |
-| product.discount_ends      | ?date                       |                                                                  |
-| product.image              | object                      |                                                                  |
-| product.image.url          | string                      |                                                                  |
-| product.image.alt          | ?string                     |                                                                  |
-| product.images             | array                       |                                                                  |
-| product.images[].id        | int                         |                                                                  |
-| product.images[].url       | string                      |                                                                  |
-| product.images[].alt       | ?string                     |                                                                  |
-| product.images[].video_url | ?string                     |                                                                  |
-| product.images[].type      | string                      | `image` `video`                                                  |
-| product.brand              | object                      |                                                                  |
-| product.brand.url          | string                      |                                                                  |
-| product.brand.name         | string                      |                                                                  |
-| product.brand.logo         | string                      |                                                                  |
-| product.comments           | Feedback[] *Paginator       | @see views/components/page-comments.twig                         |
-| product.tags               | ?Tags[] *Collection         |                                                                  |
-| product.tags[].name        | string                      |                                                                  |
-| product.tags[].url         | string                      |                                                                  |
-| product.options            | ProductOption[] *Collection | @see views/pages/partials/product/options.twig                   |
-| product.donation           | ?ProductDonation            | @see views/components/product/donation-progress-bar.twig         |
-| product.show_read_more     | bool                        |                                                                  |
-| product.can_add_note       | bool                        |                                                                  |
-| product.can_show_remained  | bool                        |                                                                  |
-| product.can_show_sold      | bool                        |                                                                  |
-| product.can_upload_file    | bool                        |                                                                  |
-| product.hide_zero_price    | bool                        |                                                                  |
-| product.has_custom_form    | bool                        | Is it for  `Food` or `Custom Service` product                    |
-| product.has_options        | bool                        |                                                                  |
-| product.has_discount       | bool                        |                                                                  |
-| product.hide_quantity      | bool                        |                                                                  |
-| product.is_available       | bool                        |                                                                  |
-| product.is_donation        | bool                        |                                                                  |
-| in_wishlist                | bool                        |                                                                  |
+|                                        | Type                        | Description                                                            |
+|----------------------------------------|-----------------------------|------------------------------------------------------------------------|
+| page                                   | object                      |                                                                        |
+| page.title                             | string                      | *could be html                                                         |
+| page.name                              | string                      | ex: "cat.show"                                                         |
+| product                                | Product                     |                                                                        |
+| product.id                             | int                         |                                                                        |
+| product.product_id                     | int                         | Alias For id                                                           |
+| product.name                           | string                      |                                                                        |
+| product.description                    | string                      | HTML                                                                   |
+| product.url                            | string                      |                                                                        |
+| product.promotion_title                | string                      |                                                                        |
+| product.subtitle                       | string                      |                                                                        |
+| product.type                           | string                      | product, service, group_products, codes, digital, food, donating       |
+| product.status                         | string                      | sale, out                                                              |
+| product.rating                         | int                         |                                                                        |
+| product.price                          | MoneyTaxable                | can be string too `-`, when merchant doesn't want to show zero         |
+| product.sale_price                     | MoneyTaxable                |                                                                        |
+| product.regular_price                  | MoneyTaxable                |                                                                        |
+| product.starting_price                 | ?float                      |                                                                        |
+| product.quantity                       | ?int                        | if it's null, means it's unlimited                                     |
+| product.sold_quantity                  | int                         |                                                                        |
+| product.max_quantity                   | int                         |                                                                        |
+| product.discount_ends                  | ?date                       |                                                                        |
+| product.image                          | object                      |                                                                        |
+| product.image.url                      | string                      |                                                                        |
+| product.image.alt                      | ?string                     |                                                                        |
+| product.images                         | array                       |                                                                        |
+| product.images[].id                    | int                         |                                                                        |
+| product.images[].url                   | string                      |                                                                        |
+| product.images[].alt                   | ?string                     |                                                                        |
+| product.images[].video_url             | ?string                     |                                                                        |
+| product.images[].type                  | string                      | `image` `video`                                                        |
+| product.brand                          | object                      |                                                                        |
+| product.brand.url                      | string                      |                                                                        |
+| product.brand.name                     | string                      |                                                                        |
+| product.brand.logo                     | string                      |                                                                        |
+| product.comments                       | Feedback[] *Paginator       | @see views/components/page-comments.twig                               |
+| product.tags                           | ?Tags[] *Collection         |                                                                        |
+| product.tags[].name                    | string                      |                                                                        |
+| product.tags[].url                     | string                      |                                                                        |
+| product.options                        | ProductOption[] *Collection | @see views/pages/partials/product/options.twig                         |
+| product.notify_availability            | ?object                     | does product outOfStock & can visitor subscribe to notify availability |
+| product.notify_availability.channels   | array                       | ex: ['sms', 'email']                                                   |
+| product.notify_availability.subscribed | bool                        | Does user subscribed before                                            |
+| product.donation                       | ?ProductDonation            | @see views/components/product/donation-progress-bar.twig               |
+| product.show_read_more                 | bool                        |                                                                        |
+| product.can_add_note                   | bool                        |                                                                        |
+| product.can_show_remained              | bool                        |                                                                        |
+| product.can_show_sold                  | bool                        |                                                                        |
+| product.can_upload_file                | bool                        |                                                                        |
+| product.hide_zero_price                | bool                        |                                                                        |
+| product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
+| product.has_options                    | bool                        |                                                                        |
+| product.has_discount                   | bool                        |                                                                        |
+| product.hide_quantity                  | bool                        |                                                                        |
+| product.is_available                   | bool                        |                                                                        |
+| product.is_donation                    | bool                        |                                                                        |
+| in_wishlist                            | bool                        |                                                                        |
 #}
 {% extends "layouts.master" %}
 {% block styles %}
@@ -256,26 +259,25 @@
 
                     {% if displayAs == 'in-product' %}
                       <section class="bg-white p-5 rounded-md mb-5">
-                        <div class="flex items-center justify-between">
-                          <label class="flex items-center text-base">
-                            <span class="sicon-location me-1"></span>
-                            {{ browseProductsFrom != 'all' ?
-                              '<span class="inline-block">الشحن من فرع مكة (<span class="text-green-500">متوفر</span>)</span>'
-                            : 
-                              '<span class="inline-block">التوفر في الفروع</span>'
-                            }}
-                          </label>
-                          <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
-                            <div class="flex space-s-3">
-                              <a href="#!" data-on-click="branches::show" class="group text-primary flex items-center justify-center">
-                                <span>{{browseProductsFrom == 'all' ? 
-                                  'تحديد الفرع' : 'تغيير الفرع'
-                                }}</span>
-                                <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
-                              </a>
-                            </div>
+                          <div class="flex items-center justify-between">
+                              <label class="flex items-center text-base">
+                                  <span class="sicon-location me-1"></span>
+                                  {{ browseProductsFrom != 'all' ?
+                                  '<span class="inline-block">الشحن من فرع مكة (<span class="text-green-500">متوفر</span>)</span>'
+                                  :
+                                  '<span class="inline-block">التوفر في الفروع</span>' }}
+                              </label>
+                              <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                                  <div class="flex space-s-3">
+                                      <a href="#!" data-on-click="branches::show"
+                                          class="group text-primary flex items-center justify-center">
+                              <span>{{ browseProductsFrom == 'all' ?
+                                  'تحديد الفرع' : 'تغيير الفرع' }}</span>
+                                          <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                                      </a>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
                       </section>
 
                       <salla-branches 
@@ -344,7 +346,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="flex justify-between space-s-4">
                             {% if product.is_available %}
                                 <button class="btn btn-primary add-to-cart-btn btn--has-loading"
@@ -355,6 +356,11 @@
                                             {{ trans('pages.cart.add_to_cart') }}
                                         </span>
                                 </button>
+                            {% elseif product.notify_availability %}
+                                <salla-product-availability
+                                        channels="{{ product.notify_availability.channels|join(',') }}"
+                                        {{ product.notify_availability.subscribed?'is-subscribed':'' }}
+                                        class="w-full"></salla-product-availability>
                             {% else %}
                                 <button type="button" class="btn btn-outline">
                                     {% if product.is_donation %}
@@ -363,7 +369,6 @@
                                         {{ trans('pages.products.out_of_stock') }}
                                     {% endif %}
                                 </button>
-                                {% component 'product.notify-availability' with {product:product} %}
                             {% endif %}
                         </div>
                     </section>
