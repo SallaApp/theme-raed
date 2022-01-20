@@ -46,7 +46,7 @@ module.exports = {
                 'primary-d'    : 'var(--color-main-d)',
                 'primary-l'    : 'var(--color-main-l)',
                 'dark-gray'    : '#A6B3BA',
-                'secondary'    : 'var(--color-main-reverse)',
+                'primary-reverse': 'var(--color-main-reverse)',
                 'transparent'  : 'transparent',
                 'theme-yellow' : "#FF9E01",
                 'theme-blue'   : "#27BEE1",

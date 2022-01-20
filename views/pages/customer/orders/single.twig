@@ -56,7 +56,7 @@
 {% block content %}
     {% include 'pages.partials.customer.breadcrumbs' %}
 
-    <div class="container mb-24">
+    <div class="container mb-8 sm:mb-24">
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10">
@@ -280,39 +280,41 @@
                                 {% endif %}
 
                                 {# =================== Start Rating Product =================== #}
-                                <section class="border-t mt-10 pt-8">
-                                    <div class="{{ item.feedback?'':'rating-outer-form' }}"
-                                         data-stars-error="{{ trans('pages.rating.rate_product_stars', {'item':item.name}) }}">
-                                        {% if item.feedback %}
-                                            <p>
-                                                {{ item.feedback.content|raw }}
-                                            </p>
-                                            {% if item.feedback.is_pending %}
-                                                <span>{{ trans('pages.rating.pending') }}</span>
+                                {% if item.feedback %}
+                                    <section class="border-t mt-10 pt-8">
+                                        <div class="{{ item.feedback?'':'rating-outer-form' }}"
+                                             data-stars-error="{{ trans('pages.rating.rate_product_stars', {'item':item.name}) }}">
+                                            {% if item.feedback %}
+                                                <p>
+                                                    {{ item.feedback.content|raw }}
+                                                </p>
+                                                {% if item.feedback.is_pending %}
+                                                    <span>{{ trans('pages.rating.pending') }}</span>
+                                                {% endif %}
+                                            {% else %}
+                                                <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                                <input type="hidden" name="products[{{ loop.index0 }}][product_id]"
+                                                       value="{{ item.product.getOptimusRouteKey() }}">
+                                                <input type="hidden" name="type" value="products">
+                                                <h2 class="section-title mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
+                                                <textarea data-product-id="{{ item.id }}"
+                                                          name="products[{{ loop.index0 }}][comment]"
+                                                          id="productReview_{{ item.id }}"
+                                                          class="comment form-input h-20 product-review"
+                                                          placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"></textarea>
                                             {% endif %}
-                                        {% else %}
-                                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                                            <input type="hidden" name="products[{{ loop.index0 }}][product_id]"
-                                                   value="{{ item.product.getOptimusRouteKey() }}">
-                                            <input type="hidden" name="type" value="products">
-                                            <h2 class="section-title mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
-                                            <textarea data-product-id="{{ item.id }}"
-                                                      name="products[{{ loop.index0 }}][comment]"
-                                                      id="productReview_{{ item.id }}"
-                                                      class="comment form-input h-20 product-review"
-                                                      placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"></textarea>
-                                        {% endif %}
-                                        <div class="rw-product-entry__rate">
-                                            <div class="rating-wrap flex items-center space-s-4">
-                                                <form class="rate-element rate-element--has-label">
-                                                    {% include 'pages.partials.customer.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
-                                                </form>
-                                                <p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+                                            <div class="rw-product-entry__rate">
+                                                <div class="rating-wrap flex items-center space-s-4">
+                                                    <form class="rate-element rate-element--has-label">
+                                                        {% include 'pages.partials.customer.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
+                                                    </form>
+                                                    <p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
+                                                </div>
+                                                <small class="text-red-400 validation-message"></small>
                                             </div>
-                                            <small class="text-red-400 validation-message"></small>
                                         </div>
-                                    </div>
-                                </section>
+                                    </section>
+                                {% endif %}
                                 {# =================== End Rating Product =================== #}
                             </div>
                         {% endfor %}
@@ -470,7 +472,7 @@
 
                 {# ==================== Start Rating ==================== #}
 
-                {% if store.settings.rating.store %}
+                {% if store.settings.rating.store and order.feedback.store.stars %}
                     {# Store Rating #}
                     <section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="store">
                         <div class="{{ order.feedback.store.stars?'':'rating-outer-form' }}"
@@ -499,7 +501,7 @@
                         </div>
                     </section>
                 {% endif %}
-                {% if order.has_shipping and store.settings.rating.shipping %}
+                {% if order.has_shipping and store.settings.rating.shipping and order.feedback.shipping.stars %}
                     {# Shipping Rating #}
                     <section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="shipping">
                         <div class="{{ order.feedback.shipping.stars?'':'rating-outer-form' }}"

@@ -5,6 +5,7 @@
 | from_salla_app                                     | bool     |                                                                                                          |
 | current_route_name                                 | string   |                                                                                                          |
 | currency                                           | object   |                                                                                                          |
+| country_code                                       | string   | ex: "SA" for user or guest                                                                               |
 | currency.code                                      | string   | ex: "SAR"                                                                                                |
 | currency.name                                      | string   | ex: "ريال سعودي"                                                                                           |
 | currency.symbol                                    | string   | ex: "ر.س"                                                                                                |
@@ -102,6 +103,8 @@
             --main-color: {{ theme.color }};
             --color-main-d: {{ theme.darker_color(0.25) }};
             --color-main-l: {{ theme.lighter_color(0.15) }};
+            --color-main-reverse: {{ theme.reverse_text_color }};
+            {# --color-text-reverse: {{ theme.reverse_text_color }}; #}
 
             /*Topnav*/
         {% if theme.topnav_bg %} --topnav-bg: {{theme.topnav_bg}};
