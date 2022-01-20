@@ -1,13 +1,13 @@
 {% if stars and not editable %}
     {% for star in 1..5 %}
-        <button class="btn btn--transparent px-1 text-lg text-gray-400  btn--star {{ star<=stars?'selected':'' }}" disabled>
+        <button class="btn btn--transparent s-rating-btn-star px-1 text-lg text-gray-400  btn--star {{ star<=stars?'selected':'' }}" disabled>
             <i class="sicon-star2"></i>
         </button>
     {% endfor %}
 {% else %}
     <input type="hidden" class="rating_hidden_input" name="{{ rating_name?rating_name:'rating' }}" value="{{ stars?stars:'' }}">
     {% for star in 1..5 %}
-        <button type="submit" class="btn btn--transparent px-1 text-lg text-gray-400 btn--star {{ large?'large':'' }} {{ star<=stars?'selected':'' }}"
+        <button type="submit" class="btn btn--transparent s-rating-btn-star px-1 text-lg text-gray-400 btn--star {{ large?'large':'' }} {{ star<=stars?'selected':'' }}"
                 data-star="{{ star }}"
                 data-text="{{ trans('pages.rating.'~star~'_stars') }}">
             <i class="sicon-star2"></i>

@@ -61,12 +61,15 @@
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10">
                 {# settings='{"isStoreRating":"{{store.settings.rating.store}}","url":"www.stenciljs.com"}' #}
-                <order-rating 
-                    is-store-rating="{{store.settings.rating.store}}"
-                    is-shipping-rating="{{store.settings.rating.shipping}}"
-                    is-products-rating="{{store.settings.rating.products}}"
+                <salla-rating 
+                    {{store.settings.rating.store ? 'is-store-rating' : ''}}
+                    {{store.settings.rating.shipping ? 'is-shipping-rating' : ''}}
+                    {{store.settings.rating.products ? 'is-products-rating' : ''}}
                     order-id="{{order.order_id}}"
-                > </order-rating>
+                    thanks-msg="{{ store.settings.rating.thanks_message }}"
+                > </salla-rating>   
+
+                
 
                 <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }} <span
                             class="unicode">(#{{ order.order_id }})</span></h1>
