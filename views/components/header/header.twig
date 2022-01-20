@@ -31,7 +31,7 @@
                             <salla-localization></salla-localization>
                         {% endif %}
 
-                        {% set displayAs = 'default' %}
+                        {% set displayAs = 'popup' %}
                         {% if displayAs != 'in-product' %}
                             <div class="relative inline-block">
                                 <button type="button"
@@ -42,12 +42,12 @@
                                 </button>
                             </div>
 
-                            <multi-warehouse
+                            <salla-branches
                                     position="header"
                                     current="3"
                                     browse-products-from="city"
                                     display-as="{{displayAs}}"
-                            ></multi-warehouse>
+                            ></salla-branches>
                         {% endif %}
 
                         <salla-search></salla-search>
@@ -58,7 +58,6 @@
         </div>
     </div>
 </div>
-
 
 {# Main Nav --------------------------- #}
 <div class="{{ theme.mainnav_is_dark ? 'dark': '' }}">
@@ -136,4 +135,29 @@
   left-2
   flex-row-reverse
   top-1/2 left-1/2 !-translate-x-1/2 !-translate-y-1/2 !m-0
+  max-w-[150px] order-10
 "></div>
+
+
+
+<div class="flex justify-center py-10">
+  <salla-button 
+    data-on-click="modal::open" 
+    disabled="true"
+    loading
+    class="btn--is-loading"
+    data-target="test-modal">
+      نص زر الفتح
+  </salla-button>
+</div>
+
+<salla-modal 
+  id="test-modal" 
+  modal-width="w-[500px]" 
+  title="عنوان المودل هنا" 
+  sub-title="نص فرعي للمودل هنا أيضاً" 
+  icon="sicon-home"
+  sub-title-first
+  image-icon="{{ asset('images/maroof-footer.png') }}">
+    Modal Content
+</salla-modal>

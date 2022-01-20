@@ -251,8 +251,8 @@
 
                     {% include 'pages.partials.product.options' %}
 
-                    {% set browseProductsFrom = 'city' %}
-                    {% set displayAs = 'popup' %}
+                    {% set browseProductsFrom = 'all' %}
+                    {% set displayAs = 'defautl' %}
 
                     {% if displayAs == 'in-product' %}
                       <section class="bg-white p-5 rounded-md mb-5">
@@ -267,7 +267,7 @@
                           </label>
                           <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
                             <div class="flex space-s-3">
-                              <a href="#!" id="btn-multi-warehouse" class="group text-primary flex items-center justify-center">
+                              <a href="#!" data-on-click="branches::show" class="group text-primary flex items-center justify-center">
                                 <span>{{browseProductsFrom == 'all' ? 
                                   'تحديد الفرع' : 'تغيير الفرع'
                                 }}</span>
@@ -278,12 +278,12 @@
                         </div>
                       </section>
 
-                      <multi-warehouse 
+                      <salla-branches 
                         position="single"
                         current="3"
                         browse-products-from="{{browseProductsFrom}}"
                         display-as="in-product"
-                        ></multi-warehouse>
+                        ></salla-branches>
                     {% endif %}
 
                     <section class="bg-white p-5 rounded-md mb-5">
