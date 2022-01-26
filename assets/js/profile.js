@@ -70,5 +70,5 @@ class Profile extends BasePage {
 }
 
 Profile.className = 'Profile';
-Profile.allowedPages = ['store.myprofile'];
+Profile.allowedPages = ['customer.profile'];
 Profile.intiateWhenReady();

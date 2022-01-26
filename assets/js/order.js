@@ -21,5 +21,5 @@ class Order extends BasePage {
 }
 
 Order.className = 'Order';
-Order.allowedPages = ['store.my_order'];
+Order.allowedPages = ['customer.orders.single'];
 Order.intiateWhenReady();

@@ -4,6 +4,7 @@ import '@salla.sa/twilight-components/dist/twilight-components/twilight-componen
 import MobileMenu from 'mmenu-light';
 import Swal from "sweetalert2";
 import Anime from './partials/anime';
+
 class App extends salla.AppHelpers {
     constructor() {
         super();
@@ -17,12 +18,14 @@ class App extends salla.AppHelpers {
      * @return {*}
      */
     pageData(key) {
+        //add method to salla.config.get(key, default)
         let data = salla.config.page || {};
         return key ? data[key] : data;
     }
 
+    //remove it
     isUser() {
-        return salla.config.is_user;
+        return salla.config.user.type === 'user';
     }
 
     loadTheApp() {
@@ -194,49 +197,48 @@ class App extends salla.AppHelpers {
     }
 
     initiateCollabse() {
-      const collapseButtons = document.querySelectorAll('.btn--collapse');
-      collapseButtons.forEach((trigger)=>{
-        const content = document.querySelector('#'+trigger.dataset.show);
-        this.makeCollapsible(trigger, content, 'easeOutQuart')
-      })
+        const collapseButtons = document.querySelectorAll('.btn--collapse');
+        collapseButtons.forEach((trigger) => {
+            const content = document.querySelector('#' + trigger.dataset.show);
+            this.makeCollapsible(trigger, content, 'easeOutQuart')
+        })
     }
 
-    makeCollapsible(trigger, content, easing, duration = 225){
-      const state = {isOpen: false}
+    makeCollapsible(trigger, content, easing, duration = 225) {
+        const state = {isOpen: false}
 
-      const onOpen = () => {
-        const height = content.scrollHeight
-        anime({
-          targets: content,
-          duration: duration,
-          height: height,
-          opacity: [0, 1],
-          easing: easing,
-        })
-      }
-      
-      const onClose = () => {
-        anime({
-          targets: content,
-          duration: duration,
-          height: 0,
-          opacity: [1, 0],
-          easing: easing,
-        })
-      }
+        const onOpen = () => {
+            const height = content.scrollHeight
+            anime({
+                targets : content,
+                duration: duration,
+                height  : height,
+                opacity : [0, 1],
+                easing  : easing,
+            })
+        }
 
-      const toggleState = (isOpen) => {
-        state.isOpen = !isOpen
-        this.toggleElement(content, 'is-closed', 'is-opened', ()=> isOpen);
-      }
-            
-      trigger.addEventListener('click', () => {
-        const { isOpen } = state
-        toggleState(isOpen)
-        isOpen ? onClose() : onOpen();
-      })
+        const onClose = () => {
+            anime({
+                targets : content,
+                duration: duration,
+                height  : 0,
+                opacity : [1, 0],
+                easing  : easing,
+            })
+        }
+
+        const toggleState = (isOpen) => {
+            state.isOpen = !isOpen
+            this.toggleElement(content, 'is-closed', 'is-opened', () => isOpen);
+        }
+
+        trigger.addEventListener('click', () => {
+            const {isOpen} = state
+            toggleState(isOpen)
+            isOpen ? onClose() : onOpen();
+        })
     }
-
 
 
     /**
@@ -286,19 +288,19 @@ class App extends salla.AppHelpers {
      */
     initAddToCart() {
         salla.cart.event.onUpdated(summary => {
-            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total||summary.total);
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total);
             document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.count);
         });
-        salla.cart.event.onItemAdded(()=>{
-          Anime.addToCart
-          this.removeLoading();
+        salla.cart.event.onItemAdded(() => {
+            Anime.addToCart
+            this.removeLoading();
         });
 
         salla.cart.event.onItemAddedFailed(() => this.removeLoading())
     }
 
     removeLoading() {
-      document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+        document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
     }
 
     initiateComments() {

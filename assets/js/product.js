@@ -103,7 +103,7 @@ class Product extends BasePage {
 }
 
 Product.className = 'Product';
-Product.allowedPages = ['product.show', 'product.showWithSlug'];
+Product.allowedPages = ['product.single'];
 Product.intiateWhenReady();
 
 
@@ -119,5 +119,5 @@ class Products extends BasePage {
     }
 }
 Products.className = 'Products';
-Products.allowedPages = ['cat.showWithSlug', 'cat.show'];
+Products.allowedPages = ['product.index'];
 Products.intiateWhenReady();

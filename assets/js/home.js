@@ -89,5 +89,5 @@ class Home extends BasePage {
 }
 
 Home.className = 'Home';
-Home.allowedPages = ['store.home', 'cat.show', 'cat.showWithSlug'];
+Home.allowedPages = ['index'];
 Home.intiateWhenReady();
