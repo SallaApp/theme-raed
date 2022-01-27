@@ -191,5 +191,5 @@ class Cart extends BasePage {
 }
 
 Cart.className = 'Cart';
-Cart.allowedPages = ['cart.show'];
+Cart.allowedPages = ['cart'];
 Cart.intiateWhenReady();

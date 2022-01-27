@@ -28,5 +28,5 @@ class Blog extends BasePage {
 }
 
 Blog.className = 'Blog';
-Blog.allowedPages = ['blog.article.index'];
+Blog.allowedPages = ['blog.index'];
 Blog.intiateWhenReady();

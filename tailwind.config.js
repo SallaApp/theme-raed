@@ -42,7 +42,7 @@ module.exports = {
             },
             colors             : {
                 'inherit'      : 'inherit',
-                'primary'      : 'var(--main-color)',
+                'primary'      : 'var(--color-main)',
                 'primary-d'    : 'var(--color-main-d)',
                 'primary-l'    : 'var(--color-main-l)',
                 'dark-gray'    : '#A6B3BA',
