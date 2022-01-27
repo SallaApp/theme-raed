@@ -13,19 +13,9 @@ class App extends salla.AppHelpers {
         salla.onReady(() => this.loadTheApp());
     }
 
-    /**
-     * @param key
-     * @return {*}
-     */
-    pageData(key) {
-        //add method to salla.config.get(key, default)
-        let data = salla.config.page || {};
-        return key ? data[key] : data;
-    }
-
     //remove it
     isUser() {
-        return salla.config.user.type === 'user';
+        return salla.config.get('user.type') === 'user';
     }
 
     loadTheApp() {
@@ -65,7 +55,7 @@ class App extends salla.AppHelpers {
     }
 
     log(message) {
-        salla.log(`ThemeApp(${salla.config.theme.name})::${message}`);
+        salla.log(`ThemeApp(${salla.config.get('theme.name')})::${message}`);
         return this;
     }
 
@@ -76,7 +66,7 @@ class App extends salla.AppHelpers {
             }
             return Swal.mixin({
                 toast            : true,
-                position         : salla.config.language.is_rtl ? 'top-start' : 'top-end',
+                position         : salla.config.isRTL() ? 'top-start' : 'top-end',
                 showConfirmButton: false,
                 timer            : 3500,
                 didOpen          : (toast) => {
@@ -95,7 +85,7 @@ class App extends salla.AppHelpers {
     initiateMobileMenu() {
         const menu = new MobileMenu(this.element("#mobile-menu"), "(max-width: 1024px)", "( slidingSubmenus: false)");
         menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
-        const drawer = menu.offcanvas({position: salla.config.language?.is_rtl ? "right" : 'left'});
+        const drawer = menu.offcanvas({position: salla.config.isRTL() ? "right" : 'left'});
 
         this.onClick("a[href='#mobile-menu']", event => event.preventDefault() || drawer.close() || drawer.open());
         this.onClick(".close-mobile-menu", event => event.preventDefault() || drawer.close());

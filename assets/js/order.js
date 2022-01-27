@@ -12,7 +12,7 @@ class Order extends BasePage {
             .then(() => app.element('#reorder-modal').hide()));
 
         app.onClick('#confirm-cancel', e => e.target.load()
-            .then(() => salla.order.api.cancel(app.pageData('id')))
+            .then(() => salla.order.api.cancel(salla.config.get('page.id')))
             .then(() => e.target.stop() && app.element('#modal-cancel').hide())
             .then(() => window.location.reload())
             .catch(() => e.target.stop() && app.element('#modal-cancel').hide())

@@ -63,7 +63,7 @@ class Product extends BasePage {
                 return salla.error(salla.lang.get('common.messages.must_login'));
             }
             let addToFavorite = !btn.classList.contains('favorited');
-            addToFavorite ? salla.api.wishlist.add(app.pageData('id')) : salla.api.wishlist.remove(app.pageData('id'));
+            addToFavorite ? salla.api.wishlist.add(salla.config.get('page.id')) : salla.api.wishlist.remove(salla.config.get('page.id'));
             app.toggleElement(btn, 'text-white bg-primary favorited', 'bg-white text-theme-red', () => addToFavorite)
                 .toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => addToFavorite)
             app.anime('.btn-favorite', {duration: 800, scale: [0.6, 1]});

@@ -35,7 +35,7 @@ BasePage.intiateWhenReady = function () {
                 tries++;
             }, 100)
         )).then(() => {
-            if (!this.allowedPages.includes(app.pageData('slug'))) {
+            if (!this.allowedPages.includes(salla.config.get('page.slug'))) {
                 app.log(this.className + ' Skiped.');
                 return;
             }

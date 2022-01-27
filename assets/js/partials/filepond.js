@@ -20,7 +20,7 @@ class FileUploader {
      * @param options
      */
     constructor(input = '.filepond', options = {}) {
-        label = label[salla.config.language.is_rtl ? 1 : 0];
+        label = label[salla.config.get('languages.' + salla.config.isRTL()) ? 1 : 0];
         let elements = typeof input == 'object' ? [input] : document.querySelectorAll(input);
         //return latest filepond instance
         this.fileponds = [];
@@ -92,7 +92,7 @@ class FileUploader {
                     onload : response => JSON.parse(response).data.filePath,
                     onerror: response => JSON.parse(response).error.fields.image_file[0] || salla.lang.get('common.errors.error_occurred'),
                     ondata : formData => {
-                        [['_token', salla.config.token], ['cart_item_id', data.itemId], ['product_id', data.productId]]
+                        [['_token', salla.config.get('token')], ['cart_item_id', data.itemId], ['product_id', data.productId]]
                             .forEach((key, value) => value && formData.append(key, value));
                         return formData;
                     }
