@@ -10834,9 +10834,24 @@ select{
 }
 .s-branches-submit{
   margin-top: 1.5rem;
-  width: 100%;
+}
+.s-branches-color-red{
+  --tw-text-opacity: 1;
+  color: rgba(248, 113, 113, var(--tw-text-opacity));
+}
+.s-branches-color-green{
+  --tw-text-opacity: 1;
+  color: rgba(34, 197, 94, var(--tw-text-opacity));
+}
+.s-branches-color-gray{
+  --tw-text-opacity: 1;
+  color: rgba(161, 161, 170, var(--tw-text-opacity));
+}
+.s-button-host-tag{
+  pointer-events: none;
 }
 .s-button-btn{
+  pointer-events: auto;
   display: inline-flex;
   flex: 1 1 0%;
   align-items: center;
@@ -10876,49 +10891,11 @@ select{
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  border-style: solid;
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
   transition-duration: 300ms;
-}
-.s-button-primary{
-  border-width: 1px;
-  border-color: var(--color-main);
-  background-color: var(--color-main);
-  color: var(--color-main-reverse);
-}
-.s-button-outline{
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgba(238, 238, 238, var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: rgba(161, 161, 170, var(--tw-text-opacity));
-  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-.s-button-outline:hover{
-  --tw-text-opacity: 1;
-  color: rgba(82, 82, 91, var(--tw-text-opacity));
-}
-.s-button-outline-primary{
-  border-width: 1px;
-  border-color: var(--color-main);
-  color: var(--color-main);
-}
-.s-button-outline-primary:hover{
-  background-color: var(--color-main);
-  color: var(--color-text-reverse);
-}
-.s-button-danger{
-  --tw-bg-opacity: 1;
-  background-color: rgba(255, 103, 103, var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: rgba(255, 255, 255, var(--tw-text-opacity));
-}
-.s-button-danger:hover{
-  opacity: 0.8;
 }
 .s-button-text{
   transition-property: opacity;
@@ -10927,13 +10904,48 @@ select{
   transition-duration: 300ms;
 }
 .s-button-loader{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+.s-button-loader::before{
+  content: "";
+  display: inline-block;
+  content: "";
+  height: 1rem;
+  content: "";
+  width: 1rem;
+}
+@keyframes spin{
+  to{
+    transform: rotate(360deg);
+  }
+}
+.s-button-loader::before{
+  content: "";
+  animation: spin 1s linear infinite;
+  content: "";
+  border-radius: 9999px;
+  content: "";
+  border-width: 2px;
+  content: "";
+  border-style: solid;
+  content: "";
+  border-top-color: var(--color-main);
+  content: "";
+  border-left-color: var(--color-main);
+  content: "";
+  --tw-border-opacity: 1;
+  border-bottom-color: rgba(244, 244, 245, var(--tw-border-opacity));
+  content: "";
+  --tw-border-opacity: 1;
+  border-right-color: rgba(244, 244, 245, var(--tw-border-opacity));
+  content: '';
 }
 .s-button-loader-after{
   flex-direction: row-reverse;
@@ -10962,6 +10974,45 @@ select{
 .s-button-wide{
   width: 100%;
 }
+.s-button-primary{
+  border-width: 1px;
+  border-color: var(--color-main);
+  background-color: var(--color-main);
+  color: var(--color-main-reverse);
+}
+.s-button-danger{
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 103, 103, var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+}
+.s-button-danger:hover{
+  opacity: 0.8;
+}
+.s-button-outline-primary{
+  border-width: 1px;
+  border-color: var(--color-main);
+  color: var(--color-main);
+}
+.s-button-outline-primary:hover{
+  background-color: var(--color-main);
+  color: var(--color-text-reverse);
+}
+.s-button-outline{
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgba(238, 238, 238, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(161, 161, 170, var(--tw-text-opacity));
+  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.s-button-outline:hover{
+  --tw-text-opacity: 1;
+  color: rgba(82, 82, 91, var(--tw-text-opacity));
+}
 .s-localization-title{
   font-size: 1rem;
   line-height: 1.5rem;
@@ -10971,6 +11022,9 @@ select{
 }
 .s-localization-section{
   margin-bottom: 2rem;
+}
+.s-localization-section-inner{
+  margin-top: 1rem;
 }
 .s-localization-section-inner > :not([hidden]) ~ :not([hidden]){
   --tw-space-y-reverse: 0;
@@ -11205,8 +11259,11 @@ select{
 .s-modal-close{
   position: absolute;
   top: 1rem;
+  cursor: pointer;
   border-style: none;
   background-color: transparent;
+  font-size: 1rem;
+  line-height: 1.5rem;
   --tw-text-opacity: 1;
   color: rgba(248, 113, 113, var(--tw-text-opacity));
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -11225,13 +11282,13 @@ select{
 }
 @media (min-width: 640px){
   .s-modal-close{
-    top: 1.75rem;
+    top: 1.25rem;
   }
   [dir="rtl"] .s-modal-close{
-    left: 1.75rem;
+    left: 1.25rem;
   }
   [dir="ltr"] .s-modal-close{
-    right: 1.75rem;
+    right: 1.25rem;
   }
 }
 .s-modal-header{
@@ -11254,20 +11311,21 @@ select{
   margin-right: auto;
   margin-bottom: 1rem;
   display: flex;
-  height: 4rem;
-  width: 4rem;
+  height: 5rem;
+  width: 5rem;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-}
-.s-modal-bg-normal{
   border-width: 1px;
+  border-style: solid;
   --tw-border-opacity: 1;
   border-color: rgba(238, 238, 238, var(--tw-border-opacity));
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.s-modal-bg-normal{
   --tw-bg-opacity: 1;
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
-  font-size: 1.125rem;
-  line-height: 1.75rem;
 }
 .s-modal-bg-success{
   --tw-bg-opacity: 1;
