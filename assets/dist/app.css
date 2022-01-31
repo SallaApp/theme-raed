@@ -11089,6 +11089,10 @@ select{
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  transition-duration: 300ms;
   padding-inline-end: 1rem;
   padding-inline-start: 1.25rem;
 }
@@ -11098,8 +11102,8 @@ select{
   margin-inline-start: calc(0.75rem * calc(1 - var(--tw-space-s-reverse)));
 }
 .s-login-main-btn:hover{
-  --tw-border-opacity: 1;
-  border-color: rgba(228, 228, 231, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(250, 250, 250, var(--tw-bg-opacity));
 }
 .s-login-main-btn-icon{
   display: flex;
@@ -11138,7 +11142,7 @@ select{
   color: rgba(63, 63, 70, var(--tw-text-opacity));
 }
 .s-login-input{
-  margin-bottom: 0.25rem;
+  margin-bottom: 1rem;
   height: 2.5rem;
   width: 100%;
   border-radius: 0.375rem;
@@ -11170,10 +11174,6 @@ select{
 }
 .s-login-input{
   appearance: none;
-}
-.s-login-input-group{
-  display: flex;
-  column-gap: 0.25rem;
 }
 .s-login-otp-input{
   height: 2.5rem;
@@ -11211,7 +11211,7 @@ select{
   appearance: none;
 }
 .s-login-link{
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   display: block;
   text-align: center;
   font-size: 0.875rem;
@@ -11227,6 +11227,30 @@ select{
   border-color: rgba(239, 68, 68, var(--tw-border-opacity)) !important;
   --tw-text-opacity: 1 !important;
   color: rgba(239, 68, 68, var(--tw-text-opacity)) !important;
+}
+.s-login-wrapper{
+  height: 9rem;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+}
+.s-login-tab{
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  transition-duration: 500ms;
+}
+.s-login-active{
+  --tw-translate-x: 0px;
+  transform: var(--tw-transform);
+  opacity: 1;
+}
+.s-login-unactive{
+  --tw-translate-x: 0.75rem;
+  transform: var(--tw-transform);
+  opacity: 0;
 }
 .s-modal-container{
   position: fixed;
@@ -11496,6 +11520,188 @@ select{
 .s-modal-full{
   height: 100%;
   width: 100%;
+}
+.s-offer-header{
+  margin-left: -2rem;
+  margin-right: -2rem;
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+  --tw-bg-opacity: 1;
+  background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 2rem;
+  padding-bottom: 0.5rem;
+}
+@media (min-width: 768px){
+  .s-offer-header{
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+.s-offer-title{
+  display: block;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  --tw-text-opacity: 1;
+  color: rgba(248, 113, 113, var(--tw-text-opacity));
+}
+.s-offer-subtitle{
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+.s-offer-body{
+  margin-top: 2rem;
+}
+.s-offer-badge{
+  margin-bottom: 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+  --tw-bg-opacity: 1;
+  background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgba(113, 113, 122, var(--tw-text-opacity));
+  margin-inline-end: 0.625rem;
+}
+.s-offer-badge-icon{
+  font-weight: 500;
+  margin-inline-end: 0.375rem;
+}
+.s-offer-badge-text{
+  --tw-translate-y: -0.125rem;
+  transform: var(--tw-transform);
+}
+.s-offer-product{
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+  padding: 1.25rem;
+}
+@media (min-width: 768px){
+  .s-offer-product{
+    flex-direction: row;
+  }
+}
+.s-offer-product-image{
+  position: relative;
+  height: 4rem;
+  width: 5rem;
+  overflow: hidden;
+  border-radius: 0.375rem;
+}
+@media (min-width: 768px){
+  .s-offer-product-image{
+    height: 5rem;
+  }
+  .s-offer-product-image{
+    width: 6rem;
+  }
+}
+.s-offer-product-img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.s-offer-product-info{
+  flex: 1 1 0%;
+  padding-inline-start: 1.25rem;
+}
+.s-offer-product-name{
+  margin-bottom: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: flex-start;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  line-height: 1.5rem;
+  color: var(--color-title);
+}
+.s-offer-product-price{
+  margin-bottom: 1.25rem;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  color: var(--color-main);
+}
+.s-offer-product-price > :not([hidden]) ~ :not([hidden]){
+  --tw-space-s-reverse: 0;
+  margin-inline-end: calc(0.25rem * var(--tw-space-s-reverse));
+  margin-inline-start: calc(0.25rem * calc(1 - var(--tw-space-s-reverse)));
+}
+@media (min-width: 768px){
+  .s-offer-product-price{
+    margin-bottom: 0px;
+  }
+}
+.s-offer-product-old-price{
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  --tw-text-opacity: 1;
+  color: rgba(161, 161, 170, var(--tw-text-opacity));
+  text-decoration: line-through;
+}
+.s-offer-footer{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgba(161, 161, 170, var(--tw-text-opacity));
+}
+@media (min-width: 768px){
+  .s-offer-footer{
+    flex-direction: row;
+  }
+}
+.s-offer-expiry{
+  margin-bottom: 1.25rem;
+}
+@media (min-width: 768px){
+  .s-offer-expiry{
+    margin-bottom: 0px;
+  }
+}
+.s-offer-remember-label{
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  margin-inline-start: 0.5rem;
+}
+.s-offer-remember-input{
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 0.375rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(238, 238, 238, var(--tw-border-opacity));
+  color: var(--color-main);
+}
+.s-offer-remember-input:focus{
+  --tw-ring-color: transparent;
 }
 .s-product-availability-subscribed{
   width: 100%;
