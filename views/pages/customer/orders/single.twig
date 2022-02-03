@@ -60,17 +60,6 @@
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10">
-                {# settings='{"isStoreRating":"{{store.settings.rating.store}}","url":"www.stenciljs.com"}' #}
-                <salla-rating 
-                    {{store.settings.rating.store ? 'is-store-rating' : ''}}
-                    {{store.settings.rating.shipping ? 'is-shipping-rating' : ''}}
-                    {{store.settings.rating.products ? 'is-products-rating' : ''}}
-                    order-id="{{order.order_id}}"
-                    thanks-msg="{{ store.settings.rating.thanks_message }}"
-                > </salla-rating>   
-
-                
-
                 <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }} <span
                             class="unicode">(#{{ order.order_id }})</span></h1>
                 <table class="min-w-full mb-10">
@@ -115,6 +104,7 @@
                 </table>
 
                 {% if not order.has_feedback %}
+                    <salla-rating></salla-rating>
                     <div class="relative flex justify-between  profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
                         <div>
                             <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
@@ -543,7 +533,7 @@
 
 
     {# to remove : for compile tailwind classes in component #}
-    <div class ="text-indigo-100 
+    <div class ="text-indigo-100
   hover:bg-gray-200/30
   text-green-500
   space-y-5
