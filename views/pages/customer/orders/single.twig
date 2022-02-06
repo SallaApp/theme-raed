@@ -110,11 +110,11 @@
                             <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                             <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                         </div>
-                        <button data-on-click="rating::show" class="btn btn-primary flex-none">{{trans('pages.rating.rate')}}</button>
+                        <button data-on-click="rating::show" class="btn btn-outline-primary-dark flex-none px-12 rounded-full">{{trans('pages.rating.rate')}}</button>
                     </div>
                 {% endif %}
 
-                <div class="overflow-hidden mb-10">
+                <div class="overflow-hidden mb-10 last:mb-0">
                     <section class="rating-section products-section" data-type="product">
                         {% for item in order.items %}
                             <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}"
@@ -298,7 +298,6 @@
                                                     <form class="rate-element rate-element--has-label">
                                                         {% include 'pages.partials.customer.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
                                                     </form>
-                                                    <p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
                                                 </div>
                                                 <small class="text-red-400 validation-message"></small>
                                             </div>
@@ -485,7 +484,6 @@
                                 <form class="rate-element rate-element--has-label">
                                     {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.store.stars} %}
                                 </form>
-                                <p class="rate-label fix-align font-sm center mb-0">{{ (order.feedback.store.stars?trans('pages.rating.'~order.feedback.store.stars~'_stars'):'')|raw }}</p>
                             </div>
                             <small class="text-red-400 validation-message"></small>
                         </div>
@@ -516,16 +514,11 @@
                                 <form class="rate-element ratFeedbackPresentere-element--has-label">
                                     {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.shipping.stars} %}
                                 </form>
-                                <p class="rate-label fix-align font-sm center mb-0">{{ (order.feedback.shipping.stars?trans('pages.rating.'~order.feedback.shipping.stars~'_stars'):'')|raw }}</p>
                             </div>
                             <small class="text-red-400 validation-message"></small>
                         </div>
                     </section>
                 {% endif %}
-                <button id="submitRating" class="btn btn-primary w-full hidden">
-                    <span class="loader loader--small"></span>
-                    <span class="btn__text">{{ trans('pages.rating.send_ratings') }}</span>
-                </button>
                 {# ==================== EN Rating ==================== #}
             </div>
         </div>
