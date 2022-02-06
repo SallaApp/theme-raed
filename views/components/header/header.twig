@@ -41,6 +41,13 @@
                                     <span>فرع الرياض</span>
                                 </button>
                             </div>
+
+                            <salla-branches
+                                    position="header"
+                                    current="3"
+                                    browse-products-from="city"
+                                    display-as="{{displayAs}}"
+                            ></salla-branches>
                         {% endif %}
 
                         <div class="relative inline-block">
@@ -51,6 +58,7 @@
                             <span class="sicon-search"></span>
                           </button>
                         </div>
+                        <salla-search></salla-search>
 
                     </div>
                 </div>
@@ -91,6 +99,7 @@
                                     type="button">
                                 <i class="sicon-user-circle"></i>
                             </button>
+                            <salla-login></salla-login>
                         {% endif %}
                         <div class="flex items-center ms-4" id="main-cart-btn">
                             <a href="{{ link('cart') }}" class="me-1 relative ">
@@ -110,25 +119,6 @@
         </div>
     </header>
 </div>
-
-{% if not user %}
-  <salla-login></salla-login>
-{% endif %}
-
-{# Search Modal #}
-<salla-search></salla-search>
-
-{# Branches Modal #}
-{% if displayAs != 'in-product' %}
-<salla-branches
-        position="header"
-        current="3"
-        browse-products-from="city"
-        display-as="{{displayAs}}"
-></salla-branches>
-{% endif %}
-
-
 {% component 'header.menu' with {is_mobile:true} %}
 
 {# fix unreadable tailwind class in twilight-components #}
