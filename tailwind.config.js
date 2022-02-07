@@ -30,6 +30,7 @@ module.exports = {
                 '-apple-system',
                 'BlinkMacSystemFont',
             ],
+            primary: "var(--font-main)"
         },
         colors    : colors,
         extend    : {
