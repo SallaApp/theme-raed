@@ -463,7 +463,7 @@
 
                 {% if store.settings.rating.store and order.feedback.store.stars %}
                     {# Store Rating #}
-                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="store">
+                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5 last:mb-0" data-type="store">
                         <div class="{{ order.feedback.store.stars?'':'rating-outer-form' }}"
                              data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
                             <input type="hidden" name="order_id" value="{{ order.order_id }}">
@@ -491,7 +491,7 @@
                 {% endif %}
                 {% if order.has_shipping and store.settings.rating.shipping and order.feedback.shipping.stars %}
                     {# Shipping Rating #}
-                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5" data-type="shipping">
+                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5 last:mb-0" data-type="shipping">
                         <div class="{{ order.feedback.shipping.stars?'':'rating-outer-form' }}"
                              data-stars-error="{{ trans('pages.rating.rate_shipping_stars') }}">
                             <input type="hidden" name="order_id" value="{{ order.order_id }}">
