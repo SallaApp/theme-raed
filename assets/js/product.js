@@ -50,7 +50,7 @@ class Product extends BasePage {
         app.onClick('.go-to-slide', e => main.slideTo(app.element(`[data-img-id*="${e.target.dataset.imgId}"]`).dataset.slidIndex, 0));
 
         //used in (similar-products.twig)
-        new Slider('.similar-products-slider', {spaceBetween: 30, breakpoints: {980: {slidesPerView: 4}}});
+        new Slider('.similar-products-slider', {breakpoints: {980: {slidesPerView: 4}}});
 
         //used in (components/product/offer.twig)
         new Slider('#offer-slider', {breakpoints: {640: {slidesPerView: 2, slidesPerGroup: 2}}});
