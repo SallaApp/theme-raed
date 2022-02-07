@@ -66,13 +66,6 @@
 <html lang="{{ language.code }}" dir="{{ language.dir }}">
 <!-- بسم الله الرحمن الرحيم -->
 <head>
-    <script>
-        var baseUrl = '{{ link('/') }}';
-        var is_rtl = parseInt({{ is_rtl?1:0 }});
-        window.locale = "{{ language.code }}";
-    </script>
-    {% hook 'head:inner' %}
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -93,8 +86,6 @@
     {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
     <link rel="stylesheet" href="{{ theme.font.url }}"/>
 
-    {# tracking services, custom css feature. #}
-    {% hook 'head:end' %}
     {% block head %}{% endblock %}
 
     <style>
@@ -126,10 +117,11 @@
         {% endif %} --font-main: '{{theme.font.name}}';
         }
     </style>
+    {# tracking services, custom css feature. #}
+    {% hook 'head:end' %}
 </head>
 
 <body id="app" class="{% hook 'body:classes' %} bg-gray-50">
-{% hook 'head:end' %}
 <noscript>
     To get full functionality of this site you need to enable JavaScript. Here is how
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
@@ -142,11 +134,11 @@
     {% component 'footer.footer' %}
 </div>
 
-{% hook 'body:end' %}
 {% hook 'scripts' %}
 
 <script defer src="{{ asset('dist/app.js') }}"></script>
 {% block scripts %}{% endblock %}
+{# TODO:: Move It to Twilight on initiateing#}
 {% if error %}
     <script>
         document.addEventListener('DOMContentLoaded', function () {

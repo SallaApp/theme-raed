@@ -281,8 +281,8 @@ class App extends salla.AppHelpers {
             document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total);
             document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.count);
         });
-        salla.cart.event.onItemAdded(() => {
-            Anime.addToCart
+        salla.cart.event.onItemAdded((response, prodId) => {
+            Anime.addToCart(response, prodId);
             this.removeLoading();
         });
 
@@ -290,7 +290,7 @@ class App extends salla.AppHelpers {
     }
 
     removeLoading() {
-        document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+        document.querySelectorAll('.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
     }
 
     initiateComments() {

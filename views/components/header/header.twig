@@ -36,7 +36,7 @@
                             <div class="relative inline-block">
                                 <button type="button"
                                         data-on-click="branches::show"
-                                        class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium focus:outline-none focus:ring-offset-transparent">
+                                        class="inline-flex justify-center w-full rounded-full cursor-pointer px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium focus:outline-none">
                                     <span class="sicon-location me-1"></span>
                                     <span>فرع الرياض</span>
                                 </button>
@@ -50,7 +50,16 @@
                             ></salla-branches>
                         {% endif %}
 
+                        <div class="relative inline-block">
+                          <button type="button"
+                                data-target="s-search-modal"
+                                data-on-click="modal::open"
+                                class="inline-flex justify-center items-center  rounded-full cursor-pointer px-3 py-3 h-9 w-9 transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium focus:outline-none">
+                            <span class="sicon-search"></span>
+                          </button>
+                        </div>
                         <salla-search></salla-search>
+
                     </div>
                 </div>
                 {% component 'footer.contacts' with {is_header:true} %}
@@ -85,7 +94,7 @@
                         {% if user %}
                             {% component 'header.user-menu' %}
                         {% else %}
-                            <button class="cursor-pointer mx-1 dropdown-trigger border text-dark rounded-full w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent"
+                            <button class="cursor-pointer mx-1 dropdown-trigger border text-dark rounded-full w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent flex-shrink-0"
                                     onclick="document.querySelector('salla-login').show()"
                                     type="button">
                                 <i class="sicon-user-circle"></i>

@@ -60,17 +60,6 @@
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10">
-                {# settings='{"isStoreRating":"{{store.settings.rating.store}}","url":"www.stenciljs.com"}' #}
-                <salla-rating 
-                    {{store.settings.rating.store ? 'is-store-rating' : ''}}
-                    {{store.settings.rating.shipping ? 'is-shipping-rating' : ''}}
-                    {{store.settings.rating.products ? 'is-products-rating' : ''}}
-                    order-id="{{order.order_id}}"
-                    thanks-msg="{{ store.settings.rating.thanks_message }}"
-                > </salla-rating>   
-
-                
-
                 <h1 class="font-bold text-lg mb-5">{{ trans('pages.orders.details') }} <span
                             class="unicode">(#{{ order.order_id }})</span></h1>
                 <table class="min-w-full mb-10">
@@ -115,16 +104,17 @@
                 </table>
 
                 {% if not order.has_feedback %}
+                    <salla-rating></salla-rating>
                     <div class="relative flex justify-between  profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
                         <div>
                             <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                             <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                         </div>
-                        <button data-on-click="order-rating::show" class="btn btn-primary flex-none">تقييم</button>
+                        <button data-on-click="rating::show" class="btn btn-outline-primary-dark flex-none px-12 rounded-full">{{trans('pages.rating.rate')}}</button>
                     </div>
                 {% endif %}
 
-                <div class="overflow-hidden mb-10">
+                <div class="overflow-hidden mb-10 last:mb-0">
                     <section class="rating-section products-section" data-type="product">
                         {% for item in order.items %}
                             <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}"
@@ -308,7 +298,6 @@
                                                     <form class="rate-element rate-element--has-label">
                                                         {% include 'pages.partials.customer.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
                                                     </form>
-                                                    <p class="rate-label fix-align font-xsm my-0">{{ (item.feedback.stars?trans('pages.rating.'~item.feedback.stars~'_stars'):'')|raw }}</p>
                                                 </div>
                                                 <small class="text-red-400 validation-message"></small>
                                             </div>
@@ -495,7 +484,6 @@
                                 <form class="rate-element rate-element--has-label">
                                     {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.store.stars} %}
                                 </form>
-                                <p class="rate-label fix-align font-sm center mb-0">{{ (order.feedback.store.stars?trans('pages.rating.'~order.feedback.store.stars~'_stars'):'')|raw }}</p>
                             </div>
                             <small class="text-red-400 validation-message"></small>
                         </div>
@@ -526,16 +514,11 @@
                                 <form class="rate-element ratFeedbackPresentere-element--has-label">
                                     {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.shipping.stars} %}
                                 </form>
-                                <p class="rate-label fix-align font-sm center mb-0">{{ (order.feedback.shipping.stars?trans('pages.rating.'~order.feedback.shipping.stars~'_stars'):'')|raw }}</p>
                             </div>
                             <small class="text-red-400 validation-message"></small>
                         </div>
                     </section>
                 {% endif %}
-                <button id="submitRating" class="btn btn-primary w-full hidden">
-                    <span class="loader loader--small"></span>
-                    <span class="btn__text">{{ trans('pages.rating.send_ratings') }}</span>
-                </button>
                 {# ==================== EN Rating ==================== #}
             </div>
         </div>
@@ -543,7 +526,7 @@
 
 
     {# to remove : for compile tailwind classes in component #}
-    <div class ="text-indigo-100 
+    <div class ="text-indigo-100
   hover:bg-gray-200/30
   text-green-500
   space-y-5

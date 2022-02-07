@@ -69,9 +69,7 @@
             {% component 'header.breadcrumbs' %}
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product_{{ product.id }}">
-
-            <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-16">
-
+            <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16">
                 <div class="swiper relative my-gallery details-slider rounded-md mb-2.5"
                      id="details-slider-{{ product.id }}">
                     {% if(product.promotion_title) %}
@@ -89,7 +87,7 @@
                                data-type="{{ image.video_url?'youtube':'image' }}"
                                href="{{ image.video_url?image.video_url:image.url }}"
                                aria-label="{{ product.name }}"
-                               class="swiper-slide h-500 homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
+                               class="swiper-slide h-72 sm:h-96 lg:h-[500px] homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
                                 <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
                                      alt="{{ image.alt }}"
                                      class="h-full object-cover lazy-load w-full">
@@ -107,7 +105,7 @@
                     <div thumbsSlider="" class="swiper thumbs-slider mini" id="thumbs-slider-{{ product.id }}">
                         <div class="swiper-wrapper">
                             {% for image in product.images %}
-                                <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-36">
+                                <div class="swiper-slide {{ image.video_url?'video-entry':'' }} rounded-md overflow-hidden cursor-pointer h-24 lg:h-36">
                                     <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
                                          class="object-cover w-full h-full lazy-load"
                                          title="{{ image.alt }}"
@@ -119,7 +117,7 @@
                 {% endif %}
             </div>
 
-            <div class="main-content w-full md:w-2/4  pb-20">
+            <div class="main-content w-full md:w-2/4 pb-8 md:pb-16">
                 {% component 'product.brand' with {product: product} %}
 
                 <div class="flex">
@@ -258,7 +256,7 @@
                     {% set displayAs = 'defautl' %}
 
                     {% if displayAs == 'in-product' %}
-                      <section class="bg-white p-5 rounded-md mb-5">
+                      <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
                           <div class="flex items-center justify-between">
                               <label class="flex items-center text-base">
                                   <span class="sicon-location me-1"></span>
@@ -288,7 +286,7 @@
                         ></salla-branches>
                     {% endif %}
 
-                    <section class="bg-white p-5 rounded-md mb-5">
+                    <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
 
                         {% if product.hide_quantity or not product.is_available %}
                             <input type="hidden" value="1" name="quantity"/>
@@ -348,8 +346,8 @@
                         </div>
                         <div class="flex justify-between space-s-4">
                             {% if product.is_available %}
-                                <button class="btn btn-primary add-to-cart-btn btn--has-loading"
-                                        data-on-click="cart::add-item"
+                                <button class="btn btn-primary btn--has-loading"
+                                        data-on-click="cart::add.item"
                                         type="button">
                                     <span class="loader loader--small"></span>
                                     <span class="btn__text">

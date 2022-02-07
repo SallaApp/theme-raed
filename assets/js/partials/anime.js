@@ -202,9 +202,6 @@ Anime.addToCart = function (response, productId) {
                 cartThumb.remove();
             },
         }, '-=1700');
-
-    // remove loading class
-    document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading'))
 }
 
 export default Anime;
