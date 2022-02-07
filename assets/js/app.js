@@ -290,7 +290,7 @@ class App extends salla.AppHelpers {
     }
 
     removeLoading() {
-        document.querySelectorAll('.add-to-cart-btn.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+        document.querySelectorAll('.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
     }
 
     initiateComments() {
