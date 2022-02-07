@@ -15,7 +15,7 @@ class App extends salla.AppHelpers {
 
     //remove it
     isUser() {
-        return salla.config.get('user.type') === 'user';
+        return salla.config.isUser();
     }
 
     loadTheApp() {
