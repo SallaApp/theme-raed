@@ -10,38 +10,43 @@
         </div>
 
         <div class="flex-1">
-            <div class="flex flex-wrap md:items-center justify-between mb-3 md:mb-0">
-                <div class="md:flex items-center">
-                    <h3 class="font-bold text-base me-5 fix-align mb-1">{{ comment.name }}</h3>
-                    <div class="flex">
-                        {% if comment.order_id %}
-                            <i class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
-                            <span class="fix-align ms-1 text-sm text-gray-400">
-                                {{ trans('blocks.comments.has_bought') }}
-                            </span>
-                        {% endif %}
-                        {% if comment.stars %}
-                            <span class="fix-align ms-1 text-sm text-gray-400">
-                                {{ trans('pages.rating.rated') }}
-                            </span>
-                        {% endif %}
-                    </div>
+            <div class="flex flex-wrap md:items-center justify-between mb-2 md:mb-0">
+                <div class="flex items-center mb-1">
+                    <h3 class="font-bold text-base me-10 fix-align">{{ comment.name }}</h3>
+
+                    {% if comment.order_id or comment.stars %}
+                      <div class="flex">
+                          {% if comment.order_id %}
+                              <i class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs "></i>
+                              <span class="fix-align ms-1 text-sm text-gray-400 mt-0.5">
+                                  {{ trans('blocks.comments.has_bought') }}
+                              </span>
+                          {% endif %}
+                          {% if comment.stars %}
+                              <span class="fix-align ms-1 text-sm text-gray-400 mt-0.5">
+                                  {{ trans('pages.rating.rated') }}
+                              </span>
+                          {% endif %}
+                      </div>
+                    {% endif %}
                 </div>
                 <p class="text-gray-400 text-sm">{{ comment.created_at|time_ago }}</p>
                 {% if comment.stars %}
-                    <div class="-mt-5 md:-mt-0 text-end md:text-start w-full comment__rating text-xs mb-2.5 space-x-1">
-                        <i class="sicon-star2 text-theme-yellow"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 2 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 3 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 4 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
-                        <i class="sicon-star2 {{ comment.stars >= 5 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
+                    <div class="w-full comment__rating text-xs mb-2.5 space-s-1">
+                        <i class="sicon-star2 inline-block text-theme-yellow"></i>
+                        <i class="sicon-star2 inline-block {{ comment.stars >= 2 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
+                        <i class="sicon-star2 inline-block {{ comment.stars >= 3 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
+                        <i class="sicon-star2 inline-block {{ comment.stars >= 4 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
+                        <i class="sicon-star2 inline-block {{ comment.stars >= 5 ? 'text-theme-yellow' : 'text-gray-400' }}"></i>
                     </div>
                 {% endif %}
             </div>
 
             <div class="prose prose-sm max-w-none text-gray-500">
-                <p>{{ comment.content|raw }}{% if comment.is_pending %} <span class="pending-comment">{{ trans('blocks.comments.waiting_approval') }}</span>{% endif %}
-                </p>
+                <p>{{ comment.content|raw }}</p>
+                {% if comment.is_pending %}
+                  <p><span class="pending-comment pending-comment bg-gray-200 rounded-full px-2.5 py-0.5 inline-block mt-2">{{ trans('blocks.comments.waiting_approval') }}</span></p>
+                {% endif %}
                 {% if comment.order_id != 0 %}
                     <i class="icon-cart user-buy" data-toggle="tooltip" data-placement="right"
                        title="{{ trans('blocks.comments.has_order') }}"></i>
