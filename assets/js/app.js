@@ -249,16 +249,16 @@ class App extends salla.AppHelpers {
     // ======================= Wishlist Icons in Product Cards ======================= //
     initiateWishlistButtons() {
         app.onClick('.wishlist-btn', event => event.target.classList.add('is--loading'));
-        localStore.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
+        salla.localData.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
 
         salla.wishlist.event.onAdded((event, id) => this.updateWishlist(id, true));
         salla.wishlist.event.onRemoved((event, id) => this.updateWishlist(id, false));
     }
 
     updateWishlist(id, isAdded) {
-        let wishlist = localStore.get("salla-wishlist", []);
+        let wishlist = salla.localData.get("salla-wishlist", []);
         isAdded ? wishlist.push(id) : wishlist.splice(wishlist.indexOf(id), 1);
-        localStore.set("salla-wishlist", wishlist);
+        salla.localData.set("salla-wishlist", wishlist);
         this.toggalFavorites(id, isAdded);
     }
 

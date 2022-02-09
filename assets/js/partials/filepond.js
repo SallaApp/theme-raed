@@ -39,7 +39,7 @@ class FileUploader {
                 files           : this.getFilesFromInput(input),
                 server          : this.requestProperties(input),
                 instantUpload   : input.dataset.hasOwnProperty('instantUpload'),
-                beforeRemoveFile: ({getMetadata: file}) => file('id') && salla.cart.api.deleteFile(file('id')) || salla.log(file()),
+                beforeRemoveFile: ({getMetadata: file}) => file('id') && salla.cart.api.deleteItemImage(file('id')) || salla.log(file()),
                 labelIdle       : `<i class="sicon-camera block !text-2xl opacity-75"></i><span class="block">${label[0]}</span><span class="filepond--label-action">${label[1]}</span>`,
                 ...options,
             }));
@@ -90,10 +90,11 @@ class FileUploader {
                 url    : data.url,
                 process: {
                     onload : response => JSON.parse(response).data.filePath,
+                    headers: {accept: 'application/json'},
                     onerror: response => JSON.parse(response).error.fields.image_file[0] || salla.lang.get('common.errors.error_occurred'),
                     ondata : formData => {
-                        [['_token', salla.config.get('token')], ['cart_item_id', data.itemId], ['product_id', data.productId]]
-                            .forEach((key, value) => value && formData.append(key, value));
+                        [['_token', salla.get('_token')], ['cart_item_id', data.itemId], ['product_id', data.productId]]
+                            .forEach(value => value[1] && formData.append(value[0], value[1]));
                         return formData;
                     }
                 }
