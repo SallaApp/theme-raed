@@ -95,11 +95,11 @@
                             {% component 'header.user-menu' %}
                         {% else %}
                             <button class="cursor-pointer mx-1 dropdown-trigger border text-dark rounded-full w-10 h-10 font-medium focus:outline-none focus:ring-offset-transparent flex-shrink-0"
-                                    onclick="document.querySelector('salla-login').show()"
+                                    data-on-click="login::show"
                                     type="button">
                                 <i class="sicon-user-circle"></i>
                             </button>
-                            {# <salla-login></salla-login> #}
+                            <salla-login></salla-login>
                         {% endif %}
                         <div class="flex items-center ms-4" id="main-cart-btn">
                             <a href="{{ link('cart') }}" class="me-1 relative ">
@@ -117,7 +117,6 @@
                 </div>
             </div>
         </div>
-        <salla-login></salla-login>
     </header>
 </div>
 {% component 'header.menu' with {is_mobile:true} %}
