@@ -30,15 +30,18 @@ class Cart extends BasePage {
     }
 
     /**
-     * @param  {UpdateCartItemResponse} res
+     * @param  {CartDetailsResponse} res
      */
     updateCartPageInfo(res) {
         res.data.items?.forEach(item => this.updateItemInfo(item));
-        app.subTotal.innerText = res.data.sub_total || res.data.cart.sub_total ;
+        app.subTotal.innerText = res.data.sub_total || res.data.cart.sub_total;
         app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => res.data.total_discount)
             .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => res.data.shipping_cost);
         app.totalDiscount.querySelector('b').innerText = '- ' + res.data.total_discount;
         app.shippingCost.querySelector('b').innerText = res.data.shipping_cost;
+        if (res.data['free-shipping-bar']) {
+            //app.element('#free-shipping-bar').innerHTML = res.data['free-shipping-bar'];
+        }
     }
 
     // ========================== Cart Items ========================== //
@@ -50,18 +53,18 @@ class Cart extends BasePage {
                     btnAdd = cartItem.querySelector('.add-qty'),
                     btnSub = cartItem.querySelector('.sub-qty'),
                     quantity = cartItem.querySelector('.item-quantity');
-                    quantity && app.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target)),
-                this.items[itemId] = {
-                    item        : cartItem,
-                    total       : cartItem.querySelector('.item-total'),
-                    price       : cartItem.querySelector('.item-price'),
-                    productPrice: cartItem.querySelector('.product-price'),
-                    offer       : cartItem.querySelector('.offer-name'),
-                    offerIcon   : cartItem.querySelector('.offer-icon'),
-                    quantity    : quantity,
-                    btnAdd      : btnAdd,
-                    btnSub      : btnSub,
-                };
+                quantity && app.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target)),
+                    this.items[itemId] = {
+                        item        : cartItem,
+                        total       : cartItem.querySelector('.item-total'),
+                        price       : cartItem.querySelector('.item-price'),
+                        productPrice: cartItem.querySelector('.product-price'),
+                        offer       : cartItem.querySelector('.offer-name'),
+                        offerIcon   : cartItem.querySelector('.offer-icon'),
+                        quantity    : quantity,
+                        btnAdd      : btnAdd,
+                        btnSub      : btnSub,
+                    };
                 btnAdd && app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
                 btnSub && app.onClick(btnSub, () => this.reduceQuantity(quantity));
                 app.onClick(cartItem.querySelector('.btn--delete'), () => this.removeItem(itemId))
@@ -112,12 +115,12 @@ class Cart extends BasePage {
     /**
      * @param {CartItem} item
      */
-    updateItemInfo(item) {       
+    updateItemInfo(item) {
         /**
          * @type {{offer: HTMLElement, item: HTMLElement, total: HTMLElement, quantity: HTMLElement, btnSub: HTMLElement, btnAdd: HTMLElement, price: HTMLElement, offerIcon: HTMLElement, productPrice: HTMLElement}}
          */
         let cartItem = this.items[item.id];
-        if(item.display_total_price != cartItem.total.innerText){
+        if (item.display_total_price != cartItem.total.innerText) {
             cartItem.total.innerText = item.display_total_price;
             app.anime(cartItem.total, {scale: [.88, 1]});
         }
@@ -181,7 +184,7 @@ class Cart extends BasePage {
     }
 
     updateCartSummary() {
-        salla.cart.api.fetchFullSummary().then(res => this.updateCartPageInfo(res));
+        salla.cart.api.details().then(res => this.updateCartPageInfo(res));
     }
 
     showCouponError(message, isApplying = true) {
