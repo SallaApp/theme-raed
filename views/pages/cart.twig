@@ -58,7 +58,7 @@
                 {% for item in cart.items %}
                     {% set key_prefix=item.id %}
                     <section class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
-                            {# verifyDataBeforeSend function existed in assets/js/partials/pages/product-options.js #}
+                            {# verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
                              data-filter-before-submit="verifyDataBeforeSend"
                              data-on-change="cart::update.item"
                              data-id="{{ item.id }}"
@@ -120,14 +120,11 @@
                             </div>
                         </div>
 
-                        {% if item.options|length %}
-                            <form>
-                                {% include 'pages.partials.product.options' with {product:item} %}
-                            </form>
-                        {% endif %}
+                        <form>{% include 'pages.partials.product.options' with {product:item} %}</form>
                         <button class="btn--has-loading btn--delete bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
                             <i class="sicon-cancel icon"></i>
-                            <span style="display: none" class="absolute spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full"></span>
+                            <span style="display: none"
+                                  class="absolute spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full"></span>
                         </button>
                     </section>
 
