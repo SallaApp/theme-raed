@@ -8,12 +8,16 @@ class Cart extends BasePage {
         salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
         app.anime('.free-shipping,.shipping-item', {translateX: [-20, 0]});
         app.watchElements({
-            couponCode   : '#coupon',
-            couponBtn    : '#btn-add-coupon',
-            couponError  : '#coupon-error',
-            subTotal     : '#sub-total',
-            totalDiscount: '#total-discount',
-            shippingCost : '#shipping-cost',
+            couponCode      : '#coupon',
+            couponBtn       : '#btn-add-coupon',
+            couponError     : '#coupon-error',
+            subTotal        : '#sub-total',
+            totalDiscount   : '#total-discount',
+            shippingCost    : '#shipping-cost',
+            freeShipping    : '#free-shipping',
+            freeShippingBar : '#free-shipping-bar',
+            freeShipppingMsg: '#free-shipping-msg',
+            freeShipApplied : '#free-shipping-applied',
         });
         this.initiateCoupon();
         new ProductOptions();
@@ -36,12 +40,20 @@ class Cart extends BasePage {
         res.data.items?.forEach(item => this.updateItemInfo(item));
         app.subTotal.innerText = res.data.sub_total || res.data.cart.sub_total;
         app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => res.data.total_discount)
-            .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => res.data.shipping_cost);
+            .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => res.data.shipping_cost)
+            .toggleElement(app.freeShipping, 'has_free', 'hidden', () => res.data.free_shipping_bar);
         app.totalDiscount.querySelector('b').innerText = '- ' + res.data.total_discount;
         app.shippingCost.querySelector('b').innerText = res.data.shipping_cost;
-        if (res.data['free-shipping-bar']) {
-            //app.element('#free-shipping-bar').innerHTML = res.data['free-shipping-bar'];
+        if (!res.data.free_shipping_bar) {
+            return;
         }
+        let isFree = res.data.free_shipping_bar.has_free_shipping;
+        app.toggleElement(app.freeShippingBar, 'active', 'hidden', () => !isFree)
+            .toggleElement(app.freeShipApplied, 'active', 'hidden', () => isFree);
+        app.freeShipppingMsg.innerHTML = isFree
+            ? salla.lang.get('pages.cart.has_free_shipping')
+            : salla.lang.get('pages.cart.free_shipping_alert', {amount: salla.money(res.data.free_shipping_bar.remaining)});
+        app.freeShippingBar.children[0].style.width = res.data.free_shipping_bar.percent + '%';
     }
 
     // ========================== Cart Items ========================== //
