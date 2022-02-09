@@ -1,0 +1,68 @@
+{% if products is not empty or 
+      categories is not empty or
+    discounts is not empty  %}
+      
+  <div class="flex justify-between items-center mb-9">
+
+    {# Big % bg in offers block #}
+    {% if type == 'offer' %}
+      <span class="text-[200px] font-normal text-red-50 absolute leading-none -top-4 right-12 -z-1">%</span>
+    {% endif %}
+
+    {# Block Title #}
+    <div>
+      <h2 class="text-xl font-bold {{type == 'offer' ? 'text-red-400': 'text-gray-500'}}">{{ title }}</h2>
+      {% if subTitle %} <p class="pe-16 mt-2">{{ subTitle|raw }}</p> {% endif %}
+    </div>
+
+    {# Slider Nav btns && show all btn #}
+    <div class="flex items-center">
+      {% if display_all_url %}
+          <a href="{{ display_all_url }}" class="text-sm font-bold text-primary hover:opacity-80 me-3">{{ trans('blocks.home.display_all') }}</a>
+      {% endif %}
+      <div class="hidden sm:flex space-s-1" dir="rtl">
+          <button aria-label="Slider Right Arrow" class="slider-prev inline-flex items-center justify-center focus:outline-none border border-gray text-gray-500 rounded-full w-7 h-7">
+              <i class="text-gray-400 sicon-keyboard_arrow_right"></i>
+          </button>
+          <button aria-label="Slider Left Arrow" class="slider-next inline-flex items-center justify-center focus:outline-none border border-gray text-gray-500 rounded-full w-7 h-7">
+              <i class="text-gray-400  sicon-keyboard_arrow_left"></i>
+          </button>
+      </div>
+    </div>
+  </div>
+
+  {# Swiper #}
+  <div class="swiper default-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="{{type}}-slider">
+    
+    <div class="swiper-wrapper flex">
+      {% if type == 'offer' and categories|length %} 
+        {% for category in categories %}
+          <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-2 lg:px-3.75">
+            <a href="{{ category.url }}" class="bg-white rounded-md h-36 mb-8 p-3 text-center flex flex-col items-center justify-center text-gray-400 transition duration-500 hover:shadow-default hover:text-gray-500 border border-gray-100"> 
+              <i class="{{ category.icon}} text-primary text-icon-lg mb-4 cat-item"></i>
+              <h4 class="font-bold text-sm cat-item">{{ category.name }}</h4>
+            </a>
+          </div>
+        {% endfor %}
+      {% elseif type == 'offer' and discounts|length %} 
+        {% for discount in discounts %}
+          <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 lg:w-1/4 px-2 lg:px-3.75">
+            <div class="bg-white rounded-md h-36 mb-8 text-center flex flex-col items-center justify-between text-gray-600 transition duration-500 hover:shadow-default border border-border-color">
+              <div class="p-3 flex-grow flex flex-col justify-center w-full">
+                <p class="mb-1">{{ discount.text|raw }}</p>
+                <div class="text-sm text-gray-400"><span class="font-extrabold text-red-400 text-3xl">{{ discount.price }}</span> ر.س</div>
+              </div>
+              <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">بخصم يصل إلى (<span class="font-bold">{{discount.discount}}%</span>)</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for product in products %}
+          <div class="swiper-slide h-auto similar-products__slide w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
+              {% include 'pages.partials.product.card' %}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

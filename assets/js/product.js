@@ -49,11 +49,14 @@ class Product extends BasePage {
         //when clicking product option form type image, move slider to same image
         app.onClick('.go-to-slide', e => main.slideTo(app.element(`[data-img-id*="${e.target.dataset.imgId}"]`).dataset.slidIndex, 0));
 
-        //used in (similar-products.twig)
-        new Slider('.similar-products-slider', {breakpoints: {980: {slidesPerView: 4}}});
 
-        //used in (components/product/offer.twig)
-        new Slider('#offer-slider', {breakpoints: {640: {slidesPerView: 2, slidesPerGroup: 2}}});
+        /*
+          used in:
+            1- similar-products.twig
+            2- best offer home block (called again in home.js)
+            3- product offer products slider/ cats slider / discount slider
+        */
+        new Slider('.default-slider');
     }
 
 
