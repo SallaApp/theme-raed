@@ -292,18 +292,15 @@
                         {% if product.hide_quantity or not product.is_available %}
                             <input type="hidden" value="1" name="quantity"/>
                         {% else %}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
-                                <label class="form-label">
-                                    <b class="block">
-                                        {{ trans('pages.products.quantity') }}
-                                    </b>
+                            <div class="flex justify-between items-center mb-5">
+                                <label class="form-label font-bold">
+                                  {{ trans('pages.products.quantity') }}
                                 </label>
-                                <div class="mt-1 sm:mt-0 sm:col-span-2 flex justify-end ">
+                                <div class="flex justify-end">
                                     <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                                        <button class="text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
-                                                id="btn-increase"
-                                                type="button">
-                                            <i class="sicon-add"></i></button>
+                                        <button class="btn--quantity" id="btn-increase" type="button">
+                                          <i class="sicon-add"></i>
+                                        </button>
                                         <input id="product-quantity"
                                                data-digits="1"
                                                name="quantity"
@@ -316,35 +313,33 @@
                                                aria-label="Product Quantity"
                                                min="1"/>
 
-                                        <button class="text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300 cursor-pointer"
-                                                id="btn-decrease"
-                                                type="button">
-                                            <i class="sicon-minus"></i></button>
+                                        <button class="btn--quantity" id="btn-decrease" type="button">
+                                          <i class="sicon-minus"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         {% endif %}
 
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-5">
+                        <div class="flex justify-between items-center mb-5">
                             <label class="form-label">
                                 <b class="block">
                                     {{ trans('pages.products.price') }}
                                 </b>
                             </label>
-                            <div class="mt-1 sm:mt-0 sm:col-span-2 text-end space-s-1">
-                                <div class="space-s-1">
-                                    {% if product.on_sale %}
-                                        <h4 id="total-price"
-                                            class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                        <span id="before-price"
-                                              class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                                    {% else %}
-                                        <h4 id="total-price"
-                                            class="text-theme-red font-bold text-sm inline-block">{{ product.price|money }}</h4>
-                                    {% endif %}
-                                </div>
+                            <div class="space-s-1">
+                              {% if product.on_sale %}
+                                <h4 id="total-price"
+                                    class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                <span id="before-price"
+                                      class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                              {% else %}
+                                <h4 id="total-price"
+                                    class="text-theme-red font-bold text-sm inline-block">{{ product.price|money }}</h4>
+                              {% endif %}
                             </div>
                         </div>
+
                         <div class="flex justify-between space-s-4">
                             {% if product.is_available %}
                                 <button class="btn btn-primary btn--has-loading"
