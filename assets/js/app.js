@@ -248,7 +248,7 @@ class App extends salla.AppHelpers {
 
     // ======================= Wishlist Icons in Product Cards ======================= //
     initiateWishlistButtons() {
-        app.onClick('.wishlist-btn', event => event.target.classList.add('is--loading'));
+        app.onClick('.btn--wishlist', event => event.target.classList.add('is--loading'));
         salla.localData.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
 
         salla.wishlist.event.onAdded((event, id) => this.updateWishlist(id, true));
@@ -263,7 +263,7 @@ class App extends salla.AppHelpers {
     }
 
     toggalFavorites(id, isAdded) {
-        document.querySelectorAll('.wishlist-btn[data-id="' + id + '"]')
+        document.querySelectorAll('.btn--wishlist[data-id="' + id + '"]')
             .forEach(btn => {
                 app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
                 app.toggleElement(btn, ['text-primary', 'pulse'], 'un-favorited', () => isAdded);

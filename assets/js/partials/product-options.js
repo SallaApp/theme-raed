@@ -82,7 +82,7 @@ export default class ProductOptions {
         });
     }
 
-//register verifyDataBeforeSend function
+    //register verifyDataBeforeSend function
     verifyDataBeforeSend(formData, element, event) {
         if (!element) {
             return;

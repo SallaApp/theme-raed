@@ -9,20 +9,20 @@
 | offer.products                | Product[] *Collection   |             |
 | offer.steps(product_quantity) | array                   |             |
 #}
-{% set discounts = {
+
+{# {% set discounts = {
  '1':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30},
  '2':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1400, 'discount': 40},
  '3':{'text': 'اشتري <strong>اربع قطع</strong> من المنتج بـ', 'price': 1800, 'discount': 50},
  '4':{'text': 'اشتري <strong>خمس قطع</strong> من المنتج بـ', 'price': 2000, 'discount': 60},
  '5':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30}
 } 
-%}
+%} #}
 
 <section id="offer-slider" class="relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
   {% include 'pages.partials.product.slider' with {
     products: offer.products, 
     categories: offer.categories,
-    discounts: discounts,
     type: 'offer',
     title: offer.name,
     subTitle: offer.description
