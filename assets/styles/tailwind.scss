@@ -63,7 +63,7 @@
 		}
 
 		&--light-gray {
-			@apply inline-flex justify-center w-full rounded-full px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium;
+			@apply inline-flex justify-center w-full rounded-full px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium whitespace-nowrap;
 		}
 
 		&--gray-circle {
@@ -80,6 +80,58 @@
     
     &--close-sm{ 
       @apply opacity-0 transform -translate-y-full transition duration-300 h-[51px] w-[51px] bg-red-500 text-white text-xl fixed top-0 end-0 z-50;
+    }
+
+    /* --- Sliders nav arrows --- */
+    /*
+    used in:
+      1- Latest proudcts slider - home block
+      2- Offers slider
+      3- Similar products
+    */
+    &--sm-arrow{
+      @apply inline-flex items-center justify-center border text-gray-500 rounded-full w-7 h-7 text-gray-400;
+    }
+
+    /*
+    used in:
+      1- Home tabs block
+    */
+    &--md-arrow{
+      @apply text-gray-400 border text-gray-500 rounded-full w-10 h-10;
+    }
+
+    /*
+    used in:
+      1- Main slider (enhancend slider)
+      2- Photos slider
+      3- Product slider
+      4- Testimonials slider
+    */
+    &--md-white-arrow{
+      @apply h-10 w-10 bg-white text-primary transition shadow-sm hidden md:flex justify-center items-center rounded-full hover:opacity-60 absolute top-1/2 -translate-y-1/2 z-1 start-4 xl:start-8;
+
+      &.slider-next{
+        @apply start-auto end-4 xl:end-8;
+      }
+
+      i{
+        font-size: 22px;
+      }
+
+      &.lg{
+        @apply hidden lg:flex start-5 lg:start-60 translate-y-1/2;
+
+        &.slider-next{
+          @apply start-auto end-5 lg:end-60;
+        }
+      }
+
+      .ltr &{
+        i{
+          transform: scaleX(-1);
+        }
+      }
     }
 	}
   
