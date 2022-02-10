@@ -6,56 +6,56 @@
 #}
 {% if is_profile_sidebar %}
     <a href="{{ link('notifications') }}"
-       class="{% if is_link('notifications') %}active{% endif %} menu-item flex justify-between  items-center  px-6 py-2.5 text-sm hover:text-gray-600 transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('notifications')? 'text-primary bg-gray-200/20':'text-gray-500' }}">
+       class="{% if is_link('notifications') %}active{% endif %} menu-item menu-item--notify {{ is_link('notifications')? 'text-primary bg-gray-200/20':'text-gray-500' }}">
         <span>
             <i class="sicon-school-bell me-3 text-lg"></i>
             <span class="truncate"> {{ trans('common.titles.notifications') }}</span>
         </span>
         {% if new_notifications_count %}
-            <span class="bg-theme-red text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">{{ new_notifications_count }}</span>
+            <span class="notifications-count">{{ new_notifications_count }}</span>
         {% endif %}
     </a>
     <a href="{{ link('pending_orders') }}"
-       class="{% if is_link('pending_orders') %}active{% endif %} menu-item flex justify-between  items-center  px-6 py-2.5 text-sm hover:text-gray-600 transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'text-gray-500' }}">
+       class="{% if is_link('pending_orders') %}active{% endif %} menu-item menu-item--notify {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'text-gray-500' }}">
         <span>
         <i class="sicon-cart me-3 text-lg"></i>
         <span class="truncate"> {{ trans('common.titles.pending_orders') }}</span>
         </span>
         {% if pending_orders_count %}
-            <span class="bg-theme-red text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">{{ pending_orders_count }}</span>
+            <span class="notifications-count">{{ pending_orders_count }}</span>
         {% endif %}
     </a>
     <a href="{{ link('orders') }}"
        aria-current="page"
-       class="menu-item flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
+       class="menu-item {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
         <i class="sicon-packed-box me-3 text-lg"></i>
         <span class="truncate">{{ trans('common.titles.orders') }}</span>
     </a>
     <a href="{{ link('wishlist') }}"
        aria-current="page"
-       class="menu-item flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
+       class="menu-item {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
         <i class="sicon-heart me-3 text-lg"></i>
         {{ trans('common.titles.wishlist') }}
     </a>
     <a href="{{ link('profile') }}"
-       class="menu-item flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30 {{ is_link('profile')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
+       class="menu-item {{ is_link('profile')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
         <i class="sicon-settings me-3 text-lg"></i>
         {{ trans('common.titles.profile') }}
     </a>
     <a href="{{ link('logout') }}"
        data-on-click="auth-logout"
-       class="text-theme-red  menu-item flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30">
+       class="menu-item text-theme-red">
         <i class="sicon-send-out me-3 text-lg"></i>
         {{ trans('blocks.header.logout') }}
     </a>
 {% else %}
-    <div class="dropdown-toggler inline-flex items-center lg:h-full w-10 mx-1 md:mx-2 text-gray-500 absolute top-[-47px] end-8 lg:static">
+    <div class="dropdown-toggler">
         <button aria-label="User Menu Trigger" type="button"
-                class="dropdown__trigger border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent"
+                class="dropdown__trigger"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
             <img class="h-10 w-10 object-cover pointer-events-none" src="{{ user.avatar }}" alt="">
         </button>
-        <div class="dropdown__menu origin-top-right inset-top-shadow duration-200 transition-all scale-y-90 absolute opacity-0 -translate-y-4 invisible rtl:left-0 ltr:right-0 z-30 w-80 lg:w-56 rounded-t-md lg:rounded-t-none rounded-b-md shadow-default bg-white dark:bg-gray-700 top-full after:border-t {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }} {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}"
+        <div class="dropdown__menu inset-top-shadow after:border-t {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }} {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="menu-button"
@@ -74,46 +74,46 @@
             <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
                 <li class="{{ new_notifications_count ? 'has-badge' : '' }}">
                     <a href="{{ link('notifications') }}"
-                       class="flex justify-between  items-center px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('notifications')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="menu-item menu-item--user menu-item--notify {{ is_link('notifications')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
                        <span>
                         <i class="sicon-bell-ring me-3"></i>
                         <span>{{ trans('common.titles.notifications') }}</span>
                         </span>
                         {% if new_notifications_count %}
                             <span id="notificationsCount"
-                                  class="bg-theme-red text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">{{ new_notifications_count }}</span>
+                                  class="notifications-count">{{ new_notifications_count }}</span>
                         {% endif %}
                     </a>
                 </li>
                 <li class="{{ pending_orders_count ? 'has-badge' : '' }}">
                     <a href="{{ link('pending_orders') }}"
-                       class="flex items-center justify-between px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/30 {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="menu-item menu-item--user menu-item--notify {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
                         <span>
                             <i class="sicon-cart me-3"></i>
                             <span> {{ trans('common.titles.pending_orders') }}</span>
                         </span>
                         {% if pending_orders_count %}
-                            <span class="bg-theme-red text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">{{ pending_orders_count }}</span>
+                            <span class="notifications-count">{{ pending_orders_count }}</span>
                         {% endif %}
                     </a>
                 </li>
                 <li>
                     <a href="{{ link('orders') }}"
-                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
+                       class="menu-item menu-item--user {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
                         <i class="sicon-packed-box me-3"></i>
                         <span>{{ trans('common.titles.orders') }}</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ link('wishlist') }}"
-                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
+                       class="menu-item menu-item--user {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
                         <i class="sicon-heart me-3"></i>
                         {{ trans('common.titles.wishlist') }}
                     </a>
                 </li>
                 <li>
                     <a href="{{ link('profile') }}"
-                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10 {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="menu-item menu-item--user {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
                         <i class="sicon-settings me-3"></i>
                         {{ trans('common.titles.profile') }}
                     </a>
@@ -121,7 +121,7 @@
                 <li>
                     <a href="{{ link('logout') }}"
                        data-on-click="auth-logout"
-                       class="block px-4 py-3 lg:py-2 text-base lg:text-sm text-red-500 transition-colors duration-200 hover:bg-gray-200/30 dark:hover:bg-gray-200/10">
+                       class="menu-item menu-item--user text-red-500">
                         <i class="sicon-send-out me-3"></i>
                         {{ trans('blocks.header.logout') }}
                     </a>
