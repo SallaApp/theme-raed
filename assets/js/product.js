@@ -16,7 +16,6 @@ class Product extends BasePage {
             totalPrice   : '#total-price',
             beforePrice  : '#before-price',
         });
-        salla.event.on('comment::added', () => document.location.reload());
     }
 
     registerEvents() {

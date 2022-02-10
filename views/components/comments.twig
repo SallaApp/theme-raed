@@ -25,12 +25,17 @@
                 <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
                 <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
                           class="form-input h-24 mb-5"
-                          name="ask_textarea"
+                          name="comment"
                           maxlength="500" cols="30"
                           rows="30"></textarea>
 
                 <div class="text-end mb-4">
-                    <button class="btn btn-primary btn--has-loading" id="add-new-comment-btn" data-on-click="comment::{{ type }}.add" data-id="{{ id }}" type="button">
+                    <button class="btn btn-primary btn--has-loading"
+                            data-on-click="comment::send"
+                            id="add-new-comment-btn"
+                            data-id="{{ id }}"
+                            data-type="{{ type }}"
+                            type="button">
                         <span class="loader loader--small"></span>
                         <span class="btn__text"> {{ trans('blocks.comments.submit') }} </span>
                     </button>
@@ -48,7 +53,7 @@
 
             {% include 'pages.partials.loader-status' with {next_page:comments.next_page} %}
         {% else %}
-              <!-- no comments placeholder -->
+            <!-- no comments placeholder -->
             <div class="content-placeholder content-placeholder--comments text-center text-gray-400 pt-10">
                 <i class="sicon-chat-bubbles text-5xl block mb-2.5 text-reverse-dark"></i>
                 <p class="text-sm">لا يوجد تعليقات حتي الآن, قم بإضافة اول تعليق</p>

@@ -278,8 +278,8 @@ class App extends salla.AppHelpers {
      */
     initAddToCart() {
         salla.cart.event.onUpdated(summary => {
-            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total);
-            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.count);
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total || salla.money(0));
+            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.items_count || summary.count || 0);
         });
         salla.cart.event.onItemAdded((response, prodId) => {
             Anime.addToCart(response, prodId);
@@ -299,11 +299,11 @@ class App extends salla.AppHelpers {
         if (!btn) {
             return;
         }
-        let input = this.element('textarea[name="ask_textarea"]');
+        let input = this.element('textarea[name="comment"]');
         this.onClick(btn, () => input.value.length >= 3 ? btn.classList.add('btn--has-loading', 'pointer-events-none') : input.classList.add('!border-red-400'));
         this.onKeyUp(input, () => input.classList.remove('!border-red-400'));
-        salla.comment.event.onAdded(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
-        salla.comment.event.onAdditionFailed(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
+        salla.comment.event.onAdded(() => btn.classList.remove('btn--is-loading', 'pointer-events-none') || window.location.reload());
+        salla.comment.event.onAdditionFailed(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'));
     }
 
     initiateInfiniteScroll() {

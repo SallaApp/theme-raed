@@ -164,7 +164,7 @@ class Cart extends BasePage {
             event.preventDefault();
             //if it's remove coupon, will have `btn-danger` class
             if (app.couponBtn.classList.contains('btn-danger')) {
-                return salla.api.coupon.remove(salla.get('page.id'));
+                return salla.api.coupon.remove(salla.config.get('page.id'));
             }
 
             if (!app.couponCode.value.length) {
@@ -172,7 +172,7 @@ class Cart extends BasePage {
                 return;
             }
 
-            salla.api.coupon.add({id: salla.get('page.id'), coupon: app.couponCode.value});
+            salla.api.coupon.add({id: salla.config.get('page.id'), coupon: app.couponCode.value});
         });
     }
 
