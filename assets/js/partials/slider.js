@@ -67,10 +67,10 @@ export default class Slider {
      * @return {{nextEl: Element, prevEl: Element}}
      */
     navigation(id) {
-        let nextEl = app.element(`${id} .slider-next,${id} .swiper-button-next,${id} .slider-next-lg`);
+        let nextEl = app.element(`${id} .slider-next`);
         return nextEl ? {
             nextEl: nextEl,
-            prevEl: app.element(`${id} .slider-prev,${id} .swiper-button-prev,${id} .slider-prev-lg`)
+            prevEl: app.element(`${id} .slider-prev`)
         } : {};
     }
 
