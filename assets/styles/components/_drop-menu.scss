@@ -14,7 +14,7 @@
 		background-color: white;
 		position: absolute;
 		// box-shadow: 0 4px 8px rgba(161, 121, 121, 0.07);
-		box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .07);
+		box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.07);
 		// z-index: 20;
 		transform: translateY(20px);
 		opacity: 0;
@@ -22,7 +22,6 @@
 		visibility: hidden;
 		border-radius: 5px;
 		padding: 10px 0 20px;
-
 
 		li {
 			padding: 8px 16px;
@@ -64,21 +63,21 @@
 }
 
 // Dropdown toggler
-.dropdown-toggler {
+.dropdown-toggler {	
   &:before {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    content: '';
-    background: rgba(#000, 0.75);
-    left: 0;
-    top: 0;
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-    transition: 0.3s;
-    z-index: 9;
-  }
+		position: fixed;
+		width: 100vw;
+		height: 100vh;
+		content: "";
+		background: rgba(#000, 0.75);
+		left: 0;
+		top: 0;
+		opacity: 0;
+		pointer-events: none;
+		visibility: hidden;
+		transition: 0.3s;
+		z-index: 9;
+	}
 
 	&.is-opened {
 		.dropdown__menu {
@@ -88,31 +87,31 @@
 		}
 	}
 
-  @media (max-width: 1024px){
-    .dropdown__menu {
-      position: fixed; 
-      top: calc(50vh + 30px);
-      left: 50vw !important;
-      transform: translateX(-50%) translateY(-50%);
-    }
+	@media (max-width: 1024px) {
+		.dropdown__menu {
+			position: fixed;
+			top: calc(50vh + 30px);
+			left: 50vw !important;
+			transform: translateX(-50%) translateY(-50%);
+		}
 
-    &.is-opened {
-      .dropdown__menu {
-        top: 50vh;
-        transform: translateX(-50%) translateY(-50%) scale(1);
-      }
+		&.is-opened {
+			.dropdown__menu {
+				top: 50vh;
+				transform: translateX(-50%) translateY(-50%) scale(1);
+			}
 
-      &:before {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-      }
-    }
-  }
+			&:before {
+				opacity: 1;
+				visibility: visible;
+				pointer-events: auto;
+			}
+		}
+	}
 }
 
-@media (max-width: 1024px){
-  .dropdown--is-opened{
-    overflow: hidden;;
-  }
+@media (max-width: 1024px) {
+	.dropdown--is-opened {
+		overflow: hidden;
+	}
 }
