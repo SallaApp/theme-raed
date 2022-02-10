@@ -6,16 +6,16 @@ class Order extends BasePage {
     }
 
     initiateOrderCancelation() {
-        app.onClick('salla-button#btn-reorder', e => e.target.load()
+        app.onClick('salla-button#btn-reorder', ({currentTarget: btn}) => btn.load()
             .then(sallaBtn => salla.twilight.api.request(sallaBtn.dataset.url, {}, 'get'))
-            .then(() => e.target.stop())
+            .then(() => btn.stop())
             .then(() => app.element('#reorder-modal').hide()));
 
-        app.onClick('#confirm-cancel', e => e.target.load()
+        app.onClick('salla-button#confirm-cancel', ({currentTarget: btn}) => btn.load()
             .then(() => salla.order.api.cancel(salla.config.get('page.id')))
-            .then(() => e.target.stop() && app.element('#modal-cancel').hide())
+            .then(() => btn.stop() && app.element('#modal-cancel').hide())
             .then(() => window.location.reload())
-            .catch(() => e.target.stop() && app.element('#modal-cancel').hide())
+            .catch(() => btn.stop() && app.element('#modal-cancel').hide())
         );
     }
 }

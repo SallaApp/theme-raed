@@ -93,7 +93,7 @@ class FileUploader {
                     headers: {accept: 'application/json'},
                     onerror: response => JSON.parse(response).error.fields.image_file[0] || salla.lang.get('common.errors.error_occurred'),
                     ondata : formData => {
-                        [['_token', salla.get('_token')], ['cart_item_id', data.itemId], ['product_id', data.productId]]
+                        [['_token', salla.config.get('_token')], ['cart_item_id', data.itemId], ['product_id', data.productId]]
                             .forEach(value => value[1] && formData.append(value[0], value[1]));
                         return formData;
                     }
