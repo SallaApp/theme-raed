@@ -115,7 +115,12 @@
             </div>
         </div>
         {% if not user %}
-            <salla-login></salla-login>
+            <salla-login 
+            {{store.settings.auth.email_allowed ? 'is-email-allowed' : ''}} 
+            {{store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : ''}}
+            {{store.settings.auth.is_email_required ? 'is-email-required' : ''}}
+            >
+            </salla-login>
         {% endif %}
     </header>
 </div>
