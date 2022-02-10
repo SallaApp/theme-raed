@@ -32,6 +32,14 @@ class Home extends BasePage {
             },
         });
 
+        /*
+          used in:
+            1- similar-products.twig
+            2- best offer home block (called again in home.js)
+            3- product offer products slider/ cats slider / discount slider
+        */
+        new Slider('.default-slider');
+
         //Used in: [testimonials.twig, random-testimonials.twig]
         new Slider('.testimonials-slider', {
             loop          : true,

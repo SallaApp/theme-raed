@@ -9,35 +9,23 @@
 | offer.products                | Product[] *Collection   |             |
 | offer.steps(product_quantity) | array                   |             |
 #}
-<section class="relative overflow-hidden bg-white px-5 pt-8 pb-0 rounded-md mb-5 last:mb-0">
-    <p class="mb-5 pe-16">{{ offer.name }}: {{ offer.description|raw }}</p>
-    {% if offer.products|length %} 
-        <div class="swiper offer-slider pb-8 -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)" id="offer-slider">
-            <div class="swiper-wrapper">
-                {% for product in offer.products %}
-                    <div class="swiper-slide h-auto offer-slider__slide w-1/2 px-2 lg:px-3.75">
-                        {% include 'pages.partials.product.card' with {block_classes:'product-block--small'} %}
-                    </div>
-                {% endfor %}
-            </div>
+{% set discounts = {
+ '1':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30},
+ '2':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1400, 'discount': 40},
+ '3':{'text': 'اشتري <strong>اربع قطع</strong> من المنتج بـ', 'price': 1800, 'discount': 50},
+ '4':{'text': 'اشتري <strong>خمس قطع</strong> من المنتج بـ', 'price': 2000, 'discount': 60},
+ '5':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30}
+} 
+%}
 
-            <div class="hidden md:block">
-                <button class="offer-prev swiper-button swiper-button-prev"></button>
-                <button class="offer-next swiper-button swiper-button-next"></button>
-            </div>
-        </div>
-    {% else %}
-        {% for category in offer.categories %}
-            <a href="{{ category.url }}"
-               class="me-2.5 bg-gray-bg  py-2.5 px-4 rounded-large inline-flex items-center text-gray-500 justify-center text-sm mb-2.5">
-                <i class="font-medium sicon-tag me-1.5 text-md"></i>
-                <span class="fix-align">{{ category.name }}</span>
-            </a>
-        {% endfor %}
-        <div class="mt-5 border-b-2 border-red-400"></div>
-    {% endif %}
-    <div class="absolute z-10 top-5 w-40 end-0 transform -translate-x-12 -rotate-45 text-center">
-        <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ trans('pages.products.special_offer') }}
-        </div>
-    </div>
+<section id="offer-slider" class="relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
+  {% include 'pages.partials.product.slider' with {
+    products: offer.products, 
+    categories: offer.categories,
+    discounts: discounts,
+    type: 'offer',
+    title: offer.name,
+    subTitle: offer.description
+    } 
+  %}
 </section>
