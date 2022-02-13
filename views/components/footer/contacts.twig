@@ -9,37 +9,37 @@
 | contacts[].value | string |                                                    |
 #}
 {% if is_header %}
-  <div class="hidden lg:block">
-    <ul class="flex items-center contacts-menu menu-divide">
-        {% for contact in contacts %}
-            <li class="inline-block">
-                <a href="{{ contact.url }}"
-                   class="block transition duration-300 p-4 text-sm hover:text-{{ theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary' }}">
-                    {% if contact.type == 'email' %}
-                        {{ contact.value }}
-                    {% else %}
-                        <span>{{ trans('blocks.footer.social') }}: </span>
-                        <span class="unicode">{{ contact.value }}</span>
-                    {% endif %}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-  </div>
+    <div class="hidden lg:block">
+        <ul class="flex items-center contacts-menu menu-divide">
+            {% for contact in contacts|filter(contact => contact.type in ['email', 'phone']) %}
+                <li class="inline-block">
+                    <a href="{{ contact.url }}"
+                       class="block transition duration-300 p-4 text-sm hover:text-{{ theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary' }}">
+                        {% if contact.type == 'email' %}
+                            {{ contact.value }}
+                        {% else %}
+                            <span>{{ trans('blocks.footer.social') }}: </span>
+                            <span class="unicode">{{ contact.value }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% else %}
-  <div>
-      <h3 class="font-bold mb-5">{{ trans('blocks.footer.social') }}</h3>
-      <ul>
-          {% for contact in contacts %}
-              <li class="mb-4">
-                  <a href="{{ contact.url }}" class="flex items-center  focus:underline text-sm leading-none">
+    <div>
+        <h3 class="font-bold mb-5">{{ trans('blocks.footer.social') }}</h3>
+        <ul>
+            {% for contact in contacts %}
+                <li class="mb-4">
+                    <a href="{{ contact.url }}" class="flex items-center  focus:underline text-sm leading-none">
                       <span class="me-2.5 border text-reverse rounded-full w-8 h-8 justify-center flex items-center">
                           <i class="{{ contact.icon }}"></i>
                       </span>
-                      <span class="text-unicode unicode">{{ contact.value }}</span>
-                  </a>
-              </li>
-          {% endfor %}
-      </ul>
-  </div>
+                        <span class="text-unicode unicode">{{ contact.value }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endif %}
