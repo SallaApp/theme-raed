@@ -5,15 +5,17 @@
 | apps[].name | string | appstore, googleplay |
 | apps[].url  | string |                      |
 #}
-<div class="lg:col-span-2 lg:ps-20">
+{% if apps is not empty %}
+  <div class="lg:col-span-2 lg:ps-20">
     <h3 class="font-bold mb-5">{{trans('blocks.footer.download_apps')}}</h3>
     <ul class="flex">
-        {% for app in apps %}
-            <li class="me-4">
-                <a href="{{ app.url }}" rel="noreferrer" target="_blank"  class="focus:underline leading-none hover:text-primary">
-                    <img src="https://assets.salla.cloud/themes/default/assets/images/{{app.name}}.png" alt="{{ app.name }}"/>
-                </a>
-            </li>
-        {% endfor %}
+      {% for app in apps %}
+        <li class="me-4">
+          <a href="{{ app.url }}" rel="noreferrer" target="_blank"  class="focus:underline leading-none hover:text-primary">
+            <img src="https://assets.salla.cloud/themes/default/assets/images/{{app.name}}.png" alt="{{ app.name }}"/>
+          </a>
+        </li>
+      {% endfor %}
     </ul>
-</div>
+  </div>
+{% endif %}
