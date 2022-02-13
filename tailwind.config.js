@@ -150,6 +150,7 @@ module.exports = {
         extend: {
           translate: ['group-hover'],
         },
+        scrollbar: ['rounded']
     },
 
     corePlugins: {
@@ -162,5 +163,6 @@ module.exports = {
       require('@tailwindcss/line-clamp'),
       require('@tailwindcss/jit'),
       require('@salla.sa/twilight-tailwind-theme'),
+      require('tailwind-scrollbar'),
     ],
 }

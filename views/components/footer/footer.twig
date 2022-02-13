@@ -1,44 +1,50 @@
 {# * It's important to put all Footer components here, to be excluded in mobile apps #}
 <footer id="footer" class="relative mt-auto mt-8 md:pt-16">
-    <div class="bg-gray-700 text-reverse">
-        <div aria-label="footer" class="py-11 lg:pt-28 lg:pb-40">
-            <div class="container lg:grid grid-cols-6 gap-6">
-                <div class="lg:col-span-2 pe-20">
-                    <a href="{{ link('/') }}" class="flex mb-6">
-                        <img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
-                        <h1 class="text-2xl text-primary font-bold mx-1.5 fix-align">{{store.name}}</h1>
-                    </a>
-                    {% if store.description %}
-                        <p class="max-w-sm leading-6 mb-6">
-                            {{ store.description|raw }}
-                        </p>
-                    {% endif %}
-                    {% component 'footer.social' %}
+  <div aria-label="footer" class="bg-gray-700 text-reverse py-11 lg:pt-28 lg:pb-40">
+    <div class="container lg:grid grid-cols-6 gap-6">
+        <div class="lg:col-span-2 pe-20">
+          <a href="{{ link('/') }}" class="flex items-center mb-6 text-primary hover:text-primary-d">
+            <img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
+            <h1 class="text-2xl font-bold mx-1.5 fix-align leading-none">{{store.name}}</h1>
+          </a>
+          {% if store.description %}
+            <p class="max-w-sm leading-6 mb-6">
+              {{ store.description|raw }}
+            </p>
+          {% endif %}
+          {% component 'footer.social' %}
 
-                    {# vat #}
-                    {% if store.settings.tax.number %}
-                    <div class="flex  space-s-2 items-end">
-                    {% if store.settings.tax.certificate %}
-                        <a data-fslightbox="gallery" href="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}">
-                            <img src="{{asset('images/tax.png')}}" class="w-10" alt="value added tax">
-                        </a>
-                    {% endif %}
-                        <div>
-                            <p class="text-sm text-text-grey mb-1">{{ trans('common.elements.tax_number') }}</p>
-                            <b class="text-sm">{{ store.settings.tax.number }}</b>
-                        </div>
-                    </div>
-                {% endif %}
-                </div>
-
-                {% component 'footer.pages' %}
-                {% component 'footer.contacts' %}
-                {% component 'footer.mobile-apps' %}
+          {# vat #}
+          {% if store.settings.tax.number %}
+            <div class="flex space-s-2 items-end">
+              {% if store.settings.tax.certificate %}
+                <a data-target="modal-value-tax" data-on-click="modal::open" href="#!" alt="{{ store.settings.tax.number }}">
+                  <img src="{{asset('images/tax.png')}}" class="w-10" alt="value added tax">
+                </a>
+              {% endif %}
+              <div>
+                <p class="text-sm text-text-grey mb-1">{{ trans('common.elements.tax_number') }}</p>
+                <b class="text-sm">{{ store.settings.tax.number }}</b>
+              </div>
             </div>
+
+            {% if store.settings.tax.certificate %}
+              <salla-modal no-padding id="modal-value-tax">
+                <div class="flex justify-center max-w-full">
+                  <img src="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}"/>
+                </div>
+              </salla-modal>
+            {% endif %}
+          {% endif %}
         </div>
+
+        {% component 'footer.pages' %}
+        {% component 'footer.contacts' %}
+        {% component 'footer.mobile-apps' %}
     </div>
-    <div class="md:flex items-center justify-between py-2  lg:px-0 container text-center border-border-dark border-dashed">
-        {% component 'footer.copyright' %}
-        {% component 'footer.payment-methods' %}
-    </div>
+  </div>
+  <div class="md:flex items-center justify-between py-2 lg:px-0 container text-center">
+    {% component 'footer.copyright' %}
+    {% component 'footer.payment-methods' %}
+  </div>
 </footer>
