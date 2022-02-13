@@ -61,12 +61,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="md:grid-cols-auto-fill mb-8 products-container list-container gird-view grid sm:grid-cols-2  grid-flow-row gap-6" data-auto-load>
+                    <salla-infinite-scroll
+                            class="md:grid-cols-auto-fill mb-8 products-container gird-view grid sm:grid-cols-2 grid-flow-row gap-6"
+                            next-page="{{ products.next_page }}" autoload>
                         {% for product in products %}
                             {% include 'pages.partials.product.card' with {block_classes:'list-block'} %}
                         {% endfor %}
-                    </div>
-                    {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
+                    </salla-infinite-scroll>
                 {% else %}
                     <div class="h-full content-placeholder content-placeholder--cart text-gray-400 pt-10 pb-20 flex items-center flex-col justify-center">
                             <span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">

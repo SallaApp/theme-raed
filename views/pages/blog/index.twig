@@ -19,7 +19,7 @@
             <nav class="w-full py-5">
                 {% component 'header.breadcrumbs' %}
             </nav>
-            <a class="lg:hidden  space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary"
+            <a class="lg:hidden space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary"
                href="#filters-menu">
                 <i class="sicon-filter text-xs"></i>
                 <span class="fix-align">{{ trans('pages.blog_categories.categories') }}</span>
@@ -88,10 +88,11 @@
                     </div>
                 {% endif %}
                 {% if articles|length %}
-                    <div class="grid md:grid-cols-2 gap-8 list-container" data-auto-load>
+                    <salla-infinite-scroll class="grid md:grid-cols-2 gap-8"
+                                           next-page="{{ articles.next_page }}"
+                                           autoload>
                         {% for article in articles %}
-                            <div id=""
-                                 class='list-block post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
+                            <div class='list-block post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
                                 <a href="{{ article.url }}"
                                    class='post-entry__image relative overflow-hidden hover:opacity-90 w-full h-56 bg-border-color flex items-center justify-center'>
                                     {% if article.has_image %}
@@ -137,8 +138,7 @@
                                 {% endif %}
                             </div>
                         {% endfor %}
-                    </div>
-                    {% include 'pages.partials.loader-status' with {next_page:articles.next_page} %}
+                    </salla-infinite-scroll>
                 {% elseif not slides.count %}
                     <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
                         <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>

@@ -17,56 +17,58 @@
             <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
                 <h1 class="font-bold text-lg mb-5">{{ is_pending_orders ? trans('common.titles.pending_orders') : trans('common.titles.orders') }}</h1>
                 {% if orders.items is not empty %}
-                    <table class="s-table min-w-full border-separate" style="border-spacing: 0 20px;">
-                        <thead class="bg-gray-50 mb-5 hidden md:table-header-group">
-                        <tr>
-                            <th scope="col" class="px-6 text-start text-sm font-medium uppercase tracking-wider">
-                                {{ trans('pages.thank_you.order_id') }}
-                            </th>
-                            <th scope="col" class="px-6 text-start text-sm font-medium uppercase tracking-wider">
-                                {{ trans('pages.orders.total') }}
-                            </th>
-                            <th scope="col" class="px-6 text-start text-sm font-medium uppercase tracking-wider">
-                                {{ trans('pages.orders.date') }}
-                            </th>
-                            <th scope="col" class="px-6 text-end text-sm font-medium  uppercase tracking-wider">
-                                {{ trans('pages.orders.status') }}
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody class="list-container">
-                        {% for order in orders.items %}
-                            <tr class="s-table__tr">
-                                <td class="w-full md:w-auto  md:rounded-s-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
-                                    <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.thank_you.order_id') }}:</span>
-                                    #{{ order.order_id }}
-                                    <a href="{{ order.url }}" class="w-full block absolute top-0 bottom-0 start-0"></a>
-                                </td>
+                    <salla-infinite-scroll next-page="{{ orders.next_page }}" container=".list-container" item=".s-table__tr">
+                        <table class="s-table min-w-full border-separate" style="border-spacing: 0 20px;">
+                            <thead class="bg-gray-50 mb-5 hidden md:table-header-group">
+                            <tr>
+                                <th scope="col" class="px-6 text-start text-sm font-medium uppercase tracking-wider">
+                                    {{ trans('pages.thank_you.order_id') }}
+                                </th>
+                                <th scope="col" class="px-6 text-start text-sm font-medium uppercase tracking-wider">
+                                    {{ trans('pages.orders.total') }}
+                                </th>
+                                <th scope="col" class="px-6 text-start text-sm font-medium uppercase tracking-wider">
+                                    {{ trans('pages.orders.date') }}
+                                </th>
+                                <th scope="col" class="px-6 text-end text-sm font-medium  uppercase tracking-wider">
+                                    {{ trans('pages.orders.status') }}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="list-container">
+                            {% for order in orders.items %}
+                                <tr class="s-table__tr">
+                                    <td class="w-full md:w-auto  md:rounded-s-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
+                                        <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.thank_you.order_id') }}:</span>
+                                        #{{ order.order_id }}
+                                        <a href="{{ order.url }}"
+                                           class="w-full block absolute top-0 bottom-0 start-0"></a>
+                                    </td>
 
-                                <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                    <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.orders.total') }}:</span>
-                                    {{ order.total|money }}
-                                </td>
+                                    <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
+                                        <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.orders.total') }}:</span>
+                                        {{ order.total|money }}
+                                    </td>
 
-                                <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                    <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.orders.date') }}:</span>
-                                    {{ order.created_at|date("l j F Y") }}
-                                </td>
-                                <td class="w-full md:w-auto md:text-end  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
-                                    <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.orders.status') }}:</span>
-                                    <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl"
-                                          style="border-color: {{ theme.lighter_color(0.5, order.status.color) }} !important; color: {{ order.status.color }}">
+                                    <td class="w-full md:w-auto  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
+                                        <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.orders.date') }}:</span>
+                                        {{ order.created_at|date("l j F Y") }}
+                                    </td>
+                                    <td class="w-full md:w-auto md:text-end  px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm ">
+                                        <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.orders.status') }}:</span>
+                                        <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl"
+                                              style="border-color: {{ theme.lighter_color(0.5, order.status.color) }} !important; color: {{ order.status.color }}">
 											<i class="mt-1 {{ order.status.icon }}"></i>
 											<span class="">
 												{{ order.status.name }}</span>
 										</span>
-                                    <i class="sicon-star2 text-lg ms-5 {{ order.has_feedback?'text-theme-yellow':'text-gray-200' }}"></i>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    {% include 'pages.partials.loader-status' with {next_page:orders.next_page} %}
+                                        <i class="sicon-star2 text-lg ms-5 {{ order.has_feedback?'text-theme-yellow':'text-gray-200' }}"></i>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </salla-infinite-scroll>
                 {% else %}
                     <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
                         <i class="sicon-packed-box block text-5xl text-gray-300 mb-2"></i>

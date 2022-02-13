@@ -99,10 +99,10 @@
                     {% set has_many_images=product.images|length>1 %}
                     {% if has_many_images %}
                         <button aria-label="Previous Slide" class="slider-prev btn--md-white-arrow">
-                          <i class="sicon-keyboard_arrow_right"></i>
+                            <i class="sicon-keyboard_arrow_right"></i>
                         </button>
                         <button aria-label="Next Slide" class="slider-next btn--md-white-arrow">
-                          <i class="sicon-keyboard_arrow_left"></i>
+                            <i class="sicon-keyboard_arrow_left"></i>
                         </button>
                     {% endif %}
                 </div>
@@ -262,130 +262,131 @@
                     {% set displayAs = 'defautl' %}
 
                     {% if displayAs == 'in-product' %}
-                      <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
-                          <div class="flex items-center justify-between">
-                              <label class="flex items-center text-base">
-                                  <span class="sicon-location me-1"></span>
-                                  {{ browseProductsFrom != 'all' ?
-                                  '<span class="inline-block">الشحن من فرع مكة (<span class="text-green-500">متوفر</span>)</span>'
-                                  :
-                                  '<span class="inline-block">التوفر في الفروع</span>' }}
-                              </label>
-                              <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
-                                  <div class="flex space-s-3">
-                                      <a href="#!" data-on-click="branches::show"
-                                          class="group text-primary flex items-center justify-center">
+                        <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center text-base">
+                                    <span class="sicon-location me-1"></span>
+                                    {{ browseProductsFrom != 'all' ?
+                                    '<span class="inline-block">الشحن من فرع مكة (<span class="text-green-500">متوفر</span>)</span>'
+                                    :
+                                    '<span class="inline-block">التوفر في الفروع</span>' }}
+                                </label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                                    <div class="flex space-s-3">
+                                        <a href="#!" data-on-click="branches::show"
+                                           class="group text-primary flex items-center justify-center">
                               <span>{{ browseProductsFrom == 'all' ?
                                   'تحديد الفرع' : 'تغيير الفرع' }}</span>
-                                          <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
-                                      </a>
-                                  </div>
-                              </div>
-                          </div>
-                      </section>
-
-                      <salla-branches 
-                        position="single"
-                        current="3"
-                        browse-products-from="{{browseProductsFrom}}"
-                        display-as="in-product"
-                        ></salla-branches>
-                    {% endif %}
-                    {# {% component 'product.quick-buy' with {product: product} %} #} 
-                </form>
-                <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
-
-                        {% if product.hide_quantity or not product.is_available %}
-                            <input type="hidden" value="1" name="quantity"/>
-                        {% else %}
-                            <div class="flex justify-between items-center mb-5">
-                                <label class="form-label font-bold">
-                                  {{ trans('pages.products.quantity') }}
-                                </label>
-                                <div class="flex justify-end">
-                                    <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                                        <button class="btn--quantity" id="btn-increase" type="button">
-                                          <i class="sicon-add"></i>
-                                        </button>
-                                        <input 
-                                               data-on-change="product::get.price" 
-                                               data-form-selector=".product-details__options"
-                                               id="product-quantity"
-                                               data-digits="1"
-                                               name="quantity"
-                                               type="number"
-                                               max="{{ product.max_quantity }}"
-                                               data-max_quantity="{{ product.max_quantity }}"
-                                               value="1"
-                                               class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                               data-on-keyup="product::get.price"
-                                               aria-label="Product Quantity"
-                                               min="1"/>
-
-                                        <button class="btn--quantity" id="btn-decrease" type="button">
-                                          <i class="sicon-minus"></i>
-                                        </button>
+                                            <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
+                        </section>
 
+                        <salla-branches
+                                position="single"
+                                current="3"
+                                browse-products-from="{{ browseProductsFrom }}"
+                                display-as="in-product"
+                        ></salla-branches>
+                    {% endif %}
+                    {# {% component 'product.quick-buy' with {product: product} %} #}
+                </form>
+                <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+
+                    {% if product.hide_quantity or not product.is_available %}
+                        <input type="hidden" value="1" name="quantity"/>
+                    {% else %}
                         <div class="flex justify-between items-center mb-5">
-                            <label class="form-label">
-                                <b class="block">
-                                    {{ trans('pages.products.price') }}
-                                </b>
+                            <label class="form-label font-bold">
+                                {{ trans('pages.products.quantity') }}
                             </label>
-                            <div class="space-s-1">
-                              {% if product.on_sale %}
+                            <div class="flex justify-end">
+                                <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
+                                    <button class="btn--quantity" id="btn-increase" type="button">
+                                        <i class="sicon-add"></i>
+                                    </button>
+                                    <input
+                                            data-on-change="product::get.price"
+                                            data-form-selector=".product-details__options"
+                                            id="product-quantity"
+                                            data-digits="1"
+                                            name="quantity"
+                                            type="number"
+                                            max="{{ product.max_quantity }}"
+                                            data-max_quantity="{{ product.max_quantity }}"
+                                            value="1"
+                                            class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
+                                            data-on-keyup="product::get.price"
+                                            aria-label="Product Quantity"
+                                            min="1"/>
+
+                                    <button class="btn--quantity" id="btn-decrease" type="button">
+                                        <i class="sicon-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="flex justify-between items-center mb-5">
+                        <label class="form-label">
+                            <b class="block">
+                                {{ trans('pages.products.price') }}
+                            </b>
+                        </label>
+                        <div class="space-s-1">
+                            {% if product.on_sale %}
                                 <h4 id="total-price"
                                     class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
                                 <span id="before-price"
                                       class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                              {% else %}
+                            {% else %}
                                 <h4 id="total-price"
                                     class="text-theme-red font-bold text-sm inline-block">{{ product.price|money }}</h4>
-                              {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between space-s-4">
-                            {% if product.is_available %}
-                                <button class="btn btn-primary btn--has-loading"
-                                        data-on-click="cart::add.item"
-                                        type="button">
-                                    <span class="loader loader--small"></span>
-                                    <span class="btn__text">
-                                            {{ trans('pages.cart.add_to_cart') }}
-                                        </span>
-                                </button>
-                            {% elseif product.notify_availability %}
-                                <salla-product-availability
-                                        channels="{{ product.notify_availability.channels|join(',') }}"
-                                        {{ product.notify_availability.subscribed?'is-subscribed':'' }}
-                                        class="w-full"></salla-product-availability>
-                            {% else %}
-                                <button type="button" class="btn btn-outline">
-                                    {% if product.is_donation %}
-                                        {{ trans('pages.products.donation_exceed') }}
-                                    {% else %}
-                                        {{ trans('pages.products.out_of_stock') }}
-                                    {% endif %}
-                                </button>
                             {% endif %}
                         </div>
+                    </div>
+
+                    <div class="flex justify-between space-s-4">
+                        {% if product.is_available %}
+                            <button class="btn btn-primary btn--has-loading"
+                                    data-on-click="cart::add.item"
+                                    type="button">
+                                <span class="loader loader--small"></span>
+                                <span class="btn__text">
+                                            {{ trans('pages.cart.add_to_cart') }}
+                                        </span>
+                            </button>
+                        {% elseif product.notify_availability %}
+                            <salla-product-availability
+                                    channels="{{ product.notify_availability.channels|join(',') }}"
+                                    {{ product.notify_availability.subscribed?'is-subscribed':'' }}
+                                    class="w-full"></salla-product-availability>
+                        {% else %}
+                            <button type="button" class="btn btn-outline">
+                                {% if product.is_donation %}
+                                    {{ trans('pages.products.donation_exceed') }}
+                                {% else %}
+                                    {{ trans('pages.products.out_of_stock') }}
+                                {% endif %}
+                            </button>
+                        {% endif %}
+                    </div>
                 </section>
             </div>
         </div>
-    
-      {# frontend TODO:: support this section #}
-      {% component 'product.offer' with {product:product} %}
+
+
+        {% component 'product.quick-buy' with {product: product} %}
+        {# frontend TODO:: support this section #}
+        {% component 'product.offer' with {product:product} %}
     </div>
 
     {% component comments with {comments: comments} %}
-
     {% component 'product.similar-products' %}
-    
+
 {% endblock %}
 
 {% block scripts %}

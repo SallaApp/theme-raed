@@ -30,10 +30,8 @@ class App extends salla.AppHelpers {
         this.initiateModals();
         this.initiateCollabse();
         this.initiateComments();
-        this.initiateInfiniteScroll();
 
         this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading', 'pointer-events-none'));
-        salla.event.on('infiniteScroll::load', () => this.removeClass('#next-page-btn', 'btn--is-loading').hideElement('.loading-status-wrapper .loader-status'))
         this.anime('.anime-count', {scale: [0.5, 1]});
         this.onClick('#productFilter', event => {
             let url = window.location.href.replace(/([?;&])by[^&;]*[;&]?/g, "$1").replace(/&$/, '');
@@ -304,15 +302,6 @@ class App extends salla.AppHelpers {
         this.onKeyUp(input, () => input.classList.remove('!border-red-400'));
         salla.comment.event.onAdded(() => btn.classList.remove('btn--is-loading', 'pointer-events-none') || window.location.reload());
         salla.comment.event.onAdditionFailed(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'));
-    }
-
-    initiateInfiniteScroll() {
-        let container = this.element('.list-container');
-        if (!container) {
-            return;
-        }
-        let options = ['', 'true'].includes(container.dataset.autoLoad) ? {} : {history: false, scrollThreshold: false};
-        salla.infiniteScroll.initiate('.list-container', '.list-block', options);
     }
 }
 
