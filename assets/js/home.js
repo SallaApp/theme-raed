@@ -87,7 +87,7 @@ class Home extends BasePage {
     }
 
     loadMoreLatestProducts() {
-        if (!app.element('.s-block--latestProducts')) {
+        if (!app.element('.s-block--latest-products')) {
             return;
         }
         salla.infiniteScroll.initiate('.products-list-container', '.product-entry', {
