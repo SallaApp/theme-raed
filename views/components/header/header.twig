@@ -7,7 +7,8 @@
 
 * It's important to put all Header components here, to be excluded in mobile apps
 #}
-{# TODO:: Remove all classes conditions in this file, use global selector on the body#}
+{# TODO:: Remove all classes conditions in this file, use global selector on the body #}
+{# TODO:: Reduce dom levels if you can #}
 <div class="{{ theme.topnav_is_dark ? 'dark':'' }}">
     <div id="top-nav" class="py-2 lg:py-0
     {{ theme.topnav_bg ? '!bg-[color:var(--topnav-bg)]' : '' }}
@@ -20,11 +21,10 @@
                 <div class="flex items-center w-full lg:w-auto justify-between">
                     <div class="flex items-center space-s-2">
                         {% component 'footer.pages' with {is_header:true} %}
+                        {# TODO:: it looks that there is no need for button inside div, just use button#}
                         {% if store.settings.languages_enabled or store.settings.currencies_enabled %}
                             <div class="relative inline-block">
-                                <button type="button"
-                                        data-on-click="localization::show"
-                                        class="btn--light-gray">
+                                <button type="button" data-on-click="localization::show" class="btn--light-gray">
                                     <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
                                     | <span class="ms-2">{{ language.name }}</span>
                                 </button>
@@ -32,35 +32,26 @@
                             <salla-localization></salla-localization>
                         {% endif %}
 
+                        {# TODO:: Remove This Condition #}
                         {% set displayAs = 'default' %}
                         {% if displayAs != 'in-product' %}
                             <div class="relative inline-block">
-                                <button type="button"
+                                <a class="btn--light-gray sicon-location me-1"
                                         data-on-click="branches::show"
-                                        class="btn--light-gray">
-                                    <span class="sicon-location me-1"></span>
-                                    <span>فرع الرياض</span>
-                                </button>
+                                        href="#"> &nbsp;فرع الرياض</a>
                             </div>
 
-                            <salla-branches
-                                    position="header"
-                                    current="3"
-                                    browse-products-from="city"
-                                    display-as="{{ displayAs }}"
+                            {# TODO:: make default props #}
+                            <salla-branches position="header"
+                                            current="3"
+                                            browse-products-from="city"
+                                            display-as="{{ displayAs }}"
                             ></salla-branches>
                         {% endif %}
-
                         <div class="relative inline-block">
-                            <button type="button"
-                                    data-target="s-search-modal"
-                                    data-on-click="modal::open"
-                                    class="btn--gray-circle">
-                                <span class="sicon-search"></span>
-                            </button>
+                            <a href="#" data-on-click="search::show" class="btn--gray-circle sicon-search"></a>
                         </div>
                         <salla-search></salla-search>
-
                     </div>
                 </div>
                 {% component 'footer.contacts' with {is_header:true} %}
@@ -83,8 +74,10 @@
                         <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
                             <span class="sicon-menu text-primary text-3xl me-2.5"></span>
                         </a>
-                        <a class="site-logo theme-logo navbar-brand items-center flex my-2 lg:my-0" href="{{ store.url }}">
-                            <img src="{{ store.logo }}" alt="{{ store.name }}" class="max-h-14 sm:max-h-16 max-w-[170px]">
+                        <a class="site-logo theme-logo navbar-brand items-center flex my-2 lg:my-0"
+                           href="{{ store.url }}">
+                            <img src="{{ store.logo }}" alt="{{ store.name }}"
+                                 class="max-h-14 sm:max-h-16 max-w-[170px]">
                             <h1 class="hidden">{{ store.name }}</h1>
                         </a>
                         {% component 'header.menu' %}
@@ -116,12 +109,11 @@
             </div>
         </div>
         {% if not user %}
-            <salla-login 
-            {{store.settings.auth.email_allowed ? 'is-email-allowed' : ''}} 
-            {{store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : ''}}
-            {{store.settings.auth.is_email_required ? 'is-email-required' : ''}}
-            >
-            </salla-login>
+            <salla-login
+                    {{ store.settings.auth.email_allowed ? 'is-email-allowed' : '' }}
+                    {{ store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : '' }}
+                    {{ store.settings.auth.is_email_required ? 'is-email-required' : '' }}
+            ></salla-login>
         {% endif %}
     </header>
 </div>

@@ -9,12 +9,13 @@
 | contacts[].value | string |                                                    |
 #}
 {% if is_header %}
+    {# TODO:: Remove classes conditions, use global selector on the body #}
+    {# TODO:: reduce two doms levels by remove ul & li #}
     <div class="hidden lg:block">
         <ul class="flex items-center contacts-menu menu-divide">
             {% for contact in contacts|filter(contact => contact.type in ['email', 'phone']) %}
                 <li class="inline-block">
                     <a href="{{ contact.url }}"
-                        {# TODO:: Remove this conditions, use global selector on the body#}
                        class="block transition duration-300 p-4 text-sm hover:text-{{ theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary' }}">
                         {% if contact.type == 'email' %}
                             {{ contact.value }}
@@ -30,17 +31,11 @@
 {% else %}
     <div>
         <h3 class="font-bold mb-5">{{ trans('blocks.footer.social') }}</h3>
-        <ul>
-            {% for contact in contacts %}
-                <li class="mb-4">
-                    <a href="{{ contact.url }}" class="flex items-center focus:underline text-sm leading-none">
-                      <span class="me-2.5 border text-reverse rounded-full w-8 h-8 justify-center flex items-center">
-                          <i class="{{ contact.icon }}"></i>
-                      </span>
-                        <span class="text-unicode unicode">{{ contact.value }}</span>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+        {% for contact in contacts %}
+            <a href="{{ contact.url }}" class="mb-4 flex items-center text-sm leading-none">
+                <i class="me-2.5 border rounded-full w-8 h-8 justify-center flex items-center {{ contact.icon }}"></i>
+                <span class="text-unicode unicode">{{ contact.value }}</span>
+            </a>
+        {% endfor %}
     </div>
 {% endif %}

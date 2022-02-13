@@ -13,14 +13,10 @@
 | advertisement.colors.text   | string        | Hex Color ex: #ffffff                         |
 | advertisement.target        | string        | `_self`, `_blank`                             |
 #}
-<div id="s-theme_ad" class="s-theme-ad hidden" 
-  style="background-color:{{ advertisement.colors.bg }}; color:{{ advertisement.colors.text }}" 
-  data-id="{{ advertisement.id }}">
+<div id="s-theme_ad" class="s-theme-ad hidden" data-id="{{ advertisement.id }}"
+     style="background-color:{{ advertisement.colors.bg }}; color:{{ advertisement.colors.text }}">
     <div class="container flex justify-between items-center py-2.5">
-        <h2 class="font-bold text-sm">
-            {% if advertisement.icon %}
-                <span class="{{ advertisement.icon }}"></span>
-            {% endif %}
+        <h2 class="font-bold text-sm {{ advertisement.icon }}">
             {% if advertisement.url %}
                 <a href="{{ advertisement.url }}" target='{{ advertisement.target }}'>
                     {{ advertisement.description }}
@@ -29,8 +25,6 @@
                 {{ advertisement.description }}
             {% endif %}
         </h2>
-        <a href="#" class="px-1 ad-close">
-            <i class="sicon-cancel"></i>
-        </a>
+        <a href="#" class="px-1 ad-close sicon-cancel" aria-label="close-alert"></a>
     </div>
 </div>

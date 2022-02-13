@@ -8,27 +8,26 @@
 | pages[].url     | String  |             |
 #}
 {% if is_header %}
-  {% if pages.count %}
-    <ul class="hidden lg:flex items-center page-links-menu menu-divide">
-      {% for key, page in pages|slice(0,3) %}
-        <li class="inline-block">
-            {# TODO:: Remove this condition, use global selector on the body#}
-          <a href="{{ page.url }}" class="block transition duration-300 p-4 
-          hover:text-{{ theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary'  }}
-          {% if pages|length == key + 1 %} ps-0 {% endif %} text-sm">
-              ={{ page.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+    {% if pages.count %}
+        {# TODO:: Remove class conditions, use global selector on the body #}
+        {# TODO:: reduce html doms, use div & a only #}
+        <ul class="hidden lg:flex items-center page-links-menu menu-divide">
+            {% for key, page in pages|slice(0,3) %}
+                <li class="inline-block">
+                    <a href="{{ page.url }}" class="block transition duration-300 p-4
+          hover:text-{{ theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary' }}
+          {% if pages|length == key + 1 %} ps-0 {% endif %} text-sm">{{ page.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% else %}
-  <div>
-    <h3 class="font-bold mb-5">{{ trans('blocks.footer.pages_links') }}</h3>
-    <ul class="footer-list {{ (pages|length)>4?'store-links-items':'' }}">
-      {% for item in pages %}
-        <li class="mb-4"><a href="{{ item.url }}" class=" focus:underline text-sm leading-none hover:text-primary">{{ item.title }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
+    <div>
+        <h3 class="font-bold mb-5">{{ trans('blocks.footer.pages_links') }}</h3>
+        <div class="footer-list {{ (pages|length)>4?'store-links-items':'' }}">
+            {% for item in pages %}
+                <a href="{{ item.url }}" class="block mb-7 text-sm leading-none hover:text-primary">{{ item.title }}</a>
+            {% endfor %}
+        </div>
+    </div>
 {% endif %}
