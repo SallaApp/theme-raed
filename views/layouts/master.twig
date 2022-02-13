@@ -89,18 +89,18 @@
     {% block head %}{% endblock %}
 
     <style>
-        :root {
+      :root {
+        --font-main: '{{theme.font.name}}';
+        --color-main: {{ theme.color }};
+        --color-main-d: {{ theme.darker_color(0.25) }};
+        --color-main-l: {{ theme.lighter_color(0.15) }};
+        --color-main-reverse: {{ theme.reverse_text_color }};
+        {# --color-text-reverse: {{ theme.reverse_text_color }}; #}
+        {# --color-text: {{ theme.text_color }};
+        --color-text-reverse: {{ theme.reverse_text_color }};
+        --color-title: {{ theme.color }}; #}
 
-            --color-main: {{ theme.color }};
-            --color-main-d: {{ theme.darker_color(0.25) }};
-            --color-main-l: {{ theme.lighter_color(0.15) }};
-            --color-main-reverse: {{ theme.reverse_text_color }};
-            {# --color-text-reverse: {{ theme.reverse_text_color }}; #}
-            {# --color-text: {{ theme.text_color }};
-            --color-text-reverse: {{ theme.reverse_text_color }};
-            --color-title: {{ theme.color }}; #}
-
-            /*Topnav*/
+        /*Topnav*/
         {% if theme.topnav_bg %} --topnav-bg: {{theme.topnav_bg}};
         {% endif %}{% if theme.topnav_text_color %} --topnav-text-color: {{theme.topnav_text_color}};
         {% endif %}{% if theme.topnav_link_hover %} --topnav-link-hover: {{theme.topnav_link_hover}};
@@ -108,14 +108,15 @@
             --topnav-gradient-to: {{theme.topnav_bg_gradient_to}};
         {% endif %}
 
-            /*Mainnav*/
-        {% if theme.mainnav_bg %} --mainnav-bg: {{theme.mainnav_bg}};
-        {% endif %}{% if theme.mainnav_text_color %} --mainnav-text-color: {{theme.mainnav_text_color}};
-        {% endif %}{% if theme.mainnav_link_hover %} --mainnav-link-hover: {{theme.mainnav_link_hover}};
-        {% endif %}{% if theme.mainnav_bg_gradient %} --mainnav-gradient-from: {{theme.mainnav_bg_gradient_from}};
-            --mainnav-gradient-to: {{theme.mainnav_bg_gradient_to}};
-        {% endif %} --font-main: '{{theme.font.name}}';
-        }
+        /*Mainnav*/
+        {% if theme.mainnav_bg %} --mainnav-bg: {{theme.mainnav_bg}};{% endif %}
+        {% if theme.mainnav_text_color %} --mainnav-text-color: {{theme.mainnav_text_color}};{% endif %}
+        {% if theme.mainnav_link_hover %} --mainnav-link-hover: {{theme.mainnav_link_hover}};{% endif %}
+        {% if theme.mainnav_bg_gradient %} 
+          --mainnav-gradient-from: {{theme.mainnav_bg_gradient_from}};
+          --mainnav-gradient-to: {{theme.mainnav_bg_gradient_to}};
+        {% endif %} 
+      }
     </style>
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
@@ -135,17 +136,19 @@
 </div>
 
 {% hook 'scripts' %}
-
 <script defer src="{{ asset('dist/app.js') }}"></script>
 {% block scripts %}{% endblock %}
+
 {# TODO:: Move It to Twilight on initiateing#}
 {% if error %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            salla.error('{{ error }}');
-        })
-    </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      salla.error('{{ error }}');
+    })
+  </script>
 {% endif %}
+
 <salla-offer></salla-offer>
+
 </body>
 </html>
