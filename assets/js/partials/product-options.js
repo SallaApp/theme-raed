@@ -88,25 +88,29 @@ export default class ProductOptions {
             return;
         }
         let shouldPass = true;
+        let isFormData = formData instanceof FormData;
 
         element.querySelectorAll('[required]:not(:disabled)').forEach(input => {
             //get the value for option, if it's empty return
             let inputValue = formData
-                ? (formData instanceof FormData
-                    ? formData.get(input.name)
-                    : input.name.replace(']', '').replace('[', '.').split('.').reduce((data, key) => data[key], formData))
+                ? (isFormData ? formData.get(input.name) : input.name.replace(']', '').replace('[', '.').split('.').reduce((data, key) => data[key], formData))
                 : formData;
             //we may accept 0, '0'
             if (this.toggleError(input, inputValue === undefined || inputValue === '' || inputValue === null)) {
                 return shouldPass = false;
             }
         });
+        //if current page is single page & there is no qunatity in formData, make sure to inject it to the formData.
+        if (salla.config.get('page.slug') === 'product.single' && !(isFormData ? formData.get('quantity') : formData.quantity)) {
+            let quantity = app.quantityInput.value;
+            (!isFormData && (formData.quantity = quantity)) || formData.append('quantity', quantity);
+        }
         return shouldPass ? formData : false;
     }
 
-    digitOnlyField(){
-      document.querySelectorAll('.digits-only-field').forEach((field)=>{
-        field.addEventListener('keyup', (event) => salla.helpers.digitsOnly(event.target))
-      })
+    digitOnlyField() {
+        document.querySelectorAll('.digits-only-field').forEach((field) => {
+            field.addEventListener('keyup', (event) => salla.helpers.digitsOnly(event.target))
+        })
     }
 }

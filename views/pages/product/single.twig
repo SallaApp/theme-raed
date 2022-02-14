@@ -245,7 +245,7 @@
                     {% hook 'product:after-description' %}
                 </div>
 
-                <form class="form product-details__options"
+                <form class="form product-form"
                         {# verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
                       data-filter-before-submit="verifyDataBeforeSend"
                       data-on-change="product::get.price"
@@ -304,27 +304,21 @@
                             </label>
                             <div class="flex justify-end">
                                 <div class="flex items-center h-10 py-2 border border-border-color rounded-md text-sm">
-                                    <button class="btn--quantity" id="btn-increase" type="button">
-                                        <i class="sicon-add"></i>
-                                    </button>
-                                    <input
-                                            data-on-change="product::get.price"
-                                            data-form-selector=".product-details__options"
-                                            id="product-quantity"
-                                            data-digits="1"
-                                            name="quantity"
-                                            type="number"
-                                            max="{{ product.max_quantity }}"
-                                            data-max_quantity="{{ product.max_quantity }}"
-                                            value="1"
-                                            class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                            data-on-keyup="product::get.price"
-                                            aria-label="Product Quantity"
-                                            min="1"/>
-
-                                    <button class="btn--quantity" id="btn-decrease" type="button">
-                                        <i class="sicon-minus"></i>
-                                    </button>
+                                    <button class="btn--quantity sicon-add" id="btn-increase" type="button"></button>
+                                    <input class="focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
+                                           data-max_quantity="{{ product.max_quantity }}"
+                                           data-on-change="product::get.price"
+                                           data-on-keyup="product::get.price"
+                                           data-form-selector=".product-form"
+                                           max="{{ product.max_quantity }}"
+                                           aria-label="Product Quantity"
+                                           id="product-quantity"
+                                           data-digits="1"
+                                           name="quantity"
+                                           type="number"
+                                           value="1"
+                                           min="1"/>
+                                    <button class="btn--quantity sicon-minus" id="btn-decrease" type="button"></button>
                                 </div>
                             </div>
                         </div>
@@ -352,18 +346,16 @@
                     <div class="flex justify-between space-s-4">
                         {% if product.is_available %}
                             <button class="btn btn-primary btn--has-loading"
+                                    data-form-selector=".product-form"
                                     data-on-click="cart::add.item"
                                     type="button">
                                 <span class="loader loader--small"></span>
-                                <span class="btn__text">
-                                            {{ trans('pages.cart.add_to_cart') }}
-                                        </span>
+                                <span class="btn__text">{{ trans('pages.cart.add_to_cart') }}</span>
                             </button>
                         {% elseif product.notify_availability %}
-                            <salla-product-availability
-                                    channels="{{ product.notify_availability.channels|join(',') }}"
+                            <salla-product-availability channels="{{ product.notify_availability.channels|join(',') }}"
                                     {{ product.notify_availability.subscribed?'is-subscribed':'' }}
-                                    class="w-full"></salla-product-availability>
+                                                        class="w-full"></salla-product-availability>
                         {% else %}
                             <button type="button" class="btn btn-outline">
                                 {% if product.is_donation %}
@@ -379,7 +371,7 @@
         </div>
 
 
-        {% component 'product.quick-buy' with {product: product} %}
+        {# {% component 'product.quick-buy' with {product: product} %} #}
         {# frontend TODO:: support this section #}
         {% component 'product.offer' with {product:product} %}
     </div>
