@@ -9,7 +9,6 @@ class Home extends BasePage {
     onReady() {
         this.initiateSliders();
         this.initFeaturedTabs();
-        this.loadMoreLatestProducts();
     }
 
     initiateSliders() {
@@ -84,16 +83,6 @@ class Home extends BasePage {
             .translateY([30, 0])
             .duration(1200)
             .play();
-    }
-
-    loadMoreLatestProducts() {
-        if (!app.element('.s-block--latest-products')) {
-            return;
-        }
-        salla.infiniteScroll.initiate('.products-list-container', '.product-entry', {
-            history        : false,
-            scrollThreshold: false
-        });
     }
 }
 

@@ -9,11 +9,11 @@
         <h2 class="font-bold text-lg text-gray-500">{{ trans('blocks.home.latest_products') }}</h2>
     </div>
     {% if products|length %}
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 products-list-container mb-6">
+        <salla-infinite-scroll class="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 mb-6"
+                               next-page="{{ products.next_page }}" autoload>
             {% for product in products %}
                 {% include 'pages.partials.product.card' %}
             {% endfor %}
-        </div>
-        {% include 'pages.partials.loader-status' with {next_page:products.next_page} %}
+        </salla-infinite-scroll>
     {% endif %}
 </section>
