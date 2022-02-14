@@ -66,7 +66,7 @@ template.innerHTML = /*html*/`
 
                 <div class="modal-body text-start">
                     <button @click="closeSizesTableModal"
-                        class="close-modal text-gray-400 w-6 h-6  text-lg absolute top-6 end-6">
+                        class="close-modal text-gray-text w-6 h-6  text-lg absolute top-6 end-6">
                         <i class="sicon-cancel"></i>
                     </button>
                     <!-- content -->
