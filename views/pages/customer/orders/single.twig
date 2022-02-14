@@ -55,7 +55,6 @@
 {% extends "layouts.master" %}
 {% block content %}
     {% include 'pages.partials.customer.breadcrumbs' %}
-
     <div class="container mb-8 sm:mb-24">
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
@@ -110,12 +109,13 @@
                             <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                             <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                         </div>
-                        <button data-on-click="rating::show" class="btn btn-outline-primary-dark flex-none px-12 rounded-full">{{trans('pages.rating.rate')}}</button>
+                        <button data-on-click="rating::show"
+                                class="btn btn-outline-primary-dark flex-none px-12 rounded-full">{{ trans('pages.rating.rate') }}</button>
                     </div>
                 {% endif %}
 
                 <div class="overflow-hidden mb-10 last:mb-0">
-                    <section class="rating-section products-section" data-type="product">
+                    <section class="products-section">
                         {% for item in order.items %}
                             <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}"
                                  class="order-item bg-white mb-5 p-5 rounded-md">
@@ -269,42 +269,15 @@
                                     </div>
                                 {% endif %}
 
-                                {# =================== Start Rating Product =================== #}
                                 {% if item.feedback %}
                                     <section class="border-t mt-10 pt-8">
-                                        <div class="{{ item.feedback?'':'rating-outer-form' }}"
-                                             data-stars-error="{{ trans('pages.rating.rate_product_stars', {'item':item.name}) }}">
-                                            {% if item.feedback %}
-                                                <p>
-                                                    {{ item.feedback.content|raw }}
-                                                </p>
-                                                {% if item.feedback.is_pending %}
-                                                    <span>{{ trans('pages.rating.pending') }}</span>
-                                                {% endif %}
-                                            {% else %}
-                                                <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                                                <input type="hidden" name="products[{{ loop.index0 }}][product_id]"
-                                                       value="{{ item.product.getOptimusRouteKey() }}">
-                                                <input type="hidden" name="type" value="products">
-                                                <h2 class="section-title mb-3 text-sm font-bold">{{ trans('pages.rating.rate_products') }}</h2>
-                                                <textarea data-product-id="{{ item.id }}"
-                                                          name="products[{{ loop.index0 }}][comment]"
-                                                          id="productReview_{{ item.id }}"
-                                                          class="comment form-input h-20 product-review"
-                                                          placeholder="{{ trans('pages.rating.write_product_rate') }} ({{ item.name|length > 50 ? item.name|slice(0, 50) ~ '...' : item.name }})"></textarea>
-                                            {% endif %}
-                                            <div class="rw-product-entry__rate">
-                                                <div class="rating-wrap flex items-center space-s-4">
-                                                    <form class="rate-element rate-element--has-label">
-                                                        {% include 'pages.partials.customer.rating-stars' with {'stars':item.feedback.stars, 'rating_name':'products['~loop.index0~'][rating]'} %}
-                                                    </form>
-                                                </div>
-                                                <small class="text-red-400 validation-message"></small>
-                                            </div>
-                                        </div>
+                                        <p>{{ item.feedback.content|raw }}</p>
+                                        {% if item.feedback.is_pending %}
+                                            <span>{{ trans('pages.rating.pending') }}</span>
+                                        {% endif %}
+                                        <div>{% include 'pages.partials.customer.stars' with {stars:item.feedback.stars} %}</div>
                                     </section>
                                 {% endif %}
-                                {# =================== End Rating Product =================== #}
                             </div>
                         {% endfor %}
                     </section> {# end products section #}
@@ -459,88 +432,27 @@
                 {% endif %}
                 {# ==================== End cancel && reorder ==================== #}
 
-                {# ==================== Start Rating ==================== #}
-
-                {% if store.settings.rating.store and order.feedback.store.stars %}
-                    {# Store Rating #}
-                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5 last:mb-0" data-type="store">
-                        <div class="{{ order.feedback.store.stars?'':'rating-outer-form' }}"
-                             data-stars-error="{{ trans('pages.rating.rate_store_stars') }}">
-                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                            <input type="hidden" name="type" value="store">
-                            <h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
-                            <div class="mb-2">
-                                {% if order.feedback.store.content %}
-                                    <p>
-                                        {{ order.feedback.store.content|raw }}
-                                    </p>
-                                {% else %}
-                                    <textarea id="storeReview" name="comment" class="form-input comment h-20"
-                                              placeholder="{{ trans('pages.rating.write_store_rate') }}"></textarea>
-                                    {# <small class="block text-red-400 text-tiny text-end"> التعليق  مطلوب</small> #}
-                                {% endif %}
-                            </div>
-                            <div class="rating-wrap flex items-center space-s-4">
-                                <form class="rate-element rate-element--has-label">
-                                    {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.store.stars} %}
-                                </form>
-                            </div>
-                            <small class="text-red-400 validation-message"></small>
+                {% if order.feedback.store.stars %}
+                    <section class="bg-white my-10 p-5 rounded-md mb-5 last:mb-0">
+                        <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
+                        <p class="mb-2">{{ order.feedback.store.content|raw }}</p>
+                        <div class="space-s-4">
+                            {% include 'pages.partials.customer.stars' with {stars:order.feedback.store.stars} %}
                         </div>
                     </section>
                 {% endif %}
-                {% if order.has_shipping and store.settings.rating.shipping and order.feedback.shipping.stars %}
-                    {# Shipping Rating #}
-                    <section class="rating-section bg-white my-10 p-5 rounded-md mb-5 last:mb-0" data-type="shipping">
-                        <div class="{{ order.feedback.shipping.stars?'':'rating-outer-form' }}"
-                             data-stars-error="{{ trans('pages.rating.rate_shipping_stars') }}">
-                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
-                            <input type="hidden" name="shipping_company_id" value="{{ order.shipping.id }}">
-                            <input type="hidden" name="type" value="shipping">
-
-                            <h2 class="section-title text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
-                            <div class="mb-2">
-                                {% if order.feedback.shipping.content %}
-                                    <p>
-                                        {{ order.feedback.shipping.content|raw }}
-                                    </p>
-                                {% else %}
-                                    <textarea id="shippingReview" name="comment"
-                                              class="form-input comment h-20 mb-2"
-                                              placeholder="{{ trans('pages.rating.write_shipping_rate') }}"></textarea>
-                                {% endif %}
-                            </div>
-                            <div class="rating-wrap flex items-center space-s-4">
-                                <form class="rate-element ratFeedbackPresentere-element--has-label">
-                                    {% include 'pages.partials.customer.rating-stars' with {'stars':order.feedback.shipping.stars} %}
-                                </form>
-                            </div>
-                            <small class="text-red-400 validation-message"></small>
+                {% if order.has_shipping and order.feedback.shipping.stars %}
+                    <section class="bg-white my-10 p-5 rounded-md mb-5 last:mb-0">
+                        <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
+                        <p class="mb-2">{{ order.feedback.shipping.content|raw }}</p>
+                        <div class="space-s-4">
+                            {% include 'pages.partials.customer.stars' with {stars:order.feedback.shipping.stars} %}
                         </div>
                     </section>
                 {% endif %}
-                {# ==================== EN Rating ==================== #}
             </div>
         </div>
     </div>
-
-
-    {# to remove : for compile tailwind classes in component #}
-    <div class ="text-indigo-100
-  hover:bg-gray-200/30
-  text-green-500
-  space-y-5
-  !w-116
-  text-primary-d
-  translate-x-0
-  translate-x-3
-  w-[800px]
-  mt-auto
-  flex-col
-  flex-grow
-  duration-400 ease-[cubic-bezier(0.55, 0, 0.1, 1)]
-  ease-elastic
-  elastic w-200 py-32 px-8 w-28 w-7/12 max-w-md hidden cursor-pointer w-2.5 h-2.5 bg-gray-200 rounded-full transition-colors duration-300 bg-primary"></div>
 {% endblock %}
 
 {% block scripts %}

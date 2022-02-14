@@ -81,7 +81,7 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ store.logo }}">
     <meta name="_token" content="{{ csrf_token() }}">
-    {% hook 'head' %}
+    {% hook head %}
     {# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
     {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
     <link rel="stylesheet" href="{{ theme.font.url }}"/>
@@ -135,21 +135,9 @@
     {% block content %}{% endblock %}
     {% component 'footer.footer' %}
 </div>
-
-{% hook 'scripts' %}
+{% hook scripts %}
 <script defer src="{{ asset('dist/app.js') }}"></script>
 {% block scripts %}{% endblock %}
-
-{# TODO:: Move It to Twilight on initiateing#}
-{% if error %}
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      salla.error('{{ error }}');
-    })
-  </script>
-{% endif %}
-
 <salla-offer></salla-offer>
-
 </body>
 </html>
