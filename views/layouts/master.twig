@@ -25,10 +25,7 @@
 | store.settings.tax.number                          | ?string  |                                                                                                          |
 | store.settings.tax.certificate                     | ?string  | certificate image url                                                                                    |
 | store.settings.tax.taxable_prices_enabled          | bool     | Does tax included in the prices ex product_price 100 & tax is 15, price will be 115                      |
-| store.settings.rating.enabled                      | bool     | Is one of: store_enabled or shipping_enabled or products_enabled                                         |
-| store.settings.rating.store_enabled                | bool     | User is allowed to rate the store                                                                        |
-| store.settings.rating.shipping_enabled             | bool     | User is allowed to rate the shipping companies in his order                                              |
-| store.settings.rating.products_enabled             | bool     | User is allowed to rate the products in his order                                                        |
+| store.settings.rating_enabled                      | bool     | Is one of: store_enabled or shipping_enabled or products_enabled                                         |
 | store.settings.arabic_numbers_enabled              | bool     | Does the merchant wants the numbers to be shown as Arabic format                                         |
 | store.settings.is_multilingual                     | bool     |                                                                                                          |
 | store.settings.currencies_enabled                  | bool     |                                                                                                          |
@@ -65,8 +62,8 @@
     {% hook 'head:start' %}
 
     <!-- theme color -->
-    <meta name="msapplication-navbutton-color" content="{{ theme.color }}">
-    <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color }}">
+    <meta name="msapplication-navbutton-color" content="{{ theme.color.primary }}">
+    <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color.primary }}">
 
     <!-- fav icon -->
     <link rel="icon" type="image/png" href="{{ store.icon }}"/>
@@ -88,14 +85,14 @@
     <style>
       :root {
         --font-main: '{{theme.font.name}}';
-        --color-main: {{ theme.color }};
-        --color-main-d: {{ theme.darker_color(0.25) }};
-        --color-main-l: {{ theme.lighter_color(0.15) }};
-        --color-main-reverse: {{ theme.reverse_text_color }};
-        {# --color-text-reverse: {{ theme.reverse_text_color }}; #}
-        {# --color-text: {{ theme.text_color }};
-        --color-text-reverse: {{ theme.reverse_text_color }};
-        --color-title: {{ theme.color }}; #}
+        --color-main: {{ theme.color.primary }};
+        --color-main-d: {{ theme.color.darker(0.25) }};
+        --color-main-l: {{ theme.color.lighter(0.15) }};
+        --color-main-reverse: {{ theme.color.reverse_text }};
+        {# --color-text-reverse: {{ theme.color.reverse_text }}; #}
+        {# --color-text: {{ theme.color.text }};
+        --color-text-reverse: {{ theme.color.reverse_text }};
+        --color-title: {{ theme.color.primary }}; #}
 
         /*Topnav*/
       {# TODO:: Remove all these conditions or put them in theme.json settings section, after discussing it with Adel#}
