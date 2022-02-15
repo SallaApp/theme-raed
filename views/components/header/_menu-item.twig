@@ -16,16 +16,17 @@
     {# TODO:: Remove classes conditions in this file, use global selector on the body or the parent dom#}
     <li class="{{ is_root_menu?'inline-block':'relative hover:bg-gray-200/20 dark:hover:bg-gray-200/10' }} {{ menu.mega_menu?'mega-menu': '' }}" {{ menu.attrs|raw }}>
         <a href="{{ menu.url }}"
-
            class="flex justify-between items-center transition duration-300 p-2 ps-3 text-sm hover:no-underline {{ is_root_menu? 'font-bold pt-0 pb-8 whitespace-nowrap':'' }}
         {{ theme.mainnav_link_hover ? 'hover:!text-[color:var(--mainnav-link-hover)]': 'hover:text-primary' }}
         ">
             <span>{{ menu.title }}</span>
             {% if menu.has_children %}
+                {# TODO:: @Adel #enhance - remove the tag and use has-children class in parent and target via before and after --- #}
                 <i class="{{ is_root_menu?'sicon-keyboard_arrow_down':'sicon-keyboard_arrow_left' }} inline-block transition-transform duration-300 self-end mx-0.5 text-lg opacity-50 leading-4"></i>
             {% endif %}
         </a>
         {% if menu.has_children %}
+            {# TODO:: @Adel #enhance - shorten with mobile-nav-el and target it's children --- #}
             <div class="sub-menu z-20 transition transition-delay-300 opacity-0 invisible absolute bg-white dark:bg-gray-700 {{ menu.mega_menu?'w-full left-0 flex': 'w-56 pb-2' }} transform -translate-y-3 shadow-default rounded-b-md after:border-t
           {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }}
           {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}">

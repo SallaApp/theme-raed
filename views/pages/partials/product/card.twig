@@ -6,6 +6,7 @@ view options:
 *Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
 #}
 <div id="product_{{ product.id }}"
+        {# TODO:: @Adel #enhance - reduce using product-entry --- #}
      class='product-entry {{ block_classes ?? '' }} {{ is_special?'product-entry--special':'' }} {{ is_horizontal?'product-entry--horizontal lg:flex-row':'product-entry--vertical' }} relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
     <a href="{{ product.url }}"
        class='product-entry__image relative overflow-hidden hover:opacity-90 w-full {{ is_special?(store.settings.product.fit_type?'sm:h-500': ''):(store.settings.product.fit_type?'h-40':'') }} {{ is_horizontal?"lg:h-full lg:w-60":"" }}'>

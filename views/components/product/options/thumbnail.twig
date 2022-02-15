@@ -22,6 +22,7 @@
                     data-img-id="{{ detail.option_value }}"
                     value="{{ detail.id }}"/>
             <label for="option_{{ detail.id }}-{{ key_prefix }}" data-img-id="{{ detail.option_value }}"
+                    {# TODO:: @Adel #enhance - reduce --- #}
                    class="go-to-slide inline-block mb-0.5 cursor-pointer rounded-md overflow-hidden h-24 md:h-20 w-full">
 
                 <img data-src="{{ detail.image }}" src="{{ asset('images/s-empty.png') }}"
@@ -32,6 +33,7 @@
             </label>
             <p class="text-sm text-gray-400">{{ detail.name }}</p>
             {% if detail.is_out %}
+                {# TODO:: @Adel #enhance - unify with checkbox optons --- #}
                 <small class="block absolute bottom-10 left-1/2 transform -translate-x-1/2  rounded-full px-2.5 pb-1 bg-red-400 text-white whitespace-nowrap">{{ trans('pages.products.out_of_stock') }}</small>
             {% endif %}
         </div>

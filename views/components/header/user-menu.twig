@@ -5,7 +5,9 @@
 | pending_orders_count    | int     |             |
 #}
 {# TODO:: Clean this file& classes & ccondtions & dom levels#}
+{# TODO:: @Adel #enhance - classes can be cleaned using the menu-item--notify modifier --- #}
 {% if is_profile_sidebar %}
+    {# TODO:: @Adel #enhance - reduce DOM elements for all links --- #}
     <a href="{{ link('notifications') }}"
        class="{% if is_link('notifications') %}active{% endif %} menu-item menu-item--notify {{ is_link('notifications')? 'text-primary bg-gray-200/20':'text-gray-500' }}">
         <span>
@@ -54,9 +56,9 @@
         <button aria-label="User Menu Trigger" type="button"
                 class="dropdown__trigger"
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
-            <img class="h-10 w-10 object-cover pointer-events-none" src="{{ user.avatar }}" alt="">
+            <img class="h-10 w-10 object-cover pointer-events-none" src="{{ user.avatar }}" alt="{{ user.full_name }}" />
         </button>
-        {# TODO:: Remove this condition, use global selector on the body#}
+        {# TODO::  @Adel #enhance - Remove this condition, use global selector on the body #}
         <div class="dropdown__menu inset-top-shadow after:border-t {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }} {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}"
             role="menu"
             aria-orientation="vertical"

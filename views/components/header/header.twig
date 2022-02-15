@@ -21,11 +21,10 @@
                 <div class="flex items-center w-full lg:w-auto justify-between">
                     <div class="flex items-center space-s-2">
                         {% component 'footer.pages' with {is_header:true} %}
-                        {# TODO:: it looks that there is no need for button inside div, just use button#}
                         {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                             <div class="relative inline-block">
+                                {# TODO:: @Adel #enhance - handle layout if only lang or currency enabled current layout will not work... use flex with after for first child --- #}
                                 <button type="button" data-on-click="localization::show" class="btn--light-gray">
-                                    {# todo::consider that it can be one item  #}
                                     <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
                                     | <span class="ms-2">{{ user.language.name }}</span>
                                 </button>
@@ -37,11 +36,11 @@
                         {% set displayAs = 'default' %}
                         {% if displayAs != 'in-product' %}
                             <div class="relative inline-block">
-                                <a class="btn--light-gray sicon-location me-1"
+                                {# TODO:: @Ashraf #enhance - using the sicon- class will override button font - split or use after --- #}
+                                <a class="btn--light-gray sicon-location"
                                         data-on-click="branches::show"
                                         href="#"> &nbsp;فرع الرياض</a>
                             </div>
-
                             {# TODO:: make default props #}
                             <salla-branches position="header"
                                             current="3"
@@ -55,6 +54,7 @@
                         <salla-search></salla-search>
                     </div>
                 </div>
+                {# @Jamal - component naming is confusing footer in the header , why not storeContacts #}
                 {% component 'footer.contacts' with {is_header:true} %}
             </div>
         </div>
@@ -73,8 +73,10 @@
                 <div class="flex items-stretch justify-between relative">
                     <div class="flex items-center">
                         <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
+                            {# TODO:: @Adel #enhance - make it consistant - either use span or i tag for salla icons --- #}
                             <span class="sicon-menu text-primary text-3xl me-2.5"></span>
                         </a>
+                        {# TODO:: @Adel #enhance - use store-logo and remove both if not needed --- #}
                         <a class="site-logo theme-logo navbar-brand items-center flex my-2 lg:my-0"
                            href="{{ store.url }}">
                             <img src="{{ store.logo }}" alt="{{ store.name }}"
@@ -93,9 +95,11 @@
                                 <i class="sicon-user-circle"></i>
                             </button>
                         {% endif %}
+                        {# TODO:: @Adel #enhance - make the whole cart widget clickable - and all id's are under_score separated not dashed --- #}
                         <div class="flex items-center ms-4" id="main-cart-btn">
                             <a href="{{ link('cart') }}" class="me-1 relative ">
                                 <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
+                                {# TODO:: @Adel #enhance - shrink it usign the #main-cart-btn  --- #}
                                 <div data-cart-badge
                                      class="opacity-0 anime-count absolute top-1 -start-2 bg-theme-red text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">
                                     {{ cart.items_count }}</div>
