@@ -60,20 +60,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {% hook 'head:start' %}
-    {% block styles %}{% endblock %}
-    <link rel="stylesheet" href="{{ asset('dist/app.css') }}">
+
     <!-- theme color -->
     <meta name="msapplication-navbutton-color" content="{{ theme.color }}">
     <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color }}">
+
     <!-- fav icon -->
     <link rel="icon" type="image/png" href="{{ store.icon }}"/>
     <link rel="apple-touch-icon-precomposed" href="{{ store.logo }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ store.logo }}">
     <meta name="_token" content="{{ csrf_token() }}">
-    {% hook head %}
+
     {# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
     {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
+
+    {% hook head %}
+    {% block styles %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('dist/app.css') }}">
     <link rel="stylesheet" href="{{ theme.font.url }}"/>
 
     {% block head %}{% endblock %}
@@ -103,10 +107,10 @@
         {% if theme.mainnav_bg %} --mainnav-bg: {{theme.mainnav_bg}};{% endif %}
         {% if theme.mainnav_text_color %} --mainnav-text-color: {{theme.mainnav_text_color}};{% endif %}
         {% if theme.mainnav_link_hover %} --mainnav-link-hover: {{theme.mainnav_link_hover}};{% endif %}
-        {% if theme.mainnav_bg_gradient %} 
+        {% if theme.mainnav_bg_gradient %}
           --mainnav-gradient-from: {{theme.mainnav_bg_gradient_from}};
           --mainnav-gradient-to: {{theme.mainnav_bg_gradient_to}};
-        {% endif %} 
+        {% endif %}
       }
     </style>
     {# tracking services, custom css feature. #}
