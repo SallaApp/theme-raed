@@ -84,7 +84,7 @@
                         {% component 'header.menu' %}
                     </div>
                     <div class="flex items-center justify-end min-w-[200px]">
-                        {% if user %}
+                        {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
                             <button class="btn--icon"
@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-        {% if not user %}
+        {% if user.type=='guest' %}
             <salla-login
                     {{ store.settings.auth.email_allowed ? 'is-email-allowed' : '' }}
                     {{ store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : '' }}
