@@ -20,7 +20,8 @@ module.exports = {
         //plugins
         filepond : ['./assets/styles/plugins/filepond.scss', './assets/js/partials/filepond.js'],
         flatpickr: './assets/styles/plugins/flatpicker.scss',
-        twilight: './assets/js/twilight.js',
+
+        twilight: ['./assets/js/twilight.js', './assets/styles/tailwind.scss'],//to use them in example
 
         //fonts
         // amazon_ember: './assets/fonts/amazon_ember.scss',
