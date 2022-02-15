@@ -1,21 +1,38 @@
 {#
-| Variable              | Type     | Description                   |
-|-----------------------|----------|-------------------------------|
-| page                  | object   |                               |
-| page.title            | string   |                               |
-| page.name             | string   |                               |
-| customer              | Customer | TODO                          |
-| customer.first_name   | string   |                               |
-| customer.last_name    | string   |                               |
-| customer.avatar       | string   |                               |
-| customer.city         | ?string  |                               |
-| customer.country      | ?string  |                               |
-| customer.full_name    | string   | link:`first_name` `last_name` |
-| customer.mobile       | string   |                               |
-| customer.email        | string   |                               |
-| customer.gender       | ?string  | 'male', 'female'              |
-| customer.birthday     | ?data    |                               |
-| customer.country_code | string   | Customer country code ex. SA  |
+| Variable                       | Type     | Description                                         |
+|--------------------------------|----------|-----------------------------------------------------|
+| page                           | object   |                                                     |
+| page.title                     | string   |                                                     |
+| page.name                      | string   |                                                     |
+| customer                       | User     | Available also on @see `user` on layouts/master     |
+| customer.first_name            | string   |                                                     |
+| customer.last_name             | string   |                                                     |
+| customer.avatar                | string   |                                                     |
+| customer.city                  | ?string  |                                                     |
+| customer.country               | ?string  |                                                     |
+| customer.full_name             | string   | link:`first_name` `last_name`                       |
+| customer.mobile                | string   |                                                     |
+| customer.email                 | string   |                                                     |
+| customer.gender                | ?string  | 'male', 'female'                                    |
+| customer.birthday              | ?data    |                                                     |
+| customer.type                  | string   | `user`, `guest`                                     |
+| customer.country_code          | string   | ex: "SA" for user or guest                          |
+| customer.currency_code         | string   | ex: "SAR"                                           |
+| customer.currency              | object   |                                                     |
+| customer.currency.code         | string   | ex: "SAR"                                           |
+| customer.currency.name         | string   | ex: "ريال سعودي"                                      |
+| customer.currency.symbol       | string   | ex: "ر.س"                                           |
+| customer.currency.amount       | string   | ex: "1.0"                                           |
+| customer.currency.country_code | string   | lower first two letters from currency code ex: "sa" |
+| customer.language_code         | string   |                                                     |
+| customer.language              | Language | Current user language                               |
+| customer.language.name         | string   |                                                     |
+| customer.language.is_rtl       | Bool     |                                                     |
+| customer.language.code         | string   | ex: ar, en                                          |
+| customer.language.url          | string   | Current url in this lang                            |
+| customer.language.flag         | string   | Url of flag for the language                        |
+| customer.language.country_code | string   | ex: Arabic=>sa, English=>gb                         |
+| customer.language.order        | int      | Sort language in menu                               |
 #}
 {% extends "layouts.master" %}
 

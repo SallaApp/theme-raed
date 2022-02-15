@@ -2,16 +2,6 @@
 | Variable                                           | Type     | Description                                                                                              |
 |----------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------|
 | is_home                                            | ?bool    |                                                                                                          |
-| currency                                           | object   |                                                                                                          |
-| country_code                                       | string   | ex: "SA" for user or guest                                                                               |
-| currency.code                                      | string   | ex: "SAR"                                                                                                |
-| currency.name                                      | string   | ex: "ريال سعودي"                                                                                         |
-| currency.symbol                                    | string   | ex: "ر.س"                                                                                                |
-| currency.amount                                    | string   | ex: "1.0"                                                                                                |
-| currency.country_code                              | string   | lower first two letters from currency code ex: "sa"                                                      |
-| is_rtl                                             | bool     |                                                                                                          |
-| error                                              | ?string  |                                                                                                          |
-|                                                    |          |                                                                                                          |
 | store                                              | Store    |                                                                                                          |
 | store.name                                         | string   |                                                                                                          |
 | store.username                                     | string   |                                                                                                          |
@@ -37,29 +27,30 @@
 | store.settings.rating.shipping                     | bool     | User is allowed to rate the shipping companies in his order                                              |
 | store.settings.rating.products                     | bool     | User is allowed to rate the products in his order                                                        |
 | store.settings.arabic_numbers_enabled              | bool     | Does the merchant wants the numbers to be shown as Arabic format                                         |
-| store.settings.languages_enabled                   | bool     |                                                                                                          |
+| store.settings.is_multilingual                     | bool     |                                                                                                          |
 | store.settings.currencies_enabled                  | bool     |                                                                                                          |
 |                                                    |          |                                                                                                          |
 | theme                                              | Theme    |                                                                                                          |
-| theme.color                                        | string   |                                                                                                          |
-| theme.text_color                                   | string   | suitable text color comparing to theme.color, #000000, #FFFFFF                                           |
-| theme.reverse_color                                | string   |                                                                                                          |
-| theme.reverse_text_color                           | string   | if `theme.text_color=#000000` means that `theme.reverse_text_color=#FFFFFF`                              |
-| theme.is_dark                                      | bool     | Does main store color `theme.color` considered as dim color?                                             |
+| theme.id                                           | int      |                                                                                                          |
+| theme.name                                         | string   |                                                                                                          |
+| theme.mode                                         | string   | `live`, `preview`                                                                                        |
+| theme.is_rtl                                       | bool     |                                                                                                          |
+| theme.translations_hash                            | int      | to be used in case merchant updated frontend store translations                                          |
+| theme.color                                        | object   |                                                                                                          |
+| theme.color.primary                                | string   |                                                                                                          |
+| theme.color.text                                   | string   | suitable text color comparing to `theme.primary.color`, #000000, #FFFFFF                                 |
+| theme.color.reverse_primary                        | string   |                                                                                                          |
+| theme.color.reverse_text                           | string   | if `theme.text_color=#000000` means that `theme.reverse_text_color=#FFFFFF`                              |
+| theme.color.is_dark                                | bool     | Does main store color `theme.primary.color` considered as dim color?                                     |
+| theme.color.darker(float alpha, ?string hexColor)  | string   | get darker color from `theme.primary.color` or from passed color, `alpha` range from 0.0-1.0             |
+| theme.color.lighter(float alpha, ?string hexColor) | string   | get lighter color from `theme.primary.color` or from passed color, `alpha` range from 0.0-1.0            |
 | theme.font                                         | ?object  | Salla predefined font, null when the theme doesn't have `fonts` feature                                  |
-| theme.font.id                                      | int      | 1-5                                                                                                      |
 | theme.font.name                                    | string   | DINNextLTArabic-Regular, Amazon-Ember, Apple, Dubai, Estedad                                             |
-| theme.font.path                                    | string   | css path ex: '/fonts/default.css'                                                                        |
 | theme.font.url                                     | string   | css full url ex: 'https://my_store.test/dist/fonts/default.css'                                          |
-| theme.translations_hash                            | number   | to be use in case merchant updated frontend store translations                                           |
 | theme.settings                                     | object   | dynamic object with values of the `settings` in theme.json ex. `theme.settings.topnav_is_dark`           |
-| theme.darker_color(float alpha, ?string hexColor)  | string   | get darker color from `theme.color` or from passed color, `alpha` range from 0.0-1.0                     |
-| theme.lighter_color(float alpha, ?string hexColor) | string   | get lighter color from `theme.color` or from passed color, `alpha` range from 0.0-1.0                    |
 | theme.set(settingName, value)                      | string   | set global var, ex {{ theme.set(my_var, 'something') }}, then get it {{theme.my_var }}                   |
 | theme.get(settingName, default=null)               | mixed    | get theme setting ex `theme.set(my_var, 'something')` then `theme.get('my_var', 'fallback')`             |
-| theme.*                                            | mixed    | getting values for the dynamic settings that are defined in theme.json, under `settings` section         |
-| language                                           | Language | see: views/components/header/language-switcher.twig                                                      |
-| user                                               | User     | see: views/pages/customer/profile.twig                                                                   |
+| user                                               | User     | @see `Customer` Object in: views/pages/customer/profile.twig                                             |
 #}
 <!DOCTYPE html>
 <html lang="{{ language.code }}" dir="{{ language.dir }}">
