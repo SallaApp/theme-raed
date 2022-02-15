@@ -3,36 +3,7 @@
 |--------------------------------|----------|-----------------------------------------------------|
 | page                           | object   |                                                     |
 | page.title                     | string   |                                                     |
-| page.name                      | string   |                                                     |
-| customer                       | User     | Available also @see `user` in layouts/master.twig   |
-| customer.first_name            | string   |                                                     |
-| customer.last_name             | string   |                                                     |
-| customer.avatar                | string   |                                                     |
-| customer.city                  | ?string  |                                                     |
-| customer.country               | ?string  |                                                     |
-| customer.full_name             | string   | link:`first_name` `last_name`                       |
-| customer.mobile                | string   |                                                     |
-| customer.email                 | string   |                                                     |
-| customer.gender                | ?string  | 'male', 'female'                                    |
-| customer.birthday              | ?data    |                                                     |
-| customer.type                  | string   | `user`, `guest`                                     |
-| customer.country_code          | string   | ex: "SA" for user or guest                          |
-| customer.currency_code         | string   | ex: "SAR"                                           |
-| customer.currency              | object   |                                                     |
-| customer.currency.code         | string   | ex: "SAR"                                           |
-| customer.currency.name         | string   | ex: "ريال سعودي"                                      |
-| customer.currency.symbol       | string   | ex: "ر.س"                                           |
-| customer.currency.amount       | string   | ex: "1.0"                                           |
-| customer.currency.country_code | string   | lower first two letters from currency code ex: "sa" |
-| customer.language_code         | string   |                                                     |
-| customer.language              | Language | Current user language                               |
-| customer.language.name         | string   |                                                     |
-| customer.language.is_rtl       | bool     |                                                     |
-| customer.language.code         | string   | ex: ar, en                                          |
-| customer.language.url          | string   | Current url in this lang                            |
-| customer.language.flag         | string   | Url of flag for the language                        |
-| customer.language.country_code | string   | ex: Arabic=>sa, English=>gb                         |
-| customer.language.order        | int      | Sort language in menu                               |
+| page.slug                      | string   |                                                     |
 #}
 {% extends "layouts.master" %}
 
@@ -73,7 +44,7 @@
                                 <b class="block">{{ trans('pages.profile.first_name') }}</b>
                             </label>
                             <div class="mt-2.5 mb-5">
-                                <input type="text" name="first_name" value="{{ customer.first_name }}"
+                                <input type="text" name="first_name" value="{{ user.first_name }}"
                                        id="first-name" autocomplete="first_name" class="form-input">
                             </div>
                         </div>
@@ -82,7 +53,7 @@
                                 <b class="block">{{ trans('pages.profile.last_name') }}</b>
                             </label>
                             <div class="mt-2.5 mb-5">
-                                <input type="text" name="last_name" value="{{ customer.last_name }}" id="last-name"
+                                <input type="text" name="last_name" value="{{ user.last_name }}" id="last-name"
                                        autocomplete="last-name" class="form-input">
                             </div>
                         </div>
@@ -95,7 +66,7 @@
                             </label>
 
                             <div class="mt-2.5 mb-5">
-                                <input type="text" id="birthday" name="birthday" value="{{ customer.birthday }}"
+                                <input type="text" id="birthday" name="birthday" value="{{ user.birthday }}"
                                        class="form-input date-element"
                                        placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
                             </div>
@@ -109,10 +80,10 @@
                                 <select class="form-input appearance-none" name="gender">
                                     <option placeholder
                                             value="">{{ trans('pages.profile.gender_placeholder') }}</option>
-                                    <option value="male" {{ customer.gender=='male'?'selected':'' }}>
+                                    <option value="male" {{ user.gender=='male'?'selected':'' }}>
                                         {{ trans('pages.profile.male') }}
                                     </option>
-                                    <option value="female" {{ customer.gender=='female'?'selected':'' }}>
+                                    <option value="female" {{ user.gender=='female'?'selected':'' }}>
                                         {{ trans('pages.profile.female') }}
                                     </option>
                                 </select>
@@ -126,7 +97,7 @@
                                 <b class="block">{{ trans('common.elements.email') }}</b>
                             </label>
                             <div class="mt-2.5 mb-5">
-                                <input type="email" name="email" value="{{ customer.email }}" id="email"
+                                <input type="email" name="email" value="{{ user.email }}" id="email"
                                        class="form-input ">
                             </div>
                         </div>
@@ -136,13 +107,13 @@
                                 <b class="block">{{ trans('common.elements.mobile') }}</b>
                             </label>
                             <div class="mt-2.5 mb-5">
-                                <salla-tel-input mobile="{{ customer.mobile }}"></salla-tel-input>
-                                {# <input type="text" name="mobile" value="{{ customer.mobile }}"
+                                <salla-tel-input mobile="{{ user.mobile }}"></salla-tel-input>
+                                {# <input type="text" name="mobile" value="{{ user.mobile }}"
                                        id="international-mobile" class="tel-input form-input"
-                                       data-code="{{ customer.country_code }}" data-digits="true">
+                                       data-code="{{ user.country_code }}" data-digits="true">
 
                                 <input type="hidden" name="country_code" class="country_code"
-                                       value="{{ customer.country_code }}"> #}
+                                       value="{{ user.country_code }}"> #}
                             </div>
                         </div>
                     </div>
