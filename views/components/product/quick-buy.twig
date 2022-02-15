@@ -14,7 +14,7 @@
                             <p class="no-m">{{ quick_checkout.getSubTitle() }}</p>
                         </div>
                         <button type="{{ oneClick ? 'submit' : 'button' }}"
-                                data-type="{{ user ? 'logged' : 'gust' }}"
+                                data-type="{{ user.type }}"
                                 class="btn btn--padded btn--large btn--oval quick-buy__toggle qo-order">
                             <span class="text">{{ quick_checkout.getButtonAlertPlaceholder() }}</span>
                             <span class="sicon-keyboard_arrow_up icon"></span>
@@ -36,7 +36,7 @@
                                 <input type="hidden" name="product_ids[]" value="{{ product.product_id }}">
                             {% endfor %}
 
-                            {% if not user %}
+                            {% if user.type=='guest' %}
 
                                 <div class="form-group">
                                     <label>{{trans('pages.products.your_name')}}</label>
@@ -85,7 +85,7 @@
                                         <div class="form-group">
                                             <div class="checkbox checkbox--large">
                                                 <input name="terms" id="qo_agreement"
-                                                       type="checkbox" {{ user ? 'checked' : '' }}>
+                                                       type="checkbox" {{ user.type=='user' ? 'checked' : '' }}>
                                                 {% if agreement_text|raw|length > 200 %}
                                                     <label for="qo_agreement">
                                                         {{ agreement_text|striptags|slice(0, 150) ~ '...' }}                                                        &ensp;

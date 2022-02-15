@@ -52,7 +52,7 @@ rounded-lg justify-around overflow-hidden'>
             </button>
             <div class="text-white">
                 <button aria-label="Add or Remove To Wishlist" class="btn--wishlist animated"
-                    {% if user %}
+                    {% if user.type=='user' %}
                         data-on-click="wishlist::add" data-id="{{ product.id }}"
                     {% else %}
                         onClick="salla.error('{{ trans('common.messages.must_login') }}')"
