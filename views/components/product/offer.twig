@@ -10,22 +10,73 @@
 | offer.steps(product_quantity) | array                   |             |
 #}
 
-{# {% set discounts = {
+{% set discounts = {
  '1':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30},
  '2':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1400, 'discount': 40},
  '3':{'text': 'اشتري <strong>اربع قطع</strong> من المنتج بـ', 'price': 1800, 'discount': 50},
  '4':{'text': 'اشتري <strong>خمس قطع</strong> من المنتج بـ', 'price': 2000, 'discount': 60},
  '5':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30}
 } 
-%} #}
+%}
 
 <section id="offer-slider" class="relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
-  {% include 'pages.partials.product.slider' with {
-    products: offer.products, 
-    categories: offer.categories,
-    type: 'offer',
-    title: offer.name,
-    subTitle: offer.description
-    } 
-  %}
+  <div class="flex justify-between items-center mb-9">
+    <span class="text-[200px] font-normal text-red-50 absolute leading-none -top-4 right-12 -z-1">%</span>
+ 
+    <div>
+      <h2 class="text-xl font-bold text-red-400">{{ offer.name }}</h2>
+      <p class="pe-16 mt-2">{{ offer.description|raw }}</p>
+    </div>
+
+    {# Slider Nav btns && show all btn #}
+    <div class="flex items-center">
+      <div class="hidden sm:flex space-s-1" dir="rtl">
+          <button aria-label="Previous Slide" class="slider-prev btn--sm-arrow">
+            <i class="sicon-keyboard_arrow_right"></i>
+          </button>
+          <button aria-label="Next Slide" class="slider-next btn--sm-arrow">
+            <i class="sicon-keyboard_arrow_left"></i>
+          </button>
+      </div>
+    </div>
+  </div>
+
+  {# Swiper #}
+  <div class="swiper default-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="offer-slider">
+    
+    <div class="swiper-wrapper flex">
+      {% if offer.categories|length %} 
+        {% for category in offer.categories %}
+            {# TODO:: @Adel #enhance - reduce --- #}
+            <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-2 lg:px-3.75">
+            <a href="{{ category.url }}" class="bg-white rounded-md h-36 mb-8 p-3 text-center flex flex-col items-center justify-center text-gray-400 transition duration-500 hover:shadow-default hover:text-gray-500 border border-gray-100"> 
+              <i class="{{ category.icon}} text-primary text-icon-lg mb-4 cat-item"></i>
+              <h4 class="font-bold text-sm cat-item">{{ category.name }}</h4>
+            </a>
+          </div>
+        {% endfor %}
+
+      {% elseif offer.products|length %} 
+        {% for product in offer.products %}
+          <div class="swiper-slide h-auto w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
+              {% include 'pages.partials.product.card' %}
+          </div>
+        {% endfor %}
+
+      {% elseif discounts|length %} 
+        {% for discount in discounts %}
+            {# TODO:: @Adel #enhance - reduce --- #}
+            <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 lg:w-1/4 px-2 lg:px-3.75">
+            <div class="bg-white rounded-md h-36 mb-8 text-center flex flex-col items-center justify-between text-gray-600 transition duration-500 hover:shadow-default border border-border-color">
+              <div class="p-3 flex-grow flex flex-col justify-center w-full">
+                <p class="mb-1">{{ discount.text|raw }}</p>
+                <div class="text-sm text-gray-400"><span class="font-extrabold text-red-400 text-3xl">{{ discount.price }}</span> ر.س</div>
+              </div>
+              <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">بخصم يصل إلى (<span class="font-bold">{{discount.discount}}%</span>)</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
 </section>
