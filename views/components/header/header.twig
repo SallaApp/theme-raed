@@ -8,104 +8,101 @@
 * It's important to put all Header components here, to be excluded in mobile apps
 #}
 <header class="store-header">
-  <div class="{{ theme.topnav_is_dark ? 'dark':'' }}">
-      <div id="topnav" class="py-2 lg:py-1.5">
-          <div class="container flex justify-between">
-              <div class="flex items-center w-full lg:w-auto justify-between">
-                  <div class="flex items-center space-s-2">
-                      {% component 'footer.pages' with {is_header:true} %}
-                      {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                          <div class="relative inline-block">
-                              {# TODO:: @Adel #enhance - handle layout if only lang or currency enabled current layout will not work... use flex with after for first child --- #}
-                              <button type="button" data-on-click="localization::show" class="btn--light-gray">
-                                  <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
-                                  | <span class="ms-2">{{ user.language.name }}</span>
-                              </button>
-                          </div>
-                          <salla-localization></salla-localization>
-                      {% endif %}
-
-                      {# TODO:: Remove This Condition #}
-                      {% set displayAs = 'default' %}
-                      {% if displayAs != 'in-product' %}
-                          <div class="relative inline-block">
-                              <a class="btn--light-gray" data-on-click="branches::show" href="#"><i class="sicon-location me-1"></i> فرع الرياض</a>
-                          </div>
-                          {# TODO:: make default props #}
-                          <salla-branches position="header"
-                                          current="3"
-                                          browse-products-from="city"
-                                          display-as="{{ displayAs }}"
-                          ></salla-branches>
-                      {% endif %}
+  {# Top Nav #}
+  <div id="topnav" class="py-2 lg:py-1.5">
+      <div class="container flex justify-between">
+          <div class="flex items-center w-full lg:w-auto justify-between">
+              <div class="flex items-center space-s-2">
+                  {% component 'footer.pages' with {is_header:true} %}
+                  {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                       <div class="relative inline-block">
-                          <a href="#" data-on-click="search::show" class="btn--gray-circle sicon-search"></a>
+                          {# TODO:: @Adel #enhance - handle layout if only lang or currency enabled current layout will not work... use flex with after for first child --- #}
+                          <button type="button" data-on-click="localization::show" class="btn--light-gray">
+                              <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
+                              | <span class="ms-2">{{ user.language.name }}</span>
+                          </button>
                       </div>
-                      <salla-search></salla-search>
+                      <salla-localization></salla-localization>
+                  {% endif %}
+
+                  {# TODO:: Remove This Condition #}
+                  {% set displayAs = 'default' %}
+                  {% if displayAs != 'in-product' %}
+                      <div class="relative inline-block">
+                          <a class="btn--light-gray" data-on-click="branches::show" href="#"><i class="sicon-location me-1"></i> فرع الرياض</a>
+                      </div>
+                      {# TODO:: make default props #}
+                      <salla-branches position="header"
+                                      current="3"
+                                      browse-products-from="city"
+                                      display-as="{{ displayAs }}"
+                      ></salla-branches>
+                  {% endif %}
+                  <div class="relative inline-block">
+                      <a href="#" data-on-click="search::show" class="btn--gray-circle sicon-search"></a>
                   </div>
+                  <salla-search></salla-search>
               </div>
-              {# @Jamal - component naming is confusing footer in the header , why not storeContacts #}
-              {% component 'footer.contacts' with {is_header:true} %}
           </div>
+          {# @Jamal - component naming is confusing footer in the header , why not storeContacts #}
+          {% component 'footer.contacts' with {is_header:true} %}
       </div>
   </div>
 
-  {# Main Nav --------------------------- #}
-  <div class="{{ theme.mainnav_is_dark ? 'dark': '' }}">
-      <div id="mainnav" class="mainnav-container bg-white shadow-default
-      {{ theme.mainnav_is_dark ? 'dark:bg-gray-700 dark:text-gray-300': 'bg-white' }}
-      ">
-          <div class="mainnav-inner bg-inherit">
-              <div class="container">
-                  <div class="flex items-stretch justify-between relative">
-                      <div class="flex items-center">
-                          <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
-                              <i class="sicon-menu text-primary text-3xl me-2.5"></i>
+  {# Main Nav #} 
+  <div id="mainnav" class="mainnav-container bg-white shadow-default
+  {{ theme.mainnav_is_dark ? 'dark:bg-gray-700 dark:text-gray-300': 'bg-white' }}
+  ">
+      <div class="mainnav-inner bg-inherit">
+          <div class="container">
+              <div class="flex items-stretch justify-between relative">
+                  <div class="flex items-center">
+                      <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
+                          <i class="sicon-menu text-primary text-3xl me-2.5"></i>
+                      </a>
+                      <a class="store-logo navbar-brand items-center flex my-2 lg:my-0"
+                        href="{{ store.url }}">
+                          <img src="{{ store.logo }}" alt="{{ store.name }}"
+                              class="max-h-14 sm:max-h-16 max-w-[170px]">
+                          <h1 class="hidden">{{ store.name }}</h1>
+                      </a>
+                      {% component 'header.menu' %}
+                  </div>
+                  <div class="flex items-center justify-end min-w-[200px]">
+                      {% if user.type=='user' %}
+                          {% component 'header.user-menu' %}
+                      {% else %}
+                          <button class="btn--icon"
+                                  data-on-click="login::show"
+                                  type="button">
+                              <i class="sicon-user-circle"></i>
+                          </button>
+                      {% endif %}
+                      {# TODO:: @Adel #enhance - make the whole cart widget clickable - and all id's are under_score separated not dashed --- #}
+                      <div class="flex items-center ms-4" id="main-cart-btn">
+                          <a href="{{ link('cart') }}" class="me-1 relative ">
+                              <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
+                              {# TODO:: @Adel #enhance - shrink it usign the #main-cart-btn  --- #}
+                              <div data-cart-badge
+                                  class="opacity-0 anime-count absolute top-1 -start-2 bg-theme-red text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">
+                                  {{ cart.items_count }}</div>
                           </a>
-                          <a class="store-logo navbar-brand items-center flex my-2 lg:my-0"
-                            href="{{ store.url }}">
-                              <img src="{{ store.logo }}" alt="{{ store.name }}"
-                                  class="max-h-14 sm:max-h-16 max-w-[170px]">
-                              <h1 class="hidden">{{ store.name }}</h1>
-                          </a>
-                          {% component 'header.menu' %}
-                      </div>
-                      <div class="flex items-center justify-end min-w-[200px]">
-                          {% if user.type=='user' %}
-                              {% component 'header.user-menu' %}
-                          {% else %}
-                              <button class="btn--icon"
-                                      data-on-click="login::show"
-                                      type="button">
-                                  <i class="sicon-user-circle"></i>
-                              </button>
-                          {% endif %}
-                          {# TODO:: @Adel #enhance - make the whole cart widget clickable - and all id's are under_score separated not dashed --- #}
-                          <div class="flex items-center ms-4" id="main-cart-btn">
-                              <a href="{{ link('cart') }}" class="me-1 relative ">
-                                  <i class="cart-icon block sicon-shopping-bag text-3xl"></i>
-                                  {# TODO:: @Adel #enhance - shrink it usign the #main-cart-btn  --- #}
-                                  <div data-cart-badge
-                                      class="opacity-0 anime-count absolute top-1 -start-2 bg-theme-red text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">
-                                      {{ cart.items_count }}</div>
-                              </a>
-                              <div class="whitespace-nowrap">
-                                  <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
-                                  <b class="leading-3" data-cart-total>{{ cart.total }}</b>
-                              </div>
+                          <div class="whitespace-nowrap">
+                              <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
+                              <b class="leading-3" data-cart-total>{{ cart.total }}</b>
                           </div>
                       </div>
                   </div>
               </div>
           </div>
-          {% if user.type=='guest' %}
-              <salla-login
-                      {{ store.settings.auth.email_allowed ? 'is-email-allowed' : '' }}
-                      {{ store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : '' }}
-                      {{ store.settings.auth.is_email_required ? 'is-email-required' : '' }}
-              ></salla-login>
-          {% endif %}
       </div>
-  </div>
+      {% if user.type=='guest' %}
+          <salla-login
+                  {{ store.settings.auth.email_allowed ? 'is-email-allowed' : '' }}
+                  {{ store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : '' }}
+                  {{ store.settings.auth.is_email_required ? 'is-email-required' : '' }}
+          ></salla-login>
+      {% endif %}
+  </div> 
 </header>
 {% component 'header.menu' with {is_mobile:true} %}

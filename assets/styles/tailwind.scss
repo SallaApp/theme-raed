@@ -136,7 +136,7 @@
   }
 
   .dropdown__trigger {
-    @apply border dark:border-gray-600 rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent;
+    @apply rounded-full overflow-hidden w-10 h-10 font-medium focus:ring-offset-transparent;
   }
 
   .btn-danger {
@@ -200,7 +200,7 @@
 
   // menu
   .dropdown__menu {
-    @apply origin-top-right duration-200 transition-all scale-y-90 absolute opacity-0 -translate-y-4 invisible rtl:left-0 ltr:right-0 z-30 w-80 lg:w-56 rounded-t-md lg:rounded-t-none rounded-b-md shadow-default bg-white dark:bg-gray-700 top-full;
+    @apply origin-top-right duration-200 transition-all scale-y-90 absolute opacity-0 -translate-y-4 invisible rtl:left-0 ltr:right-0 z-30 w-80 lg:w-56 rounded-t-md lg:rounded-t-none rounded-b-md shadow-default bg-white top-full lg:border-t lg:border-gray-300/30;
   }
 
   .dropdown-toggler {
@@ -208,14 +208,18 @@
   }
 
   .menu-item {
-    @apply flex items-center  px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30;
+    @apply flex items-center px-6 py-2.5 text-sm transition-colors duration-300 hover:bg-gray-200/30;
 
     &--user {
-      @apply block px-4 py-3 lg:py-2 text-base lg:text-sm dark:hover:bg-gray-200/10;
+      @apply block px-4 py-3 lg:py-2 text-base lg:text-sm;
     }
 
     &--notify {
       @apply flex justify-between items-center;
+    }
+
+    &.is-active{
+      @apply text-primary bg-gray-200/20;
     }
   }
 
@@ -253,13 +257,23 @@
     }
 
     .topnav-is-dark & {
-      @apply dark:bg-gray-800 dark:text-gray-300;
+      @apply bg-gray-900 text-gray-300;
+
+      .btn--gray-circle,
+      .btn--light-gray{
+        @apply bg-gray-100/10  hover:bg-gray-100/20
+      }
+
+      .topnav-link-item{
+        @apply border-gray-300/10;
+      }
     }
   }
 
   //Main Nav custom classes
   #mainnav{
-    .mainnav-has-bg & {
+    .mainnav-has-bg &,
+    .mainnav-has-bg & .sub-menu{
       @apply bg-[color:var(--mainnav-bg)];
     }
 
@@ -268,7 +282,41 @@
     }
 
     .mainnav-is-dark & {
-      @apply dark:bg-gray-700 dark:text-gray-300;
+      @apply bg-gray-800 text-gray-300;
+
+      .dropdown-toggler,
+      .dropdown__menu > div p{
+        @apply text-gray-300;
+      }
+
+      .sub-menu,
+      .dropdown__menu{
+        @apply bg-gray-800 border-gray-300/10;
+      }
+
+      .sub-menu li a:hover,
+      .dropdown__menu li a:hover,
+      .menu-item.is-active,
+      .has-children li a:hover,
+      .has-children .has-children:hover > a{
+        @apply bg-gray-200/10;
+      }
+
+      .dropdown__menu > div{
+        @apply border-gray-300/10;
+      } 
+
+      .product-entry{
+        @apply bg-gray-800 border border-gray-300/10;
+
+        .product-entry__title a:not(:hover){
+          @apply text-gray-300;
+        }
+      }
     }
+  }
+
+  .sub-menu{
+    @apply z-20 transition delay-300 opacity-0 invisible absolute bg-white transform -translate-y-3 shadow-default rounded-b-md border-t border-gray-300/30;
   }
 }

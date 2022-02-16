@@ -9,7 +9,7 @@
 {% if is_profile_sidebar %}
     {# TODO:: @Adel #enhance - reduce DOM elements for all links --- #}
     <a href="{{ link('notifications') }}"
-       class="{% if is_link('notifications') %}active{% endif %} menu-item menu-item--notify {{ is_link('notifications')? 'text-primary bg-gray-200/20':'text-gray-500' }}">
+       class="{% if is_link('notifications') %}active{% endif %} menu-item menu-item--notify {{ is_link('notifications')? 'is-active':'text-gray-500' }}">
         <span>
             <i class="sicon-school-bell me-3 text-lg"></i>
             <span class="truncate"> {{ trans('common.titles.notifications') }}</span>
@@ -19,7 +19,7 @@
         {% endif %}
     </a>
     <a href="{{ link('pending_orders') }}"
-       class="{% if is_link('pending_orders') %}active{% endif %} menu-item menu-item--notify {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'text-gray-500' }}">
+       class="{% if is_link('pending_orders') %}active{% endif %} menu-item menu-item--notify {{ is_link('pending_orders')? 'is-active':'text-gray-500' }}">
         <span>
         <i class="sicon-cart me-3 text-lg"></i>
         <span class="truncate"> {{ trans('common.titles.pending_orders') }}</span>
@@ -30,18 +30,18 @@
     </a>
     <a href="{{ link('orders') }}"
        aria-current="page"
-       class="menu-item {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
+       class="menu-item {{ is_link('orders') and not is_link('pending_orders') ?  'is-active':'text-gray-500 hover:text-gray-600' }}">
         <i class="sicon-packed-box me-3 text-lg"></i>
         <span class="truncate">{{ trans('common.titles.orders') }}</span>
     </a>
     <a href="{{ link('wishlist') }}"
        aria-current="page"
-       class="menu-item {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
+       class="menu-item {{ is_link('wishlist')?  'is-active':'text-gray-500 hover:text-gray-600' }}">
         <i class="sicon-heart me-3 text-lg"></i>
         {{ trans('common.titles.wishlist') }}
     </a>
     <a href="{{ link('profile') }}"
-       class="menu-item {{ is_link('profile')?  'text-primary bg-gray-200/20':'text-gray-500 hover:text-gray-600' }}">
+       class="menu-item {{ is_link('profile')?  'is-active':'text-gray-500 hover:text-gray-600' }}">
         <i class="sicon-settings me-3 text-lg"></i>
         {{ trans('common.titles.profile') }}
     </a>
@@ -65,20 +65,22 @@
             aria-labelledby="menu-button"
             tabindex="-1">
 
+            {# menu header in responsive #}
             <div class="flex items-center p-4 border-b mb-1 lg:hidden relative">
                 <img class="h-12 w-12 rounded-full object-cover pointer-events-none me-3" src="{{ user.avatar }}" alt="">
                 <div>
-                    <span>{{ trans('pages.checkout.hello') }}</span>
-                    <p class="text-gray-700 font-bold text-lg">{{ user.full_name }}</p>
+                    <span class="text-sm">{{ trans('pages.checkout.hello') }}</span>
+                    <p class="text-gray-700 font-bold text-base leading-none">{{ user.full_name }}</p>
                 </div>
-                <button class="dropdown__close h-12 w-12 text-red-500 text-2xl rounded-full absolute top-2 end-1 z-50">
+                <button class="dropdown__close h-12 w-12 text-red-500 text-lg rounded-full absolute top-2 end-1 z-50">
                     <i class="sicon-cancel pointer-events-none"></i>
                 </button>
             </div>
+
             <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
                 <li class="{{ new_notifications_count ? 'has-badge' : '' }}">
                     <a href="{{ link('notifications') }}"
-                       class="menu-item menu-item--user menu-item--notify {{ is_link('notifications')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="menu-item menu-item--user menu-item--notify {{ is_link('notifications')? 'is-active':'' }}">
                        <span>
                         <i class="sicon-bell-ring me-3"></i>
                         <span>{{ trans('common.titles.notifications') }}</span>
@@ -91,7 +93,7 @@
                 </li>
                 <li class="{{ pending_orders_count ? 'has-badge' : '' }}">
                     <a href="{{ link('pending_orders') }}"
-                       class="menu-item menu-item--user menu-item--notify {{ is_link('pending_orders')? 'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="menu-item menu-item--user menu-item--notify {{ is_link('pending_orders')? 'is-active':'' }}">
                         <span>
                             <i class="sicon-cart me-3"></i>
                             <span> {{ trans('common.titles.pending_orders') }}</span>
@@ -103,21 +105,21 @@
                 </li>
                 <li>
                     <a href="{{ link('orders') }}"
-                       class="menu-item menu-item--user {{ is_link('orders') and not is_link('pending_orders') ?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
+                       class="menu-item menu-item--user {{ is_link('orders') and not is_link('pending_orders') ?  'is-active':'' }}">
                         <i class="sicon-packed-box me-3"></i>
                         <span>{{ trans('common.titles.orders') }}</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ link('wishlist') }}"
-                       class="menu-item menu-item--user {{ is_link('wishlist')?  'text-primary bg-gray-200/20':'hover:text-gray-600 ' }}">
+                       class="menu-item menu-item--user {{ is_link('wishlist')?  'is-active':'' }}">
                         <i class="sicon-heart me-3"></i>
                         {{ trans('common.titles.wishlist') }}
                     </a>
                 </li>
                 <li>
                     <a href="{{ link('profile') }}"
-                       class="menu-item menu-item--user {{ is_link('profile')?  'text-primary bg-gray-200/20':'hover:text-gray-600' }}">
+                       class="menu-item menu-item--user {{ is_link('profile')?  'is-active':'' }}">
                         <i class="sicon-settings me-3"></i>
                         {{ trans('common.titles.profile') }}
                     </a>
