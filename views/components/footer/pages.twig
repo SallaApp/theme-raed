@@ -9,15 +9,9 @@
 #}
 {% if is_header %}
     {% if pages.count %}
-        {# TODO:: Remove class conditions, use global selector on the body #}
-        {# TODO:: reduce html doms, use div & a only #}
-        <ul class="hidden lg:flex items-center page-links-menu menu-divide">
+        <ul class="hidden lg:flex items-center pe-4">
             {% for key, page in pages|slice(0,3) %}
-                <li class="inline-block">
-                    <a href="{{ page.url }}" class="block transition duration-300 p-4
-          hover:text-{{ theme.topnav_link_hover ? '[color:var(--topnav-link-hover)]' : 'primary' }}
-          {% if pages|length == key + 1 %} ps-0 {% endif %} text-sm">{{ page.title }}</a>
-                </li>
+              <a href="{{ page.url }}" class="topnav-link-item">{{ page.title }}</a>
             {% endfor %}
         </ul>
     {% endif %}

@@ -114,8 +114,8 @@ class App extends salla.AppHelpers {
     }
 
     initiateStickyMenu() {
-        let header = this.element('#site-header-outer');
-        let height = this.element('.site-header').clientHeight;
+        let header = this.element('#mainnav');
+        let height = this.element('.mainnav-inner').clientHeight;
         header.style.height = height + 'px';
 
         window.addEventListener('scroll', () => {

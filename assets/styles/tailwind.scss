@@ -204,7 +204,7 @@
   }
 
   .dropdown-toggler {
-    @apply inline-flex items-center lg:h-full w-10 mx-1 md:mx-2 text-gray-500 absolute top-[-47px] end-8 lg:static;
+    @apply inline-flex items-center lg:h-full w-10 mx-1 md:mx-2 text-gray-500 absolute top-[-47px] end-0 lg:static;
   }
 
   .menu-item {
@@ -219,6 +219,11 @@
     }
   }
 
+  // contacs menu items - pages menu items
+  .topnav-link-item{
+    @apply inline-block transition duration-300 px-4 last:pe-0 py-px text-sm leading-none ltr:border-r rtl:border-l border-gray-200 ltr:last:border-0 rtl:last:border-0 hover:text-primary;
+  }
+
   .notifications-count {
     @apply bg-theme-red text-white p-1 min-w-[20px] h-5 rounded-full flex items-center justify-center text-xs;
   }
@@ -231,5 +236,39 @@
   .scroll-y {
     @apply overflow-x-hidden overflow-y-scroll scrollbar-thin scrollbar-thumb-green-300
     hover:scrollbar-thumb-primary;
+  }
+
+  //Top Nav custom classes
+  #topnav{
+    .topnav-has-bg & {
+      @apply bg-[color:var(--topnav-bg)];
+    }
+
+    .topnav-has-gradient & {
+      @apply bg-gradient-to-r from-[color:var(--topnav-gradient-from)] to-[color:var(--topnav-gradient-to)];
+    }
+
+    .topnav-has-text-color & {
+      @apply text-[color:var(--topnav-text-color)];
+    }
+
+    .topnav-is-dark & {
+      @apply dark:bg-gray-800 dark:text-gray-300;
+    }
+  }
+
+  //Main Nav custom classes
+  #mainnav{
+    .mainnav-has-bg & {
+      @apply bg-[color:var(--mainnav-bg)];
+    }
+
+    .mainnav-has-text-color & {
+      @apply text-[color:var(--mainnav-text-color)];
+    }
+
+    .mainnav-is-dark & {
+      @apply dark:bg-gray-700 dark:text-gray-300;
+    }
   }
 }

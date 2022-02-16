@@ -162,7 +162,7 @@ Anime.addToCart = function (response, productId) {
         height = productImg.offsetHeight + 'px',
         top = position.top,
         left = position.left,
-        isFixedHeader = document.getElementById('site-header-outer').classList.contains('fixed-header');
+        isFixedHeader = document.getElementById('mainnav').classList.contains('fixed-header');
 
     // create thumb img element ---
     let img = document.createElement("img");
