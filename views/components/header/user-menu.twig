@@ -5,51 +5,31 @@
 | pending_orders_count    | int     |             |
 #}
 {# TODO:: Clean this file& classes & ccondtions & dom levels#}
-{# TODO:: @Adel #enhance - classes can be cleaned using the menu-item--notify modifier --- #}
 {% if is_profile_sidebar %}
-    {# TODO:: @Adel #enhance - reduce DOM elements for all links --- #}
-    <a href="{{ link('notifications') }}"
-       class="{% if is_link('notifications') %}active{% endif %} menu-item menu-item--notify {{ is_link('notifications')? 'is-active':'text-gray-500' }}">
-        <span>
-            <i class="sicon-school-bell me-3 text-lg"></i>
-            <span class="truncate"> {{ trans('common.titles.notifications') }}</span>
-        </span>
+    <a href="{{ link('notifications') }}" class="menu-item {{ is_link('notifications')? 'is-active':'' }}">
+        <i class="sicon-school-bell me-3 text-lg"></i>{{ trans('common.titles.notifications') }}
         {% if new_notifications_count %}
             <span class="notifications-count">{{ new_notifications_count }}</span>
         {% endif %}
     </a>
-    <a href="{{ link('pending_orders') }}"
-       class="{% if is_link('pending_orders') %}active{% endif %} menu-item menu-item--notify {{ is_link('pending_orders')? 'is-active':'text-gray-500' }}">
-        <span>
+    <a href="{{ link('pending_orders') }}" class="menu-item {{ is_link('pending_orders')? 'is-active':'' }}">
         <i class="sicon-cart me-3 text-lg"></i>
-        <span class="truncate"> {{ trans('common.titles.pending_orders') }}</span>
-        </span>
+        <span class="truncate me-auto">{{ trans('common.titles.pending_orders') }}</span>
         {% if pending_orders_count %}
-            <span class="notifications-count">{{ pending_orders_count }}</span>
+          <span class="notifications-count">{{ pending_orders_count }}</span>
         {% endif %}
     </a>
-    <a href="{{ link('orders') }}"
-       aria-current="page"
-       class="menu-item {{ is_link('orders') and not is_link('pending_orders') ?  'is-active':'text-gray-500 hover:text-gray-600' }}">
-        <i class="sicon-packed-box me-3 text-lg"></i>
-        <span class="truncate">{{ trans('common.titles.orders') }}</span>
+    <a href="{{ link('orders') }}" aria-current="page" class="menu-item {{ is_link('orders') and not is_link('pending_orders') ? 'is-active':'' }}">
+        <i class="sicon-packed-box me-3 text-lg"></i> {{ trans('common.titles.orders') }}
     </a>
-    <a href="{{ link('wishlist') }}"
-       aria-current="page"
-       class="menu-item {{ is_link('wishlist')?  'is-active':'text-gray-500 hover:text-gray-600' }}">
-        <i class="sicon-heart me-3 text-lg"></i>
-        {{ trans('common.titles.wishlist') }}
+    <a href="{{ link('wishlist') }}" aria-current="page" class="menu-item {{ is_link('wishlist')?  'is-active':'' }}">
+        <i class="sicon-heart me-3 text-lg"></i> {{ trans('common.titles.wishlist') }}
     </a>
-    <a href="{{ link('profile') }}"
-       class="menu-item {{ is_link('profile')?  'is-active':'text-gray-500 hover:text-gray-600' }}">
-        <i class="sicon-settings me-3 text-lg"></i>
-        {{ trans('common.titles.profile') }}
+    <a href="{{ link('profile') }}" class="menu-item {{ is_link('profile')?  'is-active':'' }}">
+        <i class="sicon-settings me-3 text-lg"></i> {{ trans('common.titles.profile') }}
     </a>
-    <a href="{{ link('logout') }}"
-       data-on-click="auth-logout"
-       class="menu-item text-theme-red">
-        <i class="sicon-send-out me-3 text-lg"></i>
-        {{ trans('blocks.header.logout') }}
+    <a href="{{ link('logout') }}" data-on-click="auth-logout" class="menu-item text-theme-red">
+        <i class="sicon-send-out me-3 text-lg"></i> {{ trans('blocks.header.logout') }}
     </a>
 {% else %}
     <div class="dropdown-toggler">
@@ -58,8 +38,7 @@
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
             <img class="h-10 w-10 object-cover pointer-events-none" src="{{ user.avatar }}" alt="{{ user.full_name }}" />
         </button>
-        {# TODO::  @Adel #enhance - Remove this condition, use global selector on the body #}
-        <div class="dropdown__menu inset-top-shadow after:border-t {{ theme.mainnav_bg ? '!bg-[color:var(--mainnav-bg)]': 'bg-white ' }} {{ theme.mainnav_is_dark ? 'dark:bg-gray-800 after:border-gray-300/10': 'after:border-gray-300/30' }}"
+        <div class="dropdown__menu inset-top-shadow"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="menu-button"
@@ -78,58 +57,42 @@
             </div>
 
             <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
-                <li class="{{ new_notifications_count ? 'has-badge' : '' }}">
-                    <a href="{{ link('notifications') }}"
-                       class="menu-item menu-item--user menu-item--notify {{ is_link('notifications')? 'is-active':'' }}">
-                       <span>
+                <li>
+                    <a href="{{ link('notifications') }}" class="menu-item {{ is_link('notifications')? 'is-active':'' }}">
                         <i class="sicon-bell-ring me-3"></i>
-                        <span>{{ trans('common.titles.notifications') }}</span>
-                        </span>
+                        <span class="me-auto">{{ trans('common.titles.notifications') }}</span>
                         {% if new_notifications_count %}
-                            <span id="notificationsCount"
-                                  class="notifications-count">{{ new_notifications_count }}</span>
+                            <span class="notifications-count">{{ new_notifications_count }}</span>
                         {% endif %}
                     </a>
                 </li>
-                <li class="{{ pending_orders_count ? 'has-badge' : '' }}">
-                    <a href="{{ link('pending_orders') }}"
-                       class="menu-item menu-item--user menu-item--notify {{ is_link('pending_orders')? 'is-active':'' }}">
-                        <span>
-                            <i class="sicon-cart me-3"></i>
-                            <span> {{ trans('common.titles.pending_orders') }}</span>
-                        </span>
+                <li>
+                    <a href="{{ link('pending_orders') }}" class="menu-item {{ is_link('pending_orders')? 'is-active':'' }}">
+                        <i class="sicon-cart me-3"></i>
+                        <span class="me-auto"> {{ trans('common.titles.pending_orders') }}</span>
                         {% if pending_orders_count %}
                             <span class="notifications-count">{{ pending_orders_count }}</span>
                         {% endif %}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('orders') }}"
-                       class="menu-item menu-item--user {{ is_link('orders') and not is_link('pending_orders') ?  'is-active':'' }}">
-                        <i class="sicon-packed-box me-3"></i>
-                        <span>{{ trans('common.titles.orders') }}</span>
+                    <a href="{{ link('orders') }}" class="menu-item {{ is_link('orders') and not is_link('pending_orders') ? 'is-active':'' }}">
+                      <i class="sicon-packed-box me-3"></i>{{ trans('common.titles.orders') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('wishlist') }}"
-                       class="menu-item menu-item--user {{ is_link('wishlist')?  'is-active':'' }}">
-                        <i class="sicon-heart me-3"></i>
-                        {{ trans('common.titles.wishlist') }}
+                    <a href="{{ link('wishlist') }}" class="menu-item {{ is_link('wishlist')?  'is-active':'' }}">
+                        <i class="sicon-heart me-3"></i> {{ trans('common.titles.wishlist') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('profile') }}"
-                       class="menu-item menu-item--user {{ is_link('profile')?  'is-active':'' }}">
-                        <i class="sicon-settings me-3"></i>
-                        {{ trans('common.titles.profile') }}
+                    <a href="{{ link('profile') }}" class="menu-item {{ is_link('profile')?  'is-active':'' }}">
+                        <i class="sicon-settings me-3"></i> {{ trans('common.titles.profile') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('logout') }}"
-                       data-on-click="auth-logout"
-                       class="menu-item menu-item--user text-red-500">
-                        <i class="sicon-send-out me-3"></i>
-                        {{ trans('blocks.header.logout') }}
+                    <a href="{{ link('logout') }}" data-on-click="auth-logout" class="menu-item text-red-500">
+                        <i class="sicon-send-out me-3"></i> {{ trans('blocks.header.logout') }}
                     </a>
                 </li>
             </ul>

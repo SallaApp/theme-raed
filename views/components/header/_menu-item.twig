@@ -13,7 +13,6 @@
         {% endif %}
     </li>
 {% else %}
-    {# TODO:: Remove classes conditions in this file, use global selector on the body or the parent dom#}
     <li class="{{ is_root_menu?'inline-block root-level':'relative' }} 
         {{ menu.mega_menu?' mega-menu': '' }}
         {{ menu.has_children?' has-children': '' }}" 
@@ -23,7 +22,6 @@
             <span>{{ menu.title }}</span>
         </a>
         {% if menu.has_children %}
-            {# TODO:: @Adel #enhance - shorten with mobile-nav-el and target it's children --- #}
             <div class="sub-menu {{ menu.mega_menu?'w-full left-0 flex': 'w-56 pb-2' }}">
                 <ul class="{{ menu.mega_menu?'w-56 flex-shrink-0 m-8 me-0': '' }}">
                     {% for submenu in menu.children %}
