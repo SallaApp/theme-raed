@@ -17,8 +17,7 @@
 | position                 | int       | sorting block                                                       |
 #}
 {% set component_id='featured-products-style1-' ~ position %}
-{# TODO:: @Adel #enhance - do not use camelCase specialProducts --- #}
-<section class="s-block s-block-tabs s-block--specialProducts container mt-8 sm:mt-16" id="{{ component_id }}">
+<section class="s-block s-block-tabs s-block--special-products container mt-8 sm:mt-16" id="{{ component_id }}">
     <div class="grid grid-cols-1  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-1 {% endif %} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
@@ -36,8 +35,7 @@
                             data-component-id="{{ component_id }}"
                             data-type="style1"
                             class="tab-trigger cursor-pointer border-0 font-bold leading-7">
-                        {# TODO:: @Adel #enhance - we don't need this h2 tag here - just like the other tabs --- #}
-                        <h2>{{ section.title }}</h2>
+                        {{ section.title }}
                     </button>
                 {% endfor %}
             </div>
