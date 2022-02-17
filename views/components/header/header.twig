@@ -12,38 +12,37 @@
   <div id="topnav" class="py-2 lg:py-1.5">
       <div class="container flex justify-between">
           <div class="flex items-center w-full lg:w-auto justify-between">
-              <div class="flex items-center space-s-2">
+              <div class="flex items-center space-s-1">
+
+                  {# Pages Menu #}
                   {% component 'footer.pages' with {is_header:true} %}
+
+                  {# Language & Currency Component #}
                   {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                      <div class="relative inline-block">
-                          {# TODO:: @Adel #enhance - handle layout if only lang or currency enabled current layout will not work... use flex with after for first child --- #}
-                          <button type="button" data-on-click="localization::show" class="btn--light-gray">
-                              <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
-                              | <span class="ms-2">{{ user.language.name }}</span>
-                          </button>
-                      </div>
+                      <button type="button" data-on-click="localization::show" class="btn--light-gray">
+                          <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
+                          | <span class="ms-2">{{ user.language.name }}</span>
+                      </button> 
                       <salla-localization></salla-localization>
                   {% endif %}
 
+                  {# Branches Component :: Dummy data #}
                   {# TODO:: Remove This Condition #}
                   {% set displayAs = 'default' %}
                   {% if displayAs != 'in-product' %}
-                      <div class="relative inline-block">
-                          <a class="btn--light-gray" data-on-click="branches::show" href="#"><i class="sicon-location me-1"></i> فرع الرياض</a>
-                      </div>
+                      <button class="btn--light-gray" data-on-click="branches::show"><i class="sicon-location me-1"></i> فرع الرياض</button>
+                     
                       {# TODO:: make default props #}
-                      <salla-branches position="header"
-                                      current="3"
-                                      browse-products-from="city"
-                                      display-as="{{ displayAs }}"
+                      <salla-branches position="header" current="3" browse-products-from="city" display-as="{{ displayAs }}"
                       ></salla-branches>
                   {% endif %}
-                  <div class="relative inline-block">
-                      <a href="#" data-on-click="search::show" class="btn--gray-circle sicon-search"></a>
-                  </div>
+
+                  {# Search Component #}
+                  <button data-on-click="search::show" class="btn--gray-circle sicon-search"></button>
                   <salla-search></salla-search>
               </div>
           </div>
+
           {# @Jamal - component naming is confusing footer in the header , why not storeContacts #}
           {% component 'footer.contacts' with {is_header:true} %}
       </div>
