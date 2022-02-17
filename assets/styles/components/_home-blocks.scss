@@ -1,12 +1,3 @@
-.feature-box {
-  &:hover {
-    .slide-anime-icon {
-      i {
-        animation: toRightFromLeft 0.3s forwards;
-      }
-    }
-  }
-}
 
 .banner {
   @media screen and (min-width: 768px) {
@@ -184,6 +175,34 @@
 
       .s-block--categories__title {
         color: #fff !important;
+      }
+    }
+  }
+
+  &--features{
+    &__item{
+      @apply cursor-pointer bg-white transition-shadow duration-500 hover:shadow-default rounded-md flex-grow h-48 flex flex-col items-center justify-center;
+
+      .feature-icon{
+        @apply mb-3 bg-primary w-16 h-16 rounded-full flex items-center justify-center;
+
+        i{
+          @apply text-reverse text-3xl;
+        }
+      }
+
+      h4{
+        @apply font-bold text-sm text-title-color mb-1;
+      }
+
+      p{
+        @apply text-sm text-gray-500;
+      }
+
+      &:hover {
+        .feature-icon i {
+          animation: toRightFromLeft 0.3s forwards;
+        }
       }
     }
   }
