@@ -11,7 +11,7 @@ class Profile extends BasePage {
     }
 
     initiateProfileImage() {
-        this.avatarFilepond = new FileUploader('#profile_img', {
+        this.avatarFilepond = new FileUploader('#profile-img', {
             labelIdle                     : document.querySelector('html').getAttribute('dir') === 'rtl'
                 ? '<span class="avatar-placeholder flex justify-center items-center flex-col"><span class="sicon-user"></span><span class="text">اختر صورة مناسبة</span></span>'
                 : '<span class="avatar-placeholder flex justify-center items-center flex-col"><span class="sicon-user"></span><span class="text">Choose your image</span></span>',
@@ -45,28 +45,6 @@ class Profile extends BasePage {
             return formData;
         };
     }
-
-    // initTelInput() {
-    //     salla.document.event.onKeyup('.tel-input', event => salla.helpers.digitsOnly(event.target));
-    //     document.querySelectorAll('.tel-input').forEach(intlInput => {
-    //         salla.helpers.digitsOnly(intlInput);
-    //         let iti = TelInput(intlInput, {
-    //             initialCountry    : intlInput.dataset.code || 'sa',
-    //             preferredCountries: ['sa', 'ae', 'kw', 'bh', 'qa', 'iq', 'om', 'ye', 'eg', 'jo', 'sy', 'ps', 'sd', 'lb', 'dz', 'tn', 'ma', 'ly'],
-    //             formatOnDisplay   : false,
-    //             separateDialCode  : true,
-    //             autoPlaceholder   : 'aggressive',
-    //             utilsScript       : 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/utils.min.js',
-    //         });
-    //         intlInput.addEventListener("countrychange", () => {
-    //             let data = iti.getSelectedCountryData();
-    //             document.querySelectorAll('.country_code').forEach(input => input.value = data.iso2.toUpperCase());
-    //             document.querySelectorAll('.country_key').forEach(input => {
-    //                 input.value = ('+' + data.dialCode).replace('++', '+');
-    //             });
-    //         });
-    //     });
-    // }
 }
 
 Profile.className = 'Profile';

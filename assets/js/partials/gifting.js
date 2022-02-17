@@ -386,7 +386,7 @@ export class Gifting extends HTMLElement {
         });
         intlInput.addEventListener("countrychange", () => {
           let data = iti.getSelectedCountryData();
-          document.querySelectorAll('.country_code').forEach(input => input.value = data.iso2.toUpperCase());
+          document.querySelectorAll('.country-code').forEach(input => input.value = data.iso2.toUpperCase());
           document.querySelectorAll('.country_key').forEach(input => {
             input.value = ('+' + data.dialCode).replace('++', '+');
           });

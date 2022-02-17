@@ -17,12 +17,12 @@ class ThankYou extends BasePage {
     }
 
     initiateForm() {
-        let email = document.getElementById('resend_invoice-email');
+        let email = document.getElementById('resend-invoice-email');
         //there is form for resend invoice email, so no need for logic, if there is no email input
         if (!email) {
             return;
         }
-        let btn = document.getElementById('resend_invoice-submit');
+        let btn = document.getElementById('resend-invoice-submit');
 
         email.addEventListener('keyup', () => this.isValidEmail(email.value) && email.parentElement.classList.remove('error'));
 
