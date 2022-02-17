@@ -10,13 +10,14 @@
 <section class="s-block s-block--features container mt-8 sm:mt-16">
     <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-4 sm:gap-6 xl:gap-8">
       {% for item in items %}
-          <div class="feature-box">
-          <div class="slide-anime-icon mb-3 bg-primary w-16 h-16 rounded-full flex items-center justify-center">
-            <i class="{{ item.icon }} text-reverse text-3xl"></i>
+          {# TODO:: @Adel #enhance - reduce --- #}
+          <div class="s-block--features__item">
+            <div class="feature-icon">
+              <i class="{{ item.icon }}"></i>
+            </div>
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.text }}</p>
           </div>
-          <h4 class="font-bold text-sm text-title-color mb-1">{{ item.title }}</h4>
-          <p class="text-sm text-gray-500">{{ item.text }}</p>
-        </div>
       {% endfor %}
     </div>
 </section>
