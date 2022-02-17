@@ -161,7 +161,6 @@
   }
 }
 
-// slider products with bg, top spacing
 .s-block {
   &--slider-with-bg,
   &--hero-slider,
@@ -172,11 +171,21 @@
       margin-top: 0;
     }
   }
-}
 
-.merge-with-top-component {
-  .s-block--categories__title {
-    color: #fff !important;
+  &--categories{
+    @apply relative overflow-hidden mt-8;
+
+    &__title{
+      @apply font-bold text-lg mb-6 sm:mb-8 relative z-1 min-h-[28px];
+    }
+
+    &.merge-with-top-component{
+      @apply -mt-24 md:-mt-28;
+
+      .s-block--categories__title {
+        color: #fff !important;
+      }
+    }
   }
 }
 
