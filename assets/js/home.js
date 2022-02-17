@@ -12,10 +12,6 @@ class Home extends BasePage {
     }
 
     initiateSliders() {
-        app.anime('.cat-item', {
-          translateY: [15, 0]
-        });
-
         // Used in: [products_slider.twig, featured_products_style2.twig, slider_products_with_header.twig]
         new Slider(".product-slider", {draggable: true});
 

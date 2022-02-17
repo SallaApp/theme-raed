@@ -42,23 +42,21 @@
   </div>
 
   {# Swiper #}
-  <div class="swiper default-slider -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0" data-id="offer-slider">
-    
+  <div class="swiper default-slider slider-layout" data-id="offer-slider">
     <div class="swiper-wrapper flex">
       {% if offer.categories|length %} 
         {% for category in offer.categories %}
-            {# TODO:: @Adel #enhance - reduce --- #}
-            <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-2 lg:px-3.75">
-            <a href="{{ category.url }}" class="bg-white rounded-md h-36 mb-8 p-3 text-center flex flex-col items-center justify-center text-gray-400 transition duration-500 hover:shadow-default hover:text-gray-500 border border-gray-100"> 
-              <i class="{{ category.icon}} text-primary text-icon-lg mb-4 cat-item"></i>
-              <h4 class="font-bold text-sm cat-item">{{ category.name }}</h4>
-            </a>
-          </div>
+            <div class="swiper-slide slide--one-sixth">
+              <a href="{{ category.url }}" class="cat-slide-entry"> 
+                <i class="{{ category.icon}}"></i>
+                <h4>{{ category.name }}</h4>
+              </a>
+            </div>
         {% endfor %}
 
       {% elseif offer.products|length %} 
         {% for product in offer.products %}
-          <div class="swiper-slide h-auto w-full sm:w-1/2 md:w-4/12 lg:w-1/4 px-2 lg:px-3.75">
+          <div class="swiper-slide h-auto slide--one-fourth">
               {% include 'pages.partials.product.card' %}
           </div>
         {% endfor %}
@@ -66,7 +64,7 @@
       {% elseif discounts|length %} 
         {% for discount in discounts %}
             {# TODO:: @Adel #enhance - reduce --- #}
-            <div class="swiper-slide category-slider__slide w-1/2 sm:w-2/6 lg:w-1/4 px-2 lg:px-3.75">
+            <div class="swiper-slide slide--one-fourth">
             <div class="bg-white rounded-md h-36 mb-8 text-center flex flex-col items-center justify-between text-gray-600 transition duration-500 hover:shadow-default border border-border-color">
               <div class="p-3 flex-grow flex flex-col justify-center w-full">
                 <p class="mb-1">{{ discount.text|raw }}</p>
