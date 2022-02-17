@@ -59,7 +59,7 @@
     }
 
     &--wishlist {
-      @apply relative lg:ms-2.5 justify-center items-center w-10 h-10;
+      @apply relative text-gray-300 lg:ms-2.5 justify-center items-center w-10 h-10;
     }
 
     &--light-gray {
@@ -319,5 +319,25 @@
 
   .sub-menu{
     @apply z-20 transition delay-300 opacity-0 invisible absolute bg-white transform -translate-y-3 shadow-default rounded-b-md border-t border-gray-300/30;
+  }
+
+
+
+  // Product card
+  .product-entry{
+    @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col md:flex-row relative;
+
+    &--full-image{
+      @apply h-80 md:h-auto;
+    }
+
+    &--minimal{
+      .btn--wishlist{
+        .sicon-heart{
+          text-shadow: 0 0 3px #999;
+          color: #fff;
+        }
+      }
+    }
   }
 }
