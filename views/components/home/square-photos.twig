@@ -12,8 +12,7 @@
 #}
 <section class="s-block s-block--banners container mt-8 sm:mt-16">
     <div class="grid {{ items|length <= 3 ? 'md:grid-cols-' ~ items|length : 'md:grid-cols-3' }} grid-flow-row gap-3 sm:gap-8">
-        {# TODO:: @Adel #enhance - reduce this whole line... just keep the responsive classes - use banner-entry --- #}
-        <div class="sm:col-span-1 sm:row-span-2 bg-warmGray-200 transition-opacity hover:opacity-95 bg-cover h-lg-banner text-white text-center p-5 rounded-md overflow-hidden relative lazy-background" data-src="{{ items[0].image.url }}">
+        <div class="banner-entry sm:col-span-1 sm:row-span-2 p-5 lazy-background" data-src="{{ items[0].image.url }}">
             <a href="{{ items[0].url }}"
                class="flex flex-col justify-center  h-full p-11 relative z-1 xs:border border-dashed border-border-color rounded-md">
                 {% if items[0].text %}
@@ -23,17 +22,14 @@
             <div class="overlay h-full w-full bg-black opacity-60 absolute top-0 left-0 "></div>
         </div>
         {% for item in items|slice(1,4) %}
-            {# TODO:: @Adel #enhance - reduce this whole line... just keep the responsive classes - use banner-entry --- #}
-            <div class="banner relative p-2 xs:p-4 overflow-hidden transition-opacity hover:opacity-95 text-white text-center  bg-warmGray-200  rounded-md bg-cover lazy-background {{ items|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-src="{{ item.image.url }}">
+            <div class="banner-entry lazy-background {{ items|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-src="{{ item.image.url }}">
                 <a href="{{ item.url }}"
-                   class="bannerــtext flex {{ items|length <= 3 ? '':'md:opacity-0' }} hover:opacity-100 transition-opacity duration-500 flex-col justify-center  h-full p-0 xs:p-6 relative z-1 xs:border border-dashed border-border-color rounded-md"
+                   class="banner-entryــtext {{ items|length <= 3 ? '':'md:opacity-0' }}"
                    {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
                     {% if item.text %}
                         <h3 class="font-bold   {{ items|length <= 3 ? 'text-2xl leading-12 mb-5':'banner__title text-md mb-1 leading-6' }}">{{ item.text }}</h3>
                     {% endif %}
                 </a>
-                {# TODO:: @Adel #enhance - you can ditch this using the :after for banner-entry --- #}
-                <div class="overlay h-full w-full bg-black opacity-60 absolute top-0 left-0"></div>
             </div>
         {% endfor %}
     </div>
