@@ -78,16 +78,14 @@
                           </button>
                       {% endif %}
 
-                      {# TODO:: @Adel #enhance - make the whole cart widget clickable - and all id's are under_score separated not dashed --- #}
-
-                      <a id="main-cart-btn" href="{{ link('cart') }}" class="flex items-center ms-4 relative ">
-                          <i class="cart-icon block sicon-shopping-bag text-3xl me-1"></i>
-                          <div data-cart-badge class="opacity-0 anime-count absolute top-1 -start-2 notifications-count">{{ cart.items_count }}</div>
+                      <a id="main-cart-btn" href="{{ link('cart') }}" class="flex items-center ms-4 transition-opacity hover:opacity-80 relative">
+                          <i class="cart-icon sicon-shopping-bag text-3xl me-1"></i>
+                          <div data-cart-badge class="absolute top-1 -start-2 notifications-count">{{ cart.items_count }}</div>
                           <div class="whitespace-nowrap">
                               <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
                               <b class="leading-3" data-cart-total>{{ cart.total }}</b>
                           </div>
-                      </a> 
+                      </a>
                   </div>
               </div>
           </div>

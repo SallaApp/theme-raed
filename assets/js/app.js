@@ -32,7 +32,6 @@ class App extends salla.AppHelpers {
         this.initiateComments();
 
         this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading', 'pointer-events-none'));
-        this.anime('.anime-count', {scale: [0.5, 1]});
         this.onClick('#product-filter', event => {
             let url = window.location.href.replace(/([?;&])by[^&;]*[;&]?/g, "$1").replace(/&$/, '');
             url += (url.includes('?') ? "&" : "?") + (event.target.value ? "by=" + event.target.value : '');
