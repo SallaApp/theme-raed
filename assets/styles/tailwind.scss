@@ -233,6 +233,19 @@
     @apply duration-300 hover:shadow-default flex justify-center items-center bg-white transition hover:opacity-95 bg-cover h-40 md:h-banner text-center md:px-10 p-5 rounded-md overflow-hidden relative;
   }
 
+  .banner-entry{
+    @apply bg-warmGray-200 transition-opacity hover:opacity-95 bg-cover h-lg-banner text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative;
+    
+    &:after{
+      content:'';
+      @apply h-full w-full bg-black opacity-60 absolute top-0 left-0;
+    }
+
+    &__text{
+      @apply flex md:opacity-0 hover:opacity-100 transition-opacity duration-500 flex-col justify-center  h-full p-0 xs:p-6 relative z-1 xs:border border-dashed border-border-color rounded-md
+    }
+  }
+
   .scroll-y {
     @apply overflow-x-hidden overflow-y-scroll scrollbar-thin scrollbar-thumb-green-300
     hover:scrollbar-thumb-primary;
