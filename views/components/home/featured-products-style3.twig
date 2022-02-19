@@ -13,11 +13,11 @@
 | items[].id                    | string    | Section id                                                          |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
-<section class="s-block s-block--features-products container mt-8 sm:mt-16">
-    <div class="{% if items | length > 1 %}grid lg:grid-cols-2 gap-5{% endif %}">
+<section class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container mt-8 sm:mt-16">
+    <div class="inner">
         {% for section in items %}
             <div class="flex flex-col">
-                <h2 class="s-block__title mb-6 sm:mb-8 font-bold text-lg text-gray-500">{{ section.title }}</h2> 
+                <h2 class="s-block__title">{{ section.title }}</h2> 
                 <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
                     {% if section.featured_product %}
                         {% include 'pages.partials.product.card-full-image' with {product:section.featured_product} %}
