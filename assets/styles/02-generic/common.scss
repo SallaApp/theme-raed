@@ -37,21 +37,6 @@ input[type="number"] {
   unicode-bidi: plaintext;
 }
 
-.products-container {
-  &.list {
-    .product-entry {
-      @media (min-width: 768px) {
-        flex-direction: row;
-
-        &__image {
-          height: 100%;
-          width: 240px;
-        }
-      }
-    }
-  }
-}
-
 .spinner-loader {
   border-right-color: var(--color-main) !important;
 
@@ -216,7 +201,6 @@ salla-modal {
 
 
 /* video aspect ratio*/
-
 .videoWrapper {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */
@@ -229,5 +213,22 @@ salla-modal {
     width: 100%;
     height: 100%;
     max-width: initial;
+  }
+}
+
+/* tags */
+.tag {
+  @apply px-4 pt-0.5 pb-1.5 inline-block text-sm rounded-2xl border border-border-color;
+
+  &--primary {
+    @apply text-primary border-primary;
+  }
+
+  &--default {
+    @apply text-theme-blue border-theme-blue;
+  }
+
+  &--alert {
+    @apply text-theme-red border-theme-red;
   }
 }

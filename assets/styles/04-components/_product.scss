@@ -1,0 +1,38 @@
+
+// Product card
+.product-entry{
+  @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex relative;
+
+  &--full-image{
+    @apply h-80 md:h-auto;
+  }
+
+  &--minimal{
+    .btn--wishlist{
+      .sicon-heart{
+        text-shadow: 0 0 3px #999;
+        color: #fff;
+      }
+    }
+  }
+}
+
+// Orders
+.s-table__tr {
+  @apply relative hover:shadow-default transition-shadow duration-500 border-b-8 border-t-8 border-light-gray bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-nowrap;
+}
+
+.products-container {
+  &.list {
+    .product-entry {
+      @media (min-width: 768px) {
+        flex-direction: row;
+
+        &__image {
+          height: 100%;
+          width: 240px;
+        }
+      }
+    }
+  }
+}

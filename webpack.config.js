@@ -18,8 +18,8 @@ module.exports = {
         ],
 
         //plugins
-        filepond : ['./assets/styles/plugins/filepond.scss', './assets/js/partials/filepond.js'],
-        flatpickr: './assets/styles/plugins/flatpicker.scss',
+        filepond : ['./assets/styles/05-utilities/filepond.scss', './assets/js/partials/filepond.js'],
+        flatpickr: './assets/styles/05-utilities/flatpicker.scss',
         //fonts
         // amazon_ember: './assets/fonts/amazon_ember.scss',
         // apple: './assets/fonts/apple.scss',
