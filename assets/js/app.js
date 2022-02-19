@@ -63,7 +63,7 @@ class App extends salla.AppHelpers {
             }
             return Swal.mixin({
                 toast            : true,
-                position         : salla.config.isRTL() ? 'top-start' : 'top-end',
+                position         : salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
                 showConfirmButton: false,
                 timer            : 3500,
                 didOpen          : (toast) => {
@@ -82,7 +82,7 @@ class App extends salla.AppHelpers {
     initiateMobileMenu() {
         const menu = new MobileMenu(this.element("#mobile-menu"), "(max-width: 1024px)", "( slidingSubmenus: false)");
         menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
-        const drawer = menu.offcanvas({position: salla.config.isRTL() ? "right" : 'left'});
+        const drawer = menu.offcanvas({position: salla.config.get('theme.is_rtl') ? "right" : 'left'});
 
         this.onClick("a[href='#mobile-menu']", event => event.preventDefault() || drawer.close() || drawer.open());
         this.onClick(".close-mobile-menu", event => event.preventDefault() || drawer.close());

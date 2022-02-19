@@ -20,7 +20,7 @@ class FileUploader {
      * @param options
      */
     constructor(input = '.filepond', options = {}) {
-        label = label[salla.config.get('languages.' + salla.config.isRTL()) ? 1 : 0];
+        label = label[salla.config.get('user.language_code') === 'ar' ? 1 : 0];
         let elements = typeof input == 'object' ? [input] : document.querySelectorAll(input);
         //return latest filepond instance
         this.fileponds = [];
