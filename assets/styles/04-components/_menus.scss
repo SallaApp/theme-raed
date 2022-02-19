@@ -35,31 +35,31 @@
     }
   }
 
-  li {
+  .sub-menu {
+    @apply z-20 transition delay-300 opacity-0 invisible absolute bg-white transform -translate-y-3 shadow-default rounded-b-md border-t border-gray-300/30;
+    
     .sub-menu {
-      .sub-menu {
-        top: -1px;
-        right: 100%;
+      top: -1px;
+      right: 100%;
 
-        [dir="ltr"] & {
-          left: 100%;
-          right: auto;
-        }
-      }
-
-      .btn {
-        padding: 8px 10px 10px;
+      [dir="ltr"] & {
+        left: 100%;
+        right: auto;
       }
     }
 
-    &:hover {
-      > .sub-menu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
+    .btn {
+      padding: 8px 10px 10px;
     }
   }
+
+  li:hover {
+    > .sub-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  } 
 }
 
 .main-menu .sub-menu ul > li:not(:first-child) > .sub-menu{
