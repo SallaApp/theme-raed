@@ -93,7 +93,7 @@ template.innerHTML = /*html*/`
             </label>
             <input type="email" name="email" placeholder="your@email.com" id="userEmail"
               class="form-input mb-5">
-            <button @click="openOtp()" type="button" class="w-full btn btn-primary mb-5 h-10">
+            <button @click="openOtp()" type="button" class="w-full btn btn--primary mb-5 h-10">
               دخول
             </button>
 
@@ -112,7 +112,7 @@ template.innerHTML = /*html*/`
             </label>
             <input type="tel" id="phone" name="phone" placeholder="1234344" class="tel-input form-input mb-5">
             <button @click="openOtp()" type="button"
-              class="w-full btn btn-primary mb-5 mt-5 h-10">
+              class="w-full btn btn--primary mb-5 mt-5 h-10">
               دخول
             </button>
 
@@ -146,14 +146,14 @@ template.innerHTML = /*html*/`
               <!-- </template> -->
             </div>
             <input type="hidden" name="otp" x-model="value">
-            <button type="button" class="w-full btn btn-primary mb-5 h-10">
+            <button type="button" class="w-full btn btn--primary mb-5 h-10">
               إرسال
             </button>
             <p class="mb-5 text-center text-sm text-gray-400">إعادة الارسال بعد <b x-text="'0' + remainTime + ':00'"></b>
             </p>
             <div class="flex justify-between space-s-5 mb-5">
-              <button class="btn btn-primary font-normal rounded-md" disabled>رسالة نصية</button>
-              <button class="btn btn-primary font-normal rounded-md" disabled>إعادة إرسال</button>
+              <button class="btn btn--primary font-normal rounded-md" disabled>رسالة نصية</button>
+              <button class="btn btn--primary font-normal rounded-md" disabled>إعادة إرسال</button>
             </div>
 
             <a href="#" @click="showOtp = false; animatItems() " class="text-sm text-primary block text-center"> رجوع

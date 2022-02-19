@@ -162,7 +162,7 @@ template.innerHTML = /*html*/`
                     </div>
 
                     <!-- buttons -->
-                    <button type="button" class="w-full h-10 px-8 btn btn-primary"> حفظ </button>
+                    <button type="button" class="w-full h-10 px-8 btn btn--primary"> حفظ </button>
                 </div>
             </div>
         </div>
