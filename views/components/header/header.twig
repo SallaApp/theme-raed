@@ -19,7 +19,7 @@
 
                   {# Language & Currency Component #}
                   {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                      <button type="button" data-on-click="localization::show" class="btn--light-gray">
+                      <button type="button" data-on-click="localization::show" class="btn--rounded-gray">
                           <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
                           | <span class="ms-2">{{ user.language.name }}</span>
                       </button> 
@@ -30,7 +30,7 @@
                   {# TODO:: Remove This Condition #}
                   {% set displayAs = 'default' %}
                   {% if displayAs != 'in-product' %}
-                      <button class="btn--light-gray" data-on-click="branches::show"><i class="sicon-location me-1"></i> فرع الرياض</button>
+                      <button class="btn--rounded-gray" data-on-click="branches::show"><i class="sicon-location me-1"></i> فرع الرياض</button>
                      
                       {# TODO:: make default props #}
                       <salla-branches position="header" current="3" browse-products-from="city" display-as="{{ displayAs }}"
@@ -38,7 +38,7 @@
                   {% endif %}
 
                   {# Search Component #}
-                  <button data-on-click="search::show" class="btn--gray-circle sicon-search"></button>
+                  <button data-on-click="search::show" class="btn--circle-gray sicon-search"></button>
                   <salla-search></salla-search>
               </div>
           </div>

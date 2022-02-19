@@ -60,7 +60,7 @@ class Home extends BasePage {
             let btn = event.target;
             let css = {
                 style1: {active: 'text-title-color', inActive: 'text-gray-400'},
-                style2: {active: 'btn btn-primary text-white', inActive: 'btn'},
+                style2: {active: 'btn btn--primary text-white', inActive: 'btn'},
             }[btn.dataset.type];
             let id = btn.dataset.componentId;
             app.toggle(`#${id} .tabs-wrapper>div`, 'active-tab', 'hidden', tab => tab.id == btn.dataset.target)

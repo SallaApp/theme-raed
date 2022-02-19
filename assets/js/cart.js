@@ -162,8 +162,8 @@ class Cart extends BasePage {
         });
         app.onClick(app.couponBtn, event => {
             event.preventDefault();
-            //if it's remove coupon, will have `btn-danger` class
-            if (app.couponBtn.classList.contains('btn-danger')) {
+            //if it's remove coupon, will have `btn--danger` class
+            if (app.couponBtn.classList.contains('btn--danger')) {
                 return salla.api.coupon.remove(salla.config.get('page.id'));
             }
 
@@ -181,7 +181,7 @@ class Cart extends BasePage {
         app.couponCode.value = applied ? app.couponCode.value : '';
         app.couponCode.toggleAttribute('disabled', applied);
         this.updateCartPageInfo(res.data.cart);
-        app.toggleElement(app.couponBtn, 'btn-danger', 'btn-default', () => applied)
+        app.toggleElement(app.couponBtn, 'btn--danger', 'btn-default', () => applied)
             .hideElement(app.couponBtn.querySelector(applied ? 'span' : 'i'))
             .showElement(app.couponBtn.querySelector(applied ? 'i' : 'span'))
             .removeClass(app.couponCode, 'has-error');

@@ -229,11 +229,11 @@ template.innerHTML = /*html*/`
                     <!-- buttons -->
                     <div class="flex bg-white relative pt-2.5" :class="currentStep == 'step2' ? ' space-s-2.5' : '' ">
                         <button x-show="currentStep == 'step2'" @click="currentStep = 'step1';animateCommonItems()"
-                            type="button" class="h-10 px-8 flex-grow-0 btn btn-outline-primary">
+                            type="button" class="h-10 px-8 flex-grow-0 btn btn--outline-primary">
                             <i class="sicon-arrow-right"></i>
                         </button>
 
-                        <button @click="changeStep()" type="button" class="btn h-10 btn-primary" x-text="stepsTitle[currentStep].btnText"></button>
+                        <button @click="changeStep()" type="button" class="btn h-10 btn--primary" x-text="stepsTitle[currentStep].btnText"></button>
                     </div>
                 </div>
             </div>
