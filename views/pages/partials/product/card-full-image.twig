@@ -1,7 +1,7 @@
 {# TODO:: @Adel #enhance - reduce using product-entry modifier --- #}
 <div id="product_{{ product.id }}" class="product-entry product-entry--full-image">
     <a href="{{ product.url }}"
-        class='product-entry__image relative overflow-hidden rounded-md hover:opacity-90 w-full h-full'>
+        class='relative overflow-hidden rounded-md hover:opacity-90 w-full h-full'>
         <img class="h-full w-full object-cover lazy-load" src="{{asset('images/s-empty.png')}}" data-src="{{product.image.url}}" alt="{{ product.image.alt }}" />
     </a>
 
@@ -49,17 +49,15 @@
                     {% if not product.is_available %} disabled {% endif %} class="btn btn--has-loading btn--outline-primary">
                 {{ trans('pages.cart.add_to_cart') }}
             </button>
-            <div class="text-white">
-                <button aria-label="Add or Remove To Wishlist" class="btn--wishlist animated"
-                    {% if user.type=='user' %}
-                        data-on-click="wishlist::add" data-id="{{ product.id }}"
-                    {% else %}
-                        onClick="salla.error('{{ trans('common.messages.must_login') }}')"
-                    {% endif %}>
-                    <i class="sicon-heart"></i>
-                    <span class="loader loader--small absolute transition inset-x-0 inset-y-0 opacity-0 flex justify-center items-center"></span>
-                </button>
-            </div>
+            <button aria-label="Add or remove to wishlist" class="btn--wishlist animated"
+                {% if user.type=='user' %}
+                    data-on-click="wishlist::add" data-id="{{ product.id }}"
+                {% else %}
+                    onClick="salla.error('{{ trans('common.messages.must_login') }}')"
+                {% endif %}>
+                <i class="sicon-heart"></i>
+                <span class="loader loader--small"></span>
+            </button>
         </div>
     </div>
 </div>

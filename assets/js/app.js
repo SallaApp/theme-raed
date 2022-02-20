@@ -263,7 +263,7 @@ class App extends salla.AppHelpers {
         document.querySelectorAll('.btn--wishlist[data-id="' + id + '"]')
             .forEach(btn => {
                 app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
-                app.toggleElement(btn, ['text-primary', 'pulse'], 'un-favorited', () => isAdded);
+                app.toggleElement(btn, 'pulse', 'un-favorited', () => isAdded);
                 btn.dataset.onClick = isAdded ? 'wishlist::remove' : 'wishlist::add';
                 btn.classList.remove('is--loading');
             });
