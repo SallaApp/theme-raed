@@ -39,8 +39,8 @@ class Home extends BasePage {
         new Slider('.testimonials-slider', {
             loop          : true,
             centeredSlides: true,
-            spaceBetween  : 15,
-            breakpoints   : {1024: {slidesPerView: 2, spaceBetween: 30}}
+            slidesPerView : 1,
+            breakpoints   : {1024: {slidesPerView: 2}}
         });
 
 
