@@ -70,16 +70,6 @@ class Home extends BasePage {
             setTimeout(() => app.toggle(`#${id} .tabs-wrapper>div`, 'opacity-100 translate-y-0', 'opacity-0 translate-y-3', tab => tab.id == btn.dataset.target), 100);
         });
         document.querySelectorAll('.s-block-tabs').forEach(block => block.classList.add('tabs-initialized'));
-        // this.animateTabsItems('.tabs-wrapper>div:first-child .featured-item');
-    }
-
-    animateTabsItems(sel) {
-        document.querySelectorAll(sel).forEach(({style}) => style.removeProperty("opacity") || style.removeProperty("transform"))
-        app.anime(sel, false)
-            .stagger(70)
-            .translateY([30, 0])
-            .duration(1200)
-            .play();
     }
 }
 
