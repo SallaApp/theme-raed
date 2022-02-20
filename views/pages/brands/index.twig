@@ -18,12 +18,11 @@
         </div>
         {% if brands|length %}
             <!-- brands nav -->
-            <ul id="brands-nav" class="flex flex-wrap justify-center px-18 lg:px-44 space-s-2 space-y-2">
+            <ul id="brands-nav" class="brands-nav">
                 <li></li>
                 {% for char,brands_group in brands %}
                     <li>
-                        {# TODO:: @Adel #enhance - reduce --- #}
-                        <a class="btn-brand fix-align rounded-md flex items-center justify-center hover:shadow-sm focus:border-primary text-sm w-10 h-10 bg-white"
+                        <a class="brands-nav__item fix-align"
                            href="#brand-section-{{ loop.index }}"
                            data-id="{{ loop.index }}">{{ char }}</a>
                     </li>
@@ -35,17 +34,13 @@
                 <section id="brand-section-{{ loop.index }}" class="pt-24">
                     <!-- separator -->
                     <div class="flex items-center mb-10">
-                        {# TODO:: @Adel #enhance - reduce --- #}
                         <span data-id="{{ loop.index }}"
-                                  class="brand-char me-5 md:me-12 fix-align bg-white rounded-md
-                                         w-10 h-10 flex items-center justify-center hover:shadow-sm
-                                         border border-transparent focus:border-primary text-sm">{{ char }}</span>
+                                  class="brand-char fix-align">{{ char }}</span>
                         <div class="bg-border-color h-px flex-1"></div>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-auto-fill-6 grid-flow-row  gap-5 md:gap-8">
                         {% for brand in brandGroup %}
-                            {# TODO:: @Adel #enhance - reduce --- #}
-                            <div class=" flex justify-center items-center  bg-white transition-opacity hover:opacity-95 bg-cover h-32  text-white text-center md:px-10 p-5 rounded-md overflow-hidden relative">
+                            <div class="brand-item">
                                 <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
                                 <a href="{{ brand.url }}"
                                    class="overlay h-full w-full bg-dark opacity-0 absolute top-0 left-0 z-10"></a>
@@ -55,9 +50,8 @@
                 </section>
             {% endfor %}
         {% else %}
-            {# TODO:: @Adel #enhance - reduce --- #}
-            <div class="h-full content-placeholder content-placeholder--cart text-gray-400 pt-10 pb-20 flex items-center flex-col justify-center">
-                <span class="rounded-icon w-36 h-36 bg-gray-bg mb-6">
+            <div class="no-content-placeholder">
+                <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">
                     <i class="sicon-award-ribbon text-6xl block text-reverse-dark"></i>
                 </span>
                 <h1 class="font-bold text-sm mb-1">{{ trans('pages.brands.non_brands') }}</h1>
