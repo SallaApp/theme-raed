@@ -117,6 +117,11 @@ class App extends salla.AppHelpers {
         let height = this.element('.mainnav-inner').clientHeight;
         header.style.height = height + 'px';
 
+        window.addEventListener('resize', () => {
+          let height = this.element('.mainnav-inner').clientHeight;
+          header.style.height = height + 'px';
+        })
+
         window.addEventListener('scroll', () => {
             window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
             window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
