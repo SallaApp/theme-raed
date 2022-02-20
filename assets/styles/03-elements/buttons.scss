@@ -91,7 +91,23 @@
 	}
 
 	&--icon {
-		@apply mx-1 border rounded-full w-10 h-10 font-medium flex-shrink-0;
+		@apply flex items-center justify-center transition bg-white text-gray-500 border-gray-150  hover:border-gray-200 hover:text-gray-600 mx-1 border rounded-full w-10 h-10 font-medium flex-shrink-0;
+
+    i{
+      @apply pointer-events-none;
+
+      &.sicon-heart{ 
+        @apply text-theme-red;
+      }
+    }
+
+    &.btn--share{
+      margin: 0;
+    }
+
+    &.favorited{
+      @apply bg-primary text-primary-reverse border-primary;
+    }
 	}
 
 	&--close {

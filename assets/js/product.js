@@ -66,7 +66,7 @@ class Product extends BasePage {
             }
             let addToFavorite = !btn.classList.contains('favorited');
             addToFavorite ? salla.api.wishlist.add(salla.config.get('page.id')) : salla.api.wishlist.remove(salla.config.get('page.id'));
-            app.toggleElement(btn, 'text-white bg-primary favorited', 'bg-white text-theme-red', () => addToFavorite)
+            app.toggleElement(btn, 'favorited', 'unfavorited', () => addToFavorite)
                 .toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => addToFavorite)
             app.anime('.btn-favorite', {duration: 800, scale: [0.6, 1]});
         });
