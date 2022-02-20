@@ -59,17 +59,18 @@ class Home extends BasePage {
             event.preventDefault();
             let btn = event.target;
             let css = {
-                style1: {active: 'text-title-color', inActive: 'text-gray-400'},
-                style2: {active: 'btn btn--primary text-white', inActive: 'btn'},
+                style1: {active: 'is-active', inActive: 'inactive'},
+                style2: {active: 'is-active', inActive: 'inactive'},
             }[btn.dataset.type];
             let id = btn.dataset.componentId;
-            app.toggle(`#${id} .tabs-wrapper>div`, 'active-tab', 'hidden', tab => tab.id == btn.dataset.target)
+            app.toggle(`#${id} .tabs-wrapper>div`, 'is-active opacity-0 translate-y-3', 'inactive', tab => tab.id == btn.dataset.target)
                 .toggle(`#${id} .tab-trigger`, css.active, css.inActive, tabBtn => tabBtn == btn);
-            setTimeout(() => this.animateTabsItems(`#${btn.dataset.target} .featured-item`), 10);
+
+            // fadeIn active tabe
+            setTimeout(() => app.toggle(`#${id} .tabs-wrapper>div`, 'opacity-100 translate-y-0', 'opacity-0 translate-y-3', tab => tab.id == btn.dataset.target), 100);
         });
-        document.querySelectorAll('.tabs>.tab-trigger:first-child').forEach(btn => btn.click());
         document.querySelectorAll('.s-block-tabs').forEach(block => block.classList.add('tabs-initialized'));
-        this.animateTabsItems('.tabs-wrapper>div:first-child .featured-item');
+        // this.animateTabsItems('.tabs-wrapper>div:first-child .featured-item');
     }
 
     animateTabsItems(sel) {

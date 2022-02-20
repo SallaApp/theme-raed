@@ -18,7 +18,7 @@
 #}
 {% set component_id='featured-products-style1-' ~ position %}
 <section class="s-block s-block-tabs s-block--special-products container mt-8 sm:mt-16" id="{{ component_id }}">
-    <div class="grid grid-cols-1  {% if main_product %} lg:grid-cols-2 {% else %} lg:grid-cols-1 {% endif %} gap-8">
+    <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
                 <div class="flex justify-between mb-6 sm:mb-8">
@@ -28,13 +28,13 @@
             </div>
         {% endif %}
         <div class="flex flex-col">
-            <div class="tabs mb-8 space-s-2 md:space-s-12 whitespace-nowrap overflow-x-auto hide-scroll">
+            <div class="tabs hide-scroll">
                 {% for section in items %}
                     <button type="button"
                             data-target="{{ component_id }}-{{ section.id }}"
                             data-component-id="{{ component_id }}"
                             data-type="style1"
-                            class="tab-trigger cursor-pointer border-0 font-bold leading-7">
+                            class="tab-trigger {{ loop.first?'is-active':'' }}">
                         {{ section.title }}
                     </button>
                 {% endfor %}
@@ -42,13 +42,9 @@
 
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
-                    <div id="{{ component_id }}-{{ section.id }}"
-                         class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3
-                                {{ main_product?'lg:grid-cols-2':'lg:grid-cols-4' }}
-                                {{ loop.first?'active-tab':'hidden' }}
-                                 gap-4 sm:gap-8">
+                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-1 sm:grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
                         {% for product in section.products|slice(0,main_product?4:8) %}
-                            {% include 'pages.partials.product.card' with {block_classes:'opacity-0 featured-item featured-item-style1'} %}
+                            {% include 'pages.partials.product.card' %}
                         {% endfor %}
                     </div>
                 {% endfor %}
