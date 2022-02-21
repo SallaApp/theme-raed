@@ -35,13 +35,13 @@ class Home extends BasePage {
         */
         new Slider('.default-slider');
 
-        //Used in: [testimonials.twig, random-testimonials.twig]
-        new Slider('.testimonials-slider', {
-            loop          : true,
+        /* Testimonials Slider */
+        let testimonials = new Slider('.testimonials-slider', {
             centeredSlides: true,
             slidesPerView : 1,
             breakpoints   : {1024: {slidesPerView: 2}}
         });
+        testimonials.slideTo(1, false,false);  //begin from slide 2 to always dispaly prev & next
 
 
         //Used in: [enhanced-slider.twig]

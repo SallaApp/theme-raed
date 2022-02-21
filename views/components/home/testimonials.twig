@@ -11,7 +11,7 @@
 | position         | string     | Sorting number start from zero                                   |
 #}
 <section class="s-block s-block--testimonials overflow-hidden mt-8 sm:mt-16">
-    <div class="container pe-0 lg:px-5">
+    <div class="container lg:overflow-hidden">
         <div class="swiper testimonials-slider" id="testimonials-slider-{{ position }}">
             <div class="flex justify-between mb-6 sm:mb-8">
                 <h2 class="font-bold text-lg text-gray-500">{{ trans('blocks.home.testimonials') }}</h2>
@@ -19,7 +19,7 @@
 
             <div class="swiper-wrapper">
                 {% for item in items %}
-                    <div class="swiper-slide testimonials-slider__slide px-2 lg:px-3.75">
+                    <div class="swiper-slide">
                         <div class="testimonial">
                             <div class="testimonial__inner">
                               <div class="testimonial__avatar">
@@ -33,7 +33,7 @@
                                           <h4 class="font-bold text-xs xs:text-sm">{{ item.customer.full_name }}</h4>
                                           <div class="text-sm text-gray-400">{{ item.customer.city }}</div>
                                       </div>
-                                      <div class="testimonial__rating text-sm absolute top-6 sm:static">
+                                      <div class="testimonial__rating text-sm">
                                           {% for i in range(0, item.stars) %}
                                               <i class="sicon-star2 text-theme-yellow"></i>
                                           {% endfor %}
