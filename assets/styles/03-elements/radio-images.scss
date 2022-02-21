@@ -1,4 +1,12 @@
 .radio-images {
+  &__label{
+    @apply inline-block mb-0.5 cursor-pointer rounded-md overflow-hidden h-24 md:h-20 w-full;
+  }
+
+  &__badge{
+    @apply block absolute bottom-10 left-1/2 transform -translate-x-1/2 rounded-full px-1.5 bg-red-400 text-white whitespace-nowrap;
+  }
+
   input[type="radio"] {
     display: none;
 
@@ -46,7 +54,6 @@
       }
     }
 
-
     &:checked {
       + label {
         &:after {
@@ -60,13 +67,10 @@
       }
     }
 
-
     &:disabled {
       + label {
         opacity: .45;
       }
     }
-
-
   }
 }

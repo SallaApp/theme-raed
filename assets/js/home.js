@@ -37,6 +37,7 @@ class Home extends BasePage {
 
         /* Testimonials Slider */
         let testimonials = new Slider('.testimonials-slider', {
+            draggable     : true,
             centeredSlides: true,
             slidesPerView : 1,
             breakpoints   : {1024: {slidesPerView: 2}}

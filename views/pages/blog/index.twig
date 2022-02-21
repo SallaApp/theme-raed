@@ -15,7 +15,7 @@
 
 {% block content %}
     <div class="container mb-8 sm:mb-24">
-        <div class="flex items-center justify-between">
+        <div class="center-between">
             <nav class="w-full py-5">
                 {% component 'header.breadcrumbs' %}
             </nav>
@@ -140,12 +140,9 @@
                         {% endfor %}
                     </salla-infinite-scroll>
                 {% elseif not slides.count %}
-                    <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
-                        <i class="sicon-inbox block text-5xl text-gray-300 mb-2"></i>
-                        <p class="text-base text-gray-500">
-                            <span>{{ trans('pages.blog_categories.no_articles') }}</span>
-                            {{ page.title }}
-                        </p>
+                    <div class="no-content-placeholder">
+                        <i class="sicon-inbox icon"></i>
+                        <p>{{ trans('pages.blog_categories.no_articles') }}</p>
                     </div>
                 {% endif %}
             </div>

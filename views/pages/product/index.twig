@@ -21,7 +21,7 @@
             <div class="main-content flex-1 md:pb-20 ">
                 <div class="mb-5 md:flex justify-between items-center">
                     <h2 class="font-bold mb-6 md:mb-0">{{ page.title|raw }}</h2>
-                    <div class="flex items-center justify-between">
+                    <div class="center-between">
                         <div class="flex items-center">
                             {% if sort_list|length %}
                                 <div class="flex items-center">
@@ -37,7 +37,7 @@
                                     </select>
                                 </div>
                             {% endif %}
-                            <div class="hidden {# md:flex #} items-center ms-2 md:ms-2">
+                            <div class="hidden items-center ms-2 md:ms-2">
                                 <a href="#" data-type="grid"
                                    class="grid-trigger bg-border-color text-primary">
                                     <i class="sicon-grid"></i>
@@ -59,15 +59,10 @@
                     </salla-infinite-scroll>
                 {% else %}
                     <div class="no-content-placeholder">
-                        <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">
-                            <i class="sicon-inbox text-6xl block text-reverse-dark"></i>
-                        </span>
-                        <p class="text-sm mb-5">
-                            <span>{{ trans('pages.categories.no_products') }}</span>
-                            {{ page.title|raw }}
-                        </p>
+                        <i class="sicon-shopping icon icon--rounded"></i>
+                        <p>{{ trans('pages.categories.no_products') }}</p>
                     </div>
-                {% endif %}
+                {% endif %} 
             </div>
         </div>
     </div>
