@@ -7,12 +7,24 @@
     @apply h-80 md:h-auto;
 
     .product-entry__title a{
-      @apply text-white;
+      @apply text-white line-clamp-3;
       text-shadow: 0 0 1px #999;
     }
   }
 
+  &__image{
+    @apply bg-gray-100 relative overflow-hidden hover:opacity-90 w-full flex-shrink-0;
+  }
+
+  &__title a{
+    @apply block text-sm font-bold text-title-color hover:text-primary;
+  }
+
   &--minimal{
+    .product-entry__title a{
+      @apply line-clamp-2;
+    }
+
     .btn--wishlist{
       @apply absolute top-0 end-0;
 
@@ -21,14 +33,6 @@
         color: #fff;
       }
     }
-  }
-
-  &__image{
-    @apply bg-gray-100 relative overflow-hidden hover:opacity-90 w-full;
-  }
-
-  &__title a{
-    @apply block text-sm font-bold text-title-color hover:text-primary whitespace-nowrap overflow-ellipsis overflow-hidden;
   }
 
   &--horizontal{
