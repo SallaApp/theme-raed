@@ -5,11 +5,11 @@
 | breadcrumbs[].title | string             | A title of breadcrumb                 |
 | breadcrumbs[].url   | string             | A url of breadcrumb                   |
 #}
-<ol class="list-reset flex items-center flex-wrap text-sm {{ is_dark ? 'text-reverse' : '' }}">
+<ol class="breadcrumbs list-reset flex items-center flex-wrap text-sm">
     {% for breadcrumb in breadcrumbs %}
         {% if not loop.last %}
-            <li class="whitespace-nowrap"><a href="{{ breadcrumb.url }}" class="fix-align {{ is_dark ? 'text-reverse' : 'text-primary' }}">{{ breadcrumb.title }}</a></li>
-            <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+            <li class="whitespace-nowrap"><a href="{{ breadcrumb.url }}" class="fix-align text-primary">{{ breadcrumb.title }}</a></li>
+            <li><i class="sicon-keyboard_arrow_left arrow mx-2"></i></li>
         {% else %}
             <li><span class="fix-align">{{ breadcrumb.title|raw }}</span></li>
         {% endif %}

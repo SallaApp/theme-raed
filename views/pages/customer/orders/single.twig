@@ -92,8 +92,7 @@
                         {% endif %}
 
                         <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            <span class="text-primary px-4 pt-0.5 pb-1.5 inline-flex items-center space-s-1  border rounded-2xl"
-                                  style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
+                            <span class="text-primary px-4 pt-1 pb-1.5 inline-flex items-center space-s-1 border rounded-2xl" style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
                                 <i class="mt-1 {{ order.status.icon }}"></i>
                                 <span class=""> {{ order.status.name }}</span>
                             </span>
@@ -103,13 +102,12 @@
                 </table>
                 {% if store.settings.rating_enabled and not order.has_feedback %}
                     <salla-rating></salla-rating>
-                    <div class="relative flex justify-between  profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
+                    <div class="relative flex justify-between profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
                         <div>
                             <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                             <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                         </div>
-                        <button data-on-click="rating::show"
-                                class="btn btn--outline-primary-dark flex-none px-12 rounded-full">{{ trans('pages.rating.rate') }}</button>
+                        <button data-on-click="rating::show" class="btn btn--outline-primary-dark btn--rounded-full !flex-grow-0 !px-12 lg:!px-20">{{ trans('pages.rating.rate') }}</button>
                     </div>
                 {% endif %}
 
@@ -127,10 +125,10 @@
                                                      class="w-18 h-14 object-cover rounded-md">
                                             </a>
                                             <div>
-                                                <a href="{{ item.product.url }}">
-                                                    <h3 class="leading-5 mb-1.5 md:text-base">{{ item.name }}</h3>
+                                                <a href="{{ item.product.url }}" class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-600 hover:text-primary">
+                                                    {{ item.name }}
                                                 </a>
-                                                <b>{{ item.price|money }}</b>
+                                                <b class="text-primary">{{ item.price|money }}</b>
                                             </div>
                                         </div>
                                     {% else %}
