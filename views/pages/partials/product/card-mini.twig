@@ -22,22 +22,28 @@
                     <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                 </div>
             {% else %}
-                <h4 class="text-primary font-bold text-sm">{{ product.price|money }}</h4>
+                <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
             {% endif %}
             {% if product.rating %}
-                <div class="text-gray-400">
-                    <div class="text-sm">
-                        <i class="sicon-star2 text-theme-yellow"></i>
-                        <span>{{ product.rating|number }}</span>
-                    </div>
-                </div>
+                <div class="text-sm text-gray-400">
+                  <i class="sicon-star2 text-amber-400"></i>
+                  <span>{{ product.rating|number }}</span>
+                </div> 
             {% endif %}
         </div>
         <div class="flex items-center mt-auto">
             <button data-on-click="cart::quick.add" data-id="{{ product.id }}"
                     {% if not product.is_available %} disabled {% endif %}
                     class="btn btn--has-loading btn--outline-primary">
-                {{ trans('pages.cart.add_to_cart') }}
+                <span class="btn__text">
+                  {% if product.is_available %}
+                      {{ trans('pages.cart.add_to_cart') }}
+                  {% elseif product.is_donation %}
+                      {{ trans('pages.products.donation_exceed') }}
+                  {% else %}
+                      {{ trans('pages.products.out_of_stock') }}
+                  {% endif %}
+                </span>
             </button> 
         </div>
     </div>

@@ -142,15 +142,13 @@
                     </h3>
                 {% endif %}
 
-                <div class="mb-2">
-                    <div class="space-s-1">
-                        {% if product.on_sale %}
-                            <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                            <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                        {% else %}
-                            <span>{{ product.price|money }}</span>
-                        {% endif %}
-                    </div>
+                <div class="mb-2 space-s-1">
+                    {% if product.on_sale %}
+                        <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                        <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                    {% else %}
+                        <span class="font-bold">{{ product.price|money }}</span>
+                    {% endif %}
                 </div>
 
                 <div class="product__description leading-7 mb-6">
