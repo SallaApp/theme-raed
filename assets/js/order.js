@@ -6,6 +6,8 @@ class Order extends BasePage {
     }
 
     initiateOrderCancelation() {
+        app.onClick('.copy-btn', e => app.copyToClipboard(e.target.dataset.selector));
+        
         app.onClick('salla-button#btn-reorder', ({currentTarget: btn}) => btn.load()
             .then(sallaBtn => salla.twilight.api.request(sallaBtn.dataset.url, {}, 'get'))
             .then(() => btn.stop())

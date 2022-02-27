@@ -128,7 +128,7 @@
                                                 <a href="{{ item.product.url }}" class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-600 hover:text-primary">
                                                     {{ item.name }}
                                                 </a>
-                                                <b class="text-primary">{{ item.price|money }}</b>
+                                                <b>{{ item.price|money }}</b>
                                             </div>
                                         </div>
                                     {% else %}
@@ -220,13 +220,14 @@
                                         <dl class="text-sm text-dark divide-y divide-border-color">
                                             {% for code in item.codes %}
                                                 <div x-data="{}" class="py-3.5 center-between">
-                                                    <dt class="mb-2 md:mb-0" id="order_code_{{ code }}">
-                                                        {{ code }}
-                                                    </dt>
-                                                    <button title="Copy to clipboard"
+                                                    <dt class="mb-2 md:mb-0" id="order_code_{{ item.id }}_{{ loop.index }}">{{ code }}</dt>
+                                                    {# <button title="Copy to clipboard"
                                                             class="opacity-80 hover:opacity-100"
                                                             @click="copyToClipboard('order_code_{{ code }}')">
                                                         <i class="copy-icon sicon-swap-stroke text-primary"></i>
+                                                    </button> #}
+                                                    <button class="copy-btn text-primary opacity-80 hover:opacity-100" data-selector="order_code_{{ item.id }}_{{ loop.index }}">
+                                                        <i class="copy-icon sicon-swap-stroke"></i>
                                                     </button>
                                                 </div>
                                             {% endfor %}
