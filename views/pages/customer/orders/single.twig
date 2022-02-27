@@ -221,13 +221,8 @@
                                             {% for code in item.codes %}
                                                 <div x-data="{}" class="py-3.5 center-between">
                                                     <dt class="mb-2 md:mb-0" id="order_code_{{ item.id }}_{{ loop.index }}">{{ code }}</dt>
-                                                    {# <button title="Copy to clipboard"
-                                                            class="opacity-80 hover:opacity-100"
-                                                            @click="copyToClipboard('order_code_{{ code }}')">
-                                                        <i class="copy-icon sicon-swap-stroke text-primary"></i>
-                                                    </button> #}
                                                     <button class="copy-btn text-primary opacity-80 hover:opacity-100" data-selector="order_code_{{ item.id }}_{{ loop.index }}">
-                                                        <i class="copy-icon sicon-swap-stroke"></i>
+                                                      <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
                                                     </button>
                                                 </div>
                                             {% endfor %}
