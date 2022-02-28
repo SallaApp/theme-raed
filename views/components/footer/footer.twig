@@ -20,7 +20,7 @@
             <div class="flex space-s-2 items-end">
               {% if store.settings.tax.certificate %}
                 <a data-target="modal-value-tax" data-on-click="modal::open" href="#!" alt="{{ store.settings.tax.number }}">
-                  <img src="{{asset('images/tax.png')}}" class="w-10" alt="value added tax">
+                  <img src="{{asset('images/tax.png')}}" class="w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
                 </a>
               {% endif %}
               <div>
@@ -30,7 +30,7 @@
             </div>
 
             {% if store.settings.tax.certificate %}
-              <salla-modal no-padding id="modal-value-tax">
+              <salla-modal sub-title-first sub-title="{{ trans('common.elements.tax_number') }}" title="{{ store.settings.tax.number }}" id="modal-value-tax">
                 <div class="flex justify-center max-w-full">
                   <img src="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}"/>
                 </div>
