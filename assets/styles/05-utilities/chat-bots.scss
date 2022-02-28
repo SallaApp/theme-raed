@@ -1,0 +1,68 @@
+body.mm-ocd-opened,
+body.modal-is-open,
+body.fancybox-open{
+  overflow: hidden;
+
+  #tidio-chat,
+  [id^="gb-widget"],
+  [class$="__feedback"],
+  #fb-root,
+  .fb_reset,
+  #chat-widget-container {
+    display: none !important;
+  }
+}
+
+/* CSS specific to iOS devices */
+@supports (-webkit-touch-callout: none) {
+  @media screen and (max-width: 767px) {
+    .mobile #button {
+      transform: translateY(-58px);
+      margin-left: 5px;
+    }
+  }
+}
+
+@media(max-width: 992px) {
+  #tidio-chat {
+    z-index: 9999999999;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+
+    #tidio-chat-iframe {
+      bottom: 0 !important;
+      pointer-events: auto;
+    }
+  }
+
+  [id^="gb-widget"] {
+    bottom: 20px !important;
+    z-index: 9999 !important;
+  }
+
+  #fb-root {
+    .fb_dialog {
+      iframe[data-testid="bubble_iframe"] {
+        bottom: 20px !important;
+      }
+    }
+  }
+
+  iframe.tawk-widget {
+    bottom: 20px !important;
+  }
+
+  #chat-widget-container {
+    height: 100%;
+    bottom: 0 !important;
+  }
+}
+
+iframe.tawk-widget {
+  display: block;
+  bottom: 20px;
+}
