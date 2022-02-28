@@ -1,7 +1,6 @@
 body.mm-ocd-opened,
 body.modal-is-open,
-body.fancybox-open,
-body.dropdown--is-opened{
+body.fancybox-open{
   overflow: hidden;
 
   #tidio-chat,
@@ -25,6 +24,19 @@ body.dropdown--is-opened{
 }
 
 @media(max-width: 992px) {
+  body.dropdown--is-opened{
+    overflow: hidden;
+
+    #tidio-chat,
+    [id^="gb-widget"],
+    [class$="__feedback"],
+    #fb-root,
+    .fb_reset,
+    #chat-widget-container{
+      display: none !important;
+    }
+  }
+
   #tidio-chat {
     z-index: 9999999999;
     position: absolute;
