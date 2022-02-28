@@ -8,7 +8,7 @@ class ThankYou extends BasePage {
     }
 
     registerEvents() {
-        app.onClick('.copy-btn', e => app.copyLinkToClipboard(e.target.dataset.selector));
+        app.onClick('.btn--copy', function(){app.copyLinkToClipboard(this.id)} );
         
         app.onClick('#btn-open-order', event => {
             //important for mobile apps

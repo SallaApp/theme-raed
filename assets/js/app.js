@@ -57,15 +57,15 @@ class App extends salla.AppHelpers {
     }
 
     copyLinkToClipboard(elementId) {
-        let copyIcon = document.querySelector('[data-selector="'+elementId+'"] .copy-icon');
+        let btn = document.getElementById(elementId);
         var aux = document.createElement("input");
-        aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+        aux.setAttribute("value", btn.dataset.code);
         document.body.appendChild(aux);
         aux.select();
         document.execCommand("copy");
         document.body.removeChild(aux);
-        this.toggleElement(copyIcon, 'sicon-swap-stroke', 'sicon-check', ()=>false);
-        setTimeout(() => this.toggleElement(copyIcon, 'sicon-swap-stroke', 'sicon-check', ()=>true), 1000);
+        this.toggleElement(btn, 'copied', 'code-to-copy', ()=>true);
+        setTimeout(() => this.toggleElement(btn, 'code-to-copy', 'copied', ()=>true), 1000);
     }
 
     initiateNotifier() {
