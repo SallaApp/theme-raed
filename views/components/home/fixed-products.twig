@@ -7,15 +7,13 @@
 | position        | Int        | Sorting number start from zero                                   |
 #}
 <section class="s-block container mt-8 sm:mt-16">
-    <div class="flex justify-between mb-6 sm:mb-8">
+    <div class="center-between mb-6 sm:mb-8">
         {% if title %}
-            <h2 class="font-bold text-lg text-gray-500">{{ title }}</h2>
+            <h2 class="s-block__title">{{ title }}</h2>
         {% endif %}
-        <div class="flex items-center">
-            {% if display_all_url %}
-                <a href="{{ display_all_url }}" class="text-sm font-bold text-primary hover:opacity-80  ms-3">{{ trans('blocks.home.display_all') }}</a>
-            {% endif %}
-        </div>
+        {% if display_all_url %}
+            <a href="{{ display_all_url }}" class="s-block__display-all">{{ trans('blocks.home.display_all') }}</a>
+        {% endif %}
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {% for product in products %}
