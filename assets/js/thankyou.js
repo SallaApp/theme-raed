@@ -8,7 +8,8 @@ class ThankYou extends BasePage {
     }
 
     registerEvents() {
-        app.onClick('.copy-btn', e => app.copyToClipboard(e.target.dataset.selector));
+        app.onClick('.copy-btn', e => app.copyLinkToClipboard(e.target.dataset.selector));
+        
         app.onClick('#btn-open-order', event => {
             //important for mobile apps
             salla.event.dispatch('mobile::order.placed', {order_id: event.target.dataset.orderId});

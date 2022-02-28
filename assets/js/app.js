@@ -56,6 +56,18 @@ class App extends salla.AppHelpers {
         return this;
     }
 
+    copyLinkToClipboard(elementId) {
+        let copyIcon = document.querySelector('[data-selector="'+elementId+'"] .copy-icon');
+        var aux = document.createElement("input");
+        aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+        document.body.appendChild(aux);
+        aux.select();
+        document.execCommand("copy");
+        document.body.removeChild(aux);
+        this.toggleElement(copyIcon, 'sicon-swap-stroke', 'sicon-check', ()=>false);
+        setTimeout(() => this.toggleElement(copyIcon, 'sicon-swap-stroke', 'sicon-check', ()=>true), 1000);
+    }
+
     initiateNotifier() {
         salla.notify.setNotifier(function (message, type, data) {
             if (typeof message == 'object') {
