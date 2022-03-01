@@ -23,18 +23,18 @@ export default class Slider {
     }
 
     slideTo(...data) {
-        return this.getSlider().slideTo(...data);
+        return this.getSlider()?.slideTo(...data);
     }
 
     on(...data) {
-        return this.getSlider().on(...data);
+        return this.getSlider()?.on(...data);
     }
 
     /**
      * @return {NavigationMethods}
      */
     navigation() {
-        return this.getSlider().navigation;
+        return this.getSlider()?.navigation;
     }
 
     initSlider(slider, options) {
