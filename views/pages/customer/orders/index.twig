@@ -16,7 +16,7 @@
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
                 <h1 class="font-bold text-lg mb-5">{{ is_pending_orders ? trans('common.titles.pending_orders') : trans('common.titles.orders') }}</h1>
-                {% if orders.items is not empty %}
+                {% if orders.count %}
                     <salla-infinite-scroll next-page="{{ orders.next_page }}" container=".list-container" item=".s-table__tr">
                         <table class="s-table min-w-full border-separate" style="border-spacing: 0 20px;">
                             <thead class="bg-gray-50 mb-5 hidden md:table-header-group">
@@ -36,11 +36,11 @@
                             </tr>
                             </thead>
                             <tbody class="list-container">
-                            {% for order in orders.items %}
+                            {% for order in orders %}
                                 <tr class="s-table__tr">
                                     <td class="w-full md:w-auto  md:rounded-s-md px-6 py-2 md:py-6 md:h-20 whitespace-nowrap text-sm font-bold">
                                         <span class="md:hidden w-32 inline-block font-normal text-gray-400">{{ trans('pages.thank_you.order_id') }}:</span>
-                                        #{{ order.order_id }}
+                                        #{{ order.reference_id }}
                                         <a href="{{ order.url }}"
                                            class="w-full block absolute top-0 bottom-0 start-0"></a>
                                     </td>

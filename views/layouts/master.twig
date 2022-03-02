@@ -87,6 +87,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    {{ theme.set('placeholder', 'images/img_placeholder.png') }}
     {% hook 'head:start' %}
 
     <!-- theme color -->
@@ -111,20 +112,20 @@
     {% block head %}{% endblock %}
 
     <style>
-      :root {
-        --font-main: '{{theme.font.name}}';
-        --color-main: {{ theme.color.primary }};
-        --color-main-d: {{ theme.color.darker(0.25) }};
-        --color-main-l: {{ theme.color.lighter(0.15) }};
-        --color-main-reverse: {{ theme.color.reverse_text }};
-      }
+        :root {
+            --font-main: '{{theme.font.name}}';
+            --color-main: {{ theme.color.primary }};
+            --color-main-d: {{ theme.color.darker(0.25) }};
+            --color-main-l: {{ theme.color.lighter(0.15) }};
+            --color-main-reverse: {{ theme.color.reverse_text }};
+        }
     </style>
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
 </head>
 
-<body id="app"  
-  class="{% hook 'body:classes' %} bg-gray-50 topnav-is-dark
+<body id="app"
+      class="{% hook 'body:classes' %} bg-gray-50 topnav-is-dark
         {{ theme.topnav_bg ?          ' topnav-has-bg' : '' }}
         {{ theme.topnav_bg_gradient ? ' topnav-has-gradient' : '' }}
         {{ theme.topnav_text_color ?  ' topnav-has-text-color' : '' }}
