@@ -91,33 +91,25 @@
                             </div>
 
                             <div class="flex-1 border-t border-b border-border-color py-3 md:p-0 md:border-none mt-5 md:mt-1 center-between ">
-                                <div class="relative">
-                                    <div class="flex items-center h-10 py-2 border  rounded-md text-sm transtion transition-color duration-300">
-                                        {% if item.is_donation %}
-                                            <span></span>
-                                        {% elseif item.hide_quantity or not item.is_available %}
-                                            <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
-                                            <span>{{ item.quantity }}</span>
-                                        {% else %}
-                                            <button class="add-qty text-gray-400 w-11 pe-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
-                                                    type="button">
-                                                <i class="sicon-add"></i>
-                                            </button>
-                                            <input class="item-quantity focus:outline-none focus:ring-transparent shadow-none h-6 border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12 "
-                                                   data-max_quantity="{{ product.max_quantity }}"
-                                                   data-quantity="{{ item.quantity }}"
-                                                   max="{{ product.max_quantity }}"
-                                                   value="{{ item.quantity }}"
-                                                   id="qty-{{ item.id }}"
-                                                   data-digits="1"
-                                                   name="quantity"
-                                                   min="1">
-                                            <button class="sub-qty text-gray-400 w-11 ps-0.5 focus:outline-none hover:text-primary transition-colors duration-300"
-                                                    type="button">
-                                                <i class="sicon-minus"></i>
-                                            </button>
-                                        {% endif %}
-                                    </div>
+                                <div class="flex items-stretch h-10 border rounded-md text-sm transtion transition-color duration-300">
+                                    {% if item.is_donation %}
+                                        <span></span>
+                                    {% elseif item.hide_quantity or not item.is_available %}
+                                        <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
+                                        <span class="w-10 py-2.5 text-center">{{ item.quantity }}</span>
+                                    {% else %}
+                                        <button class="add-qty btn--quantity sicon-add" type="button"></button>
+                                        <input class="item-quantity focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
+                                                data-max_quantity="{{ product.max_quantity }}"
+                                                data-quantity="{{ item.quantity }}"
+                                                max="{{ product.max_quantity }}"
+                                                value="{{ item.quantity }}"
+                                                id="qty-{{ item.id }}"
+                                                data-digits="1"
+                                                name="quantity"
+                                                min="1">
+                                        <button class="sub-qty btn--quantity sicon-minus" type="button"></button>
+                                    {% endif %}
                                 </div>
 
                                 <p class="text-primary flex-none font-bold text-sm">
