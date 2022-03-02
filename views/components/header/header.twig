@@ -8,95 +8,100 @@
 * It's important to put all Header components here, to be excluded in mobile apps
 #}
 <header class="store-header">
-  {# Top Nav #}
-  <div id="topnav" class="py-2 lg:py-1.5">
-      <div class="container flex justify-between">
-          <div class="center-between w-full lg:w-auto ">
-              <div class="flex items-center space-s-1">
+    {# Top Nav #}
+    <div id="topnav" class="py-2 lg:py-1.5">
+        <div class="container flex justify-between">
+            <div class="center-between w-full lg:w-auto ">
+                <div class="flex items-center space-s-1">
 
-                  {# Pages Menu #}
-                  {% component 'footer.pages' with {is_header:true} %}
+                    {# Pages Menu #}
+                    {% component 'footer.pages' with {is_header:true} %}
 
-                  {# Language & Currency Component #}
-                  {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                      <button type="button" data-on-click="localization::show" class="btn--rounded-gray">
-                          <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
-                          | <span class="ms-2">{{ user.language.name }}</span>
-                      </button> 
-                      <salla-localization></salla-localization>
-                  {% endif %}
+                    {# Language & Currency Component #}
+                    {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+                        <button type="button" data-on-click="localization::show" class="btn--rounded-gray">
+                            <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
+                            | <span class="ms-2">{{ user.language.name }}</span>
+                        </button>
+                        <salla-localization></salla-localization>
+                    {% endif %}
 
-                  {# Branches Component :: Dummy data #}
-                  {# TODO:: Remove This Condition #}
-                  {% set displayAs = 'default' %}
-                  {% if displayAs != 'in-product' %}
-                      <button class="btn--rounded-gray" data-on-click="branches::show"><i class="sicon-location me-1"></i> فرع الرياض</button>
-                     
-                      {# TODO:: make default props #}
-                      <salla-branches position="header" current="3" browse-products-from="city" display-as="{{ displayAs }}"
-                      ></salla-branches>
-                  {% endif %}
+                    {# Branches Component :: Dummy data #}
+                    {# TODO:: Remove This Condition #}
+                    {% set displayAs = 'default' %}
+                    {% if displayAs != 'in-product' %}
+                        <button class="btn--rounded-gray" data-on-click="branches::show"><i
+                                    class="sicon-location me-1"></i> فرع الرياض
+                        </button>
 
-                  {# Search Component #}
-                  <button data-on-click="search::show" class="btn--circle-gray sicon-search"></button>
-                  <salla-search></salla-search>
-              </div>
-          </div>
+                        {# TODO:: make default props #}
+                        <salla-branches position="header" current="3" browse-products-from="city"
+                                        display-as="{{ displayAs }}"
+                        ></salla-branches>
+                    {% endif %}
 
-          {# @Jamal - component naming is confusing footer in the header , why not storeContacts #}
-          {% component 'footer.contacts' with {is_header:true} %}
-      </div>
-  </div>
+                    {# Search Component #}
+                    <button data-on-click="search::show" class="btn--circle-gray sicon-search"></button>
+                    <salla-search></salla-search>
+                </div>
+            </div>
 
-  {# Main Nav #} 
-  <div id="mainnav" class="mainnav-container bg-white shadow-default
+            {# @Jamal - component naming is confusing footer in the header , why not storeContacts #}
+            {% component 'footer.contacts' with {is_header:true} %}
+        </div>
+    </div>
+
+    {# Main Nav #}
+    <div id="mainnav" class="mainnav-container bg-white shadow-default
   {{ theme.mainnav_is_dark ? 'dark:bg-gray-700 dark:text-gray-300': 'bg-white' }}
   ">
-      <div class="mainnav-inner bg-inherit">
-          <div class="container">
-              <div class="flex items-stretch justify-between relative">
-                  <div class="flex items-center">
-                      <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
-                          <i class="sicon-menu text-primary text-3xl me-2.5"></i>
-                      </a>
-                      <a class="store-logo navbar-brand items-center flex my-2 lg:my-0"
-                        href="{{ store.url }}">
-                          <img src="{{ store.logo }}" alt="{{ store.name }}"
-                              class="max-h-14 sm:max-h-16 max-w-[170px]">
-                          <h1 class="hidden">{{ store.name }}</h1>
-                      </a>
-                      {% component 'header.menu' %}
-                  </div>
-                  <div class="flex items-center justify-end min-w-[200px]">
-                      {% if user.type=='user' %}
-                          {% component 'header.user-menu' %}
-                      {% else %}
-                          <button class="btn--icon"
-                                  data-on-click="login::show"
-                                  type="button">
-                              <i class="sicon-user-circle"></i>
-                          </button>
-                      {% endif %}
+        <div class="mainnav-inner bg-inherit">
+            <div class="container">
+                <div class="flex items-stretch justify-between relative">
+                    <div class="flex items-center">
+                        <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
+                            <i class="sicon-menu text-primary text-3xl me-2.5"></i>
+                        </a>
+                        <a class="store-logo navbar-brand items-center flex my-2 lg:my-0"
+                           href="{{ store.url }}">
+                            <img src="{{ store.logo }}" alt="{{ store.name }}"
+                                 class="max-h-14 sm:max-h-16 max-w-[170px]">
+                            <h1 class="hidden">{{ store.name }}</h1>
+                        </a>
+                        {% component 'header.menu' %}
+                    </div>
+                    <div class="flex items-center justify-end min-w-[200px]">
+                        {% if user.type=='user' %}
+                            {% component 'header.user-menu' %}
+                        {% else %}
+                            <button class="btn--icon"
+                                    data-on-click="login::show"
+                                    type="button">
+                                <i class="sicon-user-circle"></i>
+                            </button>
+                        {% endif %}
 
-                      <a id="main-cart-btn" href="{{ link('cart') }}" class="flex items-center ms-4 transition-opacity hover:opacity-80 relative">
-                          <i class="cart-icon sicon-shopping-bag text-3xl me-1"></i>
-                          <div data-cart-badge class="absolute top-1 -start-2 notifications-count">{{ cart.items_count }}</div>
-                          <div class="whitespace-nowrap">
-                              <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
-                              <b class="leading-3" data-cart-total>{{ cart.total }}</b>
-                          </div>
-                      </a>
-                  </div>
-              </div>
-          </div>
-      </div>
-      {% if user.type=='guest' %}
-          <salla-login
-                  {{ store.settings.auth.email_allowed ? 'is-email-allowed' : '' }}
-                  {{ store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : '' }}
-                  {{ store.settings.auth.is_email_required ? 'is-email-required' : '' }}
-          ></salla-login>
-      {% endif %}
-  </div> 
+                        <a id="main-cart-btn" href="{{ link('cart') }}"
+                           class="flex items-center ms-4 transition-opacity hover:opacity-80 relative">
+                            <i class="cart-icon sicon-shopping-bag text-3xl me-1"></i>
+                            <div data-cart-badge
+                                 class="absolute top-1 -start-2 notifications-count">{{ cart.items_count }}</div>
+                            <div class="whitespace-nowrap">
+                                <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
+                                <b class="leading-3" data-cart-total>{{ cart.total }}</b>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if user.type=='guest' %}
+            <salla-login
+                    {{ store.settings.auth.email_allowed ? 'is-email-allowed' : '' }}
+                    {{ store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : '' }}
+                    {{ store.settings.auth.is_email_required ? 'is-email-required' : '' }}
+            ></salla-login>
+        {% endif %}
+    </div>
 </header>
 {% component 'header.menu' with {is_mobile:true} %}

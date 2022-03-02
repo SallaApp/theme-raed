@@ -4,7 +4,6 @@ class ThankYou extends BasePage {
     onReady() {
         this.initiateForm();
         app.anime('.thanks-item', {translateX: [20, 0]});
-        salla.cart.event.clearCartSummary();
     }
 
     registerEvents() {
