@@ -13,9 +13,9 @@
             <div class="flex flex-wrap md:items-center justify-between mb-2 md:mb-0">
                 <div class="flex items-center mb-1">
                     <h3 class="font-bold text-base me-10 fix-align">{{ comment.name }}</h3>
-                    {% if comment.order_id or comment.stars %}
+                    {% if comment.has_order or comment.stars %}
                         <div class="flex">
-                            {% if comment.order_id %}
+                            {% if comment.has_order %}
                                 <i class="sicon-check rounded-full bg-theme-yellow h-5 w-5 flex items-center justify-center text-xs"></i>
                                 <span class="fix-align ms-1 text-sm text-gray-400 mt-0.5">
                                   {{ trans('blocks.comments.has_bought') }}{{ comment.stars?', ':'' }}
@@ -42,7 +42,7 @@
                 {% if comment.is_pending %}
                     <span class="pending-comment pending-comment bg-gray-200 rounded-full px-2.5 py-0.5 inline-block mt-2">{{ trans('blocks.comments.waiting_approval') }}</span>
                 {% endif %}
-                {% if comment.order_id != 0 %}
+                {% if comment.has_order %}
                     <i class="icon-cart user-buy" data-toggle="tooltip" data-placement="right"
                        title="{{ trans('blocks.comments.has_order') }}"></i>
                 {% endif %}
