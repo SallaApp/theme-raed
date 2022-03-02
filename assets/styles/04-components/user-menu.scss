@@ -11,56 +11,31 @@
   @apply inline-flex items-center lg:h-full w-10 mx-1 md:mx-2 text-gray-500 absolute top-[-47px] end-0 lg:static;
 
   &:before {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
     content: "";
     background: rgba(113, 113, 122, 0.75);
-    left: 0;
-    top: 0;
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-    transition: 0.3s;
-    z-index: 9;
+    @apply fixed w-screen h-screen left-0 top-0 opacity-0 pointer-events-none invisible duration-300 z-10;
   }
 
   &.is-opened {
     .dropdown__menu {
-      opacity: 1;
-      transform: translateY(0) scaleY(1);
-      visibility: visible;
+      @apply opacity-100 visible translate-y-0 scale-100;
     }
   }
 
   @media (max-width: 1024px) {
     .dropdown__menu {
-      position: fixed;
-      top: 50vh;
-      left: 50vw !important;
-      opacity: 0;
-      transform-origin: 50%;
-      transition-duration: 0.45s;
-      transform: translateX(-50%) translateY(-50%) scale(.95);
+      left: 0 !important;
+      @apply fixed bottom-0 top-auto w-full opacity-0 translate-y-10 origin-center duration-300 rounded-b-none;
     }
 
     &.is-opened {
       .dropdown__menu {
-        opacity: 1;
-        transform: translateX(-50%) translateY(-50%) scale(1);
+        @apply opacity-100 translate-y-0;
       }
 
       &:before {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
+        @apply opacity-100 visible pointer-events-auto;
       }
     }
-  }
-}
-
-@media (max-width: 1024px) {
-  .dropdown--is-opened {
-    overflow: hidden;
   }
 }
