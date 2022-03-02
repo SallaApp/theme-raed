@@ -140,7 +140,11 @@
       3- Similar products
     */
 	&--sm-arrow {
-		@apply inline-flex items-center justify-center border text-gray-500 rounded-full w-7 h-7 text-gray-400;
+    @apply transition inline-flex items-center justify-center border text-gray-500 rounded-full w-8 h-8 text-lg; 
+
+    &:not(:disabled){
+      @apply hover:text-primary hover:border-primary;
+    }
 	}
 
 	/*
@@ -148,10 +152,14 @@
       1- Home tabs block
     */
 	&--md-arrow {
-		@apply inline-flex items-center justify-center border text-gray-500 rounded-full w-10 h-10 text-xl;
+		@apply transition inline-flex items-center justify-center border text-gray-500 rounded-full w-10 h-10 text-xl;
 
     &.light{
       @apply text-white border-white;
+    }
+
+    &:not(:disabled){
+      @apply hover:text-primary hover:border-primary;
     }
 	}
 
@@ -182,7 +190,7 @@
 
   /* Disabled state */
   &.btn:disabled {
-    @apply text-gray-300 bg-white hover:bg-white shadow-sm border border-border-color cursor-default;
+    @apply text-gray-300 bg-transparent hover:bg-transparent shadow-sm border border-border-color cursor-default;
   }
 
   &:disabled {
