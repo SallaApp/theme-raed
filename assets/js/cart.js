@@ -155,25 +155,28 @@ class Cart extends BasePage {
         salla.coupon.event.onRemoved(res => this.toggleCoupon(res, false));
         salla.coupon.event.onAddedFailed(err => this.showCouponError(err.response?.data?.error.message));
         salla.coupon.event.onRemovedFailed(err => this.showCouponError(err.response?.data?.error.message, false));
-        app.onKeyUp(app.couponCode, event => {
-            event.keyCode === 13 && app.couponBtn.click();
-            app.couponError.value = '';
-            app.removeClass(app.couponCode, 'has-error');
-        });
-        app.onClick(app.couponBtn, event => {
-            event.preventDefault();
-            //if it's remove coupon, will have `btn--danger` class
-            if (app.couponBtn.classList.contains('btn--danger')) {
-                return salla.api.coupon.remove(salla.config.get('page.id'));
-            }
 
-            if (!app.couponCode.value.length) {
-                this.showCouponError('* ' + salla.lang.get('pages.checkout.enter_coupon'));
-                return;
-            }
+        if(app.couponCode){
+          app.onKeyUp(app.couponCode, event => {
+              event.keyCode === 13 && app.couponBtn.click();
+              app.couponError.value = '';
+              app.removeClass(app.couponCode, 'has-error');
+          });
+          app.onClick(app.couponBtn, event => {
+              event.preventDefault();
+              //if it's remove coupon, will have `btn--danger` class
+              if (app.couponBtn.classList.contains('btn--danger')) {
+                  return salla.api.coupon.remove(salla.config.get('page.id'));
+              }
 
-            salla.api.coupon.add({id: salla.config.get('page.id'), coupon: app.couponCode.value});
-        });
+              if (!app.couponCode.value.length) {
+                  this.showCouponError('* ' + salla.lang.get('pages.checkout.enter_coupon'));
+                  return;
+              }
+
+              salla.api.coupon.add({id: salla.config.get('page.id'), coupon: app.couponCode.value});
+          });
+        }
     }
 
     toggleCoupon(res, applied) {
