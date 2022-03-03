@@ -37,7 +37,15 @@ class Product extends BasePage {
     }
 
     initSliders() {
-        let mini = new Slider('.mini', {spaceBetween: 10, slidesPerView: 3, freeMode: true, watchSlidesProgress: true});
+        let mini = new Slider('.mini', {
+          slidesPerView: 4,
+          centeredSlides: true,
+          centeredSlidesBounds: true, 
+          freeMode: false, 
+          watchSlidesProgress: true,
+          watchSlidesVisibility: true,
+          watchOverflow: true,
+        });
         let main = new Slider('.details-slider', {
             slidesPerView : 1,
             centeredSlides: true,
