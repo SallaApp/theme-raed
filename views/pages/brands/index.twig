@@ -9,7 +9,7 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <div class="container mb-20 px-7 xl:px-0">
+    <div class="container mb-20">
         <nav class="w-full py-5">
             {% component 'header.breadcrumbs' %}
         </nav>
@@ -18,38 +18,40 @@
         </div>
         {% if brands|length %}
             <!-- brands nav -->
-            <ul id="brands-nav" class="brands-nav">
-                <li></li>
-                {% for char,brands_group in brands %}
-                    <li>
-                        <a class="brands-nav__item fix-align"
-                           href="#brand-section-{{ loop.index }}"
-                           data-id="{{ loop.index }}">{{ char }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
+            <div class="brands-nav-wrap">
+              <ul id="brands-nav" class="brands-nav">
+                  <li></li>
+                  {% for char,brands_group in brands %}
+                      <li>
+                          <a class="brands-nav__item fix-align"
+                            href="#brand-section-{{ loop.index }}"
+                            data-id="{{ loop.index }}">{{ char }}</a>
+                      </li>
+                  {% endfor %}
+              </ul>
+            </div>
             <!-- end:: brands nav -->
 
+            <div class="px-8 xl:px-0">
             {% for char,brandGroup in brands %}
-                <section id="brand-section-{{ loop.index }}" class="pt-24">
+                <section id="brand-section-{{ loop.index }}" class="pt-24 first:pt-16 md:first:pt-24">
                     <!-- separator -->
                     <div class="flex items-center mb-10">
                         <span data-id="{{ loop.index }}"
                                   class="brand-char fix-align">{{ char }}</span>
                         <div class="bg-border-color h-px flex-1"></div>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-auto-fill-6 grid-flow-row  gap-5 md:gap-8">
+                    <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-4 md:gap-8">
                         {% for brand in brandGroup %}
-                            <div class="brand-item">
+                            <a href="{{ brand.url }}" class="brand-item">
                                 <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
-                                <a href="{{ brand.url }}"
-                                   class="overlay h-full w-full bg-dark opacity-0 absolute top-0 left-0 z-10"></a>
-                            </div>
+                            </a> 
                         {% endfor %}
                     </div>
                 </section>
             {% endfor %}
-        {% else %}
+            </div>
+          {% else %}
             <div class="no-content-placeholder">
                 <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">
                     <i class="sicon-award-ribbon text-6xl block text-reverse-dark"></i>
@@ -57,7 +59,7 @@
                 <h1 class="font-bold text-sm mb-1">{{ trans('pages.brands.non_brands') }}</h1>
                 <small>{{ trans('pages.brands.try_again') }}</small>
             </div>
-        {% endif %}
+          {% endif %}
     </div>
 {% endblock %}
 {% block scripts %}
