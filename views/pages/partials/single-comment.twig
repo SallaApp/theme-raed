@@ -6,7 +6,7 @@
             <i class="sicon-reply text-lg text-gray-400"></i>
         {% endif %}
         <div class="flex-none">
-            <img data-src="{{ comment.avatar }}" alt="{{ comment.name }}" src="{{ asset('images/s-empty.png') }}"
+            <img data-src="{{ comment.avatar|is_placeholder ? asset('images/avatar.png') : comment.avatar}}" alt="{{ comment.name }}" src="{{ asset('images/s-empty.png') }}"
                  class="w-10 h-10 bg-gray-100 rounded-full lazy-load">
         </div>
         <div class="flex-1">
