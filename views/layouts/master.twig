@@ -1,7 +1,6 @@
 {# ############## Shared Variables in all views ################
 | Variable                                           | Type     | Description                                                                                              |
 |----------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------|
-| is_home                                            | ?bool    |                                                                                                          |
 | store                                              | Store    |                                                                                                          |
 | store.id                                           | int      |                                                                                                          |
 | store.name                                         | string   |                                                                                                          |
@@ -48,8 +47,8 @@
 | theme.font.name                                    | string   | DINNextLTArabic-Regular, Amazon-Ember, Apple, Dubai, Estedad                                             |
 | theme.font.url                                     | string   | css full url ex: 'https://my_store.test/dist/fonts/default.css'                                          |
 | theme.settings                                     | object   | dynamic object with values of the `settings` in theme.json ex. `theme.settings.topnav_is_dark`           |
-| theme.set(settingName, value)                      | string   | set global var, ex {{ theme.set(my_var, 'something') }}, then get it {{theme.my_var }}                   |
-| theme.get(settingName, default=null)               | mixed    | get theme setting ex `theme.set(my_var, 'something')` then `theme.get('my_var', 'fallback')`             |
+| theme.settings.set(settingName, value)             | string   | set global var, then get it {{theme.settings.get('my_var','fallback') }}                                 |
+| theme.settings.get(settingName, default=null)      | mixed    | get theme setting ex `theme.settings.get('my_var', 'fallback')`                                          |
 | user                                               | User     | Current user/Guest                                                                                       |
 | user.first_name                                    | string   |                                                                                                          |
 | user.last_name                                     | string   |                                                                                                          |
@@ -87,7 +86,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    {{ theme.set('placeholder', 'images/placeholder.png') }}
+    {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
     {% hook 'head:start' %}
 
     <!-- theme color -->
@@ -109,8 +108,6 @@
     <link rel="stylesheet" href="{{ asset('dist/app.css') }}">
     <link rel="stylesheet" href="{{ theme.font.url }}"/>
 
-    {% block head %}{% endblock %}
-
     <style>
         :root {
             --font-main: '{{theme.font.name}}';
@@ -126,14 +123,13 @@
 
 <body id="app"
       class="{% hook 'body:classes' %} bg-gray-50 topnav-is-dark
-        {{ theme.topnav_bg ?          ' topnav-has-bg' : '' }}
-        {{ theme.topnav_bg_gradient ? ' topnav-has-gradient' : '' }}
-        {{ theme.topnav_text_color ?  ' topnav-has-text-color' : '' }}
-        {{ theme.topnav_is_dark ?     ' topnav-is-dark' : '' }}
-
-        {{ theme.mainnav_bg ?         ' mainnav-has-bg' : '' }}
-        {{ theme.mainnav_text_color ? ' mainnav-has-text-color' : '' }}
-        {{ theme.mainnav_is_dark ?    ' mainnav-is-dark': '' }}
+        {{ theme.settings.get('topnav_bg') ?          ' topnav-has-bg' : '' }}
+        {{ theme.settings.get('topnav_bg_gradient') ? ' topnav-has-gradient' : '' }}
+        {{ theme.settings.get('topnav_text_color') ?  ' topnav-has-text-color' : '' }}
+        {{ theme.settings.get('topnav_is_dark') ?     ' topnav-is-dark' : '' }}
+        {{ theme.settings.get('mainnav_bg') ?         ' mainnav-has-bg' : '' }}
+        {{ theme.settings.get('mainnav_text_color') ? ' mainnav-has-text-color' : '' }}
+        {{ theme.settings.get('mainnav_is_dark') ?    ' mainnav-is-dark': '' }}
 ">
 <noscript>
     To get full functionality of this site you need to enable JavaScript. Here is how
@@ -146,9 +142,9 @@
     {% block content %}{% endblock %}
     {% component 'footer.footer' %}
 </div>
-{% hook scripts %}
+{% hook 'body:end' %}
 <script defer src="{{ asset('dist/app.js') }}"></script>
-{% block scripts %}{% endblock %}
 <salla-offer></salla-offer>
+{% block scripts %}{% endblock %}
 </body>
 </html>
