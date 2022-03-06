@@ -32,12 +32,7 @@ class App extends salla.AppHelpers {
         this.initiateComments();
 
         this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading', 'pointer-events-none'));
-        this.onClick('#product-filter', event => {
-            let url = window.location.href.replace(/([?;&])by[^&;]*[;&]?/g, "$1").replace(/&$/, '');
-            url += (url.includes('?') ? "&" : "?") + (event.target.value ? "by=" + event.target.value : '');
-
-            window.location.href = url.replace(/&$|\?$/, '');
-        });
+        this.onClick('#product-filter', event => window.location.href = salla.helpers.addParamToUrl('by', event.target.value));
 
         // this.onClick('.grid-trigger', event => {
         //     event.preventDefault();
@@ -64,8 +59,8 @@ class App extends salla.AppHelpers {
         aux.select();
         document.execCommand("copy");
         document.body.removeChild(aux);
-        this.toggleElement(btn, 'copied', 'code-to-copy', ()=>true);
-        setTimeout(() => this.toggleElement(btn, 'code-to-copy', 'copied', ()=>true), 1000);
+        this.toggleElement(btn, 'copied', 'code-to-copy', () => true);
+        setTimeout(() => this.toggleElement(btn, 'code-to-copy', 'copied', () => true), 1000);
     }
 
     initiateNotifier() {
@@ -130,8 +125,8 @@ class App extends salla.AppHelpers {
         header.style.height = height + 'px';
 
         window.addEventListener('resize', () => {
-          let height = this.element('.mainnav-inner').clientHeight;
-          header.style.height = height + 'px';
+            let height = this.element('.mainnav-inner').clientHeight;
+            header.style.height = height + 'px';
         })
 
         window.addEventListener('scroll', () => {
@@ -292,7 +287,7 @@ class App extends salla.AppHelpers {
      */
     initAddToCart() {
         salla.cart.event.onUpdated(summary => {
-            document.querySelectorappll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total || salla.money(0));
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total || salla.money(0));
             document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.items_count || summary.count || 0);
         });
         salla.cart.event.onItemAdded((response, prodId) => {
