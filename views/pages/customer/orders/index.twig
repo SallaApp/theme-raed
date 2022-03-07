@@ -5,7 +5,6 @@
 | page.title        | string               |             |
 | page.slug         | string               |             |
 | orders[]          | Orders[] *Collection |             |
-| is_pending_orders | bool                 |             |
 | title             | string               |             |
 #}
 {% extends "layouts.master" %}
@@ -15,8 +14,15 @@
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
-                <h1 class="font-bold text-lg mb-5">{{ is_pending_orders ? trans('common.titles.pending_orders') : trans('common.titles.orders') }}</h1>
-                {% if orders.count %}
+                <h1 class="font-bold text-lg mb-5">{{ page.slug=='customer.orders.pending' ? trans('common.titles.pending_orders') : trans('common.titles.orders') }}</h1>
+                {% if not orders.count %}
+                    <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
+                        <i class="sicon-packed-box block text-5xl text-gray-300 mb-2"></i>
+                        <p class="text-base text-gray-500">
+                            <span>{{ trans('pages.orders.non_orders') }}</span>
+                        </p>
+                    </div>
+                {% else %}
                     <salla-infinite-scroll next-page="{{ orders.next_page }}" container=".list-container" item=".s-table__tr">
                         <table class="s-table min-w-full border-separate" style="border-spacing: 0 20px;">
                             <thead class="bg-gray-50 mb-5 hidden md:table-header-group">
@@ -69,13 +75,6 @@
                             </tbody>
                         </table>
                     </salla-infinite-scroll>
-                {% else %}
-                    <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
-                        <i class="sicon-packed-box block text-5xl text-gray-300 mb-2"></i>
-                        <p class="text-base text-gray-500">
-                            <span>{{ trans('pages.orders.non_orders') }}</span>
-                        </p>
-                    </div>
                 {% endif %}
             </div>
         </div>
