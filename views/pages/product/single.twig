@@ -53,7 +53,7 @@
 | product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
 | product.has_options                    | bool                        |                                                                        |
 | product.has_discount                   | bool                        |                                                                        |
-| product.hide_quantity                  | bool                        |                                                                        |
+| product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
 | product.is_available                   | bool                        |                                                                        |
 | product.is_donation                    | bool                        |                                                                        |
 | in_wishlist                            | bool                        |                                                                        |
@@ -257,7 +257,7 @@
                 </form>
                 <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
 
-                    {% if product.hide_quantity or not product.is_available %}
+                    {% if product.is_hidden_quantity %}
                         <input type="hidden" value="1" name="quantity"/>
                     {% else %}
                         <div class="center-between mb-5">
