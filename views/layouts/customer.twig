@@ -1,5 +1,6 @@
 {% extends "layouts.master" %}
 {% block content %}
+{#    TODO:: use global selector#}
     <div class="relative profile-header {{theme.is_rtl ? 'bg-gradient-to-l':'bg-gradient-to-r'}} from-primary to-primary-d lg:h-48 overflow-hidden">
         <div class="container relative flex justify-between h-full items-center">
             <div class="self-start">
@@ -33,7 +34,7 @@
             </nav>
             <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
                 <h1 class="font-bold text-lg mb-5">{{ page.title }}</h1>
-                {% block customer_content %}{% endblock %}
+                {% block inner_content %}{% endblock %}
             </div>
         </div>
     </div>

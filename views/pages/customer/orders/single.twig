@@ -53,7 +53,7 @@
 | order.has_feedback               | bool                              | minus number                                                                             |
 #}
 {% extends "layouts.customer" %}
-{% block customer_content %}
+{% block inner_content %}
     <div class="space-y-8">
         {# Order Details #}
         <table class="min-w-full">
@@ -388,7 +388,7 @@
             </div>
 
             {# Reorder Modal #}
-            {% if order.can_reorder and not order.is_pending_payment %}
+            {% if order.can_reorder%}
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}"
                              icon="sicon-rotate" id="reorder-modal" success
                              title="{{ trans('pages.orders.reorder') }}">
@@ -434,7 +434,7 @@
         {% endif %}
 
         {# Shipping Rating #}
-        {% if order.has_shipping and order.feedback.shipping.stars %}
+        {% if order.feedback.shipping.stars %}
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
                 <p class="mb-2">{{ order.feedback.shipping.content|raw }}</p>
