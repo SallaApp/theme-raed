@@ -25,6 +25,7 @@
 | cart.free_shipping_bar.remaining_to_free_shipping | money               | same as `cart.free_shipping_bar.remaining` but as money object |
 | cart.items                                        | CartItem[]          |                                                                |
 | cart.items[].id                                   | int                 |                                                                |
+| cart.items[].is_hidden_quantity                   | bool                |                                                                |
 | cart.items[].url                                  | string              | Product url                                                    |
 | cart.items[].quantity                             | int                 |                                                                |
 | cart.items[].type                                 | string              | product type                                                   |
@@ -94,7 +95,7 @@
                                 <div class="flex items-stretch h-10 border rounded-md text-sm transtion transition-color duration-300">
                                     {% if item.is_donation %}
                                         <span></span>
-                                    {% elseif item.hide_quantity or not item.is_available %}
+                                    {% elseif item.is_hidden_quantity %}
                                         <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
                                         <span class="w-10 py-2.5 text-center">{{ item.quantity }}</span>
                                     {% else %}
