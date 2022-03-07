@@ -88,9 +88,7 @@
                     </div>
                 {% endif %}
                 {% if articles|length %}
-                    <salla-infinite-scroll class="grid md:grid-cols-2 gap-8"
-                                           next-page="{{ articles.next_page }}"
-                                           autoload>
+                    <salla-infinite-scroll class="grid md:grid-cols-2 gap-8" next-page="{{ articles.next_page }}" next-page.autoload>
                         {% for article in articles %}
                             <div class='list-block post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
                                 <a href="{{ article.url }}"
