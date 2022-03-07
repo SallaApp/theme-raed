@@ -5,101 +5,93 @@
 | page.title                     | string   |                                                     |
 | page.slug                      | string   |                                                     |
 #}
-{% extends "layouts.master" %}
-
+{% extends "layouts.customer" %}
 {% block styles %}
     <link rel="stylesheet" href="{{ asset('dist/flatpickr.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/filepond.css') }}">
 {% endblock %}
-{% block content %}
-    {% include 'pages.partials.customer.breadcrumbs' %}
-
-    <div class="container mb-8 sm:mb-24">
-        <div class="flex flex-col lg:flex-row ">
-            {% include 'pages.partials.customer.sidebar' %}
-            <div class="main-content flex-1 pt-5 lg:pt-10" id="profile_info">
-                <div class="lg:hidden">
-                    <div class="text-center mb-6">
-                        <div class=" h-24 w-24 m-auto">
-                            <input type="file"
-                                   class="filepond profile-img file-pond--circular {{user.avatar ? 'has-image':'has-no-image'}}"
-                                   name="filepond"
-                                   data-instantUpload="true"
-                                   id="profile-img"
-                                   data-default="{{ user.avatar }}"
-                                   data-max-file-size="3MB"/>
-                        </div>
-                    </div>
-                </div>
-                <h1 class="font-bold text-lg mb-5 lg:mb-10">{{ trans('pages.profile.edit') }}</h1>
-                <form class="form form--user-profile ajax"
-                      method="POST"
-                      novalidate
-                      action="{{ link('profile') }}"
-                      data-filter-before-submit="appendAvtar">
-                    {{ csrf_field() }}
-                 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-                      <div class="profile-field-item">
-                          <label for="first-name" class="block text-sm font-bold mb-2 text-gray-700">
-                            {{ trans('pages.profile.first_name') }}
-                          </label> 
-                          <input type="text" name="first_name" value="{{ user.first_name }}" id="first-name" autocomplete="first_name" class="form-input">
-                      </div>
-
-                      <div class="profile-field-item">
-                          <label for="last-name" class="block text-sm font-bold mb-2 text-gray-700">
-                              {{ trans('pages.profile.last_name') }}
-                          </label> 
-                          <input type="text" name="last_name" value="{{ user.last_name }}" id="last-name"  autocomplete="last-name" class="form-input">
-                      </div>
-  
-                      <div class="profile-field-item">
-                          <label for="birthday" class="block text-sm font-bold mb-2 text-gray-700">
-                              {{ trans('pages.profile.birthday') }}
-                          </label>
-                          <input type="text" id="birthday" name="birthday" value="{{ user.birthday }}" class="form-input date-element"  placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
-                      </div>
-
-                      <div class="profile-field-item">
-                          <label for="gender" class="block text-sm font-bold mb-2 text-gray-700">
-                              {{ trans('pages.profile.gender') }}
-                          </label> 
-                          <select class="form-input appearance-none" name="gender">
-                              <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
-                              <option value="male" {{ user.gender=='male'?'selected':'' }}>
-                                  {{ trans('pages.profile.male') }}
-                              </option>
-                              <option value="female" {{ user.gender=='female'?'selected':'' }}>
-                                  {{ trans('pages.profile.female') }}
-                              </option>
-                          </select> 
-                      </div> 
-
-                      <div class="profile-field-item">
-                          <label for="email" class="block text-sm font-bold mb-2 text-gray-700">
-                              {{ trans('common.elements.email') }}
-                          </label> 
-                          <input type="email" name="email" value="{{ user.email }}" id="email" class="form-input">
-                      </div>
-
-                      <div class="profile-field-item">
-                          <label for="international-mobile" class="block text-sm font-bold mb-2 text-gray-700">
-                              {{ trans('common.elements.mobile') }}
-                          </label> 
-                          <salla-tel-input mobile="{{ user.mobile }}"></salla-tel-input>
-                      </div>
-                    </div>
-
-                    <button id="update-profile-btn" class="btn btn--primary btn--has-loading w-full mt-4 sm:mt-6">
-                        <span class="loader loader--small"></span>
-                        <span class="btn__text">{{ trans('common.elements.save') }}</span>
-                    </button>
-                </form>
-                <salla-verify></salla-verify>
+{% block customer_content %}
+    <div class="lg:hidden">
+        <div class="text-center mb-6">
+            <div class=" h-24 w-24 m-auto">
+                <input type="file"
+                       class="filepond profile-img file-pond--circular {{ user.avatar ? 'has-image':'has-no-image' }}"
+                       name="filepond"
+                       data-instantUpload="true"
+                       id="profile-img"
+                       data-default="{{ user.avatar }}"
+                       data-max-file-size="3MB"/>
             </div>
         </div>
     </div>
+    <form class="form form--user-profile ajax"
+          method="POST"
+          novalidate
+          action="{{ link('profile') }}"
+          data-filter-before-submit="appendAvtar">
+        {{ csrf_field() }}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+            <div class="profile-field-item">
+                <label for="first-name" class="block text-sm font-bold mb-2 text-gray-700">
+                    {{ trans('pages.profile.first_name') }}
+                </label>
+                <input type="text" name="first_name" value="{{ user.first_name }}" id="first-name"
+                       autocomplete="first_name" class="form-input">
+            </div>
+
+            <div class="profile-field-item">
+                <label for="last-name" class="block text-sm font-bold mb-2 text-gray-700">
+                    {{ trans('pages.profile.last_name') }}
+                </label>
+                <input type="text" name="last_name" value="{{ user.last_name }}" id="last-name" autocomplete="last-name"
+                       class="form-input">
+            </div>
+
+            <div class="profile-field-item">
+                <label for="birthday" class="block text-sm font-bold mb-2 text-gray-700">
+                    {{ trans('pages.profile.birthday') }}
+                </label>
+                <input type="text" id="birthday" name="birthday" value="{{ user.birthday }}"
+                       class="form-input date-element" placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
+            </div>
+
+            <div class="profile-field-item">
+                <label for="gender" class="block text-sm font-bold mb-2 text-gray-700">
+                    {{ trans('pages.profile.gender') }}
+                </label>
+                <select class="form-input appearance-none" name="gender">
+                    <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
+                    <option value="male" {{ user.gender=='male'?'selected':'' }}>
+                        {{ trans('pages.profile.male') }}
+                    </option>
+                    <option value="female" {{ user.gender=='female'?'selected':'' }}>
+                        {{ trans('pages.profile.female') }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="profile-field-item">
+                <label for="email" class="block text-sm font-bold mb-2 text-gray-700">
+                    {{ trans('common.elements.email') }}
+                </label>
+                <input type="email" name="email" value="{{ user.email }}" id="email" class="form-input">
+            </div>
+
+            <div class="profile-field-item">
+                <label for="international-mobile" class="block text-sm font-bold mb-2 text-gray-700">
+                    {{ trans('common.elements.mobile') }}
+                </label>
+                <salla-tel-input mobile="{{ user.mobile }}"></salla-tel-input>
+            </div>
+        </div>
+
+        <button id="update-profile-btn" class="btn btn--primary btn--has-loading w-full mt-4 sm:mt-6">
+            <span class="loader loader--small"></span>
+            <span class="btn__text">{{ trans('common.elements.save') }}</span>
+        </button>
+    </form>
+    <salla-verify></salla-verify>
 {% endblock %}
 
 {% block scripts %}

@@ -6,66 +6,56 @@
 | page.slug  | string               |             |
 | products[] | Product[] *Paginator |             |
 #}
-{% extends "layouts.master" %}
-{% block content %}
-    {% include 'pages.partials.customer.breadcrumbs' %}
-
-    <div class="container mb-8 sm:mb-24">
-        <div class="flex items-start flex-col lg:flex-row ">
-            {% include 'pages.partials.customer.sidebar' %}
-            <div class="main-content w-full flex-1 pt-10 ">
-                <h1 class="font-bold text-lg mb-5">{{ trans('common.titles.wishlist') }}</h1>
-                <div class="space-y-5 mb-10" id="wishlist">
-                    {% for product in products %}
-                        <div class='product-entry product-entry--wishlist' id="product_{{ product.id }}">
-                            <div class="flex items-center mb-4 sm:mb-0">
-                                <a href="{{ product.url }}"
-                                   class='product-entry__image'>
-                                    <img class="h-full w-full object-cover" src="{{ product.image.url }}"
-                                         alt="{{ product.image.alt }}"/>
-                                </a>
-                                <div class="flex-1 ps-5">
-                                    <h3 class="text-sm text-title-color leading-6 mb-1.5 pe-4 md:pe-8 line-clamp-1">
-                                        <a href="{{ product.url }}">{{ product.name }}</a>
-                                    </h3>
-                                    <div class="w-full center-between">
-                                        {% if product.on_sale %}
-                                            <div class="space-s-1">
-                                                <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                                <span class="text-sm text-gray-500 line-through">{{ product.regular_price|money }}</span>
-                                            </div>
-                                        {% else %}
-                                            <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
-                                        {% endif %}
-                                    </div>
+{% extends "layouts.customer" %}
+{% block customer_content %}
+    <div class="space-y-5 mb-10" id="wishlist">
+        {% for product in products %}
+            <div class='product-entry product-entry--wishlist' id="product_{{ product.id }}">
+                <div class="flex items-center mb-4 sm:mb-0">
+                    <a href="{{ product.url }}"
+                       class='product-entry__image'>
+                        <img class="h-full w-full object-cover" src="{{ product.image.url }}"
+                             alt="{{ product.image.alt }}"/>
+                    </a>
+                    <div class="flex-1 ps-5">
+                        <h3 class="text-sm text-title-color leading-6 mb-1.5 pe-4 md:pe-8 line-clamp-1">
+                            <a href="{{ product.url }}">{{ product.name }}</a>
+                        </h3>
+                        <div class="w-full center-between">
+                            {% if product.on_sale %}
+                                <div class="space-s-1">
+                                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                    <span class="text-sm text-gray-500 line-through">{{ product.regular_price|money }}</span>
                                 </div>
-                            </div>
-                            <div class="flex items-center space-s-4">
-                                <button data-on-click="cart::quick.add" data-id="{{ product.id }}"
-                                        class="btn btn--has-loading btn--outline-primary flex-grow-0 md:w-64">
-                                    <span class="loader loader--small"></span>
-                                    <span class="btn__text">{{ trans('pages.cart.add_to_cart') }}</span>
-                                </button>
-
-                                <button class="relative rounded-full bg-red-500 text-white w-6 h-6 btn-remove cursor-pointer"
-                                        data-id="{{ product.id }}" data-on-click="wishlist::remove">
-                                    <i class="sicon-cancel text-base"></i>
-                                    <span style="display: none" class="absolute spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full top-1/2 left-1/2 -mt-2 -ml-2"></span>
-                                </button>
-                            </div>
+                            {% else %}
+                                <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
+                            {% endif %}
                         </div>
-                    {% else %}
-                        <div class="no-content-placeholder">
-                                <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">
-                                    <i class="sicon-heart text-6xl block text-reverse-dark"></i>
-                                </span>
-                            <p class="text-sm mb-5">{{ trans('pages.profile.wishlist_placeholder') }}</p>
-                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-s-4">
+                    <button data-on-click="cart::quick.add" data-id="{{ product.id }}"
+                            class="btn btn--has-loading btn--outline-primary flex-grow-0 md:w-64">
+                        <span class="loader loader--small"></span>
+                        <span class="btn__text">{{ trans('pages.cart.add_to_cart') }}</span>
+                    </button>
 
-                    {% endfor %}
+                    <button class="relative rounded-full bg-red-500 text-white w-6 h-6 btn-remove cursor-pointer"
+                            data-id="{{ product.id }}" data-on-click="wishlist::remove">
+                        <i class="sicon-cancel text-base"></i>
+                        <span style="display: none"
+                              class="absolute spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full top-1/2 left-1/2 -mt-2 -ml-2"></span>
+                    </button>
                 </div>
             </div>
-        </div>
+        {% else %}
+            <div class="no-content-placeholder">
+                <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">
+                    <i class="sicon-heart text-6xl block text-reverse-dark"></i>
+                </span>
+                <p class="text-sm mb-5">{{ trans('pages.profile.wishlist_placeholder') }}</p>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
 {% block scripts %}

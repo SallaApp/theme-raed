@@ -1,0 +1,40 @@
+{% extends "layouts.master" %}
+{% block content %}
+    <div class="relative profile-header {{theme.is_rtl ? 'bg-gradient-to-l':'bg-gradient-to-r'}} from-primary to-primary-d lg:h-48 overflow-hidden">
+        <div class="container relative flex justify-between h-full items-center">
+            <div class="self-start">
+                <nav class="w-full py-5 lg:mt-2.5">
+                    {% component 'header.breadcrumbs' with{is_dark:true} %}
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-8 sm:mb-24">
+        <div class="flex items-start flex-col lg:flex-row ">
+            <nav aria-label="Sidebar"
+                 class="hidden lg:block flex-shrink-0 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar space-y-px">
+                <div class="text-center mb-9">
+                    <div class="text-center mb-9">
+                        <div class="h-20 w-20 m-auto avatar-wrap bg-color-gray rounded-full">
+                            {% if is_current_url('profile') %}
+                                <input type="file"
+                                       class="filepond profile-img file-pond--circular {{user.avatar ? 'has-image':'has-no-image'}}"
+                                       name="filepond"
+                                       id="profile-img"
+                                       data-default="{{ user.avatar }}"
+                                       data-max-file-size="3MB"/>
+                            {% else %}
+                                <img src="{{ user.avatar }}" class="rounded-full" alt="">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% component 'header.user-menu' with{is_profile_sidebar:true} %}
+            </nav>
+            <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
+                <h1 class="font-bold text-lg mb-5">{{ page.title }}</h1>
+                {% block customer_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
