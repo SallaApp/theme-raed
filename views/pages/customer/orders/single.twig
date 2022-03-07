@@ -59,393 +59,394 @@
         <div class="flex items-start flex-col lg:flex-row ">
             {% include 'pages.partials.customer.sidebar' %}
             <div class="main-content w-full flex-1 pt-10">
+                {# Order Title #}
                 <h1 class="font-bold text-lg mb-5">
                   {{ trans('pages.orders.details') }} 
                   <span class="unicode">(#{{ order.reference_id }})</span>
                 </h1>
-                <table class="min-w-full mb-10">
+
+                <div class="space-y-8">
+                  {# Order Details #}
+                  <table class="min-w-full">
                     <tbody>
+                      <tr class="bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
+                          <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                              <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
+                              <b>{{ order.created_at|date }}</b>
+                          </td>
+                          {% if order.shipping %}
+                              <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                                  <div class="me-2  font-normal text-gray-400">{{ trans('pages.orders.shipment_details') }}</div>
+                                  <div>
+                                      {% if order.shipping.logo %}
+                                          <div class="inline-block h-6 w-8">
+                                              <img class="inline-block w-full h-full object-contain"
+                                                  src="{{ order.shipping.logo }}">
+                                          </div>
+                                      {% endif %}
+                                      <b>{{ order.shipping.name }}</b>
+                                  </div>
+                              </td>
+                          {% endif %}
 
-                    <tr class="bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap">
-                        <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
-                            <b>{{ order.created_at|date }}</b>
-                        </td>
-                        {% if order.shipping %}
-                            <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                <div class="me-2  font-normal text-gray-400">{{ trans('pages.orders.shipment_details') }}</div>
-                                <div>
-                                    {% if order.shipping.logo %}
-                                        <div class="inline-block h-6 w-8">
-                                            <img class="inline-block w-full h-full object-contain"
-                                                 src="{{ order.shipping.logo }}">
-                                        </div>
-                                    {% endif %}
-                                    <b>{{ order.shipping.name }}</b>
-                                </div>
-                            </td>
-                        {% endif %}
+                          {% if order.shipping.number %}
+                              <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                                  <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.shipment_no') }}</div>
+                                  <b>{{ order.shipping.number|raw }}</b>
+                              </td>
+                          {% endif %}
 
-                        {% if order.shipping.number %}
-                            <td class="w-full md:w-auto  px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                                <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.shipment_no') }}</div>
-                                <b>{{ order.shipping.number|raw }}</b>
-                            </td>
-                        {% endif %}
-
-                        <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                            <span class="text-primary px-4 pt-1 pb-1.5 inline-flex items-center space-s-1 border rounded-2xl" style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
-                                <i class="mt-1 {{ order.status.icon }}"></i>
-                                <span class=""> {{ order.status.name }}</span>
-                            </span>
-                        </td>
-                    </tr>
+                          <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                              <span class="text-primary px-4 pt-1 pb-1.5 inline-flex items-center space-s-1 border rounded-2xl" style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
+                                  <i class="mt-1 {{ order.status.icon }}"></i>
+                                  <span class=""> {{ order.status.name }}</span>
+                              </span>
+                          </td>
+                      </tr>
                     </tbody>
-                </table>
-                {% if store.settings.rating_enabled and not order.has_feedback %}
-                    <salla-rating></salla-rating>
-                    <div class="relative flex justify-between profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md mb-10">
-                        <div>
-                            <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
-                            <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
-                        </div>
-                        <button data-on-click="rating::show" class="btn btn--outline-primary-dark btn--rounded-full !flex-grow-0 !px-12 lg:!px-20">{{ trans('pages.rating.rate') }}</button>
-                    </div>
-                {% endif %}
+                  </table>
 
-                <div class="overflow-hidden mb-10 last:mb-0">
-                    <section class="products-section">
-                        {% for item in order.items %}
-                            <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}"
-                                 class="order-item bg-white mb-5 p-5 rounded-md">
-                                <div class="mb-5">
-                                    {% if item.product %}
-                                        <div class="flex space-s-5 mb-4">
-                                            <a href="{{ item.product.url }}" class="flex-shrink-0">
-                                                <img src="{{ item.image ?: asset('images/placeholder.png') }}"
-                                                     alt="{{ item.name }}"
-                                                     class="w-18 h-14 object-cover rounded-md">
-                                            </a>
-                                            <div>
-                                                <a href="{{ item.product.url }}" class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
-                                                    {{ item.name }}
-                                                </a>
-                                                <b>{{ item.price|money }}</b>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="w-full  flex  justify-between text-sm py-2.5">
-                                            <span class="w-40 inline-block font-normal">{{ item.name }}</span>
-                                            <b>{{ item.price|money }}</b>
-                                        </div>
-                                    {% endif %}
+                  {# Order Rating Message & Modal #}
+                  {% if store.settings.rating_enabled and not order.has_feedback %}
+                      <salla-rating></salla-rating>
+                      <div class="relative center-between profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md">
+                          <div>
+                              <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
+                              <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
+                          </div>
+                          <button data-on-click="rating::show" class="btn btn--outline-primary-dark btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">{{ trans('pages.rating.rate') }}</button>
+                      </div>
+                  {% endif %}
 
-                                    <div class="w-full flex justify-between text-sm py-2.5">
-                                        <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
-                                        <b>{{ item.quantity }}</b>
-                                    </div>
-                                    <div class="flex justify-between text-sm py-2.5">
-                                        <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
-                                        <b>{{ item.price|money }}</b>
-                                    </div>
-                                    <div class="flex justify-between  text-sm py-2.5">
-                                        <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
-                                        <b>{{ item.total|money }}</b>
-                                    </div>
-                                </div>
-                                {% if item.options %}
-                                    <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
-                                    <div class="flow-root rounded-md px-4 border border-border-color">
-                                        <dl class="text-sm text-dark divide-y divide-border-color">
-                                            {% for option in item.options %}
-                                                <div class="py-3.5 center-between">
-                                                    <dt class="mb-2 md:mb-0">
-                                                        {{ option.name }}:
-                                                    </dt>
-                                                    <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
-                                                        {% if option.is_image %}
-                                                            <div class="flex space-s-2.5">
-                                                                <a href="{{ option.value }}" target="_blank">
-                                                                    <img class="h-7 w-7 object-cover rounded-md"
-                                                                         src="{{ option.value ?: asset('images/placeholder.png') }}"
-                                                                         alt="{{ option.name }}"/>
-                                                                </a>
-                                                            </div>
-                                                        {% else %}
-                                                            {{ option.value }}
-                                                        {% endif %}
-                                                    </dd>
-                                                </div>
-                                            {% endfor %}
-                                        </dl>
-                                    </div>
-                                {% endif %}
+                  {# Order Summary #}
+                  <div class="overflow-hidden">
+                      {% for item in order.items %}
+                          <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}"
+                                class="order-item bg-white mb-5 p-5 rounded-md">
+                              <div class="mb-5">
+                                  {% if item.product %}
+                                      <div class="flex space-s-5 mb-4">
+                                          <a href="{{ item.product.url }}" class="flex-shrink-0">
+                                              <img src="{{ item.image ?: asset('images/placeholder.png') }}" alt="{{ item.name }}"
+                                                    class="w-18 h-14 object-{{item.image ? 'cover':'contain'}} rounded-md">
+                                          </a>
+                                          <div>
+                                              <a href="{{ item.product.url }}" class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
+                                                  {{ item.name }}
+                                              </a>
+                                              <b>{{ item.price|money }}</b>
+                                          </div>
+                                      </div>
+                                  {% else %}
+                                      <div class="w-full  flex  justify-between text-sm py-2.5">
+                                          <span class="w-40 inline-block font-normal">{{ item.name }}</span>
+                                          <b>{{ item.price|money }}</b>
+                                      </div>
+                                  {% endif %}
 
-                                {% if item.sub_products %}
-                                    <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
-                                    <div class="flow-root rounded-md px-4 border border-border-color">
-                                        <dl class="text-sm text-dark divide-y divide-border-color">
-                                            {% for product in item.sub_products %}
-                                                <div class="py-3.5 md:flex items-center justify-between">
-                                                    <dt class="mb-2 md:mb-0">
-                                                        <a href="{{ product.url }}">
-                                                            {{ product.name }}
-                                                        </a>
-                                                    </dt>
-                                                </div>
-                                            {% endfor %}
-                                        </dl>
-                                    </div>
-                                {% endif %}
-                                {% if item.files %}
-                                    <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.files') }}</h2>
-                                    <div class="flow-root rounded-md px-4 border border-border-color">
-                                        <dl class="text-sm text-dark divide-y divide-border-color">
-                                            {% for file in item.files %}
-                                                <div class="py-3.5 center-between">
-                                                    <dt class="mb-2 md:mb-0">
-                                                        {{ file.name }}
-                                                    </dt>
-                                                    <dd class="font-medium text-xs">
-                                                        <a href="{{ file.url }}" target="_blank"
-                                                           class="font-bold text-gray-600 hover:text-black">
-                                                            <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
-                                                        </a>
-                                                    </dd>
-                                                </div>
-                                            {% endfor %}
-                                        </dl>
-                                    </div>
-                                {% elseif item.codes %}
-                                    <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.codes') }}</h2>
-                                    <div class="flow-root rounded-md px-4 border border-border-color">
-                                        <dl class="text-sm text-dark divide-y divide-border-color">
-                                            {% for code in item.codes %}
-                                                <div class="py-3.5 center-between">
-                                                    <dt class="mb-2 md:mb-0">{{ code }}</dt>
-                                                    <button class="btn--copy text-primary opacity-80 hover:opacity-100 transition-opacity flex items-center" id="order_code_{{ item.id }}_{{ loop.index }}" data-code="{{code}}">
-                                                        <i class="copy-icon sicon-swap-stroke"></i>
-                                                        <span class="text-sm ms-2">{{ trans('common.copy_code') }}</span>
-                                                    </button>
-                                                </div>
-                                            {% endfor %}
-                                        </dl>
-                                    </div>
-                                {% endif %}
-                                {% if item.note %}
-                                    <p class="mt-3 text-sm text-gray-500">
-                                        <span>{{ trans('common.note') }} : </span>{{ item.note }} </p>
-                                {% endif %}
-                                {% if item.attachments %}
-                                    <div class="flow-root rounded-md px-4 border border-border-color">
-                                        <dl class="text-sm text-dark divide-y divide-border-color">
-                                            {% for attachment in item.attachments %}
-                                                <div class="py-3.5 md:flex items-center justify-between">
-                                                    <dt class="mb-2 md:mb-0">
-                                                        {{ trans('pages.products.attachments') }}
-                                                    </dt>
-                                                    <dd class="font-medium {{ attachment.type == 'image' ? 'text-gray-900' : 'text-xs' }}">
-                                                        <a href="{{ attachment.url }}">
-                                                            {% if attachment.type == 'image' %}
-                                                                <div class="flex space-s-2.5">
-                                                                    <a href="{{ attachment.url }}" target="_blank">
-                                                                        <img class="h-7 w-7 object-cover rounded-md"
-                                                                             src="{{ attachment.url }}"
-                                                                             alt="{{ item.name }}"/>
-                                                                    </a>
-                                                                </div>
-                                                            {% else %}
-                                                                {{ trans('pages.orders.file_url') }}
-                                                            {% endif %}
-                                                        </a>
-                                                    </dd>
-                                                </div>
-                                            {% endfor %}
-                                        </dl>
-                                    </div>
-                                {% endif %}
+                                  <div class="w-full flex justify-between text-sm py-2.5">
+                                      <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
+                                      <b>{{ item.quantity }}</b>
+                                  </div>
+                                  <div class="flex justify-between text-sm py-2.5">
+                                      <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
+                                      <b>{{ item.price|money }}</b>
+                                  </div>
+                                  <div class="flex justify-between  text-sm py-2.5">
+                                      <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
+                                      <b>{{ item.total|money }}</b>
+                                  </div>
+                              </div>
+                              {% if item.options %}
+                                  <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
+                                  <div class="flow-root rounded-md px-4 border border-border-color">
+                                      <dl class="text-sm text-dark divide-y divide-border-color">
+                                          {% for option in item.options %}
+                                              <div class="py-3.5 center-between">
+                                                  <dt class="mb-2 md:mb-0">
+                                                      {{ option.name }}:
+                                                  </dt>
+                                                  <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
+                                                      {% if option.is_image %}
+                                                          <div class="flex space-s-2.5">
+                                                              <a href="{{ option.value }}" target="_blank">
+                                                                  <img class="h-7 w-7 object-cover rounded-md"
+                                                                        src="{{ option.value ?: asset('images/placeholder.png') }}"
+                                                                        alt="{{ option.name }}"/>
+                                                              </a>
+                                                          </div>
+                                                      {% else %}
+                                                          {{ option.value }}
+                                                      {% endif %}
+                                                  </dd>
+                                              </div>
+                                          {% endfor %}
+                                      </dl>
+                                  </div>
+                              {% endif %}
 
-                                {% if item.feedback %}
-                                    <section class="border-t mt-10 pt-8">
-                                        <p>{{ item.feedback.content|raw }}</p>
-                                        {% if item.feedback.is_pending %}
-                                            <span>{{ trans('pages.rating.pending') }}</span>
-                                        {% endif %}
-                                        <div>{% include 'pages.partials.customer.stars' with {stars:item.feedback.stars} %}</div>
-                                    </section>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </section> {# end products section #}
+                              {% if item.sub_products %}
+                                  <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
+                                  <div class="flow-root rounded-md px-4 border border-border-color">
+                                      <dl class="text-sm text-dark divide-y divide-border-color">
+                                          {% for product in item.sub_products %}
+                                              <div class="py-3.5 md:flex items-center justify-between">
+                                                  <dt class="mb-2 md:mb-0">
+                                                      <a href="{{ product.url }}">
+                                                          {{ product.name }}
+                                                      </a>
+                                                  </dt>
+                                              </div>
+                                          {% endfor %}
+                                      </dl>
+                                  </div>
+                              {% endif %}
+                              {% if item.files %}
+                                  <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.files') }}</h2>
+                                  <div class="flow-root rounded-md px-4 border border-border-color">
+                                      <dl class="text-sm text-dark divide-y divide-border-color">
+                                          {% for file in item.files %}
+                                              <div class="py-3.5 center-between">
+                                                  <dt class="mb-2 md:mb-0">
+                                                      {{ file.name }}
+                                                  </dt>
+                                                  <dd class="font-medium text-xs">
+                                                      <a href="{{ file.url }}" target="_blank"
+                                                          class="font-bold text-gray-600 hover:text-black">
+                                                          <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
+                                                      </a>
+                                                  </dd>
+                                              </div>
+                                          {% endfor %}
+                                      </dl>
+                                  </div>
+                              {% elseif item.codes %}
+                                  <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.codes') }}</h2>
+                                  <div class="flow-root rounded-md px-4 border border-border-color">
+                                      <dl class="text-sm text-dark divide-y divide-border-color">
+                                          {% for code in item.codes %}
+                                              <div class="py-3.5 center-between">
+                                                  <dt class="mb-2 md:mb-0">{{ code }}</dt>
+                                                  <button class="btn--copy text-primary opacity-80 hover:opacity-100 transition-opacity flex items-center" id="order_code_{{ item.id }}_{{ loop.index }}" data-code="{{code}}">
+                                                      <i class="copy-icon sicon-swap-stroke"></i>
+                                                      <span class="text-sm ms-2">{{ trans('common.copy_code') }}</span>
+                                                  </button>
+                                              </div>
+                                          {% endfor %}
+                                      </dl>
+                                  </div>
+                              {% endif %}
+                              {% if item.note %}
+                                  <p class="mt-3 text-sm text-gray-500">
+                                      <span>{{ trans('common.note') }} : </span>{{ item.note }} </p>
+                              {% endif %}
+                              {% if item.attachments %}
+                                  <div class="flow-root rounded-md px-4 border border-border-color">
+                                      <dl class="text-sm text-dark divide-y divide-border-color">
+                                          {% for attachment in item.attachments %}
+                                              <div class="py-3.5 md:flex items-center justify-between">
+                                                  <dt class="mb-2 md:mb-0">
+                                                      {{ trans('pages.products.attachments') }}
+                                                  </dt>
+                                                  <dd class="font-medium {{ attachment.type == 'image' ? 'text-gray-900' : 'text-xs' }}">
+                                                      <a href="{{ attachment.url }}">
+                                                          {% if attachment.type == 'image' %}
+                                                              <div class="flex space-s-2.5">
+                                                                  <a href="{{ attachment.url }}" target="_blank">
+                                                                      <img class="h-7 w-7 object-cover rounded-md"
+                                                                            src="{{ attachment.url }}"
+                                                                            alt="{{ item.name }}"/>
+                                                                  </a>
+                                                              </div>
+                                                          {% else %}
+                                                              {{ trans('pages.orders.file_url') }}
+                                                          {% endif %}
+                                                      </a>
+                                                  </dd>
+                                              </div>
+                                          {% endfor %}
+                                      </dl>
+                                  </div>
+                              {% endif %}
 
-                    <div class="bg-white rounded-md px-6">
-                        <h2 id="summary-heading" class="sr-only">Order summary</h2>
-                        <div class="flow-root">
-                            <dl class="text-sm text-gray-500 divide-y divide-border-color">
-                                <div class="py-5 center-between">
-                                    <dt class="text-gray-600">
-                                        {{ trans('pages.cart.items_total') }}
-                                    </dt>
-                                    <dd class="font-medium">
-                                        {{ order.sub_total|money }}
-                                    </dd>
-                                </div>
+                              {% if item.feedback %}
+                                  <section class="border-t mt-10 pt-8">
+                                      <p>{{ item.feedback.content|raw }}</p>
+                                      {% if item.feedback.is_pending %}
+                                          <span>{{ trans('pages.rating.pending') }}</span>
+                                      {% endif %}
+                                      <div>{% include 'pages.partials.customer.stars' with {stars:item.feedback.stars} %}</div>
+                                  </section>
+                              {% endif %}
+                          </div>
+                      {% endfor %}
 
-                                {% for discount in order.discounts %}
-                                    <div class="py-5 center-between">
-                                        <dt class="discount">
-                                            {{ discount.name }}
-                                        </dt>
-                                        <dd class="font-medium">
-                                            {{ discount.discount }}
-                                        </dd>
-                                    </div>
-                                {% endfor %}
-                                {# Cash On Delivery #}
-                                {% if order.cod_cost %}
-                                    <div class="py-5 center-between">
-                                        <dt class="">
-                                            {{ trans('pages.orders.cod_cost') }}
-                                        </dt>
-                                        <dd class="font-medium">
-                                            {{ order.cod_cost|money }}
-                                        </dd>
-                                    </div>
-                                {% endif %}
-                                {% if order.shipping_cost %}
-                                    <div class="py-5 center-between">
-                                        <dt class="shipping">
-                                            {{ trans('pages.orders.shipping_cost') }}
-                                        </dt>
-                                        <dd class="font-medium">
-                                            {{ order.shipping_cost|money }}
-                                        </dd>
-                                    </div>
-                                {% endif %}
-                                {% if order.tax %}
-                                    <div class="py-5 center-between">
-                                        <dt class="">
-                                            {{ trans('pages.cart.tax') }} ({{ order.tax.percent }}%)
-                                        </dt>
-                                        <dd class="font-medium text-gray-900">
-                                            {{ order.tax.amount|money }}
-                                        </dd>
-                                    </div>
-                                {% endif %}
-                                <div class="bg-border-color rounded-md py-5 -mx-6 px-6 center-between">
-                                    <dt class="text-base font-medium">
-                                        {{ trans('pages.orders.final_total') }}
-                                    </dt>
-                                    <dd class="text-base font-medium ">
-                                        <b>{{ order.total|money }}</b>
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div>
-                    </div>
+                      <div class="bg-white rounded-md px-6">
+                          <h2 id="summary-heading" class="sr-only">Order summary</h2>
+                          <div class="flow-root">
+                              <dl class="text-sm text-gray-500 divide-y divide-border-color">
+                                  <div class="py-5 center-between">
+                                      <dt class="text-gray-600">
+                                          {{ trans('pages.cart.items_total') }}
+                                      </dt>
+                                      <dd class="font-medium">
+                                          {{ order.sub_total|money }}
+                                      </dd>
+                                  </div>
+
+                                  {% for discount in order.discounts %}
+                                      <div class="py-5 center-between">
+                                          <dt class="discount">
+                                              {{ discount.name }}
+                                          </dt>
+                                          <dd class="font-medium">
+                                              {{ discount.discount }}
+                                          </dd>
+                                      </div>
+                                  {% endfor %}
+                                  {# Cash On Delivery #}
+                                  {% if order.cod_cost %}
+                                      <div class="py-5 center-between">
+                                          <dt class="">
+                                              {{ trans('pages.orders.cod_cost') }}
+                                          </dt>
+                                          <dd class="font-medium">
+                                              {{ order.cod_cost|money }}
+                                          </dd>
+                                      </div>
+                                  {% endif %}
+                                  {% if order.shipping_cost %}
+                                      <div class="py-5 center-between">
+                                          <dt class="shipping">
+                                              {{ trans('pages.orders.shipping_cost') }}
+                                          </dt>
+                                          <dd class="font-medium">
+                                              {{ order.shipping_cost|money }}
+                                          </dd>
+                                      </div>
+                                  {% endif %}
+                                  {% if order.tax %}
+                                      <div class="py-5 center-between">
+                                          <dt class="">
+                                              {{ trans('pages.cart.tax') }} ({{ order.tax.percent }}%)
+                                          </dt>
+                                          <dd class="font-medium text-gray-900">
+                                              {{ order.tax.amount|money }}
+                                          </dd>
+                                      </div>
+                                  {% endif %}
+                                  <div class="bg-border-color rounded-md py-5 -mx-6 px-6 center-between">
+                                      <dt class="text-base font-medium">
+                                          {{ trans('pages.orders.final_total') }}
+                                      </dt>
+                                      <dd class="text-base font-medium ">
+                                          <b>{{ order.total|money }}</b>
+                                      </dd>
+                                  </div>
+                              </dl>
+                          </div>
+                      </div>
+                  </div>
+
+                  {# Reorder & Cancel #}
+                  {% if order.can_reorder or order.can_cancel %}
+                      <div class="bg-white rounded-md p-5 divide-y divide-border-color space-y-4">
+                          {% if order.can_reorder %}
+                              <div class="center-between">
+                                  <div class="text-sm">
+                                      <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
+                                      <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
+                                  </div>
+                                  {% if order.is_pending_payment %}
+                                      <a href="{{ order.payment_url }}" class="text-primary font-bold text-sm center-between hover:text-primary-d transition">
+                                          <i class="sicon sicon-wallet me-2"></i>
+                                          <span>{{ trans('pages.orders.finish_payment') }}</span>
+                                      </a>
+                                  {% else %}
+                                      <button type="button" class="text-primary font-bold text-sm center-between hover:text-primary-d transition"
+                                              data-target="reorder-modal"
+                                              data-on-click="modal::open">
+                                          <i class="sicon sicon-rotate me-2"></i>
+                                          <span>{{ trans('pages.orders.reorder') }}</span>
+                                      </button>
+                                  {% endif %}
+                              </div>
+                          {% endif %}
+
+                          {% if order.can_cancel %}
+                              <div class="center-between pt-4">
+                                  <div class="text-sm">
+                                      <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
+                                      <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
+                                  </div>
+                                  <button type="button" class="text-red-400 font-bold text-sm center-between hover:text-red-500 transition"
+                                          data-target="modal-cancel"
+                                          data-on-click="modal::open">
+                                      <i class="sicon sicon-cancel-circle me-2"></i>
+                                      <span>{{ trans('pages.orders.cancel') }}</span>
+                                  </button>
+                              </div>
+                          {% endif %}
+                      </div>
+
+                      {# Reorder Modal #}
+                      {% if order.can_reorder and not order.is_pending_payment %}
+                          <salla-modal width="sm" sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}" icon="sicon-rotate" id="reorder-modal" success
+                                      title="{{ trans('pages.orders.reorder') }}">
+                              <div slot="footer" class="grid grid-cols-2 gap-3">
+                                  <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder"
+                                                class="cursor-pointer w-full">
+                                      {{ trans('common.elements.ok') }}
+                                  </salla-button>
+                                  <button class="w-full inline-flex justify-center btn btn--outline"
+                                          data-on-click="modal::close" data-target="reorder-modal" type="button">
+                                      {{ trans('common.elements.cancel') }}
+                                  </button>
+                              </div>
+                          </salla-modal>
+                      {% endif %}
+
+                      {# Cancel Modal #}
+                      {% if order.can_cancel %}
+                          <salla-modal width="sm" sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
+                                      icon="sicon-cancel" id="modal-cancel" error
+                                      title="{{ trans('common.elements.warning') }}">
+                              <div slot="footer" class="grid grid-cols-2 gap-3">
+                                  <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
+                                      {{ trans('common.elements.ok') }}
+                                  </salla-button>
+                                  <button class="w-full inline-flex justify-center btn btn--outline"
+                                          data-on-click="modal::close"
+                                          data-target="modal-cancel">
+                                      {{ trans('common.elements.cancel') }}
+                                  </button>
+                              </div>
+                          </salla-modal>
+                      {% endif %}
+                  {% endif %}
+
+                  {# Store Rating #}
+                  {% if order.feedback.store.stars %}
+                      <section class="bg-white p-5 rounded-md">
+                          <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
+                          <p class="mb-2">{{ order.feedback.store.content|raw }}</p>
+                          <div>
+                              {% include 'pages.partials.customer.stars' with {stars:order.feedback.store.stars} %}
+                          </div>
+                      </section>
+                  {% endif %}
+
+                  {# Shipping Rating #}
+                  {% if order.has_shipping and order.feedback.shipping.stars %}
+                      <section class="bg-white p-5 rounded-md">
+                          <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
+                          <p class="mb-2">{{ order.feedback.shipping.content|raw }}</p>
+                          <div>
+                              {% include 'pages.partials.customer.stars' with {stars:order.feedback.shipping.stars} %}
+                          </div>
+                      </section>
+                  {% endif %}
                 </div>
-                {# ==================== Start Cancel && reorder ==================== #}
-                {% if order.can_reorder or order.can_cancel %}
-                    <div class="bg-white my-10 p-5 divide-y divide-border-color space-y-5 rounded-md">
-                        {% if order.can_reorder %}
-                            <div class="flex justify-between">
-                                <div class="text-sm">
-                                    <h3 class="font-bold">{{ trans('pages.orders.reorder') }}</h3>
-                                    <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
-                                </div>
-                                {% if order.is_pending_payment %}
-                                    <a href="{{ order.payment_url }}"
-                                       class="text-sm font-bold text-primary flex items-center">
-                                        <i class="sicon sicon-wallet me-2"></i>
-                                        <span class="fix-align">{{ trans('pages.orders.finish_payment') }}</span>
-                                    </a>
-                                {% else %}
-                                    <button type="button" class="text-sm font-bold text-primary cursor-pointer"
-                                            data-target="reorder-modal"
-                                            data-on-click="modal::open">
-                                        <i class="sicon sicon-rotate me-2"></i>
-                                        <span class="fix-align">{{ trans('pages.orders.reorder') }}</span>
-                                    </button>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-
-                        {% if order.can_cancel %}
-                            <div class="flex justify-between pt-2">
-                                <div class="text-sm">
-                                    <h3 class="font-bold">{{ trans('pages.orders.cancel') }}</h3>
-                                    <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
-                                </div>
-                                <button type="button" class="text-sm font-bold text-theme-red cursor-pointer"
-                                        data-target="modal-cancel"
-                                        data-on-click="modal::open">
-                                    <i class="sicon sicon-cancel-circle me-2"></i>
-                                    <span class="fix-align">{{ trans('pages.orders.cancel') }}</span>
-                                </button>
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    {# Reorder Popup #}
-                    {% if order.can_reorder and not order.is_pending_payment %}
-                        <salla-modal sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}"
-                                     icon="sicon-rotate" id="reorder-modal" success
-                                     title="{{ trans('pages.orders.reorder') }}">
-                            <div slot="footer"
-                                 class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder"
-                                              class="cursor-pointer w-full">
-                                    {{ trans('common.elements.ok') }}
-                                </salla-button>
-                                <button class="w-full inline-flex justify-center btn btn--outline"
-                                        data-on-click="modal::close" data-target="reorder-modal" type="button">
-                                    {{ trans('common.elements.cancel') }}
-                                </button>
-                            </div>
-                        </salla-modal>
-                    {% endif %}
-                    {# End Reorder Popup #}
-
-                    {# Cancel order Popup #}
-                    {% if order.can_cancel %}
-                        <salla-modal sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
-                                     icon="sicon-cancel" id="modal-cancel" error
-                                     title="{{ trans('common.elements.warning') }}">
-                            <div slot="footer"
-                                 class="mt-5 sm:mt-8 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
-                                    {{ trans('common.elements.ok') }}
-                                </salla-button>
-                                <button class="w-full inline-flex justify-center btn btn--outline"
-                                        data-on-click="modal::close"
-                                        data-target="modal-cancel">
-                                    {{ trans('common.elements.cancel') }}
-                                </button>
-                            </div>
-                        </salla-modal>
-                    {% endif %}
-                    {# End Cancel order Popup #}
-                {% endif %}
-                {# ==================== End cancel && reorder ==================== #}
-
-                {% if order.feedback.store.stars %}
-                    <section class="bg-white my-10 p-5 rounded-md mb-5 last:mb-0">
-                        <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
-                        <p class="mb-2">{{ order.feedback.store.content|raw }}</p>
-                        <div>
-                            {% include 'pages.partials.customer.stars' with {stars:order.feedback.store.stars} %}
-                        </div>
-                    </section>
-                {% endif %}
-                {% if order.has_shipping and order.feedback.shipping.stars %}
-                    <section class="bg-white my-10 p-5 rounded-md mb-5 last:mb-0">
-                        <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
-                        <p class="mb-2">{{ order.feedback.shipping.content|raw }}</p>
-                        <div>
-                            {% include 'pages.partials.customer.stars' with {stars:order.feedback.shipping.stars} %}
-                        </div>
-                    </section>
-                {% endif %}
             </div>
         </div>
     </div>
