@@ -21,6 +21,4 @@ class Wishlist extends BasePage {
     }
 }
 
-Wishlist.className = 'Wishlist';
-Wishlist.allowedPages = ['customer.wishlist'];
-Wishlist.intiateWhenReady();
+Wishlist.intiateWhenReady('Wishlist',['customer.wishlist']);

@@ -17,6 +17,4 @@ class Brands extends BasePage {
     }
 }
 
-Brands.className = 'Brands';
-Brands.allowedPages = ['brands.index'];
-Brands.intiateWhenReady();
+Brands.intiateWhenReady('Brands',['brands.index']);

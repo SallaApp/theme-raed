@@ -44,6 +44,4 @@ class ThankYou extends BasePage {
     }
 }
 
-ThankYou.className = 'ThankYou';
-ThankYou.allowedPages = ['thank-you'];
-ThankYou.intiateWhenReady();
+ThankYou.intiateWhenReady('ThankYou',['thank-you']);

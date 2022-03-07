@@ -73,6 +73,4 @@ class Home extends BasePage {
     }
 }
 
-Home.className = 'Home';
-Home.allowedPages = ['index'];
-Home.intiateWhenReady();
+Home.intiateWhenReady('Home',['index']);
