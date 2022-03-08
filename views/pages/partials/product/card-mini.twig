@@ -1,4 +1,4 @@
-<div id="product_{{ product.id }}" class='product-entry product-entry--minimal {{ not product.is_available and not product.is_donation ? 'out-of-stock':'' }}'>
+<div id="product_{{ product.id }}" class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
     <a href="{{ product.url }}" class='product-entry__image'>
         <img class="h-full w-full object-{{product.image.url|is_placeholder ? 'contain':'cover'}} lazy-load" src="{{asset('images/s-empty.png')}}" data-src="{{product.image.url}}" alt="{{ product.image.alt }}" />
         <button  aria-label="Add or remove to wishlist" class="btn--wishlist animated"
