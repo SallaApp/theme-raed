@@ -12,46 +12,33 @@
 | notifications[].sub_title | string                    |             |
 | notifications[].date      | string                    |             |
 #}
-{% extends "layouts.master" %}
-{% block content %}
-    <main id="main">
-        {% include 'pages.partials.customer.breadcrumbs' %}
-        <div class="container mb-8 sm:mb-24">
-            <div class="flex items-start flex-col lg:flex-row ">
-                {% include 'pages.partials.customer.sidebar' %}
-                <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
-                    <h1 class="font-bold text-lg md:mb-5">{{ trans('common.titles.notifications') }}</h1>
-                      {% if notifications.count %}
-                          <salla-infinite-scroll class="space-y-2.5 md:space-y-5 mb-10" next-page="{{ notifications.next_page }}">
-                              {% for notification in notifications %}
-                                  <a href="{{ notification.url }}" class="notification-item {{ notification.is_new?'unread':'read text-gray-500'}}">
-                                      <span class="notification-item__icon">
-                                          <i class="{{ notification.is_new?'text-theme-red':'' }} sicon-bell-ring"></i>
-                                      </span>
-
-                                      <div class="flex-1 md:flex">
-                                          <div class="flex-1">
-                                              <h4>{{ notification.title }}</h4>
-                                              <p>{{ notification.sub_title }}</p>
-                                          </div>
-
-                                          <span class="inline-flex items-center text-sm">
-                                              <i class="sicon-time me-1.5 text-md"></i>
-                                              <span>{{ notification.date }}</span>
-                                          </span>
-                                      </div>
-                                  </a>
-                              {% endfor %}
-                          </salla-infinite-scroll>
-                      {% else %}
-                        <div class="no-content-placeholder">
-                            <i class="sicon-inbox icon"></i>
-                            <p>{{ trans('blocks.header.no_notifications') }}</p>
+{% extends "layouts.customer" %}
+{% block inner_content %}
+    {% if  notifications|length %}
+        <salla-infinite-scroll class="space-y-2.5 md:space-y-5 mb-10" next-page="{{ notifications.next_page }}">
+            {% for notification in notifications %}
+                <a href="{{ notification.url }}"
+                   class="notification-item {{ notification.is_new?'unread':'read text-gray-500' }}">
+                    <span class="notification-item__icon">
+                        <i class="{{ notification.is_new?'text-theme-red':'' }} sicon-bell-ring"></i>
+                    </span>
+                    <div class="flex-1 md:flex">
+                        <div class="flex-1">
+                            <h4>{{ notification.title }}</h4>
+                            <p>{{ notification.sub_title }}</p>
                         </div>
-                      {% endif %}
-                      
-                </div>
-            </div>
+                        <span class="inline-flex items-center text-sm">
+                            <i class="sicon-time me-1.5 text-md"></i>
+                            <span>{{ notification.date }}</span>
+                        </span>
+                    </div>
+                </a>
+            {% endfor %}
+        </salla-infinite-scroll>
+    {% else %}
+        <div class="no-content-placeholder">
+            <i class="sicon-inbox icon"></i>
+            <p>{{ trans('blocks.header.no_notifications') }}</p>
         </div>
-    </main>
+    {% endif %}
 {% endblock %}

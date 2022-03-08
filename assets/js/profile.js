@@ -47,6 +47,4 @@ class Profile extends BasePage {
     }
 }
 
-Profile.className = 'Profile';
-Profile.allowedPages = ['customer.profile'];
-Profile.intiateWhenReady();
+Profile.intiateWhenReady('Profile',['customer.profile']);

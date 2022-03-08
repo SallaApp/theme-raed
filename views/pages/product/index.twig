@@ -1,10 +1,10 @@
 {#
 | Variable                | Type        | Description    |
 |-------------------------|-------------|----------------|
-| products                | Product[]   |                |
 | page                    | object      |                |
 | page.title              | string      | *could be html |
 | page.slug               | string      | ex: "cat.show" |
+| products                | Product[]   |                |
 | category                | ?Category   |                |
 | category.name           | string      |                |
 | category.sub_categories | ?Category[] |                |
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 {% if products|length %}
-                    <salla-infinite-scroll next-page="{{ products.next_page }}" autoload
+                    <salla-infinite-scroll next-page="{{ products.next_page }}" next-page.autoload
                                            class="mb-8 products-container gird-view grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {% for product in products %}
                             {% include 'pages.partials.product.card' with{block_classes:'list-block'} %}
@@ -68,7 +68,7 @@
     </div>
 
     {% if store.settings.category.testimonial_enabled %}
-        {% component 'home.testimonials' with {type:'product',products:products} %}
+        {% component 'home.testimonials'%}
     {% endif %}
 {% endblock %}
 

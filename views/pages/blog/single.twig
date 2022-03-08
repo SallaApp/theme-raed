@@ -43,7 +43,7 @@
                          class="h-80 mb-10 w-full object-cover rounded-md"/>
                 {% endif %}
                 <article class="leading-7 text-sm mb-10">{{ article.body|raw }}</article>
-                {% if article.tags is not empty %}
+                {% if article.tags|length %}
                     <div class="p-4 flex flex-wrap items-center border-t border-border-color">
                         {% for tag in article.tags %}
                             <a href="{{ tag.url }}"
@@ -57,7 +57,7 @@
             </div>
 
             <aside aria-label="Sidebar" class="sticky flex-shrink-0 top-24 md:w-96 lg:ms-8 pb-11">
-                {% if related is not empty %}
+                {% if related|length %}
                     <h2 class="font-bold mb-3">{{ trans('pages.blog_articles.related') }}</h2>
 
                     {% for article in related %}

@@ -38,13 +38,13 @@ class Product extends BasePage {
 
     initSliders() {
         let mini = new Slider('.mini', {
-          slidesPerView: 4,
-          centeredSlides: true,
-          centeredSlidesBounds: true, 
-          freeMode: false, 
-          watchSlidesProgress: true,
-          watchSlidesVisibility: true,
-          watchOverflow: true,
+            slidesPerView        : 4,
+            centeredSlides       : true,
+            centeredSlidesBounds : true,
+            freeMode             : false,
+            watchSlidesProgress  : true,
+            watchSlidesVisibility: true,
+            watchOverflow        : true,
         });
         let main = new Slider('.details-slider', {
             slidesPerView : 1,
@@ -111,10 +111,7 @@ class Product extends BasePage {
         });
     }
 }
-
-Product.className = 'Product';
-Product.allowedPages = ['product.single'];
-Product.intiateWhenReady();
+Product.intiateWhenReady('Product', ['product.single']);
 
 
 class Products extends BasePage {
@@ -128,6 +125,10 @@ class Products extends BasePage {
         });
     }
 }
-Products.className = 'Products';
-Products.allowedPages = ['product.index'];
-Products.intiateWhenReady();
+
+Products.intiateWhenReady('Products', [
+    'product.index',
+    'product.index.latest',
+    'product.index.offers', 'product.index.search',
+    'product.index.tag',
+]);

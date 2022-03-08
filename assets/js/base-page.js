@@ -12,13 +12,10 @@ class BasePage {
     }
 }
 
-BasePage.allowedPages = [];//override it on the class;
-BasePage.className = 'BasePage';//override it on the class;
-
 /**
  * Because we merged multi classes into one file, there is no need to initiate all of them
  */
-BasePage.intiateWhenReady = function () {
+BasePage.intiateWhenReady = function (className, allowedPages) {
     document.addEventListener('DOMContentLoaded', () => {
         let tries = 0, inerval;
         //check if theme app is initiated each 0.1 sec for one sec otherwise don't load current page class
@@ -35,14 +32,14 @@ BasePage.intiateWhenReady = function () {
                 tries++;
             }, 100)
         )).then(() => {
-            if (!this.allowedPages.includes(salla.config.get('page.slug'))) {
-                app.log(this.className + ' Skiped.');
+            if (!allowedPages.includes(salla.config.get('page.slug'))) {
+                app.log(className + ' Skiped.');
                 return;
             }
             window.pageClass = new this;
             pageClass.onReady();
             pageClass.registerEvents();
-            app.log(`${this.className} Loaded🎉`);
+            app.log(`${className} Loaded🎉`);
         });
     });
 }

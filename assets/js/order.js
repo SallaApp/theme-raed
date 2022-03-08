@@ -22,6 +22,4 @@ class Order extends BasePage {
     }
 }
 
-Order.className = 'Order';
-Order.allowedPages = ['customer.orders.single'];
-Order.intiateWhenReady();
+Order.intiateWhenReady('Order',['customer.orders.single']);

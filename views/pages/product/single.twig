@@ -6,7 +6,6 @@
 | page.slug                              | string                      | ex: "cat.show"                                                         |
 | product                                | Product                     |                                                                        |
 | product.id                             | int                         |                                                                        |
-| product.product_id                     | int                         | Alias For id                                                           |
 | product.name                           | string                      |                                                                        |
 | product.description                    | string                      | HTML                                                                   |
 | product.url                            | string                      |                                                                        |
@@ -36,7 +35,6 @@
 | product.brand.url                      | string                      |                                                                        |
 | product.brand.name                     | string                      |                                                                        |
 | product.brand.logo                     | string                      |                                                                        |
-| product.comments                       | Feedback[] *Paginator       | @see views/components/page-comments.twig                               |
 | product.tags                           | ?Tags[] *Collection         |                                                                        |
 | product.tags[].name                    | string                      |                                                                        |
 | product.tags[].url                     | string                      |                                                                        |
@@ -54,10 +52,10 @@
 | product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
 | product.has_options                    | bool                        |                                                                        |
 | product.has_discount                   | bool                        |                                                                        |
-| product.hide_quantity                  | bool                        |                                                                        |
+| product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
 | product.is_available                   | bool                        |                                                                        |
 | product.is_donation                    | bool                        |                                                                        |
-| in_wishlist                            | bool                        |                                                                        |
+| product.in_wishlist                    | bool                        |                                                                        |
 #}
 {% extends "layouts.master" %}
 {% block styles %}
@@ -124,7 +122,7 @@
             </div>
 
             <div class="main-content w-full md:w-2/4 pb-8 md:pb-16">
-                {% component 'product.brand' with {product: product} %}
+                {% component 'product.brand'%}
 
                 <div class="center-between">
                     <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
@@ -212,7 +210,7 @@
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
 
-                    {% if in_wishlist %}
+                    {% if product.in_wishlist %}
                         <button id="btn-favorite" class="favorited btn--icon">
                             <i class="sicon-heart-off"></i>
                         </button>
@@ -223,7 +221,7 @@
                     {% endif %}
                 </div>
 
-                {% component 'product.quick-access' with {'entity': product} %}
+                {% component 'product.quick-access'%}
 
                 {% if product.tags|length %}
                     <div class="mb-4">
@@ -251,14 +249,11 @@
                       data-on-fail="itemFailedTobeAdded"
                 >
                     <input type="hidden" name="id" value="{{ product.id }}">
-
                     {% include 'pages.partials.product.options' %}
-
-                    {# {% component 'product.quick-buy' with {product: product} %} #}
                 </form>
                 <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
 
-                    {% if product.hide_quantity or not product.is_available %}
+                    {% if product.is_hidden_quantity %}
                         <input type="hidden" value="1" name="quantity"/>
                     {% else %}
                         <div class="center-between mb-5">
@@ -336,12 +331,11 @@
 
         {# {% component 'product.quick-buy' with {product: product} %} #}
         {# frontend TODO:: support this section #}
-        {% component 'product.offer' with {product:product} %}
+        {% component 'product.offer'%}
     </div>
 
-    {% component comments with {comments: comments} %}
+    {% component comments %}
     {% component 'product.similar-products' %}
-
 {% endblock %}
 
 {% block scripts %}
