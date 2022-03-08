@@ -13,6 +13,7 @@
 | order.cod_cost                   | ?Money                            | * Cash On Delivery (null when payment method not cod)                                    |
 | order.can_reorder                | bool                              |                                                                                          |
 | order.can_cancel                 | bool                              |                                                                                          |
+| order.can_rate                   | bool                              |                                                                                          |
 | order.cancel_url                 | string                            |                                                                                          |
 | order.shipping                   | ?object                           |                                                                                          |
 | order.shipping.id                | integer                           |                                                                                          |
@@ -97,7 +98,7 @@
         </table>
 
         {# Order Rating Message & Modal #}
-        {% if store.settings.rating_enabled and not order.has_feedback %}
+        {% if order.can_rate %}
             <salla-rating></salla-rating>
             <div class="relative center-between profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md">
                 <div>

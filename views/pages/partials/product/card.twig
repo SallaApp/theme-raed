@@ -10,7 +10,7 @@ view options:
   {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }} 
   {{ is_special ? 'product-entry--special':'' }} 
   {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
-  {{ not product.is_available and not product.is_donation ? 'out-of-stock':'' }}'>
+  {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
     
     {# Image #}
     <a href="{{ product.url }}" class='product-entry__image'>
