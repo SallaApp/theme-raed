@@ -38,7 +38,7 @@ class Cart extends BasePage {
      */
     updateCartPageInfo(cartData) {
         cartData.items?.forEach(item => this.updateItemInfo(item));
-        app.subTotal.innerText = cartData.sub_total || cartData.cart.sub_total;
+        app.subTotal.innerText = cartData.sub_total;
         app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => cartData.total_discount)
             .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => cartData.shipping_cost)
             .toggleElement(app.freeShipping, 'has_free', 'hidden', () => cartData.free_shipping_bar);
