@@ -8,7 +8,7 @@
 | pages[].url     | String  |             |
 #}
 {% if is_header %}
-    {% if pages.count %}
+    {% if pages|length %}
         <ul class="hidden lg:flex items-center pe-4 whitespace-nowrap">
             {% for key, page in pages|slice(0,3) %}
               <a href="{{ page.url }}" class="topnav-link-item right-side">{{ page.title }}</a>

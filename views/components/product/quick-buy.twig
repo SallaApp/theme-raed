@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="product-section mt-50 mb-0">
+            {# TODO:: avoid class fucntions#}
             <div class="quick-buy quick-buy--{{ quick_checkout.getClassName() }}" id="quick_order">
                 {% if oneClick %}
                 <form class="form ajax" id="one-click" action="{{ checkout_url }}" method="POST">
@@ -106,7 +107,7 @@
                                 <button type="submit"
                                         id="submit_btn"
                                         class="btn btn--wide btn--rounded btn--large bg-white btn--padded qo-submit">
-                                    
+
                                     <div class="line-scale">
                                         <div></div>
                                         <div></div>
@@ -279,7 +280,7 @@
         });
 
 
- 
+
         var submitBtn = document.querySelector('.btn.qo-submit'),
             email = document.querySelector('#quick_order #email'),
             full_name = document.querySelector('#quick_order #full_name'),
@@ -309,16 +310,16 @@
         window.beforeSubmit = function (form_data, that, event) {
           if (qoOrder.data('type') === 'gust') {
             var isValidList = [];
-            
+
             if(full_name){
               if(full_name.value !== '' && full_name.value.length > 3)
                 isValidList.push('name');
               else
                 full_name.parentElement.classList.add('error');
             }
-            
+
             if(email){
-              if((validateEmail(email.value) && email.className.match(/\brequired\b/)) || 
+              if((validateEmail(email.value) && email.className.match(/\brequired\b/)) ||
                 (!email.className.match(/\brequired\b/) && email.value =='') ||
                 (!email.className.match(/\brequired\b/) && email.value !=='' && validateEmail(email.value)))
                 isValidList.push('email');
@@ -349,11 +350,11 @@
 
         window.onSuccess = function (form_data, that, event) {
           submitBtn.classList.remove('btn--has-loading');
-        }; 
+        };
 
         window.onFail = function (form_data, that, event) {
           submitBtn.classList.remove('btn--has-loading');
-        }; 
+        };
 
         function validateEmail(email) {
           const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
