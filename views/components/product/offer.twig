@@ -69,9 +69,9 @@
             <div class="slide--offer-entry">
               <div class="p-3 flex-grow flex flex-col justify-center w-full">
                 <p class="mb-1">{{ discount.text|raw }}</p>
-                <div class="text-sm text-gray-400"><span class="font-extrabold text-red-400 text-3xl">{{ discount.price }}</span> ر.س</div>
+                <div class="text-sm text-gray-400"><span class="font-extrabold text-red-400 text-3xl">{{ discount.price }}</span> {{ user.currency.symbol }}</div>
               </div>
-              <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">بخصم يصل إلى (<span class="font-bold">{{discount.discount}}%</span>)</p>
+              <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">{{ trans('pages.products.with_a_discount')}} (<span class="font-bold">{{discount.discount}}%</span>)</p>
             </div>
           </div>
         {% endfor %}
