@@ -51,6 +51,8 @@
             <salla-infinite-scroll next-page="{{ comments.next_page }}">
                 <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
                 {% for comment in comments %}
+                    {# todo:: its seems this is used once in the eniter theme, so avoid the include and put the dom here #}
+                    {# todo:: its better for perfomance and better to keep everything related to comments in once plase #}
                     {% include 'pages.partials.single-comment' %}
                 {% endfor %}
             </salla-infinite-scroll>
