@@ -44,7 +44,7 @@
 | cart.items[].offer.is_free                        | bool                |                                                                |
 | cart.items[].offer.names                          | ?string             | ex: `Buy 3 and the 4th on us, National Day`                    |
 | cart.items[].offer.price_after_discount           | float               |                                                                |
-| cart.items[].donation                             | ?object             | TODO::                                                         |
+| cart.items[].donation                             | ?object             |                                                                |
 | cart.items[].attachments                          | ?array              |                                                                |
 | cart.items[].attachments[].id                     | int                 | image id, to be attache with the formData                      |
 | cart.items[].attachments[].url                    | string              | image url                                                      |
@@ -71,7 +71,6 @@
                             {# @see verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
                              data-filter-before-submit="verifyDataBeforeSend"
                              data-on-change="cart::update.item"
-                             data-id="{{ item.id }}"
                              id="item-{{ item.id }}"
                              salla-form-data>
                         {# todo:: why you have data-id in in the section tag with on-change & form and also you have it here? #}
@@ -122,7 +121,6 @@
                             </div>
                         </div>
 
-                        {# todo:: jamal why you have a from here wihtout anything? #}
                         <form>{% include 'pages.partials.product.options' with {product:item} %}</form>
 
                         {# todo:: use salla-button #}
