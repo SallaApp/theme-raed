@@ -22,7 +22,7 @@
                 <a href="{{ product.url }}">{{product.name}}</a>
             </h3>
         </div>
-      
+
         <div class="w-full center-between mb-5">
             {% if product.on_sale %}
                 <div class="space-s-1">
@@ -37,7 +37,7 @@
                 <div class="text-sm text-white">
                   <i class="sicon-star2 text-amber-400"></i>
                   <span>{{ product.rating|number }}</span>
-                </div> 
+                </div>
             {% endif %}
         </div>
         <div class="flex items-center">
@@ -53,6 +53,9 @@
                   {% endif %}
                 </span>
             </button>
+            {# todo:: salla.error should be handling in the `wishlist::add` event, so check if the user.type === user in js side #}
+            {# todo:: because you already have this value now in js level and keep it simple here just one on click #}
+            {# todo:: use salla-button #}
             <button aria-label="Add or remove to wishlist" class="btn--wishlist animated"
                 {% if user.type=='user' %}
                     data-on-click="wishlist::add" data-id="{{ product.id }}"

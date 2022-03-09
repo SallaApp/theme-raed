@@ -5,13 +5,13 @@ view options:
 
 *Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
 #}
-<div id="product_{{ product.id }}" class='product-entry 
-  {{ block_classes ?: '' }} 
-  {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }} 
-  {{ is_special ? 'product-entry--special':'' }} 
+<div id="product_{{ product.id }}" class='product-entry
+  {{ block_classes ?: '' }}
+  {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
+  {{ is_special ? 'product-entry--special':'' }}
   {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
   {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
-    
+
     {# Image #}
     <a href="{{ product.url }}" class='product-entry__image'>
         <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
@@ -59,11 +59,11 @@ view options:
             {% else %}
                 <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
             {% endif %}
-            {% if product.rating %} 
+            {% if product.rating %}
               <div class="text-sm text-gray-400">
                   <i class="sicon-star2 text-amber-400"></i>
                   <span>{{ product.rating|number }}</span>
-              </div> 
+              </div>
             {% endif %}
         </div>
         <div class="flex items-center mt-auto">
@@ -88,6 +88,9 @@ view options:
                 </span>
             </button>
             <div class="text-gray-400">
+                {# todo:: salla.error should be handling in the `wishlist::add` event, so check if the user.type === user in js side #}
+                {# todo:: because you already have this value now in js level and keep it simple here just one on click #}
+                {# todo:: use salla-button #}
                 <button aria-label="Add or remove to wishlist" class="btn--wishlist animated"
                     {% if user.type=='user' %}
                         data-on-click="wishlist::add" data-id="{{ product.id }}"
