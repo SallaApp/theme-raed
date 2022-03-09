@@ -24,6 +24,7 @@
                 <li><a href="{{ link('/') }}"
                        class="fix-align text-primary text-reverse">{{ trans('common.titles.home') }}</a></li>
                 <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+                {# todo :: what thank you mean here? its title? or conenet? or statement? use better name #}
                 <li><span class="fix-align">{{ thank_you }}</span></li>
             </ol>
         </nav>
@@ -36,6 +37,7 @@
                     {{ trans('pages.thank_you.order_id') }} <b
                             class="text-text-dark unicode">#{{ order.reference_id }}</b>
                 </p>
+                {# todo:: use salla-button #}
                 <button class="btn btn--oval btn--padded less btn--primary mt-20" data-id="{{ order.id }}"
                         data-on-click="order::show">
                     <i class="sicon-newspaper me-1"></i>
@@ -55,6 +57,7 @@
                                     <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
                                     <span>{{ code }}</span>
                                 </p>
+                                {# todo:: use salla-button #}
                                 <button class="btn--copy text-primary opacity-80 hover:opacity-100 transition-opacity flex items-center"
                                         id="product_code_{{ item.id }}_{{ loop.index }}" data-code="{{ code }}">
                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
@@ -109,6 +112,7 @@
                         {{ csrf_field() }}
                         <div class="flex max-w-3xl w-full">
                             <input type="email" class="form-input" placeholder="your@email.com" required name="email">
+                            {# todo:: use salla-button #}
                             <button type="submit" id="resend-invoice-submit"
                                     class="btn btn--has-loading btn--primary inline-flex items-center justify-center px-3 whitespace-nowrap ms-2">
                                 <span class="loader loader--small overflow-hidden"></span>
