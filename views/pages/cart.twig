@@ -71,6 +71,7 @@
                             {# @see verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
                              data-filter-before-submit="verifyDataBeforeSend"
                              data-on-change="cart::update.item"
+                             data-id="{{ item.id }}"
                              id="item-{{ item.id }}"
                              salla-form-data>
                         {# todo:: why you have data-id in in the section tag with on-change & form and also you have it here? #}
@@ -133,7 +134,7 @@
 
                 {% else %}
                     <div class="no-content-placeholder">
-                        <i class="sicon-shopping-bag icon icon--rounded"></i>
+                        <i class="sicon-shopping-bag icon"></i>
                         <p>{{ trans('pages.cart.empty_cart') }}</p>
                         <a href="{{ link('/') }}" class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back_home') }}</a>
                     </div>

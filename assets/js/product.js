@@ -23,7 +23,12 @@ class Product extends BasePage {
         let qunatityChanged = () => salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
         app.onClick('#btn-increase', () => app.quantityInput.value++ && qunatityChanged());
         app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && qunatityChanged()));
-        app.onClick('#btn-show-more', e => app.all('#more-content', div => div.style = `max-height:${div.scrollHeight}px`) || e.target.remove());
+        
+        app.onClick('#btn-show-more', e => app.all('#more-content', div => {
+          e.target.classList.add('is-expanded');
+          div.style = `max-height:${div.scrollHeight}px`;
+        }) || e.target.remove());
+
         salla.product.event.onPriceUpdated(res => {
             app.totalPrice.innerText = res.data.after;
             app.anime('#total-price', {scale: [0.88, 1]});
