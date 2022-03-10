@@ -1,15 +1,11 @@
-<div id="product_{{ product.id }}" class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
+<div id="product_{{ product.id }}"
+     class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
     <a href="{{ product.url }}" class='product-entry__image'>
-        <img class="h-full w-full object-{{product.image.url|is_placeholder ? 'contain':'cover'}} lazy-load" src="{{asset('images/s-empty.png')}}" data-src="{{product.image.url}}" alt="{{ product.image.alt }}" />
-        {# todo:: salla.error should be handling in the `wishlist::add` event, so check if the user.type === user in js side #}
-        {# todo:: because you already have this value now in js level and keep it simple here just one on click #}
+        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain':'cover' }} lazy-load"
+             src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
         {# todo:: use salla-button #}
-        <button  aria-label="Add or remove to wishlist" class="btn--wishlist animated"
-            {% if user.type=='user' %}
-                data-on-click="wishlist::add" data-id="{{ product.id }}"
-            {% else %}
-                onClick="salla.error('{{ trans('common.messages.must_login') }}')"
-            {% endif %}>
+        <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" data-on-click="wishlist::add"
+                data-id="{{ product.id }}">
             <i class="sicon-heart"></i>
             <span class="loader loader--small"></span>
         </button>
@@ -29,8 +25,8 @@
             {% endif %}
             {% if product.rating %}
                 <div class="text-sm text-gray-400">
-                  <i class="sicon-star2 text-amber-400"></i>
-                  <span>{{ product.rating|number }}</span>
+                    <i class="sicon-star2 text-amber-400"></i>
+                    <span>{{ product.rating|number }}</span>
                 </div>
             {% endif %}
         </div>

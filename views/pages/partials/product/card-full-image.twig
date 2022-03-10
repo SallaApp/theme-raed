@@ -1,25 +1,28 @@
-<div id="product_{{ product.id }}" class="product-entry product-entry--full-image {{ product.is_out_of_stock ? 'out-of-stock':'' }}">
+<div id="product_{{ product.id }}"
+     class="product-entry product-entry--full-image {{ product.is_out_of_stock ? 'out-of-stock':'' }}">
     <a href="{{ product.url }}" class='relative overflow-hidden rounded-md hover:opacity-90 w-full h-full'>
-        <img class="h-full w-full object-{{product.image.url|is_placeholder ? 'contain':'cover'}} lazy-load" src="{{asset('images/s-empty.png')}}" data-src="{{product.image.url}}" alt="{{ product.image.alt }}" />
+        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain':'cover' }} lazy-load"
+             src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
     </a>
 
-     <!-- badage -->
+    <!-- badage -->
     {% if product.promotion_title %}
-    <div class="absolute z-10 top-4 start-0">
-        <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
-     </div>
+        <div class="absolute z-10 top-4 start-0">
+            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
+        </div>
     {% endif %}
 
 
     <!-- content -->
     <!-- overlay -->
-    <a href="{{ product.url }}" class="overlay transition-opacity duration-700 opacity-50 hover:opacity-40 absolute top-0 bottom-0 left-0 right-0 bg-black"></a>
+    <a href="{{ product.url }}"
+       class="overlay transition-opacity duration-700 opacity-50 hover:opacity-40 absolute top-0 bottom-0 left-0 right-0 bg-black"></a>
 
     <div class="absolute z-10 bottom-0 px-10  w-full pt-5 pb-7 ">
         <div class="flex  justify-between items-baseline">
             <!-- title -->
             <h3 class="product-entry__title  text-sm font-bold text-white leading-6 mb-2.5">
-                <a href="{{ product.url }}">{{product.name}}</a>
+                <a href="{{ product.url }}">{{ product.name }}</a>
             </h3>
         </div>
 
@@ -35,14 +38,15 @@
 
             {% if product.rating %}
                 <div class="text-sm text-white">
-                  <i class="sicon-star2 text-amber-400"></i>
-                  <span>{{ product.rating|number }}</span>
+                    <i class="sicon-star2 text-amber-400"></i>
+                    <span>{{ product.rating|number }}</span>
                 </div>
             {% endif %}
         </div>
         <div class="flex items-center">
             <button data-on-click="cart::quick.add" data-id="{{ product.id }}"
-                    {% if not product.is_available %} disabled {% endif %} class="btn btn--has-loading btn--outline-primary">
+                    {% if not product.is_available %} disabled {% endif %}
+                    class="btn btn--has-loading btn--outline-primary">
                 <span class="btn__text">
                   {% if product.is_available %}
                       {{ trans('pages.cart.add_to_cart') }}
@@ -53,15 +57,9 @@
                   {% endif %}
                 </span>
             </button>
-            {# todo:: salla.error should be handling in the `wishlist::add` event, so check if the user.type === user in js side #}
-            {# todo:: because you already have this value now in js level and keep it simple here just one on click #}
             {# todo:: use salla-button #}
-            <button aria-label="Add or remove to wishlist" class="btn--wishlist animated"
-                {% if user.type=='user' %}
-                    data-on-click="wishlist::add" data-id="{{ product.id }}"
-                {% else %}
-                    onClick="salla.error('{{ trans('common.messages.must_login') }}')"
-                {% endif %}>
+            <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" data-on-click="wishlist::add"
+                    data-id="{{ product.id }}">
                 <i class="sicon-heart"></i>
                 <span class="loader loader--small"></span>
             </button>
