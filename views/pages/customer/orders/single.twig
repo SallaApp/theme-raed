@@ -390,9 +390,7 @@
 
             {# Reorder Modal #}
             {% if order.can_reorder%}
-                <salla-modal width="sm" sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}"
-                             icon="sicon-rotate" id="reorder-modal" success
-                             title="{{ trans('pages.orders.reorder') }}">
+                <salla-modal width="sm" sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}" icon="sicon-rotate" id="reorder-modal" icon-style="success" title="{{ trans('pages.orders.reorder') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
                         <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder"
                                       class="cursor-pointer w-full">
@@ -409,7 +407,7 @@
             {# Cancel Modal #}
             {% if order.can_cancel %}
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
-                             icon="sicon-cancel" id="modal-cancel" error
+                             icon="sicon-cancel" id="modal-cancel" icon-style="error"
                              title="{{ trans('common.elements.warning') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
                         <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
