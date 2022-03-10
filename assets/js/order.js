@@ -22,4 +22,8 @@ class Order extends BasePage {
     }
 }
 
-Order.intiateWhenReady('Order',['customer.orders.single']);
+Order.intiateWhenReady('Order',[
+    'customer.orders.single',
+    'customer.orders.index',
+    'customer.orders.index.pending',
+]);

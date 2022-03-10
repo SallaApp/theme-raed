@@ -47,4 +47,7 @@ class Profile extends BasePage {
     }
 }
 
-Profile.intiateWhenReady('Profile',['customer.profile']);
+Profile.intiateWhenReady('Profile',[
+    'customer.profile',
+    'customer.wishlist',
+]);

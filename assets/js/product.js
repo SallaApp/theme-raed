@@ -129,6 +129,7 @@ class Products extends BasePage {
 Products.intiateWhenReady('Products', [
     'product.index',
     'product.index.latest',
-    'product.index.offers', 'product.index.search',
+    'product.index.offers', 
+    'product.index.search',
     'product.index.tag',
 ]);
