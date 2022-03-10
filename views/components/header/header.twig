@@ -60,6 +60,7 @@
                         {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
+                            {#  todo :: use salla-button #}
                             <button class="btn--icon"
                                     data-on-click="login::show"
                                     type="button">
@@ -82,11 +83,7 @@
             </div>
         </div>
         {% if user.type=='guest' %}
-            <salla-login
-                    {{ store.settings.auth.email_allowed ? 'is-email-allowed' : '' }}
-                    {{ store.settings.auth.mobile_allowed ? 'is-mobile-allowed' : '' }}
-                    {{ store.settings.auth.is_email_required ? 'is-email-required' : '' }}
-            ></salla-login>
+            <salla-login></salla-login>
         {% endif %}
     </div>
 </header>

@@ -1699,6 +1699,7 @@ video {
 	position: relative;
 	display: flex;
 	user-select: none;
+	flex-direction: row-reverse;
 	align-items: center;
 	justify-content: center;
 	white-space: nowrap;
@@ -1771,7 +1772,7 @@ video {
 	border-right-color: rgba(244, 244, 245, var(--tw-border-opacity));
 	content: '';
 }.s-button-loader-after{
-	flex-direction: row-reverse;
+	flex-direction: row;
 }.s-button-loader-start{
 	position: absolute;
 	right: 0.5rem;
@@ -2208,21 +2209,23 @@ video {
 	--tw-bg-opacity: 1;
 	background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
 }.s-modal-bg-success{
+	--tw-border-opacity: 1;
+	border-color: rgba(134, 239, 172, var(--tw-border-opacity));
 	--tw-bg-opacity: 1;
 	background-color: rgba(220, 252, 231, var(--tw-bg-opacity));
-}.s-modal-bg-error{
-	--tw-bg-opacity: 1;
-	background-color: rgba(254, 226, 226, var(--tw-bg-opacity));
-}.s-modal-bg-primary{
-	background-color: var(--color-main);
-	--tw-text-opacity: 1;
-	color: rgba(255, 255, 255, var(--tw-text-opacity));
-}.s-modal-text-success{
 	--tw-text-opacity: 1;
 	color: rgba(22, 163, 74, var(--tw-text-opacity));
-}.s-modal-text-error{
+}.s-modal-bg-error{
+	--tw-border-opacity: 1;
+	border-color: rgba(252, 165, 165, var(--tw-border-opacity));
+	--tw-bg-opacity: 1;
+	background-color: rgba(254, 226, 226, var(--tw-bg-opacity));
 	--tw-text-opacity: 1;
 	color: rgba(220, 38, 38, var(--tw-text-opacity));
+}.s-modal-bg-primary{
+	border-color: var(--color-main);
+	background-color: var(--color-main);
+	color: var(--color-main-reverse);
 }.s-modal-title{
 	font-size: 1.125rem;
 	line-height: 1.75rem;
@@ -2425,10 +2428,6 @@ video {
 	line-height: 1.5rem;
 	line-height: 1.5rem;
 	color: var(--color-title);
-	overflow: hidden;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
 }.s-offer-product-name:hover{
 	color: var(--color-main);
 }.s-offer-product-price{
@@ -3084,6 +3083,7 @@ video {
 		line-height: 1.25rem;
 	}
 }.s-tel-input-error-msg{
+	margin-bottom: 0.625rem;
 	display: block;
 	height: 1rem;
 	padding-top: 0.25rem;

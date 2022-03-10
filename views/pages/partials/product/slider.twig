@@ -3,6 +3,7 @@
     {# Block Title #}
     <div>
       <h2 class="s-block__title">{{ title }}</h2>
+        {# todo:: choise better name like sub_title #}
       {% if subTitle %} <p class="pe-16 mt-2">{{ subTitle|raw }}</p> {% endif %}
     </div>
 
@@ -24,12 +25,12 @@
 
   {# Swiper #}
   <div class="swiper default-slider slider-layout" data-id="{{type}}-slider">
-    <div class="swiper-wrapper flex items-stretch"> 
+    <div class="swiper-wrapper flex items-stretch">
       {% for product in products %}
         <div class="swiper-slide slide--one-fourth">
             {% include 'pages.partials.product.card' %}
         </div>
-      {% endfor %} 
+      {% endfor %}
     </div>
   </div>
 {% endif %}

@@ -44,7 +44,7 @@
 | cart.items[].offer.is_free                        | bool                |                                                                |
 | cart.items[].offer.names                          | ?string             | ex: `Buy 3 and the 4th on us, National Day`                    |
 | cart.items[].offer.price_after_discount           | float               |                                                                |
-| cart.items[].donation                             | ?object             | TODO::                                                         |
+| cart.items[].donation                             | ?object             |                                                                |
 | cart.items[].attachments                          | ?array              |                                                                |
 | cart.items[].attachments[].id                     | int                 | image id, to be attache with the formData                      |
 | cart.items[].attachments[].url                    | string              | image url                                                      |
@@ -55,7 +55,7 @@
 {% extends "layouts.master" %}
 {% block styles %}
     <link rel="stylesheet" href="{{ asset('dist/flatpickr.css') }}">
-    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/filepond.css') }}">
 {% endblock %}
 {% block content %}
     <div class="container px-3 xs:px-5">
@@ -65,14 +65,15 @@
         <div class="flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
             <div class="main-content flex-1 w-full">
                 {% for item in cart.items %}
+                    {# todo:: jamal lets talk about it in zoom #}
                     {% set key_prefix=item.id %}
                     <section class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
-                            {# verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
+                            {# @see verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
                              data-filter-before-submit="verifyDataBeforeSend"
                              data-on-change="cart::update.item"
-                             data-id="{{ item.id }}"
                              id="item-{{ item.id }}"
                              salla-form-data>
+                        {# todo:: why you have data-id in in the section tag with on-change & form and also you have it here? #}
                         <input type="hidden" name="id" value="{{ item.id }}">
                         <!-- product -->
                         <div class="md:flex md:space-s-12 items-center justify-between mb-8">
@@ -121,6 +122,8 @@
                         </div>
 
                         <form>{% include 'pages.partials.product.options' with {product:item} %}</form>
+
+                        {# todo:: use salla-button #}
                         <button class="btn--has-loading btn--delete bg-red-400 hover:bg-red-500 transition-colors rounded-full text-white w-6 h-6 text-sm flex items-center justify-center absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
                             <i class="sicon-cancel icon"></i>
                             <span style="display: none"
@@ -142,7 +145,7 @@
                     <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative {{ cart.free_shipping_bar?'':'hidden' }}"
                          id="free-shipping">
                         <div class="flex space-s-3 items-center">
-                            <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{theme.is_rtl ? 'flip-x':''}}"></i> 
+                            <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{theme.is_rtl ? 'flip-x':''}}"></i>
                             {% set is_free=cart.free_shipping_bar.percent==100 %}
                             <div class="flex-1">
                                 <h4 class="shipping-item font-bold text-sm mb-1.5">{{ trans('pages.cart.free_shipping') }}</h4>
@@ -184,6 +187,8 @@
                                        class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
                                 <div class="mt-2.5 relative">
                                     <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}" class="pe-24 form-input" value="{{ cart.coupon }}" id="coupon" name="coupon" type="text">
+
+                                    {# todo:: use salla-button #}
                                     <button class="btn btn--primary btn--coupon {{ cart.coupon?'btn--danger':'btn-default' }}" id="btn-add-coupon" type="button">
                                         <span class="{{ cart.coupon?'hidden':'' }}">{{ trans('pages.cart.save_coupon') }}</span>
                                         <i class="sicon-cancel text-xl w-8 {{ cart.coupon?'':'hidden' }}"></i>
@@ -203,6 +208,7 @@
                             <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
                             <b data-cart-total>{{ cart.total|money }}</b>
                         </div>
+
                         {% if store.settings.tax.taxable_prices_enabled %}
                             <div class="flex justify-between text-sm mb-5">
                                 <small class="text-gray-400">
@@ -210,11 +216,14 @@
                                 </small>
                             </div>
                         {% endif %}
+
+                        {# todo:: use salla-button #}
                         <button class="w-full btn btn--primary" id="btn-submit" data-on-click="cart::submit">
                             {{ trans('pages.cart.complete_order') }}
                         </button>
                     </div>
                 </div>
+
                 <div class="fixed md:hidden space-s-2 flex-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-50">
                     <span class="text-gray-400">{{ trans('pages.cart.final_total') }}:</span>
                     <b>{{ cart.total|money }}</b>

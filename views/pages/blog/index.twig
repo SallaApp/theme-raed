@@ -39,7 +39,7 @@
                 </ul>
             </nav>
             <div class="main-content w-96 flex-1">
-                {% if slides.count %}
+                {% if slides|length %}
                     <div class="mb-8">
                         <div class="swiper blog-slider rounded-md overflow-hidden" id="blog-slider">
                             <div class="swiper-wrapper">
@@ -137,7 +137,7 @@
                             </div>
                         {% endfor %}
                     </salla-infinite-scroll>
-                {% elseif not slides.count %}
+                {% elseif not slides|length %}
                     <div class="no-content-placeholder">
                         <i class="sicon-inbox icon"></i>
                         <p>{{ trans('pages.blog_categories.no_articles') }}</p>

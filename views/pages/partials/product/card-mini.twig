@@ -1,6 +1,9 @@
 <div id="product_{{ product.id }}" class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
     <a href="{{ product.url }}" class='product-entry__image'>
         <img class="h-full w-full object-{{product.image.url|is_placeholder ? 'contain':'cover'}} lazy-load" src="{{asset('images/s-empty.png')}}" data-src="{{product.image.url}}" alt="{{ product.image.alt }}" />
+        {# todo:: salla.error should be handling in the `wishlist::add` event, so check if the user.type === user in js side #}
+        {# todo:: because you already have this value now in js level and keep it simple here just one on click #}
+        {# todo:: use salla-button #}
         <button  aria-label="Add or remove to wishlist" class="btn--wishlist animated"
             {% if user.type=='user' %}
                 data-on-click="wishlist::add" data-id="{{ product.id }}"
@@ -28,10 +31,11 @@
                 <div class="text-sm text-gray-400">
                   <i class="sicon-star2 text-amber-400"></i>
                   <span>{{ product.rating|number }}</span>
-                </div> 
+                </div>
             {% endif %}
         </div>
         <div class="flex items-center mt-auto">
+            {# todo:: use salla-button #}
             <button data-on-click="cart::quick.add" data-id="{{ product.id }}"
                     {% if not product.is_available %} disabled {% endif %}
                     class="btn btn--has-loading btn--outline-primary">
@@ -44,7 +48,7 @@
                       {{ trans('pages.products.out_of_stock') }}
                   {% endif %}
                 </span>
-            </button> 
+            </button>
         </div>
     </div>
 </div>
