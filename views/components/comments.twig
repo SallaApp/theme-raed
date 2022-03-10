@@ -13,7 +13,7 @@
 | comments[].content    | string                     |                     |
 | comments[].status     | string "pending, approved" |                     |
 | comments[].replies    | Feedback[] *Collection     |                     |
-| can_comment           | bool                       | TODO                |
+| can_comment           | bool                       |                     |
 | type                  | string                     | page, product       |
 | id                    | int                        | pageId or ProductId |
 #}
@@ -23,7 +23,6 @@
     <div class="{{ type=='product'?'container':''}}">
         {% if can_comment %}
             <div class="form form--add-comment" salla-form-data>
-                {# TODO:: enhance the docs #}
                 {% honeypot %}
                 <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
                 <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
