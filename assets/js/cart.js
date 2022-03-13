@@ -6,7 +6,6 @@ class Cart extends BasePage {
         this.initiateSubmit();
         this.initiateCartItems();
         salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
-        app.anime('.free-shipping,.shipping-item', {translateX: [-20, 0]});
         app.watchElements({
             couponCode      : '#coupon',
             couponBtn       : '#btn-add-coupon',
