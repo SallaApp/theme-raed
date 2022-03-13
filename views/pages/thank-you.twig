@@ -109,13 +109,17 @@
                           data-on-success="onSuccess" data-on-fail="onFail">
                         {{ csrf_field() }}
                         <div class="flex max-w-3xl w-full">
-                            <input type="email" class="form-input" placeholder="your@email.com" required name="email">
+                            <input type="email" id="resend-invoice-input" class="form-input me-2" placeholder="your@email.com" required name="email">
                             {# todo:: use salla-button #}
-                            <button type="submit" id="resend-invoice-submit"
+                            {# <button type="submit" id="resend-invoice-submit"
                                     class="btn btn--has-loading btn--primary inline-flex items-center justify-center px-3 whitespace-nowrap ms-2">
                                 <span class="loader loader--small overflow-hidden"></span>
                                 <span class="btn__text">{{ trans('pages.thank_you.sent_invoice') }}</span>
-                            </button>
+                            </button> #}
+
+                            <salla-button type="submit" loader-position="center" id="resend-invoice-submit">
+                              <span class="btn__text">{{ trans('pages.thank_you.sent_invoice') }}</span>
+                            </salla-button>
                         </div>
                     </form>
                 </div>
