@@ -95,10 +95,6 @@
     }
 	}
 
-  &--coupon{ 
-    @apply absolute top-px end-px rounded-s-none flex-shrink-0 h-[38px];
-  }
-
 	&--rounded-gray {
 		@apply inline-flex flex-grow-0 justify-center w-full rounded-full px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium whitespace-nowrap;
 	}
@@ -264,6 +260,33 @@
 
 .rounded-icon {
   @apply w-16 h-16 flex justify-center items-center rounded-full text-3xl;
+}
+
+/*
+* Coupon Button
+*/
+button.btn--coupon{ 
+  @apply absolute top-0 end-0 rounded-s-none flex-shrink-0 h-[40px];
+
+  .s-button-text{
+    @apply block #{!important};
+  }
+}
+
+salla-button{
+  &.has-not-coupon button{
+    .cion{
+      @apply hidden;
+    }
+  }
+  
+  &.has-coupon button{
+    @apply w-10;
+
+    .coupon-text{
+      @apply hidden;
+    }
+  }
 }
 
 /*

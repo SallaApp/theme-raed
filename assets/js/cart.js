@@ -150,46 +150,50 @@ class Cart extends BasePage {
 
     //=================== Coupon Method ========================//
     initiateCoupon() {
-        salla.coupon.event.onAdded(res => this.toggleCoupon(res, true));
-        salla.coupon.event.onRemoved(res => this.toggleCoupon(res, false));
-        salla.coupon.event.onAddedFailed(err => this.showCouponError(err.response?.data?.error.message));
-        salla.coupon.event.onRemovedFailed(err => this.showCouponError(err.response?.data?.error.message, false));
-
         if(app.couponCode){
           app.onKeyUp(app.couponCode, event => {
               event.keyCode === 13 && app.couponBtn.click();
               app.couponError.value = '';
               app.removeClass(app.couponCode, 'has-error');
           });
-          app.onClick(app.couponBtn, event => {
-              event.preventDefault();
+          app.onClick(app.couponBtn, ({currentTarget: btn}) => {
+              salla.coupon.event.onAdded(res => this.toggleCoupon(btn, res, true));
+              salla.coupon.event.onRemoved(res => this.toggleCoupon(btn, res, false));
+              salla.coupon.event.onAddedFailed(err => this.showCouponError(btn, err.response?.data?.error.message));
+              salla.coupon.event.onRemovedFailed(err => this.showCouponError(btn, err.response?.data?.error.message, false));
               //if it's remove coupon, will have `btn--danger` class
               if (app.couponBtn.classList.contains('btn--danger')) {
+                  btn.load();
                   return salla.api.coupon.remove(salla.config.get('page.id'));
               }
 
               if (!app.couponCode.value.length) {
-                  this.showCouponError('* ' + salla.lang.get('pages.checkout.enter_coupon'));
+                  this.showCouponError(btn, '* ' + salla.lang.get('pages.checkout.enter_coupon'));
                   return;
               }
 
+              btn.load();
               salla.api.coupon.add({id: salla.config.get('page.id'), coupon: app.couponCode.value});
           });
         }
     }
 
-    toggleCoupon(res, applied) {
+    toggleCoupon(btn, res, applied) {
+        btn.stop();
         app.couponError.innerText = '';
         app.couponCode.value = applied ? app.couponCode.value : '';
         app.couponCode.toggleAttribute('disabled', applied);
         this.updateCartPageInfo(res.data.cart);
-        app.toggleElement(app.couponBtn, 'btn--danger', 'btn-default', () => applied)
+
+        app.toggleElement(app.couponBtn, ['btn--danger', 'has-coupon'], ['btn-default', 'has-not-coupon'], () => applied)
+            .toggleElement(app.couponBtn, ['btn-default', 'has-not-coupon'], ['btn--danger', 'has-coupon'], () => !applied)
             .hideElement(app.couponBtn.querySelector(applied ? 'span' : 'i'))
             .showElement(app.couponBtn.querySelector(applied ? 'i' : 'span'))
             .removeClass(app.couponCode, 'has-error');
     }
 
-    showCouponError(message, isApplying = true) {
+    showCouponError(btn, message, isApplying = true) {
+        btn.stop();
         app.couponError.innerText = message || salla.lang.get('pages.checkout.error_occurred');
         isApplying ? app.addClass(app.couponCode, 'has-error') : null;
     }
