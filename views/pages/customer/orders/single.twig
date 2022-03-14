@@ -360,32 +360,24 @@
                                 <span>{{ trans('pages.orders.finish_payment') }}</span>
                             </a>
                         {% else %}
-                            {# todo :: use salla-button #}
-                            <button type="button"
-                                    class="text-primary font-bold text-sm center-between hover:text-primary-d transition"
-                                    data-target="reorder-modal"
-                                    data-on-click="modal::open">
-                                <i class="sicon sicon-rotate me-2"></i>
-                                <span>{{ trans('pages.orders.reorder') }}</span>
-                            </button>
+                            <salla-button class="w-36" btn-style="outline-primary" data-on-click="modal::open" data-target="reorder-modal">
+                              <i class="sicon sicon-rotate me-2"></i>
+                              <span>{{ trans('pages.orders.reorder') }}</span>
+                            </salla-button>
                         {% endif %}
                     </div>
                 {% endif %}
 
-                {% if order.can_cancel %}
+                {% if not order.can_cancel %}
                     <div class="center-between pt-4">
                         <div class="text-sm">
                             <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
-                        {# todo :: use salla-button #}
-                        <button type="button"
-                                class="text-red-400 font-bold text-sm center-between hover:text-red-500 transition"
-                                data-target="modal-cancel"
-                                data-on-click="modal::open">
-                            <i class="sicon sicon-cancel-circle me-2"></i>
-                            <span>{{ trans('pages.orders.cancel') }}</span>
-                        </button>
+                        <salla-button class="w-36" btn-style="outline-danger" data-on-click="modal::open" data-target="modal-cancel">
+                          <i class="sicon sicon-cancel-circle me-2"></i>
+                          <span>{{ trans('pages.orders.cancel') }}</span>
+                        </salla-button>
                     </div>
                 {% endif %}
             </div>
@@ -398,11 +390,9 @@
                                       class="cursor-pointer w-full">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        {# todo :: use salla-button #}
-                        <button class="w-full inline-flex justify-center btn btn--outline"
-                                data-on-click="modal::close" data-target="reorder-modal" type="button">
+                        <salla-button class="w-full" btn-style="outline" data-on-click="modal::close" data-target="reorder-modal">
                             {{ trans('common.elements.cancel') }}
-                        </button>
+                        </salla-button>
                     </div>
                 </salla-modal>
             {% endif %}
@@ -416,12 +406,9 @@
                         <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        {# todo :: use salla-button #}
-                        <button class="w-full inline-flex justify-center btn btn--outline"
-                                data-on-click="modal::close"
-                                data-target="modal-cancel">
+                        <salla-button class="w-full" btn-style="outline" data-on-click="modal::close" data-target="modal-cancel">
                             {{ trans('common.elements.cancel') }}
-                        </button>
+                        </salla-button>
                     </div>
                 </salla-modal>
             {% endif %}
