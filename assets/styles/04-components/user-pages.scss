@@ -1,17 +1,16 @@
-
 /* User Notifcations page */
-.notification-item{
+.notification-item {
   @apply transition bg-white p-5 rounded-md flex items-center justify-between space-s-4 hover:shadow-default hover:text-gray-600;
 
-  &__icon{
+  &__icon {
     @apply flex justify-center items-center rounded-full bg-white border border-border-color h-14 w-14 text-xl;
   }
 
-  h4{
+  h4 {
     @apply transition-colors font-bold text-sm mb-1.5;
   }
 
-  p{
+  p {
     @apply text-sm mb-3 md:mb-0;
   }
 }
@@ -34,22 +33,37 @@
 }
 
 /* Profile Header section */
-.profile-header{
-  .breadcrumbs{
+.profile-header {
+
+  @apply relative from-primary to-primary-d lg:h-48 overflow-hidden;
+
+  [dir="ltr"] {
+    @apply bg-gradient-to-r;
+  }
+
+  [dir="rtl"] {
+    @apply bg-gradient-to-l;
+  }
+
+  .breadcrumbs {
     @screen lg {
       @apply mt-2.5;
     }
 
-    a{
+    a {
       @apply text-primary-reverse hover:opacity-80;
     }
 
-    span{
+    span {
       @apply text-primary-reverse opacity-80;
     }
 
-    .arrow{
+    .arrow {
       @apply text-primary-reverse opacity-70;
     }
   }
+}
+
+.rating-header {
+  @apply relative from-primary to-primary-d p-5 text-primary-reverse rounded-md;
 }
