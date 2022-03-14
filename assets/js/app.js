@@ -31,7 +31,12 @@ class App extends salla.AppHelpers {
         this.initiateCollabse();
         this.initiateComments();
 
-        this.onClick('.btn--has-loading', event => event.target.classList.add('btn--is-loading', 'pointer-events-none'));
+        this.onClick('.btn--add-to-cart', ({currentTarget: btn}) => {
+          btn.load()
+          salla.cart.event.onItemAdded(() => btn.stop())
+          salla.cart.event.onItemAddedFailed(() => btn.stop())
+        });
+        
         this.onClick('#product-filter', event => window.location.href = salla.helpers.addParamToUrl('by', event.target.value));
 
         // this.onClick('.grid-trigger', event => {
@@ -292,14 +297,7 @@ class App extends salla.AppHelpers {
         });
         salla.cart.event.onItemAdded((response, prodId) => {
             Anime.addToCart(response, prodId);
-            this.removeLoading();
         });
-
-        salla.cart.event.onItemAddedFailed(() => this.removeLoading())
-    }
-
-    removeLoading() {
-        document.querySelectorAll('.btn--is-loading').forEach(btn => btn.classList.remove('btn--is-loading', 'pointer-events-none'))
     }
 
     initiateComments() {

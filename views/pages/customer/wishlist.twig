@@ -34,14 +34,10 @@
                     </div>
                 </div>
                 <div class="flex items-center space-s-4">
-                    {# todo :: use salla-button #}
-                    <button data-on-click="cart::quick.add" data-id="{{ product.id }}"
-                            class="btn btn--has-loading btn--outline-primary flex-grow-0 md:w-64">
-                        <span class="loader loader--small"></span>
-                        <span class="btn__text">{{ trans('pages.cart.add_to_cart') }}</span>
-                    </button>
+                    <salla-button loader-position="center" class="flex-grow-0 md:w-40 btn--add-to-cart" btn-style="outline-primary" data-on-click="cart::quick.add" data-id="{{ product.id }}">
+                      {{ trans('pages.cart.add_to_cart') }}
+                    </salla-button>
 
-                    {# todo :: use salla-button #}
                     <button class="relative rounded-full bg-red-500 text-white w-6 h-6 btn-remove cursor-pointer"
                             data-id="{{ product.id }}" data-on-click="wishlist::remove">
                         <i class="sicon-cancel text-base"></i>

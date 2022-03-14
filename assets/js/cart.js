@@ -30,6 +30,10 @@ class Cart extends BasePage {
         }
         //important for safari & iphone browsers
         app.submit.dataset.has_apple_pay = !!window.ApplePaySession;
+
+        app.onClick('#btn-submit', ({currentTarget: btn}) => {
+          btn.load()
+        });
     }
 
     /**
