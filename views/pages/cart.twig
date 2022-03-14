@@ -78,7 +78,7 @@
                              salla-form-data>
                         <input type="hidden" name="id" value="{{ item.id }}">
                         <!-- product -->
-                        <div class="md:flex md:space-s-12 items-center justify-between mb-8">
+                        <div class="md:flex md:space-s-12 items-start justify-between mb-8">
                             <div class="flex flex-1 space-s-4">
                                 <a href="{{ item.url }}" class="flex-shrink-0">
                                     <img src="{{ asset('images/s-empty.png') }}" data-src="{{ item.product_image }}" alt="{{ item.product_name }}" class="lazy-load flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
@@ -94,7 +94,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex-1 border-t border-b border-border-color py-3 md:p-0 md:border-none mt-5 md:mt-1 center-between ">
+                            <div class="flex-1 border-t border-b border-border-color py-3 md:p-0 md:border-none mt-5 md:mt-0 flex justify-between">
                                 <div class="flex items-stretch h-10 border rounded-md text-sm transtion transition-color duration-300">
                                     {% if item.is_donation %}
                                         <span></span>
@@ -116,7 +116,7 @@
                                     {% endif %}
                                 </div>
 
-                                <p class="text-primary flex-none font-bold text-sm">
+                                <p class="text-primary flex-none font-bold text-sm pe-12">
                                     <span>{{ trans('pages.cart.total') }}:</span>
                                     <span class="inline-block item-total">{{ item.is_available?item.total|money: trans('pages.cart.out_of_stock') }}</span>
                                 </p>

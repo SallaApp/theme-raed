@@ -1,21 +1,20 @@
 {#
-| Variable              | Type                       | Description         |
-|-----------------------|----------------------------|---------------------|
-| comments              | Feedback[] *Paginator      |                     |
-| comments[].id         | int                        |                     |
-| comments[].is_replay  | bool                       |                     |
-| comments[].is_admin   | bool                       |                     |
-| comments[].avatar     | string                     |                     |
-| comments[].name       | string                     |                     |
-| comments[].has_order  | bool                       |                     |
-| comments[].created_at | Date *Carbon               |                     |
-| comments[].stars      | int                        |                     |
-| comments[].content    | string                     |                     |
-| comments[].status     | string "pending, approved" |                     |
-| comments[].replies    | Feedback[] *Collection     |                     |
-| can_comment           | bool                       |                     |
-| type                  | string                     | page, product       |
-| id                    | int                        | pageId or ProductId |
+| Variable              | Type                         | Description         |
+|-----------------------|------------------------------|---------------------|
+| comments              | Feedback[] *Paginator        |                     |
+| comments[].id         | int                          |                     |
+| comments[].avatar     | string                       |                     |
+| comments[].name       | string                       |                     |
+| comments[].has_order  | bool                         |                     |
+| comments[].created_at | Date *Carbon                 |                     |
+| comments[].stars      | int                          |                     |
+| comments[].content    | string                       |                     |
+| comments[].is_pending | bool                         | Is not approved yet |
+| comments[].replies    | Feedback[] *Collection       |                     |
+| comments[].type       | string 'admin','customer'    |                     |
+| can_comment           | bool                         |                     |
+| type                  | string                       | page, product       |
+| id                    | int                          | pageId or ProductId |
 #}
 {# todo:: simpliy the main class like this (comment-{type}) comment comment-page, comment-product and merge the the classed to it #}
 {# todo:: you can avoid the container dom (avoid a inner level) in this case and merge it in the scss to comment-product class #}
