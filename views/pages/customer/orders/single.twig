@@ -56,6 +56,9 @@
 {% extends "layouts.customer" %}
 {% block inner_content %}
     <div class="space-y-8">
+
+        {% hook 'customer:orders.single.details.start' %}
+
         {# Order Details #}
         <table class="min-w-full">
             <tbody>
@@ -431,6 +434,8 @@
                 {% include 'pages.partials.stars' with {stars:order.feedback.shipping.stars} %}
             </section>
         {% endif %}
+
+        {% hook 'customer:orders.single.details.end' %}
     </div>
 {% endblock %}
 

@@ -24,6 +24,9 @@
             </div>
         </div>
     </div>
+
+    {% hook 'customer:profile.form.start' %}
+
     <form class="form form--user-profile ajax"
           method="POST"
           novalidate
@@ -32,6 +35,9 @@
         {{ csrf_field() }}
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+
+            {% hook 'customer:profile.form.fields.start' %}
+
             <div class="profile-field-item">
                 <label for="first-name" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.first_name') }}
@@ -84,12 +90,22 @@
                 </label>
                 <salla-tel-input mobile="{{ user.mobile }}"></salla-tel-input>
             </div>
+
+            {% hook 'customer:profile.form.fields.end' %}
         </div>
-        
+
+        {% hook 'customer:profile.form.submit.start' %}
+
         <salla-button type="submit" id="update-profile-btn" loader-position="end" class="w-full">
             {{ trans('common.elements.save') }}
         </salla-button>
+
+        {% hook 'customer:profile.form.submit.end' %}
     </form>
+
+
+    {% hook 'customer:profile.form.end' %}
+
     <salla-verify-modal></salla-verify-modal>
 {% endblock %}
 

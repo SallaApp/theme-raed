@@ -9,6 +9,8 @@
 {% extends "layouts.customer" %}
 {% block inner_content %}
     {% if orders|length %}
+        {% hook 'customer:orders.index.items.start' %}
+
         <salla-infinite-scroll next-page="{{ orders.next_page }}" container=".list-container" item=".s-table__tr">
             <table class="s-table min-w-full border-separate" style="border-spacing: 0 20px;">
                 <thead class="bg-gray-50 mb-5 hidden md:table-header-group">
@@ -60,6 +62,8 @@
                 </tbody>
             </table>
         </salla-infinite-scroll>
+
+        {% hook 'customer:orders.index.items.end' %}
     {% else %}
         <div class="placeholder-block placeholder-block--no-category flex flex-col justify-center items-center pt-16 px-8">
             <i class="sicon-packed-box block text-5xl text-gray-300 mb-2"></i>

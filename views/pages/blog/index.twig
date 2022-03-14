@@ -88,6 +88,8 @@
                     </div>
                 {% endif %}
                 {% if articles|length %}
+                    {% hook 'blog:index.items.start' %}
+
                     <salla-infinite-scroll class="grid md:grid-cols-2 gap-8" next-page="{{ articles.next_page }}" next-page.autoload>
                         {% for article in articles %}
                             <div class='list-block post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
@@ -137,6 +139,8 @@
                             </div>
                         {% endfor %}
                     </salla-infinite-scroll>
+
+                    {% hook 'blog:index.items.end' %}
                 {% elseif not slides|length %}
                     <div class="no-content-placeholder">
                         <i class="sicon-inbox icon"></i>

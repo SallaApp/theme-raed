@@ -60,6 +60,8 @@
                 {% if related|length %}
                     <h2 class="font-bold mb-3">{{ trans('pages.blog_articles.related') }}</h2>
 
+                    {% hook 'blog:single.items.start' %}
+
                     {% for article in related %}
                         <div class="mt-5 flex items-center bg-white p-5 rounded-md">
                             <div class="flex-shrink-0">
@@ -88,6 +90,8 @@
                             </div>
                         </div>
                     {% endfor %}
+
+                    {% hook 'blog:single.items.end' %}
                 {% endif %}
             </aside>
         </div>
