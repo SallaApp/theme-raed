@@ -100,13 +100,13 @@
         {# Order Rating Message & Modal #}
         {% if order.can_rate %}
             <salla-rating-modal></salla-rating-modal>
-            <div class="relative center-between profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md">
+            <div class="relative center-between profile-header {{theme.is_rtl ? 'bg-gradient-to-l':'bg-gradient-to-r'}} from-primary to-primary-d p-5 text-primary-reverse rounded-md">
                 <div>
                     <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                     <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                 </div>
                 <button data-on-click="rating::show"
-                        class="btn btn--outline-primary-dark btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">{{ trans('pages.rating.rate') }}</button>
+                        class="btn btn--outline-primary btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">{{ trans('pages.rating.rate') }}</button>
             </div>
         {% endif %}
 
