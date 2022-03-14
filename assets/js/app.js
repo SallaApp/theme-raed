@@ -36,7 +36,7 @@ class App extends salla.AppHelpers {
           salla.cart.event.onItemAdded(() => btn.stop())
           salla.cart.event.onItemAddedFailed(() => btn.stop())
         });
-        
+
         this.onClick('#product-filter', event => window.location.href = salla.helpers.addParamToUrl('by', event.target.value));
 
         // this.onClick('.grid-trigger', event => {
@@ -141,12 +141,14 @@ class App extends salla.AppHelpers {
     }
 
     initiateAdAlert() {
-        let ad = this.element("#s-theme_ad");
+        // todo :: test it after change the element id
+        let ad = this.element(".salla-advertisement");
 
         if (!ad) {
             return;
         }
 
+        // todo :: change to salla.storage
         if (!localStorage.getItem('statusAd-' + ad.dataset.id)) {
             ad.classList.remove('hidden');
         }
@@ -156,7 +158,7 @@ class App extends salla.AppHelpers {
             localStorage.setItem('statusAd-' + ad.dataset.id, 'dismissed');
 
             anime({
-                targets : '#s-theme_ad',
+                targets : '.salla-advertisement',
                 opacity : [1, 0],
                 duration: 300,
                 height  : [ad.clientHeight, 0],

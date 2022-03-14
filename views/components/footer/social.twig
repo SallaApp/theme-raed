@@ -1,18 +1,16 @@
 {#
-| Variable            | Type   | Description                                                        |
-|---------------------|--------|--------------------------------------------------------------------|
-| social_links        | array  | List of active social links                                        |
-| social_links[].name | string |                                                                    |
-| social_links[].type | string | instagram, twitter, snapchat, tiktok, youtube, facebook, pinterest |
-| social_links[].icon | string | Css class                                                          |
-| social_links[].url  | string |                                                                    |
+| Variable     | Type   | Description                                                        |
+|--------------|--------|--------------------------------------------------------------------|
+| links        | array  | List of active social links                                        |
+| links[].name | string |                                                                    |
+| links[].type | string | instagram, twitter, snapchat, tiktok, youtube, facebook, pinterest |
+| links[].icon | string | Css class                                                          |
+| links[].url  | string |                                                                    |
 #}
 <ul class="flex mb-6">
-  {% for link in social_links %}
+  {% for link in links %}
     <li class="me-2.5">
-      <a href="{{ link.url }}" rel="noopener" target="_blank" title="{{ link.name }}" aria-label="{{ link.name }}"
-          {# TODO:: collect these classes in short class#}
-          class="border text-reverse rounded-full w-8 h-8 justify-center flex items-center hover:text-primary hover:border-primary transition duration-300 text-sm">
+      <a href="{{ link.url }}" rel="noopener" target="_blank" title="{{ link.name }}" aria-label="{{ link.name }}" class="social-link">
           <i class="sicon-{{ link.type }}"></i>
       </a>
     </li>

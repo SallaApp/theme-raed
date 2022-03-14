@@ -29,7 +29,7 @@
     <a href="{{ link('profile') }}" class="menu-item {{ is_current_url('profile')?  'is-active':'' }}">
         <i class="sicon-settings me-3 text-lg"></i> {{ trans('common.titles.profile') }}
     </a>
-    <a href="{{ link('logout') }}" data-on-click="auth-logout" class="menu-item logout">
+    <a data-on-click="auth-logout" class="menu-item logout">
         <i class="sicon-send-out me-3 text-lg"></i> {{ trans('blocks.header.logout') }}
     </a>
 {% else %}
@@ -39,6 +39,7 @@
                 id="menu-button" aria-expanded="true" aria-haspopup="true">
             <img class="h-10 w-10 object-cover pointer-events-none" src="{{ user.avatar }}" alt="{{ user.full_name }}" />
         </button>
+
         <div class="dropdown__menu"
             role="menu"
             aria-orientation="vertical"
@@ -76,7 +77,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('orders') }}" class="menu-item {{ is_current_url('orders') and not is_current_url('pending_orders') ? 'is-active':'' }}">
+                    <a href="{{ link('orders') }}" class="menu-item {{ is_current_url('orders') ? 'is-active':'' }}">
                       <i class="sicon-packed-box me-3"></i>{{ trans('common.titles.orders') }}
                     </a>
                 </li>
@@ -91,7 +92,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('logout') }}" data-on-click="auth-logout" class="menu-item logout">
+                    <a data-on-click="auth::logout" class="menu-item logout">
                         <i class="sicon-send-out me-3"></i> {{ trans('blocks.header.logout') }}
                     </a>
                 </li>
