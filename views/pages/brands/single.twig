@@ -16,9 +16,10 @@
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container">
-        <nav class="w-full py-5">
-            {% component 'header.breadcrumbs' %}
-        </nav>
+        {% component 'header.breadcrumbs' %}
+
+        {% hook 'brands:single.details.start' %}
+
         <div class="brand__header">
             {% if brand.banner %}
                 <div class="row">
@@ -39,6 +40,9 @@
                 </div>
             </article>
         </div>
+
+        {% hook 'brands:single.details.end' %}
+
         <div class="flex items-start flex-col md:flex-row">
             <div class="main-content w-full">
                 {% if products|length %}
@@ -55,6 +59,9 @@
                             </div>
                         </div>
                     </div>
+
+                    {% hook 'brands:single.items.start' %}
+
                     <salla-infinite-scroll
                             class="md:grid-cols-auto-fill mb-8 products-container gird-view grid sm:grid-cols-2 grid-flow-row gap-6"
                             next-page="{{ products.next_page }}"  next-page.autoload>
@@ -62,6 +69,8 @@
                             {% include 'pages.partials.product.card' with {block_classes:'list-block'} %}
                         {% endfor %}
                     </salla-infinite-scroll>
+
+                    {% hook 'brands:single.items.end' %}
                 {% else %}
                     <div class="no-content-placeholder">
                             <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">

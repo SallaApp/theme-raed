@@ -16,7 +16,7 @@
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container mb-10 md:mb-20">
-        <nav class="w-full py-5">{% component 'header.breadcrumbs' %}</nav>
+        {% component 'header.breadcrumbs' %}
         <div class="flex items-start flex-col md:flex-row">
             <div class="main-content flex-1 md:pb-20 ">
                 <div class="mb-5 md:flex justify-between items-center">
@@ -50,6 +50,9 @@
                         </div>
                     </div>
                 </div>
+
+                {% hook 'product:index.items.start' %}
+
                 {% if products|length %}
                     <salla-infinite-scroll next-page="{{ products.next_page }}" next-page.autoload
                                            class="mb-8 products-container gird-view grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -62,7 +65,9 @@
                         <i class="sicon-shopping-bag icon"></i>
                         <p>{{ trans('pages.categories.no_products') }}</p>
                     </div>
-                {% endif %} 
+                {% endif %}
+
+                {% hook 'product:index.items.end' %}
             </div>
         </div>
     </div>

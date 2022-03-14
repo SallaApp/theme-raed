@@ -27,10 +27,12 @@ class Profile extends BasePage {
             styleButtonRemoveItemPosition : 'center bottom',
             styleButtonProcessItemPosition: 'center bottom',
         });
-        let btn = app.element('#update-profile-btn');
 
-        salla.event.on("stores::profile.updated", () => btn.classList.remove('btn--is-loading', 'pointer-events-none'));
-        salla.document.event.onRequestFailed(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'));
+        app.onClick('#update-profile-btn', ({currentTarget: btn}) => {
+          btn.load()
+          salla.event.on("stores::profile.updated", () => btn.stop());
+          salla.document.event.onRequestFailed(() => btn.stop());
+        });
     }
 
     appendAvtar() {

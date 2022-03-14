@@ -56,6 +56,9 @@
 {% extends "layouts.customer" %}
 {% block inner_content %}
     <div class="space-y-8">
+
+        {% hook 'customer:orders.single.details.start' %}
+
         {# Order Details #}
         <table class="min-w-full">
             <tbody>
@@ -100,13 +103,13 @@
         {# Order Rating Message & Modal #}
         {% if order.can_rate %}
             <salla-rating-modal></salla-rating-modal>
-            <div class="relative center-between profile-header bg-gradient-to-r from-primary to-primary-d p-5 text-white rounded-md">
+            <div class="relative center-between profile-header {{theme.is_rtl ? 'bg-gradient-to-l':'bg-gradient-to-r'}} from-primary to-primary-d p-5 text-primary-reverse rounded-md">
                 <div>
                     <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                     <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                 </div>
                 <button data-on-click="rating::show"
-                        class="btn btn--outline-primary-dark btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">{{ trans('pages.rating.rate') }}</button>
+                        class="btn btn--outline-primary btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">{{ trans('pages.rating.rate') }}</button>
             </div>
         {% endif %}
 
@@ -360,14 +363,10 @@
                                 <span>{{ trans('pages.orders.finish_payment') }}</span>
                             </a>
                         {% else %}
-                            {# todo :: use salla-button #}
-                            <button type="button"
-                                    class="text-primary font-bold text-sm center-between hover:text-primary-d transition"
-                                    data-target="reorder-modal"
-                                    data-on-click="modal::open">
-                                <i class="sicon sicon-rotate me-2"></i>
-                                <span>{{ trans('pages.orders.reorder') }}</span>
-                            </button>
+                            <salla-button class="w-36" btn-style="outline-primary" data-on-click="modal::open" data-target="reorder-modal">
+                              <i class="sicon sicon-rotate me-2"></i>
+                              <span>{{ trans('pages.orders.reorder') }}</span>
+                            </salla-button>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -378,14 +377,10 @@
                             <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
-                        {# todo :: use salla-button #}
-                        <button type="button"
-                                class="text-red-400 font-bold text-sm center-between hover:text-red-500 transition"
-                                data-target="modal-cancel"
-                                data-on-click="modal::open">
-                            <i class="sicon sicon-cancel-circle me-2"></i>
-                            <span>{{ trans('pages.orders.cancel') }}</span>
-                        </button>
+                        <salla-button class="w-36" btn-style="outline-danger" data-on-click="modal::open" data-target="modal-cancel">
+                          <i class="sicon sicon-cancel-circle me-2"></i>
+                          <span>{{ trans('pages.orders.cancel') }}</span>
+                        </salla-button>
                     </div>
                 {% endif %}
             </div>
@@ -398,11 +393,9 @@
                                       class="cursor-pointer w-full">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        {# todo :: use salla-button #}
-                        <button class="w-full inline-flex justify-center btn btn--outline"
-                                data-on-click="modal::close" data-target="reorder-modal" type="button">
+                        <salla-button class="w-full" btn-style="outline" data-on-click="modal::close" data-target="reorder-modal">
                             {{ trans('common.elements.cancel') }}
-                        </button>
+                        </salla-button>
                     </div>
                 </salla-modal>
             {% endif %}
@@ -416,12 +409,9 @@
                         <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        {# todo :: use salla-button #}
-                        <button class="w-full inline-flex justify-center btn btn--outline"
-                                data-on-click="modal::close"
-                                data-target="modal-cancel">
+                        <salla-button class="w-full" btn-style="outline" data-on-click="modal::close" data-target="modal-cancel">
                             {{ trans('common.elements.cancel') }}
-                        </button>
+                        </salla-button>
                     </div>
                 </salla-modal>
             {% endif %}
@@ -444,6 +434,8 @@
                 {% include 'pages.partials.stars' with {stars:order.feedback.shipping.stars} %}
             </section>
         {% endif %}
+
+        {% hook 'customer:orders.single.details.end' %}
     </div>
 {% endblock %}
 

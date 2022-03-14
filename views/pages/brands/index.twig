@@ -10,9 +10,9 @@
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container mb-20">
-        <nav class="w-full py-5">
-            {% component 'header.breadcrumbs' %}
-        </nav>
+
+        {% component 'header.breadcrumbs' %}
+
         <div class="flex justify-between pt-2 pb-6">
             <h2 class="font-bold mb-6 md:mb-0">{{ page.title }}</h2>
         </div>
@@ -33,6 +33,9 @@
             <!-- end:: brands nav -->
 
             <div class="px-8 xl:px-0">
+
+            {% hook 'brands:index.items.start' %}
+
             {% for char,brandGroup in brands %}
                 <section id="brand-section-{{ loop.index }}" class="pt-24 first:pt-16 md:first:pt-24">
                     <!-- separator -->
@@ -45,12 +48,15 @@
                         {% for brand in brandGroup %}
                             <a href="{{ brand.url }}" class="brand-item">
                                 <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
-                            </a> 
+                            </a>
                         {% endfor %}
                     </div>
                 </section>
             {% endfor %}
-            </div>
+
+            {% hook 'brands:index.items.end' %}
+
+        </div>
           {% else %}
             <div class="no-content-placeholder">
                 <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">

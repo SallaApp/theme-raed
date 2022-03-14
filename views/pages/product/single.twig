@@ -65,9 +65,7 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-        <nav class="w-full py-5">
-            {% component 'header.breadcrumbs' %}
-        </nav>
+        {% component 'header.breadcrumbs' %}
 
         <div class="flex flex-col items-start md:flex-row" id="product_{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden">
@@ -123,15 +121,18 @@
             </div>
 
             <div class="main-content w-full md:w-2/4 pb-8 md:pb-16">
+
+                {% hook 'product:single.description.start' %}
+
                 {% component 'product.brand'%}
 
                 <div class="center-between">
                     <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
-                    {% if product.rating %} 
+                    {% if product.rating %}
                         <div class="text-sm">
                             <i class="sicon-star2 text-theme-yellow"></i>
                             <span>{{ product.rating }}</span>
-                        </div> 
+                        </div>
                     {% endif %}
                 </div>
 
@@ -156,7 +157,7 @@
                              style="max-height:5.25rem"
                              id="more-content">
                             <p>{{ product.description|raw }}</p>
-                        </div> 
+                        </div>
 
                         {# Read More Button #}
                         <a id="btn-show-more" class="link--primary inline-block mt-2 cursor-pointer">{{ trans('pages.products.read_more') }}</a>
@@ -221,6 +222,7 @@
                         </button>
                     {% endif %}
                 </div>
+
                 {% if product.tags|length %}
                     <div class="mb-4">
                         {% for tag in product.tags %}
@@ -234,7 +236,7 @@
                 {% endif %}
 
                 <div class="grid gap-5 mb-5">
-                    {% hook 'product:after-description' %}
+                    {% hook 'product:single.description' %}
                 </div>
 
                 <form class="form product-form"
@@ -247,8 +249,14 @@
                       data-on-fail="itemFailedTobeAdded"
                 >
                     <input type="hidden" name="id" value="{{ product.id }}">
+
+                    {% hook 'product:single.form.start' %}
+
                     {% include 'pages.partials.product.options' %}
+
+                    {% hook 'product:single.form.end' %}
                 </form>
+
                 <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
 
                     {% if product.is_hidden_quantity %}
@@ -323,6 +331,8 @@
                         {% endif %}
                     </div>
                 </section>
+
+                {% hook 'product:single.description.end' %}
             </div>
         </div>
 

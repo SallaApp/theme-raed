@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('dist/filepond.css') }}">
 {% endblock %}
 {% block inner_content %}
+    {% hook 'customer:profile.form.start' %}
     <form class="form form--user-profile ajax"
           method="POST"
           novalidate
@@ -19,6 +20,9 @@
         {{ csrf_field() }}
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+
+            {% hook 'customer:profile.form.fields.start' %}
+
             <div class="profile-field-item">
                 <label for="first-name" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.first_name') }}
@@ -71,14 +75,22 @@
                 </label>
                 <salla-tel-input mobile="{{ user.mobile }}"></salla-tel-input>
             </div>
+
+            {% hook 'customer:profile.form.fields.end' %}
         </div>
 
-        {# todo :: use salla-button #}
-        <button id="update-profile-btn" class="btn btn--primary btn--has-loading w-full mt-4 sm:mt-6">
-            <span class="loader loader--small"></span>
-            <span class="btn__text">{{ trans('common.elements.save') }}</span>
-        </button>
+        {% hook 'customer:profile.form.submit.start' %}
+
+        <salla-button type="submit" id="update-profile-btn" loader-position="end" class="w-full">
+            {{ trans('common.elements.save') }}
+        </salla-button>
+
+        {% hook 'customer:profile.form.submit.end' %}
     </form>
+
+
+    {% hook 'customer:profile.form.end' %}
+
     <salla-verify-modal></salla-verify-modal>
 {% endblock %}
 
