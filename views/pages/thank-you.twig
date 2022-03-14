@@ -43,6 +43,8 @@
                 </button>
             </div>
 
+            {% hook 'thank-you:items.start' %}
+
             {% for item in order.items %}
                 {% if item.codes|length %}
                     <div class="bg-light-gray p-5 rounded-md text-start mb-2.5 last:mb-0">
@@ -88,6 +90,8 @@
                     </div>
                 {% endif %}
             {% endfor %}
+
+            {% hook 'thank-you:items.end' %}
         </div>
 
         <div class="lg:flex lg:space-s-8">

@@ -9,6 +9,8 @@
 {% extends "layouts.customer" %}
 {% block inner_content %}
     <div class="space-y-5 mb-10" id="wishlist">
+        {% hook 'customer:wishlist.items.start' %}
+
         {% for product in products %}
             <div class='product-entry product-entry--wishlist' id="product_{{ product.id }}">
                 <div class="flex items-center mb-4 sm:mb-0">
@@ -54,6 +56,8 @@
                 <p class="text-sm mb-5">{{ trans('pages.profile.wishlist_placeholder') }}</p>
             </div>
         {% endfor %}
+
+        {% hook 'customer:wishlist.items.end' %}
     </div>
 {% endblock %}
 {% block scripts %}
