@@ -16,12 +16,12 @@
 | type                  | string                       | page, product       |
 | id                    | int                          | pageId or ProductId |
 #}
-{# todo:: simpliy the main class like this (comment-{type}) comment comment-page, comment-product and merge the the classed to it #}
-{# todo:: you can avoid the container dom (avoid a inner level) in this case and merge it in the scss to comment-product class #}
-<div class="{{ type=='page'?'pt-16':'bg-gray-100 mb-8 md:mb-20 py-12 md:py-20' }}">
-    <div class="{{ type=='product'?'container':''}}">
+<div class="s-comments s-comments-{{ type }}">
+    <div class="s-comments-container">
+        {# todo :: move it to user.can_comment #}
         {% if can_comment %}
             <div class="form form--add-comment" salla-form-data>
+                {# todo:: find a way to have only one statement for hidden form input support honeypot & csrf_field for exmaple {% anti-spam %} #}
                 {% honeypot %}
                 <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
                 <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
@@ -31,7 +31,7 @@
                           rows="30"></textarea>
 
                 <div class="text-end mb-4">
-                    {#  todo :: use salla-button #}
+                    {# todo :: use salla-button #}
                     <button class="btn btn--primary btn--has-loading"
                             data-on-click="comment::send"
                             id="add-new-comment-btn"

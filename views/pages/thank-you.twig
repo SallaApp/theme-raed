@@ -109,6 +109,7 @@
                         <i class="sicon-newspaper-alt text-xl"></i>
                     </div>
                     <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
+                    {# todo :: why we still use csrf_field for form when this input handling via js?  #}
                     <form action="{{ order.send_invoice_url }}" class="ajax" method="post"
                           data-on-success="onSuccess" data-on-fail="onFail">
                         {{ csrf_field() }}

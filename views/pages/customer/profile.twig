@@ -12,6 +12,8 @@
 {% endblock %}
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
+
+    {# todo :: why we still use csrf_field for form when this input handling via js?  #}
     <form class="form form--user-profile ajax"
           method="POST"
           novalidate
