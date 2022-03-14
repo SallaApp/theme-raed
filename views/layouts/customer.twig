@@ -13,8 +13,8 @@
     <div class="container mb-8 sm:mb-24">
         <div class="flex items-start flex-col lg:flex-row ">
             <nav aria-label="Sidebar"
-                 class="hidden lg:block flex-shrink-0 lg:sticky top-24 -mt-28 shadow-default rounded-md bg-white w-full lg:w-72 lg:me-8 pt-8 pb-11 sidebar space-y-px">
-                <div class="text-center mb-9">
+                 class="flex-shrink-0 lg:sticky top-24 lg:-mt-28  lg:shadow-default rounded-md lg:bg-white w-full lg:w-72 lg:me-8 pt-8 lg:pb-11 sidebar space-y-px">
+                <div class="text-center lg:mb-9">
                     <div class="text-center mb-9">
                         <div class="h-20 w-20 m-auto avatar-wrap bg-color-gray rounded-full">
                             {% if is_current_url('profile') %}
@@ -31,7 +31,9 @@
                         </div>
                     </div>
                 </div>
-                {% component 'header.user-menu' with{is_profile_sidebar:true} %}
+                <div class="hidden lg:block">
+                    {% component 'header.user-menu' with{is_profile_sidebar:true} %}
+                </div>
             </nav>
             <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
                 <h1 class="font-bold text-lg mb-5">{{ page.title }}</h1>

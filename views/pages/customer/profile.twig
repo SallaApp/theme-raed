@@ -11,19 +11,6 @@
     <link rel="stylesheet" href="{{ asset('dist/filepond.css') }}">
 {% endblock %}
 {% block inner_content %}
-    <div class="lg:hidden">
-        <div class="text-center mb-6">
-            <div class=" h-24 w-24 m-auto">
-                <input type="file"
-                       class="filepond profile-img file-pond--circular {{ user.avatar ? 'has-image':'has-no-image' }}"
-                       name="filepond"
-                       data-instant-upload
-                       id="profile-img"
-                       data-default="{{ user.avatar }}"
-                       data-max-file-size="3MB"/>
-            </div>
-        </div>
-    </div>
     <form class="form form--user-profile ajax"
           method="POST"
           novalidate
