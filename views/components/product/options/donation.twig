@@ -13,7 +13,6 @@
 	<div class="product-section product-section--has-label">
 		<div class="form-group">
 			{% if product.can_donate %}
-				{{ csrf_field() }}
 				{# TODO:: @Adel #enhance - reduce --- #}
 				<div class="border-t border-border-color py-5 sm:space-s-4 mt-5 mb-2.5 sm:mb-0 sm:flex justify-between items-center">
 					<label for="donating_amount" class="flex-1 block text-sm mb-2.5 "> {{ trans('pages.products.donation_amount') }}
@@ -26,8 +25,6 @@
 					    </span>
 					</div>
 				</div>
-
-
 			{% else %}
 				<h4 class="d-block wide font-xsm color-danger">
 					{% if product.donation.completed %}
