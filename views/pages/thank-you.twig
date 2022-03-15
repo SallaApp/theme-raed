@@ -110,9 +110,7 @@
                     </div>
                     <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
                     {# todo :: why we still use csrf_field for form when this input handling via js?  #}
-                    <form action="{{ order.send_invoice_url }}" class="ajax" method="post"
-                          data-on-success="onSuccess" data-on-fail="onFail">
-                        {{ csrf_field() }}
+                    <form action="{{ order.send_invoice_url }}" class="ajax" method="post" data-on-success="onSuccess" data-on-fail="onFail">
                         <div class="flex max-w-3xl w-full">
                             <input type="email" id="resend-invoice-input" class="form-input rounded-e-none border-e-0 !w-[160px] sm:!w-[220px]" placeholder="your@email.com" required name="email">
                             <salla-button type="submit" loader-position="center" id="resend-invoice-submit" class="rounded-s-none w-32">

@@ -37,8 +37,6 @@ class App extends salla.AppHelpers {
           salla.cart.event.onItemAddedFailed(() => btn.stop())
         });
 
-        this.onClick('#product-filter', event => window.location.href = salla.helpers.addParamToUrl('by', event.target.value));
-
         // this.onClick('.grid-trigger', event => {
         //     event.preventDefault();
         //     let type = event.target.dataset.type;//list|grid
