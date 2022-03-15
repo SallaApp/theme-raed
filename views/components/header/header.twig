@@ -53,12 +53,9 @@
                         {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
-                            {#  todo :: use salla-button #}
-                            <button class="btn--icon"
-                                    data-on-click="login::show"
-                                    type="button">
-                                <i class="sicon-user-circle"></i>
-                            </button>
+                            <salla-button icon btn-style="outline" data-on-click="login::show">
+                              <i class="sicon-user-circle"></i>
+                            </salla-button>
                         {% endif %}
 
                         {# todo:: its hard to understand #}
@@ -68,7 +65,7 @@
                             <div>
                               <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
                               <b class="leading-3" data-cart-total>{{ cart.total }}</b>
-                            </>div
+                            </div>
                         </a>
                     </div>
                 </div>

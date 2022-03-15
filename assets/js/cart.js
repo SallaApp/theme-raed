@@ -82,7 +82,11 @@ class Cart extends BasePage {
                     };
                 btnAdd && app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
                 btnSub && app.onClick(btnSub, () => this.reduceQuantity(quantity));
-                app.onClick(cartItem.querySelector('.btn--delete'), () => this.removeItem(itemId))
+                
+                app.onClick(cartItem.querySelector('.btn--delete'), ({currentTarget: btn}) => {
+                  this.removeItem(itemId);
+                  btn.load();
+                })
             });
     }
 
@@ -108,8 +112,6 @@ class Cart extends BasePage {
 
     removeItem(itemId) {
         let item = document.querySelector('#item-' + itemId);
-        item.querySelector('.spinner-loader').removeAttribute('style');
-
         salla.cart.api.deleteItem(itemId).then(res => {
             this.updateCartPageInfo(res.data);
             let items = document.querySelectorAll('.cart-item');

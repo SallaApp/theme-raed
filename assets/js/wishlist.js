@@ -2,10 +2,7 @@ import BasePage from './base-page';
 
 class Wishlist extends BasePage {
     registerEvents() {
-        app.onClick('.btn-remove', ({target}) => {
-            target.querySelector('.sicon-cancel').style.display = 'none';
-            target.querySelector('.spinner-loader').removeAttribute('style');
-        });
+        app.onClick('.btn--delete', ({currentTarget: btn}) => btn.load())
 
         salla.wishlist.event.onRemoved((response, prodId) => {
             let item = document.querySelector('#product_' + prodId);

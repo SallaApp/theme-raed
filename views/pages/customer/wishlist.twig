@@ -40,12 +40,9 @@
                       {{ trans('pages.cart.add_to_cart') }}
                     </salla-button>
 
-                    <button class="relative rounded-full bg-red-500 text-white w-6 h-6 btn-remove cursor-pointer"
-                            data-id="{{ product.id }}" data-on-click="wishlist::remove">
-                        <i class="sicon-cancel text-base"></i>
-                        <span style="display: none"
-                              class="absolute spinner-loader reverse w-4 h-4 animate-spin border-2 border-white rounded-full top-1/2 left-1/2 -mt-2 -ml-2"></span>
-                    </button>
+                    <salla-button icon mini-icon btn-style="danger" data-id="{{ product.id }}" data-on-click="wishlist::remove" class="btn--delete">
+                      <i class="sicon-cancel"></i>
+                    </salla-button> 
                 </div>
             </div>
         {% else %}

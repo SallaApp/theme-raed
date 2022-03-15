@@ -4,7 +4,8 @@ class ThankYou extends BasePage {
     onReady() {
         
         app.anime('.thanks-item', {translateX: [20, 0]});
-        app.onClick('.btn--copy', event => app.copyLinkToClipboard(event.target.id));
+
+        app.onClick('.btn--copy', ({currentTarget: btn}) => app.copyLinkToClipboard(btn.id));
 
         const sendBtn = document.getElementById('resend-invoice-submit'),
               sendInput = document.getElementById('resend-invoice-input');

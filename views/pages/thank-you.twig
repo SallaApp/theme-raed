@@ -57,12 +57,10 @@
                                     <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
                                     <span>{{ code }}</span>
                                 </p>
-                                {# todo:: use salla-button #}
-                                <button class="btn--copy text-primary opacity-80 hover:opacity-100 transition-opacity flex items-center"
-                                        id="product_code_{{ item.id }}_{{ loop.index }}" data-code="{{ code }}">
+                                <salla-button class="btn--copy" btn-style="link" id="product_code_{{ item.id }}_{{ loop.index }}" data-code="{{ code }}">
                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
                                     <span class="text-sm ms-2 pointer-events-none">{{ trans('common.copy_code') }}</span>
-                                </button>
+                                </salla-button>
                             </div>
                         {% endfor %}
                     </div>
