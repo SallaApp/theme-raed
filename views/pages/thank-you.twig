@@ -31,16 +31,16 @@
                 <img src="{{ asset('images/delivery-bro.svg') }}" alt=""
                      class="thanks-item opacity-0 grayscale w-56 mb-8">
                 <h1 class="font-bold text-lg mb-2.5 thanks-item opacity-0">{{ thank_you_title }}</h1>
-                <p class="thanks-item opacity-0 text-gray-500 max-w-xs text-center text-sm leading-6">
-                    {{ trans('pages.thank_you.order_id') }} <b
-                            class="text-text-dark unicode">#{{ order.reference_id }}</b>
+                <p class="thanks-item opacity-0 text-gray-500 max-w-xs text-center text-sm leading-6 mb-20">
+                    {{ trans('pages.thank_you.order_id') }} 
+                    <b class="text-text-dark unicode">#{{ order.reference_id }}</b>
                 </p>
-                {# todo:: use salla-button #}
-                <button class="btn btn--oval btn--padded less btn--primary mt-20" data-id="{{ order.id }}"
-                        data-on-click="order::show">
-                    <i class="sicon-newspaper me-1"></i>
-                    {{ trans('pages.thank_you.order_details') }}
-                </button>
+                <salla-button
+                  data-id="{{ order.id }}"
+                  data-on-click="order::show">
+                  <i class="sicon-newspaper me-1"></i>
+                  {{ trans('pages.thank_you.order_details') }}
+                </salla-button>
             </div>
 
             {% for item in order.items %}
@@ -59,7 +59,7 @@
                                 <button class="btn--copy text-primary opacity-80 hover:opacity-100 transition-opacity flex items-center"
                                         id="product_code_{{ item.id }}_{{ loop.index }}" data-code="{{ code }}">
                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
-                                    <span class="text-sm ms-2">{{ trans('common.copy_code') }}</span>
+                                    <span class="text-sm ms-2 pointer-events-none">{{ trans('common.copy_code') }}</span>
                                 </button>
                             </div>
                         {% endfor %}

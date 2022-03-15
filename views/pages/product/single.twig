@@ -251,6 +251,7 @@
                 </form>
                 <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
 
+                    {# Quantity #}
                     {% if product.is_hidden_quantity %}
                         <input type="hidden" value="1" name="quantity"/>
                     {% else %}
@@ -280,6 +281,7 @@
                         </div>
                     {% endif %}
 
+                    {# Price #}
                     <div class="center-between mb-5">
                         <label class="form-label">
                             <b class="block">
@@ -299,19 +301,30 @@
                         </div>
                     </div>
 
+
                     <div class="flex justify-between space-s-4">
                         {% if product.is_available %}
-                            <button class="btn btn--primary btn--has-loading"
+                            {# <button class="btn btn--primary btn--has-loading"
                                     data-form-selector=".product-form"
                                     data-on-click="cart::add.item"
                                     type="button">
                                 <span class="loader loader--small"></span>
                                 <span class="btn__text">{{ trans('pages.cart.add_to_cart') }}</span>
-                            </button>
+                            </button> #}
+                            <salla-button 
+                              data-form-selector=".product-form"
+                              data-on-click="cart::add.item"
+                              loader-position="end" 
+                              class="btn--add-to-cart w-full">
+                                {{ trans('pages.cart.add_to_cart') }}
+                            </salla-button>
+
                         {% elseif product.notify_availability %}
-                            <salla-product-availability channels="{{ product.notify_availability.channels|join(',') }}"
-                                    {{ product.notify_availability.subscribed?'is-subscribed':'' }}
-                                                        class="w-full"></salla-product-availability>
+                            <salla-product-availability 
+                              channels="{{ product.notify_availability.channels|join(',') }}" 
+                              {{ product.notify_availability.subscribed?'is-subscribed':'' }}
+                              class="w-full">
+                            </salla-product-availability>
                         {% else %}
                             <button type="button" class="btn btn--outline">
                                 {% if product.is_donation %}

@@ -221,11 +221,12 @@
                                 {% for code in item.codes %}
                                     <div class="py-3.5 center-between">
                                         <dt class="mb-2 md:mb-0">{{ code }}</dt>
+                                        
                                         <button class="btn--copy text-primary opacity-80 hover:opacity-100 transition-opacity flex items-center"
                                                 id="order_code_{{ item.id }}_{{ loop.index }}"
                                                 data-code="{{ code }}">
-                                            <i class="copy-icon sicon-swap-stroke"></i>
-                                            <span class="text-sm ms-2">{{ trans('common.copy_code') }}</span>
+                                            <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
+                                            <span class="text-sm ms-2 pointer-events-none">{{ trans('common.copy_code') }}</span>
                                         </button>
                                     </div>
                                 {% endfor %}

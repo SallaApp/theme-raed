@@ -301,16 +301,16 @@ class App extends salla.AppHelpers {
     }
 
     initiateComments() {
-        //Add Loading when adding new comment
         let btn = document.getElementById('add-new-comment-btn');
-        if (!btn) {
-            return;
-        }
+        if (!btn) return;
         let input = this.element('textarea[name="comment"]');
-        this.onClick(btn, () => input.value.length >= 3 ? btn.classList.add('btn--has-loading', 'pointer-events-none') : input.classList.add('!border-red-400'));
         this.onKeyUp(input, () => input.classList.remove('!border-red-400'));
-        salla.comment.event.onAdded(() => btn.classList.remove('btn--is-loading', 'pointer-events-none') || window.location.reload());
-        salla.comment.event.onAdditionFailed(() => btn.classList.remove('btn--is-loading', 'pointer-events-none'));
+
+        this.onClick('#add-new-comment-btn', ({currentTarget: btn}) => {
+          input.value.length >= 3 ? btn.load() : input.classList.add('!border-red-400');
+          salla.comment.event.onAdded(() => window.location.reload())
+          salla.comment.event.onAdditionFailed(() => btn.stop())
+        });
     }
 }
 

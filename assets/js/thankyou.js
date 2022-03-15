@@ -8,6 +8,7 @@ class ThankYou extends BasePage {
 
         const sendBtn = document.getElementById('resend-invoice-submit'),
               sendInput = document.getElementById('resend-invoice-input');
+        if(!sendBtn) return;
         app.onClick(sendBtn, ({currentTarget: btn}) => {
           if (!sendInput.value.length || !app.isValidEmail(sendInput.value)) return;
           btn.load();
