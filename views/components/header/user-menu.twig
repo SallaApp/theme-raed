@@ -10,14 +10,14 @@
         <i class="sicon-school-bell me-3 text-lg"></i>
         <span class="me-auto">{{ trans('common.titles.notifications') }}</span>
         {% if new_notifications_count %}
-            <span class="notifications-count">{{ new_notifications_count }}</span>
+            <span class="badge badge--red">{{ new_notifications_count }}</span>
         {% endif %}
     </a>
     <a href="{{ link('pending_orders') }}" class="menu-item {{ is_current_url('pending_orders')? 'is-active':'' }}">
         <i class="sicon-cart me-3 text-lg"></i>
         <span class="truncate me-auto">{{ trans('common.titles.pending_orders') }}</span>
         {% if pending_orders_count %}
-          <span class="notifications-count">{{ pending_orders_count }}</span>
+          <span class="badge badge--red">{{ pending_orders_count }}</span>
         {% endif %}
     </a>
     <a href="{{ link('orders') }}" aria-current="page" class="menu-item {{ is_current_url('orders') and not is_current_url('pending_orders') ? 'is-active':'' }}">
@@ -63,7 +63,7 @@
                         <i class="sicon-bell-ring me-3"></i>
                         <span class="me-auto">{{ trans('common.titles.notifications') }}</span>
                         {% if new_notifications_count %}
-                            <span class="notifications-count">{{ new_notifications_count }}</span>
+                            <span class="badge badge--red">{{ new_notifications_count }}</span>
                         {% endif %}
                     </a>
                 </li>
@@ -72,7 +72,7 @@
                         <i class="sicon-cart me-3"></i>
                         <span class="me-auto"> {{ trans('common.titles.pending_orders') }}</span>
                         {% if pending_orders_count %}
-                            <span class="notifications-count">{{ pending_orders_count }}</span>
+                            <span class="badge badge--red">{{ pending_orders_count }}</span>
                         {% endif %}
                     </a>
                 </li>

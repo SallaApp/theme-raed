@@ -148,7 +148,7 @@ class Anime {
 Anime.addToCart = function (response, productId) {
     document.querySelectorAll('.cart-thumb').forEach(el => el.remove());
     let
-        cartBtn = document.querySelector('#main-cart-btn .cart-icon'),
+        cartBtn = document.querySelector('#nav-cart .icon'),
         btnOffset = cartBtn.getBoundingClientRect(),
         btnTop = btnOffset.top + window.scrollY,
         btnLeft = btnOffset.left + window.scrollX;

@@ -35,7 +35,7 @@
     </div>
 
     {# Main Nav #}
-    <div id="mainnav" class="main-nav-container bg-white shadow-default bg-white">
+    <div id="mainnav" class="main-nav-container shadow-default bg-white">
         <div class="inner bg-inherit">
             <div class="container">
                 <div class="flex items-stretch justify-between relative">
@@ -62,15 +62,13 @@
                         {% endif %}
 
                         {# todo:: its hard to understand #}
-                        <a id="main-cart-btn" href="{{ link('cart') }}"
-                           class="flex items-center ms-4 transition-opacity hover:opacity-80 relative">
-                            <i class="cart-icon sicon-shopping-bag text-3xl me-1"></i>
-                            <div data-cart-badge
-                                 class="absolute top-1 -start-2 notifications-count">{{ cart.items_count }}</div>
-                            <div class="whitespace-nowrap">
-                                <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
-                                <b class="leading-3" data-cart-total>{{ cart.total }}</b>
-                            </div>
+                        <a id="nav-cart" href="{{ link('cart') }}">
+                            <i class="icon sicon-shopping-bag"></i>
+                            <span class="badge badge--red">{{ cart.items_count }}</span>
+                            <div>
+                              <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
+                              <b class="leading-3" data-cart-total>{{ cart.total }}</b>
+                            </>div
                         </a>
                     </div>
                 </div>
