@@ -126,11 +126,11 @@ class App extends salla.AppHelpers {
 
     initiateStickyMenu() {
         let header = this.element('#mainnav');
-        let height = this.element('.mainnav-inner').clientHeight;
+        let height = this.element('#mainnav .inner').clientHeight;
         header.style.height = height + 'px';
 
         window.addEventListener('resize', () => {
-            let height = this.element('.mainnav-inner').clientHeight;
+            let height = this.element('#mainnav .inner').clientHeight;
             header.style.height = height + 'px';
         })
 
