@@ -40,18 +40,26 @@
 | order.items[].attachments        | OrderItemAttachment[] *Collection | if it's empty will be empty array so you can use it as check `{% if item.attachments %}` |
 | order.items[].attachments[].type | string                            |                                                                                          |
 | order.items[].attachments[].url  | string                            |                                                                                          |
-| order.items[].files              | array                             |                                                                                          |
-| order.items[].files[].name       |                                   |                                                                                          |
-| order.items[].files[].url        |                                   |                                                                                          |
+| order.items[].files              | ?array                            |                                                                                          |
+| order.items[].files[].name       | string                            |                                                                                          |
+| order.items[].files[].url        | string                            |                                                                                          |
 | order.items[].codes              | array                             | list of codes for item                                                                   |
-| order.items[].options            | OrderItemOption[] *Collection     |                                                                                          |
-| order.items[].options[].name     |                                   |                                                                                          |
-| order.items[].options[].value    |                                   |                                                                                          |
-| order.items[].options[].is_image |                                   |                                                                                          |
+| order.items[].options            | ?OrderItemOption[] *Collection    |                                                                                          |
+| order.items[].options[].name     | string                            |                                                                                          |
+| order.items[].options[].value    | string                            |                                                                                          |
+| order.items[].options[].is_image | bool                              |                                                                                          |
+| order.items[].rating             | ?Rating                           |                                                                                          |
+| order.items[].rating.content     | string                            | *HTML                                                                                    |
+| order.items[].rating.is_pending  | bool                              |                                                                                          |
+| order.items[].rating.stars       | int                               |                                                                                          |
+| order.items[].rating.created_at  | date                              |                                                                                          |
 | order.discounts                  | array                             |                                                                                          |
 | order.discounts[].name           | string                            |                                                                                          |
 | order.discounts[].discount       | float                             | minus number                                                                             |
-| order.has_feedback               | bool                              | minus number                                                                             |
+| order.is_rated                   | bool                              |                                                                                          |
+| order.rating                     | ?OrderRatings                     |                                                                                          |
+| order.rating.store               | ?Rating                           |                                                                                          |
+| order.rating.shipping            | ?Rating                           |                                                                                          |
 #}
 {% extends "layouts.customer" %}
 {% block inner_content %}
@@ -273,13 +281,13 @@
                         </div>
                     {% endif %}
 
-                    {% if item.feedback %}
+                    {% if item.rating %}
                         <section class="border-t mt-10 pt-8">
-                            <p>{{ item.feedback.content|raw }}</p>
-                            {% if item.feedback.is_pending %}
+                            <p>{{ item.rating.content|raw }}</p>
+                            {% if item.rating.is_pending %}
                                 <span>{{ trans('pages.rating.pending') }}</span>
                             {% endif %}
-                            {% include 'pages.partials.stars' with {stars:item.feedback.stars} %}
+                            {% include 'pages.partials.stars' with {stars:item.rating.stars} %}
                         </section>
                     {% endif %}
                 </div>
@@ -429,23 +437,22 @@
         {% endif %}
 
         {# Store Rating #}
-        {% if order.feedback.store.stars %}
+        {% if order.rating.store.stars %}
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
-                <p class="mb-2">{{ order.feedback.store.content|raw }}</p>
-                {% include 'pages.partials.stars' with {stars:order.feedback.store.stars} %}
+                <p class="mb-2">{{ order.rating.store.content|raw }}</p>
+                {% include 'pages.partials.stars' with {stars:order.rating.store.stars} %}
             </section>
         {% endif %}
 
         {# Shipping Rating #}
-        {% if order.feedback.shipping.stars %}
+        {% if order.rating.shipping.stars %}
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
-                <p class="mb-2">{{ order.feedback.shipping.content|raw }}</p>
-                {% include 'pages.partials.stars' with {stars:order.feedback.shipping.stars} %}
+                <p class="mb-2">{{ order.rating.shipping.content|raw }}</p>
+                {% include 'pages.partials.stars' with {stars:order.rating.shipping.stars} %}
             </section>
         {% endif %}
-
         {% hook 'customer:orders.single.details.end' %}
     </div>
 {% endblock %}

@@ -1,17 +1,19 @@
 {#
-| Variable                | Type        | Description    |
-|-------------------------|-------------|----------------|
-| page                    | object      |                |
-| page.title              | string      | *could be html |
-| page.slug               | string      | ex: "cat.show" |
-| products                | Product[]   |                |
-| category                | ?Category   |                |
-| category.name           | string      |                |
-| category.sub_categories | ?Category[] |                |
-| category.url            | string      |                |
-| sort_by                 | ?string     |                |
-| sort_list               | ?array      | key=>value     |
-| search_word             | ?string     |                |
+| Variable                | Type        | Description                                                          |
+|-------------------------|-------------|----------------------------------------------------------------------|
+| page                    | object      |                                                                      |
+| page.title              | string      | *could be html                                                       |
+| page.slug               | string      | ex: "cat.show"                                                       |
+| products                | Product[]   |                                                                      |
+| category                | ?Category   |                                                                      |
+| category.name           | string      |                                                                      |
+| category.sub_categories | ?Category[] |                                                                      |
+| category.url            | string      |                                                                      |
+| sort_list[]             | SortList[]  |                                                                      |
+| sort_list[].value       | string      | ourSuggest, bestSell, topRated, priceFromTopToLow, priceFromLowToTop |
+| sort_list[].label       | string      |                                                                      |
+| sort_list[].is_selected | bool        | Is current page sorted by it                                         |
+| search_word             | ?string     |                                                                      |
 #}
 {% extends "layouts.master" %}
 {% block content %}
@@ -31,8 +33,8 @@
                                             class="appearance-none form-input focus:ring-transparent
                                                        focus:outline-none h-10 text-sm rounded-md  border
                                                        border-border-color w-48 pt-0 pb-1">
-                                        {% for key,value in sort_list %}
-                                            <option value="{{ key }}" {{ sort_by==key?'selected':'' }}>{{ value }}</option>
+                                        {% for sort in sort_list %}
+                                            <option value="{{ sort.value }}" {{ sort.is_selected?'selected':'' }}>{{ sort.label }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -73,7 +75,7 @@
     </div>
 
     {% if store.settings.category.testimonial_enabled %}
-        {% component 'home.testimonials'%}
+        {% component 'home.testimonials' %}
     {% endif %}
 {% endblock %}
 

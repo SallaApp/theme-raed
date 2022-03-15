@@ -23,10 +23,10 @@ class Product extends BasePage {
         let qunatityChanged = () => salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
         app.onClick('#btn-increase', () => app.quantityInput.value++ && qunatityChanged());
         app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && qunatityChanged()));
-        
+
         app.onClick('#btn-show-more', e => app.all('#more-content', div => {
-          e.target.classList.add('is-expanded');
-          div.style = `max-height:${div.scrollHeight}px`;
+            e.target.classList.add('is-expanded');
+            div.style = `max-height:${div.scrollHeight}px`;
         }) || e.target.remove());
 
         salla.product.event.onPriceUpdated(res => {
@@ -116,6 +116,7 @@ class Product extends BasePage {
         });
     }
 }
+
 Product.intiateWhenReady('Product', ['product.single']);
 
 
@@ -128,6 +129,7 @@ class Products extends BasePage {
             spaceBetween  : 15,
             breakpoints   : {1024: {slidesPerView: 2, spaceBetween: 30}}
         });
+        app.on('change', '#product-filter', event => window.location.href = salla.helpers.addParamToUrl('by', event.target.value));
     }
 }
 

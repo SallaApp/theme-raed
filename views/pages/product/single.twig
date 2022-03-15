@@ -22,6 +22,7 @@
 | product.sold_quantity                  | int                         |                                                                        |
 | product.max_quantity                   | int                         |                                                                        |
 | product.discount_ends                  | ?date                       |                                                                        |
+| product.is_taxable                     | bool                        | Is the tax included in the price                                       |
 | product.image                          | object                      |                                                                        |
 | product.image.url                      | string                      |                                                                        |
 | product.image.alt                      | ?string                     |                                                                        |
@@ -105,7 +106,8 @@
                 </div>
 
                 {% if has_many_images %}
-                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider mini" id="thumbs-slider-{{ product.id }}">
+                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider mini"
+                         id="thumbs-slider-{{ product.id }}">
                         <div class="swiper-wrapper flex items-stretch">
                             {% for image in product.images %}
                                 <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
@@ -124,8 +126,11 @@
 
                 {% hook 'product:single.description.start' %}
 
-                {% component 'product.brand'%}
+                {% component 'product.brand' %}
 
+                {% if product.is_taxable %}
+                    <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
+                {% endif %}
                 <div class="center-between">
                     <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
                     {% if product.rating %}
@@ -160,7 +165,8 @@
                         </div>
 
                         {# Read More Button #}
-                        <a id="btn-show-more" class="link--primary inline-block mt-2 cursor-pointer">{{ trans('pages.products.read_more') }}</a>
+                        <a id="btn-show-more"
+                           class="link--primary inline-block mt-2 cursor-pointer">{{ trans('pages.products.read_more') }}</a>
                     {% else %}
                         <p class="pb-1">{{ product.description|raw }}</p>
                     {% endif %}
@@ -319,19 +325,19 @@
                                 <span class="loader loader--small"></span>
                                 <span class="btn__text">{{ trans('pages.cart.add_to_cart') }}</span>
                             </button> #}
-                            <salla-button 
-                              data-form-selector=".product-form"
-                              data-on-click="cart::add.item"
-                              loader-position="end" 
-                              class="btn--add-to-cart w-full">
+                            <salla-button
+                                    data-form-selector=".product-form"
+                                    data-on-click="cart::add.item"
+                                    loader-position="end"
+                                    class="btn--add-to-cart w-full">
                                 {{ trans('pages.cart.add_to_cart') }}
                             </salla-button>
 
                         {% elseif product.notify_availability %}
-                            <salla-product-availability 
-                              channels="{{ product.notify_availability.channels|join(',') }}" 
-                              {{ product.notify_availability.subscribed?'is-subscribed':'' }}
-                              class="w-full">
+                            <salla-product-availability
+                                    channels="{{ product.notify_availability.channels|join(',') }}"
+                                    {{ product.notify_availability.subscribed?'is-subscribed':'' }}
+                                    class="w-full">
                             </salla-product-availability>
                         {% else %}
                             <button type="button" class="btn btn--outline">
@@ -348,11 +354,7 @@
                 {% hook 'product:single.description.end' %}
             </div>
         </div>
-
-
-        {# frontend TODO:: support this section #}
-        {# {% component 'product.quick-buy' with {product: product} %} #}
-        {% component 'product.offer'%}
+        {% component 'product.offer' %}
     </div>
 
     {% component comments %}

@@ -1,7 +1,7 @@
 {#
 | Variable              | Type                         | Description         |
 |-----------------------|------------------------------|---------------------|
-| comments              | Feedback[] *Paginator        |                     |
+| comments              | Comment[] *Paginator         |                     |
 | comments[].id         | int                          |                     |
 | comments[].avatar     | string                       |                     |
 | comments[].name       | string                       |                     |
@@ -10,19 +10,16 @@
 | comments[].stars      | int                          |                     |
 | comments[].content    | string                       |                     |
 | comments[].is_pending | bool                         | Is not approved yet |
-| comments[].replies    | Feedback[] *Collection       |                     |
+| comments[].replies    | Comment[] *Collection        |                     |
 | comments[].type       | string 'admin','customer'    |                     |
-| can_comment           | bool                         |                     |
 | type                  | string                       | page, product       |
 | id                    | int                          | pageId or ProductId |
 #}
 <div class="s-comments s-comments-{{ type }}">
     <div class="s-comments-container">
-        {# todo :: move it to user.can_comment #}
-        {% if can_comment %}
+        {% if user.can_comment %}
             <div class="form form--add-comment" salla-form-data>
-                {# todo:: find a way to have only one statement for hidden form input support honeypot & csrf_field for exmaple {% anti-spam %} #}
-                {% honeypot %}
+                {% hook anti_spam %}
                 <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
                 <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
                           class="form-input"
