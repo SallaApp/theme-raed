@@ -59,15 +59,16 @@
 {% endblock %}
 {% block content %}
     <div class="container px-3 xs:px-5">
-        <nav class="w-full py-5">
-            {% component 'header.breadcrumbs' %}
-        </nav>
+        {% component 'header.breadcrumbs' %}
+
         <div class="flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
             <div class="main-content flex-1 w-full">
+                {% hook 'cart:items.start' %}
+
                 {% for item in cart.items %}
                     {# todo:: jamal lets talk about it in zoom #}
                     {% set key_prefix=item.id %}
-                    
+
                     {# @see verifyDataBeforeSend in assets/js/partials/product-options.js #}
                     {# data-id used in @see initiateCartItems in assets/js/cart.js #}
                     <section class="cart-item bg-white overflow-hidden p-5 xs:p-7 rounded-md mb-5 relative"
@@ -140,7 +141,12 @@
                         <a href="{{ link('/') }}" class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back_home') }}</a>
                     </div>
                 {% endfor %}
+
+                {% hook 'cart:items.end' %}
             </div>
+
+            {% hook 'cart:summary.start' %}
+
             <!-- sidebar -->
             {% if cart.items|length %}
                 <div class="sticky top-24 w-full lg:w-96  lg:ms-8">
@@ -229,6 +235,8 @@
                     <b>{{ cart.total|money }}</b>
                 </div>
             {% endif %}
+
+            {% hook 'cart:summary.end' %}
         </div>
     </div>
 {% endblock %}

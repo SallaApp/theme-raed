@@ -16,9 +16,9 @@
 {% block content %}
     <div class="container mb-8 sm:mb-24">
         <div class="center-between">
-            <nav class="w-full py-5">
-                {% component 'header.breadcrumbs' %}
-            </nav>
+
+            {% component 'header.breadcrumbs' %}
+
             <a class="lg:hidden space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary"
                href="#filters-menu">
                 <i class="sicon-filter text-xs"></i>
@@ -32,8 +32,9 @@
                 <ul>
                     {% for category in categories %}
                         <li {{ category.is_current ? ' class="color-main"' : '' }}>
-                            <a class="py-3 block text-sm hover:text-primary"
-                               href="{{ category.url }}">{{ category.name }}</a>
+                            <a class="py-3 block text-sm hover:text-primary" href="{{ category.url }}">
+                                {{ category.name }}
+                            </a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -88,6 +89,8 @@
                     </div>
                 {% endif %}
                 {% if articles|length %}
+                    {% hook 'blog:index.items.start' %}
+
                     <salla-infinite-scroll class="grid md:grid-cols-2 gap-8" next-page="{{ articles.next_page }}" next-page.autoload>
                         {% for article in articles %}
                             <div class='list-block post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
@@ -137,6 +140,8 @@
                             </div>
                         {% endfor %}
                     </salla-infinite-scroll>
+
+                    {% hook 'blog:index.items.end' %}
                 {% elseif not slides|length %}
                     <div class="no-content-placeholder">
                         <i class="sicon-inbox icon"></i>

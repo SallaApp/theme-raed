@@ -4,12 +4,10 @@
 | cart             | object  |                                 |
 | cart.items_count | int     |                                 |
 | cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
-
-* It's important to put all Header components here, to be excluded in mobile apps
 #}
 <header class="store-header">
     {# Top Nav #}
-    <div id="topnav" class="py-2 lg:py-1.5">
+    <div class="top-navbar">
         <div class="container flex justify-between">
             <div class="center-between w-full lg:w-auto ">
                 <div class="flex items-center space-s-1">
@@ -32,26 +30,21 @@
                 </div>
             </div>
 
-            {# @Jamal - component naming is confusing footer in the header , why not storeContacts #}
             {% component 'footer.contacts' with {is_header:true} %}
         </div>
     </div>
 
     {# Main Nav #}
-    <div id="mainnav" class="mainnav-container bg-white shadow-default
-  {{ theme.settings.get('mainnav_is_dark') ? 'dark:bg-gray-700 dark:text-gray-300': 'bg-white' }}
-  ">
-        <div class="mainnav-inner bg-inherit">
+    <div id="mainnav" class="main-nav-container bg-white shadow-default bg-white">
+        <div class="inner bg-inherit">
             <div class="container">
                 <div class="flex items-stretch justify-between relative">
                     <div class="flex items-center">
                         <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
                             <i class="sicon-menu text-primary text-3xl me-2.5"></i>
                         </a>
-                        <a class="store-logo navbar-brand items-center flex my-2 lg:my-0"
-                           href="{{ store.url }}">
-                            <img src="{{ store.logo }}" alt="{{ store.name }}"
-                                 class="max-h-14 sm:max-h-16 max-w-[170px]">
+                        <a class="navbar-brand" href="{{ store.url }}">
+                            <img src="{{ store.logo }}" alt="{{ store.name }}">
                             <h1 class="hidden">{{ store.name }}</h1>
                         </a>
                         {% component 'header.menu' %}
@@ -68,6 +61,7 @@
                             </button>
                         {% endif %}
 
+                        {# todo:: its hard to understand #}
                         <a id="main-cart-btn" href="{{ link('cart') }}"
                            class="flex items-center ms-4 transition-opacity hover:opacity-80 relative">
                             <i class="cart-icon sicon-shopping-bag text-3xl me-1"></i>
@@ -82,9 +76,12 @@
                 </div>
             </div>
         </div>
+
         {% if user.type=='guest' %}
             <salla-login-modal></salla-login-modal>
         {% endif %}
     </div>
 </header>
+
+{# Mobile Main Nav #}
 {% component 'header.menu' with {is_mobile:true} %}

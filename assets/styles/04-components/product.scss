@@ -1,77 +1,76 @@
-
 // Product card
-.product-entry{
+.product-entry {
   @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex relative;
 
-  &--full-image{
+  &--full-image {
     @apply h-80 md:h-auto;
 
-    .product-entry__title a{
+    .product-entry__title a {
       @apply text-white line-clamp-3;
       text-shadow: 0 0 1px #999;
     }
   }
 
-  &__image{
+  &__image {
     @apply bg-gray-100 relative overflow-hidden hover:opacity-90 w-full flex-shrink-0;
   }
 
   .out-of-stock &__image img,
-  &--full-image.out-of-stock img{
+  &--full-image.out-of-stock img {
     @apply grayscale
   }
 
-  &__title a{
+  &__title a {
     @apply block text-sm font-bold text-title-color hover:text-primary;
 
-    .product-entry--horizontal &{
+    .product-entry--horizontal & {
       @apply line-clamp-2;
     }
   }
 
-  &--minimal{
-    .product-entry__title a{
+  &--minimal {
+    .product-entry__title a {
       @apply line-clamp-2;
     }
 
-    .btn--wishlist{
+    .btn--wishlist {
       @apply absolute top-0 end-0;
 
-      .sicon-heart{
+      .sicon-heart {
         text-shadow: 0 0 2px #999;
         color: #fff;
       }
     }
   }
 
-  &--horizontal{
-    .product-entry__image{
+  &--horizontal {
+    .product-entry__image {
       @apply h-36 sm:h-auto w-32 sm:w-56
     }
   }
 
-  &--vertical{
+  &--vertical {
     @apply flex-col;
   }
 
-  &--fit-type{
-    .product-entry__image{
+  &--fit-type {
+    .product-entry__image {
       @apply h-44;
     }
   }
 
-  &--special{
-    &.product-entry--fit-type{
-      .product-entry__image{
+  &--special {
+    &.product-entry--fit-type {
+      .product-entry__image {
         @apply sm:h-500;
       }
     }
   }
 
-  &--wishlist{
+  &--wishlist {
     @apply justify-between p-4 flex-col sm:flex-row;
 
-    .product-entry__image{
+    .product-entry__image {
       @apply overflow-hidden w-16 h-12 md:w-20 md:h-16 rounded-md;
     }
   }
@@ -93,6 +92,21 @@
           width: 240px;
         }
       }
+    }
+  }
+}
+
+.s-comments {
+
+  .s-comments-page {
+    @apply pt-16;
+  }
+
+  .s-comments-product {
+    @apply bg-gray-100 mb-8 md:mb-20 py-12 md:py-20;
+
+    .s-comments-container {
+      @apply container;
     }
   }
 }

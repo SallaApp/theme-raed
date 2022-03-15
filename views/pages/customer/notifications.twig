@@ -15,6 +15,8 @@
 {% extends "layouts.customer" %}
 {% block inner_content %}
     {% if  notifications|length %}
+        {% hook 'customer:notifications.items.start' %}
+
         <salla-infinite-scroll class="space-y-2.5 md:space-y-5 mb-10" next-page="{{ notifications.next_page }}">
             {% for notification in notifications %}
                 <a href="{{ notification.url }}"
@@ -35,6 +37,8 @@
                 </a>
             {% endfor %}
         </salla-infinite-scroll>
+
+        {% hook 'customer:notifications.items.end' %}
     {% else %}
         <div class="no-content-placeholder">
             <i class="sicon-inbox icon"></i>

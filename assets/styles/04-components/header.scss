@@ -1,6 +1,12 @@
 
 /* Top Nav */
-#topnav{
+.top-navbar {
+  @apply py-2;
+
+  @screen lg {
+    @apply py-1.5;
+  }
+
   .topnav-has-bg & {
     @apply bg-[color:var(--topnav-bg)];
   }
@@ -37,20 +43,20 @@
 }
 
 /* Main Nav */
-#mainnav{
+.main-nav-container {
   // Custom background Color
-  .mainnav-has-bg &,
-  .mainnav-has-bg & .sub-menu{
+  .has-bg &,
+  .has-bg & .sub-menu{
     @apply bg-[color:var(--mainnav-bg)];
   }
 
   // Custom text color
-  .mainnav-has-text-color & {
+  .has-text-color & {
     @apply text-[color:var(--mainnav-text-color)];
   }
 
   // Dark mode
-  .mainnav-is-dark & {
+  .is-dark & {
     @apply bg-gray-800 text-gray-300;
 
     .dropdown-toggler,
@@ -73,7 +79,7 @@
 
     .dropdown__menu > div{
       @apply border-gray-300/10;
-    } 
+    }
 
     .product-entry{
       @apply bg-gray-800 border border-gray-300/10;
@@ -102,15 +108,15 @@
 }
 
 /* Sticky Header */
-.mainnav-container {
+.main-nav-container {
   &.animated {
-    .mainnav-inner {
+    .inner {
       transition: transform 0.5s, -webkit-transform 0.5s, opacity 0.4s;
     }
   }
 
   &.fixed-pinned {
-    .mainnav-inner {
+    .inner {
       position: fixed;
       top: 0;
       right: 0;
@@ -121,7 +127,7 @@
       transform: translate3d(0, -100%, 0);
     }
 
-    .store-logo {
+    .navbar-brand {
       img {
         max-height: 40px;
       }
@@ -138,8 +144,16 @@
   }
 
   &.fixed-header {
-    .mainnav-inner {
+    .inner {
       transform: translate3d(0, 0, 0);
     }
+  }
+}
+
+.navbar-brand {
+  @apply items-center flex my-2 lg:my-0;
+
+  img {
+    @apply max-h-14 sm:max-h-16 max-w-[170px];
   }
 }

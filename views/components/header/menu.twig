@@ -11,7 +11,7 @@
 | menus[].mega_menu    | ?Product[] *Collection | List of selected products or null                  |
 #}
 {% if is_mobile %}
-  <nav id="mobile-menu" class="mobile-menu lg:hidden overflow-hidden">
+  <nav id="mobile-menu" class="mobile-menu">
       <ul>
           {% for menu_id, menu in menus %}
               {% include 'components.header._menu-item' with {is_mobile:true} %}
@@ -23,7 +23,7 @@
   <button class="btn--close-sm close-mobile-menu sicon-cancel"></button>
 
 {% else %}
-    <ul class="main-menu hidden lg:flex flex-wrap items-center mx-6 pt-8 pb-0">
+    <ul class="main-menu">
       {% for menu_id, menu in menus %}
         {% include 'components.header._menu-item' with {is_root_menu:true} %}
       {% endfor %}

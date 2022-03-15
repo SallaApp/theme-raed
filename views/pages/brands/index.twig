@@ -10,48 +10,55 @@
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container mb-20">
-        <nav class="w-full py-5">
-            {% component 'header.breadcrumbs' %}
-        </nav>
+
+        {% component 'header.breadcrumbs' %}
+
         <div class="flex justify-between pt-2 pb-6">
             <h2 class="font-bold mb-6 md:mb-0">{{ page.title }}</h2>
         </div>
+
         {% if brands|length %}
             <!-- brands nav -->
             <div class="brands-nav-wrap">
-              <ul id="brands-nav" class="brands-nav">
-                  <li></li>
-                  {% for char,brands_group in brands %}
-                      <li>
-                          <a class="brands-nav__item fix-align"
-                            href="#brand-section-{{ loop.index }}"
-                            data-id="{{ loop.index }}">{{ char }}</a>
-                      </li>
-                  {% endfor %}
-              </ul>
+                <ul id="brands-nav" class="brands-nav">
+                    <li></li>
+                    {% for char,brands_group in brands %}
+                        <li>
+                            <a class="brands-nav__item fix-align"
+                               href="#brand-section-{{ loop.index }}"
+                               data-id="{{ loop.index }}">{{ char }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
             <!-- end:: brands nav -->
 
             <div class="px-8 xl:px-0">
-            {% for char,brandGroup in brands %}
-                <section id="brand-section-{{ loop.index }}" class="pt-24 first:pt-16 md:first:pt-24">
-                    <!-- separator -->
-                    <div class="flex items-center mb-10">
+
+                {% hook 'brands:index.items.start' %}
+
+                {% for char,brandGroup in brands %}
+                    <section id="brand-section-{{ loop.index }}" class="pt-24 first:pt-16 md:first:pt-24">
+                        <!-- separator -->
+                        <div class="flex items-center mb-10">
                         <span data-id="{{ loop.index }}"
-                                  class="brand-char fix-align">{{ char }}</span>
-                        <div class="bg-border-color h-px flex-1"></div>
-                    </div>
-                    <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-4 md:gap-8">
-                        {% for brand in brandGroup %}
-                            <a href="{{ brand.url }}" class="brand-item">
-                                <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
-                            </a> 
-                        {% endfor %}
-                    </div>
-                </section>
-            {% endfor %}
+                              class="brand-char fix-align">{{ char }}</span>
+                            <div class="bg-border-color h-px flex-1"></div>
+                        </div>
+                        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-4 md:gap-8">
+                            {% for brand in brandGroup %}
+                                <a href="{{ brand.url }}" class="brand-item">
+                                    <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endfor %}
+
+                {% hook 'brands:index.items.end' %}
+
             </div>
-          {% else %}
+        {% else %}
             <div class="no-content-placeholder">
                 <span class="rounded-icon !w-36 !h-36 bg-gray-bg mb-6">
                     <i class="sicon-award-ribbon text-6xl block text-reverse-dark"></i>
@@ -59,7 +66,7 @@
                 <h1 class="font-bold text-sm mb-1">{{ trans('pages.brands.non_brands') }}</h1>
                 <small>{{ trans('pages.brands.try_again') }}</small>
             </div>
-          {% endif %}
+        {% endif %}
     </div>
 {% endblock %}
 {% block scripts %}
