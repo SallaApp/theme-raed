@@ -115,8 +115,10 @@
                     <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                     <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                 </div>
-                <button data-on-click="rating::show"
-                        class="btn btn--outline-primary btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">{{ trans('pages.rating.rate') }}</button>
+                <button onclick="salla.event.dispatch('rating::show')"
+                        class="btn btn--outline-primary btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">
+                    {{ trans('pages.rating.rate') }}
+                </button>
             </div>
             <salla-rating-modal></salla-rating-modal>
         {% endif %}
@@ -235,9 +237,9 @@
                                           <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
                                           <spn>{{ code }}</span>
                                         </dt>
-                                        <salla-button 
-                                          class="btn--copy" 
-                                          btn-style="link" 
+                                        <salla-button
+                                          class="btn--copy"
+                                          btn-style="link"
                                           id="order_code_{{ item.id }}_{{ loop.index }}"
                                           data-code="{{ code }}">
                                             <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
@@ -250,7 +252,8 @@
                     {% endif %}
                     {% if item.note %}
                         <p class="mt-3 text-sm text-gray-500">
-                            <span>{{ trans('common.note') }} : </span>{{ item.note }} </p>
+                            <span>{{ trans('common.note') }} : </span>{{ item.note }}
+                        </p>
                     {% endif %}
                     {% if item.attachments %}
                         <div class="flow-root rounded-md px-4 border border-border-color">
@@ -376,8 +379,7 @@
                                 <span>{{ trans('pages.orders.finish_payment') }}</span>
                             </a>
                         {% else %}
-                            <salla-button btn-style="link" data-on-click="modal::open"
-                                          data-target="reorder-modal">
+                            <salla-button btn-style="link" onclick="document.querySelector('#reorder-modal').show()">
                                 <i class="sicon sicon-rotate me-2"></i>
                                 <span>{{ trans('pages.orders.reorder') }}</span>
                             </salla-button>
@@ -391,8 +393,7 @@
                             <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
-                        <salla-button btn-style="link-danger" data-on-click="modal::open"
-                                      data-target="modal-cancel">
+                        <salla-button btn-style="link-danger" onclick="document.querySelector('#modal-order-cancel').show()">
                             <i class="sicon sicon-cancel-circle me-2"></i>
                             <span>{{ trans('pages.orders.cancel') }}</span>
                         </salla-button>
@@ -410,8 +411,7 @@
                                       class="cursor-pointer w-full">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        <salla-button class="w-full" btn-style="outline" data-on-click="modal::close"
-                                      data-target="reorder-modal">
+                        <salla-button class="w-full" btn-style="outline" onclick="document.querySelector('#reorder-modal').hide()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
                     </div>
@@ -421,14 +421,13 @@
             {# Cancel Modal #}
             {% if order.can_cancel %}
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
-                             icon="sicon-cancel" id="modal-cancel" icon-style="error"
+                             icon="sicon-cancel" id="modal-order-cancel" icon-style="error"
                              title="{{ trans('common.elements.warning') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
                         <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        <salla-button class="w-full" btn-style="outline" data-on-click="modal::close"
-                                      data-target="modal-cancel">
+                        <salla-button class="w-full" btn-style="outline" onclick="document.querySelector('#modal-order-cancel').hide()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
                     </div>

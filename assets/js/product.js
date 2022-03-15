@@ -118,24 +118,3 @@ class Product extends BasePage {
 }
 
 Product.intiateWhenReady('Product', ['product.single']);
-
-
-class Products extends BasePage {
-    onReady() {
-        //Used in: [random-testimonials.twig]
-        new Slider('.testimonials-slider', {
-            loop          : true,
-            centeredSlides: true,
-            spaceBetween  : 15,
-            breakpoints   : {1024: {slidesPerView: 2, spaceBetween: 30}}
-        });
-        app.on('change', '#product-filter', event => window.location.href = salla.helpers.addParamToUrl('by', event.target.value));
-    }
-}
-
-Products.intiateWhenReady('Products', [
-    'product.index',
-    'product.index.latest',
-    'product.index.offers', 'product.index.search',
-    'product.index.tag',
-]);

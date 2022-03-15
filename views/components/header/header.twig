@@ -17,7 +17,7 @@
 
                     {# Language & Currency Component #}
                     {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                        <button type="button" data-on-click="localization::show" class="btn--rounded-gray">
+                        <button type="button" onclick="salla.event.dispatch('localization::show')" class="btn--rounded-gray">
                             <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
                             | <span class="ms-2">{{ user.language.name }}</span>
                         </button>
@@ -25,7 +25,7 @@
                     {% endif %}
 
                     {# Search Component #}
-                    <button data-on-click="search::show" class="btn--circle-gray sicon-search"></button>
+                    <button onclick="salla.event.dispatch('search::show')" class="btn--circle-gray sicon-search"></button>
                     <salla-search></salla-search>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                         {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
-                            <salla-button icon btn-style="outline" data-on-click="login::show">
+                            <salla-button icon btn-style="outline" onclick="salla.event.dispatch('login::show')">
                               <i class="sicon-user-circle"></i>
                             </salla-button>
                         {% endif %}
