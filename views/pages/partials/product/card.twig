@@ -67,6 +67,8 @@ view options:
                 </div>
             {% endif %}
         </div>
+
+
         <div class="flex items-center mt-auto">
             <salla-button
               {% if not product.is_available %} disabled {% endif %}
@@ -91,7 +93,7 @@ view options:
 
             <div class="text-gray-400">
                 {# todo:: use salla-button #}
-                <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.add({{ product.id }})">
+                <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.api.add({{ product.id }})">
                     <i class="sicon-heart"></i>
                     <span class="loader loader--small"></span>
                 </button>
