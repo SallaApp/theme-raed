@@ -239,11 +239,11 @@
                                         </dt>
                                         <salla-button
                                           class="btn--copy"
-                                          btn-style="link"
+                                          button-type="link"
                                           id="order_code_{{ item.id }}_{{ loop.index }}"
                                           data-code="{{ code }}">
-                                            <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
-                                            <span class="text-sm ms-2 pointer-events-none">{{ trans('common.copy_code') }}</span>
+                                            <i class="copy-icon sicon-swap-stroke"></i>
+                                            <span class="text-sm ms-2">{{ trans('common.copy_code') }}</span>
                                         </salla-button>
                                     </div>
                                 {% endfor %}
@@ -379,7 +379,7 @@
                                 <span>{{ trans('pages.orders.finish_payment') }}</span>
                             </a>
                         {% else %}
-                            <salla-button btn-style="link" onclick="document.querySelector('#reorder-modal').show()">
+                            <salla-button button-type="link" onclick="document.querySelector('#reorder-modal').show()">
                                 <i class="sicon sicon-rotate me-2"></i>
                                 <span>{{ trans('pages.orders.reorder') }}</span>
                             </salla-button>
@@ -393,7 +393,7 @@
                             <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
-                        <salla-button btn-style="link-danger" onclick="document.querySelector('#modal-order-cancel').show()">
+                        <salla-button button-type="link" color="danger" onclick="document.querySelector('#modal-order-cancel').show()">
                             <i class="sicon sicon-cancel-circle me-2"></i>
                             <span>{{ trans('pages.orders.cancel') }}</span>
                         </salla-button>
@@ -407,11 +407,10 @@
                              icon="sicon-rotate" id="reorder-modal" icon-style="success"
                              title="{{ trans('pages.orders.reorder') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
-                        <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder"
-                                      class="cursor-pointer w-full">
+                        <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder" width="wide">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        <salla-button class="w-full" btn-style="outline" onclick="document.querySelector('#reorder-modal').hide()">
+                        <salla-button class="w-full" fill="outline" color="gray" onclick="document.querySelector('#reorder-modal').hide()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
                     </div>
@@ -424,10 +423,10 @@
                              icon="sicon-cancel" id="modal-order-cancel" icon-style="error"
                              title="{{ trans('common.elements.warning') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
-                        <salla-button id="confirm-cancel" kind="danger" class="w-full cursor-pointer">
+                        <salla-button id="confirm-cancel" color="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        <salla-button class="w-full" btn-style="outline" onclick="document.querySelector('#modal-order-cancel').hide()">
+                        <salla-button class="w-full" fill="outline" color="gray" onclick="document.querySelector('#modal-order-cancel').hide()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
                     </div>
