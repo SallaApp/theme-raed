@@ -15,9 +15,9 @@ class Order extends BasePage {
 
         app.onClick('salla-button#confirm-cancel', ({currentTarget: btn}) => btn.load()
             .then(() => salla.order.api.cancel(salla.config.get('page.id')))
-            .then(() => btn.stop() && app.element('#modal-cancel').hide())
+            .then(() => btn.stop() && app.element('#modal-order-cancel').hide())
             .then(() => window.location.reload())
-            .catch(() => btn.stop() && app.element('#modal-cancel').hide())
+            .catch(() => btn.stop() && app.element('#modal-order-cancel').hide())
         );
     }
 }

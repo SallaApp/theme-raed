@@ -67,18 +67,20 @@ view options:
                 </div>
             {% endif %}
         </div>
+
+
         <div class="flex items-center mt-auto">
-            <salla-button 
+            <salla-button
               {% if not product.is_available %} disabled {% endif %}
               {% if product.is_donation %}
                   data-on-click="cart::add.item"
                   data-form-selector="#product_{{ product.id }}"
               {% else %}
                   data-on-click="cart::quick.add"
-              {% endif %} 
+              {% endif %}
               data-id="{{ product.id }}"
-              loader-position="center" 
-              class="btn--add-to-cart w-full" 
+              loader-position="center"
+              class="btn--add-to-cart w-full"
               btn-style="outline-primary">
               {% if product.is_available %}
                   {{ trans('pages.cart.add_to_cart') }}
@@ -91,8 +93,7 @@ view options:
 
             <div class="text-gray-400">
                 {# todo:: use salla-button #}
-                <button aria-label="Add or remove to wishlist" class="btn--wishlist animated"
-                        data-on-click="wishlist::add" data-id="{{ product.id }}">
+                <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.api.add({{ product.id }})">
                     <i class="sicon-heart"></i>
                     <span class="loader loader--small"></span>
                 </button>

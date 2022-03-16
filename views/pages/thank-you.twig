@@ -32,12 +32,10 @@
                      class="thanks-item opacity-0 grayscale w-56 mb-8">
                 <h1 class="font-bold text-lg mb-2.5 thanks-item opacity-0">{{ thank_you_title }}</h1>
                 <p class="thanks-item opacity-0 text-gray-500 max-w-xs text-center text-sm leading-6 mb-20">
-                    {{ trans('pages.thank_you.order_id') }} 
+                    {{ trans('pages.thank_you.order_id') }}
                     <b class="text-text-dark unicode">#{{ order.reference_id }}</b>
                 </p>
-                <salla-button
-                  data-id="{{ order.id }}"
-                  data-on-click="order::show">
+                <salla-button onclick="salla.order.api.show({{ order.id }})">
                   <i class="sicon-newspaper me-1"></i>
                   {{ trans('pages.thank_you.order_details') }}
                 </salla-button>

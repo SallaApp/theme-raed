@@ -36,13 +36,16 @@
                     </div>
                 </div>
                 <div class="flex items-center space-s-4">
-                    <salla-button loader-position="center" class="flex-grow-0 md:w-40 btn--add-to-cart" btn-style="outline-primary" data-on-click="cart::quick.add" data-id="{{ product.id }}">
+                    <salla-button loader-position="center" class="flex-grow-0 md:w-40 btn--add-to-cart"
+                                  btn-style="outline-primary"
+                                  trigger-on-click="cart::quick.add"
+                                  data-id="{{ product.id }}">
                       {{ trans('pages.cart.add_to_cart') }}
                     </salla-button>
 
-                    <salla-button icon mini-icon btn-style="danger" data-id="{{ product.id }}" data-on-click="wishlist::remove" class="btn--delete">
+                    <salla-button icon mini-icon btn-style="danger" onclick="salla.wishlist.api.remove({{ product.id }})" class="btn--delete">
                       <i class="sicon-cancel"></i>
-                    </salla-button> 
+                    </salla-button>
                 </div>
             </div>
         {% else %}
