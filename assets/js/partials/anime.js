@@ -155,7 +155,7 @@ Anime.addToCart = function (response, productId) {
 
     // get thumb position ---
     let
-        productBlock = document.getElementById('product_' + productId),
+        productBlock = document.getElementById('product-' + productId),
         productImg = productBlock.getElementsByTagName('img')[0],
         position = productImg.getBoundingClientRect(),
         width = productImg.offsetWidth + 'px',

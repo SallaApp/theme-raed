@@ -32,11 +32,11 @@ class App extends salla.AppHelpers {
 
         salla.comment.event.onAdded(() => window.location.reload());
 
-        this.onClick('.btn--add-to-cart', ({currentTarget: btn}) => {
-          btn.load()
-          salla.cart.event.onItemAdded(() => btn.stop())
-          salla.cart.event.onItemAddedFailed(() => btn.stop())
-        });
+        // this.onClick('.btn--add-to-cart', ({currentTarget: btn}) => {
+        //   btn.load()
+        //   salla.cart.event.onItemAdded(() => btn.stop())
+        //   salla.cart.event.onItemAddedFailed(() => btn.stop())
+        // });
 
         // this.onClick('.grid-trigger', event => {
         //     event.preventDefault();
