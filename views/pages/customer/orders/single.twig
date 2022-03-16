@@ -208,6 +208,7 @@
                             </dl>
                         </div>
                     {% endif %}
+
                     {% if item.files %}
                         <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.files') }}</h2>
                         <div class="flow-root rounded-md px-4 border border-border-color">
@@ -237,11 +238,7 @@
                                           <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
                                           <spn>{{ code }}</span>
                                         </dt>
-                                        <salla-button
-                                          class="btn--copy"
-                                          button-type="link"
-                                          id="order_code_{{ item.id }}_{{ loop.index }}"
-                                          data-code="{{ code }}">
+                                        <salla-button onclick="theme.copyToClipboard(event)" data-content="{{ code }}">
                                             <i class="copy-icon sicon-swap-stroke"></i>
                                             <span class="text-sm ms-2">{{ trans('common.copy_code') }}</span>
                                         </salla-button>
@@ -407,9 +404,11 @@
                              icon="sicon-rotate" id="reorder-modal" icon-style="success"
                              title="{{ trans('pages.orders.reorder') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
+                        {# todo:: support reorder the order via api salla.order.reorder(id) -> authed only #}
                         <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder" width="wide">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
+
                         <salla-button class="w-full" fill="outline" color="gray" onclick="document.querySelector('#reorder-modal').hide()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
@@ -423,7 +422,7 @@
                              icon="sicon-cancel" id="modal-order-cancel" icon-style="error"
                              title="{{ trans('common.elements.warning') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
-                        <salla-button id="confirm-cancel" color="danger" class="w-full cursor-pointer">
+                        <salla-button data-order="{{  order.id }}" id="confirm-cancel" color="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
                         <salla-button class="w-full" fill="outline" color="gray" onclick="document.querySelector('#modal-order-cancel').hide()">

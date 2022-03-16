@@ -4,7 +4,7 @@
         <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain':'cover' }} lazy-load"
              src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
         {# todo:: use salla-button #}
-        <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.api.add({{ product.id }})">
+        <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.add({{ product.id }})">
             <i class="sicon-heart"></i>
             <span class="loader loader--small"></span>
         </button>

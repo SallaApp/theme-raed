@@ -76,7 +76,7 @@ view options:
                   data-on-click="cart::add.item"
                   data-form-selector="#product_{{ product.id }}"
               {% else %}
-                  data-on-click="cart::quick.add"
+                  onclick="salla.cart.quickAdd({{ product.id }})"
               {% endif %}
               data-id="{{ product.id }}"
               loader-position="center"
@@ -93,8 +93,11 @@ view options:
             </salla-button>
 
             <div class="text-gray-400">
-                {# todo:: use salla-button #}
-                <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.api.add({{ product.id }})">
+                {# todo:: use salla-button & test onclick #}
+{#                <salla-button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.add({{ product.id }})">#}
+{#                    <i class="sicon-heart"></i>#}
+{#                </salla-button>#}
+                <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.add({{ product.id }})">
                     <i class="sicon-heart"></i>
                     <span class="loader loader--small"></span>
                 </button>
