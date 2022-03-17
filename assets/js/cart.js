@@ -5,7 +5,7 @@ class Cart extends BasePage {
     onReady() {
         this.initiateSubmit();
         this.initiateCartItems();
-        salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
+        salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res.data.cart));
         app.watchElements({
             couponCode      : '#coupon',
             couponBtn       : '#btn-add-coupon',
@@ -31,22 +31,20 @@ class Cart extends BasePage {
         //important for safari & iphone browsers
         app.submit.dataset.has_apple_pay = !!window.ApplePaySession;
 
-        app.onClick('#btn-submit', ({currentTarget: btn}) => {
-          btn.load()
-        });
+        app.onClick('#btn-submit', ({currentTarget: btn}) => btn.load());
     }
 
     /**
-     * @param  {CartDetailsResponse} cartData
+     * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
      */
     updateCartPageInfo(cartData) {
         cartData.items?.forEach(item => this.updateItemInfo(item));
-        app.subTotal.innerText = cartData.sub_total;
-        app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => cartData.total_discount)
-            .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => cartData.shipping_cost)
+        app.subTotal.innerText = salla.money(cartData.sub_total);
+        app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => cartData.discount)
+            .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => cartData.real_shipping_cost)
             .toggleElement(app.freeShipping, 'has_free', 'hidden', () => cartData.free_shipping_bar);
-        app.totalDiscount.querySelector('b').innerText = '- ' + cartData.total_discount;
-        app.shippingCost.querySelector('b').innerText = cartData.shipping_cost;
+        app.totalDiscount.querySelector('b').innerText = '- ' + salla.money(cartData.discount);
+        app.shippingCost.querySelector('b').innerText = salla.money(cartData.real_shipping_cost);
         if (!cartData.free_shipping_bar) {
             return;
         }
@@ -68,7 +66,7 @@ class Cart extends BasePage {
                     btnAdd = cartItem.querySelector('.add-qty'),
                     btnSub = cartItem.querySelector('.sub-qty'),
                     quantity = cartItem.querySelector('.item-quantity');
-                quantity && app.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target)),
+                quantity && app.on('input', quantity, event => salla.helpers.inputDigitsOnly(event.target)),
                     this.items[itemId] = {
                         item        : cartItem,
                         total       : cartItem.querySelector('.item-total'),
@@ -82,10 +80,10 @@ class Cart extends BasePage {
                     };
                 btnAdd && app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
                 btnSub && app.onClick(btnSub, () => this.reduceQuantity(quantity));
-                
+
                 app.onClick(cartItem.querySelector('.btn--delete'), ({currentTarget: btn}) => {
-                  this.removeItem(itemId);
-                  btn.load();
+                    this.removeItem(itemId);
+                    btn.load();
                 })
             });
     }
@@ -130,72 +128,78 @@ class Cart extends BasePage {
     }
 
     /**
-     * @param {CartItem} item
+     * @param {import("@salla.sa/twilight/types/api/cart").CartItem} item
      */
     updateItemInfo(item) {
         /**
          * @type {{offer: HTMLElement, item: HTMLElement, total: HTMLElement, quantity: HTMLElement, btnSub: HTMLElement, btnAdd: HTMLElement, price: HTMLElement, offerIcon: HTMLElement, productPrice: HTMLElement}}
          */
         let cartItem = this.items[item.id];
-        if (item.display_total_price != cartItem.total.innerText) {
-            cartItem.total.innerText = item.display_total_price;
+        let total = salla.money(item.total);
+        if (total !== cartItem.total.innerText) {
+            cartItem.total.innerText = total;
             app.anime(cartItem.total, {scale: [.88, 1]});
         }
-        app.toggleElement(cartItem.offer, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElement(cartItem.offerIcon, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElement(cartItem.productPrice, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElement(cartItem.price, 'text-theme-red', 'text-sm text-gray-400', () => item.has_special_price);
-        if (!item.has_special_price) {
-            cartItem.price.innerText = item.product_price_formatted;
+        app.toggleElement(cartItem.offer, 'offer-applied', 'hidden', () => item.offer)
+            .toggleElement(cartItem.offerIcon, 'offer-applied', 'hidden', () => item.offer)
+            .toggleElement(cartItem.productPrice, 'offer-applied', 'hidden', () => item.offer)
+            .toggleElement(cartItem.price, 'text-theme-red', 'text-sm text-gray-400', () => item.offer);
+        if (!item.offer) {
+            cartItem.price.innerText = salla.money(item.product_price);
             return;
         }
-        cartItem.price.innerText = item.display_price;
+        cartItem.price.innerText = salla.money(item.price);
         cartItem.offer.innerText = item.offer.names;
     }
 
 
     //=================== Coupon Method ========================//
     initiateCoupon() {
-        if(app.couponCode){
-          app.onKeyUp(app.couponCode, event => {
-              event.keyCode === 13 && app.couponBtn.click();
-              app.couponError.value = '';
-              app.removeClass(app.couponCode, 'has-error');
-          });
-          app.onClick(app.couponBtn, ({currentTarget: btn}) => {
-              salla.coupon.event.onAdded(res => this.toggleCoupon(btn, res, true));
-              salla.coupon.event.onRemoved(res => this.toggleCoupon(btn, res, false));
-              salla.coupon.event.onAddedFailed(err => this.showCouponError(btn, err.response?.data?.error.message));
-              salla.coupon.event.onRemovedFailed(err => this.showCouponError(btn, err.response?.data?.error.message, false));
-              //if it's remove coupon, will have `btn--danger` class
-              if (app.couponBtn.classList.contains('btn--danger')) {
-                  btn.load();
-                  return salla.api.coupon.remove(salla.config.get('page.id'));
-              }
-
-              if (!app.couponCode.value.length) {
-                  this.showCouponError(btn, '* ' + salla.lang.get('pages.checkout.enter_coupon'));
-                  return;
-              }
-
-              btn.load();
-              salla.api.coupon.add({id: salla.config.get('page.id'), coupon: app.couponCode.value});
-          });
+        if (!app.couponCode) {
+            return;
         }
+        let btn = app.couponBtn;
+        app.onKeyUp(app.couponCode, event => {
+            event.keyCode === 13 && btn.click();
+            app.couponError.value = '';
+            app.couponCode.classList.remove('has-error');
+        });
+        app.onClick(btn, () => {
+            //if it's remove coupon, will have `btn--danger` class
+            if (app.couponBtn.classList.contains('has-coupon')) {
+                return btn.load().then(() => salla.coupon.api.remove()
+                    .then(res => this.toggleCoupon(btn, res, false))
+                    .catch(err => this.showCouponError(btn, err.response?.data?.error.message, false)));
+            }
+
+            if (!app.couponCode.value.length) {
+                this.showCouponError(btn, '* ' + salla.lang.get('pages.checkout.enter_coupon'));
+                return;
+            }
+
+            btn.load().then(() => salla.api.coupon.add(app.couponCode.value)
+                .then(res => this.toggleCoupon(btn, res))
+                .catch(err => this.showCouponError(btn, err.response?.data?.error.message)));
+        });
     }
 
-    toggleCoupon(btn, res, applied) {
+    /**
+     * @param {HTMLSallaButtonElement} btn
+     * @param {import("@salla.sa/twilight/types/api/coupon").AddCouponResponse} res
+     * @param {boolean} applied
+     */
+    toggleCoupon(btn, res, applied = true) {
         btn.stop();
+        this.updateCartPageInfo(res.data.cart);
         app.couponError.innerText = '';
         app.couponCode.value = applied ? app.couponCode.value : '';
         app.couponCode.toggleAttribute('disabled', applied);
-        this.updateCartPageInfo(res.data.cart);
 
-        app.toggleElement(app.couponBtn, ['btn--danger', 'has-coupon'], ['btn-default', 'has-not-coupon'], () => applied)
-            .toggleElement(app.couponBtn, ['btn-default', 'has-not-coupon'], ['btn--danger', 'has-coupon'], () => !applied)
-            .hideElement(app.couponBtn.querySelector(applied ? 'span' : 'i'))
-            .showElement(app.couponBtn.querySelector(applied ? 'i' : 'span'))
+        app.toggleElement(btn, 'has-coupon', 'has-no-coupon', () => applied)
+            .hideElement(btn.querySelector(applied ? 'span' : 'i'))
+            .showElement(btn.querySelector(applied ? 'i' : 'span'))
             .removeClass(app.couponCode, 'has-error');
+        btn.setAttribute('color', applied ? 'danger' : 'primary');
     }
 
     showCouponError(btn, message, isApplying = true) {
@@ -205,4 +209,4 @@ class Cart extends BasePage {
     }
 }
 
-Cart.intiateWhenReady('Cart',['cart']);
+Cart.intiateWhenReady('Cart', ['cart']);

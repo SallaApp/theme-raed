@@ -127,7 +127,7 @@ class App extends salla.AppHelpers {
         let header = this.element('#mainnav');
         let logo = header.querySelector('.navbar-brand img')
         let height = this.element('#mainnav .inner').clientHeight;
-        logo.addEventListener( 'load', () => {
+        logo.addEventListener('load', () => {
             height = this.element('#mainnav .inner').clientHeight;
             header.style.height = height + 'px';
         })
@@ -269,17 +269,17 @@ class App extends salla.AppHelpers {
     initiateWishlistButtons() {
         salla.storage.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
         this.onClick('.btn--wishlist', ({currentTarget: btn}) => {
-          btn.load()
-          salla.wishlist.event.onAdded((event, id) => {
-            btn.stop();
-            this.updateWishlist(id, true)
-          });
-          salla.wishlist.event.onRemoved((event, id) => {
-            btn.stop(); 
-            this.updateWishlist(id, false)
-          })
-          salla.wishlist.event.onAdditionFailed(() => btn.stop());
-          salla.wishlist.event.onRemovingFailed(() => btn.stop());
+            btn.load()
+            salla.wishlist.event.onAdded((event, id) => {
+                btn.stop();
+                this.updateWishlist(id, true)
+            });
+            salla.wishlist.event.onRemoved((event, id) => {
+                btn.stop();
+                this.updateWishlist(id, false)
+            })
+            salla.wishlist.event.onAdditionFailed(() => btn.stop());
+            salla.wishlist.event.onRemovingFailed(() => btn.stop());
         });
     }
 
@@ -296,7 +296,7 @@ class App extends salla.AppHelpers {
                 app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
                 app.toggleElement(btn, 'pulse', 'un-favorited', () => isAdded);
                 console.log('btn.onClick:', btn.onClick);
-                btn.onClick = isAdded ? 'salla.wishlist.api.remove('+id+')' : 'salla.wishlist.api.add('+id+')';
+                btn.onClick = isAdded ? 'salla.wishlist.api.remove(' + id + ')' : 'salla.wishlist.api.add(' + id + ')';
             });
     }
 
@@ -306,8 +306,8 @@ class App extends salla.AppHelpers {
      */
     initAddToCart() {
         salla.cart.event.onUpdated(summary => {
-            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total || salla.money(0));
-            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.items_count || summary.count || 0);
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
+            document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
         });
 
         salla.cart.event.onItemAdded((response, prodId) => {
