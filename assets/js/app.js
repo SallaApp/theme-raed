@@ -124,8 +124,12 @@ class App extends salla.AppHelpers {
 
     initiateStickyMenu() {
         let header = this.element('#mainnav');
+        let logo = header.querySelector('.navbar-brand img')
         let height = this.element('#mainnav .inner').clientHeight;
-        header.style.height = height + 'px';
+        logo.addEventListener( 'load', () => {
+            height = this.element('#mainnav .inner').clientHeight;
+            header.style.height = height + 'px';
+        })
 
         window.addEventListener('resize', () => {
             let height = this.element('#mainnav .inner').clientHeight;
