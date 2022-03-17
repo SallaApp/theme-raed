@@ -5,6 +5,7 @@ class Cart extends BasePage {
   onReady() {
     this.initiateCartItems();
     salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
+
     app.watchElements({
       couponCodeInput: '#coupon-input',
       couponBtn: '#btn-add-coupon',
@@ -17,7 +18,9 @@ class Cart extends BasePage {
       freeShipppingMsg: '#free-shipping-msg',
       freeShipApplied: '#free-shipping-applied'
     });
+
     this.initiateCoupon();
+
     new ProductOptions();
   }
 
@@ -151,12 +154,12 @@ class Cart extends BasePage {
       app.removeClass(app.couponCodeInput, 'has-error');
     });
 
-    app.onClick(app.couponBtn, ({currentTarget: btn}) => {
-      salla.coupon.event.onAdded(res => this.toggleCoupon(btn, res, true));
-      salla.coupon.event.onRemoved(res => this.toggleCoupon(btn, res, false));
-      salla.coupon.event.onAddedFailed(err => this.showCouponError(btn, err.response?.data?.error.message));
-      salla.coupon.event.onRemovedFailed(err => this.showCouponError(btn, err.response?.data?.error.message, false));
+    salla.coupon.event.onAdded(res => this.toggleCoupon(btn, res, true));
+    salla.coupon.event.onRemoved(res => this.toggleCoupon(btn, res, false));
+    salla.coupon.event.onAddedFailed(err => this.showCouponError(btn, err.response?.data?.error.message));
+    salla.coupon.event.onRemovedFailed(err => this.showCouponError(btn, err.response?.data?.error.message, false));
 
+    app.onClick(app.couponBtn, ({currentTarget: btn}) => {
       //if it's remove coupon, will have `btn--danger` class
       if (app.couponBtn.classList.contains('btn--danger')) {
         btn.load();

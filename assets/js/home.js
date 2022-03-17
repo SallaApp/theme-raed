@@ -45,7 +45,7 @@ class Home extends BasePage {
         testimonials.slideTo(1, false,false);  //begin from slide 2 to always dispaly prev & next
 
 
-        //Used in: [enhanced-slider.twig]
+        // Used in: [enhanced-slider.twig]
         let animate = () => setTimeout(() => app.anime('.swiper-slide-active .main-slide-anime', {translateX: [50, 0]}), 100);
         (new Slider('.main-slider', {loop: true,})).on('slideChange', () => animate());
         animate();

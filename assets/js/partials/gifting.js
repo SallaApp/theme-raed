@@ -2,6 +2,7 @@
 // Tag: <gifting-modal>
 // Dependencies: Tailwind, AlpineJs, intl-tel-input, swiper-slider, animejs
 
+// todo :: remove it and move it to web component pacakge
 const template = document.createElement('template');
 template.innerHTML = /*html*/`
 <style>
@@ -302,7 +303,7 @@ export class Gifting extends HTMLElement {
         }else{
           this.currentStep = 'step2';
         }
-        
+
       },
 
       setSelectedImage: function (src) {

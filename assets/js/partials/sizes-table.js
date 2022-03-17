@@ -2,6 +2,7 @@
 // Tag: <sizes-table>
 // Dependencies: Tailwind, AlpineJs
 
+// todo :: remove it and move it to web component pacakge
 const template = document.createElement('template');
 template.innerHTML = /*html*/`
 <style>
