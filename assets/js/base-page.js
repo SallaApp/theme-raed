@@ -15,7 +15,7 @@ class BasePage {
 /**
  * Because we merged multi classes into one file, there is no need to initiate all of them
  */
-BasePage.intiateWhenReady = function (className, allowedPages) {
+BasePage.intiateWhenReady = function (className, allowedPages = null) {
     document.addEventListener('DOMContentLoaded', () => {
         let tries = 0, inerval;
         //check if theme app is initiated each 0.1 sec for one sec otherwise don't load current page class
@@ -32,7 +32,7 @@ BasePage.intiateWhenReady = function (className, allowedPages) {
                 tries++;
             }, 100)
         )).then(() => {
-            if (!allowedPages.includes(salla.config.get('page.slug'))) {
+            if (allowedPages && !allowedPages.includes(salla.config.get('page.slug'))) {
                 app.log(className + ' Skiped.');
                 return;
             }

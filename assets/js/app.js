@@ -24,7 +24,6 @@ class App extends salla.AppHelpers {
         this.initiateMobileMenu();
         this.initiateStickyMenu();
         this.initAddToCart();
-        this.initiateWishlistButtons();
         this.initiateAdAlert();
         this.initiateDropdowns();
         this.initiateModals();
@@ -262,42 +261,6 @@ class App extends salla.AppHelpers {
     anime(selector, options = null) {
         let anime = new Anime(selector, options);
         return options === false ? anime : anime.play();
-    }
-
-
-    // ======================= Wishlist Icons in Product Cards ======================= //
-    initiateWishlistButtons() {
-        salla.storage.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
-        this.onClick('.btn--wishlist', ({currentTarget: btn}) => {
-          btn.load()
-          salla.wishlist.event.onAdded((event, id) => {
-            btn.stop();
-            this.updateWishlist(id, true)
-          });
-          salla.wishlist.event.onRemoved((event, id) => {
-            btn.stop(); 
-            this.updateWishlist(id, false)
-          })
-          salla.wishlist.event.onAdditionFailed(() => btn.stop());
-          salla.wishlist.event.onRemovingFailed(() => btn.stop());
-        });
-    }
-
-    updateWishlist(id, isAdded) {
-        let wishlist = salla.storage.get("salla-wishlist", []);
-        isAdded ? wishlist.push(id) : wishlist.splice(wishlist.indexOf(id), 1);
-        salla.storage.set("salla-wishlist", wishlist);
-        this.toggalFavorites(id, isAdded);
-    }
-
-    toggalFavorites(id, isAdded) {
-        document.querySelectorAll('.btn--wishlist[data-id="' + id + '"]')
-            .forEach(btn => {
-                app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
-                app.toggleElement(btn, 'pulse', 'un-favorited', () => isAdded);
-                console.log('btn.onClick:', btn.onClick);
-                btn.onClick = isAdded ? 'salla.wishlist.api.remove('+id+')' : 'salla.wishlist.api.add('+id+')';
-            });
     }
 
     /**
