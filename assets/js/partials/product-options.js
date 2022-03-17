@@ -27,7 +27,7 @@ export default class ProductOptions {
                 let value = field.dataset.visibilityValue;
                 let condSelector = '#field_' + field.dataset.keyPrefix + '_' + option + (isMultiple ? '_' + value : '');
                 let condition = document.querySelector(condSelector);
-                let isSelected = isMultiple ? condition.checked : value == condition.value;
+                let isSelected = isMultiple ? condition?.checked : value == condition.value;
 
                 return this.toggleConditionalElement(field, (isEqual && isSelected) || (!isEqual && !isSelected));
             });
