@@ -13,6 +13,9 @@
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
 
+    {# todo:: support update profile via api and change onSubmit="return salla.form.submit(event, 'customer.update');"  #}
+    {# todo:: drop ajax class & method & action & novalidate from the class list  #}
+    {# todo:: drop id update-profile-btn from submit butto and drop js logic in the profile.js file  #}
     <form class="form form--user-profile ajax"
           method="POST"
           novalidate
@@ -27,7 +30,7 @@
                 <label for="first-name" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.first_name') }}
                 </label>
-                <input type="text" name="first_name" value="{{ user.first_name }}" id="first-name"
+                <input type="text" name="first_name" value="{{ user.first_name }}" id="first-name" required
                        autocomplete="first_name" class="form-input">
             </div>
 
@@ -36,14 +39,14 @@
                     {{ trans('pages.profile.last_name') }}
                 </label>
                 <input type="text" name="last_name" value="{{ user.last_name }}" id="last-name" autocomplete="last-name"
-                       class="form-input">
+                       required class="form-input">
             </div>
 
             <div class="profile-field-item">
                 <label for="birthday" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.birthday') }}
                 </label>
-                <input type="text" id="birthday" name="birthday" value="{{ user.birthday }}"
+                <input type="text" id="birthday" name="birthday" value="{{ user.birthday }}" required
                        class="form-input date-element" placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
             </div>
 
@@ -51,7 +54,7 @@
                 <label for="gender" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.gender') }}
                 </label>
-                <select class="form-input appearance-none" name="gender">
+                <select class="form-input appearance-none" name="gender" required>
                     <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
                     <option value="male" {{ user.gender=='male'?'selected':'' }}>
                         {{ trans('pages.profile.male') }}
@@ -66,7 +69,7 @@
                 <label for="email" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('common.elements.email') }}
                 </label>
-                <input type="email" name="email" value="{{ user.email }}" id="email" class="form-input">
+                <input type="email" name="email" value="{{ user.email }}" id="email" class="form-input" required>
             </div>
 
             <div class="profile-field-item">

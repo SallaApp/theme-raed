@@ -35,7 +35,7 @@
                     {{ trans('pages.thank_you.order_id') }}
                     <b class="text-text-dark unicode">#{{ order.reference_id }}</b>
                 </p>
-                <salla-button onclick="salla.order.api.show({{ order.id }})">
+                <salla-button onclick="salla.order.show({{ order.id }})">
                   <i class="sicon-newspaper me-1"></i>
                   {{ trans('pages.thank_you.order_details') }}
                 </salla-button>
@@ -55,7 +55,7 @@
                                     <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
                                     <span>{{ code }}</span>
                                 </p>
-                                <salla-button class="btn--copy" button-type="link" id="product_code_{{ item.id }}_{{ loop.index }}" data-code="{{ code }}">
+                                <salla-button onclick="theme.copyToClipboard(event)" data-content="{{ code }}">
                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
                                     <span class="text-sm ms-2 pointer-events-none">{{ trans('common.copy_code') }}</span>
                                 </salla-button>
@@ -105,10 +105,12 @@
                         <i class="sicon-newspaper-alt text-xl"></i>
                     </div>
                     <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
-                    <form action="{{ order.send_invoice_url }}" class="ajax" method="post" data-on-success="onSuccess" data-on-fail="onFail">
+
+                    {# todo:: support sent invoice via api by order id and drop send invoice url for all from presenter :) salla.order.send(orderId) -> for authed only #}
+                    <form onSubmit="return salla.form.submit('{{ order.send_invoice_url }}');">
                         <div class="flex max-w-3xl w-full">
-                            <input type="email" id="resend-invoice-input" class="form-input rounded-e-none border-e-0 !w-[160px] sm:!w-[220px]" placeholder="your@email.com" required name="email">
-                            <salla-button type="submit" loader-position="center" id="resend-invoice-submit" class="rounded-s-none w-32">
+                            <input type="email" class="form-input rounded-e-none border-e-0 !w-[160px] sm:!w-[220px]" placeholder="your@email.com" required name="email">
+                            <salla-button type="submit" loader-position="center" class="rounded-s-none w-32">
                               <span class="btn__text">{{ trans('pages.thank_you.sent_invoice') }}</span>
                             </salla-button>
                         </div>
@@ -130,6 +132,7 @@
                                         class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
                         </div>
                     {% endif %}
+
                     {% if store.social.whatsapp %}
                         <div class="text-sm unicode flex items-center">
                             <i class="sicon-whatsapp"></i>

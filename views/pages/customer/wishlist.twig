@@ -12,7 +12,7 @@
         {% hook 'customer:wishlist.items.start' %}
 
         {% for product in products %}
-            <div class='product-entry product-entry--wishlist' id="product_{{ product.id }}">
+            <div class="product-entry product-entry--wishlist" id="product-{{ product.id }}">
                 <div class="flex items-center mb-4 sm:mb-0">
                     <a href="{{ product.url }}"
                        class='product-entry__image'>
@@ -36,15 +36,14 @@
                     </div>
                 </div>
                 <div class="flex items-center space-s-4">
-                    <salla-button loader-position="center" class="flex-grow-0 md:w-40 btn--add-to-cart"
-                                  fill="outline"
-                                  trigger-on-click="cart::quick.add"
-                                  data-id="{{ product.id }}">
-                      {{ trans('pages.cart.add_to_cart') }}
+                    <salla-button loader-position="center" class="flex-grow-0 md:w-40 btn--add-to-cart" fill="outline"
+                                  onclick="salla.cart.addItem({{ product.id }})">
+                        {{ trans('pages.cart.add_to_cart') }}
                     </salla-button>
 
-                    <salla-button button-type="icon" size="small" color="danger" class="btn--delete" onclick="salla.wishlist.api.remove({{ product.id }})">
-                      <i class="sicon-cancel"></i>
+                    <salla-button loader-position="center" button-type="icon" size="small" color="danger"
+                                  class="btn--delete" onclick="salla.wishlist.remove({{ product.id }})">
+                        <i class="sicon-cancel"></i>
                     </salla-button>
                 </div>
             </div>

@@ -5,12 +5,13 @@ view options:
 
 *Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
 #}
-<div id="product_{{ product.id }}" class='product-entry
+<form id="product-{{ product.id }}" onSubmit="return salla.form.submit('cart.addItem');" class='product-entry
   {{ block_classes ?: '' }}
   {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
   {{ is_special ? 'product-entry--special':'' }}
   {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
   {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
+    <input type="hidden" name="id" value="{{  product.id }}">
 
     {# Image #}
     <a href="{{ product.url }}" class='product-entry__image'>
@@ -48,9 +49,11 @@ view options:
                 </div>
             </div>
         {% endif %}
+
         {% if product.subtitle %}
             <p class="text-sm text-gray-400 leading-6 mb-2.5">{{ product.subtitle }}</p>
         {% endif %}
+
         <div class="w-full center-between mb-5">
             {% if product.on_sale %}
                 <div class="space-s-1">
@@ -70,26 +73,15 @@ view options:
 
 
         <div class="flex items-center mt-auto">
-            <salla-button
-              {% if not product.is_available %} disabled {% endif %}
-              {% if product.is_donation %}
-                  data-on-click="cart::add.item"
-                  data-form-selector="#product_{{ product.id }}"
-              {% else %}
-                  data-on-click="cart::quick.add"
-              {% endif %}
-              data-id="{{ product.id }}"
-              loader-position="center"
-              class="btn--add-to-cart"
-              width="wide"
-              fill="outline">
-              {% if product.is_available %}
-                  {{ trans('pages.cart.add_to_cart') }}
-              {% elseif product.is_donation %}
-                  {{ trans('pages.products.donation_exceed') }}
-              {% else %}
-                  {{ trans('pages.products.out_of_stock') }}
-              {% endif %}
+            <salla-button type="submit" loader-position="center" class="btn--add-to-cart" width="wide" fill="outline"
+                    {{ not product.is_available ? 'disabled' : '' }}>
+                {% if product.is_available %}
+                    {{ trans('pages.cart.add_to_cart') }}
+                {% elseif product.is_donation %}
+                    {{ trans('pages.products.donation_exceed') }}
+                {% else %}
+                    {{ trans('pages.products.out_of_stock') }}
+                {% endif %}
             </salla-button>
 
             <salla-button 
@@ -104,4 +96,4 @@ view options:
             </salla-button>
         </div>
     </div>
-</div>
+</form>

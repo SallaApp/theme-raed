@@ -18,27 +18,25 @@
 <div class="s-comments s-comments-{{ type }}">
     <div class="container">
         {% if user.can_comment %}
-            <div class="form form--add-comment" salla-form-data>
+            <form class="form form--add-comment" onSubmit="return salla.form.submit('comment.send');">
                 {% hook anti_spam %}
+                <input name="type" type="hidden" value="{{  type }}">
+                <input name="id" type="hidden" value="{{  id }}">
+
                 <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
                 <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
                           class="form-input"
                           name="comment"
+                          required
                           maxlength="500" cols="30"
                           rows="30"></textarea>
 
                 <div class="text-end mb-4">
-                    <salla-button 
-                      class="w-36"
-                      loader-position="end"
-                      data-on-click="comment::send"
-                      id="add-new-comment-btn"
-                      data-id="{{ id }}"
-                      data-type="{{ type }}">
+                    <salla-button type="submit" class="w-36" loader-position="end">
                       {{ trans('blocks.comments.submit') }}
                     </salla-button>
                 </div>
-            </div>
+            </form>
         {% endif %}
 
         {% if comments|length %}
