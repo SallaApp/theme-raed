@@ -5,13 +5,11 @@ view options:
 
 *Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
 #}
-<form id="product-{{ product.id }}" onSubmit="return salla.form.submit('cart.addItem');" class='product-entry
-  {{ block_classes ?: '' }}
+<div id="product-{{ product.id }}" class='product-entry {{ block_classes ?: '' }}
   {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
   {{ is_special ? 'product-entry--special':'' }}
   {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
   {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
-    <input type="hidden" name="id" value="{{  product.id }}">
 
     {# Image #}
     <a href="{{ product.url }}" class='product-entry__image'>
@@ -40,7 +38,7 @@ view options:
             <div>
                 {% component 'product.donation-progress-bar' with {product:product} %}
                 <div class="border-color py-5 mt-5 mb-2.5">
-                    <label for="donation-amount" class="block text-sm ">{{ trans('pages.products.donation_amount') }}
+                    <label for="donation-amount" class="block text-sm">{{ trans('pages.products.donation_amount') }}
                         <span class="text-red-500">*</span>
                     </label>
                     <div class="mt-2.5 relative">
@@ -73,7 +71,8 @@ view options:
 
 
         <div class="flex items-center mt-auto">
-            <salla-button type="submit" loader-position="center" class="btn--add-to-cart" width="wide" fill="outline"
+            <salla-button onclick="salla.cart.addItem({id: {{ product.id }}, donating_amount: document.querySelector('#product-{{  product.id }} #donation-amount')?.value})"
+                          loader-position="center" class="btn--add-to-cart" width="wide" fill="outline"
                     {{ not product.is_available ? 'disabled' : '' }}>
                 {% if product.is_available %}
                     {{ trans('pages.cart.add_to_cart') }}
@@ -84,16 +83,10 @@ view options:
                 {% endif %}
             </salla-button>
 
-            <salla-button 
-              data-id="{{ product.id }}"
-              button-type="icon"
-              fill="none"
-              color="light"
-              aria-label="Add or remove to wishlist" 
-              class="btn--wishlist animated" 
-              onclick="salla.wishlist.api.add({{ product.id }})">
+            <salla-button button-type="icon" fill="none" color="light" aria-label="Add or remove to wishlist"
+              class="btn--wishlist animated" onclick="salla.wishlist.api.add({{ product.id }})">
                 <i class="sicon-heart"></i>
             </salla-button>
         </div>
     </div>
-</form>
+</div>

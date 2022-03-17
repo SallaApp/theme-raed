@@ -46,9 +46,8 @@
         </div>
 
         <div class="flex items-center">
-            <salla-button onclick="salla.cart.addItem({{ product.id }})" loader-position="center"
-                          class="btn--add-to-cart" width="wide"
-                          fill="outline" {{ not product.is_available ? 'disabled' : '' }}>
+            <salla-button onclick="salla.cart.addItem({{ product.id }})" loader-position="center" width="wide"
+                          class="btn--add-to-cart" fill="outline" {{ not product.is_available ? 'disabled' : '' }}>
                 {% if product.is_available %}
                     {{ trans('pages.cart.add_to_cart') }}
                 {% elseif product.is_donation %}
