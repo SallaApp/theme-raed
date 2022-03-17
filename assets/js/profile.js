@@ -22,12 +22,14 @@ class Profile extends BasePage {
             styleButtonProcessItemPosition: 'center bottom',
         });
 
+        // todo :: drop it after move to onSubmit
         app.onClick('#update-profile-btn', ({currentTarget: btn}) => {
             btn.load()
             salla.event.on("stores::profile.updated", () => btn.stop());
             salla.document.event.onRequestFailed(() => btn.stop());
         });
 
+        // todo :: remove it after create api for update customer avatar
         /**
          * Because in the theme we used FilePond as uploader helper
          * You need to extract the avatar from it and attach the avatar to the form data

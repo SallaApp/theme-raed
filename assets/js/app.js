@@ -29,13 +29,14 @@ class App extends salla.AppHelpers {
         this.initiateDropdowns();
         this.initiateModals();
         this.initiateCollabse();
-        this.initiateComments();
 
-        this.onClick('.btn--add-to-cart', ({currentTarget: btn}) => {
-          btn.load()
-          salla.cart.event.onItemAdded(() => btn.stop())
-          salla.cart.event.onItemAddedFailed(() => btn.stop())
-        });
+        salla.comment.event.onAdded(() => window.location.reload());
+
+        // this.onClick('.btn--add-to-cart', ({currentTarget: btn}) => {
+        //   btn.load()
+        //   salla.cart.event.onItemAdded(() => btn.stop())
+        //   salla.cart.event.onItemAddedFailed(() => btn.stop())
+        // });
 
         // this.onClick('.grid-trigger', event => {
         //     event.preventDefault();
@@ -54,16 +55,16 @@ class App extends salla.AppHelpers {
         return this;
     }
 
-    copyLinkToClipboard(elementId) {
-        let btn = document.getElementById(elementId);
-        var aux = document.createElement("input");
-        aux.setAttribute("value", btn.dataset.code);
+    copyToClipboard(event) {
+        event.preventDefault();
+        let aux = document.createElement("input");
+        aux.setAttribute("value", event.currentTarget.dataset.content);
         document.body.appendChild(aux);
         aux.select();
         document.execCommand("copy");
         document.body.removeChild(aux);
-        this.toggleElement(btn, 'copied', 'code-to-copy', () => true);
-        setTimeout(() => this.toggleElement(btn, 'code-to-copy', 'copied', () => true), 1000);
+        this.toggleElement(event.currentTarget, 'copied', 'code-to-copy', () => true);
+        setTimeout(() => this.toggleElement(event.currentTarget, 'code-to-copy', 'copied', () => true), 1000);
     }
 
     initiateNotifier() {
@@ -266,7 +267,6 @@ class App extends salla.AppHelpers {
 
     // ======================= Wishlist Icons in Product Cards ======================= //
     initiateWishlistButtons() {
-        app.onClick('.btn--wishlist', event => event.target.classList.add('is--loading'));
         salla.storage.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
 
         salla.wishlist.event.onAdded((event, id) => this.updateWishlist(id, true));
@@ -299,24 +299,11 @@ class App extends salla.AppHelpers {
             document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total || salla.money(0));
             document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.items_count || summary.count || 0);
         });
+
         salla.cart.event.onItemAdded((response, prodId) => {
             Anime.addToCart(response, prodId);
         });
     }
-
-    initiateComments() {
-        let btn = document.getElementById('add-new-comment-btn');
-        if (!btn) return;
-        let input = this.element('textarea[name="comment"]');
-        this.onKeyUp(input, () => input.classList.remove('!border-red-400'));
-
-        this.onClick('#add-new-comment-btn', ({currentTarget: btn}) => {
-          input.value.length >= 3 ? btn.load() : input.classList.add('!border-red-400');
-          salla.comment.event.onAdded(() => window.location.reload())
-          salla.comment.event.onAdditionFailed(() => btn.stop())
-        });
-    }
 }
 
-
-new App;
+window.theme = new App;

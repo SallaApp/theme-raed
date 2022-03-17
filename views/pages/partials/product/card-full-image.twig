@@ -1,5 +1,6 @@
-<div id="product_{{ product.id }}"
+<div id="product-{{ product.id }}"
      class="product-entry product-entry--full-image {{ product.is_out_of_stock ? 'out-of-stock':'' }}">
+
     <a href="{{ product.url }}" class='relative overflow-hidden rounded-md hover:opacity-90 w-full h-full'>
         <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain':'cover' }} lazy-load"
              src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
@@ -43,26 +44,18 @@
                 </div>
             {% endif %}
         </div>
+
         <div class="flex items-center">
-            <salla-button
-              {% if not product.is_available %} disabled {% endif %}
-              {% if product.is_donation %}
-                  data-on-click="cart::add.item"
-                  data-form-selector="#product_{{ product.id }}"
-              {% else %}
-                  data-on-click="cart::quick.add"
-              {% endif %}
-              data-id="{{ product.id }}"
-              loader-position="center"
-              class="btn--add-to-cart w-full"
-              btn-style="outline-primary">
-              {% if product.is_available %}
-                  {{ trans('pages.cart.add_to_cart') }}
-              {% elseif product.is_donation %}
-                  {{ trans('pages.products.donation_exceed') }}
-              {% else %}
-                  {{ trans('pages.products.out_of_stock') }}
-              {% endif %}
+            <salla-button onclick="salla.cart.addItem({{ product.id }})" loader-position="center"
+                          class="btn--add-to-cart" width="wide"
+                          fill="outline" {{ not product.is_available ? 'disabled' : '' }}>
+                {% if product.is_available %}
+                    {{ trans('pages.cart.add_to_cart') }}
+                {% elseif product.is_donation %}
+                    {{ trans('pages.products.donation_exceed') }}
+                {% else %}
+                    {{ trans('pages.products.out_of_stock') }}
+                {% endif %}
             </salla-button>
 
             {# todo:: use salla-button #}

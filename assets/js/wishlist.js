@@ -2,10 +2,6 @@ import BasePage from './base-page';
 
 class Wishlist extends BasePage {
     registerEvents() {
-
-        // todo :: remove it with salla-button
-        app.onClick('.btn--delete', ({currentTarget: btn}) => btn.load())
-
         // just a animation when the item removed
         salla.wishlist.event.onRemoved((response, prodId) => {
             let item = document.querySelector('#product_' + prodId);

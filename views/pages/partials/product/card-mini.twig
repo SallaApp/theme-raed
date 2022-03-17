@@ -1,18 +1,23 @@
-<div id="product_{{ product.id }}"
+<div id="product-{{ product.id }}"
      class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
-    <a href="{{ product.url }}" class='product-entry__image'>
-        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain':'cover' }} lazy-load"
+
+    <a href="{{ product.url }}" class="product-entry__image">
+        <img class="h-full w-full lazy-load object-{{ product.image.url|is_placeholder ? 'contain':'cover' }}"
              src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+
         {# todo:: use salla-button #}
-        <button aria-label="Add or remove to wishlist" class="btn--wishlist animated" onclick="salla.wishlist.add({{ product.id }})">
+        <button aria-label="Add or remove to wishlist" class="btn--wishlist animated"
+                onclick="salla.wishlist.add({{ product.id }})">
             <i class="sicon-heart"></i>
             <span class="loader loader--small"></span>
         </button>
     </a>
+
     <div class="flex flex-col flex-1 overflow-hidden p-5">
         <h3 class="product-entry__title leading-6 mb-2.5 max-w-full">
             <a href="{{ product.url }}">{{ product.name }}</a>
         </h3>
+
         <div class="w-full center-between mb-4">
             {% if product.on_sale %}
                 <div class="space-s-1">
@@ -29,26 +34,18 @@
                 </div>
             {% endif %}
         </div>
+
         <div class="flex items-center mt-auto">
-            <salla-button
-              {% if not product.is_available %} disabled {% endif %}
-              {% if product.is_donation %}
-                  data-on-click="cart::add.item"
-                  data-form-selector="#product_{{ product.id }}"
-              {% else %}
-                  data-on-click="cart::quick.add"
-              {% endif %}
-              data-id="{{ product.id }}"
-              loader-position="center"
-              class="btn--add-to-cart w-full"
-              btn-style="outline-primary">
-              {% if product.is_available %}
-                  {{ trans('pages.cart.add_to_cart') }}
-              {% elseif product.is_donation %}
-                  {{ trans('pages.products.donation_exceed') }}
-              {% else %}
-                  {{ trans('pages.products.out_of_stock') }}
-              {% endif %}
+            <salla-button onclick="salla.cart.addItem({{ product.id }})" loader-position="center"
+                          class="btn--add-to-cart" width="wide"
+                          fill="outline" {{ not product.is_available ? 'disabled' : '' }}>
+                {% if product.is_available %}
+                    {{ trans('pages.cart.add_to_cart') }}
+                {% elseif product.is_donation %}
+                    {{ trans('pages.products.donation_exceed') }}
+                {% else %}
+                    {{ trans('pages.products.out_of_stock') }}
+                {% endif %}
             </salla-button>
         </div>
     </div>
