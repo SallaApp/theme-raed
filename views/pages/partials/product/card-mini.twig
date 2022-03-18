@@ -6,11 +6,15 @@
              src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
 
         {# todo:: use salla-button #}
-        <button aria-label="Add or remove to wishlist" class="btn--wishlist animated"
-                onclick="salla.wishlist.add({{ product.id }})">
+        <salla-button 
+          data-id="{{ product.id }}"
+          button-type="icon"
+          fill="none"
+          color="light"
+          aria-label="Add or remove to wishlist" 
+          class="btn--wishlist animated">
             <i class="sicon-heart"></i>
-            <span class="loader loader--small"></span>
-        </button>
+        </salla-button>
     </a>
 
     <div class="flex flex-col flex-1 overflow-hidden p-5">
