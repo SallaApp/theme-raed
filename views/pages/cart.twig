@@ -17,12 +17,9 @@
 | cart.total                                        | float               |                                                                |
 | cart.free_shipping_bar                            | ?object             |                                                                |
 | cart.free_shipping_bar.minimum_amount             | float               | how much cart total should be to apply free shipping ex: 1000  |
-| cart.free_shipping_bar.total_until_free_total     | string              | ex: "٨٣٠ ر.س"                                                  |
 | cart.free_shipping_bar.has_free_shipping          | bool                | true when `cart.free_shipping_bar.percent==100`                |
 | cart.free_shipping_bar.percent                    | float               | `0 - 100`                                                      |
-| cart.free_shipping_bar.currency                   | string              | ex: "ر.س"                                                      |
 | cart.free_shipping_bar.remaining                  | float               | `830`                                                          |
-| cart.free_shipping_bar.remaining_to_free_shipping | money               | same as `cart.free_shipping_bar.remaining` but as money object |
 | cart.items                                        | CartItem[]          |                                                                |
 | cart.items[].id                                   | int                 |                                                                |
 | cart.items[].is_hidden_quantity                   | bool                |                                                                |
@@ -43,7 +40,6 @@
 | cart.items[].offer.discount                       | float               |                                                                |
 | cart.items[].offer.is_free                        | bool                |                                                                |
 | cart.items[].offer.names                          | ?string             | ex: `Buy 3 and the 4th on us, National Day`                    |
-| cart.items[].offer.price_after_discount           | float               |                                                                |
 | cart.items[].donation                             | ?object             |                                                                |
 | cart.items[].attachments                          | ?array              |                                                                |
 | cart.items[].attachments[].id                     | int                 | image id, to be attache with the formData                      |
@@ -82,7 +78,9 @@
                         <div class="md:flex md:space-s-12 items-start justify-between mb-8">
                             <div class="flex flex-1 space-s-4">
                                 <a href="{{ item.url }}" class="flex-shrink-0">
-                                    <img src="{{ asset('images/s-empty.png') }}" data-src="{{ item.product_image }}" alt="{{ item.product_name }}" class="lazy-load flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
+                                    <img src="{{ asset('images/s-empty.png') }}" data-src="{{ item.product_image }}"
+                                         alt="{{ item.product_name }}"
+                                         class="lazy-load flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
                                 </a>
                                 <div class=" space-y-1">
                                     <h3 class="text-gray-900 leading-6">
@@ -105,14 +103,14 @@
                                     {% else %}
                                         <button class="add-qty btn--quantity sicon-add" type="button"></button>
                                         <input class="item-quantity focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
-                                                data-max_quantity="{{ product.max_quantity }}"
-                                                data-quantity="{{ item.quantity }}"
-                                                max="{{ product.max_quantity }}"
-                                                value="{{ item.quantity }}"
-                                                id="qty-{{ item.id }}"
-                                                data-digits="1"
-                                                name="quantity"
-                                                min="1">
+                                               data-max_quantity="{{ product.max_quantity }}"
+                                               data-quantity="{{ item.quantity }}"
+                                               max="{{ product.max_quantity }}"
+                                               value="{{ item.quantity }}"
+                                               id="qty-{{ item.id }}"
+                                               data-digits="1"
+                                               name="quantity"
+                                               min="1">
                                         <button class="sub-qty btn--quantity sicon-minus" type="button"></button>
                                     {% endif %}
                                 </div>
@@ -137,7 +135,8 @@
                     <div class="no-content-placeholder">
                         <i class="sicon-shopping-bag icon"></i>
                         <p>{{ trans('pages.cart.empty_cart') }}</p>
-                        <a href="{{ link('/') }}" class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back_home') }}</a>
+                        <a href="{{ link('/') }}"
+                           class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back_home') }}</a>
                     </div>
                 {% endfor %}
 
@@ -152,8 +151,8 @@
                     <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative {{ cart.free_shipping_bar?'':'hidden' }}"
                          id="free-shipping">
                         <div class="flex space-s-3 items-center">
-                            <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{theme.is_rtl ? 'flip-x':''}}"></i>
-                            {% set is_free=cart.free_shipping_bar.percent==100 %}
+                            <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x':'' }}"></i>
+                            {% set is_free=cart.free_shipping_bar.has_free_shipping %}
                             <div class="flex-1">
                                 <h4 class="shipping-item font-bold text-sm mb-1.5">{{ trans('pages.cart.free_shipping') }}</h4>
                                 <p class="shipping-item text-sm font- text-gray-400">
@@ -169,7 +168,7 @@
                              id="free-shipping-bar">
                             <div class="progress-bg transition-all duration-500 h-4 bg-primary relative rounded-full flex justify-end"
                                  style="width:{{ cart.free_shipping_bar.percent }}%">
-                                <i class="inline-block sicon-shipping-fast text-sm absolute -bottom-5 -end-0 {{theme.is_rtl ? 'flip-x':''}}"></i>
+                                <i class="inline-block sicon-shipping-fast text-sm absolute -bottom-5 -end-0 {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             </div>
                         </div>
                     </div>
@@ -193,11 +192,16 @@
                                 <label for="coupon"
                                        class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
                                 <div class="mt-2.5 relative">
-                                    <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}" class="pe-24 form-input" value="{{ cart.coupon }}" id="coupon" name="coupon" type="text">
+                                    <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
+                                           class="pe-24 form-input" value="{{ cart.coupon }}" id="coupon" name="coupon"
+                                           type="text">
 
-                                    <salla-button loader-position="center" id="btn-add-coupon" class="btn--coupon {{ cart.coupon?'has-coupon':'' }}">
-                                      <span class="coupon-text">{{ trans('pages.cart.save_coupon') }}</span>
-                                      <i class="sicon-cancel icon text-xl w-8"></i>
+                                    <salla-button class="btn--coupon {{ cart.coupon?'has-coupon':'' }}"
+                                                  loader-position="center"
+                                                  id="btn-add-coupon">
+                                        <span class="coupon-text">{{ trans('pages.cart.save_coupon') }}</span>
+                                        <i class="sicon-cancel icon text-xl w-8"
+                                           style="display: {{ cart.coupon?'block':'none' }}"></i>
                                     </salla-button>
                                 </div>
                                 <span class="text-xs text-red-700" id="coupon-error"></span>
@@ -223,8 +227,9 @@
                             </div>
                         {% endif %}
 
-                        <salla-button type="submit" id="btn-submit" data-on-click="cart::submit" loader-position="end" width="wide">
-                          {{ trans('pages.cart.complete_order') }}
+                        <salla-button type="submit" id="btn-submit" data-on-click="cart::submit" loader-position="end"
+                                      width="wide">
+                            {{ trans('pages.cart.complete_order') }}
                         </salla-button>
                     </div>
                 </div>

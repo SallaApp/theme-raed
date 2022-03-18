@@ -3,7 +3,7 @@ import Flatpickr from "flatpickr";
 export default class ProductOptions {
     constructor() {
         this.initDateTimeInputes();
-        this.digitOnlyField();
+        app.on('input', '.digits-only-field', event => salla.helpers.inputDigitsOnly(event.target));
         salla.document.event.onChange('.visibility_condition', ({target}) => this.visibilityConditionCheck(target));
         //lets call event to show correct fields in cart page
         document.querySelectorAll('.visibility_condition').forEach(input => this.visibilityConditionCheck(input));
@@ -27,7 +27,7 @@ export default class ProductOptions {
                 let value = field.dataset.visibilityValue;
                 let condSelector = '#field_' + field.dataset.keyPrefix + '_' + option + (isMultiple ? '_' + value : '');
                 let condition = document.querySelector(condSelector);
-                let isSelected = isMultiple ? condition.checked : value == condition.value;
+                let isSelected = isMultiple ? condition?.checked : value == condition.value;
 
                 return this.toggleConditionalElement(field, (isEqual && isSelected) || (!isEqual && !isSelected));
             });
@@ -106,11 +106,5 @@ export default class ProductOptions {
             (!isFormData && (formData.quantity = quantity)) || formData.append('quantity', quantity);
         }
         return shouldPass ? formData : false;
-    }
-
-    digitOnlyField() {
-        document.querySelectorAll('.digits-only-field').forEach((field) => {
-            field.addEventListener('keyup', (event) => salla.helpers.digitsOnly(event.target))
-        })
     }
 }
