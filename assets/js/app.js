@@ -269,8 +269,8 @@ class App extends salla.AppHelpers {
      */
     initAddToCart() {
         salla.cart.event.onUpdated(summary => {
-            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total || salla.money(0));
-            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.items_count || summary.count || 0);
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
+            document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
         });
 
         salla.cart.event.onItemAdded((response, prodId) => {
