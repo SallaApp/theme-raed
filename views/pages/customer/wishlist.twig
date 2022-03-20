@@ -12,42 +12,40 @@
         {% hook 'customer:wishlist.items.start' %}
 
         {% for product in products %}
-            <div id="wishlist-product-{{ product.id }}">
-              <div class="product-entry product-entry--wishlist">
-                  <div class="flex items-center mb-4 sm:mb-0">
-                      <a href="{{ product.url }}"
-                        class='product-entry__image'>
-                          <img class="h-full w-full object-cover" src="{{ product.image.url }}"
-                              alt="{{ product.image.alt }}"/>
-                      </a>
-                      <div class="flex-1 ps-5">
-                          <h3 class="text-sm text-title-color leading-6 mb-1.5 pe-4 md:pe-8 line-clamp-1">
-                              <a href="{{ product.url }}">{{ product.name }}</a>
-                          </h3>
-                          <div class="w-full center-between">
-                              {% if product.on_sale %}
-                                  <div class="space-s-1">
-                                      <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                      <span class="text-sm text-gray-500 line-through">{{ product.regular_price|money }}</span>
-                                  </div>
-                              {% else %}
-                                  <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
-                              {% endif %}
-                          </div>
-                      </div>
-                  </div>
-                  <div class="flex items-center space-s-4">
-                      <salla-button loader-position="center" class="flex-grow-0 md:w-40 btn--add-to-cart" fill="outline"
-                                    onclick="salla.cart.addItem({{ product.id }})">
-                          {{ trans('pages.cart.add_to_cart') }}
-                      </salla-button>
+            <div class="product-entry product-entry--wishlist" id="wishlist-product-{{ product.id }}">
+                <div class="flex items-center mb-4 sm:mb-0">
+                    <a href="{{ product.url }}"
+                       class='product-entry__image'>
+                        <img class="h-full w-full object-cover" src="{{ product.image.url }}"
+                             alt="{{ product.image.alt }}"/>
+                    </a>
+                    <div class="flex-1 ps-5">
+                        <h3 class="text-sm text-title-color leading-6 mb-1.5 pe-4 md:pe-8 line-clamp-1">
+                            <a href="{{ product.url }}">{{ product.name }}</a>
+                        </h3>
+                        <div class="w-full center-between">
+                            {% if product.on_sale %}
+                                <div class="space-s-1">
+                                    <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                    <span class="text-sm text-gray-500 line-through">{{ product.regular_price|money }}</span>
+                                </div>
+                            {% else %}
+                                <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-s-4">
+                    <salla-button loader-position="center" class="flex-grow-0 md:w-40 btn--add-to-cart" fill="outline"
+                                  onclick="salla.cart.addItem({{ product.id }})">
+                        {{ trans('pages.cart.add_to_cart') }}
+                    </salla-button>
 
-                      <salla-button loader-position="center" button-type="icon" size="small" color="danger"
-                                    class="btn--delete" onclick="salla.wishlist.remove({{ product.id }})">
-                          <i class="sicon-cancel"></i>
-                      </salla-button>
-                  </div>
-              </div>
+                    <salla-button loader-position="center" button-type="icon" size="small" color="danger"
+                                  class="btn--delete" onclick="salla.wishlist.remove({{ product.id }})">
+                        <i class="sicon-cancel"></i>
+                    </salla-button>
+                </div>
             </div>
         {% else %}
             <div class="no-content-placeholder">

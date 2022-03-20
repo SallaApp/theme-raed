@@ -6,14 +6,13 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
 module.exports = {
     entry  : {
-        app     : ['./assets/styles/app.scss', './assets/js/app.js'],
+        app     : ['./assets/styles/app.scss', './assets/js/wishlist.js', './assets/js/app.js'],
         home    : './assets/js/home.js',
         checkout: ['./assets/js/cart.js', './assets/js/thankyou.js'],
         pages   : ['./assets/js/blog.js', './assets/js/brands.js',],
         product : ['./assets/js/product.js', './assets/js/products.js'],
         customer: [
             './assets/js/profile.js',
-            './assets/js/wishlist.js',
             './assets/js/order.js',
         ],
 

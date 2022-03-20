@@ -71,8 +71,9 @@ view options:
 
 
         <div class="flex items-center mt-auto">
-            <salla-button onclick="salla.cart.addItem({id: {{ product.id }}, donating_amount: document.querySelector('#product-{{  product.id }} #donation-amount')?.value})"
-                          loader-position="center" class="btn--add-to-cart" width="wide" fill="outline"
+            <salla-button
+                    onclick="salla.cart.addItem({id: {{ product.id }}, donating_amount: document.querySelector('#product-{{ product.id }} #donation-amount')?.value})"
+                    loader-position="center" class="btn--add-to-cart" width="wide" fill="outline"
                     {{ not product.is_available ? 'disabled' : '' }}>
                 {% if product.is_available %}
                     {{ trans('pages.cart.add_to_cart') }}
@@ -83,13 +84,8 @@ view options:
                 {% endif %}
             </salla-button>
 
-            <salla-button 
-              button-type="icon" 
-              fill="none" 
-              color="light" 
-              aria-label="Add or remove to wishlist" 
-              class="btn--wishlist animated" 
-              data-id="{{ product.id }}">
+            <salla-button button-type="icon" fill="none" color="light" aria-label="Add or remove to wishlist"
+                          class="btn--wishlist animated" onclick="salla.wishlist.toggle({{ product.id }})">
                 <i class="sicon-heart"></i>
             </salla-button>
         </div>

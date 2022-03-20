@@ -24,7 +24,6 @@ class App extends salla.AppHelpers {
         this.initiateMobileMenu();
         this.initiateStickyMenu();
         this.initAddToCart();
-        this.initiateWishlistButtons();
         this.initiateAdAlert();
         this.initiateDropdowns();
         this.initiateModals();
@@ -127,7 +126,7 @@ class App extends salla.AppHelpers {
         let header = this.element('#mainnav');
         let logo = header.querySelector('.navbar-brand img')
         let height = this.element('#mainnav .inner').clientHeight;
-        logo.addEventListener('load', () => {
+        logo.addEventListener( 'load', () => {
             height = this.element('#mainnav .inner').clientHeight;
             header.style.height = height + 'px';
         })
@@ -264,42 +263,14 @@ class App extends salla.AppHelpers {
         return options === false ? anime : anime.play();
     }
 
-
-    // ======================= Wishlist Icons in Product Cards ======================= //
-    initiateWishlistButtons() {
-      salla.storage.get("salla::wishlist", []).forEach(id => this.toggalFavorites(id, true));  
-      this.onClick('.btn--wishlist', ({currentTarget: btn}) => {
-        btn.load().then(()=> {
-            if(btn.classList.contains('is-added')){
-              salla.wishlist.api.remove(btn.dataset.id);
-              setTimeout(()=> this.toggalFavorites(btn.dataset.id, false), 200);
-            }
-            else{
-              salla.wishlist.api.add(btn.dataset.id);
-              setTimeout(()=> this.toggalFavorites(btn.dataset.id, true), 200);
-            }
-          })
-          .catch(()=> btn.stop());
-      });
-    }
-
-    toggalFavorites(id, isAdded) {
-        document.querySelectorAll('salla-button.btn--wishlist[data-id="' + id + '"]')
-          .forEach(btn => {
-              app.toggleElement(btn, 'is-added', 'not-added', () => isAdded);
-              app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
-              app.toggleElement(btn, 'pulse', 'un-favorited', () => isAdded);
-          });
-    }
-
     /**
      * These actions are responsable for pressing "add to cart" button,
      * they can be from any page, espacially when megamenu is enabled
      */
     initAddToCart() {
         salla.cart.event.onUpdated(summary => {
-            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
-            document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
+            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = summary.final_total || summary.total || salla.money(0));
+            document.querySelectorAll('[data-cart-badge]').forEach(el => el.innerText = summary.items_count || summary.count || 0);
         });
 
         salla.cart.event.onItemAdded((response, prodId) => {

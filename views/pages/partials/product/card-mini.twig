@@ -5,13 +5,8 @@
         <img class="h-full w-full lazy-load object-{{ product.image.url|is_placeholder ? 'contain':'cover' }}"
              src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
 
-        <salla-button 
-          button-type="icon" 
-          fill="none" 
-          color="light" 
-          aria-label="Add or remove to wishlist" 
-          class="btn--wishlist animated" 
-          data-id="{{ product.id }}">
+        <salla-button button-type="icon" fill="none" color="light" aria-label="Add or remove to wishlist"
+                      onclick="salla.wishlist.toggle({{ product.id }})" class="btn--wishlist animated">
             <i class="sicon-heart"></i>
         </salla-button>
     </a>
