@@ -228,23 +228,22 @@
                         </button>
                     {% endif %}
                 </div>
-
-                {% if product.can_show_sold or product.can_show_remained_quantity %}
-                  <div class="bg-white px-5 py-2.5 mb-5 rounded-md inline-flex text-sm">
-                      {% if not product.can_show_sold %}
-                        <div class="border-e border-border-color pe-5 me-5">
-                            <i class="text-red-400 sicon-fire me-1.5 text-md"></i>
-                            {{ trans('pages.products.sold') }} <span class="text-red-400">{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
-                        </div>
-                      {% endif %}
-                      {% if product.can_show_remained_quantity %}
-                      <div>
-                          <i class="text-red-400 sicon-box-bankers me-1.5 text-md"></i>
-                          {{ trans('pages.products.remained') }}
-                          <span>{{ product.quantity }}</span>
-                      </div>
-                      {% endif %}
-                  </div>
+                {% if product.sold_quantity or product.can_show_remained_quantity %}
+                    <div class="bg-white px-5 py-2.5 mb-5 rounded-md inline-flex text-sm">
+                        {% if product.sold_quantity %}
+                            <div class="border-e border-border-color pe-5 me-5 text-red-400">
+                                <i class="sicon-fire me-1.5 text-md"></i> {{ trans('pages.products.sold') }}
+                                <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
+                            </div>
+                        {% endif %}
+                        {% if product.can_show_remained_quantity %}
+                            <div>
+                                <i class="text-red-400 sicon-box-bankers me-1.5 text-md"></i>
+                                {{ trans('pages.products.remained') }}
+                                <span>{{ product.quantity }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
                 {% endif %}
 
                 {% if product.tags|length %}
