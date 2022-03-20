@@ -267,37 +267,29 @@ class App extends salla.AppHelpers {
 
     // ======================= Wishlist Icons in Product Cards ======================= //
     initiateWishlistButtons() {
-        salla.storage.get("salla-wishlist", []).forEach(id => this.toggalFavorites(id, true));
-        this.onClick('.btn--wishlist', ({currentTarget: btn}) => {
-            btn.load()
-            salla.wishlist.event.onAdded((event, id) => {
-                btn.stop();
-                this.updateWishlist(id, true)
-            });
-            salla.wishlist.event.onRemoved((event, id) => {
-                btn.stop();
-                this.updateWishlist(id, false)
-            })
-            salla.wishlist.event.onAdditionFailed(() => btn.stop());
-            salla.wishlist.event.onRemovingFailed(() => btn.stop());
-        });
-    }
-
-    updateWishlist(id, isAdded) {
-        let wishlist = salla.storage.get("salla-wishlist", []);
-        isAdded ? wishlist.push(id) : wishlist.splice(wishlist.indexOf(id), 1);
-        salla.storage.set("salla-wishlist", wishlist);
-        this.toggalFavorites(id, isAdded);
+      salla.storage.get("salla::wishlist", []).forEach(id => this.toggalFavorites(id, true));  
+      this.onClick('.btn--wishlist', ({currentTarget: btn}) => {
+        btn.load().then(()=> {
+            if(btn.classList.contains('is-added')){
+              salla.wishlist.api.remove(btn.dataset.id);
+              setTimeout(()=> this.toggalFavorites(btn.dataset.id, false), 200);
+            }
+            else{
+              salla.wishlist.api.add(btn.dataset.id);
+              setTimeout(()=> this.toggalFavorites(btn.dataset.id, true), 200);
+            }
+          })
+          .catch(()=> btn.stop());
+      });
     }
 
     toggalFavorites(id, isAdded) {
-        document.querySelectorAll('.btn--wishlist[data-id="' + id + '"]')
-            .forEach(btn => {
-                app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
-                app.toggleElement(btn, 'pulse', 'un-favorited', () => isAdded);
-                console.log('btn.onClick:', btn.onClick);
-                btn.onClick = isAdded ? 'salla.wishlist.api.remove(' + id + ')' : 'salla.wishlist.api.add(' + id + ')';
-            });
+        document.querySelectorAll('salla-button.btn--wishlist[data-id="' + id + '"]')
+          .forEach(btn => {
+              app.toggleElement(btn, 'is-added', 'not-added', () => isAdded);
+              app.toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
+              app.toggleElement(btn, 'pulse', 'un-favorited', () => isAdded);
+          });
     }
 
     /**
