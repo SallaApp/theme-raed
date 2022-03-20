@@ -4,7 +4,7 @@ class Wishlist extends BasePage {
 
     onReady() {
         // init wishlist icons in product cards
-        salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id, true));
+        salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id));
     }
 
     registerEvents() {
@@ -24,8 +24,7 @@ class Wishlist extends BasePage {
 
             app.anime(item, false)
                 .height(0)// -> from 'height' to '0',
-                .paddingBottom(0)
-                .paddingTop(0)
+                .opacity(0)
                 .easing('easeInOutQuad')
                 .duration(300)
                 .complete(() => item.remove() || (document.querySelector('#wishlist>*') || window.location.reload()))
