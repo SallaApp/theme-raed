@@ -9,7 +9,7 @@ class Cart extends BasePage {
 
         app.watchElements({
             couponCodeInput: '#coupon-input',
-            couponBtn: '#btn-add-coupon',
+            couponBtn: '#coupon-btn',
             couponError: '#coupon-error',
             subTotal: '#sub-total',
             totalDiscount: '#total-discount',

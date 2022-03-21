@@ -20,7 +20,7 @@
     <div class="container mb-10 md:mb-20">
         {% component 'header.breadcrumbs' %}
         <div class="flex items-start flex-col md:flex-row">
-            <div class="main-content flex-1 md:pb-20 ">
+            <div class="main-content flex-1 w-full md:pb-20 ">
                 <div class="mb-5 md:flex justify-between items-center">
                     <h2 class="font-bold mt-12 mb-6 md:mb-0">{{ page.title|raw }}</h2>
                     <div class="center-between">
@@ -57,7 +57,7 @@
 
                 {% if products|length %}
                     <salla-infinite-scroll next-page="{{ products.next_page }}" next-page.autoload
-                                           class="mb-8 products-container gird-view grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                           class="mb-8 products-container gird-view grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {% for product in products %}
                             {% include 'pages.partials.product.card' with{block_classes:'list-block'} %}
                         {% endfor %}
