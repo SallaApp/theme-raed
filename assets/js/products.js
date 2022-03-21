@@ -4,12 +4,14 @@ import Slider from './partials/slider'
 class Products extends BasePage {
     onReady() {
         //Used in: [random-testimonials.twig]
-        new Slider('.testimonials-slider', {
-            loop          : true,
-            centeredSlides: true,
-            spaceBetween  : 15,
-            breakpoints   : {1024: {slidesPerView: 2, spaceBetween: 30}}
+        let testimonials = new Slider('.testimonials-slider', {
+          draggable     : true,
+          centeredSlides: true,
+          slidesPerView : 1,
+          breakpoints   : {1024: {slidesPerView: 2}}
         });
+        //begin from slide 2 to always dispaly prev & next
+        if(window.innerWidth > 1024)  testimonials.slideTo(1, false,false);  
     }
 }
 
