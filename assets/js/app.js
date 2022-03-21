@@ -123,23 +123,22 @@ class App extends salla.AppHelpers {
     }
 
     initiateStickyMenu() {
-        let header = this.element('#mainnav');
-        let logo = header.querySelector('.navbar-brand img')
-        let height = this.element('#mainnav .inner').clientHeight;
-        logo.addEventListener( 'load', () => {
-            height = this.element('#mainnav .inner').clientHeight;
-            header.style.height = height + 'px';
-        })
+        let header = this.element('#mainnav'),
+        height = this.element('#mainnav .inner').clientHeight;
 
-        window.addEventListener('resize', () => {
-            let height = this.element('#mainnav .inner').clientHeight;
-            header.style.height = height + 'px';
-        })
+        window.addEventListener('load', ()=> this.setHeaderHeight())
+        window.addEventListener('resize', ()=> this.setHeaderHeight())
 
         window.addEventListener('scroll', () => {
             window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
             window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
         }, {passive: true});
+    }
+
+    setHeaderHeight(){
+      let height = this.element('#mainnav .inner').clientHeight,
+          header = this.element('#mainnav');
+      header.style.height = height + 'px';
     }
 
     initiateAdAlert() {
