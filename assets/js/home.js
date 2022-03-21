@@ -42,7 +42,8 @@ class Home extends BasePage {
             slidesPerView : 1,
             breakpoints   : {1024: {slidesPerView: 2}}
         });
-        testimonials.slideTo(1, false,false);  //begin from slide 2 to always dispaly prev & next
+        //begin from slide 2 to always dispaly prev & next
+        if(window.innerWidth > 1024)  testimonials.slideTo(1, false,false);  
 
 
         //Used in: [enhanced-slider.twig]

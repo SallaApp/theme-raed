@@ -9,7 +9,7 @@
 | component.banners[].description | ?string  |                                                                           |
 | position                        | int      | Sorting number start from zero                                            |
 #}
-<section class="s-block s-block--banners container mt-8 sm:mt-16">
+<section class="s-block s-block--banners s-block--full-bg container">
     <div class="grid {{ component.banners|length <= 3 ? 'md:grid-cols-' ~ component.banners|length : 'md:grid-cols-3' }} grid-flow-row gap-3 sm:gap-8">
         <div class="sm:col-span-1 {{ component.banners|length > 3 ? 'sm:row-span-2' }} banner-entry lazy-background" data-src="{{ component.banners[0].image }}">
             <a href="{{component.banners[0].url}}"
