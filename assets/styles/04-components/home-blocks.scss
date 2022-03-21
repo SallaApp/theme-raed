@@ -226,74 +226,15 @@
   @apply bg-white rounded-md h-36 mb-8 text-center flex flex-col items-center justify-between text-gray-600 transition duration-500 hover:shadow-default border border-border-color;
 }
 
-/*
-* Home block spacing situations
-*/
 
 .s-block {
-  // Footer top spacing
-  &--hero-slider,
-  &--full-banner,
-  &--tabs-produtcs,
-  &--logos-slider,
-  &--slider-with-bg {
-    + footer {
-      margin-top: 0;
-    }
-  }
+  @apply mt-8 sm:mt-16;
 
-  // hero top spacing
-  &--hero-slider,
-  &--full-banner,
-  &--tabs-produtcs,
-  &--logos-slider,
-  &--slider-with-bg {
-    + .s-block--hero-slider {
-      margin-top: 0;
-    }
-  }
-
-  // pomotion top spacing
-  &--full-banner,
-  &--hero-slider,
-  &--tabs-produtcs,
-  &--logos-slider,
-  &--slider-with-bg {
-    + .s-block--full-banner {
-      margin-top: 0;
-    }
-  }
-
-  // brands top spacing
-  &--logos-slider,
-  &--hero-slider,
-  &--tabs-produtcs,
-  &--full-banner,
-  &--slider-with-bg {
-    + .s-block--logos-slider {
-      margin-top: 0;
-    }
-  }
-
-  // tabs top spacing
-  &--tabs-produtcs,
-  &--hero-slider,
-  &--logos-slider,
-  &--full-banner,
-  &--slider-with-bg {
-    + .s-block--tabs-produtcs {
-      margin-top: 0;
-    }
-  }
-
-  // slider with header & bg
-  &--slider-with-bg,
-  &--hero-slider,
-  &--tabs-produtcs,
-  &--logos-slider,
-  &--full-banner {
-    + .s-block--slider-with-bg {
-      margin-top: 0;
+  &--full-bg{
+    + footer,
+    + .s-block--full-bg,
+    &:first-of-type{
+      @apply mt-0;
     }
   }
 
@@ -342,7 +283,7 @@
   }
 }
 
-// repeated block top spacing
+// repeated block with narrow top spacing
 .s-block--features + .s-block--features,
 .s-block--fixed-banner + .s-block--fixed-banner,
 .s-block--banners + .s-block--banners {
