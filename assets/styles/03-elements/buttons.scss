@@ -1,177 +1,177 @@
 /*
 * Buttons
 */
-salla-button{
-  &[width="wide"]{
+salla-button {
+  &[width="wide"] {
     @apply w-full;
   }
 }
 
 .btn {
-	@apply transition duration-300 flex-1 inline-flex justify-center items-center px-6 pb-2.5 pt-2 text-sm font-bold rounded-md hover:opacity-80 whitespace-nowrap;
+  @apply transition duration-300 flex-1 inline-flex justify-center items-center px-6 pb-2.5 pt-2 text-sm font-bold rounded-md hover:opacity-80 whitespace-nowrap;
 
-	.loader {
-		width: 0;
-		opacity: 0;
-		height: 16px;
-		transform: scale(0);
-		transition: 0.3s;
-	}
+  .loader {
+    width: 0;
+    opacity: 0;
+    height: 16px;
+    transform: scale(0);
+    transition: 0.3s;
+  }
 
-	&--is-loading {
-		pointer-events: none;
+  &--is-loading {
+    pointer-events: none;
 
-		.loader {
-			width: 16px;
-			margin: 0 5px;
-			opacity: 1;
-			transform: scale(1);
-		}
-	}
+    .loader {
+      width: 16px;
+      margin: 0 5px;
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
-	&--delete {
-		.loader {
-			width: 15px;
+  &--delete {
+    .loader {
+      width: 15px;
 
-			&:before {
-				width: 12px;
-				height: 12px;
-				border-top-color: transparent;
-				border-bottom-color: #fff;
-				border-left-color: transparent;
-				border-right-color: #fff;
-			}
-		}
+      &:before {
+        width: 12px;
+        height: 12px;
+        border-top-color: transparent;
+        border-bottom-color: #fff;
+        border-left-color: transparent;
+        border-right-color: #fff;
+      }
+    }
 
-		&.btn--is-loading {
-			.icon {
-				opacity: 0;
-			}
-		}
-	}
+    &.btn--is-loading {
+      .icon {
+        opacity: 0;
+      }
+    }
+  }
 
-  &--copy{
-    &.copied{
+  &--copy {
+    &.copied {
       @apply text-green-600;
 
-      i:before{
+      i:before {
         content: '\ea9d';
       }
     }
   }
 
-	&--quantity {
-		@apply text-gray-400 w-11 hover:text-primary transition-colors duration-300;
-	}
+  &--quantity {
+    @apply text-gray-400 w-11 hover:text-primary transition-colors duration-300;
+  }
 
-	&__text {
-		@apply transition-transform duration-500 inline-block pointer-events-none;
-	}
+  &__text {
+    @apply transition-transform duration-500 inline-block pointer-events-none;
+  }
 
-	&--wishlist {
+  &--wishlist {
     @apply m-0 ms-0.5;
 
     &:hover,
-    .sicon-heart-off{
+    .sicon-heart-off {
       @apply text-primary
     }
-	}
+  }
 
-	&--rounded-gray {
-		@apply inline-flex flex-grow-0 justify-center w-full rounded-full px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium whitespace-nowrap;
-	}
+  &--rounded-gray {
+    @apply inline-flex flex-grow-0 justify-center w-full rounded-full px-2.5 py-2 items-center transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium whitespace-nowrap;
+  }
 
-	&--circle-gray {
-		@apply inline-flex justify-center items-center rounded-full px-3 py-3 h-9 w-9 transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium;
-	}
+  &--circle-gray {
+    @apply inline-flex justify-center items-center rounded-full px-3 py-3 h-9 w-9 transition-colors bg-gray-200/30 hover:bg-gray-200/50 text-sm font-medium;
+  }
 
-	&--icon {
-		@apply flex items-center justify-center transition bg-white text-gray-500 border-gray-150  hover:border-gray-200 hover:text-gray-600 mx-1 border rounded-full w-10 h-10 font-medium flex-shrink-0;
+  &--icon {
+    @apply flex items-center justify-center transition bg-white text-gray-500 border-gray-150  hover:border-gray-200 hover:text-gray-600 mx-1 border rounded-full w-10 h-10 font-medium flex-shrink-0;
 
-    i{
+    i {
       @apply pointer-events-none;
 
-      &.sicon-heart{ 
+      &.sicon-heart {
         @apply text-theme-red;
       }
     }
 
-    &.btn--share{
+    &.btn--share {
       margin: 0;
     }
 
-    &.favorited{
-      @apply bg-primary text-primary-reverse border-primary;
-    }
-	}
+    //.unfavorited {
+    //  @apply bg-primary text-primary-reverse border-primary;
+    //}
+  }
 
-	&--close {
-		@apply hidden xs:block h-12 w-14 text-red-500 text-2xl absolute top-0 end-0 z-50;
-	}
+  &--close {
+    @apply hidden xs:block h-12 w-14 text-red-500 text-2xl absolute top-0 end-0 z-50;
+  }
 
-	&--close-sm {
-		@apply opacity-0 transform -translate-y-full transition duration-300 h-[51px] w-[51px] bg-red-500 text-white text-xl fixed top-0 end-0 z-50;
-	}
+  &--close-sm {
+    @apply opacity-0 transform -translate-y-full transition duration-300 h-[51px] w-[51px] bg-red-500 text-white text-xl fixed top-0 end-0 z-50;
+  }
 
-  &--collapse{
+  &--collapse {
     @apply w-full bg-gray-bg py-2.5 xs:ps-7 xs:pe-5 rounded-md flex items-center text-gray-500 justify-center text-sm;
   }
 
-	/* --- Sliders nav arrows --- */
-	/*
-    used in:
-      1- Latest proudcts slider - home block
-      2- Offers slider
-      3- Similar products
-    */
-	&--sm-arrow {
-    @apply transition inline-flex items-center justify-center border text-gray-500 rounded-full w-8 h-8 text-lg; 
+  /* --- Sliders nav arrows --- */
+  /*
+  used in:
+    1- Latest proudcts slider - home block
+    2- Offers slider
+    3- Similar products
+  */
+  &--sm-arrow {
+    @apply transition inline-flex items-center justify-center border text-gray-500 rounded-full w-8 h-8 text-lg;
 
-    &:not(:disabled){
+    &:not(:disabled) {
       @apply hover:text-primary hover:border-primary;
     }
-	}
+  }
 
-	/*
-    used in:
-      1- Home tabs block
-    */
-	&--md-arrow {
-		@apply transition inline-flex items-center justify-center border text-gray-500 rounded-full w-10 h-10 text-xl;
+  /*
+  used in:
+    1- Home tabs block
+  */
+  &--md-arrow {
+    @apply transition inline-flex items-center justify-center border text-gray-500 rounded-full w-10 h-10 text-xl;
 
-    &.light{
+    &.light {
       @apply text-white border-white;
     }
 
-    &:not(:disabled){
+    &:not(:disabled) {
       @apply hover:text-primary hover:border-primary;
     }
-	}
+  }
 
-	/*
-    used in:
-      1- Main slider (enhancend slider)
-      2- Photos slider
-      3- Product slider
-      4- Testimonials slider
-    */
-	&--md-white-arrow {
-		@apply h-10 w-10 bg-white text-primary transition shadow-sm hidden md:flex justify-center items-center rounded-full hover:opacity-60 absolute top-1/2 -translate-y-1/2 z-1 start-4 xl:start-8;
+  /*
+  used in:
+    1- Main slider (enhancend slider)
+    2- Photos slider
+    3- Product slider
+    4- Testimonials slider
+  */
+  &--md-white-arrow {
+    @apply h-10 w-10 bg-white text-primary transition shadow-sm hidden md:flex justify-center items-center rounded-full hover:opacity-60 absolute top-1/2 -translate-y-1/2 z-1 start-4 xl:start-8;
 
-		&.slider-next {
-			@apply start-auto end-4 xl:end-8;
-		}
+    &.slider-next {
+      @apply start-auto end-4 xl:end-8;
+    }
 
-		i {
-			font-size: 22px;
-		}
+    i {
+      font-size: 22px;
+    }
 
-		.ltr & {
-			i {
-				transform: scaleX(-1);
-			}
-		}
-	}
+    .ltr & {
+      i {
+        transform: scaleX(-1);
+      }
+    }
+  }
 
   /* Disabled state */
   &.btn:disabled {
@@ -201,15 +201,15 @@ salla-button{
     @apply border border-primary-d text-reverse hover:bg-primary-d;
   }
 
-  &--outline{
+  &--outline {
     @apply text-gray-400 bg-white hover:bg-primary hover:text-white hover:border-primary shadow-sm border border-border-color;
 
-    &.light{
+    &.light {
       @apply bg-transparent text-white border-white;
     }
   }
 
-  &--rounded-full{
+  &--rounded-full {
     @apply rounded-full;
   }
 }
@@ -217,27 +217,27 @@ salla-button{
 .btn--star {
   @apply px-0.5 text-lg text-gray-400 opacity-50;
 
-	&.selected {
-		@apply text-amber-400;
-		opacity: 1;
-	}
+  &.selected {
+    @apply text-amber-400;
+    opacity: 1;
+  }
 
-	&[disabled] {
-		border: unset;
-		background-color: transparent !important;
+  &[disabled] {
+    border: unset;
+    background-color: transparent !important;
 
-		&.selected {
-			@apply text-amber-400;
-		}
-	}
+    &.selected {
+      @apply text-amber-400;
+    }
+  }
 
-	&:hover,
-	&.hovered {
-		&:not([disabled]):not(.selected) {
-			opacity: 1;
-			@apply text-amber-400;
-		}
-	}
+  &:hover,
+  &.hovered {
+    &:not([disabled]):not(.selected) {
+      opacity: 1;
+      @apply text-amber-400;
+    }
+  }
 }
 
 .rounded-icon {
@@ -247,25 +247,25 @@ salla-button{
 /*
 * Coupon Button
 */
-button.btn--coupon{ 
+button.btn--coupon {
   @apply absolute top-0 end-0 rounded-s-none flex-shrink-0 h-[40px];
 
-  .s-button-text{
+  .s-button-text {
     @apply block #{!important};
   }
 }
 
-salla-button{
-  &.has-not-coupon button{
-    .icon{
+salla-button {
+  &.has-not-coupon button {
+    .icon {
       @apply hidden;
     }
   }
-  
-  &.has-coupon button{
+
+  &.has-coupon button {
     @apply w-10;
 
-    .coupon-text{
+    .coupon-text {
       @apply hidden;
     }
   }
@@ -274,16 +274,16 @@ salla-button{
 /*
 * Links ---------------------------------------------------
 */
-.link{
-  &--primary{
+.link {
+  &--primary {
     @apply text-primary hover:text-primary-d transition;
   }
 }
 
-#btn-show-more{
+#btn-show-more {
   @apply transition;
 
-  &.is-expanded{
+  &.is-expanded {
     @apply opacity-0 pointer-events-none;
   }
 }

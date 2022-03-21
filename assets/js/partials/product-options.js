@@ -1,29 +1,35 @@
-import Flatpickr from "flatpickr";
+import Flatpickr from 'flatpickr';
 
 export default class ProductOptions {
     constructor() {
-        this.initDateTimeInputes();
-        app.on('input', '.digits-only-field', event => salla.helpers.inputDigitsOnly(event.target));
-        salla.document.event.onChange('.visibility_condition', ({target}) => this.visibilityConditionCheck(target));
-        //lets call event to show correct fields in cart page
-        document.querySelectorAll('.visibility_condition').forEach(input => this.visibilityConditionCheck(input));
-        this.optionsAlreadyInitiated = true;
-        window.verifyDataBeforeSend = (...data) => this.verifyDataBeforeSend(...data);
         new FileUploader();
-    }
-
-    initDateTimeInputes() {
         Flatpickr('.date-element', {"dateFormat": "Y-m-d H:i"});
         Flatpickr('.date-time-element', {"enableTime": true, "dateFormat": "Y-m-d H:i",});
         Flatpickr('.time-element', {enableTime: true, noCalendar: true, dateFormat: "H:i",});
+
+
+
+        app.on('input', '.digits-only-field', event => salla.helpers.inputDigitsOnly(event.target));
+
+        salla.document.event.onChange('.visibility_condition', ({target}) => this.visibilityConditionCheck(target));
+
+        //lets call event to show correct fields in cart page
+        document.querySelectorAll('.visibility_condition').forEach(input => this.visibilityConditionCheck(input));
+        this.optionsAlreadyInitiated = true;
+
+        window.verifyDataBeforeSend = (...data) => this.verifyDataBeforeSend(...data);
     }
 
+
     visibilityConditionCheck(input) {
-        let isMultiple = input.type == 'checkbox';
+        let isMultiple = input.type === 'checkbox';
         let option = input.dataset.option;
+
+
+
         document.querySelectorAll('[data-visibility-option="' + option + '"]')
             .forEach((field) => {
-                let isEqual = field.dataset.visibilityOperator == '=';
+                let isEqual = field.dataset.visibilityOperator === '=';
                 let value = field.dataset.visibilityValue;
                 let condSelector = '#field_' + field.dataset.keyPrefix + '_' + option + (isMultiple ? '_' + value : '');
                 let condition = document.querySelector(condSelector);
@@ -90,6 +96,8 @@ export default class ProductOptions {
         let shouldPass = true;
         let isFormData = formData instanceof FormData;
 
+
+        // todo :: why?
         element.querySelectorAll('[required]:not(:disabled)').forEach(input => {
             //get the value for option, if it's empty return
             let inputValue = formData
@@ -100,11 +108,13 @@ export default class ProductOptions {
                 return shouldPass = false;
             }
         });
+
         //if current page is single page & there is no qunatity in formData, make sure to inject it to the formData.
         if (salla.config.get('page.slug') === 'product.single' && !(isFormData ? formData.get('quantity') : formData.quantity)) {
             let quantity = app.quantityInput.value;
             (!isFormData && (formData.quantity = quantity)) || formData.append('quantity', quantity);
         }
+
         return shouldPass ? formData : false;
     }
 }

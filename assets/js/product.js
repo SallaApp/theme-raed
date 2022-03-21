@@ -9,18 +9,51 @@ window.fslightbox = Fslightbox;
 class Product extends BasePage {
     onReady() {
         this.initSliders();
-        this.initShareAndFavoriteBtns();
         new ProductOptions();
+
         app.watchElements({
             quantityInput: '#product-quantity',
             totalPrice   : '#total-price',
             beforePrice  : '#before-price',
+        });
+
+        //Toggale share menu
+        app.onClick('.btn--share', ({target: btn}) => {
+            let showShareMenu = !btn.classList.contains('opened');
+
+            app.toggleElementClassIf(btn, 'opened', 'closed', () => showShareMenu)
+                .toggleElementClassIf(btn.querySelector('i'), 'sicon-cancel', 'sicon-share-alt', () => showShareMenu)
+                .toggleElementClassIf(btn.nextElementSibling, 'h-auto', 'h-0 opacity-0', () => showShareMenu);
+
+            if (!showShareMenu) {
+                return;
+            }
+
+            (new anime.timeline())
+                .add({
+                    targets   : '.share-btns-list',
+                    translateY: [-50, 0],
+                    opacity   : [0, 1],
+                    duration  : 300,
+                    podding   : '0',
+                    easing    : 'easeInOutSine'
+                })
+                .add({
+                    targets   : '.share-btns-list li',
+                    translateZ: 0,
+                    translateY: [-30, 0],
+                    scaleY    : [0, 1],
+                    opacity   : [0, 1],
+                    duration  : 1200,
+                    delay     : anime.stagger(100)
+                }, '-=200');
         });
     }
 
     registerEvents() {
         //Workaround to fire data-on-change="product::get.price"
         let qunatityChanged = () => salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
+
         app.onClick('#btn-increase', () => app.quantityInput.value++ && qunatityChanged());
         app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && qunatityChanged()));
 
@@ -30,13 +63,17 @@ class Product extends BasePage {
         }) || e.target.remove());
 
         salla.product.event.onPriceUpdated(res => {
+
             app.totalPrice.innerText = res.data.after;
+
             app.anime('#total-price', {scale: [0.88, 1]});
+
             if (res.data.before) {
                 app.beforePrice.style.display = 'inline';
                 app.beforePrice.innerText = res.data.before;
                 return;
             }
+
             app.beforePrice && (app.beforePrice.style.display = 'none')
         });
     }
@@ -69,51 +106,6 @@ class Product extends BasePage {
             3- product offer products slider/ cats slider / discount slider
         */
         new Slider('.default-slider');
-    }
-
-
-    initShareAndFavoriteBtns() {
-        app.onClick('#btn-favorite', ({target: btn}) => {
-            if (!app.isUser()) {
-                return salla.error(salla.lang.get('common.messages.must_login'));
-            }
-            let addToFavorite = !btn.classList.contains('favorited');
-            addToFavorite ? salla.api.wishlist.add(salla.config.get('page.id')) : salla.api.wishlist.remove(salla.config.get('page.id'));
-            app.toggleElement(btn, 'favorited', 'unfavorited', () => addToFavorite)
-                .toggleElement(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => addToFavorite)
-            app.anime('.btn-favorite', {duration: 800, scale: [0.6, 1]});
-        });
-
-        //Toggale share menu
-        app.onClick('.btn--share', ({target: btn}) => {
-            let showShareMenu = !btn.classList.contains('opened');
-            app.toggleElement(btn, 'opened', 'closed', () => showShareMenu)
-                .toggleElement(btn.querySelector('i'), 'sicon-cancel', 'sicon-share-alt', () => showShareMenu)
-                .toggleElement(btn.nextElementSibling, 'h-auto', 'h-0 opacity-0', () => showShareMenu);
-
-            if (!showShareMenu) {
-                return;
-            }
-
-            (new anime.timeline())
-                .add({
-                    targets   : '.share-btns-list',
-                    translateY: [-50, 0],
-                    opacity   : [0, 1],
-                    duration  : 300,
-                    podding   : '0',
-                    easing    : 'easeInOutSine'
-                })
-                .add({
-                    targets   : '.share-btns-list li',
-                    translateZ: 0,
-                    translateY: [-30, 0],
-                    scaleY    : [0, 1],
-                    opacity   : [0, 1],
-                    duration  : 1200,
-                    delay     : anime.stagger(100)
-                }, '-=200');
-        });
     }
 }
 

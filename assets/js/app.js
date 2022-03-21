@@ -30,22 +30,7 @@ class App extends salla.AppHelpers {
         this.initiateCollabse();
 
         salla.comment.event.onAdded(() => window.location.reload());
-
-        // this.onClick('.btn--add-to-cart', ({currentTarget: btn}) => {
-        //   btn.load()
-        //   salla.cart.event.onItemAdded(() => btn.stop())
-        //   salla.cart.event.onItemAddedFailed(() => btn.stop())
-        // });
-
-        // this.onClick('.grid-trigger', event => {
-        //     event.preventDefault();
-        //     let type = event.target.dataset.type;//list|grid
-        //
-        //     this.toggle('.grid-trigger', 'bg-border-color text-primary', 'text-gray-400', e => e.dataset.type === type)
-        //         .toggle('.products-container', 'list md:grid-cols-1', 'md:grid-cols-auto-fill', () => type === 'list');
-        //     this.anime('.product-entry', {duration: 1200, translateY: [20, 0]});
-        // });
-
+        
         this.log('App Loaded 🎉');
     }
 
@@ -62,8 +47,8 @@ class App extends salla.AppHelpers {
         aux.select();
         document.execCommand("copy");
         document.body.removeChild(aux);
-        this.toggleElement(event.currentTarget, 'copied', 'code-to-copy', () => true);
-        setTimeout(() => this.toggleElement(event.currentTarget, 'code-to-copy', 'copied', () => true), 1000);
+        this.toggleElementClassIf(event.currentTarget, 'copied', 'code-to-copy', () => true);
+        setTimeout(() => this.toggleElementClassIf(event.currentTarget, 'code-to-copy', 'copied', () => true), 1000);
     }
 
     initiateNotifier() {
@@ -113,7 +98,7 @@ class App extends salla.AppHelpers {
                 } catch (e) {
                     salla.log(`Failed to load image (${src})!`, e.message);
                 }
-                app.toggleElement(entry.target, 'loaded', 'lazy-load lazy-background', () => true);
+                app.toggleElementClassIf(entry.target, 'loaded', 'lazy-load lazy-background', () => true);
                 observer.unobserve(entry.target);
             });
         }, {threshold: 0, trackVisibility: true, delay: 100, rootMargin: "250px 250px 250px 250px"});
@@ -192,12 +177,12 @@ class App extends salla.AppHelpers {
     }
 
     toggleModal(id, isOpen) {
-        this.toggle(`${id} .s-salla-modal-overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
-            .toggle(`${id} .s-salla-modal-body`,
+        this.toggleClassIf(`${id} .s-salla-modal-overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
+            .toggleClassIf(`${id} .s-salla-modal-body`,
                 'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
                 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
                 () => isOpen)
-            .toggleElement(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
+            toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
         if (!isOpen) {
             setTimeout(() => this.addClass(id, 'hidden'), 350);
         }
@@ -237,7 +222,7 @@ class App extends salla.AppHelpers {
 
         const toggleState = (isOpen) => {
             state.isOpen = !isOpen
-            this.toggleElement(content, 'is-closed', 'is-opened', () => isOpen);
+            this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
         }
 
         trigger.addEventListener('click', () => {

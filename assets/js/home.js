@@ -63,11 +63,11 @@ class Home extends BasePage {
                 style2: {active: 'is-active', inActive: 'inactive'},
             }[btn.dataset.type];
             let id = btn.dataset.componentId;
-            app.toggle(`#${id} .tabs-wrapper>div`, 'is-active opacity-0 translate-y-3', 'inactive', tab => tab.id == btn.dataset.target)
-                .toggle(`#${id} .tab-trigger`, css.active, css.inActive, tabBtn => tabBtn == btn);
+            app.toggleClassIf(`#${id} .tabs-wrapper>div`, 'is-active opacity-0 translate-y-3', 'inactive', tab => tab.id == btn.dataset.target)
+                .toggleClassIf(`#${id} .tab-trigger`, css.active, css.inActive, tabBtn => tabBtn == btn);
 
             // fadeIn active tabe
-            setTimeout(() => app.toggle(`#${id} .tabs-wrapper>div`, 'opacity-100 translate-y-0', 'opacity-0 translate-y-3', tab => tab.id == btn.dataset.target), 100);
+            setTimeout(() => app.toggleClassIf(`#${id} .tabs-wrapper>div`, 'opacity-100 translate-y-0', 'opacity-0 translate-y-3', tab => tab.id == btn.dataset.target), 100);
         });
         document.querySelectorAll('.s-block-tabs').forEach(block => block.classList.add('tabs-initialized'));
     }

@@ -4,7 +4,9 @@ import ProductOptions from './partials/product-options';
 class Cart extends BasePage {
     onReady() {
         this.initiateCartItems();
+
         salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
+
         app.watchElements({
             couponCodeInput: '#coupon-input',
             couponBtn: '#btn-add-coupon',
@@ -17,7 +19,9 @@ class Cart extends BasePage {
             freeShipppingMsg: '#free-shipping-msg',
             freeShipApplied: '#free-shipping-applied'
         });
+
         this.initiateCoupon();
+
         new ProductOptions();
     }
 
@@ -27,17 +31,17 @@ class Cart extends BasePage {
     updateCartPageInfo(cartData) {
         cartData.items?.forEach(item => this.updateItemInfo(item));
         app.subTotal.innerText = cartData.sub_total;
-        app.toggleElement(app.totalDiscount, 'discounted', 'hidden', () => cartData.total_discount)
-            .toggleElement(app.shippingCost, 'has_shipping', 'hidden', () => cartData.shipping_cost)
-            .toggleElement(app.freeShipping, 'has_free', 'hidden', () => cartData.free_shipping_bar);
+        app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => cartData.total_discount)
+            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => cartData.shipping_cost)
+            .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => cartData.free_shipping_bar);
         app.totalDiscount.querySelector('b').innerText = '- ' + cartData.total_discount;
         app.shippingCost.querySelector('b').innerText = cartData.shipping_cost;
         if (!cartData.free_shipping_bar) {
             return;
         }
         let isFree = cartData.free_shipping_bar.has_free_shipping;
-        app.toggleElement(app.freeShippingBar, 'active', 'hidden', () => !isFree)
-            .toggleElement(app.freeShipApplied, 'active', 'hidden', () => isFree);
+        app.toggleElementClassIf(app.freeShippingBar, 'active', 'hidden', () => !isFree)
+            .toggleElementClassIf(app.freeShipApplied, 'active', 'hidden', () => isFree);
         app.freeShipppingMsg.innerHTML = isFree
             ? salla.lang.get('pages.cart.has_free_shipping')
             : salla.lang.get('pages.cart.free_shipping_alert', {amount: salla.money(cartData.free_shipping_bar.remaining)});
@@ -126,10 +130,10 @@ class Cart extends BasePage {
             cartItem.total.innerText = item.display_total_price;
             app.anime(cartItem.total, {scale: [.88, 1]});
         }
-        app.toggleElement(cartItem.offer, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElement(cartItem.offerIcon, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElement(cartItem.productPrice, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElement(cartItem.price, 'text-theme-red', 'text-sm text-gray-400', () => item.has_special_price);
+        app.toggleElementClassIf(cartItem.offer, 'offer-applied', 'hidden', () => item.has_special_price)
+            .toggleElementClassIf(cartItem.offerIcon, 'offer-applied', 'hidden', () => item.has_special_price)
+            .toggleElementClassIf(cartItem.productPrice, 'offer-applied', 'hidden', () => item.has_special_price)
+            .toggleElementClassIf(cartItem.price, 'text-theme-red', 'text-sm text-gray-400', () => item.has_special_price);
         if (!item.has_special_price) {
             cartItem.price.innerText = item.product_price_formatted;
             return;
@@ -180,8 +184,8 @@ class Cart extends BasePage {
         app.couponCodeInput.toggleAttribute('disabled', applied);
         this.updateCartPageInfo(res.data.cart);
 
-        app.toggleElement(app.couponBtn, ['btn--danger', 'has-coupon'], ['btn-default', 'has-not-coupon'], () => applied)
-            .toggleElement(app.couponBtn, ['btn-default', 'has-not-coupon'], ['btn--danger', 'has-coupon'], () => !applied)
+        app.toggleElementClassIf(app.couponBtn, ['btn--danger', 'has-coupon'], ['btn-default', 'has-not-coupon'], () => applied)
+            .toggleElementClassIf(app.couponBtn, ['btn-default', 'has-not-coupon'], ['btn--danger', 'has-coupon'], () => !applied)
             .hideElement(app.couponBtn.querySelector(applied ? 'span' : 'i'))
             .showElement(app.couponBtn.querySelector(applied ? 'i' : 'span'))
             .removeClass(app.couponCodeInput, 'has-error');
