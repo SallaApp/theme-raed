@@ -44,7 +44,7 @@
 | product.notify_availability.channels   | array                       | ex: ['sms', 'email']                                                   |
 | product.notify_availability.subscribed | bool                        | Does user subscribed before                                            |
 | product.donation                       | ?ProductDonation            | @see views/components/product/donation-progress-bar.twig               |
-| product.show_read_more                 | bool                        |                                                                        |
+| product.has_read_more                  | bool                        |                                                                        |
 | product.can_add_note                   | bool                        |                                                                        |
 | product.can_show_remained_quantity     | bool                        |                                                                        |
 | product.can_show_sold                  | bool                        |                                                                        |
@@ -163,7 +163,7 @@
                 </div>
 
                 <div class="product__description leading-7 mb-6">
-                    {% if product.show_read_more %}
+                    {% if product.has_read_more %}
                         <div class="relative overflow-hidden transition-all max-h-0 duration-300" id="more-content"
                              style="max-height:5.25rem">
                             <p>{{ product.description|raw }}</p>
