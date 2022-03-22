@@ -183,38 +183,38 @@
 
                 <div class="flex mb-5 space-s-3 ">
                     <div class="share-wrapper relative">
-                        <button type="button"
+                        {# <button type="button"
                                 class="btn--share btn--icon"
                                 aria-label="Share">
                             <i class="sicon-share-alt"></i>
-                        </button>
-                        <ul class="absolute z-10 h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share">
+                        </button> #}
+                        <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light" class="!m-0">
+                          <i class="sicon-share-alt pointer-events-none"></i>
+                        </salla-button>
+
+                        <ul class="share-btns-list a2a_kit share">
                             <li>
-                                <a class="a2a_button_whatsapp block p-2.5" aria-label="Share Via Whatsapp">
+                                <a class="a2a_button_whatsapp" aria-label="Share Via Whatsapp">
                                     <i class="sicon-whatsapp"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_facebook block p-2.5 hover:text-primary"
-                                   aria-label="Share Via Facebook">
+                                <a class="a2a_button_facebook" aria-label="Share Via Facebook">
                                     <i class="sicon-facebook"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_twitter block p-2.5 hover:text-primary"
-                                   aria-label="Share Via Twitter">
+                                <a class="a2a_button_twitter" aria-label="Share Via Twitter">
                                     <i class="sicon-twitter"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_email block p-2.5 hover:text-primary"
-                                   aria-label="Share Via Email">
+                                <a class="a2a_button_email" aria-label="Share Via Email">
                                     <i class="sicon-mail"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_copy_link block p-2.5 hover:text-primary"
-                                   aria-label="Copy Product Link">
+                                <a class="a2a_button_copy_link" aria-label="Copy Product Link">
                                     <i class="sicon-link"></i>
                                 </a>
                             </li>
@@ -228,8 +228,7 @@
                     </div>
 
                     {# todo:: ashraf enhance the style (hover) without change the js and relay on (pulse, un-favorited) #}
-                    <salla-button class="btn--wishlist btn--icon" data-id="{{ product.id }}"
-                                  onclick="salla.wishlist.toggle({{ product.id }})" button-type="icon">
+                    <salla-button class="btn--wishlist animated" data-id="{{ product.id }}" onclick="salla.wishlist.toggle({{ product.id }})" shape="icon" fill="outline" color="light">
                         <i class="{{ product.in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
                     </salla-button>
                 </div>
