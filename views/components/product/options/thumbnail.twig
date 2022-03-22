@@ -6,7 +6,7 @@
 | disabled   | bool          |                                                         |
 | required   | bool          |                                                         |
 | value      | ?string       |                                                         |
-| key_prefix | ?string       |                                                         |
+| item_id | ?string       |                                                         |
 #}
 <div class="radio-images grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
     {% for detail_index, detail in option.details %}
@@ -15,13 +15,13 @@
                     required
                     type="radio"
                     class="image-option"
-                    id="option_{{ detail.id }}-{{ key_prefix }}"
+                    id="option_{{ detail.id }}-{{ item_id }}"
                     {{ detail.is_out?"disabled":"" }}
                     data-itemid="{{ detail.id }}"
                     name="options[{{ option.id }}]"
                     data-img-id="{{ detail.option_value }}"
                     value="{{ detail.id }}"/>
-            <label for="option_{{ detail.id }}-{{ key_prefix }}" data-img-id="{{ detail.option_value }}" class="go-to-slide radio-images__label">
+            <label for="option_{{ detail.id }}-{{ item_id }}" data-img-id="{{ detail.option_value }}" class="go-to-slide radio-images__label">
                 <img data-src="{{ detail.image }}" src="{{ asset('images/s-empty.png') }}" class="object-cover h-full w-full lazy-load" title="{{ detail.name }}" alt="{{ detail.name }}"/>
             </label>
             <p class="text-sm text-gray-400">{{ detail.name }}</p>

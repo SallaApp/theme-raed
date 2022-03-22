@@ -91,8 +91,7 @@
                                aria-label="{{ product.name }}"
                                class="swiper-slide h-72 sm:h-96 lg:h-[500px] homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
                                 <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
-                                     alt="{{ image.alt }}"
-                                     class="h-full object-contain lazy-load w-full bg-white">
+                                     alt="{{ image.alt }}" class="h-full object-contain lazy-load w-full bg-white">
                             </a>
                         {% endfor %}
                     </div>
@@ -140,6 +139,7 @@
                 {% if product.is_taxable %}
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
+
                 <div class="center-between">
                     <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
                     {% if product.rating %}
@@ -220,9 +220,9 @@
                             </li>
                         </ul>
                         <script type="text/javascript">
-                            var a2a_config = a2a_config || {};
-                            a2a_config.linkurl = "{{ product.url }}";
-                            a2a_config.locale = "{{ user.language.code }}";
+                          var a2a_config = a2a_config || {};
+                          a2a_config.linkurl = "{{ product.url }}";
+                          a2a_config.locale = "{{ user.language.code }}";
                         </script>
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
@@ -268,100 +268,92 @@
                     {% hook 'product:single.description' %}
                 </div>
 
-                <form class="form product-form" enctype="multipart/form-data"
-                        {# verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
-                      data-filter-before-submit="verifyDataBeforeSend"
-                      data-on-change="product::get.price"
-                      action="{{ link('cart/item/%s/add'|format(product.id)) }}">
+                {# todo:: find a way to submit the form with option data onchange="salla.product.getPrice()" #}
+                <form class="form product-form" enctype="multipart/form-data" method="post"
+                      onSubmit="return salla.form.submit('cart.addItem');">
                     <input type="hidden" name="id" value="{{ product.id }}">
 
-                    {% hook 'product:single.form.start' %}
+                    <salla-conditional-fields>
+                        {% hook 'product:single.form.start' %}
 
-                    {% include 'pages.partials.product.options' %}
+                        {% include 'pages.partials.product.options' %}
 
-                    {% hook 'product:single.form.end' %}
-                </form>
+                        {% hook 'product:single.form.end' %}
+                    </salla-conditional-fields>
 
-                <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
 
-                    {# Quantity #}
-                    {% if product.is_hidden_quantity %}
-                        <input type="hidden" value="1" name="quantity"/>
-                    {% else %}
-                        <div class="center-between mb-5">
-                            <label class="form-label font-bold">
-                                {{ trans('pages.products.quantity') }}
-                            </label>
-                            <div class="flex justify-end">
-                                <div class="flex items-stretch h-10 border border-border-color rounded-md text-sm">
-                                    <button class="btn--quantity sicon-add" id="btn-increase" type="button"></button>
-                                    <input class="focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
-                                           data-max_quantity="{{ product.max_quantity }}"
-                                           data-on-change="product::get.price"
-                                           data-on-keyup="product::get.price"
-                                           data-form-selector=".product-form"
-                                           max="{{ product.max_quantity }}"
-                                           aria-label="Product Quantity"
-                                           id="product-quantity"
-                                           data-digits="1"
-                                           name="quantity"
-                                           type="number"
-                                           value="1"
-                                           min="1"/>
-                                    <button class="btn--quantity sicon-minus" id="btn-decrease" type="button"></button>
+                    <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+
+                        {# Quantity #}
+                        {% if product.is_hidden_quantity %}
+                            <input type="hidden" value="1" name="quantity"/>
+                        {% else %}
+                            <div class="center-between mb-5">
+                                <label class="form-label font-bold">
+                                    {{ trans('pages.products.quantity') }}
+                                </label>
+                                <div class="flex justify-end">
+                                    <div class="flex items-stretch h-10 border border-border-color rounded-md text-sm">
+                                        <button class="btn--quantity sicon-add" id="btn-increase"
+                                                type="button"></button>
+                                        <input class="focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
+                                               max="{{ product.max_quantity }}"
+                                               aria-label="Product Quantity"
+                                               id="product-quantity"
+                                               data-digits="1"
+                                               name="quantity"
+                                               type="number"
+                                               value="1"
+                                               min="1"/>
+                                        <button class="btn--quantity sicon-minus" id="btn-decrease"
+                                                type="button"></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
 
-                    {# Price #}
-                    <div class="center-between mb-5">
-                        <label class="form-label">
-                            <b class="block">
-                                {{ trans('pages.products.price') }}
-                            </b>
-                        </label>
-                        <div class="space-s-1">
-                            {% if product.is_on_sale %}
-                                <h4 id="total-price"
-                                    class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                <span id="before-price"
-                                      class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                        {# Price #}
+                        <div class="center-between mb-5">
+                            <label class="form-label">
+                                <b class="block">
+                                    {{ trans('pages.products.price') }}
+                                </b>
+                            </label>
+                            <div class="space-s-1">
+                                {% if product.is_on_sale %}
+                                    <h4 id="total-price"
+                                        class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                    <span id="before-price"
+                                          class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                                {% else %}
+                                    <h4 id="total-price"
+                                        class="text-red-400 font-bold text-sm inline-block">{{ product.price|money }}</h4>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between space-s-4">
+                            {% if product.is_available %}
+                                <salla-button type="submit" loader-position="end" class="btn--add-to-cart w-full">
+                                    {{ trans('pages.cart.add_to_cart') }}
+                                </salla-button>
+                            {% elseif product.notify_availability %}
+                                <salla-product-availability
+                                        channels="{{ product.notify_availability.channels|join(',') }}"
+                                        {{ product.notify_availability.subscribed?'is-subscribed':'' }} class="w-full">
+                                </salla-product-availability>
                             {% else %}
-                                <h4 id="total-price"
-                                    class="text-red-400 font-bold text-sm inline-block">{{ product.price|money }}</h4>
+                                <button type="button" class="btn btn--outline">
+                                    {% if product.is_donation %}
+                                        {{ trans('pages.products.donation_exceed') }}
+                                    {% else %}
+                                        {{ trans('pages.products.out_of_stock') }}
+                                    {% endif %}
+                                </button>
                             {% endif %}
                         </div>
-                    </div>
-
-
-                    <div class="flex justify-between space-s-4">
-                        {% if product.is_available %}
-                            <salla-button
-                                    data-form-selector=".product-form"
-                                    data-on-click="cart::add.item"
-                                    loader-position="end"
-                                    class="btn--add-to-cart w-full">
-                                {{ trans('pages.cart.add_to_cart') }}
-                            </salla-button>
-
-                        {% elseif product.notify_availability %}
-                            <salla-product-availability
-                                    channels="{{ product.notify_availability.channels|join(',') }}"
-                                    {{ product.notify_availability.subscribed?'is-subscribed':'' }}
-                                    class="w-full">
-                            </salla-product-availability>
-                        {% else %}
-                            <button type="button" class="btn btn--outline">
-                                {% if product.is_donation %}
-                                    {{ trans('pages.products.donation_exceed') }}
-                                {% else %}
-                                    {{ trans('pages.products.out_of_stock') }}
-                                {% endif %}
-                            </button>
-                        {% endif %}
-                    </div>
-                </section>
+                    </section>
+                </form>
 
                 {% hook 'product:single.description.end' %}
             </div>
@@ -369,7 +361,7 @@
         {% component 'product.offer' %}
     </div>
 
-    {% component comments %}
+    {% component 'comments' %}
     {% component 'product.similar-products' %}
 {% endblock %}
 

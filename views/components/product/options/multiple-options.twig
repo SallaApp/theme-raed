@@ -10,16 +10,15 @@
 <div class=" md:flex flex-wrap items-center{{ required?' required':'' }}">
     {% for key,detail in option.details %}
         <div class="relative flex items-center mb-4 md:w-6/12">
-            <input id="field-{{ key_prefix }}-{{ option.id }}-{{ detail.id }}"
+            <input id="field-{{ item_id }}-{{ option.id }}-{{ detail.id }}"
                     {{ disabled?"disabled":"" }}
                     {{ detail.is_selected?"checked":"" }}
                    name="options[{{ option.id }}][]"
-                   data-option="{{ option.id }}"
-                   class="visibility_condition focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md"
+                   class="focus:ring-transparent h-6 w-6 text-primary border-border-color rounded-md"
                    value="{{ detail.id }}"
                    type="checkbox"
                    {{ attirubtes|raw }}>
-            <label for="field-{{ key_prefix }}-{{ option.id }}-{{ detail.id }}" class="ms-2 text-sm font-medium text-gray-700 pe-3">
+            <label for="field-{{ item_id }}-{{ option.id }}-{{ detail.id }}" class="ms-2 text-sm font-medium text-gray-700 pe-3">
                 {{ detail.full_name }}
             </label>
         </div>
