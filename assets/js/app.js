@@ -13,11 +13,6 @@ class App extends salla.AppHelpers {
         salla.onReady(() => this.loadTheApp());
     }
 
-    //remove it
-    isUser() {
-        return salla.config.isUser();
-    }
-
     loadTheApp() {
         this.initiateNotifier();
         this.initiateLazyLoad();
@@ -30,8 +25,8 @@ class App extends salla.AppHelpers {
         this.initiateCollabse();
 
         salla.comment.event.onAdded(() => window.location.reload());
-        
-        this.log('App Loaded 🎉');
+
+        this.log('Theme Loaded 🎉');
     }
 
     log(message) {
@@ -53,9 +48,11 @@ class App extends salla.AppHelpers {
 
     initiateNotifier() {
         salla.notify.setNotifier(function (message, type, data) {
+            console.log(message);
             if (typeof message == 'object') {
                 return Swal.fire(message).then(type);
             }
+
             return Swal.mixin({
                 toast            : true,
                 position         : salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',

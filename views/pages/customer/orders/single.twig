@@ -7,10 +7,10 @@
 | order                            | Order                             |                                                                                          |
 | order.id                         | integer                           |                                                                                          |
 | order.reference_id               | integer                           |                                                                                          |
-| order.created_at                 |                                   |                                                                                          |
-| order.sub_total                  | Money                             |                                                                                          |
-| order.total                      | Money                             |                                                                                          |
-| order.cod_cost                   | ?Money                            | * Cash On Delivery (null when payment method not cod)                                    |
+| order.created_at                 | date                              |                                                                                          |
+| order.sub_total                  | float                             |                                                                                          |
+| order.total                      | float                             |                                                                                          |
+| order.cod_cost                   | float                             | * Cash On Delivery                                                                       |
 | order.can_reorder                | bool                              |                                                                                          |
 | order.can_cancel                 | bool                              |                                                                                          |
 | order.can_rate                   | bool                              |                                                                                          |
@@ -22,7 +22,7 @@
 | order.shipping.logo              | ?string                           |                                                                                          |
 | order.shipping.cost              | ?Money                            |                                                                                          |
 | order.tax                        | ?object                           |                                                                                          |
-| order.tax.amount                 | Money                             |                                                                                          |
+| order.tax.amount                 | float                             |                                                                                          |
 | order.tax.percent                | float                             |                                                                                          |
 | order.status                     | object                            |                                                                                          |
 | order.status.name                | string                            |                                                                                          |
@@ -376,7 +376,7 @@
                                 <span>{{ trans('pages.orders.finish_payment') }}</span>
                             </a>
                         {% else %}
-                            <salla-button button-type="link" onclick="document.querySelector('#reorder-modal').show()">
+                            <salla-button shape="link" onclick="document.querySelector('#reorder-modal').show()">
                                 <i class="sicon sicon-rotate me-2"></i>
                                 <span>{{ trans('pages.orders.reorder') }}</span>
                             </salla-button>
@@ -390,7 +390,7 @@
                             <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
-                        <salla-button button-type="link" color="danger" onclick="document.querySelector('#modal-order-cancel').show()">
+                        <salla-button shape="link" color="danger" onclick="document.querySelector('#modal-order-cancel').show()">
                             <i class="sicon sicon-cancel-circle me-2"></i>
                             <span>{{ trans('pages.orders.cancel') }}</span>
                         </salla-button>

@@ -44,20 +44,18 @@
 | product.notify_availability.channels   | array                       | ex: ['sms', 'email']                                                   |
 | product.notify_availability.subscribed | bool                        | Does user subscribed before                                            |
 | product.donation                       | ?ProductDonation            | @see views/components/product/donation-progress-bar.twig               |
-| product.show_read_more                 | bool                        |                                                                        |
+| product.has_read_more                  | bool                        |                                                                        |
 | product.can_add_note                   | bool                        |                                                                        |
 | product.can_show_remained_quantity     | bool                        |                                                                        |
 | product.can_show_sold                  | bool                        |                                                                        |
 | product.can_upload_file                | bool                        |                                                                        |
-| product.hide_zero_price                | bool                        |                                                                        |
 | product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
 | product.has_options                    | bool                        |                                                                        |
-| product.has_discount                   | bool                        |                                                                        |
 | product.is_on_sale                     | bool                        | Product has discounted price                                           |
 | product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
 | product.is_available                   | bool                        |                                                                        |
 | product.is_donation                    | bool                        |                                                                        |
-| product.in_wishlist                    | bool                        |                                                                        |
+| product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
 #}
 {% extends "layouts.master" %}
@@ -68,7 +66,6 @@
 {% block content %}
     <div class="container">
         {% component 'header.breadcrumbs' %}
-
         <div class="flex flex-col items-start md:flex-row" id="product_{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden">
                 <div class="swiper relative my-gallery details-slider rounded-md mb-4"
@@ -91,8 +88,7 @@
                                aria-label="{{ product.name }}"
                                class="swiper-slide h-72 sm:h-96 lg:h-[500px] homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
                                 <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
-                                     alt="{{ image.alt }}"
-                                     class="h-full object-cover lazy-load w-full bg-white">
+                                     alt="{{ image.alt }}" class="h-full object-cover lazy-load w-full bg-white">
                             </a>
                         {% endfor %}
                     </div>
@@ -140,6 +136,7 @@
                 {% if product.is_taxable %}
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
+
                 <div class="center-between">
                     <h1 class="text-3xl font-bold mb-5 w-5/6 text-title-color">{{ product.name }}</h1>
                     {% if product.rating %}
@@ -166,7 +163,7 @@
                 </div>
 
                 <div class="product__description leading-7 mb-6">
-                    {% if product.show_read_more %}
+                    {% if product.has_read_more %}
                         <div class="relative overflow-hidden transition-all max-h-0 duration-300" id="more-content"
                              style="max-height:5.25rem">
                             <p>{{ product.description|raw }}</p>
@@ -183,54 +180,53 @@
 
                 <div class="flex mb-5 space-s-3 ">
                     <div class="share-wrapper relative">
-                        <button type="button"
+                        {# <button type="button"
                                 class="btn--share btn--icon"
                                 aria-label="Share">
                             <i class="sicon-share-alt"></i>
-                        </button>
-                        <ul class="absolute z-10 h-0 overflow-hidden opacity-0 top-12 share-btns-list bg-white flex items-center flex-col shadow-huge rounded-3xl a2a_kit share">
+                        </button> #}
+                        <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light" class="!m-0">
+                          <i class="sicon-share-alt pointer-events-none"></i>
+                        </salla-button>
+
+                        <ul class="share-btns-list a2a_kit share">
                             <li>
-                                <a class="a2a_button_whatsapp block p-2.5" aria-label="Share Via Whatsapp">
+                                <a class="a2a_button_whatsapp" aria-label="Share Via Whatsapp">
                                     <i class="sicon-whatsapp"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_facebook block p-2.5 hover:text-primary"
-                                   aria-label="Share Via Facebook">
+                                <a class="a2a_button_facebook" aria-label="Share Via Facebook">
                                     <i class="sicon-facebook"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_twitter block p-2.5 hover:text-primary"
-                                   aria-label="Share Via Twitter">
+                                <a class="a2a_button_twitter" aria-label="Share Via Twitter">
                                     <i class="sicon-twitter"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_email block p-2.5 hover:text-primary"
-                                   aria-label="Share Via Email">
+                                <a class="a2a_button_email" aria-label="Share Via Email">
                                     <i class="sicon-mail"></i>
                                 </a>
                             </li>
                             <li>
-                                <a class="a2a_button_copy_link block p-2.5 hover:text-primary"
-                                   aria-label="Copy Product Link">
+                                <a class="a2a_button_copy_link" aria-label="Copy Product Link">
                                     <i class="sicon-link"></i>
                                 </a>
                             </li>
                         </ul>
                         <script type="text/javascript">
-                            var a2a_config = a2a_config || {};
-                            a2a_config.linkurl = "{{ product.url }}";
-                            a2a_config.locale = "{{ user.language.code }}";
+                          var a2a_config = a2a_config || {};
+                          a2a_config.linkurl = "{{ product.url }}";
+                          a2a_config.locale = "{{ user.language.code }}";
                         </script>
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
 
                     {# todo:: ashraf enhance the style (hover) without change the js and relay on (pulse, un-favorited) #}
-                    <salla-button class="btn--wishlist btn--icon" data-id="{{ product.id }}"
-                                  onclick="salla.wishlist.toggle({{ product.id }})" button-type="icon">
-                        <i class="{{ product.in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
+                    <salla-button class="btn--wishlist animated" data-id="{{ product.id }}" onclick="salla.wishlist.toggle({{ product.id }})" shape="icon" fill="outline" color="light">
+                        <i class="{{ product.is_in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
                     </salla-button>
                 </div>
 
@@ -268,100 +264,88 @@
                     {% hook 'product:single.description' %}
                 </div>
 
-                <form class="form product-form" enctype="multipart/form-data"
-                        {# verifyDataBeforeSend function existed in assets/js/partials/product-options.js #}
-                      data-filter-before-submit="verifyDataBeforeSend"
-                      data-on-change="product::get.price"
-                      action="{{ link('cart/item/%s/add'|format(product.id)) }}">
+                <form class="form product-form" enctype="multipart/form-data" method="post"
+                      onchange="salla.product.getPrice(new FormData(event.currentTarget))"
+                      onSubmit="return salla.form.submit('cart.addItem');">
                     <input type="hidden" name="id" value="{{ product.id }}">
 
-                    {% hook 'product:single.form.start' %}
+                    <salla-conditional-fields>
+                        {% hook 'product:single.form.start' %}
 
-                    {% include 'pages.partials.product.options' %}
+                        {% include 'pages.partials.product.options' %}
 
-                    {% hook 'product:single.form.end' %}
-                </form>
+                        {% hook 'product:single.form.end' %}
+                    </salla-conditional-fields>
 
-                <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
 
-                    {# Quantity #}
-                    {% if product.is_hidden_quantity %}
-                        <input type="hidden" value="1" name="quantity"/>
-                    {% else %}
-                        <div class="center-between mb-5">
-                            <label class="form-label font-bold">
-                                {{ trans('pages.products.quantity') }}
-                            </label>
-                            <div class="flex justify-end">
-                                <div class="flex items-stretch h-10 border border-border-color rounded-md text-sm">
-                                    <button class="btn--quantity sicon-add" id="btn-increase" type="button"></button>
-                                    <input class="focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
-                                           data-max_quantity="{{ product.max_quantity }}"
-                                           data-on-change="product::get.price"
-                                           data-on-keyup="product::get.price"
-                                           data-form-selector=".product-form"
-                                           max="{{ product.max_quantity }}"
-                                           aria-label="Product Quantity"
-                                           id="product-quantity"
-                                           data-digits="1"
-                                           name="quantity"
-                                           type="number"
-                                           value="1"
-                                           min="1"/>
-                                    <button class="btn--quantity sicon-minus" id="btn-decrease" type="button"></button>
+                    <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+
+                        {# Quantity #}
+                        {% if product.is_hidden_quantity %}
+                            <input type="hidden" value="1" name="quantity"/>
+                        {% else %}
+                            <div class="center-between mb-5">
+                                <label class="form-label font-bold">
+                                    {{ trans('pages.products.quantity') }}
+                                </label>
+                                <div class="flex justify-end">
+                                    <div class="flex items-stretch h-10 border border-border-color rounded-md text-sm">
+                                        <button class="btn--quantity sicon-add" id="btn-increase" type="button"></button>
+                                        <input class="focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
+                                               max="{{ product.max_quantity }}"
+                                               aria-label="Product Quantity"
+                                               name="quantity"
+                                               type="number"
+                                               value="1"
+                                               min="1"/>
+                                        <button class="btn--quantity sicon-minus" id="btn-decrease" type="button"></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
 
-                    {# Price #}
-                    <div class="center-between mb-5">
-                        <label class="form-label">
-                            <b class="block">
-                                {{ trans('pages.products.price') }}
-                            </b>
-                        </label>
-                        <div class="space-s-1">
-                            {% if product.is_on_sale %}
-                                <h4 id="total-price"
-                                    class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                <span id="before-price"
-                                      class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                        {# Price #}
+                        <div class="center-between mb-5">
+                            <label class="form-label">
+                                <b class="block">
+                                    {{ trans('pages.products.price') }}
+                                </b>
+                            </label>
+                            <div class="space-s-1">
+                                {% if product.is_on_sale %}
+                                    <h4 id="total-price"
+                                        class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                                    <span id="before-price"
+                                          class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                                {% else %}
+                                    <h4 id="total-price"
+                                        class="text-red-400 font-bold text-sm inline-block">{{ product.price|money }}</h4>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between space-s-4">
+                            {% if product.is_available %}
+                                <salla-button type="submit" loader-position="end" class="btn--add-to-cart w-full">
+                                    {{ trans('pages.cart.add_to_cart') }}
+                                </salla-button>
+                            {% elseif product.notify_availability %}
+                                <salla-product-availability
+                                        channels="{{ product.notify_availability.channels|join(',') }}"
+                                        {{ product.notify_availability.subscribed?'is-subscribed':'' }} class="w-full">
+                                </salla-product-availability>
                             {% else %}
-                                <h4 id="total-price"
-                                    class="text-red-400 font-bold text-sm inline-block">{{ product.price|money }}</h4>
+                                <button type="button" class="btn btn--outline">
+                                    {% if product.is_donation %}
+                                        {{ trans('pages.products.donation_exceed') }}
+                                    {% else %}
+                                        {{ trans('pages.products.out_of_stock') }}
+                                    {% endif %}
+                                </button>
                             {% endif %}
                         </div>
-                    </div>
-
-
-                    <div class="flex justify-between space-s-4">
-                        {% if product.is_available %}
-                            <salla-button
-                                    data-form-selector=".product-form"
-                                    data-on-click="cart::add.item"
-                                    loader-position="end"
-                                    class="btn--add-to-cart w-full">
-                                {{ trans('pages.cart.add_to_cart') }}
-                            </salla-button>
-
-                        {% elseif product.notify_availability %}
-                            <salla-product-availability
-                                    channels="{{ product.notify_availability.channels|join(',') }}"
-                                    {{ product.notify_availability.subscribed?'is-subscribed':'' }}
-                                    class="w-full">
-                            </salla-product-availability>
-                        {% else %}
-                            <button type="button" class="btn btn--outline">
-                                {% if product.is_donation %}
-                                    {{ trans('pages.products.donation_exceed') }}
-                                {% else %}
-                                    {{ trans('pages.products.out_of_stock') }}
-                                {% endif %}
-                            </button>
-                        {% endif %}
-                    </div>
-                </section>
+                    </section>
+                </form>
 
                 {% hook 'product:single.description.end' %}
             </div>
@@ -369,7 +353,7 @@
         {% component 'product.offer' %}
     </div>
 
-    {% component comments %}
+    {% component 'comments' %}
     {% component 'product.similar-products' %}
 {% endblock %}
 
