@@ -128,7 +128,13 @@
 
                 {% hook 'product:single.description.start' %}
 
-                {% component 'product.brand' %}
+                {% if product.brand %}
+                    <div class="product-brand mb-5 w-12">
+                        <img class="max-h-full object-contain" src="{{ product.brand.logo }}"
+                             title="{{ product.brand.name }}"
+                             alt="{{ product.brand.name }}">
+                    </div>
+                {% endif %}
 
                 {% if product.is_taxable %}
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
@@ -220,8 +226,8 @@
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
 
-                    {# todo:: ashraf enhance the style (hover) without change the js and relay on (pulse, un-favorited)#}
-                    <salla-button class="btn--wishlist btn--icon" data-id="{{  product.id }}"
+                    {# todo:: ashraf enhance the style (hover) without change the js and relay on (pulse, un-favorited) #}
+                    <salla-button class="btn--wishlist btn--icon" data-id="{{ product.id }}"
                                   onclick="salla.wishlist.toggle({{ product.id }})" button-type="icon">
                         <i class="{{ product.in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
                     </salla-button>
