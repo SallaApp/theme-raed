@@ -3,9 +3,11 @@ import ProductOptions from './partials/product-options';
 
 class Cart extends BasePage {
     onReady() {
-        this.initiateCartItems();
-
-        salla.cart.event.onItemUpdated(res => this.updateCartPageInfo(res));
+        // keep update the dom base in the events
+        salla.event.cart.onItemUpdated(res => this.updateCartPageInfo(res.data.cart));
+        salla.event.cart.onItemDeleted(res => this.updateCartPageInfo(res.data.cart));
+        salla.event.coupon.onAdded(res => this.updateCartPageInfo(res.data.cart));
+        salla.event.coupon.onRemoved(res => this.updateCartPageInfo(res.data.cart));
 
         app.watchElements({
             couponCodeInput: '#coupon-input',
@@ -23,123 +25,89 @@ class Cart extends BasePage {
         this.initiateCoupon();
 
         new ProductOptions();
+
+        app.on('input', '[name="quantity"]', event => salla.helpers.inputDigitsOnly(event.target));
     }
 
     /**
      * @param  {CartDetailsResponse} cartData
      */
     updateCartPageInfo(cartData) {
+        // update each item data
         cartData.items?.forEach(item => this.updateItemInfo(item));
-        app.subTotal.innerText = cartData.sub_total;
+
+        app.subTotal.innerText = salla.money(cartData.sub_total);
+
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => cartData.total_discount)
             .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => cartData.shipping_cost)
             .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => cartData.free_shipping_bar);
-        app.totalDiscount.querySelector('b').innerText = '- ' + cartData.total_discount;
-        app.shippingCost.querySelector('b').innerText = cartData.shipping_cost;
+
+        app.totalDiscount.querySelector('b').innerText = '- ' + salla.money(cartData.total_discount);
+        app.shippingCost.querySelector('b').innerText = salla.money(cartData.shipping_cost);
+
         if (!cartData.free_shipping_bar) {
             return;
         }
+
         let isFree = cartData.free_shipping_bar.has_free_shipping;
         app.toggleElementClassIf(app.freeShippingBar, 'active', 'hidden', () => !isFree)
             .toggleElementClassIf(app.freeShipApplied, 'active', 'hidden', () => isFree);
-        app.freeShipppingMsg.innerHTML = isFree
-            ? salla.lang.get('pages.cart.has_free_shipping')
+
+        app.freeShipppingMsg.innerHTML = isFree ? salla.lang.get('pages.cart.has_free_shipping')
             : salla.lang.get('pages.cart.free_shipping_alert', {amount: salla.money(cartData.free_shipping_bar.remaining)});
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
     }
 
-    // ========================== Cart Items ========================== //
-    initiateCartItems() {
-        this.items = {};
-        document.querySelectorAll('.cart-item')
-            .forEach(cartItem => {
-                let itemId = cartItem.dataset.id,
-                    btnAdd = cartItem.querySelector('.add-qty'),
-                    btnSub = cartItem.querySelector('.sub-qty'),
-                    quantity = cartItem.querySelector('.item-quantity');
-                quantity && app.onKeyUp(quantity, event => salla.helpers.digitsOnly(event.target)),
-                    this.items[itemId] = {
-                        item: cartItem,
-                        total: cartItem.querySelector('.item-total'),
-                        price: cartItem.querySelector('.item-price'),
-                        productPrice: cartItem.querySelector('.product-price'),
-                        offer: cartItem.querySelector('.offer-name'),
-                        offerIcon: cartItem.querySelector('.offer-icon'),
-                        quantity: quantity,
-                        btnAdd: btnAdd,
-                        btnSub: btnSub
-                    };
-                btnAdd && app.onClick(btnAdd, () => quantity.value++ && this.qunatityChanged(quantity));
-                btnSub && app.onClick(btnSub, () => this.reduceQuantity(quantity));
+    // /**
+    //  * @param {HTMLElement} quantity
+    //  */
+    // reduceQuantity(quantity) {
+    //     if (quantity.value <= 1) {
+    //         return;
+    //     }
+    //     quantity.value--;
+    //     this.qunatityChanged(quantity);
+    // }
 
-                app.onClick(cartItem.querySelector('.btn--delete'), ({currentTarget: btn}) => {
-                    this.removeItem(itemId);
-                    btn.load();
-                });
-            });
-    }
-
-    /**
-     * @param {HTMLElement} quantity
-     */
-    reduceQuantity(quantity) {
-        if (quantity.value <= 1) {
-            return;
-        }
-        quantity.value--;
-        this.qunatityChanged(quantity);
-    }
-
-    /**
-     * Workaround to fire data-on-change="cart::update.item"
-     *
-     * @param {HTMLElement} quantity
-     */
-    qunatityChanged(quantity) {
-        app.debounce(() => salla.document.event.fireEvent(quantity, 'change', {'bubbles': true}));
-    }
-
-    removeItem(itemId) {
-        let item = document.querySelector('#item-' + itemId);
-        salla.cart.api.deleteItem(itemId).then(res => {
-            this.updateCartPageInfo(res.data);
-            let items = document.querySelectorAll('.cart-item');
-
-            app.anime(item, false)
-                .complete(() => item.remove() || items.length == 1 && window.location.reload())
-                .easing('easeInOutQuad')
-                .paddingBottom(0)
-                .duration(300)
-                .paddingTop(0)
-                .opacity(0)
-                .height(0)
-                .margin(0)
-                .play();
-        });
-    }
+    // /**
+    //  * Workaround to fire data-on-change="cart::update.item"
+    //  *
+    //  * @param {HTMLElement} quantity
+    //  */
+    // qunatityChanged(quantity) {
+    //     app.debounce(() => salla.document.event.fireEvent(quantity, 'change', {'bubbles': true}));
+    // }
 
     /**
      * @param {CartItem} item
      */
     updateItemInfo(item) {
-        /**
-         * @type {{offer: HTMLElement, item: HTMLElement, total: HTMLElement, quantity: HTMLElement, btnSub: HTMLElement, btnAdd: HTMLElement, price: HTMLElement, offerIcon: HTMLElement, productPrice: HTMLElement}}
-         */
-        let cartItem = this.items[item.id];
-        if (item.display_total_price != cartItem.total.innerText) {
-            cartItem.total.innerText = item.display_total_price;
-            app.anime(cartItem.total, {scale: [.88, 1]});
+
+        // lets get the elements for this item
+        let cartItem = document.querySelector('#item-' + item.id),
+            totalElement = cartItem.querySelector('.item-total'),
+            priceElement = cartItem.querySelector('.item-price'),
+            regularPriceElement = cartItem.querySelector('.item-regular-price'),
+            offerElement = cartItem.querySelector('.offer-name'),
+            offerIconElement = cartItem.querySelector('.offer-icon');
+
+        if (item.total !== totalElement.innerText) {
+            totalElement.innerText = salla.money(item.total);
+            app.anime(totalElement, {scale: [.88, 1]});
         }
-        app.toggleElementClassIf(cartItem.offer, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElementClassIf(cartItem.offerIcon, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElementClassIf(cartItem.productPrice, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElementClassIf(cartItem.price, 'text-theme-red', 'text-sm text-gray-400', () => item.has_special_price);
+
+        app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => item.has_special_price)
+            .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => item.has_special_price)
+            .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => item.has_special_price)
+            .toggleElementClassIf(priceElement, 'text-theme-red', 'text-sm text-gray-400', () => item.has_special_price);
+
         if (!item.has_special_price) {
-            cartItem.price.innerText = item.product_price_formatted;
+            priceElement.innerText = salla.money(item.product_price);
             return;
         }
-        cartItem.price.innerText = item.display_price;
-        cartItem.offer.innerText = item.offer.names;
+
+        priceElement.innerText = salla.money(item.product_price);
+        offerElement.innerText = item.offer.names;
     }
 
 
@@ -155,12 +123,12 @@ class Cart extends BasePage {
             app.removeClass(app.couponCodeInput, 'has-error');
         });
 
-        app.onClick(app.couponBtn, ({currentTarget: btn}) => {
-            salla.coupon.event.onAdded(res => this.toggleCoupon(btn, res, true));
-            salla.coupon.event.onRemoved(res => this.toggleCoupon(btn, res, false));
-            salla.coupon.event.onAddedFailed(err => this.showCouponError(btn, err.response?.data?.error.message));
-            salla.coupon.event.onRemovedFailed(err => this.showCouponError(btn, err.response?.data?.error.message, false));
+        salla.coupon.event.onAdded(res => this.toggleCoupon(app.couponBtn, res, true));
+        salla.coupon.event.onRemoved(res => this.toggleCoupon(app.couponBtn, res, false));
+        salla.coupon.event.onAddedFailed(err => this.showCouponError(app.couponBtn, err.response?.data?.error.message));
+        salla.coupon.event.onRemovedFailed(err => this.showCouponError(app.couponBtn, err.response?.data?.error.message, false));
 
+        app.onClick(app.couponBtn, ({currentTarget: btn}) => {
             //if it's remove coupon, will have `btn--danger` class
             if (app.couponBtn.classList.contains('btn--danger')) {
                 btn.load();
@@ -182,7 +150,6 @@ class Cart extends BasePage {
         app.couponError.innerText = '';
         app.couponCodeInput.value = applied ? app.couponCodeInput.value : '';
         app.couponCodeInput.toggleAttribute('disabled', applied);
-        this.updateCartPageInfo(res.data.cart);
 
         app.toggleElementClassIf(app.couponBtn, ['btn--danger', 'has-coupon'], ['btn-default', 'has-not-coupon'], () => applied)
             .toggleElementClassIf(app.couponBtn, ['btn-default', 'has-not-coupon'], ['btn--danger', 'has-coupon'], () => !applied)

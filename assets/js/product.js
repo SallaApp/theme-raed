@@ -12,7 +12,7 @@ class Product extends BasePage {
         new ProductOptions();
 
         app.watchElements({
-            quantityInput: '#product-quantity',
+            quantityInput: '[name="quantity"]',
             totalPrice   : '#total-price',
             beforePrice  : '#before-price',
         });
@@ -51,17 +51,6 @@ class Product extends BasePage {
     }
 
     registerEvents() {
-        //Workaround to fire data-on-change="product::get.price"
-        let qunatityChanged = () => salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
-
-        app.onClick('#btn-increase', () => app.quantityInput.value++ && qunatityChanged());
-        app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && qunatityChanged()));
-
-        app.onClick('#btn-show-more', e => app.all('#more-content', div => {
-            e.target.classList.add('is-expanded');
-            div.style = `max-height:${div.scrollHeight}px`;
-        }) || e.target.remove());
-
         salla.product.event.onPriceUpdated(res => {
 
             app.totalPrice.innerText = res.data.after;
@@ -76,6 +65,17 @@ class Product extends BasePage {
 
             app.beforePrice && (app.beforePrice.style.display = 'none')
         });
+
+        app.onClick('#btn-show-more', e => app.all('#more-content', div => {
+            e.target.classList.add('is-expanded');
+            div.style = `max-height:${div.scrollHeight}px`;
+        }) || e.target.remove());
+
+        // Workaround to fire on change event of the form
+        let quantityChanged = () => salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
+
+        app.onClick('#btn-increase', () => app.quantityInput.value++ && quantityChanged());
+        app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && quantityChanged()));
     }
 
     initSliders() {

@@ -267,8 +267,8 @@
                     {% hook 'product:single.description' %}
                 </div>
 
-                {# todo:: find a way to submit the form with option data onchange="salla.product.getPrice()" #}
                 <form class="form product-form" enctype="multipart/form-data" method="post"
+                      onchange="salla.product.getPrice(new FormData(event.currentTarget))"
                       onSubmit="return salla.form.submit('cart.addItem');">
                     <input type="hidden" name="id" value="{{ product.id }}">
 
@@ -293,19 +293,15 @@
                                 </label>
                                 <div class="flex justify-end">
                                     <div class="flex items-stretch h-10 border border-border-color rounded-md text-sm">
-                                        <button class="btn--quantity sicon-add" id="btn-increase"
-                                                type="button"></button>
+                                        <button class="btn--quantity sicon-add" id="btn-increase" type="button"></button>
                                         <input class="focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
                                                max="{{ product.max_quantity }}"
                                                aria-label="Product Quantity"
-                                               id="product-quantity"
-                                               data-digits="1"
                                                name="quantity"
                                                type="number"
                                                value="1"
                                                min="1"/>
-                                        <button class="btn--quantity sicon-minus" id="btn-decrease"
-                                                type="button"></button>
+                                        <button class="btn--quantity sicon-minus" id="btn-decrease" type="button"></button>
                                     </div>
                                 </div>
                             </div>

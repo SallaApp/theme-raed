@@ -6,7 +6,6 @@
 | disabled   | bool          |                                                         |
 | required   | bool          |                                                         |
 | value      | ?string       |                                                         |
-| item_id    | ?string       |                                                         |
 #}
 
 <div class="custom-radios custom-radios--rounded">
@@ -20,9 +19,9 @@
                     name="options[{{ option.id }}]"
                     value="{{ detail.id }}"
                     required
-                    id="color_option_{{ detail.id }}-{{ item_id }}"
+                    id="color_option_{{ detail.id }}"
                     type="radio"/>
-            <label class="flex flex-col items-center" for="color_option_{{ detail.id }}-{{ item_id }}">
+            <label class="flex flex-col items-center" for="color_option_{{ detail.id }}">
                 <span style="background-color: {{ detail.option_value }}" class="mb-2"></span>
                 <p class="text-sm text-gray-400">{{ detail.name }}</p>
                 {% if detail.is_out %}
