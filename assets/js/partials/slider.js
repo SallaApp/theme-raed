@@ -1,6 +1,6 @@
-import Swiper, {Navigation, Pagination, Lazy} from "swiper";
+import Swiper, {Navigation, Pagination, Lazy, Controller} from "swiper";
 
-Swiper.use([Navigation, Pagination, Lazy]);
+Swiper.use([Controller, Navigation, Pagination, Lazy]);
 
 export default class Slider {
     /**
