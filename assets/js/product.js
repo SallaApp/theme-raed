@@ -19,11 +19,12 @@ class Product extends BasePage {
 
         //Toggale share menu
         app.onClick('.btn--share', ({target: btn}) => {
-            let showShareMenu = !btn.classList.contains('opened');
+            let showShareMenu = !btn.classList.contains('opened'),
+                shareMenu = document.querySelector('.share-btns-list');
 
             app.toggleElementClassIf(btn, 'opened', 'closed', () => showShareMenu)
                 .toggleElementClassIf(btn.querySelector('i'), 'sicon-cancel', 'sicon-share-alt', () => showShareMenu)
-                .toggleElementClassIf(btn.nextElementSibling, 'h-auto', 'h-0 opacity-0', () => showShareMenu);
+                .toggleElementClassIf(shareMenu, 'h-auto', 'h-0 opacity-0', () => showShareMenu);
 
             if (!showShareMenu) {
                 return;
