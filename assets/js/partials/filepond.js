@@ -39,7 +39,7 @@ class FileUploader {
                 files           : this.getFilesFromInput(input),
                 server          : this.requestProperties(input),
                 instantUpload   : input.dataset.hasOwnProperty('instantUpload'),
-                beforeRemoveFile: ({getMetadata: file}) => file('id') && salla.cart.api.deleteItemImage(file('id')) || salla.log(file()),
+                beforeRemoveFile: ({getMetadata: file}) => file('id') && salla.cart.api.deleteImage(file('id')) || salla.log(file()),
                 labelIdle       : `<i class="sicon-camera block !text-2xl opacity-75"></i><span class="block">${label[0]}</span><span class="filepond--label-action">${label[1]}</span>`,
                 ...options,
             }));

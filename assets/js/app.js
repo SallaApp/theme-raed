@@ -48,7 +48,6 @@ class App extends salla.AppHelpers {
 
     initiateNotifier() {
         salla.notify.setNotifier(function (message, type, data) {
-            console.log(message);
             if (typeof message == 'object') {
                 return Swal.fire(message).then(type);
             }
@@ -106,10 +105,10 @@ class App extends salla.AppHelpers {
 
     initiateStickyMenu() {
         let header = this.element('#mainnav'),
-        height = this.element('#mainnav .inner').clientHeight;
+            height = this.element('#mainnav .inner').clientHeight;
 
-        window.addEventListener('load', ()=> this.setHeaderHeight())
-        window.addEventListener('resize', ()=> this.setHeaderHeight())
+        window.addEventListener('load', () => this.setHeaderHeight())
+        window.addEventListener('resize', () => this.setHeaderHeight())
 
         window.addEventListener('scroll', () => {
             window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
@@ -117,12 +116,13 @@ class App extends salla.AppHelpers {
         }, {passive: true});
     }
 
-    setHeaderHeight(){
-      let height = this.element('#mainnav .inner').clientHeight,
-          header = this.element('#mainnav');
-      header.style.height = height + 'px';
+    setHeaderHeight() {
+        let height = this.element('#mainnav .inner').clientHeight,
+            header = this.element('#mainnav');
+        header.style.height = height + 'px';
     }
 
+    //todo::add comments to explain what is the benefits from this method.
     initiateAdAlert() {
         // todo :: test it after change the element id
         let ad = this.element(".salla-advertisement");
@@ -131,14 +131,13 @@ class App extends salla.AppHelpers {
             return;
         }
 
-        // todo :: change to salla.storage
-        if (!localStorage.getItem('statusAd-' + ad.dataset.id)) {
+        if (!salla.storage.get('statusAd-' + ad.dataset.id)) {
             ad.classList.remove('hidden');
         }
 
         this.onClick('.ad-close', function (event) {
             event.preventDefault();
-            localStorage.setItem('statusAd-' + ad.dataset.id, 'dismissed');
+            salla.storage.set('statusAd-' + ad.dataset.id, 'dismissed');
 
             anime({
                 targets : '.salla-advertisement',
@@ -179,7 +178,7 @@ class App extends salla.AppHelpers {
                 'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
                 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
                 () => isOpen)
-            toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
+        toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
         if (!isOpen) {
             setTimeout(() => this.addClass(id, 'hidden'), 350);
         }

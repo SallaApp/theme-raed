@@ -404,8 +404,7 @@
                              icon="sicon-rotate" id="reorder-modal" icon-style="success"
                              title="{{ trans('pages.orders.reorder') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
-                        {# todo:: support reorder the order via api salla.order.reorder(id) -> authed only #}
-                        <salla-button data-url="{{ order.reorder_url }}" id="btn-reorder" width="wide">
+                        <salla-button id="btn-reorder" width="wide">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
 
@@ -422,7 +421,7 @@
                              icon="sicon-cancel" id="modal-order-cancel" icon-style="error"
                              title="{{ trans('common.elements.warning') }}">
                     <div slot="footer" class="grid grid-cols-2 gap-3">
-                        <salla-button data-order="{{  order.id }}" id="confirm-cancel" color="danger" class="w-full cursor-pointer">
+                        <salla-button id="confirm-cancel" color="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
                         <salla-button class="w-full" fill="outline" color="gray" onclick="document.querySelector('#modal-order-cancel').hide()">

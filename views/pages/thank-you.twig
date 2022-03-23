@@ -100,14 +100,12 @@
                     <b class="text-sm">{{ order.customer.email }}</b>
                 </div>
             {% else %}
-                <div class="duration-500 hover:shadow-default flex-1 bg-white p-8  rounded-md mb-6 md:mb-10 flex flex-col items-center justify-cente">
+                <div id="invoice-form" class="duration-500 hover:shadow-default flex-1 bg-white p-8  rounded-md mb-6 md:mb-10 flex flex-col items-center justify-cente">
                     <div class="bg-gray-bg rounded-icon w-12 h-12 mb-2.5">
                         <i class="sicon-newspaper-alt text-xl"></i>
                     </div>
                     <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
-
-                    {# todo:: support sent invoice via api by order id and drop send invoice url for all from presenter :) salla.order.send(orderId) -> for authed only #}
-                    <form onsubmit="return salla.form.submit('{{ order.send_invoice_url }}');">
+                    <form onsubmit="return salla.form.submit('order.send')">
                         <div class="flex max-w-3xl w-full">
                             <input type="email" class="form-input rounded-e-none border-e-0 !w-[160px] sm:!w-[220px]" placeholder="your@email.com" required name="email">
                             <salla-button type="submit" loader-position="center" class="rounded-s-none w-32">
