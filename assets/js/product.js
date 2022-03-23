@@ -12,7 +12,6 @@ class Product extends BasePage {
         new ProductOptions();
 
         app.watchElements({
-            quantityInput: '[name="quantity"]',
             totalPrice   : '#total-price',
             beforePrice  : '#before-price',
         });
@@ -52,7 +51,7 @@ class Product extends BasePage {
     }
 
     registerEvents() {
-        salla.product.event.onPriceUpdated(res => {
+        salla.product.event.onPriceUpdated((res) => {
 
             app.totalPrice.innerText = res.data.after;
 
@@ -71,12 +70,6 @@ class Product extends BasePage {
             e.target.classList.add('is-expanded');
             div.style = `max-height:${div.scrollHeight}px`;
         }) || e.target.remove());
-
-        // Workaround to fire on change event of the form
-        let quantityChanged = () => salla.document.event.fireEvent(app.quantityInput, 'change', {'bubbles': true});
-
-        app.onClick('#btn-increase', () => app.quantityInput.value++ && quantityChanged());
-        app.onClick('#btn-decrease', () => app.quantityInput.value <= 1 || (app.quantityInput.value-- && quantityChanged()));
     }
 
     initSliders() {

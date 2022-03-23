@@ -1,8 +1,8 @@
-import '@salla.sa/twilight'
+import '@salla.sa/twilight';
 //todo:: use import "@salla.sa/twilight-components" or import {component1, component2} from "@salla.sa/twilight-components"
 import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
 import MobileMenu from 'mmenu-light';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 import Anime from './partials/anime';
 
 class App extends salla.AppHelpers {
