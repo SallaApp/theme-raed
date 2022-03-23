@@ -4,10 +4,10 @@ import ProductOptions from './partials/product-options';
 class Cart extends BasePage {
     onReady() {
         // keep update the dom base in the events
-        salla.event.cart.onItemUpdated(res => this.updateCartPageInfo(res.data.cart));
-        salla.event.cart.onItemDeleted(res => this.updateCartPageInfo(res.data.cart));
-        salla.event.coupon.onAdded(res => this.updateCartPageInfo(res.data.cart));
-        salla.event.coupon.onRemoved(res => this.updateCartPageInfo(res.data.cart));
+        salla.event.cart.onItemUpdated((res) => this.updateCartPageInfo(res.data.cart));
+        salla.event.cart.onItemDeleted((res) => this.updateCartPageInfo(res.data.cart));
+        salla.event.coupon.onAdded((res) => this.updateCartPageInfo(res.data.cart));
+        salla.event.coupon.onRemoved((res) => this.updateCartPageInfo(res.data.cart));
 
         app.watchElements({
             couponCodeInput: '#coupon-input',
@@ -25,14 +25,10 @@ class Cart extends BasePage {
         this.initiateCoupon();
 
         new ProductOptions();
-
-        app.on('input', '[name="quantity"]', event => salla.helpers.inputDigitsOnly(event.target));
     }
 
-    /**
-     * @param  {CartDetailsResponse} cartData
-     */
     updateCartPageInfo(cartData) {
+
         // update each item data
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
@@ -58,29 +54,6 @@ class Cart extends BasePage {
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
     }
 
-    // /**
-    //  * @param {HTMLElement} quantity
-    //  */
-    // reduceQuantity(quantity) {
-    //     if (quantity.value <= 1) {
-    //         return;
-    //     }
-    //     quantity.value--;
-    //     this.qunatityChanged(quantity);
-    // }
-
-    // /**
-    //  * Workaround to fire data-on-change="cart::update.item"
-    //  *
-    //  * @param {HTMLElement} quantity
-    //  */
-    // qunatityChanged(quantity) {
-    //     app.debounce(() => salla.document.event.fireEvent(quantity, 'change', {'bubbles': true}));
-    // }
-
-    /**
-     * @param {CartItem} item
-     */
     updateItemInfo(item) {
 
         // lets get the elements for this item

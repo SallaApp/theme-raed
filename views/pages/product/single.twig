@@ -185,8 +185,9 @@
                                 aria-label="Share">
                             <i class="sicon-share-alt"></i>
                         </button> #}
-                        <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light" class="!m-0">
-                          <i class="sicon-share-alt pointer-events-none"></i>
+                        <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light"
+                                      class="!m-0">
+                            <i class="sicon-share-alt pointer-events-none"></i>
                         </salla-button>
 
                         <ul class="share-btns-list a2a_kit share">
@@ -225,7 +226,9 @@
                     </div>
 
                     {# todo:: ashraf enhance the style (hover) without change the js and relay on (pulse, un-favorited) #}
-                    <salla-button class="btn--wishlist animated" data-id="{{ product.id }}" onclick="salla.wishlist.toggle({{ product.id }})" shape="icon" fill="outline" color="light">
+                    <salla-button class="btn--wishlist animated" data-id="{{ product.id }}"
+                                  onclick="salla.wishlist.toggle({{ product.id }})" shape="icon" fill="outline"
+                                  color="light">
                         <i class="{{ product.is_in_wishlist ? 'sicon-heart-off' : 'sicon-heart' }}"></i>
                     </salla-button>
                 </div>
@@ -288,19 +291,8 @@
                                 <label class="form-label font-bold">
                                     {{ trans('pages.products.quantity') }}
                                 </label>
-                                <div class="flex justify-end">
-                                    <div class="flex items-stretch h-10 border border-border-color rounded-md text-sm">
-                                        <button class="btn--quantity sicon-add" id="btn-increase" type="button"></button>
-                                        <input class="focus:outline-none focus:ring-transparent shadow-none border-t-0 border-b-0 border focus:border-border-color border-border-color font-bold px-2 text-center w-12"
-                                               max="{{ product.max_quantity }}"
-                                               aria-label="Product Quantity"
-                                               name="quantity"
-                                               type="number"
-                                               value="1"
-                                               min="1"/>
-                                        <button class="btn--quantity sicon-minus" id="btn-decrease" type="button"></button>
-                                    </div>
-                                </div>
+                                <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
+                                                      class="border-border-color flex justify-end"></salla-quantity-input>
                             </div>
                         {% endif %}
 

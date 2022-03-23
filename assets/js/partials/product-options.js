@@ -6,7 +6,5 @@ export default class ProductOptions {
         Flatpickr('.date-element', {"dateFormat": "Y-m-d H:i"});
         Flatpickr('.date-time-element', {"enableTime": true, "dateFormat": "Y-m-d H:i",});
         Flatpickr('.time-element', {enableTime: true, noCalendar: true, dateFormat: "H:i",});
-
-        app.on('input', '[name="quantity"]', event => salla.helpers.inputDigitsOnly(event.target));
     }
 }
