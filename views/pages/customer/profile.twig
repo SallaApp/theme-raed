@@ -12,16 +12,7 @@
 {% endblock %}
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
-
-    {# todo:: support update profile via api and change onSubmit="return salla.form.submit(event, 'customer.update');"  #}
-    {# todo:: drop ajax class & method & action & novalidate from the class list  #}
-    {# todo:: drop id update-profile-btn from submit butto and drop js logic in the profile.js file  #}
-    <form class="form form--user-profile ajax"
-          method="POST"
-          novalidate
-          action="{{ link('profile') }}"
-          data-filter-before-submit="appendAvatar">
-
+    <form class="form form--user-profile ajax" onsubmit="return salla.form.submit('profile.update')">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
 
             {% hook 'customer:profile.form.fields.start' %}
