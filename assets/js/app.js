@@ -1,11 +1,10 @@
 import '@salla.sa/twilight';
 // import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
-import { applyPolyfills, defineCustomElements as SallaWebComponents } from '@salla.sa/twilight-components/loader';
+import {applyPolyfills, defineCustomElements as SallaWebComponents} from '@salla.sa/twilight-components/loader';
+
 applyPolyfills().then(() => {
     SallaWebComponents(window);
 });
-
-
 
 
 import MobileMenu from 'mmenu-light';
@@ -29,7 +28,7 @@ class App extends salla.AppHelpers {
         this.initiateAdAlert();
         this.initiateDropdowns();
         this.initiateModals();
-        this.initiateCollabse();
+        this.initiateCollapse();
 
         salla.comment.event.onAdded(() => window.location.reload());
 
@@ -129,9 +128,11 @@ class App extends salla.AppHelpers {
         header.style.height = height + 'px';
     }
 
-    //todo::add comments to explain what is the benefits from this method.
+    /**
+     * Because salla caches the response, it's important to keep the alert disabled if the visitor closed it.
+     * by store the status of the ad in local storage `salla.storage.set(...)`
+     */
     initiateAdAlert() {
-        // todo :: test it after change the element id
         let ad = this.element(".salla-advertisement");
 
         if (!ad) {
@@ -185,54 +186,45 @@ class App extends salla.AppHelpers {
                 'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
                 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
                 () => isOpen)
-        toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
+            .toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
         if (!isOpen) {
             setTimeout(() => this.addClass(id, 'hidden'), 350);
         }
     }
 
-    initiateCollabse() {
-        const collapseButtons = document.querySelectorAll('.btn--collapse');
-        collapseButtons.forEach((trigger) => {
-            const content = document.querySelector('#' + trigger.dataset.show);
-            this.makeCollapsible(trigger, content, 'easeOutQuart')
-        })
-    }
+    initiateCollapse() {
+        document.querySelectorAll('.btn--collapse')
+            .forEach((trigger) => {
+                const content = document.querySelector('#' + trigger.dataset.show);
+                const state = {isOpen: false}
 
-    makeCollapsible(trigger, content, easing, duration = 225) {
-        const state = {isOpen: false}
+                const onOpen = () => anime({
+                    targets : content,
+                    duration: 225,
+                    height  : content.scrollHeight,
+                    opacity : [0, 1],
+                    easing  : 'easeOutQuart',
+                });
 
-        const onOpen = () => {
-            const height = content.scrollHeight
-            anime({
-                targets : content,
-                duration: duration,
-                height  : height,
-                opacity : [0, 1],
-                easing  : easing,
-            })
-        }
+                const onClose = () => anime({
+                    targets : content,
+                    duration: 225,
+                    height  : 0,
+                    opacity : [1, 0],
+                    easing  : 'easeOutQuart',
+                })
 
-        const onClose = () => {
-            anime({
-                targets : content,
-                duration: duration,
-                height  : 0,
-                opacity : [1, 0],
-                easing  : easing,
-            })
-        }
+                const toggleState = (isOpen) => {
+                    state.isOpen = !isOpen
+                    this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
+                }
 
-        const toggleState = (isOpen) => {
-            state.isOpen = !isOpen
-            this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
-        }
-
-        trigger.addEventListener('click', () => {
-            const {isOpen} = state
-            toggleState(isOpen)
-            isOpen ? onClose() : onOpen();
-        })
+                trigger.addEventListener('click', () => {
+                    const {isOpen} = state
+                    toggleState(isOpen)
+                    isOpen ? onClose() : onOpen();
+                })
+            });
     }
 
 
@@ -240,7 +232,7 @@ class App extends salla.AppHelpers {
      * Workaround for seeking to simplify & clean, There are three ways to use this method:
      * 1- direct call: `this.anime('.my-selector')` - will use default values
      * 2- direct call with overriding defaults: `this.anime('.my-selector', {duration:3000})`
-     * 3- return object to play it leter: `this.anime('.my-selector', false).duration(3000).play()` - will not play animation unless calling play method.
+     * 3- return object to play it letter: `this.anime('.my-selector', false).duration(3000).play()` - will not play animation unless calling play method.
      * @param {string} selector
      * @param {object|undefined|null|null} options - in case there is need to set attributes one by one set it `false`;
      * @return {Anime|*}
@@ -251,8 +243,8 @@ class App extends salla.AppHelpers {
     }
 
     /**
-     * These actions are responsable for pressing "add to cart" button,
-     * they can be from any page, espacially when megamenu is enabled
+     * These actions are responsible for pressing "add to cart" button,
+     * they can be from any page, especially when mega-menu is enabled
      */
     initAddToCart() {
         salla.cart.event.onUpdated(summary => {
@@ -260,9 +252,7 @@ class App extends salla.AppHelpers {
             document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
         });
 
-        salla.cart.event.onItemAdded((response, prodId) => {
-            Anime.addToCart(response, prodId);
-        });
+        salla.cart.event.onItemAdded((response, prodId) => Anime.addToCart(response, prodId));
     }
 }
 

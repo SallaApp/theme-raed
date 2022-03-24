@@ -66,8 +66,7 @@ class FileUploader {
                     source : metadata.id,
                     options: {
                         type: 'local',
-                        //todo:: remove default size
-                        file    : {name: metadata.name || metadata.id, size: 3000000},
+                        file    : {name: metadata.name || metadata.id},
                         metadata: metadata,
                     },
                 };
