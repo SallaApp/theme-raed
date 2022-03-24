@@ -11,7 +11,7 @@ FilePond.registerPlugin(
 
 class FileUploader {
     /**
-     * 💡 There are two senarios for old files:
+     * 💡 There are two scenarios for existed files:
      * 1- without delete endpoint, pass default images via: `data-default="fileUrl1,fileUrl2"`
      * 2- with delete endpoint, pass files metadata via: `data-files="[{id:*,url:*,name:*},...]"`
      *
@@ -25,7 +25,7 @@ class FileUploader {
         //return latest filepond instance
         this.fileponds = [];
         elements.forEach(input => {
-            //todo:: expline why this
+            //todo:: explain why this
             if (input.disabled) {
                 input.removeAttribute('disabled');
                 if (input.hasAttribute('required')) {
@@ -90,7 +90,7 @@ class FileUploader {
                 url    : data.url,
                 process: {
                     onload : response => JSON.parse(response).data.filePath,
-                    headers: {accept: 'application/json'},
+                    headers: salla.api.getHeaders(),
                     onerror: response => JSON.parse(response).error.fields.image_file[0] || salla.lang.get('common.errors.error_occurred'),
                     ondata : formData => {
                         [['_token', salla.config.get('_token')], ['cart_item_id', data.itemId], ['product_id', data.productId]]
