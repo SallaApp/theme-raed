@@ -1,6 +1,13 @@
 import '@salla.sa/twilight';
-//todo:: use import "@salla.sa/twilight-components" or import {component1, component2} from "@salla.sa/twilight-components"
-import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
+// import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
+import { applyPolyfills, defineCustomElements as SallaWebComponents } from '@salla.sa/twilight-components/loader';
+applyPolyfills().then(() => {
+    SallaWebComponents(window);
+});
+
+
+
+
 import MobileMenu from 'mmenu-light';
 import Swal from 'sweetalert2';
 import Anime from './partials/anime';
