@@ -109,6 +109,7 @@
         </table>
 
         {# Order Rating Message & Modal #}
+       
         {% if order.can_rate %}
             <div class="rating-header gradient-bg center-between">
                 <div>
@@ -125,6 +126,7 @@
 
         {# Order Summary #}
         <div class="overflow-hidden">
+        
             {% for item in order.items %}
                 <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}"
                      class="order-item bg-white mb-5 p-5 rounded-md">
@@ -280,14 +282,14 @@
                             </dl>
                         </div>
                     {% endif %}
-
+                   
                     {% if item.rating %}
                         <section class="border-t mt-10 pt-8">
                             <p>{{ item.rating.content|raw }}</p>
                             {% if item.rating.is_pending %}
                                 <span>{{ trans('pages.rating.pending') }}</span>
-                            {% endif %}
-                            {% include 'pages.partials.stars' with {stars:item.rating.stars} %}
+                            {% endif %} 
+                            <salla-rating-stars size="small" value="{{item.rating.stars}}"></salla-rating-stars>
                         </section>
                     {% endif %}
                 </div>
@@ -437,7 +439,7 @@
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
                 <p class="mb-2">{{ order.rating.store.content|raw }}</p>
-                {% include 'pages.partials.stars' with {stars:order.rating.store.stars} %}
+                <salla-rating-stars value="{{order.rating.store.stars}}"></salla-rating-stars>
             </section>
         {% endif %}
 
@@ -446,7 +448,7 @@
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
                 <p class="mb-2">{{ order.rating.shipping.content|raw }}</p>
-                {% include 'pages.partials.stars' with {stars:order.rating.shipping.stars} %}
+                <salla-rating-stars value="{{order.rating.shipping.stars}}"></salla-rating-stars>
             </section>
         {% endif %}
         {% hook 'customer:orders.single.details.end' %}
