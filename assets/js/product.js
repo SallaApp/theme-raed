@@ -12,8 +12,8 @@ class Product extends BasePage {
         new ProductOptions();
 
         app.watchElements({
-            totalPrice   : '#total-price',
-            beforePrice  : '#before-price',
+            totalPrice : '#total-price',
+            beforePrice: '#before-price',
         });
 
         //Toggale share menu
@@ -53,13 +53,13 @@ class Product extends BasePage {
     registerEvents() {
         salla.product.event.onPriceUpdated((res) => {
 
-            app.totalPrice.innerText = res.data.after;
+            app.totalPrice.innerText = salla.money(res.data.price);
 
             app.anime('#total-price', {scale: [0.88, 1]});
 
-            if (res.data.before) {
+            if (res.data.price > res.data.regular_price) {
                 app.beforePrice.style.display = 'inline';
-                app.beforePrice.innerText = res.data.before;
+                app.beforePrice.innerText = salla.money(res.data.regular_price);
                 return;
             }
 
@@ -74,14 +74,14 @@ class Product extends BasePage {
 
     initSliders() {
         let mini = new Slider('.mini', {
-            slidesPerView        : 4,
-            centeredSlides       : true,
-            touchRatio           : 0.2,
-            slideToClickedSlide  : true,
+            slidesPerView      : 4,
+            centeredSlides     : true,
+            touchRatio         : 0.2,
+            slideToClickedSlide: true,
         });
         let main = new Slider('.details-slider', {
-            slidesPerView : 1,
-            spaceBetween  : 30,
+            slidesPerView: 1,
+            spaceBetween : 30,
         });
         main.getSlider().controller.control = mini.getSlider();
         mini.getSlider().controller.control = main.getSlider();
