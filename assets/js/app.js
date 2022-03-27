@@ -1,10 +1,9 @@
 import '@salla.sa/twilight';
-// import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
-import {applyPolyfills, defineCustomElements as SallaWebComponents} from '@salla.sa/twilight-components/loader';
-
-applyPolyfills().then(() => {
-    SallaWebComponents(window);
-});
+import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
+// import {applyPolyfills, defineCustomElements as SallaWebComponents} from '@salla.sa/twilight-components/loader';
+// applyPolyfills().then(() => {
+//     SallaWebComponents(window);
+// });
 
 
 import MobileMenu from 'mmenu-light';
@@ -42,14 +41,17 @@ class App extends salla.AppHelpers {
 
     copyToClipboard(event) {
         event.preventDefault();
-        let aux = document.createElement("input");
-        aux.setAttribute("value", event.currentTarget.dataset.content);
+        let aux = document.createElement("input"),
+            btn = event.currentTarget;
+        aux.setAttribute("value", btn.dataset.content);
         document.body.appendChild(aux);
         aux.select();
         document.execCommand("copy");
         document.body.removeChild(aux);
-        this.toggleElementClassIf(event.currentTarget, 'copied', 'code-to-copy', () => true);
-        setTimeout(() => this.toggleElementClassIf(event.currentTarget, 'code-to-copy', 'copied', () => true), 1000);
+        this.toggleElementClassIf(btn, 'copied', 'code-to-copy', () => true);
+        setTimeout(() => {
+          this.toggleElementClassIf(btn, 'code-to-copy', 'copied', () => true)
+        }, 1000);
     }
 
     initiateNotifier() {
