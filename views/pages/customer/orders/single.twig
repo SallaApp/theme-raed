@@ -116,10 +116,7 @@
                     <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                     <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                 </div>
-                <button onclick="salla.event.dispatch('rating::show')"
-                        class="btn btn--outline-primary btn--rounded-full !flex-grow-0 !px-12 lg:!px-16">
-                    {{ trans('pages.rating.rate') }}
-                </button>
+                <salla-button color="light" class="btn--rounded-full !text-primary" onclick="salla.event.dispatch('rating::show')">{{ trans('pages.rating.rate') }}</salla-button>
             </div>
             <salla-rating-modal></salla-rating-modal>
         {% endif %}
@@ -240,9 +237,9 @@
                                           <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
                                           <spn>{{ code }}</span>
                                         </dt>
-                                        <salla-button onclick="theme.copyToClipboard(event)" data-content="{{ code }}">
-                                            <i class="copy-icon sicon-swap-stroke"></i>
-                                            <span class="text-sm ms-2">{{ trans('common.copy_code') }}</span>
+                                        <salla-button onclick="theme.copyToClipboard(event)" shape="link" data-content="{{ code }}">
+                                            <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
+                                            <span class="text-sm ms-2 pointer-events-non">{{ trans('common.copy_code') }}</span>
                                         </salla-button>
                                     </div>
                                 {% endfor %}
@@ -410,7 +407,7 @@
                             {{ trans('common.elements.ok') }}
                         </salla-button>
 
-                        <salla-button class="w-full" fill="outline" color="gray" onclick="document.querySelector('#reorder-modal').hide()">
+                        <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#reorder-modal').hide()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
                     </div>
@@ -426,7 +423,7 @@
                         <salla-button id="confirm-cancel" color="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        <salla-button class="w-full" fill="outline" color="gray" onclick="document.querySelector('#modal-order-cancel').hide()">
+                        <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#modal-order-cancel').hide()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
                     </div>
