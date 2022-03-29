@@ -1,4 +1,3 @@
-//todo:: use import {tailwind} from "@salla.sa/twilight-components"
 const colors = require('tailwindcss/colors');
 delete colors['lightBlue']
 
