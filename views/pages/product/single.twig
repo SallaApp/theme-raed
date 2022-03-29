@@ -180,11 +180,6 @@
 
                 <div class="flex mb-5 space-s-3 ">
                     <div class="share-wrapper relative">
-                        {# <button type="button"
-                                class="btn--share btn--icon"
-                                aria-label="Share">
-                            <i class="sicon-share-alt"></i>
-                        </button> #}
                         <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light"
                                       class="!m-0">
                             <i class="sicon-share-alt pointer-events-none"></i>
@@ -225,7 +220,6 @@
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
 
-                    {# todo:: ashraf enhance the style (hover) without change the js and relay on (pulse, un-favorited) #}
                     <salla-button class="btn--wishlist animated" data-id="{{ product.id }}"
                                   onclick="salla.wishlist.toggle({{ product.id }})" shape="icon" fill="outline"
                                   color="light">
@@ -281,8 +275,7 @@
                     </salla-conditional-fields>
 
 
-                    <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
-
+                    <section class="bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
                         {% if product.is_hidden_quantity %}
                             <input type="hidden" value="1" name="quantity"/>
@@ -297,7 +290,7 @@
                         {% endif %}
 
                         {# Price #}
-                        <div class="center-between mb-5">
+                        <div class="center-between">
                             <label class="form-label">
                                 <b class="block">
                                     {{ trans('pages.products.price') }}
@@ -315,29 +308,30 @@
                                 {% endif %}
                             </div>
                         </div>
-
-                        <div class="flex justify-between space-s-4">
-                            {% if product.is_available %}
-                                <salla-button type="submit" loader-position="end" class="btn--add-to-cart w-full">
-                                    {{ trans('pages.cart.add_to_cart') }}
-                                </salla-button>
-                            {% elseif product.notify_availability %}
-                                <salla-product-availability
-                                        channels="{{ product.notify_availability.channels|join(',') }}"
-                                        {{ product.notify_availability.subscribed?'is-subscribed':'' }} class="w-full">
-                                </salla-product-availability>
-                            {% else %}
-                                <button type="button" class="btn btn--outline">
-                                    {% if product.is_donation %}
-                                        {{ trans('pages.products.donation_exceed') }}
-                                    {% else %}
-                                        {{ trans('pages.products.out_of_stock') }}
-                                    {% endif %}
-                                </button>
-                            {% endif %}
-                        </div>
                     </section>
                 </form>
+
+                <div class="flex justify-between bg-white rounded-md rounded-t-none p-5 pt-0">
+                    {% if product.is_available %}
+                        <salla-button type="submit" loader-position="end" class="btn--add-to-cart w-full">
+                            {{ trans('pages.cart.add_to_cart') }}
+                        </salla-button>
+                    {% elseif product.notify_availability %}
+                        <salla-product-availability
+                                channels="{{ product.notify_availability.channels|join(',') }}"
+                                {{ product.notify_availability.subscribed?'is-subscribed':'' }} class="w-full">
+                        </salla-product-availability>
+                    {% else %}
+                        <button type="button" class="btn btn--outline">
+                            {% if product.is_donation %}
+                                {{ trans('pages.products.donation_exceed') }}
+                            {% else %}
+                                {{ trans('pages.products.out_of_stock') }}
+                            {% endif %}
+                        </button>
+                    {% endif %}
+                </div>
+
 
                 {% hook 'product:single.description.end' %}
             </div>
