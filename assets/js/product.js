@@ -75,7 +75,6 @@ class Product extends BasePage {
     initSliders() {
         let mini = new Slider('.mini', {
             slidesPerView      : 4,
-            centeredSlides     : true,
             touchRatio         : 0.2,
             slideToClickedSlide: true,
         });
