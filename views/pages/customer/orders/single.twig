@@ -131,7 +131,7 @@
                         {% if item.product %}
                             <div class="flex space-s-5 mb-4">
                                 <a href="{{ item.product.url }}" class="flex-shrink-0">
-                                    <img src="{{ item.image ?: asset('images/placeholder.png') }}"
+                                    <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
                                          alt="{{ item.name }}"
                                          class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
                                 </a>
@@ -177,7 +177,7 @@
                                                 <div class="flex space-s-2.5">
                                                     <a href="{{ option.value }}" target="_blank">
                                                         <img class="h-7 w-7 object-cover rounded-md"
-                                                             src="{{ option.value ?: asset('images/placeholder.png') }}"
+                                                             src="{{ option.value ?: 'images/placeholder.png' | asset }}"
                                                              alt="{{ option.name }}"/>
                                                     </a>
                                                 </div>
@@ -454,5 +454,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('dist/customer.js') }}"></script>
+    <script src="{{ 'dist/customer.js' | asset }}"></script>
 {% endblock %}

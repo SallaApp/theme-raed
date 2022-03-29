@@ -50,8 +50,8 @@
 #}
 {% extends "layouts.master" %}
 {% block styles %}
-    <link rel="stylesheet" href="{{ asset('dist/flatpickr.css') }}">
-    <link rel="stylesheet" href="{{ asset('dist/filepond.css') }}">
+    <link rel="stylesheet" href="{{ 'dist/flatpickr.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'dist/filepond.css' | asset }}">
 {% endblock %}
 {% block content %}
     <div class="container px-3 xs:px-5">
@@ -71,7 +71,7 @@
                                 <div class="md:flex md:space-s-12 items-start justify-between mb-8">
                                     <div class="flex flex-1 space-s-4">
                                         <a href="{{ item.url }}" class="flex-shrink-0">
-                                            <img src="{{ asset('images/s-empty.png') }}"
+                                            <img src="{{ 'images/s-empty.png' | asset }}"
                                                  data-src="{{ item.product_image }}"
                                                  alt="{{ item.product_name }}"
                                                  class="lazy-load flex-none w-24 h-20 border border-border-color bg-gray-100 rounded-md object-center object-cover">
@@ -235,6 +235,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ asset('dist/filepond.js') }}"></script>
-    <script src="{{ asset('dist/checkout.js') }}"></script>
+    <script defer src="{{ 'dist/filepond.js' | asset }}"></script>
+    <script src="{{ 'dist/checkout.js' | asset }}"></script>
 {% endblock %}

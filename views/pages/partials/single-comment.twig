@@ -5,8 +5,8 @@
     <div class="{% if is_admin %} nested-comment reply ps-8 md:ps-16 mt-8 admin {% else %} comment {% endif %} flex text-sm space-s-3 comment_id_{{ comment.id }}">
         {% if is_admin %} <i class="sicon-reply text-lg text-gray-400"></i>{% endif %}
         <div class="flex-none">
-            <img data-src="{{ comment.avatar|is_placeholder ? asset('images/avatar.png') : comment.avatar }}"
-                 alt="{{ comment.name }}" src="{{ asset('images/s-empty.png') }}"
+            <img data-src="{{ comment.avatar|is_placeholder ? 'images/avatar.png' | cdn : comment.avatar }}"
+                 alt="{{ comment.name }}" src="{{ 'images/s-empty.png' | asset }}"
                  class="w-10 h-10 bg-gray-100 rounded-full lazy-load">
         </div>
         <div class="flex-1">
