@@ -6,13 +6,13 @@
 <ul class="flex justify-center items-stretch space-s-2">
   {% for method in payment_methods %}
     <li class="w-14 bg-white rounded flex items-center">
-      <img class="object-contain" src="{{ asset('images/payment/'~ method ~'_mini.png') }}" alt="{{ method }}">
+      <img class="object-contain" src="{{ ('images/payment/'~ method ~'_mini.png') | cdn }}" alt="{{ method }}">
     </li>
   {% endfor %}
   {% if store.social.maroof %}
     <li class="w-14 bg-white rounded">
       <a href="{{ store.social.maroof }}" class="flex items-center h-full" target="_blank" rel="noreferrer">
-        <img class="object-contain" src="{{ asset('images/maroof-footer.png') }}" alt="maroof">
+        <img class="object-contain" src="{{ 'images/maroof-footer.png' | cdn }}" alt="maroof">
       </a>
     </li>
   {% endif %}

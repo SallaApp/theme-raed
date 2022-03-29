@@ -25,7 +25,6 @@ class FileUploader {
         //return latest filepond instance
         this.fileponds = [];
         elements.forEach(input => {
-            //todo:: explain why this
             if (input.disabled) {
                 input.removeAttribute('disabled');
                 if (input.hasAttribute('required')) {

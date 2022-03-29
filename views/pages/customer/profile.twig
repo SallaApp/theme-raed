@@ -7,8 +7,8 @@
 #}
 {% extends "layouts.customer" %}
 {% block styles %}
-    <link rel="stylesheet" href="{{ asset('dist/flatpickr.css') }}">
-    <link rel="stylesheet" href="{{ asset('dist/filepond.css') }}">
+    <link rel="stylesheet" href="{{ 'dist/flatpickr.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'dist/filepond.css' | asset }}">
 {% endblock %}
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
@@ -75,7 +75,7 @@
 
         {% hook 'customer:profile.form.submit.start' %}
 
-        <salla-button type="submit" id="update-profile-btn" loader-position="end" class="w-full">
+        <salla-button type="submit" loader-position="end" class="w-full">
             {{ trans('common.elements.save') }}
         </salla-button>
 
@@ -88,6 +88,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defser src="{{ asset('dist/filepond.js') }}"></script>
-    <script defer src="{{ asset('dist/customer.js') }}"></script>
+    <script defser src="{{ 'dist/filepond.js' | asset }}"></script>
+    <script defer src="{{ 'dist/customer.js' | asset }}"></script>
 {% endblock %}

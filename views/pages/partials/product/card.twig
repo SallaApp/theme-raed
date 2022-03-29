@@ -14,7 +14,7 @@ view options:
     {# Image #}
     <a href="{{ product.url }}" class='product-entry__image'>
         <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
-             src="{{ asset('images/s-empty.png') }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+             src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
         {% if product.promotion_title %}
             <div class="absolute top-4 start-0 z-1 font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
         {% endif %}

@@ -102,11 +102,10 @@
 
     {# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
     {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
-
     {% hook head %}
     {% block styles %}{% endblock %}
-    <link rel="stylesheet" href="{{ asset('dist/app.css') }}">
-    <link rel="stylesheet" href="{{ theme.font.url }}"/>
+    <link rel="stylesheet" href="{{ 'dist/app.css' | asset }}">
+    <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
 
     <style>
         :root {
@@ -134,7 +133,7 @@
     {% component 'footer.footer' %}
 </div>
 {% hook 'body:end' %}
-<script defer src="{{ asset('dist/app.js') }}"></script>
+<script defer src="{{ 'dist/app.js' | asset }}"></script>
 <salla-offer-modal></salla-offer-modal>
 {% block scripts %}{% endblock %}
 </body>

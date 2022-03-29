@@ -60,8 +60,8 @@
 #}
 {% extends "layouts.master" %}
 {% block styles %}
-    <link rel="stylesheet" href="{{ asset('dist/flatpickr.css') }}">
-    <link rel="stylesheet" href="{{ asset('/dist/filepond.css') }}">
+    <link rel="stylesheet" href="{{ 'dist/flatpickr.css' | asset }}">
+    <link rel="stylesheet" href="{{ '/dist/filepond.css' | asset }}">
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -87,7 +87,7 @@
                                href="{{ image.video_url?image.video_url:image.url }}"
                                aria-label="{{ product.name }}"
                                class="swiper-slide h-72 sm:h-96 lg:h-[500px] homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
-                                <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
+                                <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
                                      alt="{{ image.alt }}" class="h-full object-cover lazy-load w-full bg-white">
                             </a>
                         {% endfor %}
@@ -110,7 +110,7 @@
                         <div class="swiper-wrapper flex items-stretch">
                             {% for image in product.images %}
                                 <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
-                                    <img data-src="{{ image.url }}" src="{{ asset('images/s-empty.png') }}"
+                                    <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
                                          class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
                                          title="{{ image.alt }}"
                                          alt="{{ image.alt }}"/>
@@ -348,6 +348,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ asset('dist/filepond.js') }}"></script>
-    <script src="{{ asset('dist/product.js') }}"></script>
+    <script defer src="{{ 'dist/filepond.js' | asset }}"></script>
+    <script src="{{ 'dist/product.js' | asset }}"></script>
 {% endblock %}
