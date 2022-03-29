@@ -109,7 +109,7 @@
         </table>
 
         {# Order Rating Message & Modal #}
-       
+
         {% if order.can_rate %}
             <div class="rating-header gradient-bg center-between">
                 <div>
@@ -123,7 +123,7 @@
 
         {# Order Summary #}
         <div class="overflow-hidden">
-        
+
             {% for item in order.items %}
                 <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}"
                      class="order-item bg-white mb-5 p-5 rounded-md">
@@ -279,13 +279,13 @@
                             </dl>
                         </div>
                     {% endif %}
-                   
+
                     {% if item.rating %}
                         <section class="border-t mt-10 pt-8">
                             <p>{{ item.rating.content|raw }}</p>
                             {% if item.rating.is_pending %}
                                 <span>{{ trans('pages.rating.pending') }}</span>
-                            {% endif %} 
+                            {% endif %}
                             <salla-rating-stars size="small" value="{{item.rating.stars}}"></salla-rating-stars>
                         </section>
                     {% endif %}
@@ -448,6 +448,7 @@
                 <salla-rating-stars value="{{order.rating.shipping.stars}}"></salla-rating-stars>
             </section>
         {% endif %}
+
         {% hook 'customer:orders.single.details.end' %}
     </div>
 {% endblock %}
