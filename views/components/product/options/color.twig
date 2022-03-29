@@ -12,9 +12,6 @@
     {% for detail in option.details %}
         <div class="me-8 mb-5">
             <input {{ detail.is_selected?'checked':'' }}
-                    {% if not is_cart %}
-                        data-on-change="product::get.price" data-allow-default
-                    {% endif %}
                     {{ detail.is_out?"disabled":"" }}
                     name="options[{{ option.id }}]"
                     value="{{ detail.id }}"

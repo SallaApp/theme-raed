@@ -61,7 +61,7 @@
 {% extends "layouts.master" %}
 {% block styles %}
     <link rel="stylesheet" href="{{ 'dist/flatpickr.css' | asset }}">
-    <link rel="stylesheet" href="{{ '/dist/filepond.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'dist/filepond.css' | asset }}">
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -213,9 +213,9 @@
                             </li>
                         </ul>
                         <script type="text/javascript">
-                          var a2a_config = a2a_config || {};
-                          a2a_config.linkurl = "{{ product.url }}";
-                          a2a_config.locale = "{{ user.language.code }}";
+                            var a2a_config = a2a_config || {};
+                            a2a_config.linkurl = "{{ product.url }}";
+                            a2a_config.locale = "{{ user.language.code }}";
                         </script>
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
@@ -299,14 +299,13 @@
                                 </b>
                             </label>
                             <div class="space-s-1">
+                                <h4 id="total-price" class="text-red-400 font-bold text-sm inline-block">
+                                    {{ product.price|money }}
+                                </h4>
                                 {% if product.is_on_sale %}
-                                    <h4 id="total-price"
-                                        class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                                    <span id="before-price"
-                                          class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                                {% else %}
-                                    <h4 id="total-price"
-                                        class="text-red-400 font-bold text-sm inline-block">{{ product.price|money }}</h4>
+                                    <span id="before-price" class="text-sm text-gray-400 line-through">
+                                        {{ product.regular_price|money }}
+                                    </span>
                                 {% endif %}
                             </div>
                         </div>
@@ -329,12 +328,12 @@
                 </form>
 
                 {% if product.notify_availability %}
-                  <div class="bg-white rounded-md rounded-t-none p-5 pt-0">
-                      <salla-product-availability
-                              channels="{{ product.notify_availability.channels|join(',') }}"
-                              {{ product.notify_availability.subscribed?'is-subscribed':'' }} class="w-full">
-                      </salla-product-availability>
-                  </div>
+                    <div class="bg-white rounded-md rounded-t-none p-5 pt-0">
+                        <salla-product-availability
+                                channels="{{ product.notify_availability.channels|join(',') }}"
+                                {{ product.notify_availability.subscribed?'is-subscribed':'' }} class="w-full">
+                        </salla-product-availability>
+                    </div>
                 {% endif %}
 
                 {% hook 'product:single.description.end' %}

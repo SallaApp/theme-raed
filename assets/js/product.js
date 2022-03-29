@@ -57,7 +57,7 @@ class Product extends BasePage {
 
             app.anime('#total-price', {scale: [0.88, 1]});
 
-            if (res.data.price > res.data.regular_price) {
+            if (res.data.has_sale_price) {
                 app.beforePrice.style.display = 'inline';
                 app.beforePrice.innerText = salla.money(res.data.regular_price);
                 return;
