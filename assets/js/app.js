@@ -1,9 +1,9 @@
 import '@salla.sa/twilight';
-import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
-// import {applyPolyfills, defineCustomElements as SallaWebComponents} from '@salla.sa/twilight-components/loader';
-// applyPolyfills().then(() => {
-//     SallaWebComponents(window);
-// });
+// import '@salla.sa/twilight-components/dist/twilight-components/twilight-components.esm';
+import {applyPolyfills, defineCustomElements as SallaWebComponents} from '@salla.sa/twilight-components/loader';
+applyPolyfills().then(() => {
+    SallaWebComponents(window);
+});
 
 
 import MobileMenu from 'mmenu-light';
