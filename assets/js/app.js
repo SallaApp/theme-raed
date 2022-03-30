@@ -237,7 +237,7 @@ class App extends salla.AppHelpers {
      * 1- direct call: `this.anime('.my-selector')` - will use default values
      * 2- direct call with overriding defaults: `this.anime('.my-selector', {duration:3000})`
      * 3- return object to play it letter: `this.anime('.my-selector', false).duration(3000).play()` - will not play animation unless calling play method.
-     * @param {string} selector
+     * @param {string|HTMLElement} selector
      * @param {object|undefined|null|null} options - in case there is need to set attributes one by one set it `false`;
      * @return {Anime|*}
      */

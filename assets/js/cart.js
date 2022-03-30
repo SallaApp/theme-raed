@@ -11,14 +11,14 @@ class Cart extends BasePage {
 
         app.watchElements({
             couponCodeInput: '#coupon-input',
-            couponBtn: '#coupon-btn',
-            couponError: '#coupon-error',
-            subTotal: '#sub-total',
-            totalDiscount: '#total-discount',
-            shippingCost: '#shipping-cost',
-            freeShipping: '#free-shipping',
+            couponBtn      : '#coupon-btn',
+            couponError    : '#coupon-error',
+            subTotal       : '#sub-total',
+            totalDiscount  : '#total-discount',
+            shippingCost   : '#shipping-cost',
+            freeShipping   : '#free-shipping',
             freeShippingBar: '#free-shipping-bar',
-            freeShipppingMsg: '#free-shipping-msg',
+            freeShippingMsg: '#free-shipping-msg',
             freeShipApplied: '#free-shipping-applied'
         });
 
@@ -27,19 +27,25 @@ class Cart extends BasePage {
         new ProductOptions();
     }
 
+    /**
+     * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
+     */
     updateCartPageInfo(cartData) {
-
+        //if item deleted & there is no more items, just reload the page
+        if (!cartData.count) {
+            return window.location.reload();
+        }
         // update each item data
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
         app.subTotal.innerText = salla.money(cartData.sub_total);
 
-        app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => cartData.total_discount)
-            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => cartData.shipping_cost)
-            .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => cartData.free_shipping_bar);
+        app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.discount)
+            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost)
+            .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
 
-        app.totalDiscount.querySelector('b').innerText = '- ' + salla.money(cartData.total_discount);
-        app.shippingCost.querySelector('b').innerText = salla.money(cartData.shipping_cost);
+        app.totalDiscount.querySelector('b').innerText = '- ' + salla.money(cartData.discount);
+        app.shippingCost.querySelector('b').innerText = salla.money(cartData.real_shipping_cost);
 
         if (!cartData.free_shipping_bar) {
             return;
@@ -49,11 +55,15 @@ class Cart extends BasePage {
         app.toggleElementClassIf(app.freeShippingBar, 'active', 'hidden', () => !isFree)
             .toggleElementClassIf(app.freeShipApplied, 'active', 'hidden', () => isFree);
 
-        app.freeShipppingMsg.innerHTML = isFree ? salla.lang.get('pages.cart.has_free_shipping')
+        app.freeShippingMsg.innerHTML = isFree
+            ? salla.lang.get('pages.cart.has_free_shipping')
             : salla.lang.get('pages.cart.free_shipping_alert', {amount: salla.money(cartData.free_shipping_bar.remaining)});
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
     }
 
+    /**
+     * @param {import("@salla.sa/twilight/types/api/cart").CartItem} item
+     */
     updateItemInfo(item) {
 
         // lets get the elements for this item
@@ -62,25 +72,25 @@ class Cart extends BasePage {
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             offerElement = cartItem.querySelector('.offer-name'),
-            offerIconElement = cartItem.querySelector('.offer-icon');
+            offerIconElement = cartItem.querySelector('.offer-icon'),
+            hasSpecialPrice = item.special_price > 0;
 
-        if (item.total !== totalElement.innerText) {
-            totalElement.innerText = salla.money(item.total);
+        let total = salla.money(item.total);
+        if (total !== totalElement.innerText) {
+            totalElement.innerText = total;
             app.anime(totalElement, {scale: [.88, 1]});
         }
 
-        app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => item.has_special_price)
-            .toggleElementClassIf(priceElement, 'text-theme-red', 'text-sm text-gray-400', () => item.has_special_price);
+        app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
+            .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
+            .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
+            .toggleElementClassIf(priceElement, 'text-theme-red', 'text-sm text-gray-400', () => hasSpecialPrice);
 
-        if (!item.has_special_price) {
-            priceElement.innerText = salla.money(item.product_price);
-            return;
+        priceElement.innerText = salla.money(item.price);
+        if (hasSpecialPrice) {
+            offerElement.innerText = item.offer.names;
+            regularPriceElement.innerText = salla.money(item.product_price);
         }
-
-        priceElement.innerText = salla.money(item.product_price);
-        offerElement.innerText = item.offer.names;
     }
 
 
