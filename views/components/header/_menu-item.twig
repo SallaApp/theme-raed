@@ -13,12 +13,12 @@
         {% endif %}
     </li>
 {% else %}
-    <li class="{{ is_root_menu?'inline-block root-level':'relative' }}
+    <li class="{{ is_root_menu?'root-level':'relative' }}
         {{ menu.mega_menu?' mega-menu': '' }}
         {{ menu.has_children?' has-children': '' }}"
         {{ menu.attrs|raw }}>
         {# TODO:: collect these classes in short class#}
-        <a href="{{ menu.url }}" class="center-between transition duration-300 p-2 ps-3 text-sm hover:text-primary hover:no-underline {{ is_root_menu? 'font-bold pt-0 pb-8 whitespace-nowrap':'' }}">
+        <a href="{{ menu.url }}">
             <span>{{ menu.title }}</span>
         </a>
         {% if menu.has_children %}
