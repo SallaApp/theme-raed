@@ -20,11 +20,13 @@
 
       <div class="tabs hide-scroll">
           {% for section in items %}
-              <button class="tab-trigger btn btn--outline-primary {{ loop.first?'is-active':'' }}"
-                      data-target="{{ component_id }}-{{ section.id }}"
-                      data-component-id="{{ component_id }}"
-                      data-type="style2"
-                      type="button">{{ section.title }}</button>
+              <salla-button 
+                class="tab-trigger {{ loop.first?'is-active':'' }}"
+                data-target="{{ component_id }}-{{ section.id }}"
+                data-component-id="{{ component_id }}"
+                fill="outline">
+                  {{ section.title }}
+              </salla-button>
           {% endfor %}
       </div>
 
