@@ -56,19 +56,16 @@ class Home extends BasePage {
      * used in views/components/home/featured-products-style*.twig
      */
     initFeaturedTabs() {
-        salla.document.event.onClick('.tab-trigger', event => {
-            event.preventDefault();
-            let btn = event.target;
-            let css = {
-                style1: {active: 'is-active', inActive: 'inactive'},
-                style2: {active: 'is-active', inActive: 'inactive'},
-            }[btn.dataset.type];
+        app.all('.tab-trigger', el => {
+          el.addEventListener('click', ({currentTarget: btn})=>{
             let id = btn.dataset.componentId;
+            // btn.setAttribute('fill', 'solid');
             app.toggleClassIf(`#${id} .tabs-wrapper>div`, 'is-active opacity-0 translate-y-3', 'inactive', tab => tab.id == btn.dataset.target)
-                .toggleClassIf(`#${id} .tab-trigger`, css.active, css.inActive, tabBtn => tabBtn == btn);
+                .toggleClassIf(`#${id} .tab-trigger`, 'is-active', 'inactive', tabBtn => tabBtn == btn);
 
             // fadeIn active tabe
             setTimeout(() => app.toggleClassIf(`#${id} .tabs-wrapper>div`, 'opacity-100 translate-y-0', 'opacity-0 translate-y-3', tab => tab.id == btn.dataset.target), 100);
+          })
         });
         document.querySelectorAll('.s-block-tabs').forEach(block => block.classList.add('tabs-initialized'));
     }
