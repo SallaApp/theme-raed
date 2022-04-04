@@ -73,22 +73,23 @@ class Product extends BasePage {
     }
 
     initSliders() {      
-        if(document.querySelectorAll('.details-slider .swiper-slide').lenght > 1){
-          let mini = new Slider('.mini', {
-              slidesPerView      : 4,
-              touchRatio         : 0.2,
-              slideToClickedSlide: true,
-          });
-          let main = new Slider('.details-slider', {
+        if(document.querySelectorAll('.details-slider .swiper-slide').length > 1){
+          let thumbsSlider = new Slider('.thumbs-slider', {
+            freeMode: true,
+            watchSlidesProgress: true,
+           });
+
+          let mainSlider = new Slider('.details-slider', {
               slidesPerView: 1,
               spaceBetween : 30,
+              thumbs: {
+                swiper: thumbsSlider.getSlider(),
+              },
           });
-          main.getSlider().controller.control = mini.getSlider();
-          mini.getSlider().controller.control = main.getSlider();
+      
+          //when clicking product option form type image, move slider to same image
+          app.onClick('.go-to-slide', e => mainSlider.slideTo(app.element(`[data-img-id*="${e.target.dataset.imgId}"]`).dataset.slidIndex, 0));
         }
-
-        //when clicking product option form type image, move slider to same image
-        app.onClick('.go-to-slide', e => main.slideTo(app.element(`[data-img-id*="${e.target.dataset.imgId}"]`).dataset.slidIndex, 0));
 
 
         /*
