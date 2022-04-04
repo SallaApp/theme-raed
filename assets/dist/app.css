@@ -4688,26 +4688,54 @@ video {
 	}.swiper.slider-layout{
 		padding-inline-end: 0px;
 	}
-}.swiper.slider-layout.mini{
+}.swiper.slider-layout.thumbs-slider{
 	margin-left: -0.5rem;
 	margin-right: -0.5rem;
 	padding-left: 0px;
 	padding-right: 0px;
-}@media (min-width: 1024px){.swiper.slider-layout.mini{
+}@media (min-width: 1024px){.swiper.slider-layout.thumbs-slider{
 		width: calc(100% + 16px);
 	}
-}.swiper.slider-layout.mini .slide--one-fourth{
+}.swiper.slider-layout.thumbs-slider .swiper-slide{
 	height: 4rem;
 	width: 33.333333%;
 	cursor: pointer;
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
-}@media (min-width: 640px){.swiper.slider-layout.mini .slide--one-fourth{
+	transition-property: opacity;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+	transition-duration: 300ms;
+}@media (min-width: 640px){.swiper.slider-layout.thumbs-slider .swiper-slide{
 		width: 25%;
 	}
-}@media (min-width: 768px){.swiper.slider-layout.mini .slide--one-fourth{
+}@media (min-width: 768px){.swiper.slider-layout.thumbs-slider .swiper-slide{
 		height: 5rem;
 	}
+}.swiper.slider-layout.thumbs-slider .swiper-slide:hover{
+	opacity: 0.8;
+}.swiper.slider-layout.thumbs-slider .swiper-slide:after{
+	position: absolute;
+	top: 0px;
+	left: 0.5rem;
+	z-index: 1;
+	height: 100%;
+	width: calc(100% - 1rem);
+	border-radius: 0.375rem;
+	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+	--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+	box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+	--tw-ring-inset: inset;
+	--tw-ring-color: var(--color-main);
+	transition-property: box-shadow;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+	transition-duration: 300ms;
+	content: "";
+}.swiper.slider-layout.thumbs-slider .swiper-slide-thumb-active:after{
+	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+	--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+	box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }.swiper .slide--one-fourth{
 	height: auto;
 	width: 100%;
