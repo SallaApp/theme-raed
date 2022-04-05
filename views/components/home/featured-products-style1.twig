@@ -41,7 +41,7 @@
 
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
-                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-1 sm:grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
+                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
                         {% for product in section.products|slice(0,main_product?4:8) %}
                             {% include 'pages.partials.product.card' %}
                         {% endfor %}
