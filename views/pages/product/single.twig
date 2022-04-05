@@ -105,7 +105,7 @@
                 </div>
 
                 {% if has_many_images %}
-                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider mini"
+                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider {{ product.images|length > 4 ? '!pe-10' : ''}}"
                          id="thumbs-slider-{{ product.id }}">
                         <div class="swiper-wrapper flex items-stretch">
                             {% for image in product.images %}
