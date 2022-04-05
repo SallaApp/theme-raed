@@ -643,10 +643,10 @@ video {
 	margin-bottom: 0.5rem;
 }.-mt-1{
 	margin-top: -0.25rem;
-}.mt-8{
-	margin-top: 2rem;
 }.mb-7{
 	margin-bottom: 1.75rem;
+}.mt-8{
+	margin-top: 2rem;
 }.-mt-62{
 	margin-top: -248px;
 }.mt-16{
@@ -984,9 +984,6 @@ video {
 }.bg-gray-bg{
 	--tw-bg-opacity: 1;
 	background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
-}.bg-gray-700{
-	--tw-bg-opacity: 1;
-	background-color: rgba(63, 63, 70, var(--tw-bg-opacity));
 }.bg-gray-800{
 	--tw-bg-opacity: 1;
 	background-color: rgba(39, 39, 42, var(--tw-bg-opacity));
@@ -3866,7 +3863,15 @@ video {
 	border-width: 0px;
 }.topnav-link-item.right-side:first-child{
 	padding-inline-start: 0px;
-}.main-nav-container{min-height:84px}.has-bg .main-nav-container, .has-bg .main-nav-container .sub-menu{
+}.main-nav-container{
+	min-height: 72px;
+}@media (min-width: 640px){.main-nav-container{
+		min-height: 80px;
+	}
+}@media (min-width: 768px){.main-nav-container{
+		min-height: 84px;
+	}
+}.has-bg .main-nav-container, .has-bg .main-nav-container .sub-menu{
 	background-color: var(--mainnav-bg);
 }.has-text-color .main-nav-container{
 	color: var(--mainnav-text-color);
@@ -3954,12 +3959,20 @@ video {
 	right: -0.5rem;
 }[dir="ltr"] #nav-cart span{
 	left: -0.5rem;
-}footer h3{
+}.store-footer{
+	position: relative;
+	margin-top: 2rem;
+	--tw-bg-opacity: 1;
+	background-color: rgba(63, 63, 70, var(--tw-bg-opacity));
+}@media (min-width: 640px){.store-footer{
+		margin-top: 4rem;
+	}
+}.store-footer h3{
 	margin-bottom: 1.25rem;
 	font-size: 1.125rem;
 	line-height: 1.75rem;
 	font-weight: 700;
-}footer .social-link{
+}.store-footer .social-link{
 	display: flex;
 	height: 2rem;
 	width: 2rem;
@@ -3974,7 +3987,7 @@ video {
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 	transition-duration: 150ms;
 	transition-duration: 300ms;
-}footer .social-link:hover{
+}.store-footer .social-link:hover{
 	border-color: var(--color-main);
 	color: var(--color-main);
 }.main-menu{
@@ -4086,8 +4099,8 @@ video {
 }.dropdown__menu{outline:none}.dropdown-toggler{
 	position: absolute;
 	top: -47px;
-	margin-left: 0.25rem;
-	margin-right: 0.25rem;
+	margin-left: 0px;
+	margin-right: 0px;
 	display: inline-flex;
 	width: 2.5rem;
 	align-items: center;
@@ -4097,12 +4110,11 @@ video {
 	left: 0px;
 }[dir="ltr"] .dropdown-toggler{
 	right: 0px;
-}@media (min-width: 768px){.dropdown-toggler{
-		margin-left: 0.5rem;
-		margin-right: 0.5rem;
-	}
 }@media (min-width: 1024px){.dropdown-toggler{
 		position: static;
+	}.dropdown-toggler{
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
 	}.dropdown-toggler{
 		height: 100%;
 	}
@@ -4478,7 +4490,7 @@ video {
 	line-height: 1.75rem;
 	--tw-text-opacity: 1;
 	color: rgba(113, 113, 122, var(--tw-text-opacity));
-}.s-block--special-products .tab-trigger.is-active{
+}.s-block--special-products .tab-trigger.is-active button{
 	color: var(--color-main);
 }.s-block--tabs-produtcs:not(.tabs-initialized) .tabs-wrapper>div:not(:first-child),.s-block--special-products:not(.tabs-initialized) .tabs-wrapper>div:not(:first-child){display:none}.s-block--tabs-produtcs.as-grid .product-entry__image, .s-block--features-products .product-entry__image{
 	position: relative;
@@ -4613,7 +4625,7 @@ video {
 }@media (min-width: 768px){.s-block--full-bg+.merge-with-top-component{
 		margin-top: -7rem;
 	}
-}.s-block--categories{
+}.s-block--full-bg+.merge-with-top-component .s-block--categories__title{color:#fff !important}.s-block--categories{
 	position: relative;
 	margin-top: 2rem;
 	overflow: hidden;
@@ -4628,7 +4640,7 @@ video {
 }@media (min-width: 640px){.s-block--categories__title{
 		margin-bottom: 2rem;
 	}
-}.s-block--categories.merge-with-top-component .s-block--categories__title{color:#fff !important}.s-block--features__item{
+}.s-block--features__item{
 	display: flex;
 	height: 12rem;
 	flex-grow: 1;
@@ -5101,10 +5113,12 @@ video {
 }.brands-nav__item.is-selected{
 	background-color: var(--color-main) !important;
 	color: var(--color-main-reverse) !important;
+}.brands-nav__item span{
+	pointer-events: none;
 }.brands-nav.is-sticky{
 	position: fixed;
 	top: 2.25rem;
-	z-index: 10;
+	z-index: 0;
 	height: 100%;
 	flex-direction: column;
 	flex-wrap: wrap;
@@ -5326,8 +5340,6 @@ video {
 		grid-row: span 2 / span 2;
 	}.sm\:mb-24{
 		margin-bottom: 6rem;
-	}.sm\:mt-16{
-		margin-top: 4rem;
 	}.sm\:mb-8{
 		margin-bottom: 2rem;
 	}.sm\:mt-0{
