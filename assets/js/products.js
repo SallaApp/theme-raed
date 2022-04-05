@@ -14,7 +14,7 @@ class Products extends BasePage {
         if(window.innerWidth > 1024)  testimonials.slideTo(1, false,false);  
 
         // Sort Products
-        app.element('#product-filter').addEventListener('change', function (event) {
+        app.on('#product-filter', 'change', function (event) {
           window.location.href = salla.helpers.addParamToUrl('by', event.target.value)
         });
     }
