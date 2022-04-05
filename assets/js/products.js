@@ -12,6 +12,11 @@ class Products extends BasePage {
         });
         //begin from slide 2 to always dispaly prev & next
         if(window.innerWidth > 1024)  testimonials.slideTo(1, false,false);  
+
+        // Sort Products
+        app.element('#product-filter').addEventListener('change', function (event) {
+          window.location.href = salla.helpers.addParamToUrl('by', event.target.value)
+        });
     }
 }
 
