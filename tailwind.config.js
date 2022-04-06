@@ -47,7 +47,6 @@ module.exports = {
                 'dark-gray'    : '#A6B3BA',
                 'primary-reverse': 'var(--color-main-reverse)',
                 'transparent'  : 'transparent',
-                'theme-yellow' : "#FF9E01",
                 'theme-blue'   : "#27BEE1",
                 'theme-red'    : "#FF6767",
                 'light-gray'   : '#F9FAFB',
