@@ -24,9 +24,7 @@
   }
 }
 
-/*
-  Banner Blocks
-*/
+/* Banner Block */
 .banner {
   @media screen and (min-width: 768px) {
     &:hover {
@@ -41,19 +39,42 @@
   }
 }
 
+/* Square Banner Block */
 .banner-entry{
-  @apply bg-warmGray-200 transition-opacity hover:opacity-95 bg-cover h-lg-banner text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative;
+  @apply h-[200px] bg-gray-100 bg-cover text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative;
 
-  &:after{
-    content:'';
-    @apply h-full w-full bg-black opacity-60 absolute top-0 left-0;
+  h3{
+    @apply text-md leading-6;
   }
 
-  &__text{
-    @apply flex md:opacity-0 hover:opacity-100 transition-opacity duration-500 flex-col justify-center  h-full p-0 xs:p-6 relative z-1 xs:border border-dashed border-border-color rounded-md;
+  a{
+    @apply flex md:opacity-0 hover:opacity-100 transition-opacity duration-500 flex-col justify-center h-full xs:p-6 relative z-1 xs:border border-dashed border-border-color rounded-md;
+  }
+
+  .two-row &{
+    &:first-child{
+      @apply md:h-full sm:col-span-1 sm:row-span-2 p-5;
+
+      > a{
+        @apply opacity-100;
+      }
+
+      h3{
+        @apply text-2xl leading-12;
+      }
+    }
+  }
+
+  &:after{
+    @apply content-[''] h-full w-full bg-black/60 absolute top-0 left-0 transition-colors duration-300;
+  }
+
+  &:hover:after{
+    @apply bg-black/70
   }
 }
 
+/* Full banner block */
 .full-banner-entry {
   @apply row-span-2 h-80 md:h-96 lg:h-116 xl:h-132 bg-warmGray-200 transition-opacity hover:opacity-95 bg-center bg-cover text-white text-center p-5 overflow-hidden relative bg-fixed;
 

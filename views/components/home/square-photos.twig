@@ -11,24 +11,11 @@
 | position          | Int    | Sorting number start from zero                                   |
 #}
 <section class="s-block s-block--banners container">
-    <div class="grid {{ items|length <= 3 ? 'md:grid-cols-' ~ items|length : 'md:grid-cols-3' }} grid-flow-row gap-3 sm:gap-8">
-        <div class="banner-entry sm:col-span-1 sm:row-span-2 p-5 lazy-background" data-src="{{ items.first.image.url }}">
-            <a href="{{ items[0].url }}"
-               class="banner-entry__text p-11 !opacity-100">
-                {% if items.first.text %}
-                    <h3 class="text-2xl font-bold leading-12 mb-5">{{ items.first.text }}</h3>
-                {% endif %}
-            </a>
-            <div class="overlay h-full w-full bg-black opacity-60 absolute top-0 left-0 "></div>
-        </div>
-        {% for item in items|slice(1,4) %}
-            <div class="banner-entry lazy-background {{ items|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-src="{{ item.image.url }}">
-                <a href="{{ item.url }}"
-                   class="banner-entry__text {{ items|length <= 3 ? '':'md:opacity-0' }}"
-                   {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
-                    {% if item.text %}
-                        <h3 class="font-bold   {{ items|length <= 3 ? 'text-2xl leading-12 mb-5':'banner__title text-md mb-1 leading-6' }}">{{ item.text }}</h3>
-                    {% endif %}
+    <div class="grid {{ items|length <= 3 ? 'one-row md:grid-cols-' ~ items|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
+        {% for item in items %}
+            <div class="banner-entry lazy-background" data-src="{{ item.image.url }}">
+                <a href="{{ item.url }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
+                  {% if item.text %} <h3>{{ item.text }}</h3> {% endif %}
                 </a>
             </div>
         {% endfor %}
