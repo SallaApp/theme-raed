@@ -15,31 +15,26 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
+
+  {# Brand banner #}
+  {% if brand.banner %} 
+        <div class="brand-page__banner">
+            <img class="lazy-load w-full max-h-[300px] object-cover rounded-md bg-gray-100" data-src="{{ brand.banner }}" src="{{ 'images/s-empty.png' | asset }}" alt="{{ brand.name }}"/>
+        </div>
+    {% endif %}
+
     <div class="container">
         {% component 'header.breadcrumbs' %}
-
         {% hook 'brands:single.details.start' %}
-
-        <div class="brand__header">
-            {% if brand.banner %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="brand__banner">
-                            <img class="lazy-load w-full max-h-96 object-cover rounded-md"
-                                 data-src="{{ brand.banner }}" alt="{{ brand.name }}"/>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-            <article class="brand__content flex py-5">
-                <img class="rounded-md w-40 h-24 object-contain  shadow-md p-4 bg-white lazy-load"
-                     data-src="{{ brand.logo }}" src="{{ 'images/s-empty.png' | asset }}" alt="{{ brand.name }}">
-                <div class="px-5 pt-3">
-                    <h3 class="brand__title text-2xl font-bold mb-1">{{ brand.name }}</h3>
-                    <p class="text-base text-gray-500">{{ brand.description|raw }}</p>
-                </div>
-            </article>
-        </div>
+   
+        {# brand header #}
+        <header class="flex mt-2 mb-12 md:mb-20">
+            <img class="rounded-md w-40 h-24 object-contain  shadow-md p-4 bg-white lazy-load" data-src="{{ brand.logo }}" src="{{ 'images/s-empty.png' | asset }}" alt="{{ brand.name }}">
+            <div class="px-5 pt-3">
+                <h1 class="text-2xl font-bold mb-1">{{ brand.name }}</h1>
+                <p class="text-base text-gray-500">{{ brand.description|raw }}</p>
+            </div>
+        </header>
 
         {% hook 'brands:single.details.end' %}
 
@@ -47,7 +42,6 @@
             <div class="main-content w-full">
                 {% if products|length %}
                     <div class="mb-5 md:flex justify-between items-center">
-                        <h2 class="font-bold mb-6 md:mb-0">{{ page.title|raw }}</h2>
                         <div class="center-between">
                             <div class="hidden items-center ms-2 md:ms-2">
                                 <a href="#" data-type="grid" class="grid-trigger bg-border-color !text-primary">
