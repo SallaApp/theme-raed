@@ -5,7 +5,7 @@ class ThankYou extends BasePage {
         app.anime('.thanks-item', {translateX: [20, 0]});
         let form = document.querySelector('#invoice-form');
         salla.order.event.onSent(res =>{
-            form.innerHTML = res.message;
+            form.innerHTML = res.data.message;
             form.classList.add('sent');
         });
     }
