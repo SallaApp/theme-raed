@@ -76,6 +76,8 @@
                         </div>
                     {% endif %}
 
+
+                    {% set has_many_images=product.images|length>1 %}
                     <div class="swiper-wrapper">
                         {% for image in product.images %}
                             <a data-fslightbox="product_{{ product.id }}"
@@ -87,12 +89,11 @@
                                href="{{ image.video_url?image.video_url:image.url }}"
                                aria-label="{{ product.name }}"
                                class="swiper-slide bg-white h-72 sm:h-96 lg:h-[500px] homeslider__slide relative {{ image.video_url?'video-entry':'' }}">
-                                <img data-src="{{ image.url }}" alt="{{ image.alt }}" class="swiper-lazy h-full object-contain w-full">
+                                <img {{ has_many_images ? 'data-' : '' }}src="{{ image.url }}" alt="{{ image.alt }}" class="{{has_many_images ? 'swiper-lazy ' : ''}}h-full object-contain w-full">
                             </a>
                         {% endfor %}
                     </div>
 
-                    {% set has_many_images=product.images|length>1 %}
                     {% if has_many_images %}
                         <button aria-label="Previous Slide" class="slider-prev btn--md-white-arrow">
                             <i class="sicon-keyboard_arrow_right"></i>
