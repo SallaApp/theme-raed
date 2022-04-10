@@ -12,7 +12,9 @@
     <div class="swiper home-slider photos-slider" data-id="photos-{{ position }}">
         <div class="swiper-wrapper">
             {% for item in items %}
-                <div class="swiper-slide h-80 md:h-96 lg:h-116 xl:h-132 home-slider__slide relative lazy-background" data-src="{{ item.image.url }}"></div>
+              <div class="swiper-slide">
+                <div data-background="{{ item.image.url }}" class="swiper-lazy"></div>
+              </div>
             {% endfor %}
         </div>
         <div class="swiper-pagination"></div>

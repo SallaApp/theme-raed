@@ -82,6 +82,7 @@ class Product extends BasePage {
           let mainSlider = new Slider('.details-slider', {
               slidesPerView: 1,
               spaceBetween : 30,
+              lazy: true,
               thumbs: {
                 swiper: thumbsSlider.getSlider(),
               },

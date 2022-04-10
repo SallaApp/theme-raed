@@ -20,7 +20,13 @@
 */
 .s-block--hero-slider{
   .swiper-slide{
-    @apply h-80 sm:h-96 lg:h-116 xl:h-132 bg-cover bg-center relative;
+    @apply h-80 sm:h-96 lg:h-116 xl:h-132 relative bg-gray-800;
+
+    .swiper-lazy{
+      &:after{
+        @apply content-[''] absolute transition top-0 bg-black/60 w-full h-full;
+      }
+    }
   }
 }
 
@@ -41,7 +47,7 @@
 
 /* Square Banner Block */
 .banner-entry{
-  @apply h-[200px] bg-gray-100 bg-cover text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative;
+  @apply h-[200px] bg-gray-100 text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative;
 
   h3{
     @apply text-md leading-6;

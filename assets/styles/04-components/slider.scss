@@ -6,14 +6,14 @@
       @apply -mx-2 lg:w-[calc(100%+16px)] px-0;
 
       .swiper-slide{
-        @apply w-1/3 sm:w-1/4 px-2 cursor-pointer h-16 md:h-20 transition-opacity duration-300;
+        @apply w-1/3 sm:w-1/4 mx-2 p-0 cursor-pointer h-16 md:h-20 transition-opacity duration-300 bg-gray-100 rounded-md;
 
         &:hover{
           @apply opacity-80
         }
 
         &:after{
-          @apply transition-shadow duration-300 content-[''] absolute top-0 w-[calc(100%-1rem)] left-2 h-full rounded-md z-1 ring-0 ring-inset ring-primary;
+          @apply transition-shadow duration-300 content-[''] absolute top-0 left-0 h-full w-full rounded-md z-1 ring-0 ring-inset ring-primary;
         }
 
         &-thumb-active:after{
@@ -45,12 +45,10 @@
     }
   }
 
-  // block slider //////////////////
+  // Photos block slider
   &.photos-slider {
-    .home-slider__slide {
-      width: 80%;
-      border-radius: 5px;
-      overflow: hidden;
+    .swiper-slide {
+      @apply bg-gray-150 h-80 md:h-96 lg:h-116 xl:h-132 w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
     }
 
     // pagination

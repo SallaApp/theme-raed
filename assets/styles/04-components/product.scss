@@ -13,6 +13,20 @@
 
   &__image {
     @apply bg-gray-100 relative overflow-hidden hover:opacity-90 w-full flex-shrink-0;
+
+    &::before{
+      font-family: 'sallaicons';
+      content: '\ec1f';
+      @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inline-block text-gray-200 text-3xl;
+    }
+
+    img{
+      @apply transition-opacity duration-500 opacity-0;
+
+      &.loaded{
+        @apply opacity-100 relative;
+      }
+    }
   }
 
   .out-of-stock &__image img,

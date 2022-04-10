@@ -1,63 +1,18 @@
 
-[data-background],
-[data-src] {
-  transition: opacity .5s ease-in, transform 0.3s;
+// sliders lazyloading opacity transition
+.swiper-lazy{
+  @apply transition-opacity duration-500 opacity-0;
+  @apply absolute top-0 h-full w-full bg-cover bg-center;
 
-  &.loaded,
-  &.swiper-lazy-loaded {
-    animation: lazy_loaded_anime 1s;
+  &.swiper-lazy-loaded{
+    @apply opacity-100;
   }
 }
 
-// .lazy-load:not([style*='background-image']),
-.lazy-background:not(.loaded):not(.swiper-lazy-loaded),
-.lazy-load[src*="s-empty"] {
-  opacity: 1;
-  background-image: linear-gradient(to left, #f2f3f4 0%, #edeef1 20%, #f2f3f4 40%, #f2f3f4 100%);
-  background-repeat: no-repeat;
-  background-color: #f2f3f4;
-  background-size: 450px 700px;
-  animation: lazy_loading_anime 1s infinite linear forwards;
+.lazy__bg{
+  @apply absolute top-0 left-0 w-full h-full bg-cover bg-center transition-opacity duration-500 opacity-0;
 
-  .dark & {
-    background-image: linear-gradient(to left, #050606 0%, #161619 20%, #050606 40%, #050606 100%);
-    background-color: #050606;
-  }
-
-  .banner--fixed & {
-    max-height: 200px;
-  }
-
-  .wide-placeholder & {
-    animation: wide-lazy-loading-anime 1.4s infinite linear forwards;
-    background-size: 700px 1000px;
-  }
-}
-
-@keyframes lazy_loading_anime {
-  from {
-    background-position: -400px 0;
-  }
-  to {
-    background-position: 200px 0;
-  }
-}
-
-@keyframes wide-lazy-loading-anime {
-  from {
-    background-position: -400px 0;
-  }
-
-  to {
-    background-position: 100% 0;
-  }
-}
-
-@keyframes lazy_loaded_anime {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
+  &.loaded{
+    @apply opacity-100;
   }
 }

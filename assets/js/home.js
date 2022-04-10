@@ -18,13 +18,8 @@ class Home extends BasePage {
         //Used in: [photos_slider.twig]
         new Slider(".photos-slider", {
             loop          : true,
-            centeredSlides: true,
-            spaceBetween  : 30,
-            breakpoints   : {
-                320: {spaceBetween: 10},
-                768: {spaceBetween: 15},
-                980: {paceBetween: 30},
-            },
+            lazy          : true,
+            centeredSlides: true
         });
 
         /*
@@ -48,7 +43,7 @@ class Home extends BasePage {
 
         //Used in: [enhanced-slider.twig]
         let animate = () => setTimeout(() => app.anime('.swiper-slide-active .main-slide-anime', {translateX: [50, 0]}), 100);
-        (new Slider('.main-slider', {loop: true,})).on('slideChange', () => animate());
+        (new Slider('.main-slider', {loop: true, lazy: true})).on('slideChange', () => animate());
         animate();
     }
 
