@@ -113,11 +113,11 @@ class App extends salla.AppHelpers {
         salla.infiniteScroll.event.onAppend(LazyLoad); //fire it after each load more request;
     }
 
-    initiateStickyMenu() {
+    initiateStickyMenu() {      
         let header = this.element('#mainnav'),
             height = this.element('#mainnav .inner').clientHeight;
 
-        window.addEventListener('load', () => this.setHeaderHeight())
+        window.addEventListener('load', () => setTimeout(()=> this.setHeaderHeight(),500))
         window.addEventListener('resize', () => this.setHeaderHeight())
 
         window.addEventListener('scroll', () => {
