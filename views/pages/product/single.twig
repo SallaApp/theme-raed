@@ -12,7 +12,7 @@
 | product.promotion_title                | string                      |                                                                        |
 | product.subtitle                       | string                      |                                                                        |
 | product.type                           | string                      | product, service, group_products, codes, digital, food, donating       |
-| product.status                         | string                      | sale, out                                                              |
+| product.status                         | string                      | sale, out, out-and-notify                                                              |
 | product.rating                         | int                         |                                                                        |
 | product.price                          | MoneyTaxable                | can be string too `-`, when merchant doesn't want to show zero         |
 | product.sale_price                     | MoneyTaxable                |                                                                        |
@@ -311,30 +311,16 @@
                         </div>
 
                         {# Add to cart #}
-                        {% if product.is_available %}
-                            <salla-button type="submit" loader-position="end" class="mt-5" width="wide">
-                                {{ trans('pages.cart.add_to_cart') }}
-                            </salla-button>
-                        {% elseif not product.notify_availability %}
-                            <salla-button width="wide" fill="outline" color="light" class="mt-5" disabled>
-                                {% if product.is_donation %}
-                                    {{ trans('pages.products.donation_exceed') }}
-                                {% else %}
-                                    {{ trans('pages.products.out_of_stock') }}
-                                {% endif %}
-                            </salla-button>
-                        {% endif %}
+                        <salla-add-product-button type="submit" loader-position="end" width="wide"
+                                                  class="mt-5 w-full"
+                                                  product-id="{{ product.id }}"
+                                                  product-status="{{ product.status }}"
+                                                  product-type="{{ product.type }}"
+                                                  channels="{{ product.notify_availability.channels|join(',') }}"
+                                                  {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}>
+                        </salla-add-product-button>
                     </section>
                 </form>
-
-                {% if product.notify_availability %}
-                    <div class="bg-white rounded-md rounded-t-none p-5 pt-0">
-                        <salla-product-availability
-                                channels="{{ product.notify_availability.channels|join(',') }}"
-                                {{ product.notify_availability.subscribed?'is-subscribed':'' }} class="w-full">
-                        </salla-product-availability>
-                    </div>
-                {% endif %}
 
                 {% hook 'product:single.description.end' %}
             </div>

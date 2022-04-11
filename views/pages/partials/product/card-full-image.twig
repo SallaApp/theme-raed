@@ -46,25 +46,21 @@
         </div>
 
         <div class="flex items-center">
-            <salla-button onclick="salla.cart.addItem({{ product.id }})" loader-position="center" width="wide"
-                          class="btn--add-to-cart" fill="outline" {{ not product.is_available ? 'disabled' : '' }}>
-                {% if product.is_available %}
-                    {{ trans('pages.cart.add_to_cart') }}
-                {% elseif product.is_donation %}
-                    {{ trans('pages.products.donation_exceed') }}
-                {% else %}
-                    {{ trans('pages.products.out_of_stock') }}
-                {% endif %}
-            </salla-button>
+            <salla-add-product-button class="btn--add-to-cart"  fill="outline" width="wide"
+                                      product-id="{{ product.id }}"
+                                      product-status="{{ product.status }}"
+                                      product-type="{{ product.type }}">
+                {{ product.add_to_cart_label }}
+            </salla-add-product-button>
 
-            <salla-button 
-              shape="icon" 
-              fill="none" 
-              color="light" 
-              aria-label="Add or remove to wishlist"
-              class="btn--wishlist animated" 
-              onclick="salla.wishlist.toggle({{ product.id }})"
-              data-id="{{ product.id }}">
+            <salla-button
+                    shape="icon"
+                    fill="none"
+                    color="light"
+                    aria-label="Add or remove to wishlist"
+                    class="btn--wishlist animated"
+                    onclick="salla.wishlist.toggle({{ product.id }})"
+                    data-id="{{ product.id }}">
                 <i class="sicon-heart"></i>
             </salla-button>
         </div>
