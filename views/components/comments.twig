@@ -15,41 +15,44 @@
 | type                  | string                       | page, product       |
 | id                    | int                          | pageId or ProductId |
 #}
-<div class="s-comments s-comments-{{ type }}">
-    <div class="container">
-        {% if user.can_comment %}
-            <form class="form form--add-comment" onsubmit="return salla.form.onSubmit('comment.send', event);">
-                <input name="type" type="hidden" value="{{  type }}">
-                <input name="id" type="hidden" value="{{  id }}">
 
-                <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
-                <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
-                          class="form-input"
-                          name="comment"
-                          required
-                          maxlength="500" cols="30"
-                          rows="30"></textarea>
+{% if user.can_comment or comments|length %}
+  <div class="s-comments s-comments-{{ type }}">
+      <div class="container">
+          {% if user.can_comment %}
+              <form class="form form--add-comment" onsubmit="return salla.form.onSubmit('comment.send', event);">
+                  <input name="type" type="hidden" value="{{  type }}">
+                  <input name="id" type="hidden" value="{{  id }}">
 
-                <div class="text-end mb-4">
-                    <salla-button type="submit" class="w-36" loader-position="end">
-                      {{ trans('blocks.comments.submit') }}
-                    </salla-button>
-                </div>
-            </form>
-        {% endif %}
+                  <h2 class="mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
+                  <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
+                            class="form-input"
+                            name="comment"
+                            required
+                            maxlength="500" cols="30"
+                            rows="30"></textarea>
 
-        {% if comments|length %}
-            <salla-infinite-scroll next-page="{{ comments.next_page }}">
-                <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
-                {% for comment in comments %}
-                    {% include 'pages.partials.single-comment' %}
-                {% endfor %}
-            </salla-infinite-scroll>
-        {% else %}
-            <div class="no-content-placeholder--comments">
-                <i class="sicon-chat-bubbles text-5xl block mb-5 text-reverse-dark"></i>
-                <p class="text-sm">{{ trans('blocks.comments.no_comments') }}</p>
-            </div>
-        {% endif %}
-    </div>
-</div>
+                  <div class="text-end mb-4">
+                      <salla-button type="submit" class="w-36" loader-position="end">
+                        {{ trans('blocks.comments.submit') }}
+                      </salla-button>
+                  </div>
+              </form>
+          {% endif %}
+
+          {% if comments|length %}
+              <salla-infinite-scroll next-page="{{ comments.next_page }}">
+                  <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
+                  {% for comment in comments %}
+                      {% include 'pages.partials.single-comment' %}
+                  {% endfor %}
+              </salla-infinite-scroll>
+          {% else %}
+              <div class="no-content-placeholder--comments">
+                  <i class="sicon-chat-bubbles text-5xl block mb-5 text-reverse-dark"></i>
+                  <p class="text-sm">{{ trans('blocks.comments.no_comments') }}</p>
+              </div>
+          {% endif %}
+      </div>
+  </div>
+{% endif %}
