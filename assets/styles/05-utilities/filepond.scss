@@ -153,12 +153,10 @@
     width: 80px;
     height: 80px;
 
-    // &.has-image .filepond--drop-label{
-    //   display: none;
-    // }
-
     #{$filepond-root} {
-      overflow: inherit !important;
+      &--image-preview-wrapper{
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+      }
 
       &--file-poster{
         height: 100%;
@@ -166,6 +164,8 @@
         img{
           object-fit: cover;
           height: 100%;
+          width: 100%;
+          border-radius: 50%;
         }
       }
 
