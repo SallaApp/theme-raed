@@ -14,23 +14,23 @@
     </li>
 {% else %}
     <li class="{{ is_root_menu?'root-level':'relative' }}
-        {{ menu.mega_menu?' mega-menu': '' }}
+        {{ menu.products?' mega-menu': '' }}
         {{ menu.has_children?' has-children': '' }}"
         {{ menu.attrs|raw }}>
         <a href="{{ menu.url }}">
             <span>{{ menu.title }}</span>
         </a>
         {% if menu.has_children %}
-            <div class="sub-menu {{ menu.mega_menu?'w-full left-0 flex': 'w-56 pb-2' }}">
-                <ul class="{{ menu.mega_menu?'w-56 flex-shrink-0 m-8 me-0': '' }}">
+            <div class="sub-menu {{ menu.products?'w-full left-0 flex': 'w-56 pb-2' }}">
+                <ul class="{{ menu.products?'w-56 flex-shrink-0 m-8 me-0': '' }}">
                     {% for submenu in menu.children %}
                         {% include _self with {menu:submenu, is_root_menu:false} %}
                     {% endfor %}
                 </ul>
-                {% if menu.mega_menu %}
+                {% if menu.products %}
                     <div class="flex-grow-1 p-8">
                         <div class="grid gap-4 grid-cols-4">
-                            {% for product in menu.mega_menu|slice(0, 4) %}
+                            {% for product in menu.products|slice(0, 4) %}
                                 {% include 'pages.partials.product.card' with {block_classes:'shadow-default'} %}
                             {% endfor %}
                         </div>
