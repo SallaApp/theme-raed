@@ -20,14 +20,14 @@
 <section class="s-block s-block-tabs s-block--special-products container" id="{{ component_id }}">
     <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
         {% if main_product %}
-            <div>
+            <div class="flex flex-col">
                 <div class="mb-6 sm:mb-8">
                     <h2 class="s-block__title">{{ main_product.title }}</h2>
                 </div>
                 {% include 'pages.partials.product.card' with {product:main_product.product, is_special:true} %}
             </div>
         {% endif %}
-        <div>
+        <div class="flex flex-col">
             <div class="tabs hide-scroll">
                 {% for section in items %}
                     <salla-button shape="link"
