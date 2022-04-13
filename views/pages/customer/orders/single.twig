@@ -48,6 +48,7 @@
 | order.items[].options[].name     | string                            |                                                                                          |
 | order.items[].options[].value    | string                            |                                                                                          |
 | order.items[].options[].is_image | bool                              |                                                                                          |
+| order.items[].options[].color    | string                            | option hex color                                                                         |
 | order.items[].rating             | ?Rating                           |                                                                                          |
 | order.items[].rating.content     | string                            | *HTML                                                                                    |
 | order.items[].rating.is_pending  | bool                              |                                                                                          |
@@ -176,11 +177,13 @@
                                             {% if option.is_image %}
                                                 <div class="flex space-s-2.5">
                                                     <a href="{{ option.value }}" target="_blank">
-                                                        <img class="h-7 w-7 object-cover rounded-md"
+                                                        <img class="h-6 w-6 object-cover rounded-md"
                                                              src="{{ option.value ?: 'images/placeholder.png' | asset }}"
                                                              alt="{{ option.name }}"/>
                                                     </a>
                                                 </div>
+                                            {% elseif option.color %}
+                                              <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
                                             {% else %}
                                                 {{ option.value }}
                                             {% endif %}
