@@ -4,10 +4,7 @@ import ProductOptions from './partials/product-options';
 class Cart extends BasePage {
     onReady() {
         // keep update the dom base in the events
-        salla.event.cart.onItemUpdated((res) => this.updateCartPageInfo(res.data.cart));
-        salla.event.cart.onItemDeleted((res) => this.updateCartPageInfo(res.data.cart));
-        salla.event.coupon.onAdded((res) => this.updateCartPageInfo(res.data.cart));
-        salla.event.coupon.onRemoved((res) => this.updateCartPageInfo(res.data.cart));
+        salla.event.cart.onUpdated(data => this.updateCartPageInfo(data));
 
         app.watchElements({
             couponCodeInput: '#coupon-input',
@@ -106,30 +103,28 @@ class Cart extends BasePage {
             app.removeClass(app.couponCodeInput, 'has-error');
         });
 
-        salla.coupon.event.onAdded(res => this.toggleCoupon(app.couponBtn, res, true));
-        salla.coupon.event.onRemoved(res => this.toggleCoupon(app.couponBtn, res, false));
-        salla.coupon.event.onAddedFailed(err => this.showCouponError(app.couponBtn, err.response?.data?.error.message));
-        salla.coupon.event.onRemovedFailed(err => this.showCouponError(app.couponBtn, err.response?.data?.error.message, false));
-
-        app.onClick(app.couponBtn, ({currentTarget: btn}) => {
+        app.onClick(app.couponBtn, event => {
             //if it's remove coupon, will have `btn--danger` class
-            if (app.couponBtn.classList.contains('btn--danger')) {
-                btn.load();
-                return salla.api.coupon.remove(salla.config.get('page.id'));
-            }
-
-            if (!app.couponCodeInput.value.length) {
-                this.showCouponError(btn, '* ' + salla.lang.get('pages.checkout.enter_coupon'));
+            let hasCoupon = app.couponBtn.classList.contains('btn--danger');
+            /** @type HTMLSallaButtonElement */
+            let btn = event.currentTarget;
+            if (!hasCoupon && !app.couponCodeInput.value.length) {
+                this.showCouponError('* ' + salla.lang.get('pages.checkout.enter_coupon'));
                 return;
             }
-
-            btn.load();
-            salla.api.coupon.add({id: salla.config.get('page.id'), coupon: app.couponCodeInput.value});
+            btn.load()
+                .then(() => hasCoupon ? salla.cart.deleteCoupon() : salla.cart.addCoupon(app.couponCodeInput.value))
+                .then(res => this.toggleCoupon(res, !hasCoupon))
+                .catch(err => this.showCouponError(err.response?.data?.error.message, !hasCoupon))
+                .finally(() => btn.stop());
         });
     }
 
-    toggleCoupon(btn, res, applied) {
-        btn.stop();
+    /**
+     * @param {CartResponse.update} res
+     * @param {boolean} applied
+     */
+    toggleCoupon(res, applied) {
         app.couponError.innerText = '';
         app.couponCodeInput.value = applied ? app.couponCodeInput.value : '';
         app.couponCodeInput.toggleAttribute('disabled', applied);
@@ -141,8 +136,7 @@ class Cart extends BasePage {
             .removeClass(app.couponCodeInput, 'has-error');
     }
 
-    showCouponError(btn, message, isApplying = true) {
-        btn.stop();
+    showCouponError(message, isApplying = true) {
         app.couponError.innerText = message || salla.lang.get('pages.checkout.error_occurred');
         isApplying ? app.addClass(app.couponCodeInput, 'has-error') : null;
     }
