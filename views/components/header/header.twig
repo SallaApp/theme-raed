@@ -17,15 +17,15 @@
 
                     {# Language & Currency Component #}
                     {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                        <button type="button" onclick="salla.event.dispatch('localization::show')" class="btn--rounded-gray">
+                        <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
                             <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
-                            | <span class="ms-2">{{ currency.symbol }}</span>
+                            | <span class="ms-2 me-1">{{ currency.symbol }}</span>
                         </button>
                         <salla-localization-modal></salla-localization-modal>
                     {% endif %}
 
                     {# Search Component #}
-                    <button onclick="salla.event.dispatch('search::show')" class="btn--circle-gray sicon-search"></button>
+                    <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray sicon-search"></button>
                     <salla-search></salla-search>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                         {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
-                            <salla-button shape="icon" fill="outline" color="light" onclick="salla.event.dispatch('login::show')">
+                            <salla-button shape="icon" fill="outline" color="light" onclick="salla.event.dispatch('login::open')">
                               <i class="sicon-user-circle"></i>
                             </salla-button>
                         {% endif %}
