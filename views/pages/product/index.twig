@@ -16,10 +16,10 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <div class="container mb-10 md:mb-20">
+    <div class="container mb-10">
         {% component 'header.breadcrumbs' %}
         <div class="flex items-start flex-col md:flex-row">
-            <div class="main-content flex-1 w-full md:pb-20 ">
+            <div class="main-content flex-1 w-full">
                 <div class="mb-6 mt-6 md:mt-12 flex justify-between items-center">
                     <h1 class="font-bold text-xl pe-3">{{ page.title|raw }}</h1>
                     <div class="center-between">
@@ -52,10 +52,12 @@
                 {% hook 'product:index.items.start' %}
 
                 {% if products|length %}
-                    <salla-infinite-scroll next-page="{{ products.next_page }}" autoload
-                                           class="mb-8 products-container gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <salla-infinite-scroll 
+                    next-page="{{ products.next_page }}" 
+                    autoload
+                    class="mb-8 products-container gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {% for product in products %}
-                            {% include 'pages.partials.product.card' with{block_classes:'list-block'} %}
+                            {% include 'pages.partials.product.card' %}
                         {% endfor %}
                     </salla-infinite-scroll>
                 {% else %}

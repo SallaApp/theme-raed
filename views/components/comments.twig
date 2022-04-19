@@ -41,8 +41,8 @@
           {% endif %}
 
           {% if comments|length %}
+              <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
               <salla-infinite-scroll next-page="{{ comments.next_page }}">
-                  <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
                   {% for comment in comments %}
                       {% include 'pages.partials.single-comment' %}
                   {% endfor %}

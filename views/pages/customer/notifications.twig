@@ -17,7 +17,9 @@
     {% if  notifications|length %}
         {% hook 'customer:notifications.items.start' %}
 
-        <salla-infinite-scroll class="space-y-2.5 md:space-y-5 mb-10" item=".notification-item" next-page="{{ notifications.next_page }}">
+        <salla-infinite-scroll 
+          class="space-y-2.5 md:space-y-5 mb-10" 
+          next-page="{{ notifications.next_page }}">
             {% for notification in notifications %}
                 <a href="{{ notification.url }}"
                    class="notification-item {{ notification.is_new?'unread':'read text-gray-500' }}">
