@@ -80,7 +80,24 @@ module.exports = {
             logo : path.resolve("./assets/images/favicon/apple-icon.png"),
             // suppressSuccess: true, // don't spam success notifications
             successSound: false,
-        }),
+        }), {
+            apply: (compiler) => {
+                if (compiler.options.mode === 'development' && !compiler.options.watch) {
+                    return;
+                }
+                compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+                    let themeSettingsPath = path.resolve('./theme.json');
+                    let themeSettings = require(themeSettingsPath);
+                    let version = (themeSettings.version || '0.0.0').split('.').reverse();
+                    version[0] = Number(version[0]) + 1;
+                    themeSettings.version = version.reverse().join(".");
+                    require('fs').writeFileSync(
+                        themeSettingsPath,
+                        JSON.stringify(themeSettings, null, '  ')
+                    );
+                });
+            }
+        }
     ],
 }
 ;
