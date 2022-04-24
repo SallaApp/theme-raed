@@ -6,12 +6,16 @@
 | disabled   | bool          |                                                         |
 | required   | bool          |                                                         |
 | value      | ?string       |                                                         |
+| item_id    | ?int          |                                                         |
 #}
 <input name="options[{{ option.id }}]"
        class="filepond form-control filepond--option-image{{ required?' required':'' }}"
        data-max-file-size="3MB"
        data-url="{{ link('cart/option-image') }}"
        data-instant-upload
+       {% if is_page('cart') %}
+       data-item-id="{{ item_id }}"
+       {% endif %}
        {% if value %}
        data-default="{{ value }}"
        {% endif %}
