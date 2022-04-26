@@ -256,7 +256,6 @@ class App extends salla.AppHelpers {
             document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
             document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
         });
-
         salla.cart.event.onItemAdded((response, prodId) => Anime.addToCart(response, prodId));
     }
 
