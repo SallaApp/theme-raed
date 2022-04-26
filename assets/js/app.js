@@ -28,6 +28,7 @@ class App extends salla.AppHelpers {
         this.initiateDropdowns();
         this.initiateModals();
         this.initiateCollapse();
+        this.initCircleBar();
 
         salla.comment.event.onAdded(() => window.location.reload());
 
@@ -257,6 +258,19 @@ class App extends salla.AppHelpers {
         });
 
         salla.cart.event.onItemAdded((response, prodId) => Anime.addToCart(response, prodId));
+    }
+
+
+    initCircleBar(){
+      // Special offer Block ---
+      document.querySelectorAll('.pie-wrapper').forEach(elem => {
+        let qty = elem.dataset.quantity,
+            total = elem.dataset.total,
+            roundPercent = (qty / total) * 100,
+            $circle = elem.querySelector('.circle_bar'),
+            strokeDashOffsetValue = 100 - roundPercent;
+        $circle.style.strokeDashoffset = strokeDashOffsetValue;
+      })
     }
 }
 

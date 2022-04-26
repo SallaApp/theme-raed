@@ -55,7 +55,10 @@
         color: #fff;
       }
     }
-    
+  }
+
+  &--minimal,
+  &--special {
     .product-rating{
       @apply absolute bottom-2 end-2;
 
@@ -103,6 +106,10 @@
   }
 
   &--special {    
+    .product-rating{
+      @apply absolute bottom-auto -top-8 end-5;
+    }
+
     &.product-entry--fit-type {
       .product-entry__image {
         @apply sm:h-500;
@@ -167,4 +174,45 @@
   salla-conditional-fields > section{
     @apply px-0 pt-0 last:mb-0 last:pb-0;
   }
+}
+
+// Digital Rating(SVG)------------------------------------------
+.pie-wrapper {
+  @apply w-[72px] h-[72px] absolute end-5 text-primary flex items-center justify-center;
+
+  .pie-svg {
+    circle {
+      transition: stroke-dashoffset 1s linear;
+      stroke: #E8EDF2;
+      stroke-width: 2px;
+      stroke-linecap: round;
+      fill: none;
+
+      &.circle_bar {
+        stroke: var(--color-main);
+        stroke-dasharray: 100 100;
+        stroke-dashoffset: 100;
+      }
+    }
+  }
+
+  span {
+      display: block;
+      font-size: var(--font-xsm);
+      color: var(--color-text);
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      line-height: 1;
+      font-size: var(--font-xsm);
+      
+      b {
+          font-size: var(--font-md) !important;
+          margin-bottom: 3px;
+          color: var(--color-main);
+      }
+  }
+
 }

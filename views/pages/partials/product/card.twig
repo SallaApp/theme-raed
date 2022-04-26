@@ -22,37 +22,44 @@ view options:
 
     {# content #}
     <div class="flex-1 p-4 xs:p-5 flex flex-col relative">
-        <div class="flex justify-between items-baseline">
-            <h3 class="product-entry__title mb-2.5 leading-6 max-w-full">
-                <a href="{{ product.url }}">{{ product.name }}</a>
-            </h3>
-            {% if is_special %}
-                <div class="flex-shrink-0 border-4 border-border-color rounded-full w-20 h-20 flex flex-col items-center justify-center text-sm">
-                    <b class="font-bold text-primary leading-3">{{ product.quantity|number }}</b>
-                    <h5>{{ trans('pages.products.remained') }}</h5>
-                </div>
-            {% endif %}
+        {% if is_special %}
+            <div data-quantity="{{ product.quantity  }}" data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
+                <span>
+                    <b id="staProductQty" title="{{ product.quantity|number  }}" data-quantity="{{ product.quantity }}">{{ product.quantity|number }}</b>
+                    {{ trans('pages.products.remained') }}
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"viewBox="-2 -1 36 34" class="pie-svg">
+                    <circle cx="16" cy="16" r="15.9155" class="circle_base"></circle>
+                    <circle cx="16" cy="16" r="15.9155" class="circle_bar"></circle>
+                </svg>
+            </div>
+        {% endif %}
+ 
+        <div class="{{is_special ? 'pe-24':''}}">
+          <h3 class="product-entry__title mb-2.5 leading-6 max-w-full">
+              <a href="{{ product.url }}">{{ product.name }}</a>
+          </h3> 
+
+          {% if product.subtitle %}
+              <p class="text-sm text-gray-400 leading-6 mb-2.5">{{ product.subtitle }}</p>
+          {% endif %}
         </div>
 
         {% if product.is_donation %}
-            <div>
-                {% component 'product.donation-progress-bar' with {product:product} %}
-                <div class="border-color py-5 mt-5 mb-2.5">
-                    <label for="donation-amount" class="block text-sm">{{ trans('pages.products.donation_amount') }}
-                        <span class="text-red-500">*</span>
-                    </label>
-                    <div class="mt-2.5 relative">
-                        <input type="number" id="donation-amount" name="donating_amount" class="pe-24 h-9 form-input">
-                    </div>
-                </div>
+            {% component 'product.donation-progress-bar' with {product:product} %}
+            <div class="border-color mb-2.5">
+                <label for="donation-amount" class="block text-sm mb-2.5">{{ trans('pages.products.donation_amount') }} <span class="text-red-500">*</span></label>
+                <input 
+                  type="number" 
+                  id="donation-amount" 
+                  name="donation_amount" 
+                  class="pe-24 h-9 form-input" 
+                  placeholder="{{ trans('pages.products.donation_amount') }}"
+                  {% if not product.can_donate %} disabled {% endif %}>
             </div>
         {% endif %}
 
-        {% if product.subtitle %}
-            <p class="text-sm text-gray-400 leading-6 mb-2.5">{{ product.subtitle }}</p>
-        {% endif %}
-
-        <div class="w-full center-between mb-5">
+        <div class="w-full center-between mb-5 {{is_special ? 'pe-24':''}}">
             {% if product.is_on_sale %}
                 <div class="space-s-1">
                     <h4 class="text-theme-red font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
