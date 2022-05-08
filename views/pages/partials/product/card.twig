@@ -21,7 +21,7 @@ view options:
     </a>
 
     {# content #}
-    <div class="flex-1 p-4 xs:p-5 flex flex-col relative">
+    <div class="flex-1 p-4 xs:p-5 flex flex-col relative donating-wrap">
         {% if is_special %}
             <div data-quantity="{{ product.quantity  }}" data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
                 <span>
@@ -53,7 +53,7 @@ view options:
                   type="text"
                   data-digits
                   id="donation-amount" 
-                  name="donation_amount" 
+                  name="donating_amount" 
                   class="pe-24 h-9 form-input" 
                   placeholder="{{ trans('pages.products.donation_amount') }}"
                   {% if not product.can_donate %} disabled {% endif %}>
@@ -76,7 +76,6 @@ view options:
                 </div>
             {% endif %}
         </div>
-
 
         <div class="flex items-center mt-auto">
             <salla-add-product-button class="btn--add-to-cart" fill="outline" width="wide"

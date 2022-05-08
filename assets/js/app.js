@@ -29,12 +29,10 @@ class App extends salla.AppHelpers {
         this.initiateModals();
         this.initiateCollapse();
         this.initCircleBar();
+        this.initDonating();
 
         salla.comment.event.onAdded(() => window.location.reload());
         
-        // Digits Only field
-        app.on('input', '[data-digits]', e => salla.helpers.inputDigitsOnly(e.target));
-
         this.log('Theme Loaded 🎉');
     }
 
@@ -273,6 +271,19 @@ class App extends salla.AppHelpers {
             strokeDashOffsetValue = 100 - roundPercent;
         $circle.style.strokeDashoffset = strokeDashOffsetValue;
       })
+    }
+
+    /**
+     * Donation filed
+     */
+    initDonating(){
+      // Digits Only field all over the theme
+      app.on('input', '[data-digits]', e => salla.helpers.inputDigitsOnly(e.target));
+      
+      //add donating amount attr to salla-add-product-buton 
+      app.on('input', '#donation-amount', e => {
+        e.target.closest('.donating-wrap').querySelector('salla-add-product-button').setAttribute('donating-amount', e.target.value);
+      });
     }
 }
 
