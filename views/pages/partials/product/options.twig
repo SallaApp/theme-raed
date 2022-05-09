@@ -104,8 +104,8 @@
                           <input type="file"
                                   class="filepond form-control filepond--product-option"
                                   id="attached_file_{{ product.id }}"
-                                  name="{{ is_cart?'image_file':'file' }}"
-                                  {% if is_cart %}
+                                  name="{{ is_page('cart')?'image_file':'file' }}"
+                                  {% if is_page('cart') %}
                                       {# "product" here is actually cart.items[*], so {product.id} is {item.id} #}
                                       data-url="{{ link('cart/image') }}"
                                       data-instant-upload
