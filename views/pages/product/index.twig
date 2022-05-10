@@ -1,18 +1,18 @@
 {#
-| Variable                | Type        | Description                                                          |
-|-------------------------|-------------|----------------------------------------------------------------------|
-| page                    | object      |                                                                      |
-| page.title              | string      | *could be html                                                       |
-| page.slug               | string      | ex: "cat.show"                                                       |
-| products                | Product[]   |                                                                      |
-| category                | ?Category   |                                                                      |
-| category.name           | string      |                                                                      |
-| category.url            | string      |                                                                      |
-| sort_list[]             | SortList[]  |                                                                      |
-| sort_list[].value       | string      | ourSuggest, bestSell, topRated, priceFromTopToLow, priceFromLowToTop |
-| sort_list[].label       | string      |                                                                      |
-| sort_list[].is_selected | bool        | Is current page sorted by it                                         |
-| search_query            | ?string     |                                                                      |
+| Variable                   | Type        | Description                                                          |
+|----------------------------|-------------|----------------------------------------------------------------------|
+| page                       | object      |                                                                      |
+| page.title                 | string      | *could be html                                                       |
+| page.slug                  | string      | ex: "cat.show"                                                       |
+| products                   | Product[]   |                                                                      |
+| category                   | ?Category   |                                                                      |
+| category.name              | string      |                                                                      |
+| category.url               | string      |                                                                      |
+| sort_options[]             | SortList[]  |                                                                      |
+| sort_options[].id          | string      | ourSuggest, bestSell, topRated, priceFromTopToLow, priceFromLowToTop |
+| sort_options[].name        | string      |                                                                      |
+| sort_options[].is_selected | bool        | Is current page sorted by it                                         |
+| search_query               | ?string     |                                                                      |
 #}
 {% extends "layouts.master" %}
 {% block content %}
@@ -24,13 +24,13 @@
                     <h1 class="font-bold text-xl pe-3">{{ page.title|raw }}</h1>
                     <div class="center-between">
                         <div class="flex items-center">
-                            {% if sort_list|length %}
+                            {% if sort_options|length %}
                                 <div class="flex items-center">
                                     <label class="hidden sm:block me-3 whitespace-nowrap"
                                            for="product-filter">{{ trans('pages.categories.sorting') }}</label>
                                     <select id="product-filter" class="form-input pt-0 pb-1 pe-10">
-                                        {% for sort in sort_list %}
-                                            <option value="{{ sort.value }}" {{ sort.is_selected?'selected':'' }}>{{ sort.label }}</option>
+                                        {% for sort in sort_options %}
+                                            <option value="{{ sort.id }}" {{ sort.is_selected?'selected':'' }}>{{ sort.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
