@@ -26,18 +26,10 @@
                                data-digits
                                value="{{ is_page('cart')?product.price:'' }}"/>
                         <span class="input-group-addon absolute top-2 end-4 text-gray-400">
-						    {{ user.currency.symbol }}
-					    </span>
+                          {{ user.currency.symbol }}
+                        </span>
                     </div>
                 </div>
-            {% else %}
-                <h4 class="d-block wide font-xsm color-danger">
-                    {% if product.donation.completed %}
-                        {{ trans('pages.products.donation_exceed_target_amount') }}
-                    {% else %}
-                        {{ trans('pages.products.donation_exceed_target_date') }}
-                    {% endif %}
-                </h4>
             {% endif %}
         </div>
     </div>
