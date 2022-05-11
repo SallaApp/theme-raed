@@ -35,11 +35,7 @@
         {% endif %}
     {% else %}
         <h4 class="text-sm text-red-400">
-            {% if product.donation.completed %}
-                {{ trans('pages.products.donation_exceed_target_amount') }}
-            {% else %}
-                {{ trans('pages.products.donation_exceed_target_date') }}
-            {% endif %}
+            {{ product.donation.target_message }}
         </h4>
     {% endif %}
     {# <span class="mb-1.5">{{ product.donation.target_message }}</span> #}
