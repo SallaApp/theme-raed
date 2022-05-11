@@ -1,6 +1,5 @@
 {% extends "layouts.master" %}
 {% block content %}
-
     <div class="profile-header gradient-bg">
         <div class="container relative flex justify-between h-full items-center">
             <div class="self-start">
@@ -15,17 +14,17 @@
                  class="flex-shrink-0 lg:sticky top-24 lg:-mt-28  lg:shadow-default rounded-md lg:bg-white w-full lg:w-72 lg:me-8 pt-8 lg:pb-11 sidebar space-y-px">
                 <div class="text-center md:mb-9">
                     <div class="h-20 w-20 m-auto avatar-wrap bg-color-gray rounded-full">
-                        {% if is_current_url('profile') %}
+                        {% if is_page('profile') %}
                             <input class="filepond file-pond--circular has-image"
-                                    data-default="{{ user.avatar }}"
-                                    data-url="{{ '/api/v1/profile/update' }}"
-                                    id="profile-img"
-                                    type="file"/>
+                                   data-default="{{ user.avatar }}"
+                                   data-url="{{ '/api/v1/profile/update' }}"
+                                   id="profile-img"
+                                   type="file"/>
                         {% else %}
                             <img src="{{ user.avatar }}" class="rounded-full w-full h-full object-cover" alt="">
                         {% endif %}
                     </div>
-                </div> 
+                </div>
                 <div class="hidden lg:block">
                     {% component 'header.user-menu' with{is_profile_sidebar:true} %}
                 </div>
