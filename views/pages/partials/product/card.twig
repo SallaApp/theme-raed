@@ -48,6 +48,7 @@ view options:
         {% if product.is_donation %}
             {% component 'product.donation-progress-bar' with {product:product} %}
             <div class="border-color mb-2.5">
+              {% if product.can_donate %}
                 <label for="donation-amount" class="block text-sm mb-2.5">{{ trans('pages.products.donation_amount') }} <span class="text-red-500">*</span></label>
                 <input 
                   type="text"
@@ -55,8 +56,16 @@ view options:
                   id="donation-amount" 
                   name="donating_amount" 
                   class="pe-24 h-9 form-input" 
-                  placeholder="{{ trans('pages.products.donation_amount') }}"
-                  {% if not product.can_donate %} disabled {% endif %}>
+                  placeholder="{{ trans('pages.products.donation_amount') }}">
+              {% else %}
+                <h4 class="text-sm text-red-400">
+                    {% if product.donation.completed %}
+                        {{ trans('pages.products.donation_exceed_target_amount') }}
+                    {% else %}
+                        {{ trans('pages.products.donation_exceed_target_date') }}
+                    {% endif %}
+                </h4>
+              {% endif %}
             </div>
         {% endif %}
 
