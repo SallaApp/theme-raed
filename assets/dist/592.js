@@ -1,2 +1,0 @@
-/*! For license information please see 592.js.LICENSE.txt */
-"use strict";(self.webpackChunkTheme_One=self.webpackChunkTheme_One||[]).push([[592],{592:(e,s,l)=>{l.r(s),l.d(s,{salla_sizes_table:()=>n});var t=l(8717);const n=class{constructor(e){(0,t.r)(this,e)}render(){return(0,t.h)(t.H,null,(0,t.h)("slot",null))}};n.style=":host{display:block}"}}]);
