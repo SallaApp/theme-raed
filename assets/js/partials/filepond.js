@@ -31,6 +31,7 @@ class FileUploader {
                     input.removeAttribute('required');
                 }
             }
+            input.dataset.url = input.dataset.url || options?.url;
 
             this.fileponds.push(FilePond.create(input, {
                 allowBrowse     : true,
@@ -64,7 +65,7 @@ class FileUploader {
                 return {
                     source : metadata.id,
                     options: {
-                        type: 'local',
+                        type    : 'local',
                         file    : {name: metadata.name || metadata.id},
                         metadata: metadata,
                     },
