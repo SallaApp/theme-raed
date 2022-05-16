@@ -36,6 +36,7 @@ class FileUploader {
             this.fileponds.push(FilePond.create(input, {
                 allowBrowse     : true,
                 allowDrop       : true,
+                allowProcess    : false,
                 files           : this.getFilesFromInput(input),
                 server          : this.requestProperties(input),
                 instantUpload   : input.dataset.hasOwnProperty('instantUpload'),

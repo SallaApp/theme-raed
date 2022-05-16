@@ -102,11 +102,11 @@
                     {# Notice that "product" is actually cart.items[*], so {product.id} is {item.id} #}
                     <div class="h-0 overflow-hidden opacity-0 is-closed" id="file_{{ product.id }}">
                         <div class="pt-4">
-                            <input class="filepond form-control filepond--product-option"
-                                   id="attached_file_{{ product.id }}"
-                                   data-max-file-size="3MB"
+                            {% if not is_page('cart') %}
+                                <input type="file" name="file">
+                            {% endif %}
+                            <input class="filepond filepond--product-option"
                                    type="file"
-                                   name="file"
                                     {% if is_page('cart') %}
                                         data-files="{{ product.attachments }}"
                                         data-item-id="{{ product.id }}"
