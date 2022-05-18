@@ -15,19 +15,43 @@
 
 {% block content %}
     <div class="container mb-8 sm:mb-24">
-        <div class="center-between">
+      <div class="center-between">
 
-            {% component 'header.breadcrumbs' %}
+        {% component 'header.breadcrumbs' %}
 
-            <a class="lg:hidden space-s-1.5 hover:underline flex mburger mburger--collapse text-sm text-primary"
-               href="#filters-menu">
-                <i class="sicon-filter text-xs"></i>
-                <span class="fix-align">{{ trans('pages.blog_categories.categories') }}</span>
-            </a>
+        {# Categories filter dropdown #}
+        <div class="dropdown-toggler cat-filter lg:hidden">
+          <button aria-label="Categories Trigger" type="button" class="dropdown__trigger space-s-1.5 flex text-sm text-primary" aria-expanded="true" aria-haspopup="true"> 
+            <i class="sicon-filter text-xs pointer-events-none"></i>
+            <span class="fix-align pointer-events-none">{{ trans('pages.blog_categories.categories') }}</span>
+          </button>
+          <div class="dropdown__menu"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1">
+              <div class="flex items-center p-4 border-b mb-1 lg:hidden relative">
+                  <h2 class="font-bold">{{ trans('pages.blog_categories.categories') }}</h2>
+                  <button class="dropdown__close h-12 w-12 text-red-500 text-lg rounded-full absolute top-2 end-1 z-50">
+                      <i class="sicon-cancel pointer-events-none"></i>
+                  </button>
+              </div>
+              <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
+                {% for category in categories %}
+                    <li>
+                        <a class="p-2.5 block text-sm hover:text-primary {{ category.is_current ? ' is-active' : '' }}" href="{{ category.url }}">
+                            <span class="me-auto">{{ category.name }}</span>
+                        </a>
+                    </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+          </div>
         </div>
-        <div class="flex items-start">
-            <nav aria-label="Sidebar" class="lg:sticky flex-shrink-0 top-24 md:w-44 p-8 lg:p-0 lg:me-8 pb-11"
-                 id="filters-menu">
+
+        <div class="grid grid-cols-1 lg:grid-cols-8 gap-8">
+            <nav aria-label="Sidebar" class="hidden lg:block lg:sticky flex-shrink-0 top-24 col-span-2" id="filters-menu">
                 <h2 class="font-bold mb-3">{{ trans('pages.blog_categories.categories') }}</h2>
                 <ul>
                     {% for category in categories %}
@@ -39,13 +63,14 @@
                     {% endfor %}
                 </ul>
             </nav>
-            <div class="main-content w-96 flex-1">
+
+            <div class="main-content lg:col-span-6">
                 {% if slides|length %}
                     <div class="mb-8">
                         <div class="swiper blog-slider rounded-md overflow-hidden" id="blog-slider">
                             <div class="swiper-wrapper">
                                 {% for article in slides %}
-                                    <div class="swiper-slide has-overlay blog-slider__slide h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
+                                    <div class="swiper-slide has-overlay blog-slider__slide !h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
                                         {% if article.has_image %}
                                             <img src="{{ article.image.url }}" alt="{{ article.image.alt }}"
                                                  class="object-cover h-full w-full">
@@ -53,9 +78,9 @@
                                             <img class="sm:h-full w-20 object-contain opacity-50"
                                                  src="{{ 'images/placeholder.png' | asset }}" alt="post image">
                                         {% endif %}
-                                        <div class="absolute z-10 bottom-0 start-0 ps-10 pb-20">
+                                        <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 lg:ps-10 lg:pb-20">
                                             <div class="blog-slider__content relative">
-                                                <div class="z-20 w-5/6 lg:w-6/12 text-white">
+                                                <div class="z-20 w-full md:w-5/6 lg:w-6/12 text-white">
                                                     <div class="block-slide-anime">
                                                         <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
                                                             <div class="flex items-center">
@@ -72,14 +97,14 @@
                                                             <a href="{{ article.url }}">{{ article.title }}</a>
                                                         </h3>
                                                     </div>
-                                                    <p class="block-slide-anime description">{{ article.summary }}</p>
+                                                    <p class="line-clamp-2 block-slide-anime description">{{ article.summary }}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 {% endfor %}
                             </div>
-                            <div class="swiper-pagination text-start px-10 pb-8  bottom-10"></div>
+                            <div class="swiper-pagination text-start px-4 lg:px-10  bottom-8 lg:bottom-16"></div>
                         </div>
                     </div>
                 {% else %}
