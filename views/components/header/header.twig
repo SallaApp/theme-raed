@@ -14,11 +14,10 @@
 
                     {# Pages Menu #}
                     {% component 'footer.pages' with {is_header:true} %}
-
                     {# Language & Currency Component #}
                     {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                         <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
-                            <span class="flag iti__flag iti__{{ currency.country_code }} me-1.5 rounded-sm"></span>
+                            <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
                             | <span class="ms-2 me-1">{{ currency.symbol }}</span>
                         </button>
                         <salla-localization-modal></salla-localization-modal>
