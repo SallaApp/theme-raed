@@ -99,18 +99,21 @@
                 {% endif %}
 
                 <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                              <span class="text-primary px-4 pt-1 pb-1.5 inline-flex items-center space-s-1 border rounded-2xl"
-                                    style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
-                                  <i class="mt-1 {{ order.status.icon }}"></i>
-                                  <span class=""> {{ order.status.name }}</span>
-                              </span>
+                  {% if order.is_pending_payment and order.pending_payment_ends_in == 0 %}
+                    <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
+                  {% else %}
+                    <span class="text-primary px-4 pt-1 pb-1.5 inline-flex items-center space-s-1 border rounded-2xl"
+                          style="border-color: {{ order.status.color }} !important; color: {{ order.status.color }}">
+                        <i class="mt-1 {{ order.status.icon }}"></i>
+                        <span class=""> {{ order.status.name }}</span>
+                    </span>
+                  {% endif %}
                 </td>
             </tr>
             </tbody>
         </table>
 
         {# Order Rating Message & Modal #}
-
         {% if order.can_rate %}
             <div class="rating-header gradient-bg center-between">
                 <div>
@@ -368,10 +371,14 @@
                 {% if order.can_reorder or order.is_pending_payment %}
                     <div class="{{order.is_pending_payment ? 'flex-center': 'center-between'}}">
                         {% if order.is_pending_payment %}
-                            <salla-button width="wide" href="{{ order.payment_url }}">
-                                <i class="sicon sicon-wallet me-2"></i>
-                                <span>{{ trans('pages.orders.finish_payment') }}</span>
-                            </salla-button>
+                            {% if order.pending_payment_ends_in == 0 %}
+                              <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
+                            {% else %}
+                              <salla-button width="wide" href="{{ order.payment_url }}">
+                                  <i class="sicon sicon-wallet me-2"></i>
+                                  <span>{{ trans('pages.orders.finish_payment') }}</span>
+                              </salla-button>
+                            {% endif %}
                         {% else %}
                             <div class="text-sm">
                                 <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
