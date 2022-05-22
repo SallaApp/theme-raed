@@ -15,6 +15,9 @@
 | order.can_cancel                 | bool                              |                                                                                          |
 | order.can_rate                   | bool                              |                                                                                          |
 | order.cancel_url                 | string                            |                                                                                          |
+| order.payment_url                | string                            |                                                                                          |
+| order.is_pending_payment         | bool                              |                                                                                          |
+| order.pending_payment_ends_in    | int                               | How much many seconds untile pending payment ends, zero if it's already expired          |
 | order.shipping                   | ?object                           |                                                                                          |
 | order.shipping.id                | integer                           |                                                                                          |
 | order.shipping.name              | string                            |                                                                                          |
@@ -238,7 +241,7 @@
                                     <div class="py-2.5 center-between">
                                         <dt class="flex-center">
                                           <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
-                                          <spn>{{ code }}</span>
+                                          <span>{{ code }}</span>
                                         </dt>
                                         <salla-button onclick="theme.copyToClipboard(event)" shape="link" data-content="{{ code }}">
                                             <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
