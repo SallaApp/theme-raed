@@ -363,21 +363,20 @@
         </div>
 
         {# Reorder & Cancel #}
-        {% if order.can_reorder or order.can_cancel %}
+        {% if order.can_reorder or order.can_cancel or order.is_pending_payment %}
             <div class="bg-white rounded-md p-5 divide-y divide-border-color space-y-4">
-                {% if order.can_reorder %}
-                    <div class="center-between">
-                        <div class="text-sm">
-                            <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
-                            <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
-                        </div>
+                {% if order.can_reorder or order.is_pending_payment %}
+                    <div class="{{order.is_pending_payment ? 'flex-center': 'center-between'}}">
                         {% if order.is_pending_payment %}
-                            <a href="{{ order.payment_url }}"
-                               class="text-primary font-bold text-sm center-between hover:text-primary-d transition">
+                            <salla-button width="wide" href="{{ order.payment_url }}">
                                 <i class="sicon sicon-wallet me-2"></i>
                                 <span>{{ trans('pages.orders.finish_payment') }}</span>
-                            </a>
+                            </salla-button>
                         {% else %}
+                            <div class="text-sm">
+                                <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
+                                <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
+                            </div>
                             <salla-button shape="link" onclick="document.querySelector('#reorder-modal').open()">
                                 <i class="sicon sicon-rotate me-2"></i>
                                 <span>{{ trans('pages.orders.reorder') }}</span>
@@ -426,7 +425,7 @@
                         <salla-button id="confirm-cancel" color="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
                         </salla-button>
-                        <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#modal-order-cancel').hide()">
+                        <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#modal-order-cancel').close()">
                             {{ trans('common.elements.cancel') }}
                         </salla-button>
                     </div>
