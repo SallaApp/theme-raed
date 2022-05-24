@@ -139,6 +139,7 @@ module.exports = {
               console.log("✅ %cLive reload is currently enabled.", "color: #bada55");
             })();`;
           }
+          return "";
         })
     ],
 }
