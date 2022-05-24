@@ -73,7 +73,7 @@ module.exports = {
         ],
     },
     plugins: [
-        new ThemeWatcher(),
+        new ThemeWatcher(env.websocketURL),
         new MiniCssExtractPlugin(),
         new WebpackBuildNotifierPlugin({
             title: "Salla Theme",
