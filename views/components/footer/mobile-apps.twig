@@ -11,7 +11,7 @@
     <div class="flex">
       {% for app in apps %}
           <a href="{{ app.url }}" rel="noreferrer" target="_blank"  class="me-4 leading-none hover:text-primary">
-              <img src="https://assets.salla.cloud/themes/default/assets/images/{{app.name}}.png" alt="{{ app.name }}"/>
+              <img alt="{{ app.name }}" src="{{ ('images/'~ app.name ~'.png') | cdn }}"/>
           </a>
       {% endfor %}
     </div>
