@@ -2,6 +2,9 @@ const path = require('path');
 const ThemeWatcher = require('@salla.sa/twilight/watcher');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const InjectPlugin = require("webpack-inject-plugin").default;
+
+const mode = process.argv[process.argv.indexOf("--mode") + 1];
 
 
 module.exports = {
@@ -97,7 +100,46 @@ module.exports = {
                     );
                 });
             }
-        }
+        },
+        new InjectPlugin(function () {
+          if (mode == "development") {
+            let websocketURL = "";
+    
+        
+            const { readFileSync } = require("fs");
+            const env = require("dotenv");
+
+            try {
+                const data = env.parse(readFileSync(".env"));
+                websocketURL = data.websocketURL;
+            } catch (e) {
+                websocketURL = "";
+            }
+          
+            return `(() => {
+              const ws = new WebSocket("${websocketURL}","echo-protocol");
+              ws.onopen = () => {
+                console.log('ws opened on browser')
+             
+              }
+              ws.onmessage = function (msg) {
+                console.log("msg", msg.data);
+                let data = JSON.parse(msg.data);
+         
+                if(data.msg=="reload")
+                  location.reload();
+              };
+              ws.onclose = () => {
+                console.log("Websocket was closed!");
+              }
+      
+              ws.onerror = (error) =>{
+                console.error("Websocket error: " + JSON.stringify(error));
+              };
+              console.log("✅ %cLive reload is currently enabled.", "color: #bada55");
+            })();`;
+          }
+        })
     ],
 }
 ;
