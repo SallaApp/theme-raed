@@ -18,7 +18,7 @@
 
 {% if user.can_comment or comments|length %}
   <div class="s-comments s-comments-{{ type }}">
-      <div class="container">
+      <div class="container {{ type == 'page' ? 'px-0':'' }}">
           {% if user.can_comment %}
               <form class="form form--add-comment" onsubmit="return salla.form.onSubmit('comment.add', event);">
                   <input name="type" type="hidden" value="{{  type }}">
