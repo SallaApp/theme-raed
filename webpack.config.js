@@ -18,12 +18,7 @@ module.exports = {
 
         //plugins
         filepond : ['./assets/styles/05-utilities/filepond.scss', './assets/js/partials/filepond.js'],
-        flatpickr: './assets/styles/05-utilities/flatpicker.scss',
-        //fonts
-        // amazon_ember: './assets/fonts/amazon_ember.scss',
-        // apple: './assets/fonts/apple.scss',
-        // dubai: './assets/fonts/dubai.scss',
-        // estedad: './assets/fonts/estedad.scss',
+        flatpickr: './assets/styles/05-utilities/flatpicker.scss'
     },
     output : {
         path : path.resolve(__dirname, "assets", "dist"),
@@ -33,14 +28,6 @@ module.exports = {
         modules                : false,
         assetsSort             : "size",
         assetsSpace            : 50,
-        cachedAssets           : true,
-        groupAssetsByPath      : false,
-        groupAssetsByExtension : false,
-        groupAssetsByEmitStatus: false,
-        groupAssetsByChunk     : false,
-        groupAssetsByInfo      : false,
-        relatedAssets          : true,
-        performance            : true,
     },
     module : {
         rules: [
