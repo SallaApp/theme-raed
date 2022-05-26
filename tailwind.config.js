@@ -45,12 +45,9 @@ module.exports = {
                 'primary-reverse': 'var(--color-main-reverse)',
                 'transparent'  : 'transparent',
                 'light-gray'   : '#F9FAFB',
-                'border-dark'  : '#3A3C43',
-                'gray-bg2'     : 'var(--bg-gray)',// 'light-gray': '#F9FAFB',
                 'gray-150'     : '#eff0f0',
                 'color-gray'   : 'var(--color-grey)',
                 'reverse'      : 'var(--color-text-reverse)',
-                'reverse-dark' : '#C6C7CE',
             },
             spacing: {
               '3.75': '15px',
@@ -122,7 +119,6 @@ module.exports = {
             },
             screens            : {
                 'xxs': {'min': '380px', 'max': '479px'},
-                // 'xs': { 'min': '480px', 'max': '639px' },
                 'xs': '480px',
             },
             backgroundOpacity  : {
@@ -137,7 +133,6 @@ module.exports = {
         extend: {
           translate: ['group-hover'],
         },
-        scrollbar: ['rounded']
     },
 
     corePlugins: {
@@ -150,6 +145,5 @@ module.exports = {
       require('@tailwindcss/forms'),
       require('@tailwindcss/line-clamp'),
       require('@tailwindcss/jit'),
-      require('tailwind-scrollbar'),
     ],
 }
