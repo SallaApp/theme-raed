@@ -13,7 +13,7 @@
 | items[].id                    | string    | Section id                                                          |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
-<section class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container">
+<section class="s-block s-block--features-products {{ items | length > 1 ? 'two-cols' : 'container' }}">
     <div class="inner">
         {% for section in items %}
             <div>

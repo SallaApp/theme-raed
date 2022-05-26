@@ -5,14 +5,14 @@ view options:
 
 *Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
 #}
-<div id="product-{{ product.id }}" class='product-entry {{ block_classes ?: '' }}
+<div id="product-{{ product.id }}" class="product-entry {{ block_classes ?: '' }}
   {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
   {{ is_special ? 'product-entry--special':'' }}
   {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
-  {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
+  {{ product.is_out_of_stock ? 'out-of-stock':'' }}">
 
     {# Image #}
-    <a href="{{ product.url }}" class='product-entry__image'>
+    <a href="{{ product.url }}" class="product-entry__image">
         <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
              src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
         {% if product.promotion_title %}
