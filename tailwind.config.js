@@ -45,7 +45,6 @@ module.exports = {
                 'primary-reverse': 'var(--color-main-reverse)',
                 'transparent'  : 'transparent',
                 'light-gray'   : '#F9FAFB',
-                'border-color' : '#EEEEEE',
                 'border-dark'  : '#3A3C43',
                 'gray-bg2'     : 'var(--bg-gray)',// 'light-gray': '#F9FAFB',
                 'gray-150'     : '#eff0f0',
