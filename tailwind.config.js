@@ -49,7 +49,6 @@ module.exports = {
                 'gray-bg2'     : 'var(--bg-gray)',// 'light-gray': '#F9FAFB',
                 'gray-150'     : '#eff0f0',
                 'color-gray'   : 'var(--color-grey)',
-                'darker'       : '#333',
                 'reverse'      : 'var(--color-text-reverse)',
                 'reverse-dark' : '#C6C7CE',
             },
