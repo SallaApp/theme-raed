@@ -81,7 +81,7 @@ class Cart extends BasePage {
         app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
-            .toggleElementClassIf(priceElement, 'text-theme-red', 'text-sm text-gray-400', () => hasSpecialPrice);
+            .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice);
 
         priceElement.innerText = salla.money(item.price);
         if (hasSpecialPrice) {

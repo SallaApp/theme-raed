@@ -10,7 +10,6 @@ module.exports = {
             "assets/js/**/*.js",
             //todo:: inject it via the plugin or easier way
             'node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt',
-            'node_modules/@salla.sa/twilight-components/src/components/**/*.tsx',
         ],
     },
     darkMode: 'class', // or 'media' or 'class'
@@ -37,18 +36,14 @@ module.exports = {
             },
             gridTemplateColumns: {
                 'auto-fill'  : 'repeat(auto-fill, 290px)',
-                'auto-fill-6': 'repeat(auto-fill, 180px)',
             },
             colors             : {
                 'inherit'      : 'inherit',
                 'primary'      : 'var(--color-main)',
                 'primary-d'    : 'var(--color-main-d)',
                 'primary-l'    : 'var(--color-main-l)',
-                'dark-gray'    : '#A6B3BA',
                 'primary-reverse': 'var(--color-main-reverse)',
                 'transparent'  : 'transparent',
-                'theme-blue'   : "#27BEE1",
-                'theme-red'    : "#FF6767",
                 'light-gray'   : '#F9FAFB',
                 'border-color' : '#EEEEEE',
                 'border-dark'  : '#3A3C43',
@@ -99,7 +94,6 @@ module.exports = {
                 'light'   : '0px 4px 15px rgba(1, 1, 1, 0.06)',
                 'huge'    : '0px 3px 6px #00000029',
                 'progress': '0 5px 15px rgba(92, 213, 196, 0.4)',
-                // 'mobile': '-10px 14px 14px rgb(0 0 0 / 15%), -20px 14px 64px rgb(0 0 0 / 25%)',
                 'mobile': 'rgb(0 0 0 / 9%) 0px 2px 1px, rgb(0 0 0 / 9%) 0px 4px 2px, rgb(0 0 0 / 9%) 0px 8px 4px, rgb(0 0 0 / 9%) 0px 16px 18px, rgb(0 0 0 / 9%) -15px 10px 7px, rgb(0 0 0 / 9%) -20px 10px 20px, rgb(0 0 0 / 9%) -20px 10px 20px, rgb(0 0 0 / 9%) -25px 20px 20px',
             },
             width              : {
