@@ -9,7 +9,7 @@ Salla new theme 1
  
 ## Watch  
 
-```sh
+```sh 
 # 1. create the symlink
 rm -rf public/themes/one && ln -s vendor/salla/theme-one/assets public/themes/one
 # rm -rf public/themes/one && ln -s ~/works/salla/theme-one/assets public/themes/one
