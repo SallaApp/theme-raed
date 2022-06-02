@@ -17,7 +17,7 @@ rm -rf public/themes/one && ln -s vendor/salla/theme-one/assets public/themes/on
 
 # lets go to our theme 
 cd vendor/salla/theme-one
-
+ 
 # 3. link the package 
 npm link @salla.sa/twilight
 
