@@ -1,8 +1,8 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const BuildNotifierPlugin = require('webpack-build-notifier');
 const ThemeVersionPump = require('./theme-version-pump');
 const ThemeWatcher = require('@salla.sa/twilight/watcher');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const asset = file => path.resolve('src/assets', file || '');
@@ -56,10 +56,10 @@ module.exports = {
     },
     plugins: [
         new ThemeWatcher(),
-        new MiniCssExtractPlugin(),
-        new CopyWebpackPlugin({patterns: [{from: asset('images'), to: output('images')}]}),
         new ThemeVersionPump(),
-        new WebpackBuildNotifierPlugin({title: "Salla Theme", successSound: false})
+        new MiniCssExtractPlugin(),
+        new BuildNotifierPlugin({title: "Salla Theme", successSound: false}),
+        new CopyPlugin({patterns: [{from: asset('images'), to: output('images')}]}),
     ],
 }
 ;
