@@ -6,8 +6,8 @@ module.exports = {
     purge: {
         enabled: true,
         content: [
-            "views/**/*.twig",
-            "assets/js/**/*.js",
+            "src/views/**/*.twig",
+            "src/assets/js/**/*.js",
             //todo:: inject it via the plugin or easier way
             'node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt',
         ],
