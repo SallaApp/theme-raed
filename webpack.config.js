@@ -57,11 +57,9 @@ module.exports = {
     plugins: [
         new ThemeWatcher(),
         new MiniCssExtractPlugin(),
-        // new CopyWebpackPlugin([{from: `${assets}images`, to: `${output}/images`}]),
+        new CopyWebpackPlugin({patterns: [{from: asset('images'), to: output('images')}]}),
         new ThemeVersionPump(),
-        new WebpackBuildNotifierPlugin({
-            title: "Salla Theme", logo: asset('images/favicon/apple-icon.png'), successSound: false
-        })
+        new WebpackBuildNotifierPlugin({title: "Salla Theme", successSound: false})
     ],
 }
 ;
