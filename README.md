@@ -19,7 +19,7 @@ rm -rf public/themes/one && ln -s vendor/salla/theme-one/assets public/themes/on
 cd vendor/salla/theme-one
  
 # 3. link the package
-npm link @salla.sa/twilight
+npm link @salla.sa/twilight 
 
 # 3. start watch :)
 npm run watch
