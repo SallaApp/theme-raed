@@ -8,7 +8,7 @@ Salla new theme 1
 
 
 ## Watch 
-
+ 
 ```sh
 # 1. create the symlink
 rm -rf public/themes/one && ln -s vendor/salla/theme-one/assets public/themes/one
@@ -17,7 +17,7 @@ rm -rf public/themes/one && ln -s vendor/salla/theme-one/assets public/themes/on
 
 # lets go to our theme 
 cd vendor/salla/theme-one
-
+ 
 # 3. link the package
 npm link @salla.sa/twilight
 
