@@ -5,7 +5,7 @@ class ThemeVersionPump {
         if (compiler.options.mode === 'development' && !compiler.options.watch) {
             return;
         }
-        let settingsPath = path.resolve('theme.json');
+        let settingsPath = path.resolve('twilight.json');
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
             let themeSettings = require(settingsPath);
             let version = (themeSettings.version || '0.0.0').split('.').reverse();
