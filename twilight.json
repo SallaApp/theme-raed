@@ -55,6 +55,7 @@
               "icon": "sicon-image",
               "value": null,
               "id": "image",
+              "label": "صورة البنر",
               "description": "",
               "format": "image",
               "required": true,
@@ -69,7 +70,7 @@
               "value": null,
               "required": false,
               "format": "text",
-              "description": "يتم عرض هذا النص على الصورة بحجم بارز جداً، إضافة تأثير دخول للنص يضيف لمسة جمالية على معرض الصور.",
+              "description": "يتم عرضه على الصورة بحجم بارز جداً، مع إضافة تأثير دخول للنص يضيف لمسة جمالية على معرض الصور.",
               "placeholder": "يمكنك إضافة عنوان بارز هنا...",
               "hide": false,
               "minLength": 0,
@@ -82,7 +83,7 @@
               "multilanguage": true,
               "id": "description",
               "value": null,
-              "description": "يتم عرض هذا النص على الصورة بحجم أصغر من العنوان الرئيسي، مع إضافة تأثير دخول للنص يضيف لمسة جمالية على معرض الصور.",
+              "description": "يتم عرضه على الصورة بحجم أصغر من العنوان الرئيسي، مع إضافة تأثير دخول للنص يضيف لمسة جمالية على معرض الصور.",
               "format": "textarea",
               "required": false,
               "placeholder": "يمكنك إضافة تفاصيل إضافية هنا",
@@ -163,18 +164,47 @@
               "maxLength": 20
             },
             {
-              "type": "string",
+              "type": "items",
               "icon": "sicon-link",
               "label": "الرابط",
               "id": "url",
               "value": null,
               "description": "",
-              "format": "url",
-              "inputType": "url",
-              "required": true,
-              "placeholder": "أدخل الرابط هنا...",
-              "minLength": 3,
-              "maxLength": 100
+              "required": false,
+              "format": "variable-list",
+              "source": "Products",
+              "sources": [
+                {
+                  "label": "منتج",
+                  "key": "Products",
+                  "value": "Products"
+                },
+                {
+                  "label": "تصنيف",
+                  "key": "Categories",
+                  "value": "Categories"
+                },
+                {
+                  "label": "ماركة تجارية",
+                  "key": "Brands",
+                  "value": "Brands"
+                },
+                {
+                  "label": "صفحة تعريفية",
+                  "key": "Pages",
+                  "value": "Pages"
+                },
+                {
+                  "label": "صفحة التخفيضات",
+                  "key": "offers",
+                  "value": "offers"
+                },
+                {
+                  "label": "رابط خارجي",
+                  "key": "custom",
+                  "value": "custom"
+                }
+              ]
             }
           ]
         }
@@ -221,14 +251,14 @@
         {
           "type": "string",
           "icon": "sicon-format-text-alt",
-          "label": "عنوان رئيسي (إختياري)",
+          "label": "عنوان رئيسي",
           "multilanguage": true,
           "id": "title",
           "value": null,
           "required": false,
           "format": "text",
           "description": "",
-          "placeholder": "Placeholder text ..",
+          "placeholder": "يمكنك إضافة العنوان الرئيسي هنا...",
           "hide": false,
           "minLength": 0,
           "maxLength": 80
@@ -236,14 +266,14 @@
         {
           "type": "string",
           "icon": "sicon-typography",
-          "label": "نص توضيحي (إختياري)",
+          "label": "نص توضيحي",
           "multilanguage": true,
           "id": "description",
           "value": null,
           "description": "",
           "format": "textarea",
           "required": false,
-          "placeholder": "Your text here",
+          "placeholder": "يمكنك إضافة وصف لهذا القسم هنا...",
           "minLength": 20,
           "maxLength": 255
         },
@@ -283,7 +313,7 @@
               "type": "string",
               "icon": "sicon-image",
               "value": null,
-              "label": "",
+              "label": "صورة البنر",
               "id": "image",
               "description": "",
               "format": "image",
