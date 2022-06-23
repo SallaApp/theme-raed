@@ -87,7 +87,7 @@
               "format": "textarea",
               "required": false,
               "placeholder": "يمكنك إضافة تفاصيل إضافية هنا",
-              "minLength": 20,
+              "minLength": 0,
               "maxLength": 255
             }
           ]
@@ -140,7 +140,7 @@
               "type": "string",
               "icon": "sicon-format-text-alt",
               "label": "عنوان الرابط",
-              "id": "icon",
+              "id": "links.icon",
               "value": null,
               "required": true,
               "format": "icon",
@@ -153,7 +153,7 @@
               "type": "string",
               "icon": "sicon-format-text-alt",
               "multilanguage": true,
-              "id": "title",
+              "id": "links.title",
               "value": null,
               "required": true,
               "format": "text",
@@ -167,7 +167,7 @@
               "type": "items",
               "icon": "sicon-link",
               "label": "الرابط",
-              "id": "url",
+              "id": "links.url",
               "value": null,
               "description": "",
               "required": false,
@@ -274,7 +274,7 @@
           "format": "textarea",
           "required": false,
           "placeholder": "يمكنك إضافة وصف لهذا القسم هنا...",
-          "minLength": 20,
+          "minLength": 0,
           "maxLength": 255
         },
         {
@@ -307,6 +307,7 @@
           "minLength": 1,
           "maxLength": 5,
           "label": "قائمة الصور",
+          "item_label": "صورة ",
           "value": [],
           "fields": [
             {
@@ -321,46 +322,75 @@
               "placeholder": ""
             },
             {
-              "type": "string",
+              "type": "items",
               "icon": "sicon-link",
               "label": "الرابط",
               "id": "url",
               "value": null,
               "description": "",
-              "format": "url",
-              "inputType": "url",
-              "required": true,
-              "placeholder": "أدخل الرابط هنا...",
-              "minLength": 3,
-              "maxLength": 100
+              "required": false,
+              "format": "variable-list",
+              "source": "Products",
+              "sources": [
+                {
+                  "label": "منتج",
+                  "key": "Products",
+                  "value": "Products"
+                },
+                {
+                  "label": "تصنيف",
+                  "key": "Categories",
+                  "value": "Categories"
+                },
+                {
+                  "label": "ماركة تجارية",
+                  "key": "Brands",
+                  "value": "Brands"
+                },
+                {
+                  "label": "صفحة تعريفية",
+                  "key": "Pages",
+                  "value": "Pages"
+                },
+                {
+                  "label": "صفحة التخفيضات",
+                  "key": "offers",
+                  "value": "offers"
+                },
+                {
+                  "label": "رابط خارجي",
+                  "key": "custom",
+                  "value": "custom"
+                }
+              ]
             },
             {
               "type": "string",
               "icon": "sicon-format-text-alt",
-              "label": "عنوان رئيسي (إختياري)",
+              "label": "عنوان رئيسي",
               "multilanguage": true,
               "id": "title",
               "value": null,
               "required": false,
               "format": "text",
-              "description": "",
-              "placeholder": "Placeholder text ..",
+              "description":  "نص يتم إضافته على الصورة بنمط خط كبير",
+              "placeholder": "أدخل النص هنا...",
               "hide": false,
               "minLength": 0,
-              "maxLength": 80
+              "maxLength": 100
             },
             {
               "type": "string",
               "icon": "sicon-typography",
-              "label": "نص توضيحي (إختياري)",
+              "label": "نص توضيحي",
               "multilanguage": true,
               "id": "description",
               "value": null,
-              "description": "",
+              "description": "نص يتم إضافته على الصورة بخط أصغر من العنوان الرئيسي",
               "format": "textarea",
               "required": false,
               "placeholder": "Your text here",
-              "minLength": 20,
+              "minLength": 0,
               "maxLength": 255
             }
           ]
