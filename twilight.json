@@ -14,7 +14,6 @@
     "component-photos-slider",
     "component-products-slider",
     "component-parallax-background",
-    "component-random-testimonials",
     "component-testimonials",
     "component-square-photos",
     "component-store-features",
@@ -47,7 +46,8 @@
           "required": true,
           "minLength": 1,
           "maxLength": 10,
-          "label": "قائمة الصور",
+          "label": "",
+          "item_label": "صورة",
           "value": [],
           "fields": [
             {
@@ -55,6 +55,7 @@
               "icon": "sicon-image",
               "value": null,
               "id": "image",
+              "label": "صورة البنر",
               "description": "",
               "format": "image",
               "required": true,
@@ -63,14 +64,14 @@
             {
               "type": "string",
               "icon": "sicon-format-text-alt",
-              "label": "عنوان رئيسي (إختياري)",
+              "label": "عنوان رئيسي",
               "multilanguage": true,
               "id": "title",
               "value": null,
               "required": false,
               "format": "text",
-              "description": "",
-              "placeholder": "Placeholder text ..",
+              "description": "يتم عرضه على الصورة بحجم بارز جداً، مع إضافة تأثير دخول للنص يضيف لمسة جمالية على معرض الصور.",
+              "placeholder": "يمكنك إضافة عنوان بارز هنا...",
               "hide": false,
               "minLength": 0,
               "maxLength": 80
@@ -78,15 +79,15 @@
             {
               "type": "string",
               "icon": "sicon-typography",
-              "label": "نص توضيحي (إختياري)",
+              "label": "نص إضافي",
               "multilanguage": true,
               "id": "description",
               "value": null,
-              "description": "",
+              "description": "يتم عرضه على الصورة بحجم أصغر من العنوان الرئيسي، مع إضافة تأثير دخول للنص يضيف لمسة جمالية على معرض الصور.",
               "format": "textarea",
               "required": false,
-              "placeholder": "Your text here",
-              "minLength": 20,
+              "placeholder": "يمكنك إضافة تفاصيل إضافية هنا",
+              "minLength": 0,
               "maxLength": 255
             }
           ]
@@ -115,20 +116,31 @@
           "maxLength": 80
         },
         {
+          "type": "boolean",
+          "icon": "sicon-toggle-off",
+          "label": "دمج مع التصميم السابق",
+          "description": "إزاحة كامل العنصر ومحتوياته مع العنصر السابق، وجعلهما يظهران كعنصر واحد متناسق، مناسب في حالة كان العنصر السابق صور متحركة، أو روابط سريعة.",
+          "id": "merge_with_top_component",
+          "format": "switch",
+          "required": false,
+          "value": true,
+          "selected": true
+        },
+        {
           "id": "links",
           "type": "collection",
           "format": "collection",
           "required": true,
           "minLength": 3,
           "maxLength": 6,
-          "label": "الأيقونات والروابط",
+          "item_label": "رابط ",
           "value": [],
           "fields": [
             {
               "type": "string",
               "icon": "sicon-format-text-alt",
-              "label": "أيقونة معبرة عن الرابط",
-              "id": "icon",
+              "label": "عنوان الرابط",
+              "id": "links.icon",
               "value": null,
               "required": true,
               "format": "icon",
@@ -140,9 +152,8 @@
             {
               "type": "string",
               "icon": "sicon-format-text-alt",
-              "label": "عنوان الرابط",
               "multilanguage": true,
-              "id": "title",
+              "id": "links.title",
               "value": null,
               "required": true,
               "format": "text",
@@ -153,31 +164,49 @@
               "maxLength": 20
             },
             {
-              "type": "string",
+              "type": "items",
               "icon": "sicon-link",
               "label": "الرابط",
-              "id": "url",
+              "id": "links.url",
               "value": null,
               "description": "",
-              "format": "url",
-              "inputType": "url",
-              "required": true,
-              "placeholder": "أدخل الرابط هنا...",
-              "minLength": 3,
-              "maxLength": 100
+              "required": false,
+              "format": "variable-list",
+              "source": "Products",
+              "sources": [
+                {
+                  "label": "منتج",
+                  "key": "Products",
+                  "value": "Products"
+                },
+                {
+                  "label": "تصنيف",
+                  "key": "Categories",
+                  "value": "Categories"
+                },
+                {
+                  "label": "ماركة تجارية",
+                  "key": "Brands",
+                  "value": "Brands"
+                },
+                {
+                  "label": "صفحة تعريفية",
+                  "key": "Pages",
+                  "value": "Pages"
+                },
+                {
+                  "label": "صفحة التخفيضات",
+                  "key": "offers",
+                  "value": "offers"
+                },
+                {
+                  "label": "رابط خارجي",
+                  "key": "custom",
+                  "value": "custom"
+                }
+              ]
             }
           ]
-        },
-        {
-          "type": "boolean",
-          "icon": "sicon-toggle-off",
-          "label": "دمج مع التصميم السابق",
-          "description": "",
-          "id": "merge_with_top_component",
-          "format": "switch",
-          "required": false,
-          "value": true,
-          "selected": true
         }
       ]
     },
@@ -222,14 +251,14 @@
         {
           "type": "string",
           "icon": "sicon-format-text-alt",
-          "label": "عنوان رئيسي (إختياري)",
+          "label": "عنوان رئيسي",
           "multilanguage": true,
           "id": "title",
           "value": null,
           "required": false,
           "format": "text",
           "description": "",
-          "placeholder": "Placeholder text ..",
+          "placeholder": "يمكنك إضافة العنوان الرئيسي هنا...",
           "hide": false,
           "minLength": 0,
           "maxLength": 80
@@ -237,15 +266,15 @@
         {
           "type": "string",
           "icon": "sicon-typography",
-          "label": "نص توضيحي (إختياري)",
+          "label": "نص توضيحي",
           "multilanguage": true,
           "id": "description",
           "value": null,
           "description": "",
           "format": "textarea",
           "required": false,
-          "placeholder": "Your text here",
-          "minLength": 20,
+          "placeholder": "يمكنك إضافة وصف لهذا القسم هنا...",
+          "minLength": 0,
           "maxLength": 255
         },
         {
@@ -278,13 +307,14 @@
           "minLength": 1,
           "maxLength": 5,
           "label": "قائمة الصور",
+          "item_label": "صورة ",
           "value": [],
           "fields": [
             {
               "type": "string",
               "icon": "sicon-image",
               "value": null,
-              "label": "",
+              "label": "صورة البنر",
               "id": "image",
               "description": "",
               "format": "image",
@@ -292,46 +322,75 @@
               "placeholder": ""
             },
             {
-              "type": "string",
+              "type": "items",
               "icon": "sicon-link",
               "label": "الرابط",
               "id": "url",
               "value": null,
               "description": "",
-              "format": "url",
-              "inputType": "url",
-              "required": true,
-              "placeholder": "أدخل الرابط هنا...",
-              "minLength": 3,
-              "maxLength": 100
+              "required": false,
+              "format": "variable-list",
+              "source": "Products",
+              "sources": [
+                {
+                  "label": "منتج",
+                  "key": "Products",
+                  "value": "Products"
+                },
+                {
+                  "label": "تصنيف",
+                  "key": "Categories",
+                  "value": "Categories"
+                },
+                {
+                  "label": "ماركة تجارية",
+                  "key": "Brands",
+                  "value": "Brands"
+                },
+                {
+                  "label": "صفحة تعريفية",
+                  "key": "Pages",
+                  "value": "Pages"
+                },
+                {
+                  "label": "صفحة التخفيضات",
+                  "key": "offers",
+                  "value": "offers"
+                },
+                {
+                  "label": "رابط خارجي",
+                  "key": "custom",
+                  "value": "custom"
+                }
+              ]
             },
             {
               "type": "string",
               "icon": "sicon-format-text-alt",
-              "label": "عنوان رئيسي (إختياري)",
+              "label": "عنوان رئيسي",
               "multilanguage": true,
               "id": "title",
               "value": null,
               "required": false,
               "format": "text",
-              "description": "",
-              "placeholder": "Placeholder text ..",
+              "description":  "نص يتم إضافته على الصورة بنمط خط كبير",
+              "placeholder": "أدخل النص هنا...",
               "hide": false,
               "minLength": 0,
-              "maxLength": 80
+              "maxLength": 100
             },
             {
               "type": "string",
               "icon": "sicon-typography",
-              "label": "نص توضيحي (إختياري)",
+              "label": "نص توضيحي",
               "multilanguage": true,
               "id": "description",
               "value": null,
-              "description": "",
+              "description": "نص يتم إضافته على الصورة بخط أصغر من العنوان الرئيسي",
               "format": "textarea",
               "required": false,
               "placeholder": "Your text here",
-              "minLength": 20,
+              "minLength": 0,
               "maxLength": 255
             }
           ]
