@@ -54,7 +54,7 @@
               "type": "string",
               "icon": "sicon-image",
               "value": null,
-              "id": "image",
+              "id": "slides.image",
               "label": "صورة البنر",
               "description": "",
               "format": "image",
@@ -66,7 +66,7 @@
               "icon": "sicon-format-text-alt",
               "label": "عنوان رئيسي",
               "multilanguage": true,
-              "id": "title",
+              "id": "slides.title",
               "value": null,
               "required": false,
               "format": "text",
@@ -81,7 +81,7 @@
               "icon": "sicon-typography",
               "label": "نص إضافي",
               "multilanguage": true,
-              "id": "description",
+              "id": "slides.description",
               "value": null,
               "description": "يتم عرضه على الصورة بحجم أصغر من العنوان الرئيسي، مع إضافة تأثير دخول للنص يضيف لمسة جمالية على معرض الصور.",
               "format": "textarea",
@@ -177,37 +177,52 @@
               "required": false,
               "format": "variable-list",
               "searchable": true,
-              "source": "Products",
+              "source": "custom",
               "sources": [
                 {
                   "label": "منتج",
-                  "key": "Products",
-                  "value": "Products"
+                  "key": "products",
+                  "value": "products"
                 },
                 {
                   "label": "تصنيف",
-                  "key": "Categories",
-                  "value": "Categories"
+                  "key": "categories",
+                  "value": "categories"
                 },
                 {
                   "label": "ماركة تجارية",
-                  "key": "Brands",
-                  "value": "Brands"
+                  "key": "brands",
+                  "value": "brands"
                 },
                 {
                   "label": "صفحة تعريفية",
-                  "key": "Pages",
-                  "value": "Pages"
+                  "key": "pages",
+                  "value": "pages"
                 },
                 {
-                  "label": "صفحة التخفيضات",
-                  "key": "offers",
-                  "value": "offers"
+                  "label": "مقالة",
+                  "key": "blog_articles",
+                  "value": "blog_articles"
+                },
+                {
+                  "label": "تصنيف ضمن المدونة",
+                  "key": "blog_categories",
+                  "value": "blog_categories"
+                },
+                {
+                  "label": "التخفيضات",
+                  "key": "offers_link",
+                  "value": "offers_link"
+                },
+                {
+                  "label": "الماركات التجارية",
+                  "key": "brands_link",
+                  "value": "brands_link"
                 },
                 {
                   "label": "المدونة",
-                  "key": "blog",
-                  "value": "blog"
+                  "key": "blog_link",
+                  "value": "blog_link"
                 },
                 {
                   "label": "رابط خارجي",
@@ -227,6 +242,34 @@
       "path": "home.brands",
       "fields": [
         {
+          "type": "string",
+          "icon": "sicon-format-text-alt",
+          "label": "العنوان",
+          "multilanguage": true,
+          "id": "title",
+          "required": false,
+          "format": "text",
+          "description": "",
+          "placeholder": "أدخل العنوان هنا...",
+          "minLength": 0,
+          "maxLength": 200,
+          "value": {
+            "ar": "تصفح من خلال العلامات التجارية",
+            "en": "Browse All Brands"
+          }
+        },
+        {
+          "type": "boolean",
+          "icon": "sicon-toggle-off",
+          "label": "إظهار زر (عرض الكل)",
+          "description": "",
+          "id": "show_all",
+          "format": "switch",
+          "required": false,
+          "value": true,
+          "selected": true
+        },
+        {
           "type": "items",
           "icon": "sicon-keyboard_arrow_down",
           "label": "الماركات التجارية",
@@ -237,7 +280,7 @@
           "options": [],
           "required": true,
           "multichoice": true,
-          "source": "Brands"
+          "source": "brands"
         }
       ]
     },
@@ -298,14 +341,14 @@
           "options": [],
           "required": false,
           "multichoice": true,
-          "source": "Products",
+          "source": "products",
           "maxLength": 8
         }
       ]
     },
     {
       "key": "b89edc4a-ce0b-468f-8323-2da48147bb32",
-      "title": "صور ثابتة (محسنة)",
+      "title": "صور مربعة (محسنة)",
       "icon": "sicon-image",
       "path": "home.enhanced-square-banners",
       "fields": [
@@ -325,7 +368,7 @@
               "icon": "sicon-image",
               "value": null,
               "label": "صورة البنر",
-              "id": "image",
+              "id": "banners.image",
               "description": "",
               "format": "image",
               "required": true,
@@ -335,38 +378,58 @@
               "type": "items",
               "icon": "sicon-link",
               "label": "الرابط",
-              "id": "url",
+              "id": "banners.url",
               "value": null,
               "description": "",
               "required": false,
               "format": "variable-list",
               "searchable": true,
-              "source": "Products",
+              "source": "custom",
               "sources": [
                 {
                   "label": "منتج",
-                  "key": "Products",
-                  "value": "Products"
+                  "key": "products",
+                  "value": "products"
                 },
                 {
                   "label": "تصنيف",
-                  "key": "Categories",
-                  "value": "Categories"
+                  "key": "categories",
+                  "value": "categories"
                 },
                 {
                   "label": "ماركة تجارية",
-                  "key": "Brands",
-                  "value": "Brands"
+                  "key": "brands",
+                  "value": "brands"
                 },
                 {
                   "label": "صفحة تعريفية",
-                  "key": "Pages",
-                  "value": "Pages"
+                  "key": "pages",
+                  "value": "pages"
                 },
                 {
-                  "label": "صفحة التخفيضات",
-                  "key": "offers",
-                  "value": "offers"
+                  "label": "مقالة",
+                  "key": "blog_articles",
+                  "value": "blog_articles"
+                },
+                {
+                  "label": "تصنيف ضمن المدونة",
+                  "key": "blog_categories",
+                  "value": "blog_categories"
+                },
+                {
+                  "label": "التخفيضات",
+                  "key": "offers_link",
+                  "value": "offers_link"
+                },
+                {
+                  "label": "الماركات التجارية",
+                  "key": "brands_link",
+                  "value": "brands_link"
+                },
+                {
+                  "label": "المدونة",
+                  "key": "blog_link",
+                  "value": "blog_link"
                 },
                 {
                   "label": "رابط خارجي",
@@ -380,7 +443,7 @@
               "icon": "sicon-format-text-alt",
               "label": "عنوان رئيسي",
               "multilanguage": true,
-              "id": "title",
+              "id": "banners.title",
               "value": null,
               "required": false,
               "format": "text",
@@ -395,7 +458,7 @@
               "icon": "sicon-typography",
               "label": "نص توضيحي",
               "multilanguage": true,
-              "id": "description",
+              "id": "banners.description",
               "value": null,
               "description": "نص يتم إضافته على الصورة بخط أصغر من العنوان الرئيسي",
               "format": "textarea",

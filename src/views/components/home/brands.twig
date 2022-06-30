@@ -7,16 +7,23 @@
 #}
 <section class="s-block s-block--logos-slider s-block--full-bg bg-gray-1002 pt-8 sm:pt-12 pb-8 sm:pb-20">
     <div class="container">
-        <div class="center-between mb-6 sm:mb-8">
-            <h1 class="s-block__title">{{trans('blocks.home.browse_brands')}}</h1>
-            <a href="{{link('brands')}}" class="s-block__display-all"> {{trans('blocks.home.display_all')}} </a>
-        </div>
+        {% if(component.title or component.show_all) %}
+            <div class="center-between mb-6 sm:mb-8">
+                {% if component.title %}
+                    <h1 class="s-block__title">{{ component.title }}</h1>
+                {% endif %}
+                {% if(component.show_all) %}
+                    <a href="{{ link('brands') }}"
+                       class="s-block__display-all"> {{ trans('blocks.home.display_all') }} </a>
+                {% endif %}
+            </div>
+        {% endif %}
 
-        <div class="grid grid-cols-2 {{component.brands|length > 4 ? 'md:grid-cols-4' : 'md:grid-cols-' ~ component.brands|length }} grid-flow-row lg:grid-flow-col gap-4 lg:gap-8">
+        <div class="grid grid-cols-2 {{ component.brands|length > 4 ? 'md:grid-cols-4' : 'md:grid-cols-' ~ component.brands|length }} grid-flow-row lg:grid-flow-col gap-4 lg:gap-8">
             {% for brand in component.brands %}
                 {% if loop.first or loop.index0%3==0 %}
                     <a href="{{ brand.url }}"
-                       class="brand-item {{component.brands|length > 4  ? 'sm:row-span-2 sm:h-auto': 'md:h-banner' }}">
+                       class="brand-item {{ component.brands|length > 4  ? 'sm:row-span-2 sm:h-auto': 'md:h-banner' }}">
                         <img class="max-h-full" src="{{ brand.logo }}" alt=""/>
                     </a>
                 {% else %}
