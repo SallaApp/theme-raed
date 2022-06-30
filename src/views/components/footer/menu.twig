@@ -1,25 +1,24 @@
 {#
 | Variable        | Type    | Description |
 |-----------------|---------|-------------|
-| pages           | Page[]  |             |
-| pages[].id      | int     |             |
-| pages[].title   | String  |             |
-| pages[].content | String  |             |
-| pages[].url     | String  |             |
+| items           | link[]  |             |
+| items[].id      | int     |             |
+| items[].title   | String  |             |
+| items[].url     | String  |             |
 #}
 {% if is_header %}
-    {% if pages|length %}
+    {% if items|length %}
         <ul class="hidden lg:flex items-center pe-4 whitespace-nowrap">
-            {% for key, page in pages|slice(0,3) %}
-              <a href="{{ page.url }}" class="topnav-link-item right-side">{{ page.title }}</a>
+            {% for key, item in items|slice(0,3) %}
+              <a href="{{ item.url }}" class="topnav-link-item right-side">{{ item.title }}</a>
             {% endfor %}
         </ul>
     {% endif %}
 {% else %}
     <div>
         <h3>{{ trans('blocks.footer.pages_links') }}</h3>
-        <div class="footer-list {{ (pages|length)>4?'store-links-items':'' }}">
-            {% for item in pages %}
+        <div class="footer-list {{ (items|length)>4?'store-links-items':'' }}">
+            {% for item in items %}
                 <a href="{{ item.url }}" class="block mb-7 last:mb-0 text-sm leading-none hover:text-primary">{{ item.title }}</a>
             {% endfor %}
         </div>
