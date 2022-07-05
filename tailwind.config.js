@@ -1,17 +1,11 @@
 const colors = require('tailwindcss/colors');
-delete colors['lightBlue']
-
 module.exports = {
-    mode: 'jit',
-    purge: {
-        enabled: true,
-        content: [
-            "src/views/**/*.twig",
-            "src/assets/js/**/*.js",
-            //todo:: inject it via the plugin or easier way
-            'node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt',
-        ],
-    },
+    content: [
+        "src/views/**/*.twig",
+        "src/assets/js/**/*.js",
+        //todo:: inject it via the plugin or easier way
+        'node_modules/@salla.sa/twilight-tailwind-theme/safe-list-css.txt',
+    ],
     darkMode: 'class', // or 'media' or 'class'
     theme   : {
         container : {
@@ -38,16 +32,21 @@ module.exports = {
                 'auto-fill'  : 'repeat(auto-fill, 290px)',
             },
             colors             : {
-                'inherit'      : 'inherit',
-                'primary'      : 'var(--color-main)',
+                gray           : colors.neutral,
+                green          : colors.emerald,
+                yellow         : colors.amber,
+                purple         : colors.violet,
+                inherit        : 'inherit',
+                transparent    : 'transparent',
+                reverse        : 'var(--color-text-reverse)',
+                primary        : 'var(--color-main)',
+                current        : 'currentColor',
                 'primary-d'    : 'var(--color-main-d)',
                 'primary-l'    : 'var(--color-main-l)',
                 'primary-reverse': 'var(--color-main-reverse)',
-                'transparent'  : 'transparent',
                 'light-gray'   : '#F9FAFB',
                 'gray-150'     : '#eff0f0',
                 'color-gray'   : 'var(--color-grey)',
-                'reverse'      : 'var(--color-text-reverse)',
             },
             spacing: {
               '3.75': '15px',
@@ -129,21 +128,13 @@ module.exports = {
             }
         },
     },
-    variants: {
-        extend: {
-          translate: ['group-hover'],
-        },
-    },
-
     corePlugins: {
       outline: false,
     },
-
     plugins: [
       require('@salla.sa/twilight-tailwind-theme'),
       require('tailwindcss-rtl'),
       require('@tailwindcss/forms'),
       require('@tailwindcss/line-clamp'),
-      require('@tailwindcss/jit'),
     ],
 }
