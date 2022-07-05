@@ -21,7 +21,7 @@ cd vendor/salla/theme-one
 # 3. link the package
 npm link @salla.sa/twilight
 
-# 3. start watch :)
+# 3. start watch :). 
 npm run watch
 
 
