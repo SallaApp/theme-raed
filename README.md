@@ -15,7 +15,7 @@ rm -rf public/themes/one && ln -s vendor/salla/theme-one/assets public/themes/on
 # rm -rf public/themes/one && ln -s ~/works/salla/theme-one/assets public/themes/one
 # 2. link the theme one package using salla cli
 
-# lets go to our theme 
+# lets go to our theme  
 cd vendor/salla/theme-one
  
 # 3. link the package
