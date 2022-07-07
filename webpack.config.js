@@ -53,7 +53,7 @@ module.exports = {
         ],
     },
     plugins: [
-        new ThemeWatcher(),
+        // new ThemeWatcher(),
         new MiniCssExtractPlugin(),
         new CopyPlugin({patterns: [{from: asset('images'), to: output('images')}]}),
     ],
