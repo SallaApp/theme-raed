@@ -2,6 +2,7 @@ const colors = require('tailwindcss/colors');
 delete colors['lightBlue']
 
 module.exports = {
+    important: true,
     mode: 'jit',
     purge: {
         enabled: true,
@@ -45,9 +46,7 @@ module.exports = {
                 'primary-reverse': 'var(--color-main-reverse)',
                 'transparent'  : 'transparent',
                 'light-gray'   : '#F9FAFB',
-                'gray-150'     : '#eff0f0',
                 'color-gray'   : 'var(--color-grey)',
-                'reverse'      : 'var(--color-text-reverse)',
             },
             spacing: {
               '3.75': '15px',
