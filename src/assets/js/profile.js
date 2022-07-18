@@ -22,6 +22,28 @@ class Profile extends BasePage {
             styleButtonRemoveItemPosition : 'center bottom',
             styleButtonProcessItemPosition: 'center bottom',
         });
+
+        // enable submit button with  form change
+         const inputs = document.querySelectorAll(" input, select");
+         for (const el of inputs) {
+             el.oldValue = el.value + el.checked;
+         }
+ 
+         // Declares function and call it directly
+        var setEnabled;
+        (setEnabled = function () {
+             var e = true;
+             for (const el of inputs) {
+                 if (el.oldValue !== (el.value + el.checked)) {
+                     e = false;
+                     break;
+                 }
+             }
+             document.querySelector("salla-button").disabled = e;
+        })();
+ 
+        document.oninput = setEnabled;
+        document.onchange = setEnabled;
     }
 }
 
