@@ -87,9 +87,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
-    <meta name="before">
     {% hook 'head:start' %}
-    <meta name="after">
     <!-- theme color -->
     <meta name="msapplication-navbutton-color" content="{{ theme.color.primary }}">
     <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color.primary }}">
@@ -101,8 +99,6 @@
     <meta name="msapplication-TileImage" content="{{ store.logo }}">
     <meta name="_token" content="{{ csrf_token() }}">
 
-    {# <link rel="preconnect" href="https://www.googletagmanager.com"/> #}
-    {# <link rel="preconnect" href="https://assets.salla.sa"/> #}
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
@@ -110,10 +106,10 @@
     <style>
         :root {
             --font-main: '{{theme.font.name}}';
-            --color-main: {{ theme.color.primary }};
-            --color-main-d: {{ theme.color.darker(0.15) }};
-            --color-main-l: {{ theme.color.lighter(0.15) }};
-            --color-main-reverse: {{ theme.color.reverse_text }};
+            --color-primary: {{ theme.color.primary }};
+            --color-primary-dark: {{ theme.color.darker(0.15) }};
+            --color-primary-light: {{ theme.color.lighter(0.15) }};
+            --color-primary-reverse: {{ theme.color.reverse_text }};
         }
     </style>
     {# tracking services, custom css feature. #}
