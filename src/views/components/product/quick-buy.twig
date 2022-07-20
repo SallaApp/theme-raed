@@ -38,28 +38,28 @@
                                 <input type="hidden" name="product_ids[]" value="{{ product.id }}">
                             {% endfor %}
 
-                            {% if user.type == 'guest' %}
+                            {% if user.type=='guest' %}
 
                                 <div class="form-group">
-                                    <label>{{ trans('pages.products.your_name') }}</label>
+                                    <label>{{trans('pages.products.your_name')}}</label>
                                     <input type="text"
                                            class="form-control"
                                            value="{{ customerPresenter.getName() }}"
                                            name="full_name"
                                            id="full_name"
-                                           placeholder="{{ trans('pages.products.your_name') }}"/>
+                                           placeholder="{{trans('pages.products.your_name')}}"/>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group phone-input">
-                                            <label>{{ trans('common.elements.mobile') }}</label>
+                                            <label>{{trans('common.elements.mobile')}}</label>
                                             <input type="tel"
                                                    class="form-control intl-input phone"
                                                    name="phone"
                                                    value="{{ customerPresenter.getNationalNumber() }}"
                                                    data-digits
                                                    id="mobile"
-                                                   placeholder="{{ trans('common.elements.mobile_placeholder') }}"/>
+                                                   placeholder="{{trans('common.elements.mobile_placeholder')}}"/>
                                             <span id="error-msg"></span>
                                         </div>
                                         <input type="hidden"
@@ -76,7 +76,7 @@
                                                    name="email"
                                                    class="form-control {{ quick_checkout.isEmailRequired() ? 'required' : '' }}"
                                                    id="email"
-                                                   placeholder="{{ trans('common.elements.email') }} {{ quick_checkout.isEmailRequired() ? '' : trans('common.elements.optional') }}"/>
+                                                   placeholder="{{ trans('common.elements.email') }} {{ quick_checkout.isEmailRequired() ?'':trans('common.elements.optional') }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +87,7 @@
                                         <div class="form-group">
                                             <div class="checkbox checkbox--large">
                                                 <input name="terms" id="qo_agreement"
-                                                       type="checkbox" {{ user.type == 'user' ? 'checked' : '' }}>
+                                                       type="checkbox" {{ user.type=='user' ? 'checked' : '' }}>
                                                 {% if agreement_text|raw|length > 200 %}
                                                     <label for="qo_agreement">
                                                         {{ agreement_text|striptags|slice(0, 150) ~ '...' }}                                                        &ensp;
@@ -96,7 +96,7 @@
                                                     </label>
                                                 {% else %}
                                                     <label for="qo_agreement">
-                                                        {{ agreement_text|raw|striptags }}
+                                                        {{ agreement_text|raw|striptags  }}
                                                     </label>
                                                 {% endif %}
                                             </div>
@@ -138,7 +138,7 @@
             </header>
             <section class="popup-modal__body">
                 <article class="article articel--main article--small">
-                    {{ agreement_text|raw }}
+                    {{ agreement_text|raw  }}
                 </article>
             </section>
             <footer class="popup-modal__footer anime-item">

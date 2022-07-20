@@ -16,15 +16,15 @@
 | main_product.product     | Product   |                                                                     |
 | position                 | int       | sorting block                                                       |
 #}
-{% set component_id = 'featured-products-style1-' ~ position %}
+{% set component_id='featured-products-style1-' ~ position %}
 <section class="s-block s-block-tabs s-block--special-products container" id="{{ component_id }}">
-    <div class="grid grid-cols-1 {{ main_product ? 'lg:grid-cols-2' : '' }} gap-8">
+    <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
                 <div class="mb-6 sm:mb-8">
                     <h2 class="s-block__title">{{ main_product.title }}</h2>
                 </div>
-                {% include 'pages.partials.product.card' with {product: main_product.product, is_special: true} %}
+                {% include 'pages.partials.product.card' with {product:main_product.product, is_special:true} %}
             </div>
         {% endif %}
         <div class="flex flex-col">
@@ -33,7 +33,7 @@
                     <salla-button shape="link"
                             data-target="{{ component_id }}-{{ section.id }}"
                             data-component-id="{{ component_id }}"
-                            class="tab-trigger {{ loop.first ? 'is-active' : '' }}">
+                            class="tab-trigger {{ loop.first?'is-active':'' }}">
                         {{ section.title }}
                     </salla-button> 
                 {% endfor %}
@@ -41,8 +41,8 @@
 
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
-                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product ? '' : 'lg:grid-cols-4' }} {{ loop.first ? 'is-active' : '' }}">
-                        {% for product in section.products|slice(0, main_product ? 4 : 8) %}
+                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
+                        {% for product in section.products|slice(0,main_product?4:8) %}
                             {% include 'pages.partials.product.card' %}
                         {% endfor %}
                     </div>
