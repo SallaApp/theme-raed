@@ -7,8 +7,8 @@
 #}
 {% extends "layouts.customer" %}
 {% block styles %}
-    <link rel="stylesheet" href="{{ 'flatpickr.css' | asset }}">
-    <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'flatpickr.css'|asset }}">
+    <link rel="stylesheet" href="{{ 'filepond.css'|asset }}">
 {% endblock %}
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
@@ -21,7 +21,7 @@
                 <label for="first-name" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.first_name') }}
                 </label>
-                <input type="text" name="first_name" value="{{ user.first_name }}" id="first-name" required
+                <input type="text" name="first_name" value="{{ user.first_name}}" id="first-name" required
                        autocomplete="first_name" class="form-input">
             </div>
 
@@ -47,10 +47,10 @@
                 </label>
                 <select class="form-input" name="gender" required>
                     <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
-                    <option value="male" {{ user.gender=='male'?'selected':'' }}>
+                    <option value="male" {{ user.gender == 'male' ? 'selected' : '' }}>
                         {{ trans('pages.profile.male') }}
                     </option>
-                    <option value="female" {{ user.gender=='female'?'selected':'' }}>
+                    <option value="female" {{ user.gender == 'female' ? 'selected' : '' }}>
                         {{ trans('pages.profile.female') }}
                     </option>
                 </select>
@@ -88,6 +88,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defser src="{{ 'filepond.js' | asset }}"></script>
-    <script defer src="{{ 'customer.js' | asset }}"></script>
+    <script defser src="{{ 'filepond.js'|asset }}"></script>
+    <script defer src="{{ 'customer.js'|asset }}"></script>
 {% endblock %}

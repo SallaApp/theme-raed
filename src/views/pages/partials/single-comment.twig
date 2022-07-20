@@ -1,12 +1,12 @@
-{% set is_admin = comment.type=='admin' %}
+{% set is_admin = comment.type == 'admin' %}
 {% if not is_admin %}
 <div class="border-b last:border-0 mb-8 pb-8 border-gray-200 list-block">
     {% endif %}
     <div class="{% if is_admin %} nested-comment reply ps-8 md:ps-16 mt-8 admin {% else %} comment {% endif %} flex text-sm space-s-3 comment_id_{{ comment.id }}">
         {% if is_admin %} <i class="sicon-reply text-lg text-gray-400"></i>{% endif %}
         <div class="flex-none">
-            <img data-src="{{ comment.avatar|is_placeholder ? 'images/avatar.png' | cdn : comment.avatar }}"
-                 alt="{{ comment.name }}" src="{{ 'images/s-empty.png' | asset }}"
+            <img data-src="{{ comment.avatar|is_placeholder ? 'images/avatar.png'|cdn : comment.avatar }}"
+                 alt="{{ comment.name }}" src="{{ 'images/s-empty.png'|asset }}"
                  class="w-10 h-10 bg-gray-100 object-cover rounded-full lazy-load">
         </div>
         <div class="flex-1">
@@ -18,7 +18,7 @@
                             {% if comment.has_order %}
                                 <i class="sicon-check rounded-full bg-amber-400 h-5 w-5 flex items-center justify-center text-xs"></i>
                                 <span class="fix-align ms-1 text-sm text-gray-600 mt-0.5">
-                                  {{ trans('blocks.comments.has_bought') }}{{ comment.stars?', ':'' }}
+                                  {{ trans('blocks.comments.has_bought') }}{{ comment.stars ? ', ' : '' }}
                                 </span>
                             {% endif %}
                             {% if comment.stars %}
@@ -31,7 +31,7 @@
                 {% if comment.stars %}
                     <div class="w-full comment__rating text-xs mb-2.5 space-s-1">
                         {% for i in 1..5 %}
-                            <i class="sicon-star2 inline-block {{ comment.stars>=i  ? 'text-amber-400' : 'text-gray-400' }}"></i>
+                            <i class="sicon-star2 inline-block {{ comment.stars >= i ? 'text-amber-400' : 'text-gray-400' }}"></i>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -51,7 +51,7 @@
     </div>
     {% if not is_admin %}
     {% for replay in comment.replies %}
-        {% include _self with {comment:replay} %}
+        {% include _self with {comment: replay} %}
     {% endfor %}
 </div>
 {% endif %}
