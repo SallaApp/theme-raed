@@ -1,5 +1,6 @@
 const colors = require('tailwindcss/colors');
 module.exports = {
+    important: false,
     content: [
         "src/views/**/*.twig",
         "src/assets/js/**/*.js",
