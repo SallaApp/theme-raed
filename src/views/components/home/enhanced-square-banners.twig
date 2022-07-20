@@ -12,18 +12,18 @@
 <section class="s-block s-block--banners container">
     <div class="grid {{ component.banners|length <= 3 ? 'md:grid-cols-' ~ component.banners|length : 'md:grid-cols-3' }} grid-flow-row gap-3 sm:gap-8">
         <div class="sm:col-span-1 {{ component.banners|length > 3 ? 'sm:row-span-2' }} banner-entry has-overlay lazy-background" data-src="{{ component.banners[0].image }}">
-            <a href="{{component.banners[0].url}}"
+            <a href="{{ component.banners[0].url }}"
                class="banner-entry__text !opacity-100">
                 <h3 class="text-2xl font-bold leading-12 mb-5">{{ component.banners[0].title }}</h3>
                 <p>{{ component.banners[0].description }}</p>
             </a>
         </div>
-        {% for banner in component.banners|slice(1,4) %}
+        {% for banner in component.banners|slice(1, 4) %}
             <div class="banner-entry lazy-background {{ component.banners|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-src="{{ banner.image }}">
-                <a href="{{banner.url}}"
+                <a href="{{ banner.url }}"
                    class="banner-entry__text">
-                    <h3 class="banner__title  font-bold  mb-1 leading-6">{{banner.title}}</h3>
-                    <p class="banner__description">{{banner.description}}</p>
+                    <h3 class="banner__title font-bold  mb-1 leading-6">{{ banner.title }}</h3>
+                    <p class="banner__description">{{ banner.description }}</p>
                 </a>
             </div>
         {% endfor %}

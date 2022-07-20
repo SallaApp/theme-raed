@@ -39,7 +39,6 @@ module.exports = {
                 'primary-l'    : 'var(--color-primary-light)',
                 'primary-reverse': 'var(--color-primary-reverse)',
                 'transparent'  : 'transparent',
-                'light-gray'   : '#F9FAFB',
                 'color-gray'   : 'var(--color-grey)',
             },
             spacing: {

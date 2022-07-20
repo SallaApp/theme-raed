@@ -19,7 +19,7 @@
   {# Brand banner #}
   {% if brand.banner %} 
         <div class="brand-page__banner">
-            <img class="lazy-load w-full max-h-[300px] object-cover rounded-md bg-gray-100" data-src="{{ brand.banner }}" src="{{ 'images/s-empty.png' | asset }}" alt="{{ brand.name }}"/>
+            <img class="lazy-load w-full max-h-[300px] object-cover rounded-md bg-gray-100" data-src="{{ brand.banner }}" src="{{ 'images/s-empty.png'|asset }}" alt="{{ brand.name }}"/>
         </div>
     {% endif %}
 
@@ -29,7 +29,7 @@
    
         {# brand header #}
         <header class="flex mt-2 mb-12 md:mb-20">
-            <img class="rounded-md w-40 h-24 object-contain  shadow-md p-4 bg-white lazy-load" data-src="{{ brand.logo }}" src="{{ 'images/s-empty.png' | asset }}" alt="{{ brand.name }}">
+            <img class="rounded-md w-40 h-24 object-contain  shadow-md p-4 bg-white lazy-load" data-src="{{ brand.logo }}" src="{{ 'images/s-empty.png'|asset }}" alt="{{ brand.name }}">
             <div class="px-5 pt-3">
                 <h1 class="text-2xl font-bold mb-1">{{ brand.name }}</h1>
                 <p class="text-base text-gray-500">{{ brand.description|raw }}</p>
@@ -60,7 +60,7 @@
                             class="md:grid-cols-auto-fill mb-8 products-container gird-view grid sm:grid-cols-2 grid-flow-row gap-6"
                             next-page="{{ products.next_page }}" autoload>
                         {% for product in products %}
-                            {% include 'pages.partials.product.card' with {block_classes:'list-block'} %}
+                            {% include 'pages.partials.product.card' with {block_classes: 'list-block'} %}
                         {% endfor %}
                     </salla-infinite-scroll>
 

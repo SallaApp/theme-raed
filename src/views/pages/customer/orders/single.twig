@@ -138,9 +138,9 @@
                         {% if item.product %}
                             <div class="flex space-s-5 mb-4">
                                 <a href="{{ item.product.url }}" class="shrink-0">
-                                    <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
+                                    <img src="{{ item.image ?: 'images/placeholder.png'|asset }}"
                                          alt="{{ item.name }}"
-                                         class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
+                                         class="w-18 h-14 object-{{ item.image ? 'cover' : 'contain' }} rounded-md">
                                 </a>
                                 <div>
                                     <a href="{{ item.product.url }}"
@@ -184,12 +184,12 @@
                                                 <div class="flex space-s-2.5">
                                                     <a href="{{ option.value }}" target="_blank">
                                                         <img class="h-6 w-6 object-cover rounded-md"
-                                                             src="{{ option.value ?: 'images/placeholder.png' | asset }}"
+                                                             src="{{ option.value ?: 'images/placeholder.png'|asset }}"
                                                              alt="{{ option.name }}"/>
                                                     </a>
                                                 </div>
                                             {% elseif option.color %}
-                                              <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
+                                              <span title="{{ option.value }}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
                                             {% else %}
                                                 {{ option.value }}
                                             {% endif %}
@@ -295,7 +295,7 @@
                             {% if item.rating.is_pending %}
                                 <span>{{ trans('pages.rating.pending') }}</span>
                             {% endif %}
-                            <salla-rating-stars size="small" value="{{item.rating.stars}}"></salla-rating-stars>
+                            <salla-rating-stars size="small" value="{{ item.rating.stars }}"></salla-rating-stars>
                         </section>
                     {% endif %}
                 </div>
@@ -372,7 +372,7 @@
         {% if order.can_reorder or order.can_cancel or order.is_pending_payment %}
             <div class="bg-white rounded-md p-5 divide-y divide-border-color space-y-4">
                 {% if order.can_reorder or order.is_pending_payment %}
-                    <div class="{{order.is_pending_payment ? 'flex-center': 'center-between'}}">
+                    <div class="{{ order.is_pending_payment ? 'flex-center' : 'center-between' }}">
                         {% if order.is_pending_payment %}
                             {% if order.pending_payment_ends_in == 0 %}
                               <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
@@ -448,7 +448,7 @@
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
                 <p class="mb-2">{{ order.rating.store.content|raw }}</p>
-                <salla-rating-stars value="{{order.rating.store.stars}}"></salla-rating-stars>
+                <salla-rating-stars value="{{ order.rating.store.stars }}"></salla-rating-stars>
             </section>
         {% endif %}
 
@@ -457,7 +457,7 @@
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
                 <p class="mb-2">{{ order.rating.shipping.content|raw }}</p>
-                <salla-rating-stars value="{{order.rating.shipping.stars}}"></salla-rating-stars>
+                <salla-rating-stars value="{{ order.rating.shipping.stars }}"></salla-rating-stars>
             </section>
         {% endif %}
 
@@ -466,5 +466,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ 'customer.js' | asset }}"></script>
+    <script src="{{ 'customer.js'|asset }}"></script>
 {% endblock %}

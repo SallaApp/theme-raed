@@ -9,7 +9,7 @@
 {% if is_header %}
     {% if items|length %}
         <ul class="hidden lg:flex items-center pe-4 whitespace-nowrap">
-            {% for key, item in items|slice(0,3) %}
+            {% for key, item in items|slice(0, 3) %}
               <a href="{{ item.url }}" class="topnav-link-item right-side">{{ item.title }}</a>
             {% endfor %}
         </ul>
@@ -17,7 +17,7 @@
 {% else %}
     <div>
         <h3>{{ trans('blocks.footer.pages_links') }}</h3>
-        <div class="footer-list {{ (items|length)>4?'store-links-items':'' }}">
+        <div class="footer-list {{ (items|length) > 4 ? 'store-links-items' : '' }}">
             {% for item in items %}
                 <a href="{{ item.url }}" class="block mb-7 last:mb-0 text-sm leading-none hover:text-primary">{{ item.title }}</a>
             {% endfor %}

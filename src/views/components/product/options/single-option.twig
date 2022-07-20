@@ -9,10 +9,10 @@
 | value              | ?string       |                                                   |
 #}
 
-<select class="form-input {{ required?'required':'' }}" name="options[{{ option.id }}]"
+<select class="form-input {{ required ? 'required' : '' }}" name="options[{{ option.id }}]"
         {{ attirubtes|raw }}>
     <option placeholder value="">{{ option.placeholder }}</option>
-    {% for key,detail in option.details %}
+    {% for key, detail in option.details %}
         <option {{ detail.is_selected ? "selected" : "" }} value="{{ detail.id }}">
             {{ detail.full_name }}
         </option>
