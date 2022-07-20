@@ -14,7 +14,7 @@
 {% extends "layouts.master" %}
 
 {% block content %}
-    <div class=" container mb-8 sm:mb-24">
+    <div class="container mb-8 sm:mb-24">
       <div class="center-between">
 
         {% component 'header.breadcrumbs' %}
@@ -76,7 +76,7 @@
                                                  class="object-cover h-full w-full">
                                         {% else %}
                                             <img class="sm:h-full w-20 object-contain opacity-50"
-                                                 src="{{ 'images/placeholder.png' | asset }}" alt="post image">
+                                                 src="{{ 'images/placeholder.png'|asset }}" alt="post image">
                                         {% endif %}
                                         <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 lg:ps-10 lg:pb-20">
                                             <div class="blog-slider__content relative">
@@ -84,7 +84,7 @@
                                                     <div class="block-slide-anime">
                                                         <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
                                                             <div class="flex items-center">
-                                                                <i class="sicon-calendar-date me-1 "></i>
+                                                                <i class="sicon-calendar-date me-1"></i>
                                                                 <span class="whitespace-nowrap">{{ article.created_at|date }}</span>
                                                             </div>
                                                             <a href="{{ article.author.url }}"
@@ -125,7 +125,7 @@
                                              alt="{{ article.image.alt }}"/>
                                     {% else %}
                                         <img class="sm:h-full w-20 object-contain opacity-60"
-                                             src="{{ 'images/placeholder.png' | asset }}"
+                                             src="{{ 'images/placeholder.png'|asset }}"
                                              alt="{{ article.image.alt }}">
                                     {% endif %}
                                 </a>
@@ -133,11 +133,11 @@
                                 <div class="flex-1 px-5 pt-5 pb-7">
                                     <div class="mb-2.5 text-gray-500 rounded-md inline-flex text-sm space-s-5">
                                         <div class="flex items-center">
-                                            <i class="sicon-calendar-date me-1 "></i>
+                                            <i class="sicon-calendar-date me-1"></i>
                                             <span class="">{{ article.created_at|date }}</span>
                                         </div>
                                         <a href="{{ article.author.url }}" class="flex items-center hover:text-dark">
-                                            <i class="sicon-user me-1 "></i>
+                                            <i class="sicon-user me-1"></i>
                                             <span class="">{{ article.author.name }}</span>
                                         </a>
                                     </div>
@@ -155,7 +155,7 @@
                                         {% for tag in article.tags %}
                                             <a href="{{ tag.url }}"
                                                class="py-2 px-4 rounded-large inline-flex items-center text-gray-500 hover:text-dark justify-center text-sm">
-                                                <i class="font-medium sicon-tag me-1.5 "></i>
+                                                <i class="font-medium sicon-tag me-1.5"></i>
                                                 <span class="fix-align whitespace-nowrap">{{ tag.name }}</span>
                                             </a>
                                         {% endfor %}
@@ -178,5 +178,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ 'pages.js' | asset }}"></script>
+    <script src="{{ 'pages.js'|asset }}"></script>
 {% endblock %}

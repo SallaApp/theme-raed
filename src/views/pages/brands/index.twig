@@ -22,7 +22,7 @@
             <div class="brands-nav-wrap">
                 <ul id="brands-nav" class="brands-nav">
                     <li></li>
-                    {% for char,brands_group in brands %}
+                    {% for char, brands_group in brands %}
                         <li>
                             <a class="brands-nav__item"
                                href="#brand-section-{{ loop.index }}"
@@ -39,7 +39,7 @@
 
                 {% hook 'brands:index.items.start' %}
 
-                {% for char,brandGroup in brands %}
+                {% for char, brand_group in brands %}
                     <section id="brand-section-{{ loop.index }}" class="pt-24 first:pt-16 md:first:pt-24">
                         <!-- separator -->
                         <div class="flex items-center mb-10">
@@ -49,7 +49,7 @@
                             <div class="bg-border-color h-px flex-1"></div>
                         </div>
                         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-4 md:gap-8">
-                            {% for brand in brandGroup %}
+                            {% for brand in brand_group %}
                                 <a href="{{ brand.url }}" class="brand-item">
                                     <img class="max-h-full" src="{{ brand.logo }}" alt="{{ brand.name }}">
                                 </a>
@@ -73,5 +73,5 @@
     </div>
 {% endblock %}
 {% block scripts %}
-    <script src="{{ 'pages.js' | asset }}"></script>
+    <script src="{{ 'pages.js'|asset }}"></script>
 {% endblock %}

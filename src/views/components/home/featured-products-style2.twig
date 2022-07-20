@@ -14,14 +14,14 @@
 | postion                       | int       | Sorting number starts from zero                                     |
 | is_slider                     | Bool      | Products should be movable or static                                |
 #}
-{% set component_id='featured-products-style2-' ~ position %}
-<section class="s-block s-block-tabs s-block--tabs-produtcs s-block--full-bg {{ is_slider ? 'as-slider':'as-grid' }} bg-gray-1002 pb-8 sm:pb-16 pt-8 sm:pt-16" id="{{ component_id }}">
+{% set component_id = 'featured-products-style2-' ~ position %}
+<section class="s-block s-block-tabs s-block--tabs-produtcs s-block--full-bg {{ is_slider ? 'as-slider' : 'as-grid' }} bg-gray-1002 pb-8 sm:pb-16 pt-8 sm:pt-16" id="{{ component_id }}">
   <div class="container">
 
       <div class="tabs hide-scroll">
           {% for section in items %}
               <salla-button 
-                class="tab-trigger {{ loop.first?'is-active':'' }}"
+                class="tab-trigger {{ loop.first ? 'is-active' : '' }}"
                 data-target="{{ component_id }}-{{ section.id }}"
                 data-component-id="{{ component_id }}"
                 fill="outline">
@@ -32,7 +32,7 @@
 
       <div class="tabs-wrapper">
         {% for section in items %}
-            <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
+            <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first ? 'is-active' : '' }}">
                 {% if is_slider %}
                     <div class="swiper default-slider slider-layout" data-id="{{ component_id }}-{{ section.id }}">
                       <div class="swiper-wrapper flex items-stretch">
@@ -55,7 +55,7 @@
                   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
                     {% for product in section.products %}
                       <div class="featured-item">
-                        {% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
+                        {% include 'pages.partials.product.card' with {is_horizontal: true, show_desc: true} %}
                       </div>
                     {% endfor %}
                   </div>
