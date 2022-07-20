@@ -28,7 +28,7 @@
         </nav>
         <div class="bg-white p-4 md:p-8 rounded-md mb-8">
             <div class="flex flex-col items-center pt-16 pb-10">
-                <img src="{{ 'images/delivery-bro.svg' | asset }}" alt=""
+                <img src="{{ 'images/delivery-bro.svg'|asset }}" alt=""
                      class="thanks-item opacity-0 grayscale w-56 mb-8">
                 <h1 class="font-bold text-lg mb-2.5 thanks-item opacity-0">{{ thank_you_title }}</h1>
                 <p class="thanks-item opacity-0 text-gray-500 max-w-xs text-center text-sm leading-6 mb-20">
@@ -45,7 +45,7 @@
 
             {% for item in order.items %}
                 {% if item.codes|length %}
-                    <div class="bg-light-gray p-5 rounded-md text-start mb-2.5 last:mb-0">
+                    <div class="bg-gray-50 p-5 rounded-md text-start mb-2.5 last:mb-0">
                         <h2 class="font-bold mb-5 unicode">
                             {{ trans('pages.thank_you.codes') }} ({{ item.name }})
                         </h2>
@@ -65,7 +65,7 @@
                 {% endif %}
 
                 {% if item.files|length %}
-                    <div class="bg-light-gray p-5 rounded-md text-start">
+                    <div class="bg-gray-50 p-5 rounded-md text-start">
                         <h2 class="font-bold mb-5 unicode">
                             {{ trans('pages.thank_you.files') }} ({{ item.name }})
                         </h2>
@@ -145,5 +145,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ 'checkout.js' | asset }}"></script>
+    <script src="{{ 'checkout.js'|asset }}"></script>
 {% endblock %}
