@@ -39,7 +39,7 @@ class Product extends BasePage {
         }) || e.target.remove());
 
         //Toggale share menu
-        app.onClick('.btn--share', ({target: btn}) => {
+        app.onClick('salla-button.btn--share', ({target: btn}) => {
             console.log("Clicked ....");
           let showShareMenu = !btn.classList.contains('opened'),
               shareMenu = document.querySelector('.share-btns-list');
