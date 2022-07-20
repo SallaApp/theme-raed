@@ -60,8 +60,8 @@
 #}
 {% extends "layouts.master" %}
 {% block styles %}
-    <link rel="stylesheet" href="{{ 'flatpickr.css' | asset }}">
-    <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'flatpickr.css'|asset }}">
+    <link rel="stylesheet" href="{{ 'filepond.css'|asset }}">
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -77,19 +77,19 @@
                     {% endif %}
 
 
-                    {% set has_many_images=product.images|length>1 %}
+                    {% set has_many_images = product.images|length > 1 %}
                     <div class="swiper-wrapper">
                         {% for image in product.images %}
                             <a data-fslightbox="product_{{ product.id }}"
                                data-img-id="{{ image.id }}"
-                               data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                               data-slid-index="{{ loop.index - 1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
                                data-caption="{{ image.alt }}"
                                data-infinite="false"
-                               data-type="{{ image.video_url?'youtube':'image' }}"
-                               href="{{ image.video_url?image.video_url:image.url }}"
+                               data-type="{{ image.video_url ? 'youtube' : 'image' }}"
+                               href="{{ image.video_url ? image.video_url : image.url }}"
                                aria-label="{{ product.name }}"
-                               class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
-                                <img {{ has_many_images ? 'data-' : '' }}src="{{ image.url }}" alt="{{ image.alt }}" class="{{has_many_images ? 'swiper-lazy ' : ''}}h-full object-contain w-full">
+                               class="swiper-slide homeslider__slide {{ image.video_url ? 'video-entry' : '' }}">
+                                <img {{ has_many_images ? 'data-' : '' }}src="{{ image.url }}" alt="{{ image.alt }}" class="{{ has_many_images ? 'swiper-lazy ' : '' }}h-full object-contain w-full">
                             </a>
                         {% endfor %}
                     </div>
@@ -105,12 +105,12 @@
                 </div>
 
                 {% if has_many_images %}
-                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider mt-4 {{ product.images|length > 4 ? '!pe-10' : ''}}"
+                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider mt-4 {{ product.images|length > 4 ? '!pe-10' : '' }}"
                          id="thumbs-slider-{{ product.id }}">
                         <div class="swiper-wrapper flex items-stretch">
                             {% for image in product.images %}
-                                <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
-                                    <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
+                                <div class="swiper-slide slide--one-fourth {{ image.video_url ? 'video-entry' : '' }}">
+                                    <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png'|asset }}"
                                          class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
                                          title="{{ image.alt }}"
                                          alt="{{ image.alt }}"/>
@@ -231,7 +231,7 @@
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
                             <div class="px-4 text-red-400">
-                                <i class="sicon-fire me-1.5 "></i> {{ trans('pages.products.sold') }}
+                                <i class="sicon-fire me-1.5"></i> {{ trans('pages.products.sold') }}
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
@@ -260,7 +260,7 @@
                 <div class="grid gap-5 mb-5">
                     {% hook 'product:single.description' %}
 
-                    <salla-installment price="{{product.price}}"></salla-installment>
+                    <salla-installment price="{{ product.price }}"></salla-installment>
                 </div>
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
@@ -333,6 +333,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ 'filepond.js' | asset }}"></script>
-    <script src="{{ 'product.js' | asset }}"></script>
+    <script defer src="{{ 'filepond.js'|asset }}"></script>
+    <script src="{{ 'product.js'|asset }}"></script>
 {% endblock %}

@@ -3,18 +3,18 @@ view options:
  1- is_horizontal = false  // display horizonal card
  2- is_special = false  // display special product with count down
 
-*Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
+*Notice: if marchent wants equal image, {{ store.settings.product.fit_type }} will be (contain|cover) if not, it will be empty.
 #}
 <div id="product-{{ product.id }}" class='product-entry {{ block_classes ?: '' }}
-  {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
-  {{ is_special ? 'product-entry--special':'' }}
-  {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
-  {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
+  {{ is_horizontal ? 'product-entry--horizontal' : 'product-entry--vertical' }}
+  {{ is_special ? 'product-entry--special' : '' }}
+  {{ store.settings.product.fit_type ? 'product-entry--fit-type' : '' }}
+  {{ product.is_out_of_stock ? 'out-of-stock' : '' }}'>
 
     {# Image #}
     <a href="{{ product.url }}" class='product-entry__image'>
-        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
-             src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ?: 'cover' }} lazy-load"
+             src="{{ 'images/s-empty.png'|asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
         {% if product.promotion_title %}
             <div class="absolute top-4 start-0 z-1 font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
         {% endif %}
@@ -23,9 +23,9 @@ view options:
     {# content #}
     <div class="flex-1 p-4 xs:p-5 flex flex-col relative donating-wrap">
         {% if is_special %}
-            <div data-quantity="{{ product.quantity  }}" data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
+            <div data-quantity="{{ product.quantity }}" data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
                 <span>
-                    <b id="staProductQty" title="{{ product.quantity|number  }}" data-quantity="{{ product.quantity }}">{{ product.quantity|number }}</b>
+                    <b id="staProductQty" title="{{ product.quantity|number }}" data-quantity="{{ product.quantity }}">{{ product.quantity|number }}</b>
                     {{ trans('pages.products.remained') }}
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg"viewBox="-2 -1 36 34" class="pie-svg">
@@ -35,7 +35,7 @@ view options:
             </div>
         {% endif %}
  
-        <div class="{{is_special ? 'pe-24':''}}">
+        <div class="{{ is_special ? 'pe-24' : '' }}">
           <h3 class="product-entry__title mb-2.5 leading-6 max-w-full">
               <a href="{{ product.url }}">{{ product.name }}</a>
           </h3> 
@@ -46,7 +46,7 @@ view options:
         </div>
 
         {% if product.is_donation %}
-            {% component 'product.donation-progress-bar' with {product:product} %}
+            {% component 'product.donation-progress-bar' with {product: product} %}
             <div class="border-color mb-2.5">
               {% if product.can_donate %}
                 <label for="donation-amount" class="block text-sm mb-2.5">{{ trans('pages.products.donation_amount') }} <span class="text-red-500">*</span></label>
@@ -61,7 +61,7 @@ view options:
             </div>
         {% endif %}
 
-        <div class="w-full center-between mb-5 {{is_special ? 'pe-24':''}}">
+        <div class="w-full center-between mb-5 {{ is_special ? 'pe-24' : '' }}">
             {% if product.is_on_sale %}
                 <div class="space-s-1">
                     <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
