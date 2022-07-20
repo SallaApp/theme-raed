@@ -9,7 +9,7 @@
 | product    | Product       |                                                         |
 #}
 <div id="cart_donating_form">
-    {% component 'product.donation-progress-bar' with {product: product} %}
+    {% component 'product.donation-progress-bar' with {product:product} %}
     {% if product.can_donate %}
       <div class="group-form border-t border-gray-100 pt-5 mt-5 only:mt-0 only:pt-0 only:border-none sm:space-s-4 mb-2.5 sm:mb-0 sm:flex justify-between items-center">
           <label for="donating-amount" class="flex-1 block text-sm mb-2.5 "> {{ trans('pages.products.donation_amount') }} <span class="text-red-500">*</span>
@@ -20,7 +20,7 @@
                       name="donating_amount"
                       class="form-control _parseArabicNumbers form-input w-full"
                       data-digits
-                      value="{{ is_page('cart') ? product.price : '' }}"/>
+                      value="{{ is_page('cart')?product.price:'' }}"/>
               <span class="input-group-addon absolute top-2 end-4 text-gray-400">
                 {{ user.currency.symbol }}
               </span>

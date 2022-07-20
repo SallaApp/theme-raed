@@ -36,7 +36,7 @@
             {% if option.type in ["splitter"] %}
                 {{ option.element|raw }}
             {% else %}
-                <div class="mb-5 last:mb-0 {{ option.visibility_condition ? 'hidden' : '' }}" {{ option.condition_attributes|raw }}>
+                <div class="mb-5 last:mb-0 {{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
                         {% if option.type != "donation" %}
                             <label for="options[{{ option.id }}]" class="form-label">
@@ -71,7 +71,7 @@
                         <button class="btn-tab btn--collapse"
                                 type="button"
                                 data-show="note_{{ product.id }}">
-                            <i class="font-medium sicon-chat-conversation-alt me-1.5"></i>
+                            <i class="font-medium sicon-chat-conversation-alt me-1.5 "></i>
                             <span class="fix-align">{{ trans('pages.products.add_note') }} </span>
                         </button>
                     {% endif %}
@@ -79,7 +79,7 @@
                         <button class="btn-tab btn--collapse"
                                 data-show="file_{{ product.id }}"
                                 type="button">
-                            <i class="font-medium sicon-paperclip me-1.5"></i>
+                            <i class="font-medium sicon-paperclip me-1.5 "></i>
                             <span class="fix-align">{{ trans('pages.products.add_file') }}</span>
                         </button>
                     {% endif %}

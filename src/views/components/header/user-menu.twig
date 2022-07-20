@@ -6,27 +6,27 @@
 #}
 
  {% if is_profile_sidebar %}
-    <a href="{{ link('notifications') }}" class="menu-item {{ is_current_url('notifications') ? 'is-active' : '' }}">
+    <a href="{{ link('notifications') }}" class="menu-item {{ is_current_url('notifications')? 'is-active':'' }}">
         <i class="sicon-school-bell me-3 text-lg"></i>
         <span class="me-auto">{{ trans('common.titles.notifications') }}</span>
         {% if new_notifications_count %}
             <span class="badge badge--red">{{ new_notifications_count }}</span>
         {% endif %}
     </a>
-    <a href="{{ link('pending_orders') }}" class="menu-item {{ is_current_url('pending_orders') ? 'is-active' : '' }}">
+    <a href="{{ link('pending_orders') }}" class="menu-item {{ is_current_url('pending_orders')? 'is-active':'' }}">
         <i class="sicon-cart me-3 text-lg"></i>
         <span class="truncate me-auto">{{ trans('common.titles.pending_orders') }}</span>
         {% if pending_orders_count %}
           <span class="badge badge--red">{{ pending_orders_count }}</span>
         {% endif %}
     </a>
-    <a href="{{ link('orders') }}" aria-current="page" class="menu-item {{ is_current_url('orders') and not is_current_url('pending_orders') ? 'is-active' : '' }}">
+    <a href="{{ link('orders') }}" aria-current="page" class="menu-item {{ is_current_url('orders') and not is_current_url('pending_orders') ? 'is-active':'' }}">
         <i class="sicon-packed-box me-3 text-lg"></i> {{ trans('common.titles.orders') }}
     </a>
-    <a href="{{ link('wishlist') }}" aria-current="page" class="menu-item {{ is_current_url('wishlist') ? 'is-active' : '' }}">
+    <a href="{{ link('wishlist') }}" aria-current="page" class="menu-item {{ is_current_url('wishlist')?  'is-active':'' }}">
         <i class="sicon-heart me-3 text-lg"></i> {{ trans('common.titles.wishlist') }}
     </a>
-    <a href="{{ link('profile') }}" class="menu-item {{ is_current_url('profile') ? 'is-active' : '' }}">
+    <a href="{{ link('profile') }}" class="menu-item {{ is_current_url('profile')?  'is-active':'' }}">
         <i class="sicon-settings me-3 text-lg"></i> {{ trans('common.titles.profile') }}
     </a>
     <a onclick="salla.auth.logout()" class="menu-item logout cursor-pointer">
@@ -59,7 +59,7 @@
 
             <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
                 <li>
-                    <a href="{{ link('notifications') }}" class="menu-item {{ is_current_url('notifications') ? 'is-active' : '' }}">
+                    <a href="{{ link('notifications') }}" class="menu-item {{ is_current_url('notifications')? 'is-active':'' }}">
                         <i class="sicon-bell-ring me-3"></i>
                         <span class="me-auto">{{ trans('common.titles.notifications') }}</span>
                         {% if new_notifications_count %}
@@ -68,7 +68,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('pending_orders') }}" class="menu-item {{ is_current_url('pending_orders') ? 'is-active' : '' }}">
+                    <a href="{{ link('pending_orders') }}" class="menu-item {{ is_current_url('pending_orders')? 'is-active':'' }}">
                         <i class="sicon-cart me-3"></i>
                         <span class="me-auto"> {{ trans('common.titles.pending_orders') }}</span>
                         {% if pending_orders_count %}
@@ -77,17 +77,17 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('orders') }}" class="menu-item {{ is_current_url('orders') ? 'is-active' : '' }}">
+                    <a href="{{ link('orders') }}" class="menu-item {{ is_current_url('orders') ? 'is-active':'' }}">
                       <i class="sicon-packed-box me-3"></i>{{ trans('common.titles.orders') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('wishlist') }}" class="menu-item {{ is_current_url('wishlist') ? 'is-active' : '' }}">
+                    <a href="{{ link('wishlist') }}" class="menu-item {{ is_current_url('wishlist')?  'is-active':'' }}">
                         <i class="sicon-heart me-3"></i> {{ trans('common.titles.wishlist') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ link('profile') }}" class="menu-item {{ is_current_url('profile') ? 'is-active' : '' }}">
+                    <a href="{{ link('profile') }}" class="menu-item {{ is_current_url('profile')?  'is-active':'' }}">
                         <i class="sicon-settings me-3"></i> {{ trans('common.titles.profile') }}
                     </a>
                 </li>
