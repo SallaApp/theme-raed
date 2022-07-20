@@ -1,9 +1,9 @@
 <div id="product-{{ product.id }}"
-     class="product-entry product-entry--full-image {{ product.is_out_of_stock ? 'out-of-stock' '' }}">
+     class="product-entry product-entry--full-image {{ product.is_out_of_stock ? 'out-of-stock':'' }}">
 
     <a href="{{ product.url }}" class='relative overflow-hidden rounded-md hover:opacity-90 w-full h-full'>
-        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : 'cover' }} lazy-load"
-             src="{{ 'images/s-empty.png'|asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain':'cover' }} lazy-load"
+             src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
     </a>
 
     <!-- badage -->

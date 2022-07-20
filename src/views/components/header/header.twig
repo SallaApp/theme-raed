@@ -12,7 +12,7 @@
             <div class="center-between w-full lg:w-auto ">
                 <div class="flex items-center space-s-1">
                     {# Footer Menu #}
-                    {% component 'footer.menu' with {is_header: true} %}
+                    {% component 'footer.menu' with {is_header:true} %}
                     {# Language & Currency Component #}
                     {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                         <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            {% component 'footer.contacts' with {is_header: true} %}
+            {% component 'footer.contacts' with {is_header:true} %}
         </div>
     </div>
 
@@ -52,7 +52,7 @@
                         {% component 'header.menu' %}
                     </div>
                     <div class="flex items-center justify-end">
-                        {% if user.type == 'user' %}
+                        {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
                             <salla-button shape="icon" fill="outline" color="light" onclick="salla.event.dispatch('login::open')">
@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        {% if user.type == 'guest' %}
+        {% if user.type=='guest' %}
             <salla-login-modal></salla-login-modal>
         {% endif %}
     </div>
@@ -81,4 +81,4 @@
 
 
 {# Mobile Main Nav #}
-{% component 'header.menu' with {is_mobile: true} %}
+{% component 'header.menu' with {is_mobile:true} %}

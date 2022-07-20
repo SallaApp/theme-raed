@@ -30,7 +30,7 @@
                                            for="product-filter">{{ trans('pages.categories.sorting') }}</label>
                                     <select id="product-filter" class="form-input pt-0 pb-1 pe-10">
                                         {% for sort in sort_options %}
-                                            <option value="{{ sort.id }}" {{ sort.is_selected ? 'selected' : '' }}>{{ sort.name }}</option>
+                                            <option value="{{ sort.id }}" {{ sort.is_selected?'selected':'' }}>{{ sort.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -78,5 +78,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ 'product.js'|asset }}"></script>
+    <script defer src="{{ 'product.js' | asset }}"></script>
 {% endblock %}

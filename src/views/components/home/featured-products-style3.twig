@@ -13,7 +13,7 @@
 | items[].id                    | string    | Section id                                                          |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
-<section class="s-block s-block--features-products {% if items|length > 1 %}two-cols{% endif %} container">
+<section class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container">
     <div class="inner">
         {% for section in items %}
             <div>
@@ -22,9 +22,9 @@
                 </div>
                 <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
                     {% if section.featured_product %}
-                        {% include 'pages.partials.product.card-full-image' with {product: section.featured_product} %}
+                        {% include 'pages.partials.product.card-full-image' with {product:section.featured_product} %}
                         <div class="grid gap-4 sm:gap-8">
-                            {% for product in section.products|slice(0, 3) %}
+                            {% for product in section.products|slice(0,3) %}
                                 {% include 'pages.partials.product.card-mini' %}
                             {% endfor %}
                         </div>
