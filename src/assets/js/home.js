@@ -42,7 +42,12 @@ class Home extends BasePage {
 
 
         //Used in: [enhanced-slider.twig]
-        (new Slider('.main-slider', {loop: true, lazy: true}));
+        (new Slider('.main-slider', {
+          speed: 750,
+          parallax: true,
+          loop: true, 
+          lazy: true
+        }));
        
     }
 
