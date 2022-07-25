@@ -1,10 +1,10 @@
 <div id="product-{{ product.id }}"
-     class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock' : '' }}'>
+     class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
 
     <div class="product-entry__image">
       <a href="{{ product.url }}">
-          <img class="h-full w-full lazy-load object-{{ product.image.url|is_placeholder ? 'contain' : 'cover' }}"
-              src="{{ 'images/s-empty.png'|asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+          <img class="h-full w-full lazy-load object-{{ product.image.url|is_placeholder ? 'contain':'cover' }}"
+              src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
       </a>
       <salla-button
           shape="icon"
