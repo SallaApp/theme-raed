@@ -17,7 +17,10 @@
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container mb-10">
-        {% component 'header.breadcrumbs' %}
+        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+        <nav class="breadcrumbs w-full py-5">
+            {% component 'header.breadcrumbs' %}
+        </nav>
         <div class="flex items-start flex-col md:flex-row">
             <div class="main-content flex-1 w-full">
                 <div class="mb-6 mt-6 md:mt-12 flex justify-between items-center">
