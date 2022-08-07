@@ -25,7 +25,13 @@
 
         <div class="w-full flex justify-between text-sm py-2.5">
             <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
-            <b>{{ item.quantity }}</b>
+            <b>
+                {% if  branch is not empty %}
+                    {{ item.stock_quantity }}
+                {% else %}
+                    {{ item.quantity }}
+                {% endif %}
+            </b>
         </div>
         <div class="flex justify-between text-sm py-2.5">
             <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
@@ -33,7 +39,13 @@
         </div>
         <div class="flex justify-between  text-sm py-2.5">
             <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
-            <b>{{ item.total|money }}</b>
+            <b>
+                {% if branch is not empty %}
+                    {{ item.stock_total|money }}
+                {% else %}
+                    {{ item.total|money }}
+                {% endif %}
+            </b>
         </div>
 
         {% if item.options %}
