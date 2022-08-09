@@ -92,7 +92,11 @@
                                href="{{ image.video_url?image.video_url:image.url }}"
                                aria-label="{{ product.name }}"
                                class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
-                                <img {{ has_many_images ? 'data-' : '' }}src="{{ image.url }}" alt="{{ image.alt }}" class="{{has_many_images ? 'swiper-lazy ' : ''}}h-full object-contain w-full">
+                                {% if loop.first %}
+                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-contain w-full">
+                                {% else %}
+                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load swiper-lazy h-full object-contain w-full">
+                                {% endif %}
                             </a>
                         {% endfor %}
                     </div>
