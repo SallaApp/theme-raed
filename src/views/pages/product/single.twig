@@ -117,10 +117,19 @@
                         <div class="swiper-wrapper flex items-stretch">
                             {% for image in product.images %}
                                 <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
-                                    <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
-                                         class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
-                                         title="{{ image.alt }}"
-                                         alt="{{ image.alt }}"/>
+                                    {% if loop.index < 4 %}
+                                        <img src="{{ image.url }}"
+                                            loading="eager"
+                                            fetchpriority="high"
+                                            class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
+                                            title="{{ image.alt }}"
+                                            alt="{{ image.alt }}"/>
+                                    {% else %}
+                                        <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
+                                            class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
+                                            title="{{ image.alt }}"
+                                            alt="{{ image.alt }}"/>
+                                    {% endif %}
                                 </div>
                             {% endfor %}
                         </div>
@@ -134,7 +143,7 @@
 
                 {% if product.brand %}
                     <div class="product-brand mb-5 w-12">
-                        <img class="max-h-full object-contain" src="{{ product.brand.logo }}"
+                        <img width="100%" height="100%" class="max-h-full object-contain" src="{{ product.brand.logo }}"
                              title="{{ product.brand.name }}"
                              alt="{{ product.brand.name }}">
                     </div>
