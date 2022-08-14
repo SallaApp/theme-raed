@@ -1,0 +1,54 @@
+{% if prizeType == 'free_product' %}
+<div  class='product-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
+
+    <!-- image -->
+    <a href="{{prize.prize_url}}" class='product-entry__image relative overflow-hidden hover:opacity-90 w-full h-40'>
+        <img class="lazy-load sm:h-full w-full object-cover" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ prize.image }}" alt="{{ prize.name }}" />    
+    </a>
+
+    <!-- content -->
+    <div class="flex-1 px-5 pt-5 pb-7 ">
+        <div class="flex  justify-between items-baseline">
+            <!-- title -->
+            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                <a href="{{prize.prize_url}}">{{ prize.name }}</a>
+            </h3>
+        </div>
+        <!-- description -->
+        <p class="text-sm text-gray-text leading-6 mb-2.5">
+            {{ prize.description }}
+        </p>
+    </div>
+
+    {% if user %}
+        <div class="font-bold text-primary py-4 flex items-center justify-center border-t border-border-color">{{ prize.cost_points }} {{trans("pages.loyalty_program.point")}}</div>
+    {% endif %}
+</div>
+
+{% else %}
+
+    <div  class='product-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
+
+    <!-- image -->
+        <img class="lazy-load sm:h-full w-full object-cover" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ prize.image }}" alt="{{ prize.name }}" />    
+
+    <!-- content -->
+    <div class="flex-1 px-5 pt-5 pb-7 ">
+        <div class="flex  justify-between items-baseline">
+            <!-- title -->
+            <h3 class="product-entry__title  text-sm font-bold text-title-color leading-6 mb-2.5">
+                <p>{{ prize.name }}</p>
+            </h3>
+        </div>
+        <!-- description -->
+        <p class="text-sm text-gray-text leading-6 mb-2.5">
+            {{ prize.description }}
+        </p>
+    </div>
+
+    {% if user %}
+        <div class="font-bold text-primary py-4 flex items-center justify-center border-t border-border-color">{{ prize.cost_points }} {{trans("pages.loyalty_program.point")}}</div>
+    {% endif %}
+</div>
+
+{% endif %}
