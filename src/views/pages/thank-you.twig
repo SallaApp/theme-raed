@@ -21,7 +21,8 @@
     <div class="container mb-20">
         <nav class="w-full py-5">
             <ol class="list-reset flex items-center text-sm text-primary-reverse">
-                <li><a href="{{ link('/') }}" class="fix-align text-primary-reverse">{{ trans('common.titles.home') }}</a></li>
+                <li><a href="{{ link('/') }}"
+                       class="fix-align text-primary-reverse">{{ trans('common.titles.home') }}</a></li>
                 <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
                 <li><span class="fix-align">{{ thank_you_title }}</span></li>
             </ol>
@@ -36,10 +37,21 @@
                     <b class="text-text-dark unicode">#{{ order.reference_id }}</b>
                 </p>
                 <salla-button onclick="salla.order.show({order_id:{{ order.id }}, url:'{{ order.url }}'})">
-                  <i class="sicon-newspaper me-1"></i>
-                  {{ trans('pages.thank_you.order_details') }}
+                    <i class="sicon-newspaper me-1"></i>
+                    {{ trans('pages.thank_you.order_details') }}
                 </salla-button>
             </div>
+
+            {% if order.loyalty_points %}
+                <div class="d-flex align-items-center justify-content-start mt-20">
+                    <i class="sicon-star2"></i>
+                    <p class="font-sm">
+                        {{ trans('pages.loyalty_program.have_won') }}
+                        <b>{{ order.loyalty_points }}</b>
+                        {{ trans('pages.loyalty_program.thank_you_loyalty_points_win') }}
+                    </p>
+                </div>
+            {% endif %}
 
             {% hook 'thank-you:items.start' %}
 
@@ -55,7 +67,8 @@
                                     <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
                                     <span>{{ code }}</span>
                                 </p>
-                                <salla-button onclick="theme.copyToClipboard(event)" shape="link" data-content="{{ code }}">
+                                <salla-button onclick="theme.copyToClipboard(event)" shape="link"
+                                              data-content="{{ code }}">
                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
                                     <span class="text-sm ms-2 pointer-events-none">{{ trans('common.elements.copy') }}</span>
                                 </salla-button>
@@ -107,9 +120,10 @@
                     <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
                     <form onsubmit="return salla.form.onSubmit('order.sendInvoice', event)">
                         <div class="flex max-w-3xl w-full">
-                            <input type="email" class="form-input rounded-e-none border-e-0 !w-[160px] sm:!w-[220px]" placeholder="your@email.com" required name="email">
+                            <input type="email" class="form-input rounded-e-none border-e-0 !w-[160px] sm:!w-[220px]"
+                                   placeholder="your@email.com" required name="email">
                             <salla-button type="submit" loader-position="center" class="rounded-s-none lg:w-24 h-10">
-                              <span class="btn__text">{{ trans('blocks.comments.submit') }}</span>
+                                <span class="btn__text">{{ trans('blocks.comments.submit') }}</span>
                             </salla-button>
                         </div>
                     </form>
