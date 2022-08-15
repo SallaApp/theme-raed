@@ -21,7 +21,7 @@
 		</nav>
         
         {# loyalty banner #}
-		<div class="relative overflow-hidden bg-white m-auto p-10 lg:py-16 lg:px-20 rounded-md mb-28 mt-28 shadow-default">
+		<div class="relative overflow-hidden bg-white m-auto p-10 lg:py-16 lg:px-20 rounded-md mb-28 mt-20 shadow-default">
 			<div class="md:flex justify-between items-center relative z-10">
 				<div class="text-center sm:flex flex-1 items-center sm:space-s-12">
 					<i class="sicon sicon-star2 star-anime opacity-0 text-amber-400 text-7xl"></i>
@@ -80,11 +80,12 @@
 							{% if user %}
 								<div class="point-entry__desc mt-auto">
 									{% if point.key == 'AFFILIATE_LINK' %}
-										<div class="border relative border-gray-600 rounded-3xl bg-white text-center ps-14 pe-5">
-											<salla-button onclick="theme.copyToClipboard(event)" color="dark" shape="link" data-content="www.link.url" class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 opacity-80 border-e border-gray-600 hover:opacity-100">
+										<div class="border relative border-gray-600 rounded-3xl bg-white h-[34px] text-center ltr:pl-14 ltr:pr-5 rtl:pr-14 rtl:pl-5">
+											<salla-button onclick="theme.copyToClipboard(event)" color="dark" shape="link" data-content="{{point.share_store_url}}" class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 ltr:border-r rtl:border-l border-gray-600 hover:opacity-80"
+                                            title="{{ trans('pages.loyalty_program.copy_link') }}">
 												<i class="copy-icon sicon-swap-fill"></i>
 											</salla-button>
-											<h3 id="textId" class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden">www.link.url
+											<h3 id="textId" class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden">
 												{{point.share_store_url}}</h3>
 										</div>
 									{% elseif point.is_completed and point.key == 'COMPLETE_PERSONAL_INFORMATION' %}
