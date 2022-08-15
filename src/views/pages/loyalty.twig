@@ -1,27 +1,27 @@
 {% extends "layouts.master" %}
 
 {% block content %}
-	<div class="h-52 -mb-52 w-full bg-primary start-0 relative -z-1">
-		<svg class="text-primary absolute top-full" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1440 320">
-			<path class="fill-current" fill-opacity="1" d="M0,96L120,112C240,128,480,160,720,165.3C960,171,1200,149,1320,138.7L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path>
-		</svg>
+	<div class="h-62 -mb-52 w-full bg-primary start-0 relative -z-1 bg-cover bg-no-repeat bg-center" style="background-image:url({{loyaltyProgram.image}})">
+		<div class="overlay h-full w-full bg-black opacity-50 absolute top-0 left-0"></div>
 	</div>
-	<div class="container mb-20">
+	<div class="container mb-28">
+        {# breadcrumbs #}
 		<nav class="w-full py-5">
-			<ol class="list-reset flex items-center text-sm text-primary-reverse">
+			<ol class="list-reset flex items-center text-sm text-white">
 				<li>
-					<a href="{{ link('/') }}" class="fix-align text-primary-reverse">{{ trans('common.titles.home') }}</a>
+					<a href="{{ link('/') }}" class="fix-align text-white">{{ trans('common.titles.home') }}</a>
 				</li>
 				<li>
 					<i class="sicon-keyboard_arrow_left mx-2"></i>
 				</li>
 				<li>
-					<span class="fix-align">{{ thank_you_title }}</span>
+					<span class="fix-align">{{ loyaltyProgram.name }}</span>
 				</li>
 			</ol>
 		</nav>
-
-		<div class="relative overflow-hidden bg-white m-auto p-10 lg:py-16 lg:px-20 rounded-md mb-32 mt-32 shadow-default">
+        
+        {# loyalty banner #}
+		<div class="relative overflow-hidden bg-white m-auto p-10 lg:py-16 lg:px-20 rounded-md mb-28 mt-28 shadow-default">
 			<div class="md:flex justify-between items-center relative z-10">
 				<div class="text-center sm:flex flex-1 items-center sm:space-s-12">
 					<i class="sicon sicon-star2 star-anime opacity-0 text-amber-400 text-7xl"></i>
@@ -32,13 +32,14 @@
 							<p class="loyality-item opacity-0 text-gray-text max-w-xs leading-6 mb-2">
 								{{loyaltyProgram.description}}
 							</p>
-							<div class="loyality-item text-sm text-gray-text">لديك<span class="text-4xl text-primary font-bold ltr:ml-2.5 rtl:mr-2.5 count-anime" data-count="{{loyaltyProgram.customer.loyalty_program_points}}"></span>نقطة</div>
+							<div class="loyality-item text-sm text-gray-text">{{ trans('pages.loyalty_program.you_have') }}<span class="text-4xl text-primary font-bold ltr:ml-2.5 rtl:mr-2.5 count-anime" data-count="{{loyaltyProgram.customer.loyalty_program_points}}"></span>
+								{{ trans("pages.loyalty_program.point") }}</div>
 						</div>
 
 						<!-- btn -->
 						<div class="btn-anime opacity-0">
 							{% if user %}
-								<salla-button data-popup-trigger="loyalty-system">{{trans("pages.loyalty_program.exchange_points")}}</salla-button>
+								<salla-loyalty></salla-loyalty>
 							{% else %}
 								<salla-button data-popup-trigger="login-modal">{{ trans('blocks.header.login') }}</salla-button>
 							{% endif %}
@@ -47,25 +48,22 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- absolute background -->
 			<!-- star1 -->
 			<div class="absolute z-0 -right-24 -top-48 transform -rotate-45 opacity-70">
 				<i class=" sicon sicon-star2 text-gray-100 text-9xl" style="font-size: 400px;"></i>
 			</div>
-
 			<!-- star2 -->
 			<div class="absolute z-0 -left-16 -bottom-40 transform -rotate-90 opacity-70">
 				<i class="sicon sicon-star2 text-gray-100 text-9xl" style="font-size: 400px;"></i>
 			</div>
 		</div>
 
-
 		<!-- ways to get points -->
-		<section class="mb-20">
+		<section class="mb-28">
 			<div>
 				<h2 class="s-block__title mb-6 sm:mb-8">{{trans("pages.loyalty_program.ways_to_get_points")}}</h2>
-				<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
 					{% for point in loyaltyProgram.points %}
 						<div class="bg-white w-full box-anime opacity-100 rounded-md shadow-default p-6 ">
 							<div class="flex space-x-reverse space-x-4">
@@ -82,11 +80,12 @@
 							{% if user %}
 								<div class="point-entry__desc mt-auto">
 									{% if point.key == 'AFFILIATE_LINK' %}
-										<div class="border relative border-primary rounded-3xl bg-white text-center text-gray-text ps-14 pe-5">
-											<button class="absolute top-0 right-0 h-full px-3 opacity-80 text-primary border-e border-primary hover:opacity-100">
+										<div class="border relative border-gray-600 rounded-3xl bg-white text-center ps-14 pe-5">
+											<salla-button onclick="theme.copyToClipboard(event)" color="dark" shape="link" data-content="www.link.url" class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 opacity-80 border-e border-gray-600 hover:opacity-100">
 												<i class="copy-icon sicon-swap-fill"></i>
-											</button>
-											<h3 id="textId" class="font-bold text-sm leading-8">#GAFRGW324</h3>
+											</salla-button>
+											<h3 id="textId" class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden">www.link.url
+												{{point.share_store_url}}</h3>
 										</div>
 									{% elseif point.is_completed and point.key == 'COMPLETE_PERSONAL_INFORMATION' %}
 										<span class="" disabled>
@@ -94,7 +93,7 @@
 											{{ trans('pages.loyalty_program.completed') }}
 										</span>
 									{% else %}
-										<a href="{{point.target_url}}" class="btn btn-outline-primary !rounded-3xl !px-6 !py-1.5">{{point.name}}</a>
+										<salla-button fill="outline" color="dark" href="{{point.target_url}}" class="!rounded-3xl text-sm !py-1.5">{{point.name}}</a>
 									{% endif %}
 								</div>
 							{% endif %}
@@ -104,11 +103,10 @@
 			</div>
 		</section>
 
-
 		{# 2-block:: prizes #}
 		{% if loyaltyProgram.prizes %}
 			{% for prizesGroup in loyaltyProgram.prizes %}
-				<section class="mb-20">
+				<section class="mb-28 last:mb-0" id="loyalty-slider-{{ prizesGroup.type }}">
 					<div
 						class="center-between mb-6 sm:mb-8">
 						{# Block Title #}
@@ -116,7 +114,7 @@
 							<h2 class="s-block__title">{{prizesGroup.title}}</h2>
 						</div>
 
-						{# Slider Nav btns && show all btn #}
+						{# Slider Nav btns #}
 						<div class="flex items-center">
 							<div class="hidden sm:flex space-s-1" dir="rtl">
 								<button aria-label="Previous Slide" class="slider-prev btn--sm-arrow">
@@ -130,7 +128,7 @@
 					</div>
 
 					{# Swiper #}
-					<div class="swiper default-slider slider-layout" data-id="loyalty-slider">
+					<div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prizesGroup.type }}">
 						<div class="swiper-wrapper flex items-stretch">
 							{% for prize in prizesGroup.items %}
 								<div class="swiper-slide slide--one-fourth">
