@@ -1,5 +1,5 @@
-{% if is_mobile %}
-    <li class="text-sm font-bold" {{ menu.attrs }}>
+{# MOBILE #}
+    <li class="lg:hidden text-sm font-bold" {{ menu.attrs }}>
         {% if not menu.has_children %}
             <a {{ menu.link_attrs }} href="{{ menu.url }}" class="text-gray-500">{{ menu.title }}</a>
         {% else %}
@@ -12,8 +12,9 @@
             </ul>
         {% endif %}
     </li>
-{% else %}
-    <li class="{{ is_root_menu?'root-level':'relative' }}
+
+{# DESKTOP #}
+    <li class="!hidden lg:!block {{ is_root_menu?'root-level lg:!inline-block':'relative' }}
         {{ menu.products?' mega-menu': '' }}
         {{ menu.has_children?' has-children': '' }}"
         {{ menu.attrs|raw }}>
@@ -40,4 +41,3 @@
             </div>
         {% endif %}
     </li>
-{% endif %}
