@@ -135,57 +135,59 @@
 
             {% if order.has_unshipping_products %}
                 <div class="overflow-hidden space-y-5">
-                    {% component 'order.order-items' with {'order': order, 'unshipping_products': true} %}
+                    {% component 'order.order-items' with {'order': order, 'is_shipping_products': false} %}
                 </div>
             {% endif %}
 
-            <div class="overflow-hidden space-y-5">
-                <h1 class="font-bold text-lg">{{ trans('pages.orders.shipments') }}</h1>
+            {% if order.has_shipping %}
+                <div class="overflow-hidden space-y-5">
+                    <h1 class="font-bold text-lg">{{ trans('pages.orders.shipments') }}</h1>
 
-                {% for shipment_branch in order.shipment_branches %}
-                <div class="shipping-orders">
-                    {# Shipping Title #}
-                    <div class="flex flex-col md:flex-row justify-between md:items-center bg-white px-5 py-3 border-b border-gray-100 rounded-t-md text-sm space-y-4 md:space-y-0">
-                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                            {% if shipment_branch.shipping.logo %}
-                            <img src="{{ shipment_branch.shipping.logo }}" class="max-w-16 max-h-8"
-                                 alt="{{ shipment_branch.shipping.name }}">
-                            <span>{{ shipment_branch.shipping.name }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="flex space-x-5 rtl:space-x-reverse">
-                            <span>
-                                {{ trans('pages.orders.branch') }}:
-                                <span class="font-bold">{{ shipment_branch.branch.name }}</span>
-                            </span>
-                            <span>{{ trans('pages.orders.shipment_no') }}:
-                                <span class="font-bold">{{ shipment_branch.shipping.number }}</span>
-                            </span>
-                            {% if shipment_branch.is_delivered %}
-                                <span>{{ trans('pages.orders.status') }}:
-                                <span style="color: {{ shipment_branch.status.color }}">
-                                    <i class="center-v mr-1 {{ shipment_branch.status.icon }}"></i>
-                                    {{ shipment_branch.status.name }}
+                    {% for shipment_branch in order.shipment_branches %}
+                    <div class="shipping-orders">
+                        {# Shipping Title #}
+                        <div class="flex flex-col md:flex-row justify-between md:items-center bg-white px-5 py-3 border-b border-gray-100 rounded-t-md text-sm space-y-4 md:space-y-0">
+                            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                                {% if shipment_branch.shipping.logo %}
+                                <img src="{{ shipment_branch.shipping.logo }}" class="max-w-16 max-h-8"
+                                     alt="{{ shipment_branch.shipping.name }}">
+                                <span>{{ shipment_branch.shipping.name }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="flex space-x-5 rtl:space-x-reverse">
+                                <span>
+                                    {{ trans('pages.orders.branch') }}:
+                                    <span class="font-bold">{{ shipment_branch.branch.name }}</span>
                                 </span>
-                            </span>
-                            {% elseif shipment_branch.shipping.number and shipment_branch.tracing_link %}
-                                <a class="font-bold text-primary hover:opacity-80 flex items-center"
-                                   href="{{ shipment_branch.tracing_link }}"
-                                   target="_blank"
-                                >
-                                    <span class="sicon-shipping rtl:ml-1 ltr:mr-1"></span>
-                                    {{ trans('pages.orders.tracking_url')}}
-                                </a>
-                            {% endif %}
+                                <span>{{ trans('pages.orders.shipment_no') }}:
+                                    <span class="font-bold">{{ shipment_branch.shipping.number }}</span>
+                                </span>
+                                {% if shipment_branch.is_delivered %}
+                                    <span>{{ trans('pages.orders.status') }}:
+                                    <span style="color: {{ shipment_branch.status.color }}">
+                                        <i class="center-v mr-1 {{ shipment_branch.status.icon }}"></i>
+                                        {{ shipment_branch.status.name }}
+                                    </span>
+                                </span>
+                                {% elseif shipment_branch.shipping.number and shipment_branch.tracing_link %}
+                                    <a class="font-bold text-primary hover:opacity-80 flex items-center"
+                                       href="{{ shipment_branch.tracing_link }}"
+                                       target="_blank"
+                                    >
+                                        <span class="sicon-shipping rtl:ml-1 ltr:mr-1"></span>
+                                        {{ trans('pages.orders.tracking_url')}}
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
 
-                    {% component 'order.order-items' with {'order': order, 'branch': shipment_branch.branch} %}
+                        {% component 'order.order-items' with {'order': order, 'branch': shipment_branch.branch, 'is_shipping_products': true} %}
+
+                    </div>
+                    {% endfor %}
 
                 </div>
-                {% endfor %}
-
-            </div>
+            {% endif %}
         {% else %}
             <div class="overflow-hidden">
                 {% component 'order.order-items' with {'order': order} %}
