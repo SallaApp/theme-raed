@@ -1,0 +1,41 @@
+.tooltip{
+  &-content{
+    position: absolute;
+    transform: translate(82px, -120px);
+    background: #fff;
+    padding: 15px 15px 15px 36px;
+    text-align: right;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s;
+
+  &:after {
+      content: '';
+      display: block;  
+      position: absolute;
+      z-index: 1;
+      left: auto;
+      background: #fff;
+      width: 20px;
+      height: 20px;
+      transform: rotate(45deg);
+      border-radius: 2px;
+     @apply shadow-md;
+      left: 43%;
+      bottom: -7px;
+  }
+
+    .visible &{
+      visibility: visible;
+      opacity: 1;
+      transform: translate(82px, -110px);
+    }
+  }
+}
+
+.close-tooltip{
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 9px 7px !important;
+}

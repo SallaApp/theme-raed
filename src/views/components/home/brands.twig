@@ -12,18 +12,18 @@
                 {% if component.title %}
                     <h1 class="s-block__title">{{ component.title }}</h1>
                 {% endif %}
-                {% if(component.show_all) %}
+                {% if(theme.settings.get('is_more_button_enabled')) %}
                     <a href="{{ link('brands') }}"
                        class="s-block__display-all"> {{ trans('blocks.home.display_all') }} </a>
                 {% endif %}
             </div>
         {% endif %}
 
-        <div class="grid grid-cols-2 {{ component.brands|length > 4 ? 'md:grid-cols-4' : 'md:grid-cols-' ~ component.brands|length }} grid-flow-row lg:grid-flow-col gap-4 lg:gap-8">
+        <div class="grid grid-cols-2 {{ component.brands|length > 5 ? 'md:grid-cols-4' : 'md:grid-cols-5' }} grid-flow-row lg:grid-flow-col gap-4 lg:gap-8">
             {% for brand in component.brands %}
                 {% if loop.first or loop.index0%3==0 %}
                     <a href="{{ brand.url }}"
-                       class="brand-item {{ component.brands|length > 4  ? 'sm:row-span-2 sm:h-auto': 'md:h-banner' }}">
+                       class="brand-item {{ component.brands|length > 5  ? 'sm:row-span-2 sm:h-auto': '' }}">
                         <img class="max-h-full" src="{{ brand.logo }}" alt=""/>
                     </a>
                 {% else %}

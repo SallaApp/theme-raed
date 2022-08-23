@@ -3,7 +3,7 @@
     <div class="container grid grid-col-1 lg:grid-cols-6 gap-10 lg:gap-6">
         <div class="lg:col-span-2 lg:pe-20">
           <a href="{{ link('/') }}" class="flex items-center mb-6 text-primary hover:text-primary-d">
-            <img src="{{ store.logo }}" alt="" class="img-fluid w-10 b-logo">
+            <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}"  data-src="{{ store.logo }}" alt="" class="lazy-load img-fluid w-10 b-logo">
             <h2 class="text-2xl font-bold mx-1.5 fix-align leading-none">{{store.name}}</h2>
           </a>
           {% if store.description %}
@@ -19,7 +19,7 @@
             <div class="flex space-s-2 items-end">
               {% if store.settings.tax.certificate %}
                 <a onclick="document.querySelector('#modal-value-tax').open()" href="#!" alt="{{ store.settings.tax.number }}">
-                  <img src="{{'images/tax.png' | cdn}}" class="w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
+                  <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}" data-src="{{'images/tax.png' | cdn}}" class="lazy-load w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
                 </a>
               {% endif %}
               <div>
@@ -31,7 +31,7 @@
             {% if store.settings.tax.certificate %}
               <salla-modal sub-title-first sub-title="{{ trans('common.elements.tax_number') }}" modal-title="{{ store.settings.tax.number }}" id="modal-value-tax">
                 <div class="flex justify-center max-w-full">
-                  <img src="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}"/>
+                  <img loading="lazy" src="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}"/>
                 </div>
               </salla-modal>
             {% endif %}
