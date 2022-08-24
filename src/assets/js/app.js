@@ -9,6 +9,7 @@ applyPolyfills().then(() => {
 import MobileMenu from 'mmenu-light';
 import Swal from 'sweetalert2';
 import Anime from './partials/anime';
+import initTootTip from './partials/tooltip';
 
 class App extends salla.AppHelpers {
     constructor() {
@@ -30,6 +31,7 @@ class App extends salla.AppHelpers {
         this.initiateCollapse();
         this.initCircleBar();
         this.initDonating();
+        initTootTip();
 
         salla.comment.event.onAdded(() => window.location.reload());
         

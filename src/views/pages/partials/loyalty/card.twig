@@ -1,0 +1,53 @@
+{% if prizeType == 'free_product' %}
+	<div
+		class='product-entry flex-col'>
+
+		<!-- image -->
+		<a href="{{prize.prize_url}}" class='product-entry__image h-40'>
+			<img class="lazy-load sm:h-full w-full object-cover" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ prize.image }}" alt="{{ prize.name }}"/>
+		</a>
+
+		<!-- content -->
+		<div
+			class="flex-1 p-5">
+			<!-- title -->
+			<h3 class="product-entry__title leading-6 mb-2.5">
+				<a href="{{prize.prize_url}}">{{ prize.name }}</a>
+			</h3>
+			<!-- description -->
+			<p class="text-sm leading-6 ">{{ prize.description }}</p>
+		</div>
+
+		{% if user %}
+			<div class="font-bold text-primary p-4 text-center border-t">{{ prize.cost_points }}
+				{{trans("pages.loyalty_program.point")}}</div>
+		{% endif %}
+	</div>
+
+{% else %}
+
+	<div
+		class='product-entry flex-col'>
+
+		<!-- image -->
+		<img
+		class="lazy-load sm:h-full w-full object-cover" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ prize.image }}" alt="{{ prize.name }}"/>
+
+		<!-- content -->
+		<div
+			class="flex-1 p-5 ">
+			<!-- title -->
+			<h3 class="product-entry__title  leading-6 mb-2.5">
+				<p>{{ prize.name }}</p>
+			</h3>
+			<!-- description -->
+			<p class="text-sm text-gray-text leading-6 mb-2.5">{{ prize.description }}</p>
+		</div>
+
+		{% if user %}
+			<div class="font-bold text-primary p-4 text-center border-t">{{ prize.cost_points }}
+				{{trans("pages.loyalty_program.point")}}</div>
+		{% endif %}
+	</div>
+
+{% endif %}

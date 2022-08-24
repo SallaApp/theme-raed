@@ -1,0 +1,142 @@
+{% extends "layouts.master" %}
+
+{% block content %}
+	<div class="h-62 -mb-52 w-full bg-primary start-0 relative -z-1 bg-cover bg-no-repeat bg-center" style="background-image:url({{loyaltyProgram.image}})">
+		<div class="overlay h-full w-full bg-black opacity-50 absolute top-0 left-0"></div>
+	</div>
+	<div class="container mb-28">
+        {# breadcrumbs #}
+		<nav class="w-full py-5">
+			<ol class="list-reset flex items-center text-sm text-white">
+				<li>
+					<a href="{{ link('/') }}" class="fix-align text-white">{{ trans('common.titles.home') }}</a>
+				</li>
+				<li>
+					<i class="sicon-keyboard_arrow_left mx-2"></i>
+				</li>
+				<li>
+					<span class="fix-align">{{ loyaltyProgram.name }}</span>
+				</li>
+			</ol>
+		</nav>
+        
+        {# loyalty banner #}
+		<div class="relative overflow-hidden bg-white m-auto p-10 lg:py-16 lg:px-20 rounded-md mb-28 mt-20 shadow-default">
+			<div class="md:flex justify-between items-center relative z-10">
+				<div class="text-center sm:flex flex-1 items-center sm:space-s-12">
+					<i class="sicon sicon-star2 star-anime opacity-0 text-amber-400 text-7xl"></i>
+
+					<div class="md:flex flex-1 justify-between items-center">
+						<div class="mb-6 md:mb-0">
+							<h1 class="font-bold text-3xl mb-2.5 loyality-item opacity-0">{{loyaltyProgram.name}}</h1>
+							<p class="loyality-item opacity-0 text-gray-text max-w-xs leading-6 mb-2">
+								{{loyaltyProgram.description}}
+							</p>
+							<div class="loyality-item text-sm text-gray-text">{{ trans('pages.loyalty_program.you_have') }}<span class="text-4xl text-primary font-bold ltr:ml-2.5 rtl:mr-2.5 count-anime" data-count="{{loyaltyProgram.customer.loyalty_program_points}}"></span>
+								{{ trans("pages.loyalty_program.point") }}</div>
+						</div>
+
+						<!-- btn -->
+						<div class="btn-anime opacity-0"><salla-loyalty></salla-loyalty></div>
+					</div>
+				</div>
+			</div>
+			<!-- absolute background -->
+			<!-- star1 -->
+			<div class="absolute z-0 -right-24 -top-48 transform -rotate-45 opacity-70">
+				<i class=" sicon sicon-star2 text-gray-100 text-9xl" style="font-size: 400px;"></i>
+			</div>
+			<!-- star2 -->
+			<div class="absolute z-0 -left-16 -bottom-40 transform -rotate-90 opacity-70">
+				<i class="sicon sicon-star2 text-gray-100 text-9xl" style="font-size: 400px;"></i>
+			</div>
+		</div>
+
+		<!-- ways to get points -->
+		<section class="mb-28">
+			<div>
+				<h2 class="s-block__title mb-6 sm:mb-8">{{trans("pages.loyalty_program.ways_to_get_points")}}</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+					{% for point in loyaltyProgram.points %}
+						<div class="bg-white w-full box-anime opacity-100 rounded-md shadow-default p-6 ">
+							<div class="flex space-x-reverse space-x-4">
+								<div class="relative overflow-hidden flex-shrink-0 rounded-icon  !w-12 !h-12 !text-xl">
+									<i class="{{ point.icon ? point.icon : 'sicon-star' }}" style="color: {{point.color}}"></i>
+									<div class="absolute h-20 w-20 top-0 right-0 opacity-20" style="background-color: {{point.color}}"></div>
+								</div>
+								<div class="flex flex-col justify-start">
+									<h4 id="count-anime" class="font-bold text-xl" style="color: {{point.color}}">{{point.points}}
+										{{ trans("pages.loyalty_program.point") }}</h4>
+									<p class="mb-6 text-sm  text-gray-400">{{point.description}}</p>
+								</div>
+							</div>
+							{% if user %}
+								<div class="point-entry__desc mt-auto">
+									{% if point.key == 'AFFILIATE_LINK' %}
+										<div class="border relative border-gray-600 rounded-3xl bg-white h-[34px] text-center ltr:pl-14 ltr:pr-5 rtl:pr-14 rtl:pl-5">
+											<salla-button onclick="theme.copyToClipboard(event)" color="dark" shape="link" data-content="{{point.share_store_url}}" class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 ltr:border-r rtl:border-l border-gray-600 hover:opacity-80"
+                                            title="{{ trans('pages.loyalty_program.copy_link') }}">
+												<i class="copy-icon sicon-swap-fill"></i>
+											</salla-button>
+											<h3 id="textId" class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden">
+												{{point.share_store_url}}</h3>
+										</div>
+									{% elseif point.is_completed and point.key == 'COMPLETE_PERSONAL_INFORMATION' %}
+										<span class="" disabled>
+											<i class="sicon-check-circle d-inline-block ty-2d"></i>
+											{{ trans('pages.loyalty_program.completed') }}
+										</span>
+									{% else %}
+										<salla-button fill="outline" color="dark" href="{{point.target_url}}" class="!rounded-3xl text-sm !py-1.5">{{point.name}}</a>
+									{% endif %}
+								</div>
+							{% endif %}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</section>
+
+		{# 2-block:: prizes #}
+		{% if loyaltyProgram.prizes %}
+			{% for prizesGroup in loyaltyProgram.prizes %}
+				<section class="mb-28 last:mb-0" id="loyalty-slider-{{ prizesGroup.type }}">
+					<div
+						class="center-between mb-6 sm:mb-8">
+						{# Block Title #}
+						<div>
+							<h2 class="s-block__title">{{prizesGroup.title}}</h2>
+						</div>
+
+						{# Slider Nav btns #}
+						<div class="flex items-center">
+							<div class="hidden sm:flex space-s-1" dir="rtl">
+								<button aria-label="Previous Slide" class="slider-prev btn--sm-arrow">
+									<i class="sicon-keyboard_arrow_right"></i>
+								</button>
+								<button aria-label="Next Slide" class="slider-next btn--sm-arrow">
+									<i class="sicon-keyboard_arrow_left"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					{# Swiper #}
+					<div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prizesGroup.type }}">
+						<div class="swiper-wrapper flex items-stretch pb-8">
+							{% for prize in prizesGroup.items %}
+								<div class="swiper-slide slide--one-fourth">
+									{% include 'pages.partials.loyalty.card' with {'prizeType': prizesGroup.type} %}
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</section>
+			{% endfor %}
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script src="{{ 'loyalty.js' | asset }}"></script>
+{% endblock %}

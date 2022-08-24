@@ -17,7 +17,10 @@
     <div class=" container mb-8 sm:mb-24">
       <div class="center-between">
 
-        {% component 'header.breadcrumbs' %}
+        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+        <nav class="breadcrumbs w-full py-5">
+            {% component 'header.breadcrumbs' %}
+        </nav>
 
         {# Categories filter dropdown #}
         <div class="dropdown-toggler cat-filter lg:hidden">
@@ -89,7 +92,7 @@
                                                             </div>
                                                             <a href="{{ article.author.url }}"
                                                                class=" flex items-center hover:underline">
-                                                                <i class="sicon-user me-1 text-md"></i>
+                                                                <i class="sicon-user me-1"></i>
                                                                 <span class="whitespace-nowrap">{{ article.author.name }}</span>
                                                             </a>
                                                         </div>

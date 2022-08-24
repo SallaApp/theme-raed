@@ -8,6 +8,7 @@ view options:
 <div id="product-{{ product.id }}" class='product-entry {{ block_classes ?: '' }}
   {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
   {{ is_special ? 'product-entry--special':'' }}
+  {{ main_product.product.discount_ends ? 'with-timer':'' }}
   {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
   {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
 
@@ -78,6 +79,15 @@ view options:
                 </div>
             {% endif %}
         </div>
+
+        {% if is_special %}
+            {% if main_product.product.discount_ends %}
+                <ul id="countdown_id"
+                    class="timer countdown-timer mt-30"
+                    data-dunixtime="{{ main_product.product.discount_ends }}"></ul>
+                    {# {{main_product.product.discount_ends.timestamp*1000}} #}
+            {% endif %}
+        {% endif %}
 
         <div class="flex items-center mt-auto">
             <salla-add-product-button class="btn--add-to-cart" fill="outline" width="wide"

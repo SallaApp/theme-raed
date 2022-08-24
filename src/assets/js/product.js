@@ -99,6 +99,7 @@ class Product extends BasePage {
             1- similar-products.twig
             2- best offer home block (called again in home.js)
             3- product offer products slider/ cats slider / discount slider
+            4- loyalty.twig
         */
         new Slider('.default-slider');
     }

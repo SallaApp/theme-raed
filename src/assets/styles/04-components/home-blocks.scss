@@ -47,19 +47,29 @@
 
 /* Square Banner Block */
 .banner-entry{
-  @apply h-[200px] bg-gray-100 text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative;
+  @apply h-[200px] bg-gray-100 text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative bg-cover bg-no-repeat bg-center;
 
   h3{
     @apply  leading-6;
   }
 
   a{
-    @apply flex md:opacity-0 hover:opacity-100 transition-opacity duration-500 flex-col justify-center h-full xs:p-6 relative z-1 xs:border border-dashed border-gray-200 rounded-md;
+    @apply flex md:opacity-0 hover:opacity-100  transition-opacity duration-500 flex-col justify-center h-full xs:p-6 relative z-1;
+
+    &.text-with-border{
+      @apply xs:border border-dashed border-gray-200 rounded-md
+    }
   }
 
   .two-row &{
     &:first-child{
       @apply md:h-full sm:col-span-1 sm:row-span-2 p-5;
+
+      &.with-hover{
+        &:after{
+          opacity: 1;
+        }
+      }
 
       > a{
         @apply opacity-100;
@@ -77,10 +87,23 @@
     @apply content-[''] h-full w-full bg-black/60 absolute top-0 left-0 transition-colors duration-300;
   }
 
+  &.with-hover{
+    &:after{
+      transition: opacity .3s;
+      opacity: 0;
+    }
+    &:hover{
+      &:after{
+      opacity: 1;
+    }
+    }
+  }
+
   &:hover:after{
     @apply bg-black/70
   }
 }
+
 
 /* Full banner block */
 .full-banner-entry {
@@ -261,7 +284,7 @@
     }
 
     + .merge-with-top-component{
-      @apply -mt-24 md:-mt-28;
+      @apply -mt-32 md:-mt-36;
 
       .s-block--categories__title {
         color: #fff !important;
@@ -273,7 +296,7 @@
     @apply relative overflow-hidden;
 
     &__title{
-      @apply font-bold text-lg mb-6 sm:mb-8 relative z-1 min-h-[28px];
+      @apply font-bold text-lg mb-2 sm:mb-4 relative z-1 min-h-[28px];
     }
   }
 

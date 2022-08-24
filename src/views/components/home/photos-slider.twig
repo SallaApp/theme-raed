@@ -12,9 +12,13 @@
     <div class="swiper home-slider photos-slider" data-id="photos-{{ position }}">
         <div class="swiper-wrapper">
             {% for item in items %}
-              <div class="swiper-slide">
-                <div data-background="{{ item.image.url }}" class="swiper-lazy"></div>
-              </div>
+              <a href="{{item.url}}" class="swiper-slide">
+              {% if loop.first %}
+                <img loading="eager" fetchpriority="high" src="{{ item.image.url }}" class="w-full h-full object-cover"></img>
+              {% else %}
+                <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.image.url }}" class="lazy-load w-full h-full object-cover swiper-lazy"></img>
+              {% endif %}
+              </a>
             {% endfor %}
         </div>
         <div class="swiper-pagination"></div>
