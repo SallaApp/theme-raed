@@ -195,46 +195,7 @@
                 </div>
 
                 <div class="flex mb-5 space-s-3 ">
-                    <div class="share-wrapper relative">
-                        <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light"
-                                      class="!m-0">
-                            <i class="sicon-share-alt pointer-events-none"></i>
-                        </salla-button>
-
-                        <ul class="share-btns-list a2a_kit share h-0">
-                            <li>
-                                <a class="a2a_button_whatsapp" aria-label="Share Via Whatsapp">
-                                    <i class="sicon-whatsapp"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_facebook" aria-label="Share Via Facebook">
-                                    <i class="sicon-facebook"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_twitter" aria-label="Share Via Twitter">
-                                    <i class="sicon-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_email" aria-label="Share Via Email">
-                                    <i class="sicon-mail"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_copy_link" aria-label="Copy Product Link">
-                                    <i class="sicon-link"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <script type="text/javascript">
-                            var a2a_config = a2a_config || {};
-                            a2a_config.linkurl = "{{ product.url }}";
-                            a2a_config.locale = "{{ user.language.code }}";
-                        </script>
-                        <script async src="https://static.addtoany.com/menu/page.js"></script>
-                    </div>
+                    <salla-social-share></salla-social-share>
 
                     <salla-button class="btn--wishlist animated" data-id="{{ product.id }}"
                                   onclick="salla.wishlist.toggle({{ product.id }})" shape="icon" fill="outline"
@@ -278,6 +239,8 @@
 
                     <salla-installment price="{{product.price}}"></salla-installment>
                 </div>
+
+                {# {{dd(product.show_availability)}} #}
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onchange="salla.product.getPrice(new FormData(event.currentTarget))"
