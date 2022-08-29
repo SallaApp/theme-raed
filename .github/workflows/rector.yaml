@@ -32,6 +32,11 @@ jobs:
      - name: CHEECK RECTOR CHANGE
        id: changes
        uses: UnicornGlobal/has-changes-action@v1.0.11
+       
+     - name: REMOVE RECTOR FILE 
+       continue-on-error: true
+       run: |
+        rm rector.php 
 
      - name: CLOSE PULL REQUEST 
        if: steps.changes.outputs.changed == 1
@@ -71,12 +76,12 @@ jobs:
         destination_branch: "master"                      
         pr_title: "🚧 [Rector Enhancement]🚧" 
         pr_body: |
-          ## Rector upgrading to PHP 8 ⬆️
+          ## Rector upgrading to PHP 7.4 ⬆️
           This pr is auto generated with every push to master 
         # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"  
         # pr_reviewer: "wei,worker"                         
         pr_assignee: "salkhwlani,${{ github.event.commits[0].committer.name }}"                        
-        pr_label: "rector-enhance,autoupdate"                   
+        pr_label: "rector-enhance"                   
         # pr_milestone: "Milestone 1"                      
         pr_draft: false                                   
         pr_allow_empty: true                              
