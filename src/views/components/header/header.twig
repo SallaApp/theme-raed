@@ -13,18 +13,22 @@
                 <div class="flex items-center space-s-1">
                     {# Footer Menu #}
                     {% component 'footer.menu' with {is_header:true} %}
+
                     {# Language & Currency Component #}
                     {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                         <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
                             <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
                             | <span class="ms-2 me-1">{{ currency.symbol }}</span>
                         </button>
-                        <salla-localization-modal></salla-localization-modal>
                     {% endif %}
+
+                    {# Scopes | Branches #}
+                    <button class="btn--rounded-gray" onclick="salla.event.dispatch('scopes::open', {})" >
+                      <i class="sicon-location me-1"></i> {{ shipment_scope.scope.name }}
+                    </button>
 
                     {# Search Component #}
                     <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray sicon-search"></button>
-                    <salla-search></salla-search>
                 </div>
             </div>
 

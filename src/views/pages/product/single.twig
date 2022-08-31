@@ -240,7 +240,25 @@
                     <salla-installment price="{{product.price}}"></salla-installment>
                 </div>
 
-                {# {{dd(product.show_availability)}} #}
+                {% if product.show_availability %}
+                  <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+                    <div class="center-between">
+                        <label class="flex items-center text-base">
+                          <span class="sicon-location me-1"></span>
+                          <span class="inline-block">التوفر في الفروع</span>
+                        </label>
+                        <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                            <div class="flex space-s-3">
+                                <a href="#!" onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
+                                    class="group text-primary flex items-center justify-center">
+                                    <span>تحديد الفرع</span>
+                                    <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                  </section>
+                {% endif %}
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onchange="salla.product.getPrice(new FormData(event.currentTarget))"
