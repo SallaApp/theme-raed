@@ -133,7 +133,11 @@
 
 {# Twilight Components #}
 <salla-offer-modal></salla-offer-modal>
-<salla-scopes selection="{{ shipment_scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
+
+{% if store.scope %}
+    <salla-scopes selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
+{% endif %}
+
 <salla-search></salla-search>
 {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
     <salla-localization-modal></salla-localization-modal>

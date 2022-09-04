@@ -23,9 +23,12 @@
                     {% endif %}
 
                     {# Scopes | Branches #}
-                    <button class="btn--rounded-gray" onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})" >
-                      <i class="sicon-location me-1"></i> {{ shipment_scope.scope.name }}
-                    </button>
+                    {% if store.scope %}
+                        <button class="btn--rounded-gray"
+                                onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
+                            <i class="sicon-location me-1"></i> {{ store.scope.name }}
+                        </button>
+                    {% endif %}
 
                     {# Search Component #}
                     <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray sicon-search"></button>
