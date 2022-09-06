@@ -4,14 +4,14 @@
   <a href="https://salla.dev"> 
     <img src="https://salla.dev/wp-content/themes/salla-portal/dist/img/salla-logo.png" alt="Logo" width="80" height="80"> 
   </a>
-  <h1 align="center">Salla Theme-One</h1>
+  <h1 align="center">Salla Theme-Raed</h1>
   <p align="center">
-    Salla Theme-One is the starting point for developing Themes for Salla Stores. 
+    Salla Theme-Raed is the starting point for developing Themes for Salla Stores. 
     <br />
     <a href="https://salla.dev/"><strong>Explore our blogs »</strong></a>
     <br />
-    <a href="https://github.com/SallaApp/theme-one/issues/new">Report Bug</a> · 
-    <a href="https://github.com/SallaApp/theme-one/discussions/new">Request Feature</a> . <a href="https://t.me/salladev">&lt;/Salla Developers&gt;</a> . <a href="https://docs.salla.dev/docs/twilight-themes-documentation">Official Documentation</a> 
+    <a href="https://github.com/SallaApp/theme-raed/issues/new">Report Bug</a> · 
+    <a href="https://github.com/SallaApp/theme-raed/discussions/new">Request Feature</a> . <a href="https://t.me/salladev">&lt;/Salla Developers&gt;</a> . <a href="https://docs.salla.dev/docs/twilight-themes-documentation">Official Documentation</a> 
   </p>
 </div>
 
@@ -50,10 +50,10 @@
 <br>
 
 ## Overview
- Salla Theme-One is the starting point for developers to design themes for merchant stores that reflect the uniqueness of each store on the [Salla Platform](https://s.salla.sa). Custom themes will make it much easier for developers to tailor the merchant's store to its changing demands over time. It shipped as the default theme along with the [Twilight Themes](https://salla.stoplight.io/docs/twilight-themes-documentation), which is the Salla themes engine for developers to create customizable themes to be used on the [Salla Platform](https://salla.sa/site/).
+ Salla Theme-Raed is the starting point for developers to design themes for merchant stores that reflect the uniqueness of each store on the [Salla Platform](https://s.salla.sa). Custom themes will make it much easier for developers to tailor the merchant's store to its changing demands over time. It shipped as the default theme along with the [Twilight Themes](https://salla.stoplight.io/docs/twilight-themes-documentation), which is the Salla themes engine for developers to create customizable themes to be used on the [Salla Platform](https://salla.sa/site/).
   
 ## Getting Started 
-Developers may use Salla Theme-One to not only design Salla themes with custom HTML/CSS/JS files and reusable custom UI components, but also to build custom actions that trigger JS events and hooks.
+Developers may use Salla Theme-Raed to not only design Salla themes with custom HTML/CSS/JS files and reusable custom UI components, but also to build custom actions that trigger JS events and hooks.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -64,21 +64,21 @@ Developers may use Salla Theme-One to not only design Salla themes with custom H
 - Installing [Salla CLI]()
 
 ### Install  
-Theme-One gets installed by default upon installing the Twilight Themes. Twilight can be installed in two ways:
+Theme-Raed gets installed by default upon installing the Twilight Themes. Twilight can be installed in two ways:
 
 - Through the [Salla Partners Portal](https://salla.stoplight.io/docs/twilight-themes-documentation/332b3dc9231e8-create-a-theme# salla-partners-portal)
 
 - Through the [Salla CLI](https://salla.stoplight.io/docs/twilight-themes-documentation/332b3dc9231e8-create-a-theme#salla-cli).
 
-Either way, it will trigger the installation of the Twilight Engine and the Theme-One.  This a complete article for how to [install and create](https://salla.stoplight.io/docs/twilight-themes-documentation/332b3dc9231e8-create-a-theme) the Twilight Themes.
+Either way, it will trigger the installation of the Twilight Engine and the Theme-Raed.  This a complete article for how to [install and create](https://salla.stoplight.io/docs/twilight-themes-documentation/332b3dc9231e8-create-a-theme) the Twilight Themes.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Usage 
-Theme-One will be installed as the default theme when you install Twilight. We'll look at how this theme's directories are set up and how to use the preview mode in the next section.
+Theme-Raed will be installed as the default theme when you install Twilight. We'll look at how this theme's directories are set up and how to use the preview mode in the next section.
 
 ### Directory structure  
-**Theme One** is a collection of files and folders that define the Salla Store presentation layer. Following is the directory structure for this starter theme.
+**Theme Raed** is a collection of files and folders that define the Salla Store presentation layer. Following is the directory structure for this starter theme.
 ```shell
 +---scr
     +---assets
@@ -138,11 +138,11 @@ On the other hand, the [Partners Portal]() lists the demo stores of the develope
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Main Features 
-By default, Theme-One home page displays a collection of Pre-Defined and Custom Components. These components are located in the [`src/views/components/home/`](https://github.com/SallaApp/theme-one/tree/master/src/views/components/home) folder.
+By default, Theme-Raed home page displays a collection of Pre-Defined and Custom Components. These components are located in the [`src/views/components/home/`](https://github.com/SallaApp/theme-raed/tree/master/src/views/components/home) folder.
 
 
 ### Predefined Components  
- Pre-Defined  Components, which are know as Theme Features, listed in the [twilight.json](https://github.com/SallaApp/theme-one/blob/master/twilight.json) under the `features` section. Below is a list of these components.
+ Pre-Defined  Components, which are know as Theme Features, listed in the [twilight.json](https://github.com/SallaApp/theme-raed/blob/master/twilight.json) under the `features` section. Below is a list of these components.
  
  | <div style="width:220px">Component</div> | Discription |
 |---|---|
@@ -162,7 +162,7 @@ By default, Theme-One home page displays a collection of Pre-Defined and Custom 
 |[Vertical menu with slider](../4.2-Components/4.2.1-Home-components/4.2.20-Home-vertical-menu-with-slider.md)| Used to display a menu for a group of the sub-pages' links in a vertical menu. |
 
 ### Custom Component
-The Custom Components can be easily modified by the developer. They are known as Theme Components. Below is the list of the Custom Components that are shipped by default along with Theme-One.
+The Custom Components can be easily modified by the developer. They are known as Theme Components. Below is the list of the Custom Components that are shipped by default along with Theme-Raed.
 
 | Components                                        | Description                                                      |
 |----------------------------------------------------------------|-----------------------------------------------------|
@@ -175,7 +175,7 @@ The Custom Components can be easily modified by the developer. They are known as
 
 ## Support
 
-The team is always here to help you. Happen to face an issue? Want to report a bug? You can submit one here on Github using the [Issue Tracker](https://github.com/SallaApp/theme-one//issues/new). If you still have any questions, please contact us via the [Telegram Bot](https://t.me/SallaSupportBot) or join in the Global Developer Community on [Telegram](https://t.me/salladev).
+The team is always here to help you. Happen to face an issue? Want to report a bug? You can submit one here on Github using the [Issue Tracker](https://github.com/SallaApp/theme-raed/issues/new). If you still have any questions, please contact us via the [Telegram Bot](https://t.me/SallaSupportBot) or join in the Global Developer Community on [Telegram](https://t.me/salladev).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
