@@ -1,7 +1,7 @@
 {% extends "layouts.master" %}
 
 {% block content %}
-	<div class="h-62 -mb-52 w-full bg-primary start-0 relative -z-1 bg-cover bg-no-repeat bg-center" style="background-image:url({{loyaltyProgram.image}})">
+	<div class="h-62 -mb-52 w-full bg-primary start-0 relative -z-1 bg-cover bg-no-repeat bg-center" style="background-image:url({{loyalty.image}})">
 		<div class="overlay h-full w-full bg-black opacity-50 absolute top-0 left-0"></div>
 	</div>
 	<div class="container mb-28">
@@ -15,7 +15,7 @@
 					<i class="sicon-keyboard_arrow_left mx-2"></i>
 				</li>
 				<li>
-					<span class="fix-align">{{ loyaltyProgram.name }}</span>
+					<span class="fix-align">{{ loyalty.name }}</span>
 				</li>
 			</ol>
 		</nav>
@@ -28,11 +28,11 @@
 
 					<div class="md:flex flex-1 justify-between items-center">
 						<div class="mb-6 md:mb-0">
-							<h1 class="font-bold text-3xl mb-2.5 loyality-item opacity-0">{{loyaltyProgram.name}}</h1>
+							<h1 class="font-bold text-3xl mb-2.5 loyality-item opacity-0">{{loyalty.name}}</h1>
 							<p class="loyality-item opacity-0 text-gray-text max-w-xs leading-6 mb-2">
-								{{loyaltyProgram.description}}
+								{{loyalty.description}}
 							</p>
-							<div class="loyality-item text-sm text-gray-text">{{ trans('pages.loyalty_program.you_have') }}<span class="text-4xl text-primary font-bold ltr:ml-2.5 rtl:mr-2.5 count-anime" data-count="{{loyaltyProgram.customer.loyalty_program_points}}"></span>
+							<div class="loyality-item text-sm text-gray-text">{{ trans('pages.loyalty_program.you_have') }}<span class="text-4xl text-primary font-bold ltr:ml-2.5 rtl:mr-2.5 count-anime" data-count="{{loyalty.customer.loyalty_program_points}}"></span>
 								{{ trans("pages.loyalty_program.point") }}</div>
 						</div>
 
@@ -57,7 +57,7 @@
 			<div>
 				<h2 class="s-block__title mb-6 sm:mb-8">{{trans("pages.loyalty_program.ways_to_get_points")}}</h2>
 				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-					{% for point in loyaltyProgram.points %}
+					{% for point in loyalty.points %}
 						<div class="bg-white w-full box-anime opacity-100 rounded-md shadow-default p-6 ">
 							<div class="flex space-x-reverse space-x-4">
 								<div class="relative overflow-hidden flex-shrink-0 rounded-icon  !w-12 !h-12 !text-xl">
@@ -98,14 +98,14 @@
 		</section>
 
 		{# 2-block:: prizes #}
-		{% if loyaltyProgram.prizes %}
-			{% for prizesGroup in loyaltyProgram.prizes %}
-				<section class="mb-28 last:mb-0" id="loyalty-slider-{{ prizesGroup.type }}">
+		{% if loyalty.prizes %}
+			{% for prize in loyalty.prizes %}
+				<section class="mb-28 last:mb-0" id="loyalty-slider-{{ prize.type }}">
 					<div
 						class="center-between mb-6 sm:mb-8">
 						{# Block Title #}
 						<div>
-							<h2 class="s-block__title">{{prizesGroup.title}}</h2>
+							<h2 class="s-block__title">{{prize.title}}</h2>
 						</div>
 
 						{# Slider Nav btns #}
@@ -122,11 +122,11 @@
 					</div>
 
 					{# Swiper #}
-					<div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prizesGroup.type }}">
+					<div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize.type }}">
 						<div class="swiper-wrapper flex items-stretch pb-8">
-							{% for prize in prizesGroup.items %}
+							{% for prize in prize.items %}
 								<div class="swiper-slide slide--one-fourth">
-									{% include 'pages.partials.loyalty.card' with {'prizeType': prizesGroup.type} %}
+									{% include 'pages.partials.loyalty.card' with {'prizeType': prize.type} %}
 								</div>
 							{% endfor %}
 						</div>
