@@ -4,7 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const asset = file => path.resolve('src/assets', file || '');
-const output = file => path.resolve("public", file || '');
+const public = file => path.resolve("public", file || '');
 
 
 module.exports = {
@@ -21,7 +21,7 @@ module.exports = {
         filepond : [asset('styles/05-utilities/filepond.scss'), asset('js/partials/filepond.js')],
         flatpickr: asset('styles/05-utilities/flatpicker.scss')
     },
-    output : {path: output(), clean: true},
+    output : {path: public(), clean: true},
     stats  : {modules: false, assetsSort: "size", assetsSpace: 50},
     module : {
         rules: [
@@ -56,7 +56,7 @@ module.exports = {
     plugins: [
         new ThemeWatcher(),
         new MiniCssExtractPlugin(),
-        new CopyPlugin({patterns: [{from: asset('images'), to: output('images')}]}),
+        new CopyPlugin({patterns: [{from: asset('images'), to: public('images')}]}),
     ],
 }
 ;
