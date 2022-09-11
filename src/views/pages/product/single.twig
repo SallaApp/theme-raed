@@ -153,20 +153,16 @@
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
 
-                <div class="center-between">
-                    <h1 class="text-3xl font-bold mb-5 w-5/6 text-gray-800">{{ product.name }}</h1>
-                    {% if product.rating %}
-                        <div class="text-sm">
-                            <i class="sicon-star2 text-amber-400"></i>
-                            <span>{{ product.rating }}</span>
-                        </div>
-                    {% endif %}
-                </div>
+                <h1 class="text-3xl font-bold mb-5 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
-                    <h3 class="product-entry__sub-title  text-sm text-gray-400 leading-6 mb-2.5">
+                    <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5">
                         {{ product.subtitle }}
                     </h3>
+                {% endif %}
+
+                {% if product.rating %}
+                  <salla-rating-stars size="small" value="{{ product.rating }}"></salla-rating-stars>
                 {% endif %}
 
                 <div class="mb-2 space-s-1">
