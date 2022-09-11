@@ -1,10 +1,10 @@
 <footer class="store-footer">
-  <div aria-label="footer" class="bg-gray-800 text-white py-11 lg:pt-28 lg:pb-40 border-b border-dashed border-b-gray-500">
+  <div aria-label="footer" class="store-footer__inner">
     <div class="container grid grid-col-1 lg:grid-cols-6 gap-10 lg:gap-6">
         <div class="lg:col-span-2 lg:pe-20">
-          <a href="{{ link('/') }}" class="flex items-center mb-6 text-primary hover:text-primary-d">
-            <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}"  data-src="{{ store.logo }}" alt="" class="lazy-load img-fluid w-10 b-logo">
-            <h2 class="text-2xl font-bold mx-1.5 fix-align leading-none">{{store.name}}</h2>
+          <a href="{{ link('/') }}" class="flex items-center mb-6">
+            {# <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}"  data-src="{{ store.logo }}" alt="" class="lazy-load img-fluid w-10 b-logo"> #}
+            <h2 class="text-2xl font-bold leading-none">{{store.name}}</h2>
           </a>
           {% if store.description %}
             <p class="max-w-sm leading-6 mb-6">
@@ -43,8 +43,9 @@
         {% component 'footer.mobile-apps' %}
     </div>
   </div>
-  <div class="md:flex items-center justify-between py-4 lg:px-0 container text-center">
-    {% hook copyright %}
+
+  <div class="md:flex items-center justify-between py-4 container text-center">
+    <span class="text-sm opacity-75">{% hook copyright %}</span>
     {% component 'footer.payment-methods' %}
   </div>
 </footer>

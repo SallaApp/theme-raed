@@ -1,13 +1,33 @@
 
 .store-footer {
-  @apply relative bg-gray-700 mt-8 sm:mt-16;
+  @apply relative bg-gray-700 text-white mt-8 sm:mt-16;
+
+  a{
+    @apply transition-opacity hover:opacity-75;
+  }
+
+  &__inner{
+    @apply bg-gray-800 py-11 lg:pt-28 lg:pb-40 border-b border-dashed border-b-gray-500;
+  }
 
   h3{
     @apply text-lg font-bold mb-5;
   }
 
   .social-link {
-    @apply border text-white rounded-full w-8 h-8 justify-center flex items-center hover:text-primary hover:border-primary transition duration-300 text-sm
+    @apply border rounded-full w-8 h-8 justify-center flex items-center hover:opacity-75 transition duration-300 text-sm
+  }
+
+  .footer-is-light & {
+    @apply bg-gray-50 text-gray-700;
+
+    .store-footer__inner {
+      @apply bg-gray-100 border-b-gray-200;
+    }
+
+    .social-link {
+      @apply border-gray-300;
+    }
   }
 }
 
