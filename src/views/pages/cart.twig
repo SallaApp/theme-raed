@@ -98,7 +98,8 @@
                                             <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
                                             <span class="w-10 py-2.5 text-center">{{ item.quantity }}</span>
                                         {% else %}
-                                            <salla-quantity-input max="{{ product.max_quantity }}" class="transtion transition-color duration-300"
+                                            <salla-quantity-input max="{{ product.max_quantity }}"
+                                                                  class="transtion transition-color duration-300"
                                                                   value="{{ item.quantity }}" name="quantity">
                                             </salla-quantity-input>
                                         {% endif %}
@@ -164,15 +165,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="shadow-default mb-5 p-3 xs:p-7 bg-white rounded-md">
-                        <salla-loyalty customer-points="1000"></salla-loyalty>
-                    </div>
-                     
-                    {# After Exchange
-                
-                    <div class="shadow-default mb-5 rounded-md">
-                        <salla-loyalty customer-points="1000" prize-points="١٠ نقاط" prize-title="كوبون تخفيض (نسبة مئوية) ١٠٪"></salla-loyalty>
-                    </div>#}
+                    {% if store.settings.is_loyalty_enabled %}
+                        <div class="shadow-default mb-5 rounded-md p-3 xs:p-7 bg-white">
+                            <salla-loyalty
+                                    customer-points='{{ loyalty.customer_points }}'
+                                    prize-points='{{ loyalty.prize.points }}'
+                                    prize-title='{{ loyalty.prize.title }}'></salla-loyalty>
+                        </div>
+                    {% endif %}
 
                     <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
                         <h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
@@ -195,13 +195,14 @@
                                        class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
                                 <div class="mt-2.5 relative">
                                     <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
-                                           {{ cart.coupon ? 'disabled':'' }}
+                                            {{ cart.coupon ? 'disabled':'' }}
                                            class="pe-24 form-input" value="{{ cart.coupon }}" id="coupon-input"
                                            name="coupon"
                                            type="text">
 
-                                    <salla-button class="btn--coupon {{ cart.coupon?'has-coupon btn--danger':'has-not-coupon btn--default' }}"
-                                                  loader-position="center" id="coupon-btn">
+                                    <salla-button
+                                            class="btn--coupon {{ cart.coupon?'has-coupon btn--danger':'has-not-coupon btn--default' }}"
+                                            loader-position="center" id="coupon-btn">
                                         <span class="coupon-text">{{ trans('pages.cart.save_coupon') }}</span>
                                         <i class="sicon-cancel icon text-xl w-8"></i>
                                     </salla-button>
