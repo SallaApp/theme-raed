@@ -161,9 +161,7 @@
                     </h3>
                 {% endif %}
 
-                {% if product.rating %}
-                  <salla-rating-stars size="small" value="{{ product.rating }}"></salla-rating-stars>
-                {% endif %}
+                <salla-rating-stars size="small" value="{{ product.rating ? product.rating : 0 }}"></salla-rating-stars>
 
                 <div class="mb-2 space-s-1">
                     {% if product.is_on_sale %}
