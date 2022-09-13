@@ -87,6 +87,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
+    <link rel="preconnect" href="{{ ''|cdn }}"/>
+    <link rel="preconnect" href="{{ ''|asset }}"/>
     {% hook 'head:start' %}
     <!-- theme color -->
     <meta name="msapplication-navbutton-color" content="{{ theme.color.primary }}">
@@ -98,12 +100,11 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ store.logo }}">
     <meta name="_token" content="{{ csrf_token() }}">
-
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
-    <link rel="stylesheet" href="{{ 'fonts/sallaicons.css?v=1.1.2'|cdn }}"/>
+    <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
     <style>
         :root {
             --font-main: '{{theme.font.name}}';
