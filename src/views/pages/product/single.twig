@@ -286,12 +286,12 @@
                     </salla-conditional-fields>
 
 
-                    <section class="bg-white p-5 rounded-md rounded-b-none">
+                    <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
                         {% if product.is_hidden_quantity %}
                             <input type="hidden" value="1" name="quantity"/>
                         {% else %}
-                            <div class="center-between mb-5">
+                            <div class="sticky-product-bar__quantity center-between mb-5">
                                 <label class="form-label font-bold">
                                     {{ trans('pages.products.quantity') }}
                                 </label>
@@ -301,7 +301,7 @@
                         {% endif %}
 
                         {# Price #}
-                        <div class="center-between">
+                        <div class="sticky-product-bar__price center-between">
                             <label class="form-label">
                                 <b class="block">
                                     {{ trans('pages.products.price') }}
@@ -321,7 +321,7 @@
 
                         {# Add to cart #}
                         <salla-add-product-button type="submit" loader-position="end" width="wide"
-                                                  class="mt-5 w-full"
+                                                  class="mt-5 w-full sticky-product-bar__btn"
                                                   product-id="{{ product.id }}"
                                                   product-status="{{ product.status }}"
                                                   product-type="{{ product.type }}"
