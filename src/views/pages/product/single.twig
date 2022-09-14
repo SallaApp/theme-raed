@@ -79,8 +79,25 @@
                         </div>
                     {% endif %}
 
+                    <salla-button 
+                      class="btn--wishlist animated" 
+                      data-id="{{ product.id }}" 
+                      onclick="salla.wishlist.toggle({{ product.id }})" 
+                      shape="icon" 
+                      fill="outline" 
+                      color="light">
+                        <i class="sicon-heart"></i>
+                    </salla-button>
 
-                    {% set has_many_images=product.images|length>1 %}
+                    {# Calories Badge #}
+                    {% if product.calories %}
+                        <div class="absolute z-[2] top-4 rtl:left-4 ltr:right-4 bg-white shadow-sm flex flex-col justify-center items-center rounded-full w-20 h-20 md:w-24 md:h-24">
+                            <span class="text-red-500 text-xl leading-none font-bold">{{ product.calories }}</span>
+                            <span class="text-xs text-gray-500">{{ trans('pages.products.calories') }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% set has_many_images = product.images|length > 1 %}
                     <div class="swiper-wrapper">
                         {% for image in product.images %}
                             <a data-fslightbox="product_{{ product.id }}"
@@ -137,7 +154,7 @@
                 {% endif %}
             </div>
 
-            <div class="main-content w-full md:w-2/4 pb-8 md:pb-16">
+            <div class="main-content w-full md:w-2/4 md:pb-16">
 
                 {% hook 'product:single.description.start' %}
 
@@ -165,8 +182,8 @@
 
                 <div class="mb-2 space-s-1">
                     {% if product.is_on_sale %}
-                        <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                        <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                        <h4 class="text-red-400 font-bold text-xl inline-block">{{ product.sale_price|money }}</h4>
+                        <span class="text-gray-400 line-through">{{ product.regular_price|money }}</span>
                     {% else %}
                         <span class="font-bold">{{ product.price|money }}</span>
                     {% endif %}
@@ -187,7 +204,7 @@
                     {% endif %}
                 </div>
 
-                {% if product.tags|length %}
+                {% if product.tags|length and theme.settings.get('show_tags') %}
                     <div class="mb-3">
                         {% for tag in product.tags %}
                             <a href="{{ tag.url }}" class="me-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }},</a>
@@ -195,50 +212,11 @@
                     </div>
                 {% endif %}
 
-                <div class="flex mb-5 space-s-3 ">
-                    <div class="share-wrapper relative">
-                        <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light"
-                                      class="!m-0">
-                            <i class="sicon-share-alt pointer-events-none"></i>
-                        </salla-button>
-
-                        <ul class="share-btns-list a2a_kit share h-0">
-                            <li>
-                                <a class="a2a_button_whatsapp" aria-label="Share Via Whatsapp">
-                                    <i class="sicon-whatsapp"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_facebook" aria-label="Share Via Facebook">
-                                    <i class="sicon-facebook"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_twitter" aria-label="Share Via Twitter">
-                                    <i class="sicon-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_email" aria-label="Share Via Email">
-                                    <i class="sicon-mail"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_copy_link" aria-label="Copy Product Link">
-                                    <i class="sicon-link"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <script type="text/javascript">
-                            var a2a_config = a2a_config || {};
-                            a2a_config.linkurl = "{{ product.url }}";
-                            a2a_config.locale = "{{ user.language.code }}";
-                        </script>
-                        <script async src="https://static.addtoany.com/menu/page.js"></script>
-                    </div>
+                <div class="flex space-s-3"> 
+                    <salla-social-share class="hidden sm:inline-flex mb-5"></salla-social-share>
 
                     <salla-button 
-                      class="btn--wishlist animated" 
+                      class="btn--wishlist animated hidden sm:inline-flex" 
                       data-id="{{ product.id }}" 
                       onclick="salla.wishlist.toggle({{ product.id }})" 
                       shape="icon" 
@@ -248,7 +226,7 @@
                     </salla-button>
                 </div>
 
-                {% if product.sold_quantity or product.can_show_remained_quantity %}
+                {% if not product.sold_quantity or not product.can_show_remained_quantity %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
                             <div class="px-4 text-red-400">
@@ -256,7 +234,7 @@
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
-                        {% if product.can_show_remained_quantity %}
+                        {% if not product.can_show_remained_quantity %}
                             <div class="px-4 even:border-s even:border-gray-200">
                                 <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
                                 {{ trans('pages.products.remained') }}
@@ -266,11 +244,10 @@
                     </div>
                 {% endif %}
 
-                <div class="grid gap-5 mb-5">
-                    {% hook 'product:single.description' %}
+                {% hook 'product:single.description' %}
 
-                    <salla-installment price="{{product.price}}"></salla-installment>
-                </div>
+                {# Installment Methods #}
+                <salla-installment price="{{product.price}}"></salla-installment>
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onchange="salla.product.getPrice(new FormData(event.currentTarget))"
@@ -308,11 +285,11 @@
                                 </b>
                             </label>
                             <div class="space-s-1">
-                                <h4 id="total-price" class="text-red-400 font-bold text-sm inline-block">
+                                <h4 id="total-price" class="text-red-400 font-bold text-xl inline-block">
                                     {{ product.price|money }}
                                 </h4>
                                 {% if product.is_on_sale %}
-                                    <span id="before-price" class="text-sm text-gray-400 line-through">
+                                    <span id="before-price" class="text-gray-400 line-through">
                                         {{ product.regular_price|money }}
                                     </span>
                                 {% endif %}
