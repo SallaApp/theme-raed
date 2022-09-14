@@ -109,7 +109,7 @@
 .main-nav-container {
   &.animated {
     .inner {
-      transition: transform 0.5s, -webkit-transform 0.5s, opacity 0.4s;
+      transition: top 0.5s, transform 0.5s, -webkit-transform 0.5s, opacity 0.4s;
     }
   }
 
@@ -123,6 +123,11 @@
       z-index: 29;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
       transform: translate3d(0, -100%, 0);
+
+      @media (max-width: 1024px){
+        transform: none;
+        top: -70px;
+      }
     }
 
     .navbar-brand {
@@ -144,6 +149,11 @@
   &.fixed-header {
     .inner {
       transform: translate3d(0, 0, 0);
+
+      @media (max-width: 1024px){
+        transform: none;
+        top: 0;
+      }
     }
   }
 }
