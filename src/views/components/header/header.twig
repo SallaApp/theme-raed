@@ -34,12 +34,12 @@
 
     {# Main Nav #}
     <div id="mainnav" class="main-nav-container shadow-default bg-white">
-        <div class="inner bg-inherit">
+        <div class="inner bg-inherit md:py-2">
             <div class="container">
                 <div class="flex items-stretch justify-between relative">
                     <div class="flex items-center">
-                        <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
-                            <i class="sicon-menu text-primary text-3xl me-2.5"></i>
+                        <a class="lg:hidden mburger mburger--collapse leading-none" href="#mobile-menu">
+                            <i class="sicon-menu text-primary text-2xl me-2.5"></i>
                         </a>
                         <a class="navbar-brand" href="{{ store.url }}">
                             <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }}">
@@ -55,7 +55,7 @@
                         {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
-                            <salla-button shape="icon" fill="outline" color="light" onclick="salla.event.dispatch('login::open')">
+                            <salla-button shape="icon" fill="outline" color="dark" onclick="salla.event.dispatch('login::open')">
                               <i class="sicon-user-circle"></i>
                             </salla-button>
                         {% endif %}
@@ -64,7 +64,7 @@
                             <i class="icon sicon-shopping-bag"></i>
                             <span class="badge badge--red" data-cart-count>{{ cart.items_count|number }}</span>
                             <div>
-                              <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
+                              <p class="leading-3 opacity-60 text-sm">{{ trans('blocks.header.cart') }}</p>
                               <b class="leading-3" data-cart-total>{{ cart.total }}</b>
                             </div>
                         </a>
