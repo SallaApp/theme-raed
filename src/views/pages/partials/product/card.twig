@@ -13,25 +13,14 @@ view options:
   {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
 
     {# Image #}
-    <div class="relative">
-        <a href="{{ product.url }}" class='product-entry__image'>
-            <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
-                src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
-            {% if product.promotion_title %}
-                <div class="absolute top-4 start-0 z-1 font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
-            {% endif %}
-        </a>
-        <salla-button
-            shape="icon"
-            fill="none"
-            color="light"
-            aria-label="Add or remove to wishlist"
-            class="btn--wishlist animated"
-            onclick="salla.wishlist.toggle({{ product.id }})"
-            data-id="{{ product.id }}">
-            <i class="sicon-heart text-xl"></i>
-        </salla-button>
-    </div>
+    <a href="{{ product.url }}" class='product-entry__image'>
+        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
+             src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+        {% if product.promotion_title %}
+            <div class="absolute top-4 start-0 z-1 font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
+        {% endif %}
+    </a>
+
     {# content #}
     <div class="flex-1 p-4 xs:p-5 flex flex-col relative donating-wrap">
         {% if is_special %}
