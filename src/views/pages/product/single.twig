@@ -153,7 +153,7 @@
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
 
-                <h1 class="text-3xl leading-10 font-bold mb-5 text-gray-800">{{ product.name }}</h1>
+                <h1 class="text-3xl leading-10 font-bold mb-2 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
                     <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5">
@@ -172,7 +172,7 @@
                     {% endif %}
                 </div>
 
-                <div class="product__description leading-7 mb-6">
+                <div class="product__description leading-7 mb-3">
                     {% if product.has_read_more %}
                         <article class="relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
                             {{ product.description|raw }}
@@ -186,6 +186,14 @@
                         <p class="pb-1">{{ product.description|raw }}</p>
                     {% endif %}
                 </div>
+
+                {% if product.tags|length %}
+                    <div class="mb-3">
+                        {% for tag in product.tags %}
+                            <a href="{{ tag.url }}" class="me-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }},</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
                 <div class="flex mb-5 space-s-3 ">
                     <div class="share-wrapper relative">
@@ -255,18 +263,6 @@
                                 <span>{{ product.quantity }}</span>
                             </div>
                         {% endif %}
-                    </div>
-                {% endif %}
-
-                {% if product.tags|length %}
-                    <div class="mb-4">
-                        {% for tag in product.tags %}
-                            <a href="{{ tag.url }}"
-                               class="me-2.5 bg-white py-2.5 px-4 rounded-large inline-flex items-center justify-center text-dark hover:text-primary text-sm mb-2.5">
-                                <i class="font-medium sicon-tag me-1.5 "></i>
-                                <span class="fix-align">{{ tag.name }}</span>
-                            </a>
-                        {% endfor %}
                     </div>
                 {% endif %}
 

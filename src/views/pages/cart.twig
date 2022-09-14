@@ -53,7 +53,7 @@
     <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
 {% endblock %}
 {% block content %}
-    <div class="container px-3 xs:px-5">
+    <div class="container">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
         <nav class="breadcrumbs w-full py-5">
             {% component 'header.breadcrumbs' %}
@@ -96,7 +96,7 @@
                                             <span></span>
                                         {% elseif item.is_hidden_quantity %}
                                             <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
-                                            <span class="w-10 py-2.5 text-center">{{ item.quantity }}</span>
+                                            <span class="w-10 text-center">{{ item.quantity }}</span>
                                         {% else %}
                                             <salla-quantity-input max="{{ product.max_quantity }}"
                                                                   class="transtion transition-color duration-300"
