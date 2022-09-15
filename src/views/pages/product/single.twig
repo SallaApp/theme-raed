@@ -330,9 +330,11 @@
                                                   {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}>
                         </salla-add-product-button>
                     </section>
-                    <div class="mt-5">
-                        <salla-gifting product-id="{{ product.id }}"></salla-gifting>
-                    </div>
+                    {% if product.giftable %}
+                        <div class="mt-5">
+                            <salla-gifting product-id="{{ product.id }}"></salla-gifting>
+                        </div>
+                    {% endif %}
                 </form>
 
                 {% hook 'product:single.description.end' %}
