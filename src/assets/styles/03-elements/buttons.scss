@@ -29,8 +29,10 @@ salla-button {
     transition: 0.3s;
   }
 
-  &--add-to-cart{
-    max-width: calc(100% - 42px);
+  .product-entry--horizontal &--add-to-cart{
+    @media only screen and (min-width: 480px) {
+      max-width: calc(100% - 42px);
+    }
   }
 
   .product-entry--minimal &{
@@ -82,9 +84,12 @@ salla-button {
   &--wishlist {
     @apply m-0 ms-0.5;
 
-    &:hover,
-    .sicon-heart-off {
-      @apply text-primary
+    &:hover{
+      @apply text-gray-600;
+    }
+
+    &.is-added {
+      @apply text-red-500;
     }
   }
 
@@ -144,7 +149,7 @@ salla-button {
     1- Home tabs block
   */
   &--md-arrow {
-    @apply transition inline-flex items-center justify-center border text-gray-500 rounded-full w-10 h-10 text-xl;
+    @apply transition inline-flex items-center justify-center border border-gray-300 text-gray-500 rounded-full w-10 h-10 text-xl;
 
     &.light {
       @apply text-white border-white;
