@@ -9,23 +9,29 @@
     {# Top Nav #}
     <div class="top-navbar">
         <div class="container flex justify-between">
-            <div class="center-between w-full lg:w-auto ">
-                <div class="flex items-center space-s-1">
-                    {# Footer Menu #}
-                    {% component 'footer.menu' with {is_header:true} %}
-                    {# Language & Currency Component #}
-                    {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                        <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
-                            <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
-                            | <span class="ms-2 me-1">{{ currency.symbol }}</span>
-                        </button>
-                        <salla-localization-modal></salla-localization-modal>
-                    {% endif %}
+            <div class="flex-1 flex items-center space-s-1">
+              {# Footer Menu #}
+              {% component 'footer.menu' with {is_header:true} %}
 
-                    {# Search Component #}
-                    <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray sicon-search"></button>
-                    <salla-search></salla-search>
-                </div>
+              <div class="header-buttons">
+                {# Language & Currency Component #}
+                {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+                  <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray basis-0">
+                      <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
+                      | <span class="ms-2 me-1">{{ currency.symbol }}</span>
+                  </button>
+                  <salla-localization-modal></salla-localization-modal>
+                {% endif %}
+              </div>
+
+              {# Search Component #}
+              {# <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray search-btn">
+                <span class="sicon-search"></span>
+                <span class="sm:hidden px-2 opacity-50">{{ trans('blocks.header.searchProducts') }}</span>
+              </button> #}
+              <div class="header-search flex-1">
+                <salla-search inline oval height="36"></salla-search>
+              </div>
             </div>
 
             {% component 'footer.contacts' with {is_header:true} %}
