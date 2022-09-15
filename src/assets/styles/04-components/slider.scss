@@ -1,23 +1,23 @@
 .swiper{
   &.slider-layout{
-    @apply -mx-5 lg:-mx-3.75 lg:w-[calc(100%+30px)] pe-12 sm:pe-16 lg:pe-0 ps-3 lg:ps-0;
+    @apply -mx-2.5 w-[calc(100%+20px)] pe-12 sm:pe-16 lg:pe-0 ps-2.5 lg:ps-0;
 
     &.thumbs-slider{
       @apply -mx-2 lg:w-[calc(100%+16px)] px-0;
 
       .swiper-slide{
-        @apply w-1/3 sm:w-1/4 mx-2 p-0 cursor-pointer h-16 md:h-20 transition-opacity duration-300 bg-gray-100 rounded-md;
+        @apply w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 mx-2 p-0 cursor-pointer h-16 md:h-20 transition-opacity duration-300 bg-gray-50 rounded-md;
 
         &:hover{
           @apply opacity-80
         }
 
         &:after{
-          @apply transition-shadow duration-300 content-[''] absolute top-0 left-0 h-full w-full rounded-md z-1 ring-0 ring-inset ring-primary;
+          @apply transition-shadow duration-300 content-[''] absolute top-0 left-0 h-full w-full rounded-md z-1 ring-1 ring-gray-200 ring-inset;
         }
 
         &-thumb-active:after{
-          @apply ring-2;
+          @apply ring-2 ring-primary;
         }
       }
     }
@@ -25,7 +25,11 @@
 
   &.details-slider{
     .swiper-slide{
-      @apply relative bg-white h-72 sm:h-96 lg:h-[500px];
+      @apply relative rounded-md bg-white h-72 sm:h-96 lg:h-[500px] ring-1 ring-inset ring-gray-100;
+    }
+
+    salla-button.btn--wishlist{
+      @apply absolute rtl:right-4 ltr:left-4 bottom-4 z-[2] sm:hidden;
     }
   }
 
@@ -126,7 +130,7 @@
 
   .testimonial {
     height: 100%;
-    @apply shadow-default lg:shadow-none flex relative p-10 bg-white rounded-l-md transition-opacity opacity-60;
+    @apply shadow-default lg:shadow-none flex relative p-6 lg:p-10 bg-white rounded-l-md transition-opacity opacity-60;
 
     &__inner{
       @apply flex items-center;
@@ -203,6 +207,10 @@
 
       &__avatar {
         @apply me-6;
+      }
+
+      &__info{
+        @apply mb-2 lg:mb-0;
       }
 
       &__rating,
