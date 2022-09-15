@@ -60,18 +60,17 @@
  <section class="bg-white p-5 rounded-md mb-5">
     {% if product.weight %}
         <div class="center-between pb-5 mb-5 border-b-2">
-        <b class="rtl:space-x-reverse space-x-2"><i class="sicon-luggage-cart"></i> <span>{{ trans('pages.products.weight') }}</span></b>
-        <span class="text-sm">{{ product.weight }}</span>
+            <b class="form-label rtl:space-x-reverse space-x-1"><i class="sicon-luggage-cart"></i> <span>{{ trans('pages.products.weight') }}</span></b>
+            <span class="text-sm">{{ product.weight }}</span>
         </div>
     {% endif %}
 
     <div class="center-between">
-        <label class="form-label">
-            <b class="rtl:space-x-reverse space-x-2">
-                <i class="sicon-pencil-ruler"></i>
-                <span> {{ trans('pages.products.size_guides') }} </span>
-            </b>
-        </label>
+        <b class="form-label rtl:space-x-reverse space-x-1">
+            <i class="sicon-pencil-ruler"></i>
+            <span> {{ trans('pages.products.size_guides') }} </span>
+        </b>
+     
         <salla-button  shape="link" color="primary" class="!p-0 text-sm"  onclick="salla.event.dispatch('size-guide::open', '{{ product.id }}')">
         {{ trans('pages.products.show_size_guides') }} <i class="sicon-keyboard_arrow_left" ></i>
         </salla-button>
