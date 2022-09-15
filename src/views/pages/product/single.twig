@@ -69,6 +69,7 @@
         <nav class="breadcrumbs w-full py-5">
             {% component 'header.breadcrumbs' %}
         </nav>
+
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
                 <div class="swiper relative details-slider rounded-md"
@@ -110,9 +111,9 @@
                                aria-label="{{ product.name }}"
                                class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                 {% if loop.first %}
-                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-contain w-full">
+                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% else %}
-                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load swiper-lazy h-full object-contain w-full">
+                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load swiper-lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% endif %}
                             </a>
                         {% endfor %}
@@ -134,11 +135,11 @@
                         <div class="swiper-wrapper flex items-stretch">
                             {% for image in product.images %}
                                 <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
-                                    {% if loop.index < 4 %}
+                                    {% if loop.index < 5 %}
                                         <img src="{{ image.url }}"
                                             loading="eager"
                                             fetchpriority="high"
-                                            class="object-contain w-full h-full bg-gray-100 rounded-md overflow-hidden"
+                                            class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
                                             title="{{ image.alt }}"
                                             alt="{{ image.alt }}"/>
                                     {% else %}
@@ -181,11 +182,20 @@
                 <salla-rating-stars size="small" value="{{ product.rating ? product.rating : 0 }}"></salla-rating-stars>
 
                 <div class="mb-2 space-s-1">
-                    {% if product.is_on_sale %}
-                        <h4 class="text-red-400 font-bold text-xl inline-block">{{ product.sale_price|money }}</h4>
+                    {# {% if product.is_on_sale %}
+                        <h4 class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">{{ product.sale_price|money }}</h4>
                         <span class="text-gray-400 line-through">{{ product.regular_price|money }}</span>
                     {% else %}
                         <span class="font-bold">{{ product.price|money }}</span>
+                    {% endif %} #}
+
+                    <h4 class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                        {{ product.price|money }}
+                    </h4>
+                    {% if product.is_on_sale %}
+                        <span id="before-price" class="text-gray-400 line-through">
+                            {{ product.regular_price|money }}
+                        </span>
                     {% endif %}
                 </div>
 
@@ -285,7 +295,7 @@
                                 </b>
                             </label>
                             <div class="space-s-1">
-                                <h4 id="total-price" class="text-red-400 font-bold text-xl inline-block">
+                                <h4 id="total-price" class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                                     {{ product.price|money }}
                                 </h4>
                                 {% if product.is_on_sale %}

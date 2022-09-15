@@ -35,8 +35,15 @@
                         <td>
                           <div>
                             <span class="mobile-title">{{ trans('pages.thank_you.order_id') }}:</span>
-                            #{{ order.reference_id }}
+                            <span class="hidden md:inline-block">#{{ order.reference_id }}</span>
                             <a href="{{ order.url }}"></a>
+
+                            <div class="flex items-center md:hidden">
+                              <salla-button class="relative" onclick="theme.copyToClipboard(event)" color="dark" shape="link" data-content="{{ order.reference_id }}">
+                                  <span>#{{ order.reference_id }}</span>
+                                  <i class="copy-icon sicon-swap-stroke pointer-events-none rtl:mr-1 ltr:ml-1"></i>
+                              </salla-button>
+                            </div>
                           </div>
                         </td>
 
