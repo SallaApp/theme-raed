@@ -1,10 +1,10 @@
 <footer class="store-footer">
   <div aria-label="footer" class="store-footer__inner">
-    <div class="container grid grid-col-1 lg:grid-cols-6 gap-10 lg:gap-6">
+    <div class="container grid grid-col-1 lg:grid-cols-6 gap-8 lg:gap-6">
         <div class="lg:col-span-2 lg:pe-20">
-          <a href="{{ link('/') }}" class="flex items-center mb-6">
+          <a href="{{ link('/') }}" class="flex items-center m-0">
             {# <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}"  data-src="{{ store.logo }}" alt="" class="lazy-load img-fluid w-10 b-logo"> #}
-            <h2 class="text-2xl font-bold leading-none">{{store.name}}</h2>
+            <h3>{{store.name}}</h3>
           </a>
           {% if store.description %}
             <p class="max-w-sm leading-6 mb-6">
@@ -12,7 +12,9 @@
             </p>
           {% endif %}
 
-          {% component 'footer.social' %}
+          <div class="hidden lg:block">
+            {% component 'footer.social' %}
+          </div>
 
           {# vat #}
           {% if store.settings.tax.number %}
@@ -39,7 +41,15 @@
         </div>
 
         {% component 'footer.menu' %}
-        {% component 'footer.contacts' %}
+
+        <div>
+          {% component 'footer.contacts' %}
+
+          <div class="lg:hidden contact-social">
+            {% component 'footer.social' %}
+          </div>
+        </div>
+
         {% component 'footer.mobile-apps' %}
     </div>
   </div>

@@ -13,16 +13,31 @@ view options:
   {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
 
     {# Image #}
-    <a href="{{ product.url }}" class='product-entry__image'>
-        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
-             src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
-        {% if product.promotion_title %}
-            <div class="absolute top-4 start-0 z-1 font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
-        {% endif %}
-    </a>
+    <div class='product-entry__image {{ is_horizontal ? '' : 'flex-1'}}'>
+      <a href="{{ product.url }}">
+          <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy-load"
+              src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+          {% if product.promotion_title %}
+              <div class="absolute top-4 start-0 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-red-400 text-white rounded-e-md {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]'}}">{{ product.promotion_title }}</div>
+          {% endif %}
+      </a>
+
+      {% if not is_horizontal %}
+        <salla-button
+            shape="icon"
+            fill="none"
+            color="light"
+            aria-label="Add or remove to wishlist"
+            class="btn--wishlist animated"
+            onclick="salla.wishlist.toggle({{ product.id }})"
+            data-id="{{ product.id }}">
+            <i class="sicon-heart text-xl"></i>
+        </salla-button>
+      {% endif %}
+    </div>
 
     {# content #}
-    <div class="flex-1 p-4 xs:p-5 flex flex-col relative donating-wrap">
+    <div class="{{ is_horizontal ? 'flex-1' : ''}} p-3 sm:p-5 flex flex-col relative donating-wrap">
         {% if is_special %}
             <div data-quantity="{{ product.quantity  }}" data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
                 <span>
@@ -97,16 +112,18 @@ view options:
                 {{ product.add_to_cart_label }}
             </salla-add-product-button>
 
-            <salla-button
-              shape="icon"
-              fill="none"
-              color="light"
-              aria-label="Add or remove to wishlist"
-              class="btn--wishlist animated"
-              onclick="salla.wishlist.toggle({{ product.id }})"
-              data-id="{{ product.id }}">
-                <i class="sicon-heart"></i>
-            </salla-button>
+            {% if is_horizontal %}
+              <salla-button
+                shape="icon"
+                fill="none"
+                color="light"
+                aria-label="Add or remove to wishlist"
+                class="btn--wishlist animated"
+                onclick="salla.wishlist.toggle({{ product.id }})"
+                data-id="{{ product.id }}">
+                  <i class="sicon-heart text-xl"></i>
+              </salla-button>
+            {% endif %}
         </div>
     </div>
 </div>

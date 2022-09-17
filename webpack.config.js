@@ -21,7 +21,11 @@ module.exports = {
         filepond : [asset('styles/05-utilities/filepond.scss'), asset('js/partials/filepond.js')],
         flatpickr: asset('styles/05-utilities/flatpicker.scss')
     },
-    output : {path: public(), clean: true},
+    output : {
+        path: public(),
+        clean: true,
+        chunkFilename: "[name].[contenthash].js"
+    },
     stats  : {modules: false, assetsSort: "size", assetsSpace: 50},
     module : {
         rules: [
