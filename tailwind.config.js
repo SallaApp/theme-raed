@@ -40,6 +40,8 @@ module.exports = {
                 'primary-reverse': 'var(--color-primary-reverse)',
                 'transparent'  : 'transparent',
                 'color-gray'   : 'var(--color-grey)',
+                'dark'         : '#1D1F1F',
+                'darker'       : '#0E0F0F'
             },
             spacing: {
               '3.75': '15px',
