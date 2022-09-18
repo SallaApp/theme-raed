@@ -3,129 +3,130 @@ import Swal from 'sweetalert2';
 import Anime from './partials/anime';
 import initTootTip from './partials/tooltip';
 
-class App extends salla.AppHelpers {
+salla.onReady(() => {
+  class App extends salla.AppHelpers {
     constructor() {
-        super();
-        this.isThemeApp = true;//to make sure that window.app, is this class
-        window.app = this;
-        salla.onInitiated(() => this.loadTheApp());
+      super();
+      this.isThemeApp = true;//to make sure that window.app, is this class
+      window.app = this;
+      this.loadTheApp();
     }
 
     loadTheApp() {
-        this.initiateNotifier();
-        this.initiateLazyLoad();
-        this.initiateMobileMenu();
-        this.initiateStickyMenu();
-        this.initAddToCart();
-        this.initiateAdAlert();
-        this.initiateDropdowns();
-        this.initiateModals();
-        this.initiateCollapse();
-        this.initCircleBar();
-        this.initDonating();
-        initTootTip();
+      this.initiateNotifier();
+      this.initiateLazyLoad();
+      this.initiateMobileMenu();
+      this.initiateStickyMenu();
+      this.initAddToCart();
+      this.initiateAdAlert();
+      this.initiateDropdowns();
+      this.initiateModals();
+      this.initiateCollapse();
+      this.initCircleBar();
+      this.initDonating();
+      initTootTip();
 
-        salla.comment.event.onAdded(() => window.location.reload());
-        
-        this.log('Theme Loaded 🎉');
+      salla.comment.event.onAdded(() => window.location.reload());
+
+      this.log('Theme Loaded 🎉');
     }
 
     log(message) {
-        salla.log(`ThemeApp(${salla.config.get('theme.name')})::${message}`);
-        return this;
+      salla.log(`ThemeApp(${salla.config.get('theme.name')})::${message}`);
+      return this;
     }
 
     copyToClipboard(event) {
-        event.preventDefault();
-        let aux = document.createElement("input"),
-            btn = event.currentTarget;
-        aux.setAttribute("value", btn.dataset.content);
-        document.body.appendChild(aux);
-        aux.select();
-        document.execCommand("copy");
-        document.body.removeChild(aux);
-        this.toggleElementClassIf(btn, 'copied', 'code-to-copy', () => true);
-        setTimeout(() => {
-          this.toggleElementClassIf(btn, 'code-to-copy', 'copied', () => true)
-        }, 1000);
+      event.preventDefault();
+      let aux = document.createElement("input"),
+        btn = event.currentTarget;
+      aux.setAttribute("value", btn.dataset.content);
+      document.body.appendChild(aux);
+      aux.select();
+      document.execCommand("copy");
+      document.body.removeChild(aux);
+      this.toggleElementClassIf(btn, 'copied', 'code-to-copy', () => true);
+      setTimeout(() => {
+        this.toggleElementClassIf(btn, 'code-to-copy', 'copied', () => true)
+      }, 1000);
     }
 
     initiateNotifier() {
-        salla.notify.setNotifier(function (message, type, data) {
-            if (typeof message == 'object') {
-                return Swal.fire(message).then(type);
-            }
+      salla.notify.setNotifier(function (message, type, data) {
+        if (typeof message == 'object') {
+          return Swal.fire(message).then(type);
+        }
 
-            return Swal.mixin({
-                toast            : true,
-                position         : salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
-                showConfirmButton: false,
-                timer            : 3500,
-                didOpen          : (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            }).fire({
-                icon            : type,
-                title           : message,
-                showCloseButton : true,
-                timerProgressBar: true
-            })
-        });
+        return Swal.mixin({
+          toast            : true,
+          position         : salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
+          showConfirmButton: false,
+          timer            : 3500,
+          didOpen          : (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        }).fire({
+          icon            : type,
+          title           : message,
+          showCloseButton : true,
+          timerProgressBar: true
+        })
+      });
     }
 
     initiateMobileMenu() {
-        const menu = new MobileMenu(this.element("#mobile-menu"), "(max-width: 1024px)", "( slidingSubmenus: false)");
-        salla.lang.onLoaded(() => {
-            menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
-        });
-        const drawer = menu.offcanvas({position: salla.config.get('theme.is_rtl') ? "right" : 'left'});
+      const menu = new MobileMenu(this.element("#mobile-menu"), "(max-width: 1024px)", "( slidingSubmenus: false)");
+      salla.lang.onLoaded(() => {
+        menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
+      });
+      const drawer = menu.offcanvas({position: salla.config.get('theme.is_rtl') ? "right" : 'left'});
 
-        this.onClick("a[href='#mobile-menu']", event => event.preventDefault() || drawer.close() || drawer.open());
-        this.onClick(".close-mobile-menu", event => event.preventDefault() || drawer.close());
+      this.onClick("a[href='#mobile-menu']", event => event.preventDefault() || drawer.close() || drawer.open());
+      this.onClick(".close-mobile-menu", event => event.preventDefault() || drawer.close());
     }
 
     initiateLazyLoad() {
-        let imgObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                let src;
-                if (!entry.isIntersecting || !(src = entry.target.dataset.src)) {
-                    return;
-                }
-                // assign image source to src attribute
-                try {
-                    entry.target.classList.contains('lazy-background')
-                        ? entry.target.style.backgroundImage = `url('${src}')`
-                        : entry.target.src = src;
-                } catch (e) {
-                    salla.log(`Failed to load image (${src})!`, e.message);
-                }
-                app.toggleElementClassIf(entry.target, 'loaded', 'lazy-load lazy-background', () => true);
-                observer.unobserve(entry.target);
-            });
-        }, {threshold: 0, trackVisibility: true, delay: 100, rootMargin: "250px 250px 250px 250px"});
-        window.LazyLoad = () => document.querySelectorAll(".lazy-load, .lazy-background").forEach(entry => imgObserver.observe(entry));
-        LazyLoad(); //fire it for the first time;
-        salla.infiniteScroll.event.onAppend(LazyLoad); //fire it after each load more request;
+      let imgObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          let src;
+          if (!entry.isIntersecting || !(src = entry.target.dataset.src)) {
+            return;
+          }
+          // assign image source to src attribute
+          try {
+            entry.target.classList.contains('lazy-background')
+              ? entry.target.style.backgroundImage = `url('${src}')`
+              : entry.target.src = src;
+          } catch (e) {
+            salla.log(`Failed to load image (${src})!`, e.message);
+          }
+          app.toggleElementClassIf(entry.target, 'loaded', 'lazy-load lazy-background', () => true);
+          observer.unobserve(entry.target);
+        });
+      }, {threshold: 0, trackVisibility: true, delay: 100, rootMargin: "250px 250px 250px 250px"});
+      window.LazyLoad = () => document.querySelectorAll(".lazy-load, .lazy-background").forEach(entry => imgObserver.observe(entry));
+      LazyLoad(); //fire it for the first time;
+      salla.infiniteScroll.event.onAppend(LazyLoad); //fire it after each load more request;
     }
 
-    initiateStickyMenu() {      
-        let header = this.element('#mainnav'),
-            height = this.element('#mainnav .inner').clientHeight;
+    initiateStickyMenu() {
+      let header = this.element('#mainnav'),
+        height = this.element('#mainnav .inner').clientHeight;
 
-        window.addEventListener('load', () => setTimeout(()=> this.setHeaderHeight(),500))
-        window.addEventListener('resize', () => this.setHeaderHeight())
+      window.addEventListener('load', () => setTimeout(() => this.setHeaderHeight(), 500))
+      window.addEventListener('resize', () => this.setHeaderHeight())
 
-        window.addEventListener('scroll', () => {
-            window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
-            window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
-        }, {passive: true});
+      window.addEventListener('scroll', () => {
+        window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
+        window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
+      }, {passive: true});
     }
 
     setHeaderHeight() {
-        let height = this.element('#mainnav .inner').clientHeight,
-            header = this.element('#mainnav');
-        header.style.height = height + 'px';
+      let height = this.element('#mainnav .inner').clientHeight,
+        header = this.element('#mainnav');
+      header.style.height = height + 'px';
     }
 
     /**
@@ -133,98 +134,98 @@ class App extends salla.AppHelpers {
      * by store the status of the ad in local storage `salla.storage.set(...)`
      */
     initiateAdAlert() {
-        let ad = this.element(".salla-advertisement");
+      let ad = this.element(".salla-advertisement");
 
-        if (!ad) {
-            return;
-        }
+      if (!ad) {
+        return;
+      }
 
-        if (!salla.storage.get('statusAd-' + ad.dataset.id)) {
-            ad.classList.remove('hidden');
-        }
+      if (!salla.storage.get('statusAd-' + ad.dataset.id)) {
+        ad.classList.remove('hidden');
+      }
 
-        this.onClick('.ad-close', function (event) {
-            event.preventDefault();
-            salla.storage.set('statusAd-' + ad.dataset.id, 'dismissed');
+      this.onClick('.ad-close', function (event) {
+        event.preventDefault();
+        salla.storage.set('statusAd-' + ad.dataset.id, 'dismissed');
 
-            anime({
-                targets : '.salla-advertisement',
-                opacity : [1, 0],
-                duration: 300,
-                height  : [ad.clientHeight, 0],
-                easing  : 'easeInOutQuad',
-            });
+        anime({
+          targets : '.salla-advertisement',
+          opacity : [1, 0],
+          duration: 300,
+          height  : [ad.clientHeight, 0],
+          easing  : 'easeInOutQuad',
         });
+      });
     }
 
     initiateDropdowns() {
-        this.onClick('.dropdown__trigger', ({target: btn}) => {
-            btn.parentElement.classList.toggle('is-opened');
-            document.body.classList.toggle('dropdown--is-opened');
-            // Click Outside || Click on close btn
-            window.addEventListener('click', ({target: element}) => {
-                if (!element.closest('.dropdown__menu') && element !== btn || element.classList.contains('dropdown__close')) {
-                    btn.parentElement.classList.remove('is-opened');
-                    document.body.classList.remove('dropdown--is-opened');
-                }
-            });
+      this.onClick('.dropdown__trigger', ({target: btn}) => {
+        btn.parentElement.classList.toggle('is-opened');
+        document.body.classList.toggle('dropdown--is-opened');
+        // Click Outside || Click on close btn
+        window.addEventListener('click', ({target: element}) => {
+          if (!element.closest('.dropdown__menu') && element !== btn || element.classList.contains('dropdown__close')) {
+            btn.parentElement.classList.remove('is-opened');
+            document.body.classList.remove('dropdown--is-opened');
+          }
         });
+      });
     }
 
     initiateModals() {
-        this.onClick('[data-modal-trigger]', e => {
-            let id = '#' + e.target.dataset.modalTrigger;
-            this.removeClass(id, 'hidden');
-            setTimeout(() => this.toggleModal(id, true)); //small amont of time to running toggle After adding hidden
-        });
-        salla.event.document.onClick("[data-close-modal]", e => this.toggleModal('#' + e.target.dataset.closeModal, false));
+      this.onClick('[data-modal-trigger]', e => {
+        let id = '#' + e.target.dataset.modalTrigger;
+        this.removeClass(id, 'hidden');
+        setTimeout(() => this.toggleModal(id, true)); //small amont of time to running toggle After adding hidden
+      });
+      salla.event.document.onClick("[data-close-modal]", e => this.toggleModal('#' + e.target.dataset.closeModal, false));
     }
 
     toggleModal(id, isOpen) {
-        this.toggleClassIf(`${id} .s-salla-modal-overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
-            .toggleClassIf(`${id} .s-salla-modal-body`,
-                'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
-                'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
-                () => isOpen)
-            .toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
-        if (!isOpen) {
-            setTimeout(() => this.addClass(id, 'hidden'), 350);
-        }
+      this.toggleClassIf(`${id} .s-salla-modal-overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
+        .toggleClassIf(`${id} .s-salla-modal-body`,
+          'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
+          'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
+          () => isOpen)
+        .toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
+      if (!isOpen) {
+        setTimeout(() => this.addClass(id, 'hidden'), 350);
+      }
     }
 
     initiateCollapse() {
-        document.querySelectorAll('.btn--collapse')
-            .forEach((trigger) => {
-                const content = document.querySelector('#' + trigger.dataset.show);
-                const state = {isOpen: false}
+      document.querySelectorAll('.btn--collapse')
+        .forEach((trigger) => {
+          const content = document.querySelector('#' + trigger.dataset.show);
+          const state = {isOpen: false}
 
-                const onOpen = () => anime({
-                    targets : content,
-                    duration: 225,
-                    height  : content.scrollHeight,
-                    opacity : [0, 1],
-                    easing  : 'easeOutQuart',
-                });
+          const onOpen = () => anime({
+            targets : content,
+            duration: 225,
+            height  : content.scrollHeight,
+            opacity : [0, 1],
+            easing  : 'easeOutQuart',
+          });
 
-                const onClose = () => anime({
-                    targets : content,
-                    duration: 225,
-                    height  : 0,
-                    opacity : [1, 0],
-                    easing  : 'easeOutQuart',
-                })
+          const onClose = () => anime({
+            targets : content,
+            duration: 225,
+            height  : 0,
+            opacity : [1, 0],
+            easing  : 'easeOutQuart',
+          })
 
-                const toggleState = (isOpen) => {
-                    state.isOpen = !isOpen
-                    this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
-                }
+          const toggleState = (isOpen) => {
+            state.isOpen = !isOpen
+            this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
+          }
 
-                trigger.addEventListener('click', () => {
-                    const {isOpen} = state
-                    toggleState(isOpen)
-                    isOpen ? onClose() : onOpen();
-                })
-            });
+          trigger.addEventListener('click', () => {
+            const {isOpen} = state
+            toggleState(isOpen)
+            isOpen ? onClose() : onOpen();
+          })
+        });
     }
 
 
@@ -238,8 +239,8 @@ class App extends salla.AppHelpers {
      * @return {Anime|*}
      */
     anime(selector, options = null) {
-        let anime = new Anime(selector, options);
-        return options === false ? anime : anime.play();
+      let anime = new Anime(selector, options);
+      return options === false ? anime : anime.play();
     }
 
     /**
@@ -247,22 +248,22 @@ class App extends salla.AppHelpers {
      * they can be from any page, especially when mega-menu is enabled
      */
     initAddToCart() {
-        salla.cart.event.onUpdated(summary => {
-            document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
-            document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
-        });
+      salla.cart.event.onUpdated(summary => {
+        document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
+        document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
+      });
 
-        salla.cart.event.onItemAdded((response, prodId) => Anime.addToCart(response, prodId));
+      salla.cart.event.onItemAdded((response, prodId) => Anime.addToCart(response, prodId));
     }
 
-    initCircleBar(){
+    initCircleBar() {
       // Special offer Block ---
       document.querySelectorAll('.pie-wrapper').forEach(elem => {
         let qty = elem.dataset.quantity,
-            total = elem.dataset.total,
-            roundPercent = (qty / total) * 100,
-            $circle = elem.querySelector('.circle_bar'),
-            strokeDashOffsetValue = 100 - roundPercent;
+          total = elem.dataset.total,
+          roundPercent = (qty / total) * 100,
+          $circle = elem.querySelector('.circle_bar'),
+          strokeDashOffsetValue = 100 - roundPercent;
         $circle.style.strokeDashoffset = strokeDashOffsetValue;
       })
     }
@@ -270,15 +271,16 @@ class App extends salla.AppHelpers {
     /**
      * Donation filed
      */
-    initDonating(){
+    initDonating() {
       // Digits Only field all over the theme
       app.on('input', '[data-digits]', e => salla.helpers.inputDigitsOnly(e.target));
-      
+
       //add donating amount attr to salla-add-product-buton 
       app.on('input', '#donation-amount', e => {
         e.target.closest('.donating-wrap').querySelector('salla-add-product-button').setAttribute('donating-amount', e.target.value);
       });
     }
-}
+  }
 
-window.theme = new App;
+  window.theme = new App;
+});
