@@ -40,7 +40,7 @@
 
     {# Main Nav #}
     <div id="mainnav" class="main-nav-container shadow-default bg-white">
-        <div class="inner bg-inherit md:py-2">
+        <div class="inner bg-inherit">
             <div class="container">
                 <div class="flex items-stretch justify-between relative">
                     <div class="flex items-center">
@@ -61,17 +61,17 @@
                         {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
-                            <salla-button shape="icon" fill="outline" color="dark" onclick="salla.event.dispatch('login::open')">
-                              <i class="sicon-user-circle"></i>
-                            </salla-button>
+                            <button class="header-btn" onclick="salla.event.dispatch('login::open')">
+                              <i class="header-btn__icon sicon-user-circle"></i>
+                            </button>
                         {% endif %}
 
-                        <a id="nav-cart" href="{{ page('cart') }}">
-                            <i class="icon sicon-shopping-bag"></i>
+                        <a id="nav-cart" class="header-btn" href="{{ page('cart') }}">
+                            <i class="header-btn__icon icon sicon-shopping-bag"></i>
                             <span class="badge badge--red" data-cart-count>{{ cart.items_count|number }}</span>
-                            <div>
-                              <p class="leading-3 opacity-60 text-sm">{{ trans('blocks.header.cart') }}</p>
-                              <b class="leading-3" data-cart-total>{{ cart.total }}</b>
+                            <div class="leading-4">
+                              <p class="opacity-60 text-sm">{{ trans('blocks.header.cart') }}</p>
+                              <b data-cart-total>{{ cart.total }}</b>
                             </div>
                         </a>
                     </div>

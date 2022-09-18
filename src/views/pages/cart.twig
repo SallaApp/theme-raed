@@ -141,8 +141,7 @@
             <!-- sidebar -->
             {% if cart.items|length %}
                 <div class="sticky top-24 w-full lg:w-96  lg:ms-8">
-                    <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative {{ cart.free_shipping_bar?'':'hidden' }}"
-                         id="free-shipping">
+                    <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative {{ cart.free_shipping_bar ? '' : 'hidden' }}" id="free-shipping">
                         <div class="flex space-s-3 items-center">
                             <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             {% set is_free=cart.free_shipping_bar.has_free_shipping %}
@@ -157,11 +156,10 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-6 bg-border-color rounded-full {{ is_free?' hidden':'' }}"
-                             id="free-shipping-bar">
-                            <div class="progress-bg transition-all duration-500 h-4 bg-primary relative rounded-full flex justify-end"
+                        <div class="mt-8 bg-border-color rounded-full {{ is_free ? ' hidden' : '' }}" id="free-shipping-bar">
+                            <div class="progress-bg transition-all duration-500 h-2.5 bg-primary relative rounded-full flex justify-end"
                                  style="width:{{ cart.free_shipping_bar.percent }}%">
-                                <i class="inline-block sicon-shipping-fast text-sm absolute -bottom-5 -end-0 {{ theme.is_rtl ? 'flip-x':'' }}"></i>
+                                <i class="inline-block sicon-shipping-fast absolute -top-5 -end-0 {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             </div>
                         </div>
                     </div>
