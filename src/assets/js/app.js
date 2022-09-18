@@ -9,7 +9,7 @@ class App extends AppHelpers {
     super();
     this.isThemeApp = true;//to make sure that window.app, is this class
     window.app = this;
-    this.loadTheApp();
+    salla.onReady(() => this.loadTheApp());
   }
 
   loadTheApp() {
