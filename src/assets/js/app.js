@@ -1,8 +1,3 @@
-// import {applyPolyfills, defineCustomElements as SallaWebComponents} from '@salla.sa/twilight-components/loader';
-// applyPolyfills().then(() => {
-//     SallaWebComponents(window);
-// });
-
 import MobileMenu from 'mmenu-light';
 import Swal from 'sweetalert2';
 import Anime from './partials/anime';
@@ -13,7 +8,7 @@ class App extends salla.AppHelpers {
         super();
         this.isThemeApp = true;//to make sure that window.app, is this class
         window.app = this;
-        salla.onReady(() => this.loadTheApp());
+        salla.onInitiated(() => this.loadTheApp());
     }
 
     loadTheApp() {
