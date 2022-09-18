@@ -20,13 +20,13 @@ class Product extends BasePage {
     registerEvents() {
         salla.product.event.onPriceUpdated((res) => {
 
-            app.totalPrice.innerText = res.data.price;
+            app.totalPrice.innerText = salla.money(res.data.price);
 
             app.anime('#total-price', {scale: [0.88, 1]});
 
             if (res.data.has_sale_price) {
                 app.beforePrice.style.display = 'inline';
-                app.beforePrice.innerText = res.data.regular_price;
+                app.beforePrice.innerText = salla.money(res.data.regular_price);
                 return;
             }
 
