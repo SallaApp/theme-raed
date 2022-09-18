@@ -1,3 +1,54 @@
+/*!*******************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/assets/styles/app.scss ***!
+  \*******************************************************************************************************************************************************************************************/
+/*
+ * IMPORTANT NOTE: Theme based on Tailwindcss but for the purpose of simplifing the DOM we use
+ * tailwind classes with @apply directive in the SCSS files
+*/
+/**
+ * SETTINGS
+ * Tailwind.............Import tailwind.
+ * Fonts................Any font files.
+ * Global...............Project-specific, globally available variables.
+ * Breakpoints..........Mixins and variables for responsive styles.
+ *
+ * GENERIC
+ * Common...............All commn styles and assistan classes and common style fixes
+ * Reset................Reset specific elements to make them easier to style in other contexts.
+ * Animations...........Some of animations from anime.css
+ * Lazyload.............Lazyload placeholder styles
+ * RTL..................Specific styles for RTL.
+ * LTR..................Specific styles for LTR.
+ *
+ * ELEMENTS
+ * Forms................Element-level form styling.
+ * Buttons..............Specific styles for buttons.
+ * Radio................Specific styles for custom radio button.
+ * Radio Images.........Specific styles for radio images, used in product options.
+ *
+ * COMPONENTS
+ * Header...............Specific styles for header styles.
+ * Footer...............Specific styles for footer styles.
+ * Menu.................Specific styles for main menu and mobile menu styles.
+ * User Menu............Specific styles for user menu dropdown.
+ * User Pages...........Specific styles for user pages like profile, notifications, orders...
+ * Home Blocks..........Specific styles for home blocks.
+ * Slider...............Specific styles for sliders.
+ * Product..............Specific styles for single product page and it's elements.
+ * Brands...............Specific styles for brands page.
+ * Placeholder..........Specific styles for no content placeholders
+ *
+ * UTILITIES
+ * Chat Bots............Specific styles for chats bots widget.
+ * Swal.................Specific styles for Sweet Alert addon.
+ * Safari Fixes.........Specific styles for Safari Browser.
+ *
+ * EMBEDED ADDONS
+ * Lite Youtube Embed...Specific styles for lite-youtube-embed addon.
+ * Swiper...............Specific styles for swiper slider addon.
+ * MMenu................Specific styles for mmenu addon.
+ *
+*/
 /*!
  * Mmenu Light
  * mmenujs.com/mmenu-light
@@ -11,22 +62,26 @@
  *//*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
-*/*,
+*/
+*,
 ::before,
 ::after {
   box-sizing: border-box; /* 1 */
   border-width: 0; /* 2 */
   border-style: solid; /* 2 */
   border-color: #e5e7eb; /* 2 */
-}::before,
+}
+::before,
 ::after {
   --tw-content: '';
-}/*
+}
+/*
 1. Use a consistent sensible line-height in all browsers.
 2. Prevent adjustments of font size after orientation changes in iOS.
 3. Use a more readable tab size.
 4. Use the user's configured `sans` font-family by default.
-*/html {
+*/
+html {
   line-height: 1.5; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
   -moz-tab-size: 4; /* 3 */
@@ -34,29 +89,37 @@
      tab-size: 4; /* 3 */
   font-family: "DINNextLTArabic", -apple-system, BlinkMacSystemFont;
   font-family: var(--font-main), -apple-system, BlinkMacSystemFont; /* 4 */
-}/*
+}
+/*
 1. Remove the margin in all browsers.
 2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
-*/body {
+*/
+body {
   margin: 0; /* 1 */
   line-height: inherit; /* 2 */
-}/*
+}
+/*
 1. Add the correct height in Firefox.
 2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
 3. Ensure horizontal rules are visible by default.
-*/hr {
+*/
+hr {
   height: 0; /* 1 */
   color: inherit; /* 2 */
   border-top-width: 1px; /* 3 */
-}/*
+}
+/*
 Add the correct text decoration in Chrome, Edge, and Safari.
-*/abbr:where([title]) {
+*/
+abbr:where([title]) {
   text-decoration: underline;
   -webkit-text-decoration: underline dotted currentColor;
           text-decoration: underline dotted currentColor;
-}/*
+}
+/*
 Remove the default font size and weight for headings.
-*/h1,
+*/
+h1,
 h2,
 h3,
 h4,
@@ -64,54 +127,70 @@ h5,
 h6 {
   font-size: inherit;
   font-weight: inherit;
-}/*
+}
+/*
 Reset links to optimize for opt-in styling instead of opt-out.
-*/a {
+*/
+a {
   color: inherit;
   text-decoration: inherit;
-}/*
+}
+/*
 Add the correct font weight in Edge and Safari.
-*/b,
+*/
+b,
 strong {
   font-weight: bolder;
-}/*
+}
+/*
 1. Use the user's configured `mono` font family by default.
 2. Correct the odd `em` font sizing in all browsers.
-*/code,
+*/
+code,
 kbd,
 samp,
 pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
   font-size: 1em; /* 2 */
-}/*
+}
+/*
 Add the correct font size in all browsers.
-*/small {
+*/
+small {
   font-size: 80%;
-}/*
+}
+/*
 Prevent `sub` and `sup` elements from affecting the line height in all browsers.
-*/sub,
+*/
+sub,
 sup {
   font-size: 75%;
   line-height: 0;
   position: relative;
   vertical-align: baseline;
-}sub {
+}
+sub {
   bottom: -0.25em;
-}sup {
+}
+sup {
   top: -0.5em;
-}/*
+}
+/*
 1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
 2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
 3. Remove gaps between table borders by default.
-*/table {
+*/
+table {
   text-indent: 0; /* 1 */
   border-color: inherit; /* 2 */
   border-collapse: collapse; /* 3 */
-}/*
+}
+/*
 1. Change the font styles in all browsers.
 2. Remove the margin in Firefox and Safari.
 3. Remove default padding in all browsers.
-*/button,
+*/
+button,
 input,
 optgroup,
 select,
@@ -123,61 +202,83 @@ textarea {
   color: inherit; /* 1 */
   margin: 0; /* 2 */
   padding: 0; /* 3 */
-}/*
+}
+/*
 Remove the inheritance of text transform in Edge and Firefox.
-*/button,
+*/
+button,
 select {
   text-transform: none;
-}/*
+}
+/*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Remove default button styles.
-*/button,
+*/
+button,
 [type='button'],
 [type='reset'],
 [type='submit'] {
   -webkit-appearance: button; /* 1 */
   background-color: transparent; /* 2 */
   background-image: none; /* 2 */
-}/*
+}
+/*
 Use the modern Firefox focus style for all focusable elements.
-*/:-moz-focusring {
+*/
+:-moz-focusring {
   outline: auto;
-}/*
+}
+/*
 Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
-*/:-moz-ui-invalid {
+*/
+:-moz-ui-invalid {
   box-shadow: none;
-}/*
+}
+/*
 Add the correct vertical alignment in Chrome and Firefox.
-*/progress {
+*/
+progress {
   vertical-align: baseline;
-}/*
+}
+/*
 Correct the cursor style of increment and decrement buttons in Safari.
-*/::-webkit-inner-spin-button,
+*/
+::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   height: auto;
-}/*
+}
+/*
 1. Correct the odd appearance in Chrome and Safari.
 2. Correct the outline style in Safari.
-*/[type='search'] {
+*/
+[type='search'] {
   -webkit-appearance: textfield; /* 1 */
   outline-offset: -2px; /* 2 */
-}/*
+}
+/*
 Remove the inner padding in Chrome and Safari on macOS.
-*/::-webkit-search-decoration {
+*/
+::-webkit-search-decoration {
   -webkit-appearance: none;
-}/*
+}
+/*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Change font properties to `inherit` in Safari.
-*/::-webkit-file-upload-button {
+*/
+::-webkit-file-upload-button {
   -webkit-appearance: button; /* 1 */
   font: inherit; /* 2 */
-}/*
+}
+/*
 Add the correct display in Chrome and Safari.
-*/summary {
+*/
+summary {
   display: list-item;
-}/*
+}
+/*
 Removes the default spacing and border for appropriate elements.
-*/blockquote,
+*/
+blockquote,
 dl,
 dd,
 h1,
@@ -191,45 +292,59 @@ figure,
 p,
 pre {
   margin: 0;
-}fieldset {
+}
+fieldset {
   margin: 0;
   padding: 0;
-}legend {
+}
+legend {
   padding: 0;
-}ol,
+}
+ol,
 ul,
 menu {
   list-style: none;
   margin: 0;
   padding: 0;
-}/*
+}
+/*
 Prevent resizing textareas horizontally by default.
-*/textarea {
+*/
+textarea {
   resize: vertical;
-}/*
+}
+/*
 1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
 2. Set the default placeholder color to the user's configured gray 400 color.
-*/input::-moz-placeholder, textarea::-moz-placeholder {
+*/
+input::-moz-placeholder, textarea::-moz-placeholder {
   opacity: 1; /* 1 */
   color: #9ca3af; /* 2 */
-}input::placeholder,
+}
+input::placeholder,
 textarea::placeholder {
   opacity: 1; /* 1 */
   color: #9ca3af; /* 2 */
-}/*
+}
+/*
 Set the default cursor for buttons.
-*/button,
+*/
+button,
 [role="button"] {
   cursor: pointer;
-}/*
+}
+/*
 Make sure disabled buttons don't get the pointer cursor.
-*/:disabled {
+*/
+:disabled {
   cursor: default;
-}/*
+}
+/*
 1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
 2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
    This can trigger a poorly considered lint error in some tools but is included by design.
-*/img,
+*/
+img,
 svg,
 video,
 canvas,
@@ -239,9 +354,11 @@ embed,
 object {
   display: block; /* 1 */
   vertical-align: middle; /* 2 */
-}/*
+}
+/*
 Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
-*/img,
+*/
+img,
 video {
   max-width: 100%;
   height: auto;
