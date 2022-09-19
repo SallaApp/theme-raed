@@ -65,19 +65,20 @@
         </div>
     {% endif %}
 
-    <div class="center-between">
-        <b class="form-label rtl:space-x-reverse space-x-1">
-            <i class="sicon-pencil-ruler"></i>
-            <span> {{ trans('pages.products.size_guides') }} </span>
-        </b>
-     
-        <salla-button  shape="link" color="primary" class="!p-0 text-sm with-arrow"  onclick="salla.event.dispatch('size-guide::open', '{{ product.id }}')">
-        {{ trans('pages.products.show_size_guides') }} <i class="sicon-keyboard_arrow_left" ></i>
-        </salla-button>
-
-    </div>
      {% if product.has_size_guide %}
-     <salla-product-size-guide></salla-product-size-guide>
+         <div class="center-between">
+             <b class="form-label rtl:space-x-reverse space-x-1">
+                 <i class="sicon-pencil-ruler"></i>
+                 <span> {{ trans('pages.products.size_guides') }} </span>
+             </b>
+
+             <salla-button shape="link" color="primary" class="!p-0 text-sm with-arrow"
+                           onclick="salla.event.dispatch('size-guide::open', '{{ product.id }}')">
+                 {{ trans('pages.products.show_size_guides') }} <i class="sicon-keyboard_arrow_left"></i>
+             </salla-button>
+
+         </div>
+         <salla-product-size-guide></salla-product-size-guide>
      {% endif %}
 </section>
 
