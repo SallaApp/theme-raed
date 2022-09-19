@@ -53,7 +53,7 @@
     <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
 {% endblock %}
 {% block content %}
-    <div class="container px-3 xs:px-5">
+    <div class="container">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
         <nav class="breadcrumbs w-full py-5">
             {% component 'header.breadcrumbs' %}
@@ -96,7 +96,7 @@
                                             <span></span>
                                         {% elseif item.is_hidden_quantity %}
                                             <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
-                                            <span class="w-10 py-2.5 text-center">{{ item.quantity }}</span>
+                                            <span class="w-10 text-center">{{ item.quantity }}</span>
                                         {% else %}
                                             <salla-quantity-input max="{{ product.max_quantity }}"
                                                                   class="transtion transition-color duration-300"
@@ -141,8 +141,7 @@
             <!-- sidebar -->
             {% if cart.items|length %}
                 <div class="sticky top-24 w-full lg:w-96  lg:ms-8">
-                    <div class="shadow-default bg-white p-5 xs:p-7 pb-12 rounded-md mb-5 relative {{ cart.free_shipping_bar?'':'hidden' }}"
-                         id="free-shipping">
+                    <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative {{ cart.free_shipping_bar ? '' : 'hidden' }}" id="free-shipping">
                         <div class="flex space-s-3 items-center">
                             <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             {% set is_free=cart.free_shipping_bar.has_free_shipping %}
@@ -157,18 +156,16 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-6 bg-border-color rounded-full {{ is_free?' hidden':'' }}"
-                             id="free-shipping-bar">
-                            <div class="progress-bg transition-all duration-500 h-4 bg-primary relative rounded-full flex justify-end"
+                        <div class="mt-8 bg-border-color rounded-full {{ is_free ? ' hidden' : '' }}" id="free-shipping-bar">
+                            <div class="progress-bg transition-all duration-500 h-2.5 bg-primary relative rounded-full flex justify-end"
                                  style="width:{{ cart.free_shipping_bar.percent }}%">
-                                <i class="inline-block sicon-shipping-fast text-sm absolute -bottom-5 -end-0 {{ theme.is_rtl ? 'flip-x':'' }}"></i>
+                                <i class="inline-block sicon-shipping-fast absolute -top-5 -end-0 {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             </div>
                         </div>
                     </div>
                     {% if loyalty %}
                         <div class="shadow-default mb-5 rounded-md p-3 xs:p-7 bg-white">
-                            <salla-loyalty
-                                    customer-points='{{ loyalty.customer_points }}'
+                            <salla-loyalty customer-points='{{ loyalty.customer_points }}'
                                     prize-points='{{ loyalty.prize.points }}'
                                     prize-title='{{ loyalty.prize.title }}'
                             ></salla-loyalty>
@@ -218,7 +215,7 @@
                             <b>- {{ cart.real_discount|money }}</b>
                         </div>
 
-                        <div class="flex justify-between text-sm mb-5">
+                        <div class="flex justify-between text-lg mb-5">
                             <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
                             <b data-cart-total>{{ cart.total|money }}</b>
                         </div>
@@ -237,10 +234,10 @@
                     </div>
                 </div>
 
-                <div class="fixed md:hidden space-s-2 flex-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-10">
+                {# <div class="fixed md:hidden space-s-2 flex-center bottom-0 start-0 rounded-t-large py-5 px-5 w-full text-center bg-white shadow-top z-10">
                     <span class="text-gray-400">{{ trans('pages.cart.final_total') }}:</span>
                     <b>{{ cart.total|money }}</b>
-                </div>
+                </div> #}
             {% endif %}
 
             {% hook 'cart:summary.end' %}

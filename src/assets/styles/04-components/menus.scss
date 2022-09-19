@@ -117,6 +117,22 @@
   }
 
   .mm-spn {
+    ul.main-menu li:before{
+      @apply w-2 h-2; 
+    }
+
+    &.mm-spn--navbar{
+      &:after {
+        @apply transition-all duration-300 rtl:pr-12 ltr:pl-12 text-start opacity-90 font-bold;
+      }
+
+      &.mm-spn--main{
+        &:after{
+          @apply rtl:pr-3 ltr:pl-3;
+        }
+      }
+    }
+
     &.mm-spn--navbar:before {
       [dir="rtl"] & {
         transform: rotate(135deg) translateY(77%);

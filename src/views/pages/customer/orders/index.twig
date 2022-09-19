@@ -35,8 +35,15 @@
                         <td>
                           <div>
                             <span class="mobile-title">{{ trans('pages.thank_you.order_id') }}:</span>
-                            #{{ order.reference_id }}
+                            <span class="hidden md:inline-block">#{{ order.reference_id }}</span>
                             <a href="{{ order.url }}"></a>
+
+                            <div class="flex items-center md:hidden">
+                              <salla-button class="relative" onclick="theme.copyToClipboard(event)" color="dark" shape="link" data-content="{{ order.reference_id }}">
+                                  <span>#{{ order.reference_id }}</span>
+                                  <i class="copy-icon sicon-swap-stroke pointer-events-none rtl:mr-1 ltr:ml-1"></i>
+                              </salla-button>
+                            </div>
                           </div>
                         </td>
 
@@ -59,12 +66,12 @@
                         <td>
                           <div>
                             <span class="mobile-title">{{ trans('pages.orders.status') }}:</span>
-                            <span class="tag tag--primary"
-                                  style="border-color: {{ theme.color.lighter(0.2, order.status.color) }}; color: {{ order.status.color }}">
+                            <span class="rtl:mr-auto ltr:ml-auto md:mx-0"
+                                  style="color: {{ order.status.color }}">
                               <i class="mt-1 {{ order.status.icon }}"></i>
                               <span>{{ order.status.name }}</span>
                             </span>
-                            <i class="sicon-star2 text-lg ms-5 {{ order.is_rated?'text-amber-400':'text-gray-200' }}"></i>
+                            <i class="sicon-star2 text-lg ms-4 {{ order.is_rated?'text-amber-400':'text-gray-200' }}"></i>
                             <a href="{{ order.url }}"></a>
                           </div>
                         </td>

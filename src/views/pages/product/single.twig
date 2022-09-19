@@ -69,6 +69,7 @@
         <nav class="breadcrumbs w-full py-5">
             {% component 'header.breadcrumbs' %}
         </nav>
+
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
                 <div class="swiper relative details-slider rounded-md"
@@ -79,8 +80,25 @@
                         </div>
                     {% endif %}
 
+                    <salla-button 
+                      class="btn--wishlist animated" 
+                      data-id="{{ product.id }}" 
+                      onclick="salla.wishlist.toggle({{ product.id }})" 
+                      shape="icon" 
+                      fill="outline" 
+                      color="light">
+                        <i class="sicon-heart"></i>
+                    </salla-button>
 
-                    {% set has_many_images=product.images|length>1 %}
+                    {# Calories Badge #}
+                    {% if product.calories %}
+                        <div class="absolute z-[2] top-4 rtl:left-4 ltr:right-4 bg-white shadow-sm flex flex-col justify-center items-center rounded-full w-20 h-20 md:w-24 md:h-24">
+                            <span class="text-red-500 text-xl leading-none font-bold">{{ product.calories }}</span>
+                            <span class="text-xs text-gray-500">{{ trans('pages.products.calories') }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% set has_many_images = product.images|length > 1 %}
                     <div class="swiper-wrapper">
                         {% for image in product.images %}
                             <a data-fslightbox="product_{{ product.id }}"
@@ -93,9 +111,9 @@
                                aria-label="{{ product.name }}"
                                class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                 {% if loop.first %}
-                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-contain w-full">
+                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% else %}
-                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load swiper-lazy h-full object-contain w-full">
+                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load swiper-lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% endif %}
                             </a>
                         {% endfor %}
@@ -117,7 +135,7 @@
                         <div class="swiper-wrapper flex items-stretch">
                             {% for image in product.images %}
                                 <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
-                                    {% if loop.index < 4 %}
+                                    {% if loop.index < 5 %}
                                         <img src="{{ image.url }}"
                                             loading="eager"
                                             fetchpriority="high"
@@ -137,7 +155,7 @@
                 {% endif %}
             </div>
 
-            <div class="main-content w-full md:w-2/4 pb-8 md:pb-16">
+            <div class="main-content w-full md:w-2/4 md:pb-16">
 
                 {% hook 'product:single.description.start' %}
 
@@ -153,7 +171,7 @@
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
 
-                <h1 class="text-3xl font-bold mb-5 text-gray-800">{{ product.name }}</h1>
+                <h1 class="text-xl md:text-3xl leading-10 font-bold mb-2 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
                     <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5">
@@ -161,23 +179,24 @@
                     </h3>
                 {% endif %}
 
-                <salla-rating-stars size="small" value="{{ product.rating ? product.rating : 0 }}"></salla-rating-stars>
+                <salla-rating-stars value="{{ product.rating ? product.rating : -1 }}"></salla-rating-stars>
 
                 <div class="mb-2 space-s-1">
+                    <h4 class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                        {{ product.price|money }}
+                    </h4>
                     {% if product.is_on_sale %}
-                        <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
-                        <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                    {% else %}
-                        <span class="font-bold">{{ product.price|money }}</span>
+                        <span class="text-gray-400 line-through">
+                            {{ product.regular_price|money }}
+                        </span>
                     {% endif %}
                 </div>
 
-                <div class="product__description leading-7 mb-6">
+                <div class="product__description leading-7 mb-3">
                     {% if product.has_read_more %}
-                        <div class="relative overflow-hidden transition-all max-h-0 duration-300" id="more-content"
-                             style="max-height:5.25rem">
-                            <p>{{ product.description|raw }}</p>
-                        </div>
+                        <article class="relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
+                            {{ product.description|raw }}
+                        </article>
 
                         {# Read More Button #}
                         <a id="btn-show-more" class="link--primary inline-block mt-2 cursor-pointer">
@@ -188,50 +207,18 @@
                     {% endif %}
                 </div>
 
-                <div class="flex mb-5 space-s-3 ">
-                    <div class="share-wrapper relative">
-                        <salla-button aria-label="Share" class="btn--share" shape="icon" fill="outline" color="light"
-                                      class="!m-0">
-                            <i class="sicon-share-alt pointer-events-none"></i>
-                        </salla-button>
-
-                        <ul class="share-btns-list a2a_kit share h-0">
-                            <li>
-                                <a class="a2a_button_whatsapp" aria-label="Share Via Whatsapp">
-                                    <i class="sicon-whatsapp"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_facebook" aria-label="Share Via Facebook">
-                                    <i class="sicon-facebook"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_twitter" aria-label="Share Via Twitter">
-                                    <i class="sicon-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_email" aria-label="Share Via Email">
-                                    <i class="sicon-mail"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="a2a_button_copy_link" aria-label="Copy Product Link">
-                                    <i class="sicon-link"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <script type="text/javascript">
-                            var a2a_config = a2a_config || {};
-                            a2a_config.linkurl = "{{ product.url }}";
-                            a2a_config.locale = "{{ user.language.code }}";
-                        </script>
-                        <script async src="https://static.addtoany.com/menu/page.js"></script>
+                {% if product.tags|length and theme.settings.get('show_tags') %}
+                    <div class="mb-3">
+                        {% for tag in product.tags %}
+                            <a href="{{ tag.url }}" class="me-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }},</a>
+                        {% endfor %}
                     </div>
+                {% endif %}
 
-                    <salla-button 
-                      class="btn--wishlist animated" 
+                <div class="flex space-s-3"> 
+                    <salla-social-share class="hidden sm:inline-flex mb-5"></salla-social-share>
+
+                    <salla-button class="btn--wishlist animated hidden sm:inline-flex"
                       data-id="{{ product.id }}" 
                       onclick="salla.wishlist.toggle({{ product.id }})" 
                       shape="icon" 
@@ -241,7 +228,7 @@
                     </salla-button>
                 </div>
 
-                {% if product.sold_quantity or product.can_show_remained_quantity %}
+                {% if not product.sold_quantity or not product.can_show_remained_quantity %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
                             <div class="px-4 text-red-400">
@@ -259,23 +246,10 @@
                     </div>
                 {% endif %}
 
-                {% if product.tags|length %}
-                    <div class="mb-4">
-                        {% for tag in product.tags %}
-                            <a href="{{ tag.url }}"
-                               class="me-2.5 bg-white py-2.5 px-4 rounded-large inline-flex items-center justify-center text-dark hover:text-primary text-sm mb-2.5">
-                                <i class="font-medium sicon-tag me-1.5 "></i>
-                                <span class="fix-align">{{ tag.name }}</span>
-                            </a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                {% hook 'product:single.description' %}
 
-                <div class="grid gap-5 mb-5">
-                    {% hook 'product:single.description' %}
-
-                    <salla-installment price="{{product.price}}"></salla-installment>
-                </div>
+                {# Installment Methods #}
+                <salla-installment price="{{product.price}}"></salla-installment>
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onchange="salla.product.getPrice(new FormData(event.currentTarget))"
@@ -291,12 +265,12 @@
                     </salla-conditional-fields>
 
 
-                    <section class="bg-white p-5 rounded-md rounded-b-none">
+                    <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
                         {% if product.is_hidden_quantity %}
                             <input type="hidden" value="1" name="quantity"/>
                         {% else %}
-                            <div class="center-between mb-5">
+                            <div class="sticky-product-bar__quantity center-between mb-5">
                                 <label class="form-label font-bold">
                                     {{ trans('pages.products.quantity') }}
                                 </label>
@@ -306,18 +280,18 @@
                         {% endif %}
 
                         {# Price #}
-                        <div class="center-between">
+                        <div class="sticky-product-bar__price center-between">
                             <label class="form-label">
                                 <b class="block">
                                     {{ trans('pages.products.price') }}
                                 </b>
                             </label>
                             <div class="space-s-1">
-                                <h4 id="total-price" class="text-red-400 font-bold text-sm inline-block">
+                                <h4 id="total-price" class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                                     {{ product.price|money }}
                                 </h4>
                                 {% if product.is_on_sale %}
-                                    <span id="before-price" class="text-sm text-gray-400 line-through">
+                                    <span id="before-price" class="text-gray-400 line-through">
                                         {{ product.regular_price|money }}
                                     </span>
                                 {% endif %}
@@ -326,7 +300,7 @@
 
                         {# Add to cart #}
                         <salla-add-product-button type="submit" loader-position="end" width="wide"
-                                                  class="mt-5 w-full"
+                                                  class="mt-5 w-full sticky-product-bar__btn"
                                                   product-id="{{ product.id }}"
                                                   product-status="{{ product.status }}"
                                                   product-type="{{ product.type }}"
@@ -335,6 +309,11 @@
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
                     </section>
+                    {% if product.giftable %}
+                        <div class="mt-5">
+                            <salla-gifting product-id="{{ product.id }}"></salla-gifting>
+                        </div>
+                    {% endif %}
                 </form>
 
                 {% hook 'product:single.description.end' %}

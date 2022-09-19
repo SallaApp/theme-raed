@@ -77,7 +77,7 @@
 
   &--horizontal {
     .product-entry__image {
-      @apply h-36 sm:h-auto w-32 sm:w-56
+      @apply h-auto w-32 sm:w-56
     }
   }
 
@@ -85,7 +85,7 @@
     @apply flex-col;
 
     salla-button.btn--wishlist {
-      @apply absolute top-2.5 end-2.5 opacity-75 hover:opacity-100; 
+      @apply absolute top-4 md:end-4 end-2 opacity-75 hover:opacity-100;
       
       button{
         background-color: #fff !important;
@@ -164,7 +164,7 @@
   }
 
   &-product {
-    @apply bg-gray-100 mb-8 md:mb-20 py-12 md:py-20;
+    @apply bg-gray-100 mb-8 md:mb-20 py-8 md:py-20;
 
     .s-comments-container {
       @apply container;
@@ -228,4 +228,43 @@
       }
   }
 
+}
+
+/* Add to cart sticky bar */
+@media (max-width: 640px) {
+  .is-sticky-product-bar{ 
+    &.product-single{
+      @apply pb-16;
+    }
+
+    .sticky-product-bar{
+      @apply flex fixed z-[2] bottom-0 left-0 p-3 w-full justify-between items-center shadow-[-1px_-2px_9px_0_rgba(0,0,0,0.05)] transition duration-700 delay-500 translate-y-100 opacity-0 ease-elastic;
+
+      &__quantity,
+      salla-add-product-button{
+        @apply translate-y-5 opacity-0 transition duration-700 ease-elastic;
+      }
+
+      &__price,
+      .form-label{
+        @apply hidden;
+      }
+
+      &__quantity{
+        @apply m-0 delay-[900ms];
+      }
+
+      salla-add-product-button{
+        @apply w-auto m-0 flex-1 rtl:mr-5 ltr:ml-5 delay-1000;
+      }
+
+      .hydrated &{
+        &,
+        &__quantity,
+        salla-add-product-button{
+          @apply translate-y-0 opacity-100;
+        }
+      }
+    }
+  }
 }

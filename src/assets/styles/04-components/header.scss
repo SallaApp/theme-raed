@@ -19,17 +19,36 @@
     @apply text-[color:var(--topnav-text-color)];
   }
 
+  .s-search-input{
+    @apply bg-gray-200/50 hover:bg-gray-200/70 border-none;
+  }
+
+  @media (max-width: 640px) {
+    .s-search-results{
+      @apply w-screen max-w-[100vw] rtl:-left-2.5 ltr:-right-2.5; 
+    }
+  } 
+
   .topnav-is-dark & {
-    @apply bg-gray-900 text-gray-300;
+    @apply bg-dark text-gray-300;
 
     .btn--circle-gray,
-    .btn--rounded-gray{
-      @apply bg-gray-100/10  hover:bg-gray-100/20
+    .btn--rounded-gray,
+    .s-search-input{
+      @apply bg-gray-100/10 hover:bg-gray-100/[0.15]
     }
 
     .topnav-link-item{
       @apply border-gray-300/10;
     }
+
+    .s-search-input{
+      @apply text-white;
+    }
+  }
+
+  .search-btn{
+    @apply grow sm:grow-0 justify-start md:justify-center;
   }
 }
 
@@ -94,7 +113,7 @@
 }
 
 .menu-item {
-  @apply flex items-center px-6 py-2.5 text-sm text-gray-500 transition-colors duration-300 hover:bg-gray-200/30;
+  @apply flex items-center px-6 py-2.5 sm:text-sm text-gray-500 transition-colors duration-300 hover:bg-gray-200/30;
 
   &.logout{
     @apply text-red-400;
@@ -109,7 +128,7 @@
 .main-nav-container {
   &.animated {
     .inner {
-      transition: transform 0.5s, -webkit-transform 0.5s, opacity 0.4s;
+      transition: top 0.5s, transform 0.5s, -webkit-transform 0.5s, opacity 0.4s;
     }
   }
 
@@ -123,6 +142,11 @@
       z-index: 29;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
       transform: translate3d(0, -100%, 0);
+
+      @media (max-width: 1024px){
+        transform: none;
+        top: -70px;
+      }
     }
 
     .navbar-brand {
@@ -144,6 +168,11 @@
   &.fixed-header {
     .inner {
       transform: translate3d(0, 0, 0);
+
+      @media (max-width: 1024px){
+        transform: none;
+        top: 0;
+      }
     }
   }
 }
@@ -152,16 +181,24 @@
   @apply items-center flex my-2 lg:my-0;
 
   img {
-    @apply max-h-14 sm:max-h-16 max-w-[170px];
+    @apply w-auto max-h-14 sm:max-h-16 max-w-[170px];
   }
 }
 
 // Mainnav cart icon
+.header-btn{
+  @apply border-none outline-none transition-opacity hover:opacity-80;
+
+  &__icon{
+    @apply text-xl w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-700;
+  }
+}
+
 #nav-cart{
-  @apply flex items-center ms-4 transition-opacity hover:opacity-80 relative whitespace-nowrap;
+  @apply flex items-center ms-4 relative whitespace-nowrap;
 
   .icon{
-    @apply text-3xl me-1;
+    @apply me-2;
   }
 
   span{

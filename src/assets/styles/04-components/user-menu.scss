@@ -13,7 +13,7 @@
 }
 
 .dropdown-toggler {
-  @apply inline-flex items-center lg:h-full w-10 mx-0 lg:mx-2 text-gray-500 absolute top-[-47px] end-0 lg:static;
+  @apply inline-flex items-center lg:h-full w-10 mx-0 text-gray-500;
 
   &.cat-filter{
     @apply static w-auto;
@@ -39,6 +39,10 @@
     .dropdown__menu {
       left: 0 !important;
       @apply fixed bottom-0 top-auto w-full opacity-0 translate-y-10 origin-center duration-300 rounded-b-none;
+
+      .menu-item{
+        @apply rtl:pl-2.5 ltr:pr-2.5;
+      }
     }
 
     &.is-opened {
