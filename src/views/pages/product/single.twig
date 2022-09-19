@@ -218,8 +218,7 @@
                 <div class="flex space-s-3"> 
                     <salla-social-share class="hidden sm:inline-flex mb-5"></salla-social-share>
 
-                    <salla-button 
-                      class="btn--wishlist animated hidden sm:inline-flex" 
+                    <salla-button class="btn--wishlist animated hidden sm:inline-flex"
                       data-id="{{ product.id }}" 
                       onclick="salla.wishlist.toggle({{ product.id }})" 
                       shape="icon" 
@@ -310,7 +309,7 @@
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
                     </section>
-                    {% if product.giftable %}
+                    {% if product.is_giftable %}
                         <div class="mt-5">
                             <salla-gifting product-id="{{ product.id }}"></salla-gifting>
                         </div>
