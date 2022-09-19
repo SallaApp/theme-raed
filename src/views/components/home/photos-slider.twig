@@ -14,9 +14,9 @@
             {% for item in items %}
               <a href="{{item.url}}" class="swiper-slide">
               {% if loop.first %}
-                <img loading="eager" fetchpriority="high" src="{{ item.image.url }}" class="w-full h-full object-cover"></img>
+                <img loading="eager" fetchpriority="high" src="{{ item.image.url }}" class="w-full h-auto"></img>
               {% else %}
-                <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.image.url }}" class="lazy-load w-full h-full object-cover swiper-lazy"></img>
+                <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.image.url }}" class="lazy-load w-full h-auto swiper-lazy"></img>
               {% endif %}
               </a>
             {% endfor %}
