@@ -269,7 +269,7 @@ class App extends AppHelpers {
   }
 
   /**
-   * Donation filed
+   * Donation field
    */
   initDonating() {
     // Digits Only field all over the theme

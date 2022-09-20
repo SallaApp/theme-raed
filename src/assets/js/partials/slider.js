@@ -33,7 +33,7 @@ export default class Slider {
     /**
      * @return {NavigationMethods}
      */
-    navigation() {
+    getNavigation() {
         return this.getSlider()?.navigation;
     }
 
@@ -46,8 +46,8 @@ export default class Slider {
         this.sliders.push(new Swiper(slider, {
             slidesPerView: 'auto',
             navigation   : this.navigation('#' + sliderId),
-            pagination   : this.pagnation('#' + sliderId), ...options,
-            autoplay: true,
+            pagination   : this.pagination('#' + sliderId),
+            autoplay     : true,
             on           : {
                 slideChange: () => {
                     //sometimes, images are not loaded by lazy load, so here we will make sure to load them, without overloading, just one time;
@@ -58,7 +58,8 @@ export default class Slider {
                     this.lazyloads.push(sliderId);
                     LazyLoad();
                 },
-            }
+            },
+            ...options,
         }));
     }
 
