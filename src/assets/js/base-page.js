@@ -16,7 +16,7 @@ class BasePage {
  * Because we merged multi classes into one file, there is no need to initiate all of them
  */
 BasePage.intiateWhenReady = function (className, allowedPages = null) {
-    document.addEventListener('DOMContentLoaded', () => {
+    salla.onReady(() => {
         let tries = 0, inerval;
         //check if theme app is initiated each 0.1 sec for one sec otherwise don't load current page class
         (new Promise((resolve, reject) =>
