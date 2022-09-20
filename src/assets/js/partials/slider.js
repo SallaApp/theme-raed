@@ -1,6 +1,6 @@
-import Swiper, {Navigation, Pagination, Lazy, Controller, Thumbs, Parallax , Autoplay} from "swiper";
+import Swiper, {Navigation, Pagination, Lazy, Controller, Thumbs, Parallax, Autoplay} from "swiper";
 
-Swiper.use([Controller, Navigation, Pagination, Lazy, Thumbs, Parallax , Autoplay]);
+Swiper.use([Controller, Navigation, Pagination, Lazy, Thumbs, Parallax, Autoplay]);
 
 export default class Slider {
     /**
@@ -47,7 +47,6 @@ export default class Slider {
             slidesPerView: 'auto',
             navigation   : this.navigation('#' + sliderId),
             pagination   : this.pagnation('#' + sliderId), ...options,
-            autoplay: true,
             on           : {
                 slideChange: () => {
                     //some times images are not loaded by lazy load, so here we will make sure to load them, without overloading, just one time;
