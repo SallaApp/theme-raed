@@ -1,6 +1,6 @@
 .swiper{
   &.slider-layout{
-    @apply -mx-2.5 w-[calc(100%+20px)] pe-12 sm:pe-16 lg:pe-0 ps-2.5 lg:ps-0;
+    @apply -mx-2.5 w-[calc(100%+20px)] px-[5px] sm:px-0 pe-12 lg:pe-0;
 
     &.thumbs-slider{
       @apply -mx-2 lg:w-[calc(100%+16px)] px-0;
@@ -25,7 +25,7 @@
 
   &.details-slider{
     .swiper-slide{
-      @apply relative rounded-md bg-white h-72 sm:h-96 lg:h-[500px] ring-1 ring-inset ring-gray-100;
+      @apply relative rounded-md bg-white ring-1 ring-inset ring-gray-100;
     }
 
     salla-button.btn--wishlist{
@@ -34,11 +34,11 @@
   }
 
   .slide--one-fourth{
-    @apply h-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[320px] px-2 lg:px-3.75;
+    @apply h-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[320px] px-[5px] sm:px-2.5;
   }
 
   .slide--one-sixth{
-    @apply w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-2 lg:px-3.75;
+    @apply w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-[5px] sm:px-2.5;
   }
 
   // Fix Flickering in Safari 
@@ -64,7 +64,7 @@
   // Photos block slider
   &.photos-slider {
     .swiper-slide {
-      @apply bg-gray-200 h-80 md:h-96 lg:h-116 xl:h-132 w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
+      @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
     }
 
     // pagination
@@ -80,11 +80,8 @@
       }
     }
 
-    .swiper-horizontal > .swiper-pagination-bullets,
-    .swiper-pagination-bullets.swiper-pagination-horizontal,
-    .swiper-pagination-custom,
-    .swiper-pagination-fraction {
-      bottom: 30px;
+    .swiper-pagination-bullets.swiper-pagination-horizontal{
+      @apply bottom-3 sm:bottom-6; 
     }
   }
 }
@@ -227,7 +224,7 @@
     top: 35%;
 
     &.slider-next {
-      @apply start-auto; 
+      @apply start-auto;
       left: 17%;
     }
 
@@ -235,7 +232,7 @@
       left: 17%;
       right: auto;
 
-      &.slider-next { 
+      &.slider-next {
         right: 17%;
         left: auto
       }

@@ -19,10 +19,6 @@
     @apply text-[color:var(--topnav-text-color)];
   }
 
-  .header-search{
-    @apply relative z-10;
-  }
-
   .s-search-input{
     @apply bg-gray-200/50 hover:bg-gray-200/70 border-none;
   }
@@ -190,11 +186,19 @@
 }
 
 // Mainnav cart icon
+.header-btn{
+  @apply border-none outline-none transition-opacity hover:opacity-80;
+
+  &__icon{
+    @apply text-xl w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-700;
+  }
+}
+
 #nav-cart{
-  @apply flex items-center ms-4 transition-opacity hover:opacity-80 relative whitespace-nowrap;
+  @apply flex items-center ms-4 relative whitespace-nowrap;
 
   .icon{
-    @apply text-3xl me-1;
+    @apply me-2;
   }
 
   span{

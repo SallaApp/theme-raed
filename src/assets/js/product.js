@@ -20,13 +20,13 @@ class Product extends BasePage {
     registerEvents() {
         salla.product.event.onPriceUpdated((res) => {
 
-            app.totalPrice.innerText = res.data.price;
+            app.totalPrice.innerText = salla.money(res.data.price);
 
             app.anime('#total-price', {scale: [0.88, 1]});
 
             if (res.data.has_sale_price) {
                 app.beforePrice.style.display = 'inline';
-                app.beforePrice.innerText = res.data.regular_price;
+                app.beforePrice.innerText = salla.money(res.data.regular_price);
                 return;
             }
 
@@ -37,40 +37,6 @@ class Product extends BasePage {
             e.target.classList.add('is-expanded');
             div.style = `max-height:${div.scrollHeight}px`;
         }) || e.target.remove());
-
-        //Toggale share menu
-        app.onClick('salla-button.btn--share', ({target: btn}) => {
-            console.log("Clicked ....");
-          let showShareMenu = !btn.classList.contains('opened'),
-              shareMenu = document.querySelector('.share-btns-list');
-
-          app.toggleElementClassIf(btn, 'opened', 'closed', () => showShareMenu)
-              .toggleElementClassIf(btn.querySelector('i'), 'sicon-cancel', 'sicon-share-alt', () => showShareMenu)
-              .toggleElementClassIf(shareMenu, 'h-auto', 'h-0 opacity-0', () => showShareMenu);
-
-          if (!showShareMenu) {
-              return;
-          }
-
-          (new anime.timeline())
-              .add({
-                  targets   : '.share-btns-list',
-                  translateY: [-50, 0],
-                  opacity   : [0, 1],
-                  duration  : 300,
-                  podding   : '0',
-                  easing    : 'easeInOutSine'
-              })
-              .add({
-                  targets   : '.share-btns-list li',
-                  translateZ: 0,
-                  translateY: [-30, 0],
-                  scaleY    : [0, 1],
-                  opacity   : [0, 1],
-                  duration  : 1200,
-                  delay     : anime.stagger(100)
-              }, '-=200');
-        });
     }
 
     initSliders() {      

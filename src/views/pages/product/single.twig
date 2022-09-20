@@ -161,9 +161,11 @@
 
                 {% if product.brand %}
                     <div class="product-brand mb-5 w-12">
-                        <img width="100%" height="100%" class="max-h-full object-contain" src="{{ product.brand.logo }}"
-                             title="{{ product.brand.name }}"
-                             alt="{{ product.brand.name }}">
+                        <a class="brand-logo" href="{{ product.brand.url }}" title="{{ product.brand.name }}">
+                            <img width="100%" height="100%" class="max-h-full object-contain" src="{{ product.brand.logo }}"
+                                 title="{{ product.brand.name }}"
+                                 alt="{{ product.brand.name }}">
+                        </a>
                     </div>
                 {% endif %}
 
@@ -171,7 +173,7 @@
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
 
-                <h1 class="text-3xl leading-10 font-bold mb-2 text-gray-800">{{ product.name }}</h1>
+                <h1 class="text-xl md:text-3xl leading-10 font-bold mb-2 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
                     <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5">
@@ -179,21 +181,14 @@
                     </h3>
                 {% endif %}
 
-                <salla-rating-stars size="small" value="{{ product.rating ? product.rating : 0 }}"></salla-rating-stars>
+                <salla-rating-stars value="{{ product.rating ? product.rating : -1 }}"></salla-rating-stars>
 
                 <div class="mb-2 space-s-1">
-                    {# {% if product.is_on_sale %}
-                        <h4 class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">{{ product.sale_price|money }}</h4>
-                        <span class="text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                    {% else %}
-                        <span class="font-bold">{{ product.price|money }}</span>
-                    {% endif %} #}
-
                     <h4 class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                         {{ product.price|money }}
                     </h4>
                     {% if product.is_on_sale %}
-                        <span id="before-price" class="text-gray-400 line-through">
+                        <span class="text-gray-400 line-through">
                             {{ product.regular_price|money }}
                         </span>
                     {% endif %}
@@ -244,7 +239,7 @@
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
-                        {% if not product.can_show_remained_quantity %}
+                        {% if product.can_show_remained_quantity %}
                             <div class="px-4 even:border-s even:border-gray-200">
                                 <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
                                 {{ trans('pages.products.remained') }}
@@ -337,7 +332,7 @@
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
                     </section>
-                    {% if product.giftable %}
+                    {% if product.is_giftable %}
                         <div class="mt-5">
                             <salla-gifting product-id="{{ product.id }}"></salla-gifting>
                         </div>
