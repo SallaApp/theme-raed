@@ -21,7 +21,7 @@ BasePage.intiateWhenReady = function (className, allowedPages = null) {
         //check if theme app is initiated each 0.1 sec for one sec otherwise don't load current page class
         (new Promise((resolve, reject) =>
             inerval = setInterval(function () {
-                if (window.app && window.app.isThemeApp) {
+                if (window.app && window.app.isThemeApp && window.app.isThemeAppReady()) {
                     resolve(true);
                     clearInterval(inerval);
                 }
