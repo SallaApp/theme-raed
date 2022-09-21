@@ -9,29 +9,29 @@
         </div>
     </div>
 
-    <div class="container mb-8 sm:mb-24">
+    <div class="container lg:mb-24">
         <div class="flex items-start flex-col lg:flex-row ">
             <nav aria-label="Sidebar"
-                 class="shrink-0 lg:sticky top-24 lg:-mt-28  lg:shadow-default rounded-md lg:bg-white w-full lg:w-72 lg:me-8 pt-8 lg:pb-11 sidebar space-y-px">
-                <div class="text-center md:mb-9">
-                    <div class="h-20 w-20 m-auto avatar-wrap bg-color-gray rounded-full">
-                        {% if is_page('customer.profile') %}
-                            <input class="filepond file-pond--circular"
-                                   data-default="{{ user.avatar }}"
-                                   data-url="{{ '/api/v1/profile/update' }}"
-                                   id="profile-img"
-                                   type="file"/>
-                        {% else %}
-                            <img src="{{ user.avatar }}" class="rounded-full w-full h-full object-cover" alt="">
-                        {% endif %}
-                    </div>
-                </div>
+                 class="shrink-0 lg:sticky top-24 lg:-mt-28 lg:shadow-default rounded-md lg:bg-white w-full lg:w-72 lg:me-8 lg:pt-8 lg:pb-11 sidebar space-y-px">
+
+                {% if is_page('customer.profile') %}
+                  <div class="text-center md:mb-9">
+                      <div class="h-20 w-20 m-auto avatar-wrap bg-color-gray rounded-full">
+                        <input class="filepond file-pond--circular"
+                            data-default="{{ user.avatar }}"
+                            data-url="{{ '/api/v1/profile/update' }}"
+                            id="profile-img"
+                            type="file"/>
+                      </div>
+                  </div>
+                {% endif %}
+
                 <div class="hidden lg:block">
                     {% component 'header.user-menu' with{is_profile_sidebar:true} %}
                 </div>
             </nav>
-            <div class="main-content w-full flex-1 pt-6 md:pt-10 ">
-                <h1 class="font-bold text-lg mb-5">{{ page.title }}</h1>
+            <div class="main-content w-full flex-1 lg:pt-10 ">
+                <h1 class="font-bold text-lg text-center sm:text-start mb-2">{{ page.title }}</h1>
                 {#
                 All customer pages have same header, this layout will wrap the different content.
                 Use it like: `{% extends "layouts.customer" %}` instead of `{% extends "layouts.master" %}`

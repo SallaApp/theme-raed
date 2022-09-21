@@ -6,7 +6,6 @@ const path = require('path');
 const asset = file => path.resolve('src/assets', file || '');
 const public = file => path.resolve("public", file || '');
 
-
 module.exports = {
     entry  : {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js')],
@@ -21,13 +20,20 @@ module.exports = {
         filepond : [asset('styles/05-utilities/filepond.scss'), asset('js/partials/filepond.js')],
         flatpickr: asset('styles/05-utilities/flatpicker.scss')
     },
-    output : {path: public(), clean: true},
+    output : {
+        path: public(),
+        clean: true,
+        chunkFilename: "[name].[contenthash].js"
+    },
     stats  : {modules: false, assetsSort: "size", assetsSpace: 50},
     module : {
         rules: [
             {
                 test   : /\.js$/,
-                exclude: /(node_modules)/,
+                exclude: [
+                    /(node_modules)/,
+                    asset('js/twilight.js')
+                ],
                 use    : {
                     loader : 'babel-loader',
                     options: {

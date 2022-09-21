@@ -1,6 +1,7 @@
 {
   "name": "Theme Raed",
   "repository": "https://github.com/SallaApp/theme-raed",
+  "author_email": "support@salla.dev",
   "features": [
     "mega-menu",
     "fonts",
@@ -28,8 +29,8 @@
       "type": "static",
       "format": "title",
       "id": "static-label",
-      "value": "خيارات الهيدر",
-      "variant": "h5"
+      "value": "خيارات أعلى الصفحة",
+      "variant": "h6"
     },
     {
       "type": "boolean",
@@ -51,19 +52,94 @@
       "type": "static",
       "format": "title",
       "id": "static-label",
-      "value": "خيارات الفوتر",
-      "variant": "h5"
+      "value": "خيارات أسفل الصفحة",
+      "variant": "h6"
     },
     {
       "type": "boolean",
       "icon": "sicon-toggle-off",
-      "label": "الوضع الداكن للفوتر",
+      "label": "الوضع الداكن",
       "description": "",
       "id": "footer_is_dark",
       "format": "switch",
       "required": false,
       "value": true,
       "selected": false
+    },
+    {
+      "type": "static",
+      "id": "static-line",
+      "format": "line"
+    },
+    {
+      "type": "static",
+      "format": "title",
+      "id": "static-label",
+      "value": "خيارات صفحة المنتج",
+      "variant": "h6"
+    },
+    {
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "label": "تثبيت زر الإضافة والكمية أسفل شاشة الجوال",
+      "description": "",
+      "id": "sticky_add_to_cart",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "label": "اظهار الوسوم",
+      "description": "",
+      "id": "show_tags",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "id": "slider_background_size",
+      "key": "7b5d0174-c326-4459-9779-8b2aa4b76eba",
+      "type": "items",
+      "format": "dropdown-list",
+      "label": "طريقة عرض الصور في سليدر صور المنتج",
+      "description": "",
+      "labelHTML": null,
+      "icon": "sicon-list",
+      "selected": [
+        {
+          "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
+          "value": "contain",
+          "key": "f4adec13-6e4c-433b-b141-b2807935ced9"
+        }
+      ],
+      "options": [
+          {
+              "label": "تغطية الصورة كامل المساحة مع المحافظة على النسبة الصورة (Cover)",
+              "value": "cover",
+              "key": "e9c8ea8f-c5c6-438e-9d45-3bce269afde4"
+          },
+          {
+              "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
+              "value": "contain",
+              "key": "f4adec13-6e4c-433b-b141-b2807935ced9"
+          },
+          {
+              "label": "تمدد الصورة لتملئ لكامل المساحة (Fill)",
+              "value": "fill",
+              "key": "12e14314-b383-4912-931b-48377d51163d"
+          },
+          {
+              "label": "عرض الصورة بحجمها الأصلي بغض النظر عن أبعاد المساحة (None)",
+              "value": "none",
+              "key": "cca8f441-455a-4ab9-873d-a742d1656b39"
+          }
+      ],
+      "source": "Manual",
+      "required": true
     }
   ],
   "components": [
@@ -93,11 +169,7 @@
               "format": "image",
               "required": true,
               "placeholder": "",
-              "description": "* المقاس المناسب للصورة هو 900×600 بكسل",
-              "settings": {
-                "height": 600,
-                "width": 900
-              }
+              "description": "* المقاس المناسب للصورة هو 900×600 بكسل"
             },
             {
               "type": "string",
@@ -175,7 +247,6 @@
           "format": "collection",
           "required": true,
           "minLength": 3,
-          "maxLength": 6,
           "item_label": "رابط ",
           "value": [
             {

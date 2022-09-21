@@ -62,10 +62,13 @@ class Cart extends BasePage {
      * @param {import("@salla.sa/twilight/types/api/cart").CartItem} item
      */
     updateItemInfo(item) {
-
         // lets get the elements for this item
-        let cartItem = document.querySelector('#item-' + item.id),
-            totalElement = cartItem.querySelector('.item-total'),
+        let cartItem = document.querySelector('#item-' + item.id);
+        if(!cartItem){
+            salla.log(`Can't get the cart item dom for ${item.id}!`);
+            return;
+        }
+        let totalElement = cartItem.querySelector('.item-total'),
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             offerElement = cartItem.querySelector('.offer-name'),

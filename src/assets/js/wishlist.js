@@ -35,8 +35,8 @@ class Wishlist extends BasePage {
     toggleFavoriteIcon(id, isAdded = true) {
         document.querySelectorAll('.btn--wishlist[data-id="' + id + '"]')
             .forEach(btn => {
-                app.toggleElementClassIf(btn.querySelector('i'), 'sicon-heart-off', 'sicon-heart', () => isAdded);
-                app.toggleElementClassIf(btn, 'pulse', 'un-favorited', () => isAdded);
+                app.toggleElementClassIf(btn, 'is-added', 'not-added', () => isAdded);
+                // app.toggleElementClassIf(btn, 'pulse', 'un-favorited', () => isAdded);
             });
     }
 }

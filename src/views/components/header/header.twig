@@ -9,23 +9,29 @@
     {# Top Nav #}
     <div class="top-navbar">
         <div class="container flex justify-between">
-            <div class="center-between w-full lg:w-auto ">
-                <div class="flex items-center space-s-1">
-                    {# Footer Menu #}
-                    {% component 'footer.menu' with {is_header:true} %}
-                    {# Language & Currency Component #}
-                    {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                        <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
-                            <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
-                            | <span class="ms-2 me-1">{{ currency.symbol }}</span>
-                        </button>
-                        <salla-localization-modal></salla-localization-modal>
-                    {% endif %}
+            <div class="flex-1 flex items-center space-s-reverse space-s-2">
+              {# Footer Menu #}
+              {% component 'footer.menu' with {is_header:true} %}
 
-                    {# Search Component #}
-                    <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray sicon-search"></button>
-                    <salla-search></salla-search>
-                </div>
+              <div class="header-buttons">
+                {# Language & Currency Component #}
+                {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+                  <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray basis-0">
+                      <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
+                      | <span class="ms-2 me-1">{{ currency.symbol }}</span>
+                  </button>
+                  <salla-localization-modal></salla-localization-modal>
+                {% endif %}
+              </div>
+
+              {# Search Component #}
+              {# <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray search-btn">
+                <span class="sicon-search"></span>
+                <span class="sm:hidden px-2 opacity-50">{{ trans('blocks.header.searchProducts') }}</span>
+              </button> #}
+              <div class="header-search z-[100] flex-1">
+                <salla-search inline oval height="36"></salla-search>
+              </div>
             </div>
 
             {% component 'footer.contacts' with {is_header:true} %}
@@ -38,8 +44,8 @@
             <div class="container">
                 <div class="flex items-stretch justify-between relative">
                     <div class="flex items-center">
-                        <a class="lg:hidden mburger mburger--collapse" href="#mobile-menu">
-                            <i class="sicon-menu text-primary text-3xl me-2.5"></i>
+                        <a class="lg:hidden mburger mburger--collapse leading-none" href="#mobile-menu">
+                            <i class="sicon-menu text-primary text-2xl me-2.5"></i>
                         </a>
                         <a class="navbar-brand" href="{{ store.url }}">
                             <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }}">
@@ -55,17 +61,17 @@
                         {% if user.type=='user' %}
                             {% component 'header.user-menu' %}
                         {% else %}
-                            <salla-button shape="icon" fill="outline" color="light" onclick="salla.event.dispatch('login::open')">
-                              <i class="sicon-user-circle"></i>
-                            </salla-button>
+                            <button class="header-btn" onclick="salla.event.dispatch('login::open')">
+                              <i class="header-btn__icon sicon-user-circle"></i>
+                            </button>
                         {% endif %}
 
-                        <a id="nav-cart" href="{{ page('cart') }}">
-                            <i class="icon sicon-shopping-bag"></i>
+                        <a id="nav-cart" class="header-btn" href="{{ page('cart') }}">
+                            <i class="header-btn__icon icon sicon-shopping-bag"></i>
                             <span class="badge badge--red" data-cart-count>{{ cart.items_count|number }}</span>
-                            <div>
-                              <p class="leading-3 opacity-60">{{ trans('blocks.header.cart') }}</p>
-                              <b class="leading-3" data-cart-total>{{ cart.total }}</b>
+                            <div class="leading-4">
+                              <p class="opacity-60 text-sm">{{ trans('blocks.header.cart') }}</p>
+                              <b data-cart-total>{{ cart.total }}</b>
                             </div>
                         </a>
                     </div>

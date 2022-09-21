@@ -254,6 +254,20 @@ salla-modal {
   [dir="rtl"] & {
     @apply bg-gradient-to-l;
   }
+
+  @media (max-width: 1024px){
+    &.profile-header{
+      background-image: none;
+
+      .breadcrumbs {
+        a,
+        span,
+        .arrow {
+          @apply text-gray-600;
+        }
+      }
+    }
+  }
 }
 
 // Small badge
@@ -262,5 +276,37 @@ salla-modal {
 
   &--red{
     @apply bg-red-400 text-white;
+  }
+}
+
+
+// copy icon
+.copy-icon{
+  @apply text-xs;
+}
+
+.s-localization-modal-inner {
+  width: 100%;
+}
+
+.s-verify-back {
+  top: 0.5rem;
+  svg {
+    max-width: 18px;
+    fill: rgba(107,114,128,var(--tw-text-opacity));
+  }
+}
+
+[dir=rtl] .s-verify-back {
+  right: 0.5rem;
+}
+
+[dir=ltr] .s-verify-back {
+  left: 0.5rem;
+}
+
+@media (max-width: 639px){
+  .s-verify-back {
+    display: none;
   }
 }

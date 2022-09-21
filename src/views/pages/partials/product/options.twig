@@ -57,27 +57,32 @@
     </section>
 {% endif %}
 
- <section class="bg-white p-5 rounded-md mb-5">
-    {% if product.weight %}
-        <div class="center-between pb-5 mb-5 border-b-2">
-            <b class="form-label rtl:space-x-reverse space-x-1"><i class="sicon-luggage-cart"></i> <span>{{ trans('pages.products.weight') }}</span></b>
-            <span class="text-sm">{{ product.weight }}</span>
-        </div>
-    {% endif %}
+{% if product.weight or product.has_size_guide %}
+    <section class="bg-white p-5 rounded-md mb-5">
+        {% if product.weight %}
+            <div class="center-between pb-5 mb-5 border-b-2">
+                <b class="form-label rtl:space-x-reverse space-x-1"><i class="sicon-luggage-cart"></i>
+                    <span>{{ trans('pages.products.weight') }}</span></b>
+                <span class="text-sm">{{ product.weight }}</span>
+            </div>
+        {% endif %}
+        {% if product.has_size_guide %}
+            <div class="center-between">
+                <b class="form-label rtl:space-x-reverse space-x-1">
+                    <i class="sicon-pencil-ruler"></i>
+                    <span> {{ trans('pages.products.size_guides') }} </span>
+                </b>
 
-    <div class="center-between">
-        <b class="form-label rtl:space-x-reverse space-x-1">
-            <i class="sicon-pencil-ruler"></i>
-            <span> {{ trans('pages.products.size_guides') }} </span>
-        </b>
-     
-        <salla-button  shape="link" color="primary" class="!p-0 text-sm with-arrow"  onclick="salla.event.dispatch('size-guide::open', '{{ product.id }}')">
-        {{ trans('pages.products.show_size_guides') }} <i class="sicon-keyboard_arrow_left"></i>
-        </salla-button>
+                <salla-button shape="link" color="primary" class="!p-0 text-sm with-arrow"
+                              onclick="salla.event.dispatch('size-guide::open', '{{ product.id }}')">
+                    {{ trans('pages.products.show_size_guides') }} <i class="sicon-keyboard_arrow_left"></i>
+                </salla-button>
 
-    </div>
-     <salla-product-size-guide></salla-product-size-guide>
-</section>
+            </div>
+            <salla-product-size-guide></salla-product-size-guide>
+        {% endif %}
+    </section>
+{% endif %}
 
 
 {% if product.can_add_note or product.can_upload_file %}

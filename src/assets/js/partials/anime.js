@@ -147,6 +147,11 @@ class Anime {
 
 Anime.addToCart = function (response, productId) {
     document.querySelectorAll('.cart-thumb').forEach(el => el.remove());
+    let productBlock = document.getElementById('product-' + productId);
+    if(productBlock){
+        salla.log(`Failed to get the image for the product: ${productId}`);
+        return;
+    }
     let
         cartBtn = document.querySelector('#nav-cart .icon'),
         btnOffset = cartBtn.getBoundingClientRect(),
@@ -154,9 +159,7 @@ Anime.addToCart = function (response, productId) {
         btnLeft = btnOffset.left + window.scrollX;
 
     // get thumb position ---
-    let
-        productBlock = document.getElementById('product-' + productId),
-        productImg = productBlock.getElementsByTagName('img')[0],
+    let productImg = productBlock.getElementsByTagName('img')[0],
         position = productImg.getBoundingClientRect(),
         width = productImg.offsetWidth + 'px',
         height = productImg.offsetHeight + 'px',
