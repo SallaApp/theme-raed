@@ -1,13 +1,18 @@
 {#
-| Variable                      | Type                    | Description |
-|-------------------------------|-------------------------|-------------|
-| offer                         | Offer                   |             |
-| offer.id                      | int                     |             |
-| offer.name                    | string                  |             |
-| offer.description             | string *HTML            |             |
-| offer.categories              | Category[] *Collection  |             |
-| offer.products                | Product[] *Collection   |             |
-| offer.steps(product_quantity) | array                   |             |
+| Variable                                    | Type                   | Description |
+|---------------------------------------------|------------------------|-------------|
+| offer                                       | Offer                  |             |
+| offer.id                                    | int                    |             |
+| offer.name                                  | string                 |             |
+| offer.description                           | string *HTML           |             |
+| offer.categories                            | Category[] *Collection |             |
+| offer.products                              | Product[] *Collection  |             |
+| offer.discounts_table                       | Discount[]             |             |
+| offer.discounts_table.show_discounted_price | bool                   |             |
+| offer.discounts_table.regular_price         | float                  |             |
+| offer.discounts_table.quantity              | string                 |             |
+| offer.discounts_table.percent               | string ex: 20%         |             |
+| offer.discounts_table.price                 | float                  |             |
 #}
 
 <section id="offer-slider" class="relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
@@ -48,6 +53,24 @@
                 {% for product in offer.products %}
                     <div class="swiper-slide h-auto slide--one-fourth">
                         {% include 'pages.partials.product.card' %}
+                    </div>
+                {% endfor %}
+
+            {% elseif offer.discounts_table|length %}
+                {% for discount in offer.discounts_table %}
+                    <div class="swiper-slide slide--one-fourth">
+                        <div class="slide--offer-entry">
+                            <div class="p-3 flex-grow flex flex-col justify-center w-full">
+                                <p class="mb-1">{{ trans('pages.offer.buy_quantity_and_take', {quantity:discount.quantity, price:''})|number }}</p>
+                                {% if discount.show_discounted_price %}
+                                    <div class="text-sm text-gray-400">
+                                        <span class="font-extrabold text-red-400 text-3xl">{{ discount.price|number_format|number }}</span> {{ user.currency.symbol }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">{{ trans('pages.products.with_a_discount') }}
+                                (<span class="font-bold">{{ discount.percent|number }}</span>)</p>
+                        </div>
                     </div>
                 {% endfor %}
             {% endif %}
