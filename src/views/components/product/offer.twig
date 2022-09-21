@@ -10,6 +10,16 @@
 | offer.steps(product_quantity) | array                   |             |
 #}
 
+
+{# todo :: cleanup this #}
+{% set discounts = {
+    '1':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30},
+    '2':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1400, 'discount': 40},
+    '3':{'text': 'اشتري <strong>اربع قطع</strong> من المنتج بـ', 'price': 1800, 'discount': 50},
+    '4':{'text': 'اشتري <strong>خمس قطع</strong> من المنتج بـ', 'price': 2000, 'discount': 60},
+    '5':{'text': 'اشتري <strong>ثلاث قطع</strong> من المنتج بـ', 'price': 1000, 'discount': 30}
+} %}
+
 <section id="offer-slider" class="relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
     <div class="center-between mb-9">
         <span class="text-[200px] font-normal text-red-50 absolute leading-none -top-4 right-12 -z-1">%</span>
@@ -48,6 +58,22 @@
                 {% for product in offer.products %}
                     <div class="swiper-slide h-auto slide--one-fourth">
                         {% include 'pages.partials.product.card' %}
+                    </div>
+                {% endfor %}
+                
+            {% elseif discounts|length %}
+                {% for discount in discounts %}
+                    <div class="swiper-slide slide--one-fourth">
+                        <div class="slide--offer-entry">
+                            <div class="p-3 flex-grow flex flex-col justify-center w-full">
+                                <p class="mb-1">{{ discount.text|raw }}</p>
+                                <div class="text-sm text-gray-400"><span
+                                            class="font-extrabold text-red-400 text-3xl">{{ discount.price }}</span> {{ user.currency.symbol }}
+                                </div>
+                            </div>
+                            <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">{{ trans('pages.products.with_a_discount') }}
+                                (<span class="font-bold">{{ discount.discount }}%</span>)</p>
+                        </div>
                     </div>
                 {% endfor %}
             {% endif %}
