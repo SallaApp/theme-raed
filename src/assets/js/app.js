@@ -21,7 +21,7 @@ class App extends salla.AppHelpers {
         // TODO: delete after doing a better solution for that.
         salla.money = (money) => {
             let currency = Salla.config.currency(money?.currency).symbol;
-            money = typeof money === 'number' ? money : money.amount;
+            money = typeof money === 'object' ? money.amount : money;
             return salla.helpers.number(money) + ' ' + currency;
         };
 
