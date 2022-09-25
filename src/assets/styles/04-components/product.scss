@@ -1,6 +1,9 @@
 // Product card
 .product-entry {
   @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex relative;
+  @media (max-width: 768px) {
+      overflow:visible;
+  }
 
   &--full-image {
     @apply h-80 md:h-auto;
@@ -12,7 +15,7 @@
   }
 
   &__image {
-    @apply bg-gray-100 relative overflow-hidden hover:opacity-90 w-full shrink-0;
+    @apply bg-gray-100 relative overflow-hidden hover:opacity-90 w-full h-full shrink-0;
 
     &::before{
       font-family: 'sallaicons';
@@ -65,7 +68,7 @@
       span{
         color: #fff;
         text-shadow: 0 0 2px #666;
-      } 
+      }
     }
   }
 
@@ -86,7 +89,7 @@
 
     salla-button.btn--wishlist {
       @apply absolute top-4 md:end-4 end-2 opacity-75 hover:opacity-100;
-      
+
       button{
         background-color: #fff !important;
       }
@@ -95,18 +98,18 @@
     @media (max-width: 480px){
       .product-rating{
         @apply absolute start-3 -top-8;
-  
+
         span{
           color: #fff;
           text-shadow: 0 0 2px #666;
-        } 
+        }
       }
     }
 
 
   }
 
-  &--special {    
+  &--special {
     .product-rating{
       @apply absolute bottom-auto -top-8 end-5;
     }
@@ -220,7 +223,7 @@
       transform: translate(-50%, -50%);
       line-height: 1;
       font-size: var(--font-xsm);
-      
+
       b {
           font-size: var(--font-md) !important;
           margin-bottom: 3px;
@@ -232,7 +235,7 @@
 
 /* Add to cart sticky bar */
 @media (max-width: 640px) {
-  .is-sticky-product-bar{ 
+  .is-sticky-product-bar{
     &.product-single{
       @apply pb-16;
     }

@@ -46,10 +46,12 @@ class Home extends BasePage {
         (new Slider('.main-slider', {
           speed: 750,
           parallax: true,
-          loop: true, 
-          lazy: true
+          loop:     true,
+          lazy:     true,
+          autoplay: {
+            delay: 5000,
+          },
         }));
-       
     }
 
     /**
