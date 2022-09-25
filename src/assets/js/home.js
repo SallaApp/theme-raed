@@ -20,6 +20,7 @@ class Home extends BasePage {
         new Slider(".photos-slider", {
             loop          : true,
             lazy          : true,
+            autoplay      : true,
             centeredSlides: true
         });
 
