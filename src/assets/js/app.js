@@ -18,6 +18,13 @@ class App extends salla.AppHelpers {
     }
 
     loadTheApp() {
+        // TODO: delete after doing a better solution for that.
+        salla.money = (money) => {
+            let currency = Salla.config.currency(money?.currency).symbol;
+            money = typeof money === 'object' ? money.amount : money;
+            return salla.helpers.number(money) + ' ' + currency;
+        };
+
         this.initiateNotifier();
         this.initiateLazyLoad();
         this.initiateMobileMenu();
