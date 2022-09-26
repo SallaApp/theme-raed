@@ -81,10 +81,11 @@
 
         {% hook 'customer:profile.form.submit.end' %}
     </form>
-
     {% hook 'customer:profile.form.end' %}
 
     <salla-verify></salla-verify>
+
+    <salla-user-settings {{ user.is_notifiable?'is-notifiable':0 }} class="mt-10 block"></salla-user-settings>
 {% endblock %}
 
 {% block scripts %}
