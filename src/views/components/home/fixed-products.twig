@@ -6,6 +6,7 @@
 | products        | Products[] |                                                                  |
 | position        | Int        | Sorting number start from zero                                   |
 #}
+{% set is_vertical = theme.settings.get('vertical_fixed_products') %}
 <section class="s-block container">
     <div class="center-between mb-6 sm:mb-8">
         {% if title %}
@@ -15,9 +16,9 @@
             <a href="{{ display_all_url }}" class="s-block__display-all">{{ trans('blocks.home.display_all') }}</a>
         {% endif %}
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+    <div class="grid {{ is_vertical ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2' }} gap-2.5 sm:gap-6 lg:gap-8">
         {% for product in products %}
-            {% include 'pages.partials.product.card' with {is_horizontal:true, show_desc:true} %}
+            {% include 'pages.partials.product.card' with { is_horizontal: is_vertical ? false : true, show_desc:true } %}
         {% endfor %}
     </div>
 </section>
