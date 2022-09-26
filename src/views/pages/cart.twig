@@ -85,6 +85,11 @@
                                             </h3>
                                             <span class="text-sm text-gray-400 line-through item-regular-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
                                             <span class="item-price {{ item.offer?'text-red-400':'text-sm text-gray-400' }}">{{ item.price|money }}</span>
+                                            {% if item.weight_label %}
+                                            <p class="text-sm text-gray-400 "> {{ trans('pages.products.weight') }}
+                                             <span>{{ item.weight_label }}</span>
+                                            </p>
+                                            {% endif %}
                                             <i class="sicon-discount-calculator text-gray-400 offer-icon {{ item.offer?'':'hidden' }}"></i>
                                             <span class="text-sm text-gray-400 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
                                         </div>
