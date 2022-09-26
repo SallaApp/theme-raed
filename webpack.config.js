@@ -6,7 +6,6 @@ const path = require('path');
 const asset = file => path.resolve('src/assets', file || '');
 const public = file => path.resolve("public", file || '');
 
-
 module.exports = {
     entry  : {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js')],
@@ -31,7 +30,10 @@ module.exports = {
         rules: [
             {
                 test   : /\.js$/,
-                exclude: /(node_modules)/,
+                exclude: [
+                    /(node_modules)/,
+                    asset('js/twilight.js')
+                ],
                 use    : {
                     loader : 'babel-loader',
                     options: {
