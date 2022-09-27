@@ -3,12 +3,14 @@ import BasePage from './base-page';
 import Fslightbox from 'fslightbox';
 import Slider from './partials/slider'
 import ProductOptions from './partials/product-options';
+import viewThreeDModel from './partials/modelViewer';
 
 window.fslightbox = Fslightbox;
 
 class Product extends BasePage {
     onReady() {
         this.initSliders();
+        this.initThreeDModel();
         new ProductOptions();
 
         app.watchElements({
@@ -69,6 +71,14 @@ class Product extends BasePage {
         */
         new Slider('.default-slider');
     }
+
+    initThreeDModel() {
+        const threeDToggle = document.getElementById('activate_3d_view');
+        if (typeof (threeDToggle) != 'undefined' && threeDToggle != null) {
+            viewThreeDModel();
+        }
+    }
+
 }
 
 Product.intiateWhenReady('Product', ['product.single']);

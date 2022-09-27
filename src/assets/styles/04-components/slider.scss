@@ -27,10 +27,33 @@
     @apply bg-white border-[1px];
     .swiper-slide{
       @apply relative rounded-md bg-white ring-1 ring-inset ring-gray-100;
+      &.video-entry,
+      &.model-entry {
+        &:before {
+          content: '\ee61';
+          font-family: 'sallaicons', serif;
+          @apply block w-[100px] h-[100px] absolute top-[50%] right-[50%] pointer-events-none opacity-70 leading-[1] text-color-gray;
+          font-size: 90px;
+          transform: translate3d(50%, -50%, 0);
+        }
+      }
+
+      &.model-entry {
+        .s-toggle-switcher {
+          pointer-events: auto;
+        }
+        &:before {
+          content: "\e9a0";
+        }
+      }
     }
 
     salla-button.btn--wishlist{
       @apply absolute rtl:right-4 ltr:left-4 bottom-4 z-[2] sm:hidden;
+    }
+
+    .switcher-3d-view {
+      @apply absolute top-[20px] rtl:left-[15px] ltr:right-[15px];
     }
   }
 
