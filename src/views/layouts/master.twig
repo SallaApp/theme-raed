@@ -87,19 +87,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
-    <link rel="preconnect" href="{{ ''|cdn }}"/>
-    <link rel="preconnect" href="{{ ''|asset }}"/>
     {% hook 'head:start' %}
-    <!-- theme color -->
-    <meta name="msapplication-navbutton-color" content="{{ theme.color.primary }}">
-    <meta name="apple-mobile-web-app-status-bar-style" content="{{ theme.color.primary }}">
-
-    <!-- fav icon -->
-    <link rel="icon" type="image/png" href="{{ store.icon }}"/>
-    <link rel="apple-touch-icon-precomposed" href="{{ store.logo }}">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ store.logo }}">
-    <meta name="_token" content="{{ csrf_token() }}">
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">

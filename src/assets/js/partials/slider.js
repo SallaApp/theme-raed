@@ -1,6 +1,6 @@
-import Swiper, {Navigation, Pagination, Lazy, Controller, Thumbs, Parallax, Autoplay} from "swiper";
+import Swiper, {Navigation, Pagination, Lazy, Controller, Thumbs, Parallax , Autoplay} from "swiper";
 
-Swiper.use([Controller, Navigation, Pagination, Lazy, Thumbs, Parallax, Autoplay]);
+Swiper.use([Controller, Navigation, Pagination, Lazy, Thumbs, Parallax , Autoplay]);
 
 export default class Slider {
     /**
@@ -33,7 +33,7 @@ export default class Slider {
     /**
      * @return {NavigationMethods}
      */
-    navigation() {
+    getNavigation() {
         return this.getSlider()?.navigation;
     }
 
@@ -46,10 +46,11 @@ export default class Slider {
         this.sliders.push(new Swiper(slider, {
             slidesPerView: 'auto',
             navigation   : this.navigation('#' + sliderId),
-            pagination   : this.pagnation('#' + sliderId), ...options,
+            pagination   : this.pagination('#' + sliderId),
+            autoplay     : true,
             on           : {
                 slideChange: () => {
-                    //some times images are not loaded by lazy load, so here we will make sure to load them, without overloading, just one time;
+                    //sometimes, images are not loaded by lazy load, so here we will make sure to load them, without overloading, just one time;
                     //on('init', ..) not working, so we will workaround for run it one time only for each slider
                     if (this.lazyloads.includes(sliderId)) {
                         return;
@@ -57,7 +58,8 @@ export default class Slider {
                     this.lazyloads.push(sliderId);
                     LazyLoad();
                 },
-            }
+            },
+            ...options,
         }));
     }
 
@@ -79,7 +81,7 @@ export default class Slider {
      * @param {string} id
      * @return {{el: Element, clickable: boolean}}
      */
-    pagnation(id) {
+    pagination(id) {
         let page = app.element(`${id} .swiper-pagination`);
         return page ? {el: page, clickable: true} : {};
     }
