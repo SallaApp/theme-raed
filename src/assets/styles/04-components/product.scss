@@ -1,9 +1,6 @@
 // Product card
 .product-entry {
-  @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex relative;
-  @media (max-width: 768px) {
-      overflow:visible;
-  }
+  @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-around flex relative;
 
   &--full-image {
     @apply h-80 md:h-auto;
@@ -80,12 +77,16 @@
 
   &--horizontal {
     .product-entry__image {
-      @apply h-auto w-32 sm:w-56
+      @apply h-auto w-32 sm:w-56 rtl:rounded-r-md ltr:rounded-l-md;
     }
   }
 
   &--vertical {
     @apply flex-col;
+
+    .product-entry__image {
+      @apply rounded-t-md;
+    }
 
     salla-button.btn--wishlist {
       @apply absolute top-4 md:end-4 end-2 opacity-75 hover:opacity-100;
@@ -105,8 +106,6 @@
         }
       }
     }
-
-
   }
 
   &--special {
