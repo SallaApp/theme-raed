@@ -263,7 +263,7 @@ class App extends AppHelpers {
 
     salla.cart.event.onItemAdded((response, prodId) => {
       let productImg = document.getElementById('product-' + prodId).getElementsByTagName('img')[0];
-      document.querySelector('salla-cart-summary').animateToCart(productImg, document.getElementById('mainnav').classList.contains('fixed-header'))
+      document.querySelector('salla-cart-summary').animateToCart(productImg)
     }
     );
   }
