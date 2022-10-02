@@ -16,43 +16,22 @@
 | id                    | int                          | pageId or ProductId |
 #}
 
-{% if user.can_comment or comments|length %}
-  <div class="s-comments s-comments-{{ type }}">
-      <div class="container {{ type == 'page' ? 'px-0':'' }}">
-          {% if user.can_comment %}
-              <form class="form form--add-comment" onsubmit="return salla.form.onSubmit('comment.add', event);">
-                  <input name="type" type="hidden" value="{{  type }}">
-                  <input name="id" type="hidden" value="{{  id }}">
-
-                  <h2 class="mb-2 sm:mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
-                  <textarea placeholder="{{ trans('blocks.comments.placeholder') }}"
-                            class="form-input"
-                            name="comment"
-                            required
-                            maxlength="500" cols="30"
-                            rows="30"></textarea>
-
-                  <div class="text-end mb-4">
-                      <salla-button type="submit" class="w-full sm:w-36" loader-position="end">
-                        {{ trans('blocks.comments.submit') }}
-                      </salla-button>
-                  </div>
-              </form>
-          {% endif %}
-
-          {% if comments|length %}
-              <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
-              <salla-infinite-scroll next-page="{{ comments.next_page }}">
-                  {% for comment in comments %}
-                      {% include 'pages.partials.single-comment' %}
-                  {% endfor %}
-              </salla-infinite-scroll>
-          {% else %}
-              <div class="no-content-placeholder--comments">
-                  <i class="sicon-chat-bubbles text-5xl block mb-5 text-gray-400"></i>
-                  <p class="text-sm">{{ trans('blocks.comments.no_comments') }}</p>
-              </div>
-          {% endif %}
-      </div>
-  </div>
-{% endif %}
+<div class="s-comments s-comments-{{ type }}">
+    <div class="container {{ type == 'page' ? 'px-0':'' }}">
+        <h2 class="mb-2 sm:mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
+        <salla-comment-form type="{{ type }}" item-id="{{ id }}"></salla-comment-form>
+        {% if comments|length %}
+            <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
+            <salla-infinite-scroll next-page="{{ comments.next_page }}">
+                {% for comment in comments %}
+                    {% include 'pages.partials.single-comment' %}
+                {% endfor %}
+            </salla-infinite-scroll>
+        {% else %}
+            <div class="no-content-placeholder--comments">
+                <i class="sicon-chat-bubbles text-5xl block mb-5 text-gray-400"></i>
+                <p class="text-sm">{{ trans('blocks.comments.no_comments') }}</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
