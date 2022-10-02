@@ -1,4 +1,3 @@
-const colors = require('tailwindcss/colors');
 module.exports = {
     important: false,
     content: [
@@ -24,7 +23,6 @@ module.exports = {
             ],
             primary: "var(--font-main)"
         },
-        colors    : colors,
         extend    : {
             transitionTimingFunction: {
               'elastic': 'cubic-bezier(0.55, 0, 0.1, 1)',
@@ -33,13 +31,6 @@ module.exports = {
                 'auto-fill'  : 'repeat(auto-fill, 290px)',
             },
             colors             : {
-                'inherit'      : 'inherit',
-                'primary'      : 'var(--color-primary)',
-                'primary-d'    : 'var(--color-primary-dark)',
-                'primary-l'    : 'var(--color-primary-light)',
-                'primary-reverse': 'var(--color-primary-reverse)',
-                'transparent'  : 'transparent',
-                'color-gray'   : 'var(--color-grey)',
                 'dark'         : '#1D1F1F',
                 'darker'       : '#0E0F0F'
             },
