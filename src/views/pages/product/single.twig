@@ -114,9 +114,9 @@
                                aria-label="{{ product.name }}"
                                class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                 {% if loop.first %}
-                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt ?? product.name }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% else %}
-                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt ?? product.name }}" class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% endif %}
                             </a>
                         {% endfor %}
@@ -144,12 +144,12 @@
                                             fetchpriority="high"
                                             class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
                                             title="{{ image.alt }}"
-                                            alt="{{ image.alt }}"/>
+                                            alt="{{ image.alt ?? product.name }}"/>
                                     {% else %}
                                         <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
                                             class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
                                             title="{{ image.alt }}"
-                                            alt="{{ image.alt }}"/>
+                                            alt="{{ image.alt ?? product.name }}"/>
                                     {% endif %}
                                 </div>
                             {% endfor %}
@@ -176,7 +176,7 @@
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
 
-                <h1 class="text-xl md:text-3xl leading-10 font-bold mb-2 text-gray-800">{{ product.name }}</h1>
+                <h1 class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
                     <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5">
@@ -199,7 +199,7 @@
 
                 <div class="product__description leading-7 mb-3">
                     {% if product.has_read_more %}
-                        <article class="relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
+                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
                             {{ product.description|raw }}
                         </article>
 

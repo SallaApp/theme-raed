@@ -38,10 +38,10 @@
                     </a>
                 </div>
                 {% if article.has_image %}
-                    <img src="{{ article.image.url }}" alt="{{ article.image.alt }}" title="{{ article.image.alt }}"
+                    <img src="{{ article.image.url }}" alt="{{ article.image.alt ?? article.title }}" title="{{ article.image.alt ?? article.title }}"
                          class="h-80 mb-10 w-full object-cover rounded-md"/>
                 {% endif %}
-                <article class="leading-7 text-sm mb-10">{{ article.body|raw }}</article>
+                <article class="article article--main leading-7 text-sm mb-10">{{ article.body|raw }}</article>
                 {% if article.tags|length %}
                     <div class="p-4 flex flex-wrap items-center border-t border-gray-200">
                         {% for tag in article.tags %}
@@ -70,10 +70,10 @@
 
                                     {% if article.has_image %}
                                         <img class="h-full w-full object-cover" src="{{ article.image.url }}"
-                                             alt="{{ article.image.alt }}">
+                                             alt="{{ article.image.alt ?? article.title }}">
                                     {% else %}
                                         <img class="sm:h-full w-10 object-contain opacity-60"
-                                             src="{{ 'images/placeholder.png' | asset }}" alt="post image"/>
+                                             src="{{ 'images/placeholder.png' | asset }}" alt="{{ article.title }}"/>
                                     {% endif %}
                                 </a>
                             </div>
