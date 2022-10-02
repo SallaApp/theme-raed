@@ -184,11 +184,11 @@
                 <salla-rating-stars value="{{ product.rating ? product.rating : -1 }}"></salla-rating-stars>
 
                 <div class="mb-2 space-s-1">
-                    <h4 class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                    <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                         {{ product.price|money }}
                     </h4>
                     {% if product.is_on_sale %}
-                        <span class="text-gray-400 line-through">
+                        <span class="before-price text-gray-400 line-through">
                             {{ product.regular_price|money }}
                         </span>
                     {% endif %}
@@ -289,11 +289,11 @@
                                 </b>
                             </label>
                             <div class="space-s-1">
-                                <h4 id="total-price" class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                                <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                                     {{ product.price|money }}
                                 </h4>
                                 {% if product.is_on_sale %}
-                                    <span id="before-price" class="text-gray-400 line-through">
+                                    <span class="before-price text-gray-400 line-through">
                                         {{ product.regular_price|money }}
                                     </span>
                                 {% endif %}
