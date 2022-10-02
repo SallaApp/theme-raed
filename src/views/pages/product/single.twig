@@ -114,9 +114,9 @@
                                aria-label="{{ product.name }}"
                                class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                 {% if loop.first %}
-                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt ?? product.name }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% else %}
-                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt ?? product.name }}" class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% endif %}
                             </a>
                         {% endfor %}
@@ -144,12 +144,12 @@
                                             fetchpriority="high"
                                             class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
                                             title="{{ image.alt }}"
-                                            alt="{{ image.alt ?? product.name }}"/>
+                                            alt="{{ image.alt }}"/>
                                     {% else %}
                                         <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
                                             class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
                                             title="{{ image.alt }}"
-                                            alt="{{ image.alt ?? product.name }}"/>
+                                            alt="{{ image.alt }}"/>
                                     {% endif %}
                                 </div>
                             {% endfor %}
