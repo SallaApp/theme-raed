@@ -10,7 +10,7 @@
 <div class="radio-images grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
     {% for detail_index, detail in option.details %}
         <div class="relative inline-block text-center w-full">
-            <input {{ detail.is_selected?'checked':'' }}
+            <input {{ detail.is_selected or option.is_selected_default(detail)?'checked':'' }}
                     required
                     type="radio"
                     class="image-option"
