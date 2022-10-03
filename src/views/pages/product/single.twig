@@ -23,6 +23,9 @@
 | product.max_quantity                   | int                         |                                                                        |
 | product.discount_ends                  | ?date                       |                                                                        |
 | product.is_taxable                     | bool                        | Is the tax included in the price                                       |
+| product.category                       | ?Category                   |                                                                        |
+| product.category.name                  | string                      |                                                                        |
+| product.category.url                   | string                      |                                                                        |
 | product.image                          | object                      |                                                                        |
 | product.image.url                      | string                      |                                                                        |
 | product.image.alt                      | ?string                     |                                                                        |
@@ -173,7 +176,7 @@
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
 
-                <h1 class="text-xl md:text-3xl leading-10 font-bold mb-2 text-gray-800">{{ product.name }}</h1>
+                <h1 class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
                     <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5">
@@ -184,11 +187,11 @@
                 <salla-rating-stars value="{{ product.rating ? product.rating : -1 }}"></salla-rating-stars>
 
                 <div class="mb-2 space-s-1">
-                    <h4 class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                    <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                         {{ product.price|money }}
                     </h4>
                     {% if product.is_on_sale %}
-                        <span class="text-gray-400 line-through">
+                        <span class="before-price text-gray-400 line-through">
                             {{ product.regular_price|money }}
                         </span>
                     {% endif %}
@@ -196,7 +199,7 @@
 
                 <div class="product__description leading-7 mb-3">
                     {% if product.has_read_more %}
-                        <article class="relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
+                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
                             {{ product.description|raw }}
                         </article>
 
@@ -310,11 +313,11 @@
                                 </b>
                             </label>
                             <div class="space-s-1">
-                                <h4 id="total-price" class="{{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                                <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                                     {{ product.price|money }}
                                 </h4>
                                 {% if product.is_on_sale %}
-                                    <span id="before-price" class="text-gray-400 line-through">
+                                    <span class="before-price text-gray-400 line-through">
                                         {{ product.regular_price|money }}
                                     </span>
                                 {% endif %}
