@@ -18,7 +18,9 @@ module.exports = {
 
         //plugins
         filepond : [asset('styles/05-utilities/filepond.scss'), asset('js/partials/filepond.js')],
-        flatpickr: asset('styles/05-utilities/flatpicker.scss')
+        flatpickr: asset('styles/05-utilities/flatpicker.scss'),
+        colorpicker: [asset('styles/05-utilities/color-picker.scss'), asset('js/partials/color-picker.js')], 
+        map: [asset('styles/05-utilities/map.scss'), asset('js/partials/map.js')], 
     },
     output : {
         path: public(),

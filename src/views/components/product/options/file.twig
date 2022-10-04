@@ -1,0 +1,12 @@
+<input name="options[{{ option.id }}]"
+       class="filepond form-control"
+       data-max-file-size="3MB"
+       data-url="{{ link('cart/option-image') }}"
+       data-item-id="{{ key_prefix }}"
+       data-instant-upload
+       accept="{{ option.supported_file_types()}}"
+       {% if value %}
+       data-default="{{ value }}"
+       {% endif %}
+        {{ attirubtes|raw }}
+       type="file"/>
