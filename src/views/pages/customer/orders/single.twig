@@ -66,6 +66,9 @@
 | order.rating.shipping            | ?Rating                           |                                                                                          |
 #}
 {% extends "layouts.customer" %}
+{% block styles %}
+  <link rel="stylesheet" href="{{ 'map.css' | asset }}">
+{% endblock %}
 {% block inner_content %}
     <div class="space-y-4 md:space-y-8">
 
@@ -191,7 +194,6 @@
                       <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
                       <b>{{ item.total|money }}</b>
                   </div>
-                    
                   {% if item.options %}
                       <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
                       <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
@@ -212,12 +214,43 @@
                                               </div>
                                           {% elseif option.color %}
                                             <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
+                                          {% elseif option.file %}
+                                            <a href="{{ option.value }}" target="_blank" class="font-medium text-xs underline">
+                                              ملف مرفق
+                                            </a>
+                                          {% elseif option.color_picker %}
+                                            <span class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.value }}" ></span>
                                           {% else %}
-                                              {{ option.value }}
+                                            {{ option.value }}
                                           {% endif %}
                                       </dd>
                                   </div>
                               {% endfor %}
+                              <div class="py-2.5 center-between">
+                                  <dt class="mb-2 md:mb-0">
+                                      File
+                                  </dt>
+                                  <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
+                                    <salla-button shape="link" onclick="document.querySelector('#location-modal').open()" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
+                                      <a class="font-medium text-xs underline">عرض الموقع</a>
+                                    </salla-button>
+                                    <salla-modal width="md" id="location-modal">
+                                        <div class="map-wrapper">
+                                          <div class="map-wrapper__map-placeholder" 
+                                          id="init_map_div" 
+                                          style="height: 300px;"
+                                          data-event="false"
+                                          data-geo-location="21.53543218227769, 39.20135258558815">
+                                          </div>
+                                        </div>
+                                        <div slot="footer" class="grid grid-cols-2 gap-3">
+                                            <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#location-modal').close()">
+                                                {{ trans('common.elements.cancel') }}
+                                            </salla-button>
+                                        </div>
+                                    </salla-modal>
+                                  </dd>
+                              </div>
                           </dl>
                       </div>
                   {% endif %}
@@ -453,6 +486,7 @@
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
                              icon="sicon-cancel" id="modal-order-cancel" icon-style="error"
                              modal-title="{{ trans('common.elements.warning') }}">
+                             
                     <div slot="footer" class="grid grid-cols-2 gap-3">
                         <salla-button id="confirm-cancel" color="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
@@ -489,4 +523,5 @@
 
 {% block scripts %}
     <script src="{{ 'customer.js' | asset }}"></script>
+    <script defer src="{{ 'map.js' | asset }}"></script>
 {% endblock %}
