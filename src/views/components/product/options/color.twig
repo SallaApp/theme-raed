@@ -11,8 +11,8 @@
 <div class="custom-radios custom-radios--rounded">
     {% for detail in option.details %}
         <div class="me-8 mb-5">
-            <input {{ detail.is_selected or option.is_selected_default(detail)?'checked':'' }}
-                    {{ detail.is_out?"disabled":"" }}
+            <input {{ detail.is_default_selected() ? 'checked': '' }}
+                    {{ detail.is_out? "disabled" : "" }}
                     name="options[{{ option.id }}]"
                     value="{{ detail.id }}"
                     required
