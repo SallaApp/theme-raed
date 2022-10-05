@@ -215,42 +215,36 @@
                                           {% elseif option.color %}
                                             <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
                                           {% elseif option.file %}
-                                            <a href="{{ option.value }}" target="_blank" class="font-medium text-xs underline">
-                                              ملف مرفق
-                                            </a>
+                                            <salla-button shape="link" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
+                                              <a href="{{ option.value }}" target="_blank" class="font-medium text-xs underline">ملف مرفق</a>
+                                            </salla-button>
                                           {% elseif option.color_picker %}
                                             <span class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.value }}" ></span>
+                                          {% elseif option.map %}
+                                            <salla-button shape="link" onclick="document.querySelector('#location-modal-{{option.id}}').open()" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
+                                              <a class="font-medium text-xs underline">عرض الموقع</a>
+                                            </salla-button>
+                                            <salla-modal width="md" id="location-modal-{{option.id}}" modal-title="{{ option.name }}">
+                                                <div class="map-wrapper mb-6">
+                                                  <div class="map-wrapper__map-placeholder" 
+                                                  id="init_map_div" 
+                                                  style="height: 300px;"
+                                                  data-event="false"
+                                                  data-geo-location="{{option.value}}">
+                                                  </div>
+                                                </div>
+                                                <div slot="footer">
+                                                    <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#location-modal').close()">
+                                                        {{ trans('common.elements.cancel') }}
+                                                    </salla-button>
+                                                </div>
+                                            </salla-modal>
                                           {% else %}
                                             {{ option.value }}
                                           {% endif %}
                                       </dd>
                                   </div>
                               {% endfor %}
-                              <div class="py-2.5 center-between">
-                                  <dt class="mb-2 md:mb-0">
-                                      File
-                                  </dt>
-                                  <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
-                                    <salla-button shape="link" onclick="document.querySelector('#location-modal').open()" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
-                                      <a class="font-medium text-xs underline">عرض الموقع</a>
-                                    </salla-button>
-                                    <salla-modal width="md" id="location-modal">
-                                        <div class="map-wrapper">
-                                          <div class="map-wrapper__map-placeholder" 
-                                          id="init_map_div" 
-                                          style="height: 300px;"
-                                          data-event="false"
-                                          data-geo-location="21.53543218227769, 39.20135258558815">
-                                          </div>
-                                        </div>
-                                        <div slot="footer" class="grid grid-cols-2 gap-3">
-                                            <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#location-modal').close()">
-                                                {{ trans('common.elements.cancel') }}
-                                            </salla-button>
-                                        </div>
-                                    </salla-modal>
-                                  </dd>
-                              </div>
                           </dl>
                       </div>
                   {% endif %}
