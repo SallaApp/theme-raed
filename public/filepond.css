@@ -112,7 +112,7 @@
 
 [data-filepond-item-state=processing-error] .filepond--action-retry-item-processing~.filepond--file-status .filepond--file-status-sub{opacity:.5}
 
-[data-filepond-item-state=processing-complete] .filepond--action-revert-item-processing svg{animation:fall .5s linear .125s both}
+[data-filepond-item-state=processing-complete] .filepond--action-revert-item-processing svg{-webkit-animation:fall .5s linear .125s both;animation:fall .5s linear .125s both}
 
 [data-filepond-item-state=processing-complete] .filepond--file-status-sub{opacity:.5}
 
@@ -120,15 +120,21 @@
 
 [data-filepond-item-state=processing-complete] .filepond--action-revert-item-processing~.filepond--file-info .filepond--file-info-sub{opacity:.5}
 
-[data-filepond-item-state*=error] .filepond--file-wrapper,[data-filepond-item-state*=error] .filepond--panel,[data-filepond-item-state*=invalid] .filepond--file-wrapper,[data-filepond-item-state*=invalid] .filepond--panel{animation:shake .65s linear both}
+[data-filepond-item-state*=error] .filepond--file-wrapper,[data-filepond-item-state*=error] .filepond--panel,[data-filepond-item-state*=invalid] .filepond--file-wrapper,[data-filepond-item-state*=invalid] .filepond--panel{-webkit-animation:shake .65s linear both;animation:shake .65s linear both}
 
-[data-filepond-item-state*=busy] .filepond--progress-indicator svg{animation:spin 1s linear infinite}
+[data-filepond-item-state*=busy] .filepond--progress-indicator svg{-webkit-animation:spin 1s linear infinite;animation:spin 1s linear infinite}
+
+@-webkit-keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}
 
 @keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}
 
+@-webkit-keyframes shake{10%,90%{transform:translateX(-.0625em)}20%,80%{transform:translateX(.125em)}30%,50%,70%{transform:translateX(-.25em)}40%,60%{transform:translateX(.25em)}}
+
 @keyframes shake{10%,90%{transform:translateX(-.0625em)}20%,80%{transform:translateX(.125em)}30%,50%,70%{transform:translateX(-.25em)}40%,60%{transform:translateX(.25em)}}
 
-@keyframes fall{0%{opacity:0;transform:scale(.5);animation-timing-function:ease-out}70%{opacity:1;transform:scale(1.1);animation-timing-function:ease-in-out}to{transform:scale(1);animation-timing-function:ease-out}}
+@-webkit-keyframes fall{0%{opacity:0;transform:scale(.5);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}70%{opacity:1;transform:scale(1.1);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}to{transform:scale(1);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}
+
+@keyframes fall{0%{opacity:0;transform:scale(.5);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}70%{opacity:1;transform:scale(1.1);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}to{transform:scale(1);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}
 
 .filepond--hopper[data-hopper-state=drag-over]>*{pointer-events:none}
 
@@ -150,11 +156,11 @@
 
 .filepond--item>.filepond--file-wrapper,.filepond--item>.filepond--panel{transition:opacity .15s ease-out}
 
-.filepond--item[data-drag-state]{cursor:grab}
+.filepond--item[data-drag-state]{cursor:-webkit-grab;cursor:grab}
 
 .filepond--item[data-drag-state]>.filepond--panel{transition:box-shadow .125s ease-in-out;box-shadow:0 0 0 transparent}
 
-.filepond--item[data-drag-state=drag]{cursor:grabbing}
+.filepond--item[data-drag-state=drag]{cursor:-webkit-grabbing;cursor:grabbing}
 
 .filepond--item[data-drag-state=drag]>.filepond--panel{box-shadow:0 .125em .3125em rgba(0,0,0,.325)}
 
