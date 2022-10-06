@@ -214,13 +214,13 @@
                                               </div>
                                           {% elseif option.color %}
                                             <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
-                                          {% elseif option.file %}
+                                          {% elseif option.is_file %}
                                             <salla-button shape="link" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
                                               <a href="{{ option.value }}" target="_blank" class="font-medium text-xs underline">ملف مرفق</a>
                                             </salla-button>
-                                          {% elseif option.color_picker %}
+                                          {% elseif option.is_color_picker %}
                                             <span class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.value }}" ></span>
-                                          {% elseif option.map %}
+                                          {% elseif option.is_map %}
                                             <salla-button shape="link" onclick="document.querySelector('#location-modal-{{option.id}}').open()" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
                                               <a class="font-medium text-xs underline">عرض الموقع</a>
                                             </salla-button>
