@@ -170,7 +170,7 @@
                     </div>
                     {% if loyalty %}
                         <div class="shadow-default mb-5 rounded-md p-3 xs:p-7 bg-white">
-                            <salla-loyalty customer-points='{{ loyalty.customer_points }}'
+                            <salla-loyalty customer-points='{{ user.loyalty_points }}'
                                     prize-points='{{ loyalty.prize.points }}'
                                     prize-title='{{ loyalty.prize.title }}'
                             ></salla-loyalty>
@@ -252,5 +252,5 @@
 
 {% block scripts %}
     <script defer src="{{ 'filepond.js' | asset }}"></script>
-    <script src="{{ 'checkout.js' | asset }}"></script>
+    <script defer src="{{ 'checkout.js' | asset }}"></script>
 {% endblock %}
