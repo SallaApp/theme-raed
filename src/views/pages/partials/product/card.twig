@@ -82,10 +82,10 @@ view options:
                 <div class="space-s-1">
                     <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
                     <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
-                </div>
-                {% elseif store.settings.product.price_start_from and product.starting_price %}
+                </div>                
+             {% elseif product.starting_price %}
                  {{trans('pages.products.starting_price')}} 
-                 <h4 class="text-red-400 font-bold text-sm inline-block"> {{ product.starting_price|money }} </h4>
+                 <h4 class="text-red-400 font-bold text-sm inline-block"> {{ product.starting_price }} </h4>
             {% else %}
                 <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
             {% endif %}
