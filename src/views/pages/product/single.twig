@@ -13,7 +13,9 @@
 | product.subtitle                       | string                      |                                                                        |
 | product.type                           | string                      | product, service, group_products, codes, digital, food, donating       |
 | product.status                         | string                      | sale, out, out-and-notify                                                              |
-| product.rating                         | int                         |                                                                        |
+| product.rating                         | Rating|null                 |                                                                        |
+| product.rating.count                   | int                         |                                                                        |
+| product.rating.stars                   | int                         |                                                                        |
 | product.price                          | MoneyTaxable                | can be string too `-`, when merchant doesn't want to show zero         |
 | product.sale_price                     | MoneyTaxable                |                                                                        |
 | product.regular_price                  | MoneyTaxable                |                                                                        |
@@ -184,7 +186,9 @@
                     </h3>
                 {% endif %}
 
-                <salla-rating-stars value="{{ product.rating ? product.rating : -1 }}"></salla-rating-stars>
+                {% if product.rating %}
+                    <salla-rating-stars value="{{product.rating}}"></salla-rating-stars>
+                {% endif %}
 
                 <div class="mb-2 space-s-1">
                     <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">

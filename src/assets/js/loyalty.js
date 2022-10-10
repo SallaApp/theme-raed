@@ -3,7 +3,7 @@ import Slider from './partials/slider'
 
 class Loyalty extends BasePage {
     onReady() {
-        let count = document.querySelector(".count-anime").dataset.count;
+        let count = app.element(".count-anime")?.dataset?.count||0;
         (new anime.timeline()).add({
             targets: '.loyality-item',
             opacity: [0, 1],
