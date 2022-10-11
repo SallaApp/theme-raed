@@ -78,14 +78,14 @@ view options:
         {% endif %}
 
         <div class="w-full center-between mb-5 {{is_special ? 'pe-24':''}}">
-            {% if product.is_on_sale %}
+             {% if product.is_on_sale %}
                 <div class="space-s-1">
                     <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
                     <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                 </div>                
-             {% elseif product.starting_price %}
+             {% elseif store.settings.product.price_start_from and product.starting_price %}
                  {{trans('pages.products.starting_price')}} 
-                 <h4 class="text-red-400 font-bold text-sm inline-block"> {{ product.starting_price }} </h4>
+                 <h4 class="text-red-400 font-bold text-sm inline-block"> {{ product.get_starting_price|money }} </h4>
             {% else %}
                 <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
             {% endif %}
