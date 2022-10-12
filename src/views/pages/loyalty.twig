@@ -38,89 +38,102 @@
          style="background-image:url({{ loyalty.image }})">
         <div class="overlay h-full w-full bg-black opacity-50 absolute top-0 left-0"></div>
     </div>
-    <div class="container mb-28">
-        <nav class="w-full py-5">{% component 'header.breadcrumbs' %}</nav>
-        {# loyalty banner #}
-        <div class="relative overflow-hidden bg-white m-auto p-10 lg:py-16 lg:px-20 rounded-md mb-28 mt-20 shadow-default">
-            <div class="md:flex justify-between items-center relative z-10">
-                <div class="text-center sm:flex flex-1 items-center sm:space-s-12">
-                    <i class="sicon sicon-star2 star-anime opacity-0 text-amber-400 text-7xl"></i>
-                    <div class="md:flex flex-1 justify-between items-center">
-                        <div class="mb-6 md:mb-0">
-                            <h1 class="font-bold text-3xl mb-2.5 loyality-item opacity-0">{{ loyalty.name }}</h1>
-                            <p class="loyality-item opacity-0 text-gray-text max-w-xs leading-6 mb-2">
-                                {{ loyalty.description }}
-                            </p>
-                            {% if user.loyalty_points %}
-                                <div class="loyality-item text-sm text-gray-text">
-                                    {{ trans('pages.loyalty_program.you_have') }}
-                                    <span class="text-4xl text-primary font-bold ltr:ml-2.5 rtl:mr-2.5 count-anime"
-                                          data-count="{{ user.loyalty_points }}"></span>
-                                    {{ trans("pages.loyalty_program.point") }}
-                                </div>
-                            {% endif %}
-                        </div>
+    <div class="container space-y-16">
 
-                        <salla-loyalty customer-points="{{ user.loyalty_points }}" class="btn-anime opacity-0">
-                            <salla-button onclick="salla.event.dispatch('loyalty::open')"
-                                          slot="widget">{{ trans("pages.loyalty_program.exchange_points") }}</salla-button>
-                        </salla-loyalty>
+        {# Breadcrumbs #}
+        <nav class="w-full py-5">{% component 'header.breadcrumbs' %}</nav>
+        
+        {# loyalty banner #}
+        <div class="loyalty__banner">  
+            <div class="loyalty__banner-inner">
+                <i class="sicon-star2 star-anime opacity-0 text-amber-400 text-7xl"></i>
+                <div class="loyalty__banner-content">
+                    <div class="info">
+                        <h1>{{ loyalty.name }}</h1>
+                        <p>{{ loyalty.description }}</p>
+                        {% if user.loyalty_points %}
+                            <div class="loyalty-points">
+                                {{ trans('pages.loyalty_program.you_have') }}
+                                <span class="count-number count-anime" data-count="{{ user.loyalty_points }}"></span>
+                                {{ trans("pages.loyalty_program.point") }}
+                            </div>
+                        {% endif %}
                     </div>
+
+                    <salla-loyalty customer-points="{{ user.loyalty_points }}" class="btn-anime opacity-0">
+                        <salla-button 
+                          onclick="salla.event.dispatch('loyalty::open')"
+                          slot="widget">
+                            {{ trans("pages.loyalty_program.exchange_points") }}
+                        </salla-button>
+                    </salla-loyalty>
                 </div>
             </div>
-            <!-- absolute background -->
-            <!-- star1 -->
-            <div class="absolute z-0 -right-24 -top-48 transform -rotate-45 opacity-70">
-                <i class=" sicon sicon-star2 text-gray-100 text-9xl" style="font-size: 400px;"></i>
+            
+            <!-- background big stars -->
+            <div class="loyalty-star loyalty-star--first">
+              <i class="sicon-star2"></i>
             </div>
-            <!-- star2 -->
-            <div class="absolute z-0 -left-16 -bottom-40 transform -rotate-90 opacity-70">
-                <i class="sicon sicon-star2 text-gray-100 text-9xl" style="font-size: 400px;"></i>
+            
+            <div class="loyalty-star loyalty-star--second">
+              <i class="sicon-star2"></i>
             </div>
         </div>
 
         <!-- ways to get points -->
-        <section class="mb-28">
+        <section class="points-ways py-6">
             <h2 class="s-block__title mb-6 sm:mb-8">{{ trans("pages.loyalty_program.ways_to_get_points") }}</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div class="points-ways__list">
+
+            {# {{dd(loyalty.points)}} #}
+
                 {% for point in loyalty.points %}
-                    <div class="bg-white w-full box-anime opacity-100 rounded-md shadow-default p-6 ">
-                        <div class="flex space-x-reverse space-x-4">
-                            <div class="relative overflow-hidden flex-shrink-0 rounded-icon  !w-12 !h-12 !text-xl">
-                                <i class="{{ point.icon ?:'sicon-star' }}" style="color: {{ point.color }}"></i>
-                                <div class="absolute h-20 w-20 top-0 right-0 opacity-20"
-                                     style="background-color: {{ point.color }}"></div>
-                            </div>
-                            <div class="flex flex-col justify-start">
-                                <h4 id="count-anime" class="font-bold text-xl" style="color: {{ point.color }}">
+                    <div class="way-item">
+                        <div class="flex rtl:space-x-reverse space-x-4">
+                            <span class="way-item__icon {{ point.icon ?:'sicon-star' }}" style="color: {{ point.color }}">
+                              <span style="background-color: {{ point.color }}"></span>
+                            </span>
+                            <div class="way-item__content">
+                                <h4 style="color: {{ point.color }}">
                                     {{ point.points }}
                                     {{ trans("pages.loyalty_program.point") }}
                                 </h4>
-                                <p class="mb-6 text-sm  text-gray-400">{{ point.description }}</p>
+                                <p>{{ point.description }}</p>
                             </div>
                         </div>
+
                         {% if user.type == 'user' %}
                             <div class="point-entry__desc mt-auto">
                                 {% if point.type == 'share' %}
                                     <div class="border relative border-gray-600 rounded-3xl bg-white h-[34px] text-center ltr:pl-14 ltr:pr-5 rtl:pr-14 rtl:pl-5">
-                                        <salla-button onclick="theme.copyToClipboard(event)" color="dark"
-                                                      shape="link" data-content="{{ point.url }}"
-                                                      class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 ltr:border-r rtl:border-l border-gray-600 hover:opacity-80"
-                                                      title="{{ trans('pages.loyalty_program.copy_link') }}">
+                                        <salla-button 
+                                          onclick="theme.copyToClipboard(event)" 
+                                          color="dark"
+                                          shape="link"
+                                          data-content="{{ point.target_url }}"
+                                          class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 ltr:border-r rtl:border-l border-gray-600 hover:opacity-80"
+                                          title="{{ trans('pages.loyalty_program.copy_link') }}">
                                             <i class="copy-icon sicon-swap-fill"></i>
                                         </salla-button>
+
                                         <h3 id="textId"
                                             class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden">
-                                            {{ point.url }}</h3>
+                                            {{ point.target_url }}
+                                        </h3>
                                     </div>
-                                {% elseif customer.is_profile_completed and point.type == 'profile' %}
+                                {% elseif point.key == 'COMPLETE_PERSONAL_INFORMATION' and point.is_completed %}
                                     <span class="" disabled>
                                         <i class="sicon-check-circle d-inline-block ty-2d"></i>
                                         {{ trans('pages.loyalty_program.completed') }}
                                     </span>
                                 {% else %}
-                                    <salla-button fill="outline" color="dark" href="{{ point.url }}"
-                                                  class="!rounded-3xl text-sm !py-1.5">{{ point.name }}</salla-button>
+                                    <salla-button 
+                                      fill="outline" 
+                                      color="dark" 
+                                      href="{{ point.target_url }}" 
+                                      class="!rounded-3xl text-sm !py-1.5">
+                                        {{ point.name }}
+                                    </salla-button>
                                 {% endif %}
                             </div>
                         {% endif %}
@@ -131,14 +144,14 @@
 
         {# 2-block:: prizes #}
         {% for prize in loyalty.prizes %}
-            <section class="mb-28 last:mb-0" id="loyalty-slider-{{ prize.type }}">
+            <section id="loyalty-slider-{{ prize.type }}">
                 <div class="center-between mb-6 sm:mb-8">
                     {# Block Title #}
                     <h2 class="s-block__title">{{ prize.title }}</h2>
 
                     {# Slider Nav btns #}
                     <div class="flex items-center">
-                        <div class="hidden sm:flex space-x-reverse space-x-1" dir="rtl">
+                        <div class="hidden sm:flex rtl:space-x-reverse space-x-1" dir="rtl">
                             <button aria-label="Previous Slide" class="slider-prev btn--md-arrow">
                                 <i class="sicon-keyboard_arrow_right"></i>
                             </button>
@@ -151,7 +164,7 @@
 
                 {# Swiper #}
                 <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize.type }}">
-                    <div class="swiper-wrapper flex items-stretch pb-8">
+                    <div class="swiper-wrapper flex items-stretch pb-6">
                         {% for prize in prize.items %}
                             <div class="swiper-slide slide--one-fourth">
                                 <div class='product-entry flex-col'>

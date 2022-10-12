@@ -5,37 +5,31 @@ class Loyalty extends BasePage {
     onReady() {
         let count = app.element(".count-anime")?.dataset?.count||0;
         (new anime.timeline()).add({
-            targets: '.loyality-item',
+          targets: '.star-anime',
+          opacity: [0, 1],
+          scale: [0, 1],
+          rotate: [25, 0],
+          duration: 2000
+        })
+        .add({
+            targets: '.loyalty__banner-content .info > *',
             opacity: [0, 1],
             translateX: [20, 0],
-            delay: function (el, i) {
-                return i * 100;
-            },
-        }).add({
-            targets: '.star-anime',
-            opacity: [0, 1],
-            rotate: [50, 0],
-            duration: 4000,
-            delay: function (el, i) {
-                return i * 100;
-            },
-        }, '-=1000').add({
+            duration: 800,
+            delay: (el, i) => i * 100,
+        }, '-=1000')
+        .add({
             targets: `.count-anime`,
             innerText: [0, count],
             easing: "linear",
             round: true,
-            delay: function (el, i) {
-                return i * 150;
-            },
-        }, '-=3700').add({
+        }, '-=1000')
+        .add({
             targets: '.btn-anime',
             opacity: [0, 1],
             duration: 2000,
-            translateX: [20, 0],
-            delay: function (el, i) {
-                return i * 100;
-            },
-        }, '-=3200')
+            translateX: [20, 0]
+        }, '-=1000')
 
 
         /*
