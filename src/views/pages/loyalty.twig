@@ -41,12 +41,14 @@
     <div class="container space-y-16">
 
         {# Breadcrumbs #}
-        <nav class="w-full py-5">{% component 'header.breadcrumbs' %}</nav>
+        <nav class="breadcrumbs w-full py-5">
+            {% component 'header.breadcrumbs' %}
+        </nav>
         
         {# loyalty banner #}
         <div class="loyalty__banner">  
             <div class="loyalty__banner-inner">
-                <i class="sicon-star2 star-anime opacity-0 text-amber-400 text-7xl"></i>
+                <i class="sicon-star2 star-anime text-amber-400 text-7xl"></i>
                 <div class="loyalty__banner-content">
                     <div class="info">
                         <h1>{{ loyalty.name }}</h1>
@@ -54,13 +56,13 @@
                         {% if user.loyalty_points %}
                             <div class="loyalty-points">
                                 {{ trans('pages.loyalty_program.you_have') }}
-                                <span class="count-number count-anime" data-count="{{ user.loyalty_points }}"></span>
+                                <span class="count-number count-anime" data-count="{{ user.loyalty_points }}">0</span>
                                 {{ trans("pages.loyalty_program.point") }}
                             </div>
                         {% endif %}
                     </div>
 
-                    <salla-loyalty customer-points="{{ user.loyalty_points }}" class="btn-anime opacity-0">
+                    <salla-loyalty customer-points="{{ user.loyalty_points }}">
                         <salla-button 
                           onclick="salla.event.dispatch('loyalty::open')"
                           slot="widget">
@@ -80,13 +82,10 @@
             </div>
         </div>
 
-        <!-- ways to get points -->
+        {# ways to get points #}
         <section class="points-ways py-6">
             <h2 class="s-block__title mb-6 sm:mb-8">{{ trans("pages.loyalty_program.ways_to_get_points") }}</h2>
             <div class="points-ways__list">
-
-            {# {{dd(loyalty.points)}} #}
-
                 {% for point in loyalty.points %}
                     <div class="way-item">
                         <div class="flex rtl:space-x-reverse space-x-4">
@@ -103,33 +102,30 @@
                         </div>
 
                         {% if user.type == 'user' %}
-                            <div class="point-entry__desc mt-auto">
-                                {% if point.type == 'share' %}
-                                    <div class="border relative border-gray-600 rounded-3xl bg-white h-[34px] text-center ltr:pl-14 ltr:pr-5 rtl:pr-14 rtl:pl-5">
+                            <div class="way-item__action">
+                                {% if point.key == 'AFFILIATE_LINK' %}
+                                    <div class="border relative border-primary rounded-3xl h-[34px] text-center pr-14 pl-5">
                                         <salla-button 
-                                          onclick="theme.copyToClipboard(event)" 
-                                          color="dark"
+                                          onclick="theme.copyToClipboard(event)"
                                           shape="link"
                                           data-content="{{ point.target_url }}"
-                                          class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 ltr:border-r rtl:border-l border-gray-600 hover:opacity-80"
+                                          class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 border-l border-primary hover:opacity-80"
                                           title="{{ trans('pages.loyalty_program.copy_link') }}">
                                             <i class="copy-icon sicon-swap-fill"></i>
                                         </salla-button>
-
-                                        <h3 id="textId"
-                                            class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden">
+                                        <h3 class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden text-primary" dir="ltr">
                                             {{ point.target_url }}
                                         </h3>
                                     </div>
                                 {% elseif point.key == 'COMPLETE_PERSONAL_INFORMATION' and point.is_completed %}
-                                    <span class="" disabled>
-                                        <i class="sicon-check-circle d-inline-block ty-2d"></i>
-                                        {{ trans('pages.loyalty_program.completed') }}
-                                    </span>
+                                    <div class="text-green-500 text-center border relative border-green-300 rounded-3xl bg-green-50 min-h-[34px] w-full pt-1 px-4">
+                                        <i class="sicon-check-circle d-inline-block"></i>
+                                        <span class="break-all">{{ trans('pages.loyalty_program.completed') }}</span>
+                                    </div>
                                 {% else %}
                                     <salla-button 
                                       fill="outline" 
-                                      color="dark" 
+                                      width="wide"
                                       href="{{ point.target_url }}" 
                                       class="!rounded-3xl text-sm !py-1.5">
                                         {{ point.name }}
@@ -143,6 +139,7 @@
         </section>
 
         {# 2-block:: prizes #}
+        {# {{dd(loyalty.prizes)}} #}
         {% for prize in loyalty.prizes %}
             <section id="loyalty-slider-{{ prize.type }}">
                 <div class="center-between mb-6 sm:mb-8">
@@ -170,13 +167,13 @@
                                 <div class='product-entry flex-col'>
                                     {# use twig to capture image tag instead of repeating our self😉 #}
                                     {% set img %}
-                                        <img class="lazy-load sm:h-full w-full object-cover"
+                                        <img class="lazy-load sm:h-full w-full object-cover bg-gray-100 rounded-t-lg"
                                              src="{{ 'images/s-empty.png' | asset }}"
                                              data-src="{{ prize.image }}"
                                              alt="{{ prize.name }}"/>
                                     {% endset %}
-                                    {% if prize.url %}
-                                        <a href="{{ prize.url }}" class='product-entry__image h-40'>
+                                    {% if prize.prize_url %}
+                                        <a href="{{ prize.prize_url }}">
                                             {{ img }}
                                         </a>
                                     {% else %}
@@ -184,13 +181,13 @@
                                     {% endif %}
                                     <div class="flex-1 p-5">
                                         <h3 class="product-entry__title leading-6 mb-2.5">
-                                            {% if prize.url %}
-                                                <a href="{{ prize.url }}">{{ prize.name }}</a>
+                                            {% if prize.prize_url %}
+                                                <a href="{{ prize.prize_url }}">{{ prize.name }}</a>
                                             {% else %}
                                                 {{ prize.name }}
                                             {% endif %}
                                         </h3>
-                                        <p class="text-sm leading-6 ">{{ prize.description }}</p>
+                                        <p class="text-sm leading-6">{{ prize.description }}</p>
                                     </div>
                                     {% if user.type == 'user' %}
                                         <div class="font-bold text-primary p-4 text-center border-t">
