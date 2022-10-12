@@ -140,7 +140,7 @@
 
         {# 2-block:: prizes #}
         {% for prize in loyalty.prizes %}
-            <section id="loyalty-slider-{{ prize.type }}">
+            <section id="loyalty-slider-{{ prize.prize_group }}">
                 <div class="center-between mb-6 sm:mb-8">
                     {# Block Title #}
                     <h2 class="s-block__title">{{ prize.title }}</h2>
@@ -159,7 +159,7 @@
                 </div>
 
                 {# Swiper #}
-                <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize.type }}">
+                <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize.prize_group }}">
                     <div class="swiper-wrapper flex items-stretch pb-8">
                         {% for prize in prize.items %}
                             <div class="swiper-slide slide--one-fourth">
@@ -171,8 +171,8 @@
                                              data-src="{{ prize.image }}"
                                              alt="{{ prize.name }}"/>
                                     {% endset %}
-                                    {% if prize.prize_url %}
-                                        <a href="{{ prize.prize_url }}">
+                                    {% if prize.url %}
+                                        <a href="{{ prize.url }}">
                                             {{ img }}
                                         </a>
                                     {% else %}
@@ -180,10 +180,10 @@
                                     {% endif %}
                                     <div class="flex-1 p-5">
                                         <h3 class="product-entry__title leading-6 mb-2.5">
-                                            {% if prize.prize_url %}
-                                                <a href="{{ prize.prize_url }}">{{ prize.name }}</a>
+                                            {% if prize.url %}
+                                                <a href="{{ prize.url }}">{{ prize.name }}</a>
                                             {% else %}
-                                                {{ prize.name }}
+                                                <span class="text-sm font-bold">{{ prize.name }}</span>
                                             {% endif %}
                                         </h3>
                                         <p class="text-sm leading-6">{{ prize.description }}</p>
