@@ -139,12 +139,11 @@
         </section>
 
         {# 2-block:: prizes #}
-        {# {{dd(loyalty.prizes)}} #}
         {% for prize in loyalty.prizes %}
             <section id="loyalty-slider-{{ prize.type }}">
                 <div class="center-between mb-6 sm:mb-8">
                     {# Block Title #}
-                    <h2 class="s-block__title">{{ prize.title }}</h2>
+                    <h2 class="s-block__title">{{ prize_group.title }}</h2>
 
                     {# Slider Nav btns #}
                     <div class="flex items-center">
@@ -160,9 +159,9 @@
                 </div>
 
                 {# Swiper #}
-                <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize.type }}">
-                    <div class="swiper-wrapper flex items-stretch pb-6">
-                        {% for prize in prize.items %}
+                <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize_group.type }}">
+                    <div class="swiper-wrapper flex items-stretch pb-8">
+                        {% for prize in prize_group.items %}
                             <div class="swiper-slide slide--one-fourth">
                                 <div class='product-entry flex-col'>
                                     {# use twig to capture image tag instead of repeating our self😉 #}
