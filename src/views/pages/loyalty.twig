@@ -103,21 +103,21 @@
 
                         {% if user.type == 'user' %}
                             <div class="way-item__action">
-                                {% if point.key == 'AFFILIATE_LINK' %}
+                                {% if point.type == 'share' %}
                                     <div class="border relative border-primary rounded-3xl h-[34px] text-center pr-14 pl-5">
                                         <salla-button 
                                           onclick="theme.copyToClipboard(event)"
                                           shape="link"
-                                          data-content="{{ point.target_url }}"
+                                          data-content="{{ point.url }}"
                                           class="absolute w-12 top-0 right-0 h-full px-3 !pt-1 border-l border-primary hover:opacity-80"
                                           title="{{ trans('pages.loyalty_program.copy_link') }}">
                                             <i class="copy-icon sicon-swap-fill"></i>
                                         </salla-button>
                                         <h3 class="font-bold text-sm leading-8 whitespace-nowrap text-ellipsis overflow-hidden text-primary" dir="ltr">
-                                            {{ point.target_url }}
+                                            {{ point.url }}
                                         </h3>
                                     </div>
-                                {% elseif point.key == 'COMPLETE_PERSONAL_INFORMATION' and point.is_completed %}
+                                {% elseif customer.is_profile_completed and point.type == 'profile' %}
                                     <div class="text-green-500 text-center border relative border-green-300 rounded-3xl bg-green-50 min-h-[34px] w-full pt-1 px-4">
                                         <i class="sicon-check-circle d-inline-block"></i>
                                         <span class="break-all">{{ trans('pages.loyalty_program.completed') }}</span>
@@ -126,7 +126,7 @@
                                     <salla-button 
                                       fill="outline" 
                                       width="wide"
-                                      href="{{ point.target_url }}" 
+                                      href="{{ point.url }}"
                                       class="!rounded-3xl text-sm !py-1.5">
                                         {{ point.name }}
                                     </salla-button>
@@ -139,11 +139,11 @@
         </section>
 
         {# 2-block:: prizes #}
-        {% for prize in loyalty.prizes %}
-            <section id="loyalty-slider-{{ prize.prize_group }}">
+        {% for prize_group in loyalty.prizes %}
+            <section id="loyalty-slider-{{ prize_group.type }}">
                 <div class="center-between mb-6 sm:mb-8">
                     {# Block Title #}
-                    <h2 class="s-block__title">{{ prize.title }}</h2>
+                    <h2 class="s-block__title">{{ prize_group.title }}</h2>
 
                     {# Slider Nav btns #}
                     <div class="flex items-center">
@@ -159,9 +159,9 @@
                 </div>
 
                 {# Swiper #}
-                <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize.prize_group }}">
+                <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize_group.type }}">
                     <div class="swiper-wrapper flex items-stretch pb-8">
-                        {% for prize in prize.items %}
+                        {% for prize in prize_group.items %}
                             <div class="swiper-slide slide--one-fourth">
                                 <div class='product-entry flex-col'>
                                     {# use twig to capture image tag instead of repeating our self😉 #}
