@@ -210,9 +210,11 @@
                                     {{ trans('pages.orders.branch') }}:
                                     <span class="font-bold">{{ shipment_branch.branch.name }}</span>
                                 </span>
-                                    <span>{{ trans('pages.orders.shipment_no') }}:
-                                    <span class="font-bold">{{ shipment_branch.shipping.number|raw }}</span>
-                                </span>
+                                    {% if shipment_branch.shipping.number %}
+                                        <span>{{ trans('pages.orders.shipment_no') }}:
+                                            <span class="font-bold">{{ shipment_branch.shipping.number|raw }}</span>
+                                        </span>
+                                    {% endif %}
                                     {% if shipment_branch.is_delivered %}
                                         <span>{{ trans('pages.orders.status') }}:
                                     <span style="color: {{ shipment_branch.status.color }}">
