@@ -217,10 +217,12 @@
                 </div>
 
                 {% if product.tags|length and theme.settings.get('show_tags') %}
-                    <div class="mb-3">
-                        {% for tag in product.tags %}
-                            <a href="{{ tag.url }}" class="me-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }},</a>
-                        {% endfor %}
+                    <div class="product-section">
+                        <div>
+                            {% for tag in product.tags %}
+                                <a href="{{ tag.url }}" class="btn btn--tag">{{ tag.name }}, </a>
+                            {% endfor %}
+                        </div>
                     </div>
                 {% endif %}
 
