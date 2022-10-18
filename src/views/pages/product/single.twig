@@ -74,7 +74,6 @@
         <nav class="breadcrumbs w-full py-5">
             {% component 'header.breadcrumbs' %}
         </nav>
-
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
                 <div class="swiper relative details-slider rounded-md"
@@ -106,21 +105,34 @@
                     {% set has_many_images = product.images|length > 1 %}
                     <div class="swiper-wrapper">
                         {% for image in product.images %}
-                            <a data-fslightbox="product_{{ product.id }}"
-                               data-img-id="{{ image.id }}"
-                               data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
-                               data-caption="{{ image.alt }}"
-                               data-infinite="false"
-                               data-type="{{ image.video_url?'youtube':'image' }}"
-                               href="{{ image.video_url?image.video_url:image.url }}"
-                               aria-label="{{ product.name }}"
-                               class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
-                                {% if loop.first %}
-                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                {% else %}
-                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                {% endif %}
-                            </a>
+                            {% if image.three_d_image_url %}
+                                <model-viewer style="min-height: 500px;" class="swiper-slide w-full h-full"
+                                              loading="eager" camera-controls
+                                              touch-action="pan-y" auto-rotate
+                                              poster="{{ image.url }}"
+                                              src="{{ image.three_d_image_url }}"
+                                              shadow-intensity="1" alt="{{ image.alt }}"></model-viewer>
+                            {% else %}
+                                <a data-fslightbox="product_{{ product.id }}"
+                                   data-img-id="{{ image.id }}"
+                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                   data-caption="{{ image.alt }}"
+                                   data-infinite="false"
+                                   data-type="{{ image.video_url?'youtube':'image' }}"
+                                   href="{{ image.video_url?image.video_url:image.url }}"
+                                   aria-label="{{ product.name }}"
+                                   class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
+                                    {% if loop.first %}
+                                        <img fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    {% else %}
+                                        <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    {% endif %}
+                                </a>
+                            {% endif %}
                         {% endfor %}
                     </div>
 
@@ -338,4 +350,7 @@
 {% block scripts %}
     <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'product.js' | asset }}"></script>
+    {% if product.has_3d_image %}
+        <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    {% endif %}
 {% endblock %}
