@@ -79,6 +79,29 @@
                     <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
                     <b>{{ order.created_at|date }}</b>
                 </td>
+                {% if (not order.has_multi_shipments) %}
+                    {% if order.shipping %}
+                        <td class="single-order-header-item w-full md:w-auto  px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                            <div class="me-2  font-normal text-gray-400">{{ trans('pages.orders.shipments') }}</div>
+                            <div>
+                                {% if order.shipping.logo %}
+                                    <div class="inline-block h-6 w-8">
+                                        <img class="inline-block w-full h-full object-contain"
+                                             src="{{ order.shipping.logo }}">
+                                    </div>
+                                {% endif %}
+                                <b>{{ order.shipping.name }}</b>
+                            </div>
+                        </td>
+                    {% endif %}
+
+                    {% if order.shipping.number %}
+                        <td class="single-order-header-item w-full md:w-auto  px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                            <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.shipment_no') }}</div>
+                            <b>{{ order.shipping.number|raw }}</b>
+                        </td>
+                    {% endif %}
+                {% endif %}
 
                 <td class="single-order-header-item flex justify-between items-center w-full md:w-auto px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                     {% if order.is_pending_payment and order.pending_payment_ends_in == 0 %}
@@ -91,13 +114,16 @@
                     </span>
                     {% endif %}
 
-
+                </td>
+                {# print order #}
+                <td class="w-full md:w-auto text-end px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                     {% if (can_print_invoice) %}
-                        <salla-button fill="outline" size="small"
+                        <salla-button fill="outline"
                                       onclick="window.open('{{ order.print_url()}}', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, width=900, height=700');">
                             <i class="sicon-printer2 v-align"></i>
                             {{ trans('pages.orders.print') }}
                         </salla-button>
+
                     {% else %}
                         <div class="tooltip-toggle tooltip-toggle--clickable text-primary border border-primary rounded text-center inline-block px-4 py-2 cursor-pointer">
                             <i class="sicon-printer2 v-align"></i>
@@ -132,226 +158,70 @@
         {% endif %}
 
         {# Order Summary #}
-        <div class="overflow-hidden space-y-5">
-            <h1 class="font-bold text-lg">{{ trans('pages.orders.shipments') }}</h1>
+        {% if order.multi_branch %}
 
-            {% for package in order.packages %}
-                <div class="shipping-orders">
-                    {# Shipping Title #}
-                    {% if package.shipping_company %}
-                    <div class="flex flex-col md:flex-row justify-between md:items-center bg-white px-5 py-3 border-b border-gray-100 rounded-t-md text-sm space-y-4 md:space-y-0">
-                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                            {% if package.shipping_company.logo %}
-                                <img src="{{ package.shipping_company.logo }}" class="max-w-16 max-h-8"
-                                     alt="{{ package.shipping_company.name }}">
-                                <span>{{ package.shipping_company.name }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="flex space-x-5 rtl:space-x-reverse">
-                            {% if package.branch %}
+            {% if order.has_unshipping_products %}
+                <div class="overflow-hidden space-y-5">
+                    {% component 'order.order-items' with {'order': order, 'is_shipping_products': false} %}
+                </div>
+            {% endif %}
+
+            {% if order.has_shipping %}
+                <div class="overflow-hidden space-y-5">
+                    <h1 class="font-bold text-lg">{{ trans('pages.orders.shipments') }}</h1>
+
+                    {% for shipment_branch in order.shipment_branches %}
+                        <div class="shipping-orders">
+                            {# Shipping Title #}
+                            <div class="flex flex-col md:flex-row justify-between md:items-center bg-white px-5 py-3 border-b border-gray-100 rounded-t-md text-sm space-y-4 md:space-y-0">
+                                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                                    {% if shipment_branch.shipping.logo %}
+                                        <img src="{{ shipment_branch.shipping.logo }}" class="max-w-16 max-h-8"
+                                             alt="{{ shipment_branch.shipping.name }}">
+                                        <span>{{ shipment_branch.shipping.name }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="flex space-x-5 rtl:space-x-reverse">
                                 <span>
                                     {{ trans('pages.orders.branch') }}:
-                                    <span class="font-bold">{{ package.branch.name }}</span>
+                                    <span class="font-bold">{{ shipment_branch.branch.name }}</span>
                                 </span>
-                            {% endif %}
-                            {% if package.shipping_company.number %}
-                                <span>{{ trans('pages.orders.shipment_no') }}:
-                                            <span class="font-bold">{{ package.shipping_company.number|raw }}</span>
+                                    {% if shipment_branch.shipping.number %}
+                                        <span>{{ trans('pages.orders.shipment_no') }}:
+                                            <span class="font-bold">{{ shipment_branch.shipping.number|raw }}</span>
                                         </span>
-                            {% endif %}
-                            {% if package.is_delivered %}
-                                <span>{{ trans('pages.orders.status') }}:
-                                    <span style="color: {{ package.status.color }}">
-                                        <i class="center-v mr-1 {{ package.status.icon }}"></i>
-                                        {{ package.status.name }}
+                                    {% endif %}
+                                    {% if shipment_branch.is_delivered %}
+                                        <span>{{ trans('pages.orders.status') }}:
+                                    <span style="color: {{ shipment_branch.status.color }}">
+                                        <i class="center-v mr-1 {{ shipment_branch.status.icon }}"></i>
+                                        {{ shipment_branch.status.name }}
                                     </span>
                                 </span>
-                            {% elseif package.shipping_company.tracing_link %}
-                                <a class="font-bold text-primary hover:opacity-80 flex items-center"
-                                   href="{{ package.shipping_company.tracing_link|raw }}"
-                                   target="_blank"
-                                >
-                                    <span class="sicon-shipping rtl:ml-1 ltr:mr-1"></span>
-                                    {{ trans('pages.orders.tracking_url')}}
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    {% for item in package.items %}
-                        <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}" class="order-item bg-white p-5 border-b border-gray-100 first:rounded-t-md last:rounded-b-md last:border-none">
-
-                            {% if item.product %}
-                                <div class="flex space-s-5 mb-4">
-                                    <a href="{{ item.product.url }}" class="shrink-0">
-                                        <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
-                                             alt="{{ item.name }}"
-                                             class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
-                                    </a>
-                                    <div>
-                                        <a href="{{ item.product.url }}"
-                                           class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
-                                            {{ item.name }}
+                                    {% elseif shipment_branch.shipping.number and shipment_branch.tracing_link %}
+                                        <a class="font-bold text-primary hover:opacity-80 flex items-center"
+                                           href="{{ shipment_branch.tracing_link|raw }}"
+                                           target="_blank"
+                                        >
+                                            <span class="sicon-shipping rtl:ml-1 ltr:mr-1"></span>
+                                            {{ trans('pages.orders.tracking_url')}}
                                         </a>
-                                        <b>{{ item.price|money }}</b>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="w-full  flex  justify-between text-sm py-2.5">
-                                    <span class="w-40 inline-block font-normal">{{ item.name }}</span>
-                                    <b>{{ item.price|money }}</b>
-                                </div>
-                            {% endif %}
-
-                            <div class="w-full flex justify-between text-sm py-2.5">
-                                <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
-                                <b>{{ item.quantity }}</b>
-                            </div>
-                            <div class="flex justify-between text-sm py-2.5">
-                                <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
-                                <b>{{ item.price|money }}</b>
-                            </div>
-                            <div class="flex justify-between  text-sm py-2.5">
-                                <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
-                                <b>{{ item.total|money }}</b>
-                            </div>
-
-                            {% if item.options %}
-                                <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for option in item.options %}
-                                            <div class="py-2.5 center-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    {{ option.name }}:
-                                                </dt>
-                                                <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
-                                                    {% if option.is_image %}
-                                                        <div class="flex space-s-2.5">
-                                                            <a href="{{ option.value }}" target="_blank">
-                                                                <img class="h-6 w-6 object-cover rounded-md"
-                                                                     src="{{ option.value ?: 'images/placeholder.png' | asset }}"
-                                                                     alt="{{ option.name }}"/>
-                                                            </a>
-                                                        </div>
-                                                    {% elseif option.color %}
-                                                        <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
-                                                    {% else %}
-                                                        {{ option.value }}
-                                                    {% endif %}
-                                                </dd>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% endif %}
-
-                            {% if item.sub_products %}
-                                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for product in item.sub_products %}
-                                            <div class="py-3.5 md:flex items-center justify-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    <a href="{{ product.url }}">
-                                                        {{ product.name }}
-                                                    </a>
-                                                </dt>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% endif %}
-
-                            {% if item.files %}
-                                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.files') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for file in item.files %}
-                                            <div class="py-2.5 center-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    {{ file.name }}
-                                                </dt>
-                                                <dd class="font-medium text-xs">
-                                                    <a href="{{ file.url }}" target="_blank"
-                                                       class="font-bold text-gray-600 hover:text-black">
-                                                        <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
-                                                    </a>
-                                                </dd>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% elseif item.codes %}
-                                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.codes') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for code in item.codes %}
-                                            <div class="py-2.5 center-between">
-                                                <dt class="flex-center">
-                                                    <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
-                                                    <span>{{ code.code }}</span>
-                                                </dt>
-                                                <salla-button onclick="theme.copyToClipboard(event)" shape="link" data-content="{{ code.code }}">
-                                                    <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
-                                                    <span class="text-sm ms-2 pointer-events-non">{{ trans('common.elements.copy') }}</span>
-                                                </salla-button>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% endif %}
-                            {% if item.note %}
-                                <p class="mt-3 text-sm text-gray-500">
-                                    <span>{{ trans('common.elements.note') }} : </span>{{ item.note }}
-                                </p>
-                            {% endif %}
-                            {% if item.attachments %}
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for attachment in item.attachments %}
-                                            <div class="py-3.5 md:flex items-center justify-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    {{ trans('pages.products.attachments') }}
-                                                </dt>
-                                                <dd class="font-medium {{ attachment.type == 'image' ? 'text-gray-900' : 'text-xs' }}">
-                                                    <a href="{{ attachment.url }}">
-                                                        {% if attachment.type == 'image' %}
-                                                            <div class="flex space-s-2.5">
-                                                                <a href="{{ attachment.url }}" target="_blank">
-                                                                    <img class="h-7 w-7 object-cover rounded-md"
-                                                                         src="{{ attachment.url }}"
-                                                                         alt="{{ item.name }}"/>
-                                                                </a>
-                                                            </div>
-                                                        {% else %}
-                                                            {{ trans('pages.orders.file_url') }}
-                                                        {% endif %}
-                                                    </a>
-                                                </dd>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% endif %}
-
-                            {% if item.rating %}
-                                <section class="border-t mt-10 pt-8">
-                                    <p>{{ item.rating.content|raw }}</p>
-                                    {% if item.rating.is_pending %}
-                                        <span>{{ trans('pages.rating.pending') }}</span>
                                     {% endif %}
-                                    <salla-rating-stars size="small" value="{{item.rating.stars}}"></salla-rating-stars>
-                                </section>
-                            {% endif %}
+                                </div>
+                            </div>
+
+                            {% component 'order.order-items' with {'order': order, 'branch': shipment_branch.branch, 'is_shipping_products': true} %}
+
                         </div>
                     {% endfor %}
 
                 </div>
-            {% endfor %}
-
-        </div>
+            {% endif %}
+        {% else %}
+            <div class="overflow-hidden">
+                {% component 'order.order-items' with {'order': order} %}
+            </div>
+        {% endif %}
 
         <div class="bg-white rounded-md px-6">
             <h2 id="summary-heading" class="sr-only">Order summary</h2>
@@ -426,12 +296,12 @@
                     <div class="{{order.is_pending_payment ? 'flex-center': 'center-between'}}">
                         {% if order.is_pending_payment %}
                             {% if order.pending_payment_ends_in == 0 %}
-                                <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
+                              <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
                             {% else %}
-                                <salla-button width="wide" href="{{ order.payment_url }}">
-                                    <i class="sicon sicon-wallet me-2"></i>
-                                    <span>{{ trans('pages.orders.finish_payment') }}</span>
-                                </salla-button>
+                              <salla-button width="wide" href="{{ order.payment_url }}">
+                                  <i class="sicon sicon-wallet me-2"></i>
+                                  <span>{{ trans('pages.orders.finish_payment') }}</span>
+                              </salla-button>
                             {% endif %}
                         {% else %}
                             <div class="text-sm">
