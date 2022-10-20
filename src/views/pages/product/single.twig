@@ -76,100 +76,93 @@
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
-                <div class="swiper relative details-slider rounded-md"
-                     id="details-slider-{{ product.id }}">
-                    {% if(product.promotion_title) %}
-                        <div class="absolute z-10 top-4 start-0">
-                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
-                        </div>
-                    {% endif %}
+            <div class="rounded-md" id="details-slider-{{ product.id }}">
+            
 
-                    <salla-button 
-                      class="btn--wishlist animated" 
-                      data-id="{{ product.id }}" 
-                      onclick="salla.wishlist.toggle({{ product.id }})" 
-                      shape="icon" 
-                      fill="outline" 
-                      color="light">
-                        <i class="sicon-heart"></i>
-                    </salla-button>
-
-                    {# Calories Badge #}
-                    {% if product.calories %}
-                        <div class="absolute z-[2] top-4 rtl:left-4 ltr:right-4 bg-white shadow-sm flex flex-col justify-center items-center rounded-full w-20 h-20 md:w-24 md:h-24">
-                            <span class="text-red-500 text-xl leading-none font-bold">{{ product.calories }}</span>
-                            <span class="text-xs text-gray-500">{{ trans('pages.products.calories') }}</span>
-                        </div>
-                    {% endif %}
-
-                    {% set has_many_images = product.images|length > 1 %}
-                    <div class="swiper-wrapper">
-                        {% for image in product.images %}
-                            {% if image.three_d_image_url %}
-                                <model-viewer style="min-height: 500px;" class="swiper-slide w-full h-full"
-                                              loading="eager" camera-controls
-                                              touch-action="pan-y" auto-rotate
-                                              poster="{{ image.url }}"
-                                              src="{{ image.three_d_image_url }}"
-                                              shadow-intensity="1" alt="{{ image.alt }}"></model-viewer>
-                            {% else %}
-                                <a data-fslightbox="product_{{ product.id }}"
-                                   data-img-id="{{ image.id }}"
-                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
-                                   data-caption="{{ image.alt }}"
-                                   data-infinite="false"
-                                   data-type="{{ image.video_url?'youtube':'image' }}"
-                                   href="{{ image.video_url?image.video_url:image.url }}"
-                                   aria-label="{{ product.name }}"
-                                   class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
-                                    {% if loop.first %}
-                                        <img fetchpriority="high" loading="eager" src="{{ image.url }}"
-                                             alt="{{ image.alt }}"
-                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                    {% else %}
-                                        <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
-                                             alt="{{ image.alt }}"
-                                             class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                    {% endif %}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-
-                    {% if has_many_images %}
-                        <button aria-label="Previous Slide" class="slider-prev btn--md-white-arrow">
-                            <i class="sicon-keyboard_arrow_right"></i>
-                        </button>
-                        <button aria-label="Next Slide" class="slider-next btn--md-white-arrow">
-                            <i class="sicon-keyboard_arrow_left"></i>
-                        </button>
-                    {% endif %}
-                </div>
-
+            {% set has_many_images = product.images|length > 1 %}
+            <salla-slider id="product-slider" class="details-slider" type="thumbs" show-thumbs-controls="false" show-controls="false">
+                
                 {% if has_many_images %}
-                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider mt-4 {{ product.images|length > 4 ? '!pe-10' : ''}}"
-                         id="thumbs-slider-{{ product.id }}">
-                        <div class="swiper-wrapper flex items-stretch">
-                            {% for image in product.images %}
-                                <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
-                                    {% if loop.index < 5 %}
-                                        <img src="{{ image.url }}"
-                                            loading="eager"
-                                            fetchpriority="high"
-                                            class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
-                                            title="{{ image.alt }}"
-                                            alt="{{ image.alt }}"/>
-                                    {% else %}
-                                        <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
-                                            class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
-                                            title="{{ image.alt }}"
-                                            alt="{{ image.alt }}"/>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                    <button aria-label="Previous Slide" class="slider-prev btn--md-white-arrow">
+                        <i class="sicon-keyboard_arrow_right"></i>
+                    </button>
+                    <button aria-label="Next Slide" class="slider-next btn--md-white-arrow">
+                        <i class="sicon-keyboard_arrow_left"></i>
+                    </button>
                 {% endif %}
+
+
+                {% if(product.promotion_title) %}
+                <div class="absolute z-10 top-4 start-0">
+                    <div  iv class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">654</div>
+                </div>
+                {% endif %}
+
+                <salla-button 
+                    class="btn--wishlist animated sws" 
+                    data-id="{{ product.id }}" 
+                    onclick="salla.wishlist.toggle({{ product.id }})" 
+                    shape="icon" 
+                    fill="outline" 
+                    color="light">
+                    <i class="sicon-heart"></i>
+                </salla-button>
+
+                {# Calories Badge #}
+                {% if product.calories %}
+                <div class="absolute z-[2] top-4 rtl:left-4 ltr:right-4 bg-white shadow-sm flex flex-col justify-center items-center rounded-full w-20 h-20 md:w-24 md:h-24">
+                    <span class="text-red-500 text-xl leading-none font-bold">50</span>
+                    <span class="text-xs text-gray-500">{{ trans('pages.products.calories') }}</span>
+                </div>
+                {% endif %}
+        
+                <div slot="items">
+                    {% for image in product.images %}
+                        <a data-fslightbox="product_{{ product.id }}"
+                        data-img-id="{{ image.id }}"
+                        data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                        data-caption="{{ image.alt }}"
+                        data-infinite="false"
+                        data-type="{{ image.video_url?'youtube':'image' }}"
+                        href="{{ image.video_url?image.video_url:image.url }}"
+                        aria-label="{{ product.name }}"
+                        class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
+                            {% if loop.first %}
+                                <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                            {% else %}
+                                <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+                {% if has_many_images %}
+                <div slot="thumbs">
+                    {% for image in product.images %}
+                        <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }}">
+                            {% if loop.index < 5 %}
+                                <img src="{{ image.url }}"
+                                    loading="eager"
+                                    fetchpriority="high"
+                                    class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
+                                    title="{{ image.alt }}"
+                                    alt="{{ image.alt }}"/>
+                            {% else %}
+                                <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
+                                    class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
+                                    title="{{ image.alt }}"
+                                    alt="{{ image.alt }}"/>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </salla-slider>
+            
+
+         
+        </div>
+
+              
             </div>
 
             <div class="main-content w-full md:w-2/4 md:pb-16">

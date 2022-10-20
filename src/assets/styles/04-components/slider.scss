@@ -1,12 +1,8 @@
-.swiper{
-  &.slider-layout{
-    @apply -mx-2.5 w-[calc(100%+20px)] px-[5px] sm:px-0 pe-12 lg:pe-0;
-
-    &.thumbs-slider{
-      @apply -mx-2 lg:w-[calc(100%+16px)] px-0;
-
+salla-slider{ 
+  .s-slider-thumbs-container{
+    @apply -mx-2.5 w-[calc(100%+20px)] px-[5px] sm:px-0 pe-12 lg:pe-0 -mx-2 lg:w-[calc(100%+16px)] px-0;
       .swiper-slide{
-        @apply w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 mx-2 p-0 cursor-pointer h-16 md:h-20 transition-opacity duration-300 bg-gray-50 rounded-md;
+        @apply w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 mx-2 p-0 cursor-pointer h-16 md:h-20 transition-opacity duration-300 bg-gray-50 rounded-md #{!important};
 
         &:hover{
           @apply opacity-80
@@ -16,19 +12,21 @@
           @apply transition-shadow duration-300 content-[''] absolute top-0 left-0 h-full w-full rounded-md z-1 ring-1 ring-gray-200 ring-inset;
         }
 
-        &-thumb-active:after{
+        &.swiper-slide-thumb-active:after{
           @apply ring-2 ring-primary;
         }
       }
-    }
+    
   }
 
-  &.details-slider{
+  &.details-slider .s-slider-container{
     @apply bg-white border-[1px];
     .swiper-slide{
       @apply relative rounded-md bg-white ring-1 ring-inset ring-gray-100;
     }
-
+    .btn--md-white-arrow{
+      z-index: 2;
+    }
     salla-button.btn--wishlist{
       @apply absolute rtl:right-4 ltr:left-4 bottom-4 z-[2] sm:hidden;
     }
@@ -61,7 +59,9 @@
       }
     }
   }
-
+  .btn--md-white-arrow{
+    z-index: 2;
+  }
   // Photos block slider
   &.photos-slider {
     .swiper-slide {
@@ -113,11 +113,11 @@
 .testimonials-slider {
   @apply transition-opacity;
 
-  &:not(.swiper-initialized){
+  .swiper:not(.swiper-initialized){
     @apply opacity-0;
   }
 
-  &.swiper{
+  .swiper{
     @apply pe-12 lg:pe-0 ps-5 lg:ps-0;
 
     @media (min-width: 1024px){
@@ -223,7 +223,7 @@
     @apply hidden lg:flex translate-y-1/2;
     right: 17%;
     top: 35%;
-
+    z-index: 2;
     &.slider-next {
       @apply start-auto;
       left: 17%;

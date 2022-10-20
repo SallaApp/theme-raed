@@ -132,30 +132,69 @@
         {# 2-block:: prizes #}
         {% for prize_group in loyalty.prizes %}
             <section id="loyalty-slider-{{ prize_group.type }}">
-                <div class="center-between mb-6 sm:mb-8">
-                    {# Block Title #}
-                    <h2 class="s-block__title">{{ prize_group.title }}</h2>
-
-                    {# Slider Nav btns #}
-                    <div class="flex items-center">
-                        <div class="hidden sm:flex rtl:space-x-reverse space-x-1" dir="rtl">
-                            <button aria-label="Previous Slide" class="slider-prev btn--md-arrow">
-                                <i class="sicon-keyboard_arrow_right"></i>
-                            </button>
-                            <button aria-label="Next Slide" class="slider-next btn--md-arrow">
-                                <i class="sicon-keyboard_arrow_left"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+             
 
                 {# Swiper #}
-                <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize_group.type }}">
+                <salla-slider type="carousel" auto-play show-controls="false">
+                <div class="center-between mb-6 sm:mb-8">
+                        {# Block Title #}
+                        <h2 class="s-block__title">{{ prize_group.title }}</h2>
+
+                        {# Slider Nav btns #}
+                        <div class="flex items-center">
+                            <div class="hidden sm:flex rtl:space-x-reverse space-x-1" dir="rtl">
+                                <button aria-label="Previous Slide" class="slider-prev btn--md-arrow">
+                                    <i class="sicon-keyboard_arrow_right"></i>
+                                </button>
+                                <button aria-label="Next Slide" class="slider-next btn--md-arrow">
+                                    <i class="sicon-keyboard_arrow_left"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div slot="items">
+                    {% for prize in prize_group.items %}
+                        <div class="slide--one-fourth">
+                            <div class='product-entry flex-col'>
+                                {% set img %}
+                                    <img class="lazy-load sm:h-full w-full object-cover"
+                                        src="{{ 'images/s-empty.png' | asset }}"
+                                        data-src="{{ prize.image }}"
+                                        alt="{{ prize.name }}"/>
+                                {% endset %}
+                                {% if prize.url %}
+                                    <a href="{{ prize.url }}" class='product-entry__image h-40'>
+                                        {{ img }}
+                                    </a>
+                                {% else %}
+                                    {{ img }}
+                                {% endif %}
+                                <div class="flex-1 p-5">
+                                    <h3 class="product-entry__title leading-6 mb-2.5">
+                                        {% if prize.url %}
+                                            <a href="{{ prize.url }}">{{ prize.name }}</a>
+                                        {% else %}
+                                            {{ prize.name }}
+                                        {% endif %}
+                                    </h3>
+                                    <p class="text-sm leading-6 ">{{ prize.description }}</p>
+                                </div>
+                                {% if user.type == 'user' %}
+                                    <div class="font-bold text-primary p-4 text-center border-t">
+                                        {{ prize.cost_points }}
+                                        {{ trans("pages.loyalty_program.point") }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </salla-slider>
+                {# <div class="swiper default-slider slider-layout" data-id="loyalty-slider-{{ prize_group.type }}">
                     <div class="swiper-wrapper flex items-stretch pb-8">
                         {% for prize in prize_group.items %}
                             <div class="swiper-slide slide--one-fourth">
                                 <div class='product-entry flex-col'>
-                                    {# use twig to capture image tag instead of repeating our self😉 #}
                                     {% set img %}
                                         <img class="lazy-load sm:h-full w-full object-cover bg-gray-100 rounded-t-lg"
                                              src="{{ 'images/s-empty.png' | asset }}"
@@ -187,7 +226,7 @@
                             </div>
                         {% endfor %}
                     </div>
-                </div>
+                </div> #}
             </section>
         {% endfor %}
     </div>

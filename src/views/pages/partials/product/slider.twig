@@ -1,4 +1,5 @@
 {% if products|length %}
+<salla-slider type="carousel" id="products-slider" show-controls="false" auto-play class="slider-layout" data-id="{{type}}-slider">
   <div class="center-between mb-6 sm:mb-8">
     {# Block Title #}
     <div>
@@ -23,13 +24,13 @@
   </div>
 
   {# Swiper #}
-  <div class="swiper default-slider slider-layout" data-id="{{type}}-slider">
-    <div class="swiper-wrapper flex items-stretch">
+  
+    <div slot="items">
       {% for product in products %}
-        <div class="swiper-slide slide--one-fourth">
+        <div class="slide--one-fourth">
             {% include 'pages.partials.product.card' %}
         </div>
       {% endfor %}
     </div>
-  </div>
+  </salla-slider>
 {% endif %}

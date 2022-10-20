@@ -70,8 +70,8 @@
             <div class="main-content lg:col-span-6">
                 {% if slides|length %}
                     <div class="mb-8">
-                        <div class="swiper blog-slider rounded-md overflow-hidden" id="blog-slider">
-                            <div class="swiper-wrapper">
+                        <salla-slider type="blog" auto-play show-controls="false" pagination class="blog-slider rounded-md overflow-hidden" id="blog-slider">
+                            <div slot="items">
                                 {% for article in slides %}
                                     <div class="swiper-slide has-overlay blog-slider__slide !h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
                                         <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-50':'object-cover h-full w-full' }}"
@@ -103,7 +103,7 @@
                                 {% endfor %}
                             </div>
                             <div class="swiper-pagination text-start px-4 lg:px-10  bottom-8 lg:bottom-16"></div>
-                        </div>
+                        </salla-slider>
                     </div>
                 {% else %}
                     <div class="sr-only lg:not-sr-only ">
