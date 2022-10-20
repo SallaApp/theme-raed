@@ -145,4 +145,4 @@ class Cart extends BasePage {
     }
 }
 
-Cart.intiateWhenReady('Cart', ['cart']);
+Cart.initiateWhenReady('Cart', ['cart']);
