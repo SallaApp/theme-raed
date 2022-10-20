@@ -7,19 +7,12 @@ import AppHelpers from "./app-helpers";
 class App extends AppHelpers {
   constructor() {
     super();
-    this.isThemeApp = true;//to make sure that window.app, is this class
     window.app = this;
 
-    this.status = 'initiated';
-    salla.onReady(() => this.loadTheApp());
-  }
-
-  isThemeAppReady() {
-    return this.status === 'ready';
+    document.addEventListener('twilight::ready', () => this.loadTheApp());
   }
 
   loadTheApp() {
-    this.status = 'loading';
     this.initiateNotifier();
     this.initiateLazyLoad();
     this.initiateMobileMenu();
@@ -36,7 +29,6 @@ class App extends AppHelpers {
     salla.comment.event.onAdded(() => window.location.reload());
 
     this.log('Theme Loaded 🎉');
-    this.status = 'ready';
   }
 
   log(message) {
@@ -292,4 +284,4 @@ class App extends AppHelpers {
   }
 }
 
-window.theme = new App;
+new App;
