@@ -22,7 +22,7 @@ class Products extends BasePage {
     }
 }
 
-Products.intiateWhenReady('Products', [
+Products.initiateWhenReady('Products', [
     'product.index',
     'product.index.latest',
     'product.index.offers', 'product.index.search',

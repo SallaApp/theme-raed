@@ -51,5 +51,4 @@ class Loyalty extends BasePage {
     }
 }
 
-Loyalty.intiateWhenReady('Loyalty');
-
+Loyalty.initiateWhenReady('Loyalty');

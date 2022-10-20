@@ -98,4 +98,4 @@ class Home extends BasePage {
     };
 }
 
-Home.intiateWhenReady('Home', ['index']);
+Home.initiateWhenReady('Home',['index']);
