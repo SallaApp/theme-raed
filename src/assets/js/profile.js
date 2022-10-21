@@ -6,7 +6,7 @@ class Profile extends BasePage {
         Flatpickr('.date-element', {"dateFormat": "Y-m-d"});
         let label = salla.config.get('theme.is_rtl') ? 'اختر صورة مناسبة' : 'Choose your image';
 
-        this.avatarFilepond = new FileUploader('#profile-img', {
+        new FileUploader('#profile-img', {
             name                          : 'avatar',
             labelIdle                     : `<span class="avatar-placeholder flex justify-center items-center flex-col"><span class="sicon-user"></span><span class="text">${label}</span></span>`,
             maxFileSize                   : '3MB',

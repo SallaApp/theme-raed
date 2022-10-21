@@ -1,5 +1,4 @@
 import BasePage from './base-page';
-// import Slider from './partials/slider';
 
 class Blog extends BasePage {
     onReady() {
