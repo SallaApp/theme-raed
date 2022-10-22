@@ -19,16 +19,7 @@ export default class AppHelpers {
     element?.classList.add(...(isClasses1 ? classes1 : classes2));
     return this;
   }
-
-  /**
-   * @param {string} email
-   * @return {boolean}
-   */
-  isValidEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
-
+  
   /**
    * @param {string|HTMLElement} selector
    * @return {null|HTMLElement}
@@ -102,16 +93,6 @@ export default class AppHelpers {
    * @param {function} callback
    * @return {AppHelpers}
    */
-  onEnter(element, callback) {
-    this.onKeyUp(element, event => event.keyCode === 13 && callback(event));
-    return this;
-  }
-
-  /**
-   * @param {string|HTMLElement} element
-   * @param {function} callback
-   * @return {AppHelpers}
-   */
   all(element, callback) {
     document.querySelectorAll(element).forEach(callback);
     return this;
@@ -155,17 +136,5 @@ export default class AppHelpers {
   addClass(element, className) {
     this.element(element).classList.add(...Array.from(arguments).slice(1));
     return this;
-  }
-
-  /**
-   * @param {function} fn
-   * @param data
-   * @return {(function(...[*]): Promise<unknown>)|*}
-   */
-  debounce(fn, ...data) {
-    if (!this.debounce_) {
-      this.debounce_ = Salla.helpers.debounce((callback, ...innerData) => callback(...innerData), 500);
-    }
-    return this.debounce_(fn, ...data);
   }
 }
