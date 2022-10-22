@@ -34,23 +34,15 @@
         {% for section in items %}
             <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
                 {% if is_slider %}
-                    <div class="swiper default-slider slider-layout" data-id="{{ component_id }}-{{ section.id }}">
-                      <div class="swiper-wrapper flex items-stretch">
-                          {% for product in section.products %}
-                              <div class="swiper-slide slide--one-fourth">
-                                  {% include 'pages.partials.product.card' %}
-                              </div>
-                          {% endfor %}
-                      </div>
-                    </div>
-                    <div class="hidden md:block text-center pt-7 space-s-3" dir="rtl">
-                        <button class="slider-prev btn--md-arrow">
-                            <i class="sicon-keyboard_arrow_right"></i>
-                        </button>
-                        <button class="slider-next btn--md-arrow">
-                            <i class="sicon-keyboard_arrow_left"></i>
-                        </button>
-                    </div>
+                    <salla-slider type="carousel" auto-play class="default-slider slider-layout">
+                        <div slot="items">
+                            {% for product in section.products %}
+                                <div class="slide--one-fourth">
+                                    {% include 'pages.partials.product.card' %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </salla-slider>
                 {% else %}
                   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
                     {% for product in section.products %}

@@ -17,4 +17,4 @@ class Brands extends BasePage {
     }
 }
 
-Brands.initiateWhenReady('Brands',['brands.index']);
+Brands.initiateWhenReady(['brands.index']);

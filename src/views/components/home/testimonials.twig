@@ -17,73 +17,37 @@
 <section class="s-block s-block--testimonials overflow-hidden">
     <div class="container mb-6 sm:mb-8">
         <h2 class="s-block__title">{{ trans('blocks.home.testimonials') }}</h2>
-    </div>  
+    </div>
     <div class="container lg:overflow-hidden">
-        
-    <salla-slider type="testimonials" id="testimonials-slider" class="testimonials-slider" show-controls="false">
-                <div>
-                    <button aria-label="Previous Slide" class="slider-prev btn--md-white-arrow">
-                        <i class="sicon-keyboard_arrow_right"></i>
-                    </button>
-                    <button aria-label="Next Slide" class="slider-next btn--md-white-arrow">
-                        <i class="sicon-keyboard_arrow_left"></i>
-                    </button>
-                </div>
-                <div slot="items">
-                {% for item in items %}
-                <div class="swiper-slide">
-                    <div class="testimonial">
-                        <div class="testimonial__inner">
-                          <div class="testimonial__avatar">
-                              <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.avatar }}" alt="{{ item.name}}"
-                                  class="lazy-load w-full h-full object-cover">
-                          </div>
-                          <div class="flex-1 testimonial__text">
-                              <p class="leading-6 mb-2 mt-4 sm:mt-0">{{ item.text }}</p>
-                              <div class="flex flex-col lg:flex-row justify-center lg:justify-between items-center">
-                                  <div class="testimonial__info">
-                                      <h4 class="font-bold text-xs xs:text-sm">{{ item.name }}</h4>
-                                  </div>
-                                  <div class="testimonial__rating text-sm">
-                                    <salla-rating-stars size="small" value="{{item.stars}}"></salla-rating-stars>
-                                  </div>
-                              </div>
-                          </div>
-                          <i class="testimonial__icon sicon-quote-open"></i>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
-            </salla-slider>
-            {# <div class="swiper-wrapper">
+        <salla-slider type="testimonials" class="testimonials-slider" show-controls="true">
+            <div slot="items">
                 {% for item in items %}
                     <div class="swiper-slide">
                         <div class="testimonial">
                             <div class="testimonial__inner">
-                              <div class="testimonial__avatar">
-                                  <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.avatar }}" alt="{{ item.name}}"
-                                      class="lazy-load w-full h-full object-cover">
-                              </div>
-                              <div class="flex-1 testimonial__text">
-                                  <p class="leading-6 mb-2 mt-4 sm:mt-0">{{ item.text }}</p>
-                                  <div class="flex flex-col lg:flex-row justify-center lg:justify-between items-center">
-                                      <div class="testimonial__info">
-                                          <h4 class="font-bold text-xs xs:text-sm">{{ item.name }}</h4>
-                                      </div>
-                                      <div class="testimonial__rating text-sm">
-                                        <salla-rating-stars size="small" value="{{item.stars}}"></salla-rating-stars>
-                                      </div>
-                                  </div>
-                              </div>
-                              <i class="testimonial__icon sicon-quote-open"></i>
+                                <div class="testimonial__avatar">
+                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.avatar }}"
+                                         alt="{{ item.name }}"
+                                         class="lazy w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1 testimonial__text">
+                                    <p class="leading-6 mb-2 mt-4 sm:mt-0">{{ item.text }}</p>
+                                    <div class="flex flex-col lg:flex-row justify-center lg:justify-between items-center">
+                                        <div class="testimonial__info">
+                                            <h4 class="font-bold text-xs xs:text-sm">{{ item.name }}</h4>
+                                        </div>
+                                        <div class="testimonial__rating text-sm">
+                                            <salla-rating-stars size="small"
+                                                                value="{{ item.stars }}"></salla-rating-stars>
+                                        </div>
+                                    </div>
+                                </div>
+                                <i class="testimonial__icon sicon-quote-open"></i>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-            </div> #}
-
-           
-    
+            </div>
+        </salla-slider>
     </div>
 </section>

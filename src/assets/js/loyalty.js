@@ -1,5 +1,5 @@
 import BasePage from './base-page';
-import * as SliderHelper from "./partials/slider-helper";
+
 class Loyalty extends BasePage {
     onReady() {
         let count = app.element(".count-anime")?.dataset?.count || 0;
@@ -36,19 +36,7 @@ class Loyalty extends BasePage {
                 return i * 100;
             },
         }, '-=3200')
-
-        this.initiateSliders();
-    }
-
-    initiateSliders() {
-        (async () => {
-            await customElements.whenDefined('salla-slider');
-            const sliders = document.querySelectorAll('salla-slider');
-            sliders.forEach(slider => {
-                SliderHelper.handleSliderNavigation(slider);
-            });
-        })();
     }
 }
 
-Loyalty.initiateWhenReady('Loyalty');
+Loyalty.initiateWhenReady();

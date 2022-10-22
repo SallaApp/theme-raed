@@ -1,14 +1,12 @@
 import 'lite-youtube-embed';
 import BasePage from './base-page';
 import Fslightbox from 'fslightbox';
-import * as SliderHelper from "./partials/slider-helper";
 import ProductOptions from './partials/product-options';
 
 window.fslightbox = Fslightbox;
 
 class Product extends BasePage {
     onReady() {
-        this.initiateSliders();
         new ProductOptions();
 
         app.watchElements({
@@ -43,15 +41,6 @@ class Product extends BasePage {
             div.style = `max-height:${div.scrollHeight}px`;
         }) || e.target.remove());
     }
-    initiateSliders() {
-        (async () => {
-            await customElements.whenDefined('salla-slider');
-            const sliders = document.querySelectorAll('salla-slider');
-            sliders.forEach(slider => {
-                SliderHelper.handleSliderNavigation(slider);
-            });
-        })();
-    }
 }
 
-Product.initiateWhenReady('Product', ['product.single']);
+Product.initiateWhenReady(['product.single']);

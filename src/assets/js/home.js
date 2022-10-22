@@ -1,41 +1,12 @@
 import "lite-youtube-embed";
 import BasePage from "./base-page";
 import Lightbox from "fslightbox";
-import * as SliderHelper from "./partials/slider-helper";
 window.fslightbox = Lightbox;
 
 class Home extends BasePage {
     onReady() {
-        this.initiateSliders();
         this.initFeaturedTabs();
         this.initCountdown();
-    }
-
-    initiateSliders() {
-        (async () => {
-            await customElements.whenDefined('salla-slider');
-            const sliders = document.querySelectorAll('salla-slider');
-            sliders.forEach(slider => {
-                if (slider.id == 'photos-slider') {
-                    setTimeout(() => {
-                        slider?.getSlides().then(async slides => {
-                            if (slides?.length > 2) slider?.slideTo(1, 100, false);
-                        });
-                    }, 500);
-                }
-                if (slider.id === 'testimonials-slider') {
-                    setTimeout(() => {
-                        if (window.innerWidth > 1024) slider?.slideTo(1, 100, false);
-                    }, 500);
-                }
-            
-                SliderHelper.handleSliderNavigation(slider);
-            });
-            const productsSlider = document.querySelector('salla-slider#products-slider');
-            if(productsSlider.querySelector('.swiper').classList.contains('swiper-initialized')){
-                salla.event.dispatch('swiper::loaded');
-            }
-        })();
     }
 
     /**
@@ -98,4 +69,4 @@ class Home extends BasePage {
     };
 }
 
-Home.initiateWhenReady('Home',['index']);
+Home.initiateWhenReady(['index']);

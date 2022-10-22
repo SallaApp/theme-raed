@@ -17,33 +17,20 @@
 #}
 
 <section id="offer-slider" class="relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
-    <div class="center-between mb-9">
-        <span class="text-[200px] font-normal text-red-50 absolute leading-none -top-4 right-12 -z-1">%</span>
+    <salla-slider type="carousel" class="default-slider slider-layout s-slider-controls-top" data-id="offer-slider">
+        <div class="center-between mb-9">
+            <span class="text-[200px] font-normal text-red-50 absolute leading-none -top-4 right-12 -z-1">%</span>
 
-        <div>
-            <h2 class="s-block__title offer">{{ offer.name }}</h2>
-            <p class="pe-16 mt-2">{{ offer.description|raw }}</p>
-        </div>
-
-        {# Slider Nav btns && show all btn #}
-        <div class="flex items-center">
-            <div class="hidden sm:flex space-x-reverse space-x-1" dir="rtl">
-                <button aria-label="Previous Slide" class="slider-prev btn--md-arrow">
-                    <i class="sicon-keyboard_arrow_right"></i>
-                </button>
-                <button aria-label="Next Slide" class="slider-next btn--md-arrow">
-                    <i class="sicon-keyboard_arrow_left"></i>
-                </button>
+            <div>
+                <h2 class="s-block__title offer">{{ offer.name }}</h2>
+                <p class="pe-16 mt-2">{{ offer.description|raw }}</p>
             </div>
         </div>
-    </div>
 
-    {# Swiper #}
-    <div class="swiper default-slider slider-layout" data-id="offer-slider">
-        <div class="swiper-wrapper flex">
+        <div slot="items">
             {% if offer.categories|length %}
                 {% for category in offer.categories %}
-                    <div class="swiper-slide slide--one-sixth">
+                    <div class="slide--one-sixth">
                         <a href="{{ category.url }}" class="slide--cat-entry">
                             <i class="{{ category.icon }}"></i>
                             <h4>{{ category.name }}</h4>
@@ -52,14 +39,14 @@
                 {% endfor %}
             {% elseif offer.products|length %}
                 {% for product in offer.products %}
-                    <div class="swiper-slide h-auto slide--one-fourth">
+                    <div class="h-auto slide--one-fourth">
                         {% include 'pages.partials.product.card' %}
                     </div>
                 {% endfor %}
 
             {% elseif offer.discounts_table|length %}
                 {% for discount in offer.discounts_table %}
-                    <div class="swiper-slide slide--one-fourth">
+                    <div class="slide--one-fourth">
                         <div class="slide--offer-entry">
                             <div class="p-3 flex-grow flex flex-col justify-center w-full">
                                 <p class="mb-1">{{ trans('pages.offer.buy_quantity_and_take', {quantity:discount.quantity_text, price:''})|number }}</p>
@@ -76,5 +63,5 @@
                 {% endfor %}
             {% endif %}
         </div>
-    </div>
+    </salla-slider>
 </section>

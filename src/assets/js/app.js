@@ -8,13 +8,10 @@ class App extends AppHelpers {
   constructor() {
     super();
     window.app = this;
-
-    document.addEventListener('twilight::ready', () => this.loadTheApp());
   }
 
   loadTheApp() {
     this.initiateNotifier();
-    this.initiateLazyLoad();
     this.initiateMobileMenu();
     this.initiateStickyMenu();
     this.initAddToCart();
@@ -27,6 +24,8 @@ class App extends AppHelpers {
     initTootTip();
 
     salla.comment.event.onAdded(() => window.location.reload());
+
+    document.dispatchEvent(new CustomEvent('theme::ready'));
 
     this.log('Theme Loaded 🎉');
   }
@@ -84,30 +83,6 @@ class App extends AppHelpers {
 
     this.onClick("a[href='#mobile-menu']", event => event.preventDefault() || drawer.close() || drawer.open());
     this.onClick(".close-mobile-menu", event => event.preventDefault() || drawer.close());
-  }
-
-  initiateLazyLoad() {
-    let imgObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        let src;
-        if (!entry.isIntersecting || !(src = entry.target.dataset.src)) {
-          return;
-        }
-        // assign image source to src attribute
-        try {
-          entry.target.classList.contains('lazy-background')
-            ? entry.target.style.backgroundImage = `url('${src}')`
-            : entry.target.src = src;
-        } catch (e) {
-          salla.log(`Failed to load image (${src})!`, e.message);
-        }
-        app.toggleElementClassIf(entry.target, 'loaded', 'lazy-load lazy-background', () => true);
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0, trackVisibility: true, delay: 100, rootMargin: "250px 250px 250px 250px" });
-    window.LazyLoad = () => document.querySelectorAll(".lazy-load, .lazy-background").forEach(entry => imgObserver.observe(entry));
-    LazyLoad(); //fire it for the first time;
-    salla.infiniteScroll.event.onAppend(LazyLoad); //fire it after each load more request;
   }
 
   initiateStickyMenu() {
@@ -284,4 +259,12 @@ class App extends AppHelpers {
   }
 }
 
-new App;
+/**
+ * sometime twilight sdk loaded faster than this file,
+ * So in that case we'll load the app immediate
+ */
+if (typeof Salla !== 'undefined') {
+  (new App).loadTheApp()
+} else {
+  document.addEventListener('twilight::ready', () => (new App).loadTheApp());
+}

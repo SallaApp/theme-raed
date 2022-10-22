@@ -24,9 +24,6 @@ salla-slider{
     .swiper-slide{
       @apply relative rounded-md bg-white ring-1 ring-inset ring-gray-100;
     }
-    .btn--md-white-arrow{
-      z-index: 2;
-    }
     salla-button.btn--wishlist{
       @apply absolute rtl:right-4 ltr:left-4 bottom-4 z-[2] sm:hidden;
     }
@@ -40,12 +37,72 @@ salla-slider{
     @apply w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-[5px] sm:px-2.5;
   }
 
+
   // Fix Flickering in Safari 
   .swiper-slide{
     -webkit-transform: translateZ(0);
     -webkit-backface-visibility: hidden;
   }
+
+  &.s-slider-controls-top {
+    .s-slider-button-prev,.s-slider-button-next  {
+      @apply transition inline-flex items-center justify-center border border-gray-300 fill-gray-500 text-gray-500 rounded-full w-10 h-10;
+
+      button {
+        @apply border-gray-300;
+      }
+
+      &:hover {
+        @apply border-primary;
+
+        svg {
+          @apply fill-primary;
+        }
+      }
+
+      &:not(:disabled) {
+        @apply hover:text-primary hover:border-primary;
+      }
+
+      svg {
+        @apply fill-gray-500;
+      }
+    }
+
+    .s-slider-button-prev {
+      @apply top-0 rtl:left-0 ltr:right-0 #{!important};
+    }
+
+    .s-slider-button-next {
+        @apply top-0 rtl:left-12 rtl:right-auto ltr:right-12 ltr:left-auto #{!important};
+    }
+  }
+
+  &.s-slider-controls-transparent {
+    .s-slider-button-prev,.s-slider-button-next  {
+      button {
+        @apply bg-transparent;
+      }
+
+      &:hover {
+        @apply border-primary;
+
+        svg {
+          @apply fill-primary;
+        }
+      }
+
+      &:not(:disabled) {
+        @apply hover:text-primary hover:border-primary;
+      }
+
+      svg {
+        @apply fill-neutral-50;
+      }
+    }
+  }
 }
+
 
 .home-slider {
   &__slide {
@@ -58,9 +115,6 @@ salla-slider{
         opacity: 0;
       }
     }
-  }
-  .btn--md-white-arrow{
-    z-index: 2;
   }
   // Photos block slider
   &.photos-slider {
@@ -123,6 +177,16 @@ salla-slider{
     @media (min-width: 1024px){
       margin-left: -200px;
       margin-right: -200px;
+    }
+
+    @media (min-width: 1024px){
+      .s-slider-button-prev {
+        margin-left: 200px;
+      }
+
+      .s-slider-button-next {
+        margin-right: 200px;
+      }
     }
   }
 
@@ -214,28 +278,6 @@ salla-slider{
       &__rating,
       &__text p{
         display: block;
-      }
-    }
-  }
-
-  // navigation arrows
-  .btn--md-white-arrow {
-    @apply hidden lg:flex translate-y-1/2;
-    right: 17%;
-    top: 35%;
-    z-index: 2;
-    &.slider-next {
-      @apply start-auto;
-      left: 17%;
-    }
-
-    .ltr &{
-      left: 17%;
-      right: auto;
-
-      &.slider-next {
-        right: 17%;
-        left: auto
       }
     }
   }
