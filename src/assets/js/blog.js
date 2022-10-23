@@ -27,4 +27,4 @@ class Blog extends BasePage {
     }
 }
 
-Blog.intiateWhenReady('Blog',['blog.index']);
+Blog.initiateWhenReady('Blog',['blog.index']);
