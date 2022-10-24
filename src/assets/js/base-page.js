@@ -15,7 +15,7 @@ class BasePage {
  * Because we merged multi classes into one file, there is no need to initiate all of them
  */
 BasePage.initiateWhenReady = function (className, allowedPages = null) {
-    document.addEventListener('twilight::ready', () => {
+    salla.onReady(() => {
         if (allowedPages && !allowedPages.includes(salla.config.get('page.slug'))) {
             app.log(className + ' Skiped.');
             return;
