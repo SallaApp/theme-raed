@@ -19,7 +19,7 @@ export default class AppHelpers {
     element?.classList.add(...(isClasses1 ? classes1 : classes2));
     return this;
   }
-  
+
   /**
    * @param {string|HTMLElement} selector
    * @return {null|HTMLElement}
