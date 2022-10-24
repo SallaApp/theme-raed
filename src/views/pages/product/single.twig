@@ -214,14 +214,15 @@
                     </div>
                 {% endif %}
 
-                <div class="flex space-s-3"> 
+                <div class="flex space-s-3">
                     <salla-social-share class="hidden sm:inline-flex mb-5"></salla-social-share>
 
-                    <salla-button class="btn--wishlist animated hidden sm:inline-flex"
-                      data-id="{{ product.id }}" 
-                      onclick="salla.wishlist.toggle({{ product.id }})" 
-                      shape="icon" 
-                      fill="outline" 
+                    <salla-button
+                      class="btn--wishlist animated hidden sm:inline-flex"
+                      data-id="{{ product.id }}"
+                      onclick="salla.wishlist.toggle({{ product.id }})"
+                      shape="icon"
+                      fill="outline"
                       color="light">
                         <i class="sicon-heart"></i>
                     </salla-button>
@@ -249,6 +250,26 @@
 
                 {# Installment Methods #}
                 <salla-installment price="{{product.price}}"></salla-installment>
+
+                {% if product.show_availability %}
+                    <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+                        <div class="center-between">
+                            <label class="flex items-center text-base">
+                                <span class="sicon-location me-1"></span>
+                                <span class="inline-block">{{ trans('pages.products.availability') }}</span>
+                            </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                                <div class="flex space-s-3">
+                                    <a href="#!" onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
+                                       class="group text-primary flex items-center justify-center">
+                                        <span>{{ trans('pages.products.select_branch') }}</span>
+                                        <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onchange="salla.product.getPrice(new FormData(event.currentTarget))"

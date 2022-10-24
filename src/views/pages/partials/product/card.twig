@@ -38,8 +38,8 @@ view options:
 
     {# content #}
     <div class="{{ is_horizontal ? 'flex-1' : ''}} p-3 sm:p-5 flex flex-col relative donating-wrap">
-        {% if is_special %}
-            <div data-quantity="{{ product.quantity  }}" data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
+        {% if is_special and product.quantity %}
+            <div data-quantity="{{ product.quantity }}" data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
                 <span>
                     <b id="staProductQty" title="{{ product.quantity|number  }}" data-quantity="{{ product.quantity }}">{{ product.quantity|number }}</b>
                     {{ trans('pages.products.remained') }}
