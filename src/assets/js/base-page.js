@@ -21,6 +21,7 @@ BasePage.initiateWhenReady = function (className, allowedPages = null) {
             return;
         }
 
+
         window.pageClass = new this;
         pageClass.onReady();
         pageClass.registerEvents();
