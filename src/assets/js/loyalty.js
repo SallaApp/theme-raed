@@ -39,4 +39,4 @@ class Loyalty extends BasePage {
     }
 }
 
-Loyalty.initiateWhenReady();
+Loyalty.initiateWhenReady(['loyalty']);
