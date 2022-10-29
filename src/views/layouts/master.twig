@@ -105,7 +105,7 @@
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
 </head>
-<body id="app" class="{% hook 'body:classes' %} bg-gray-50 
+<body id="app" class="{% hook 'body:classes' %} bg-gray-50
   {{ theme.settings.get('footer_is_dark') ? ' footer-is-dark' : ' footer-is-light' }}
   {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
   {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
@@ -132,9 +132,6 @@
 {% endif %}
 
 <salla-search></salla-search>
-{% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-    <salla-localization-modal></salla-localization-modal>
-{% endif %}
 
 {% block scripts %}{% endblock %}
 </body>

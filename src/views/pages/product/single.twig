@@ -245,7 +245,15 @@
                         {% endif %}
                     </div>
                 {% endif %}
-
+                {% if product.sku %}
+                    <div class="mb-4 flex justify-between sm:grid sm:grid-cols-3 border rounded-md px-4 py-2">
+                                <div class="flex items-center">
+                                    <i class="sicon-barcode mx-1"></i>
+                                    {{ trans('pages.products.sku') }}
+                                </div>
+                                <div class="text-unicode">{{ product.sku }}</div>
+                    </div>
+                {% endif %}
                 {% hook 'product:single.description' %}
 
                 {# Installment Methods #}
