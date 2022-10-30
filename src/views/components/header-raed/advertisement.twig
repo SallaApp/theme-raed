@@ -1,0 +1,31 @@
+{#
+| Variable                    | Type          | Description                                   |
+|-----------------------------|---------------|-----------------------------------------------|
+| advertisement               | Advertisement |                                               |
+| advertisement.id            | int           |                                               |
+| advertisement.icon          | string        | Css class                                     |
+| advertisement.title         | string        |                                               |
+| advertisement.description   | string        |                                               |
+| advertisement.url           | ?string       |                                               |
+| advertisement.close_url     | string        | * Should be client side to avoid cache issues |
+| advertisement.colors        | object        |                                               |
+| advertisement.colors.bg     | string        | Hex Color ex: #23d1b0                         |
+| advertisement.colors.text   | string        | Hex Color ex: #ffffff                         |
+| advertisement.target        | string        | `_self`, `_blank`                             |
+#}
+<div class="salla-advertisement hidden" data-id="{{ advertisement.id }}"
+     style="background-color:{{ advertisement.colors.bg }}; color:{{ advertisement.colors.text }}">
+    <div class="container center-between py-2.5">
+        <h2 class="font-bold text-sm">
+            <i class="inline-block align-middle mr-2 text-base {{ advertisement.icon }}"></i>
+            {% if advertisement.url %}
+                <a href="{{ advertisement.url }}" target='{{ advertisement.target }}'>
+                    {{ advertisement.description }}
+                </a>
+            {% else %}
+                {{ advertisement.description }}
+            {% endif %}
+        </h2>
+        <a href="#" class="px-1 ad-close sicon-cancel" aria-label="close-alert"></a>
+    </div>
+</div>

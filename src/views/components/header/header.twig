@@ -5,70 +5,118 @@
 | cart.items_count | int     |                                 |
 | cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
 #}
-<header class="store-header">
+<header class="store-header ">
     {# Top Nav #}
-    <div class="top-navbar">
-        <div class="container flex justify-between">
-            <div class="flex-1 flex items-center rtl:space-x-reverse space-x-2">
-              {# Footer Menu #}
-              {% component 'footer.menu' with {is_header:true} %}
+    <div class="top-navbar  bg-titles">
+        <div class="container flex items-center justify-between py-2 lg:py-5">
+                <div class="header-buttons flex justify-between lg:justify-start w-full lg:w-fit  items-center  lg:gap-5">
+                    <div class="flex items-center justify-between gap-3 lg:gap-5">
+                        {# Language & Currency Component #} 
+                            {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+                                <button type="button" onclick="salla.event.dispatch('localization::open')" class="header-btn btn--gray rounded">
+                                    <span class="flag iti__flag iti__{{ user.language.country_code }} rtl:ml-1.5 ltr:mr-1.5 rounded"></span>
+                                    <span class="">العربية</span>
+                                    <span class="mx-3 text-desc">|</span>
+                                    <span class="">{{ currency.symbol }}</span>
+                                </button> 
+                            {% endif %}
+                        
+                        {# city #}
+                            <button type="button"  class="header-btn btn--gray rounded flex gap-1">
+                                <span><i class="sicon-location text-sm"></i></span>
+                                <span>الرياض</span>
+                            </button>
+                            
+                        {# Search #}
+                            <button onclick="salla.event.dispatch('search::open')" class="header-btn btn--gray rounded flex lg:hidden">
+                                <i class="sicon-search text-sm"></i>
+                            </button> 
+                    </div>
 
-                <div class="header-buttons">
-                    {# Language & Currency Component #}
-                    {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                        <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray basis-0">
-                            <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
-                            | <span class="ms-2 me-1">{{ currency.symbol }}</span>
-                        </button>
-                        <salla-localization-modal></salla-localization-modal>
-                    {% endif %}
+                    <div class="flex items-center gap-4 lg:gap-8 rtl:mr-5 ltr:ml-5 justify-self-end lg:justify-self-start">
+                        {# phone Number #}
+                            <button class="flex items-center  gap-3">
+                                <span class="header-btn btn--gray rounded-full "><i class="sicon-phone text-xs ;g:text-sm"></i></span>
+                                <span class="text-zinc-500 hidden lg:flex">+966540538095</span>
+                            </button>
+
+                        {# Email #}
+                            <button class="flex items-center gap-3">
+                                <span class="header-btn btn--gray rounded-full"><i class="sicon-mail text-xs lg:text-sm"></i></span>
+                                <span class="text-zinc-500 hidden lg:flex">aster.sa8@gmail.com</span>
+                            </button>
+                    </div> 
+                </div>
+                {# Footer Menu #}
+                <div class="hidden lg:flex">
+                {% component 'footer.menu' with {is_header:true} %}
                 </div>
 
                 {# Scopes | Branches #}
+                {#
                 {% if store.scope %}
                     <button class="btn--rounded-gray"
                             onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
-                        <i class="sicon-location me-1"></i> {{ store.scope.name }}
+                        <i class="sicon-location mx-1"></i> {{ store.scope.name }}
                     </button>
                 {% endif %}
-
-                {# Search Component #}
-                {# <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray search-btn">
-                <span class="sicon-search"></span>
-                <span class="sm:hidden px-2 opacity-50">{{ trans('blocks.header.searchProducts') }}</span>
-              </button> #}
-              <div class="header-search flex-1">
-                <salla-search inline oval height="36"></salla-search>
-              </div>
+                #}
+                {#
+                    {% component 'footer.contacts' with {is_header:true} %}
+                #}
             </div>
+   
+   </div>
 
-            {% component 'footer.contacts' with {is_header:true} %}
-        </div>
-    </div>
-
-    {# Main Nav #}
-    <div id="mainnav" class="main-nav-container shadow-default bg-white">
+   
+     {# Main Nav #}
+      <div id="mainnav" class="main-nav-container fixed-pinned shadow-default bg-zinc-800 ">
         <div class="inner bg-inherit">
             <div class="container">
-                <div class="flex items-stretch justify-between relative">
-                    <div class="flex items-center">
+                <div class="flex items-stretch justify-between relative"> 
+                    <div class="flex items-center lg:gap-5">
                         <a class="lg:hidden mburger mburger--collapse leading-none" href="#mobile-menu">
-                            <i class="sicon-menu text-primary text-2xl me-2.5"></i>
+                            <i class="sicon-menu text-primary text-2xl mx-2.5"></i>
                         </a>
-                        <a class="navbar-brand" href="{{ store.url }}">
+                       
+                        <a class="navbar-brand flex items-center gap-3" href="{{ store.url }}">
                             <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }}">
                             {% if is_page('index') %}
-                              <h1 class="sr-only">{{ store.name }}</h1>
+                              <h1 class="text-white text-lg lg:text-2xl ">{{ store.name }}</h1>
                             {% else %}
-                              <h2 class="sr-only">{{ store.name }}</h2>
+                              <h2 class="text-white text-lg lg:text-2xl ">{{ store.name }}</h2>
                             {% endif %}
                         </a>
                         {% component 'header.menu' %}
                     </div>
-                    <div class="flex items-center justify-end">
-                        <salla-cart-summary class="ml-4 rtl:ml-[unset] rtl:mr-4">
-                          <i slot="icon" class="icon sicon-shopping-bag"></i>
-                        </salla-cart-summary>
+                    <div class="flex items-center justify-between gap-5">
+                            {# Search #}
+
+                        <button onclick="salla.event.dispatch('search::open')" class="btn--gray hidden lg:block search-btn w-[40px]">
+                            <i class="sicon-search lg:text-sm"></i>
+                        </button> 
+                        {# Search Component #}
+                            {# <button onclick="salla.event.dispatch('search::open')" class="btn--circle-gray search-btn">
+                            <span class="sicon-search"></span>
+                            <span class="sm:hidden px-2 opacity-50">{{ trans('blocks.header.searchProducts') }}</span>
+                        </button> #}
+
+                            {# user icon in navbar  #}
+
+                        <button class="btn--gray hidden lg:block  w-[40px]" onclick="salla.event.dispatch('login::open')">
+                            <i class="sicon-user lg:text-sm"></i>
+                        </button>
+
+                            {# salla shopping #}
+
+                        <button class="btn--gray  w-fit" >
+                           <a href="https://salla.design/dev-ajrwfcsmxxu9phih/cart" class="flex items-center gap-1">
+                                <i slot="icon" class="sicon-shopping-bag2 lg:text-sm"></i>
+                                <span class="hidden lg:block" >{{ trans('blocks.common.alSalla') }}</span>
+                                <span class="text-primary">( 150 ر.س) </span>
+                            </a>
+                        </button> 
+
                     </div>
                 </div>
             </div>
@@ -77,5 +125,5 @@
         {% if user.type=='guest' %}
             <salla-login-modal></salla-login-modal>
         {% endif %}
-    </div>
+    </div>  
 </header>
