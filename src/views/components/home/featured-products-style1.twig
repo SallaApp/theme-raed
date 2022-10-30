@@ -18,6 +18,23 @@
 #}
 {% set component_id='featured-products-style1-' ~ position %}
 <section class="s-block s-block-tabs s-block--special-products container" id="{{ component_id }}">
+    <div class="s-block__title"> 
+      <div class="right-side">
+        <h2>{{ main_product.title }}</h2>
+        {# <p>عنوان فرعي توصيفي صغير</p> #}
+      </div> 
+      <div class="tabs hide-scroll hidden lg:flex">
+          {% for section in items %}
+              <salla-button shape="link"
+                      data-target="{{ component_id }}-{{ section.id }}"
+                      data-component-id="{{ component_id }}"
+                      class="tab-trigger {{ loop.first?'is-active' : '' }}">
+                  {{ section.title }}
+              </salla-button> 
+          {% endfor %}
+      </div>
+    </div>
+
     <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
@@ -28,7 +45,7 @@
             </div>
         {% endif %}
         <div class="flex flex-col">
-            <div class="tabs hide-scroll">
+            <div class="tabs mb-4 sm:mb-8 hide-scroll lg:hidden">
                 {% for section in items %}
                     <salla-button shape="link"
                             data-target="{{ component_id }}-{{ section.id }}"
@@ -50,4 +67,4 @@
             </div>
         </div>
     </div>
-</section>
+</section> 

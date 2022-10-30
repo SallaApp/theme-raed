@@ -7,16 +7,19 @@
 #}
 <section class="s-block s-block--logos-slider s-block--full-bg bg-gray-100 pt-8 sm:pt-12 pb-8 sm:pb-20">
     <div class="container">
-        {% if(component.title or component.show_all) %}
-            <div class="center-between mb-6 sm:mb-8">
-                {% if component.title %}
-                    <h1 class="s-block__title">{{ component.title }}</h1>
-                {% endif %}
-                {% if(theme.settings.get('is_more_button_enabled')) %}
-                    <a href="{{ link('brands') }}"
-                       class="s-block__display-all"> {{ trans('blocks.home.display_all') }} </a>
-                {% endif %}
-            </div>
+    
+        {% if component.title or component.show_all %}
+          <div class="s-block__title">
+            {% if component.title %}
+              <div class="right-side">
+                <h2>{{ component.title }}</h2>
+                {# <p>عنوان فرعي توصيفي صغير</p> #}
+              </div>
+            {% endif %}
+            {% if component.show_all %}
+              <a href="{{ link('brands') }}" class="s-block__display-all"> {{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left"></i></a>
+            {% endif %}
+          </div>
         {% endif %}
 
         <div class="grid grid-cols-2 {{ component.brands|length > 5 ? 'md:grid-cols-4' : 'md:grid-cols-5' }} grid-flow-row lg:grid-flow-col gap-4 lg:gap-8">
@@ -36,3 +39,4 @@
         </div>
     </div>
 </section>
+ 

@@ -11,9 +11,14 @@
 | position          | Int    | Sorting number start from zero                                   |
 #}
 <section class="s-block s-block--banners container">
-    {% if (title) %}
-        <h2 class="s-block__title mb-6 sm:mb-8">{{ title }}</h2>
+    {% if title %}
+      <div class="s-block__title">
+        <div class="right-side">
+          <h2>{{ title }}</h2>
+        </div>
+      </div>
     {% endif %}
+    
     <div class="grid {{ items|length <= 3 ? 'one-row md:grid-cols-' ~ items|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
         {% for item in items %}
             <div class="banner-entry {{ item.text ? 'has-overlay with-hover' : '' }}">
@@ -24,4 +29,4 @@
             </div>
         {% endfor %}
     </div>
-</section>
+</section> 
