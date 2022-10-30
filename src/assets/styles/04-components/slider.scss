@@ -117,17 +117,19 @@ salla-slider{
 
 // testimonials-slider
 .s-block--testimonials{
-  .s-block__title{
-    @apply px-5 xl:px-0
+  &.container{
+    @apply p-0 lg:px-2.5;
   }
 
-  .container{
-    @apply p-0;
-  }
+  .s-slider-block__title{
+    @apply px-2.5 lg:px-0;
 
-  @media (min-width: 1024px){
-    .container{
-      max-width: 1240px;
+    &-nav{
+      @apply max-w-[88%];
+
+      button{
+        @apply bg-white border-none transition duration-300 shadow-sm shadow-gray-300 hover:shadow-md;
+      }
     }
   }
 }
@@ -249,6 +251,28 @@ salla-slider{
       }
     }
   }
+
+  // navigation arrows
+  .s-slider--nav-arrow {
+    @apply hidden lg:flex translate-y-1/2;
+    right: 17%;
+    top: 35%;
+
+    &.s-slider-next {
+      @apply start-auto;
+      left: 17%;
+    }
+
+    .ltr &{
+      left: 17%;
+      right: auto;
+
+      &.s-slider-next {
+        right: 17%;
+        left: auto
+      }
+    }
+  }
 }
 
 .best-products-slider {
@@ -276,6 +300,10 @@ salla-slider{
 
 
 /* Move theses styles to Utilities.JSON */
+.s-slider-wrapper{
+  @apply relative;
+}
+
 .s-slider-block{
   &__title{
     @apply center-between mb-4 md:mb-8;
@@ -310,6 +338,14 @@ salla-slider{
 
     &-nav{
       @apply hidden sm:flex ltr:flex-row-reverse rtl:space-x-reverse space-x-2.5 rtl:mr-6 ltr:ml-6;
+
+      .s-slider-v-centered &{
+        @apply w-full absolute left-1/2 justify-between top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[2];
+
+        button{
+          @apply pointer-events-auto;
+        }
+      }
     }
   }
 

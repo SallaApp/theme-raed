@@ -14,27 +14,13 @@
 | position           | string                    | Sorting number start from zero      |
 #}
 
-<section class="s-block s-block--testimonials overflow-hidden">
-    {# block header #}
-    <div class="s-block__title">
-      <div class="right-side">
-        <h2>{{ trans('blocks.home.testimonials') }}</h2>
-        {# <p>عنوان فرعي توصيفي صغير</p> #}
-      </div> 
-
-      {# Slider Nav btns #}
-      <div class="s-block__title-nav" dir="rtl">
-        <button aria-label="{{ trans('blocks.common.prevSlide') }}" class="slider-prev btn--nav-arrow">
-          <i class="sicon-keyboard_arrow_right"></i>
-        </button>
-        <button aria-label="{{ trans('blocks.common.nextSlide') }}" class="slider-next btn--nav-arrow">
-          <i class="sicon-keyboard_arrow_left"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="container lg:overflow-hidden">
-        <salla-slider type="testimonials" class="testimonials-slider" show-controls="true">
+<section class="s-block s-block--testimonials container overflow-hidden">
+    <div class="lg:overflow-hidden">
+        <salla-slider 
+          type="testimonials" 
+          class="testimonials-slider" 
+          block-title="{{ trans('blocks.home.testimonials') }}"
+          id="testimonials-{{ position }}-slider">
             <div slot="items">
                 {% for item in items %}
                     <div class="swiper-slide">
@@ -64,5 +50,5 @@
                 {% endfor %}
             </div>
         </salla-slider>
-    </div>
+    </div> 
 </section> 
