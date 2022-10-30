@@ -30,7 +30,11 @@ class BasePage {
  * Because we merged multi classes into one file, there is no need to initiate all of them
  */
 BasePage.initiateWhenReady = function (allowedPages = null) {
-  document.addEventListener('theme::ready', () => (new this).initiate(allowedPages))
+  if (window.app?.status === 'ready') {
+    (new this).initiate(allowedPages);
+  } else {
+    document.addEventListener('theme::ready', () => (new this).initiate(allowedPages))
+  }
 }
 
 export default BasePage;

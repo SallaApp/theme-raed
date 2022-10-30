@@ -27,6 +27,7 @@ class App extends AppHelpers {
 
     document.dispatchEvent(new CustomEvent('theme::ready'));
 
+    this.status = 'ready'
     this.log('Theme Loaded 🎉');
   }
 
