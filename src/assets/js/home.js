@@ -115,4 +115,4 @@ class Home extends BasePage {
   };
 }
 
-Home.initiateWhenReady('Home',['index']);
+Home.initiateWhenReady(['index']);

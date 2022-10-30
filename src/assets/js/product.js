@@ -76,4 +76,4 @@ class Product extends BasePage {
     }
 }
 
-Product.initiateWhenReady('Product', ['product.single']);
+Product.initiateWhenReady(['product.single']);

@@ -24,4 +24,4 @@ class Loyalty extends BasePage {
     }
 }
 
-Loyalty.initiateWhenReady('Loyalty');
+Loyalty.initiateWhenReady(['loyalty']);
