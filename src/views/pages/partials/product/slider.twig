@@ -1,25 +1,13 @@
 {% if products|length %}
-    <salla-slider type="carousel" auto-play
-                  class="slider-layout {{ display_all_url ? '' : 's-slider-controls-top' }}"
-                  data-id="{{ type }}-slider">
-        <div class="center-between mb-6 sm:mb-8">
-            {# Block Title #}
-            <div>
-                <h2 class="s-block__title">{{ title }}</h2>
-                {% if sub_title %} <p class="pe-16 mt-2">{{ sub_title|raw }}</p> {% endif %}
-            </div>
-
-            {# Slider Nav btns && show all btn #}
-            <div class="flex items-center">
-                {% if display_all_url %}
-                    <a href="{{ display_all_url }}"
-                       class="text-sm font-bold text-primary hover:opacity-80 sm:me-3">{{ trans('blocks.home.display_all') }}</a>
-                {% endif %}
-            </div>
-        </div>
-
+    <salla-slider  
+      type="carousel" 
+      auto-play
+      block-title="{{ title }}"
+      block-subTitle="{{ sub_title|raw }}"
+      display-all-url="{{display_all_url}}"
+      id="{{ type }}-slider">
         <div slot="items">
-            {% for product in products %}
+            {% for product in products %} 
                 <div class="slide--one-fourth">
                     {% include 'pages.partials.product.card' %}
                 </div>
@@ -27,3 +15,4 @@
         </div>
     </salla-slider>
 {% endif %}
+ 
