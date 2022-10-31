@@ -8,7 +8,7 @@
 | component.products    | Product[] *Collection | @see views/pages/product.twig                                                |
 | position              | int                   | Sorting number start from zero                                               |
 #}
-<section id="slider-with-bg-{{ position }}" class="s-block s-block--slider-with-bg s-block--full-bg">
+<section class="s-block s-block--slider-with-bg s-block--full-bg">
     <div class="slider-bg" style="background-image: url('{{ component.background }}');">
         <div class="container pt-8 sm:pt-20 relative">
             <div>
@@ -22,15 +22,12 @@
         </div>
     </div>
 
-    <div class="container -mt-62 relative">
-        <salla-slider type="carousel" auto-play class="slider-layout s-slider-controls-top s-slider-controls-transparent">
-            <div class="center-between mb-6 sm:mb-8 pe-5 md:px-0">
-                {# Block Title #}
-                <a href="{{ link('latest-products') }}" class="block btn btn--outline btn--rounded-full light grow-0">
-                    {{ trans('blocks.home.display_all') }}
-                </a>
-            </div>
-
+    <div class="container -mt-62 relative overflow-hidden">
+        <salla-slider 
+          type="carousel"
+          block-title=" "
+          display-all-url="{{ link('latest-products') }}"
+          id="slider-with-bg-{{ position }}">
             <div slot="items">
                 {% for product in component.products %}
                     <div class="slide--one-fourth">
@@ -41,3 +38,4 @@
         </salla-slider>
     </div>
 </section>
+ 

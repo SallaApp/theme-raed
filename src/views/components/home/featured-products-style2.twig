@@ -33,8 +33,12 @@
       <div class="tabs-wrapper">
         {% for section in items %}
             <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
-                {% if is_slider %}
-                    <salla-slider type="carousel" auto-play class="default-slider slider-layout">
+                {% if is_slider %} 
+                    <salla-slider 
+                      type="carousel"
+                      controls-outer
+                      id="section-{{ section.id }}-slider"
+                      class="default-slider slider-layout">
                         <div slot="items">
                             {% for product in section.products %}
                                 <div class="slide--one-fourth">
@@ -56,4 +60,4 @@
         {% endfor %}
       </div>
   </div>
-</section>
+</section> 

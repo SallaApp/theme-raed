@@ -8,11 +8,15 @@
 | component.slides               | object[] | list of slides                                                               |
 | position                       | int      | Sorting number start from zero                                               |
 #}
-<section class="s-block home-slider s-block--hero-slider s-block--full-bg wide-placeholder">
-    <salla-slider id="main-slider" class="home-slider main-slider" auto-play type="fullscreen">
+<section class="s-block home-slider s-block--hero-slider s-block--full-bg wide-placeholder"> 
+    <salla-slider 
+      id="main-slider-{{ position }}" 
+      class="home-slider main-slider" 
+      auto-play 
+      type="fullscreen">
         <div slot="items">
             {% for slide in component.slides %}
-                <div class="swiper-lazy-wrap">
+                <div class="swiper-lazy-wrap w-full min-h-[300px] lg:min-h-[528px] bg-dark">
                     <div data-background="{{ slide.image }}" class="swiper-lazy"></div>
                     <div class="flex-center container pb-16 sm:pb-0 home-slider__content relative h-full">
                         <div class=" w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
@@ -25,4 +29,4 @@
             {% endfor %}
         </div>
     </salla-slider>
-</section>
+</section> 

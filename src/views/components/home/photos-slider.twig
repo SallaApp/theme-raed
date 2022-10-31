@@ -8,14 +8,22 @@
 | items[].image.alt | string  |                                                                  |
 | position          | Int     | Sorting number start from zero                                   |
 #}
-<section id="photos-{{ position }}" class="s-block s-block--photos-slider {{ is_repeated?'repeated-block':'' }}">
-    <salla-slider type="carousel" class="home-slider photos-slider" centered auto-play pagination>
+<section class="s-block s-block--photos-slider {{ is_repeated?'repeated-block':'' }}">
+    <salla-slider 
+      type="carousel" 
+      class="home-slider photos-slider"
+      centered 
+      auto-play 
+      pagination 
+      id="photos-{{ position }}-slider"> 
       <div slot="items">
         {% for item in items %}
-          <a href="{{item.url}}" class="swiper-slide">
-            <img loading="eager" src="{{ item.image.url }}" class="w-full object-contain"></img>
-          </a>
+          <div class="swiper-slide">
+            <a href="{{item.url}}">
+              <img loading="eager" src="{{ item.image.url }}" class="w-full object-contain rounded-md"></img>
+            </a>
+          </div>
         {% endfor %}
       </div>
     </salla-slider>
-</section>
+</section> 

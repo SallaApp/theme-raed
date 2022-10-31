@@ -76,13 +76,14 @@
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
-                {% set has_many_images = product.images|length > 1 %}
-                <salla-slider id="details-slider-{{ product.id }}" class="details-slider rounded-md" type="thumbs"
-                              show-thumbs-controls="false">
-                    {% if(product.promotion_title) %}
-                        <div class="absolute z-10 top-4 start-0">
-                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
-                        </div>
+                {% set has_many_images = product.images|length > 1 %} 
+                <salla-slider 
+                  id="details-slider-{{ product.id }}" 
+                  class="details-slider rounded-md" 
+                  type="thumbs"
+                  show-thumbs-controls="false">
+                    {% if product.promotion_title %}
+                      <div class="promotion-title">{{ product.promotion_title }}</div>
                     {% endif %}
 
                     <salla-button
@@ -124,6 +125,20 @@
                                          class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
                                 {% endif %}
                             </a>
+
+                            {% if image.three_d_image_url %}
+                                <div slot="action" class="switcher-3d-view">
+                                  <label class="s-toggle">
+                                    <input id="activate_3d_view"
+                                            class="s-toggle-input"
+                                            type="checkbox"
+                                            data-cover-url="{{ image.url }}"
+                                            data-model-url="{{ image.three_d_image_url }}">
+                                    <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
+                                    </div>
+                                  </label>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
 
@@ -148,6 +163,32 @@
                         </div>
                     {% endif %}
                 </salla-slider>
+
+                {# 3D image viewer #}
+                {% if product.has_3d_image %}
+                  <div id="model-viewer-wrapper" class="model-viewer-wrapper hidden" dir="ltr">
+                      <model-viewer
+                              id="model_viewer"
+                              alt="Product 3D Model"
+                              class="model-viewer"
+                              reveal="auto"
+                              data-js-focus-visible
+                              camera-controls>
+                          <div class="model-viewer__poster" slot="poster"></div>
+                      </model-viewer>
+                      <div slot="action" class="switcher-3d-view">
+                          <label class="s-toggle">
+                            <input id="deactivate_3d_view"
+                                  class="s-toggle-input"
+                                  type="checkbox"
+                                  data-cover-url="{{ image.url }}"
+                                  data-model-url="{{ image.three_d_image_url }}">
+                            <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
+                          </div>
+                        </label>
+                      </div>
+                  </div>
+                {% endif %}
             </div>
 
             <div class="main-content w-full md:w-2/4 md:pb-16">
@@ -359,3 +400,4 @@
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     {% endif %}
 {% endblock %}
+ 
