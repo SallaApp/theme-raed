@@ -16,4 +16,4 @@ class Order extends BasePage {
     }
 }
 
-Order.initiateWhenReady('Order', ['customer.orders.single']);
+Order.initiateWhenReady(['customer.orders.single']);

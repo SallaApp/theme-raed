@@ -25,4 +25,4 @@ class Profile extends BasePage {
     }
 }
 
-Profile.initiateWhenReady('Profile', ['customer.profile']);
+Profile.initiateWhenReady( ['customer.profile']);

@@ -41,4 +41,4 @@ class Wishlist extends BasePage {
     }
 }
 
-Wishlist.initiateWhenReady('Wishlist');
+Wishlist.initiateWhenReady();

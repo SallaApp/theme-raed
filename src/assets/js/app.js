@@ -10,16 +10,9 @@ class App extends AppHelpers {
     this.isThemeApp = true;//to make sure that window.app, is this class
     window.app = this;
 
-    this.status = 'initiated';
     salla.onReady(() => this.loadTheApp());
   }
-
-  isThemeAppReady() {
-    return this.status === 'ready';
-  }
-
   loadTheApp() {
-    this.status = 'loading';
     this.initiateNotifier();
     this.initiateLazyLoad();
     this.initiateMobileMenu();
@@ -35,8 +28,9 @@ class App extends AppHelpers {
 
     salla.comment.event.onAdded(() => window.location.reload());
 
-    this.log('Theme Loaded 🎉');
     this.status = 'ready';
+    document.dispatchEvent(new CustomEvent('theme::ready'));
+    this.log('Theme Loaded 🎉');
   }
 
   log(message) {
