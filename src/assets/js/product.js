@@ -3,16 +3,26 @@ import BasePage from './base-page';
 import Fslightbox from 'fslightbox';
 import ProductOptions from './partials/product-options';
 
+import viewThreeDModel from './partials/modelViewer';
+
 window.fslightbox = Fslightbox;
 
 class Product extends BasePage {
     onReady() {
         new ProductOptions();
+        this.initThreeDModel();
 
         app.watchElements({
             totalPrice: '.total-price',
             beforePrice: '.before-price',
         });
+    }
+
+    initThreeDModel() {
+      const threeDToggle = document.getElementById("activate_3d_view");
+      if (typeof threeDToggle != "undefined" && threeDToggle != null) {
+        viewThreeDModel();
+      }
     }
 
     registerEvents() {

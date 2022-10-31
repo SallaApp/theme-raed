@@ -191,7 +191,7 @@
   }
 }
 
-// Digital Rating(SVG)------------------------------------------
+// Digital Rating(SVG)---------------------------
 .pie-wrapper {
   @apply w-[72px] h-[72px] absolute end-5 text-primary flex items-center justify-center;
 
@@ -277,4 +277,36 @@
 }
 .product__description ul , .product__description li{
   list-style: inherit !important;
+}
+
+
+
+// 3d Image Viewer ------------------------------
+.model-viewer-wrapper {
+  @apply relative mb-4 md:mb-0 w-full;
+}
+
+.switcher-3d-view {
+  @apply absolute top-5 rtl:left-4 ltr:right-4;
+
+  // .has-calories-badge &{
+  //   @apply top-auto bottom-5;
+  // }
+}
+
+.model-viewer {
+  @apply w-full h-full;
+
+  &__poster {
+    @apply absolute inset-0 bg-contain bg-no-repeat bg-center;
+  }
+}
+
+.s-toggle .s-toggle-switcher-has-text:before {
+  @apply content-[attr(data-switcher-text)] font-bold text-center text-gray-400 text-xs leading-[22px];
+  font-family: arial, serif;
+}
+
+.s-toggle .s-toggle-input:checked+div.s-toggle-switcher-bg-white:before {
+  @apply text-gray-600 border-white bg-white;
 }
