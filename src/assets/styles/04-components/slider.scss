@@ -75,30 +75,37 @@ salla-slider{
       }
     }
   }
+}
 
+// Photos block slider
+salla-slider.photos-slider {
+  .swiper{
+    @apply w-full mx-0;
+  }
 
-  // Photos block slider
-  &.photos-slider {
-    .swiper-slide {
-      @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
+  &:not(.hydrated) > div {
+    @apply justify-center;
+  }
+
+  .swiper-slide {
+    @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
+  }
+
+  // pagination
+  .swiper-pagination-bullet {
+    width: 20px;
+    border-radius: 5px;
+    background: #fff;
+    opacity: 0.3;
+
+    &-active {
+      opacity: 1;
+      background-color: var(--color-primary);
     }
+  }
 
-    // pagination
-    .swiper-pagination-bullet {
-      width: 20px;
-      border-radius: 5px;
-      background: #fff;
-      opacity: 0.3;
-
-      &-active {
-        opacity: 1;
-        background-color: var(--color-primary);
-      }
-    }
-
-    .swiper-pagination-bullets.swiper-pagination-horizontal{
-      @apply bottom-3 sm:bottom-6; 
-    }
+  .swiper-pagination-bullets.swiper-pagination-horizontal{
+    @apply bottom-3 sm:bottom-6; 
   }
 }
 
@@ -283,238 +290,4 @@ salla-slider{
 //general
 .swiper-button-disabled {
   opacity: 0.5;
-}
-
-
-
-
-
-
-
-
-/* Move theses styles to Utilities.JSON */
-.s-slider-wrapper{
-  @apply relative;
-}
-
-.s-slider-block{
-  &__title{
-    @apply center-between mb-4 md:mb-8 max-w-[1280px] mx-auto;
-
-    &-right{
-      @apply rtl:pl-8 ltr:pr-8;
-    }
-
-    &-left{
-      @apply flex items-center justify-end rtl:space-x-reverse space-x-6;
-    }
-
-    h2{ 
-      @apply rtl:pl-8 ltr:pr-8 text-lg font-bold relative leading-[1.2];
-    }
-
-    p{
-      @apply text-sm opacity-60 mt-2 line-clamp-1 sm:line-clamp-2 rtl:md:pl-16 ltr:md:pr-16;
-    }
-
-    .offer-slider &{
-      @apply mb-5; 
-
-      h2{
-        @apply text-lg;
-      }
-
-      p{
-        @apply mt-1 leading-6 line-clamp-none;
-      }
-    }
-
-    &-nav{
-      @apply flex ltr:flex-row-reverse rtl:space-x-reverse space-x-2.5 rtl:mr-6 ltr:ml-6;
-
-      .carousel-slider &{
-        @apply hidden lg:flex;
-      }
-
-      .s-slider-v-centered &{
-        @apply w-[94%] absolute left-1/2 justify-between top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[2] mx-0;
-
-        button{
-          @apply pointer-events-auto border-none bg-white hover:shadow shadow-lg shadow-black/30;
-
-          &.swiper-button-disabled{
-            @apply opacity-100 shadow-none;
-
-            svg{
-              @apply fill-gray-300;
-            }
-          }
-        }
-      }
-
-      .s-slider-controls-outer &{
-        @apply w-[97%];
-
-        @media (min-width: 1400px){
-          @apply w-[calc(100%+32px)] 
-        }
-      }
-    }
-  }
-
-  &__display-all{
-    @apply inline-block text-sm font-bold text-primary hover:opacity-80;
-  }
-}
-
-.s-slider--nav-arrow {
-  @apply transition duration-300 inline-flex items-center justify-center border border-gray-300 rounded-full w-10 h-10 text-xl;
-
-  svg{
-    @apply w-[22px] fill-gray-500;
-  }
-
-  &:not(:disabled) {
-    @apply hover:border-primary;
-
-    &:hover svg{
-      @apply fill-primary;
-    }
-  }
-}
-
-// carousel-slider 
-salla-slider:not(.hydrated),
-.carousel-slider{
-  @apply visible;
-}
-
-// carousel sliders
-salla-slider[type]:not(.hydrated) > div,
-salla-slider[type]:not(.hydrated) .swiper > div > div,
-.carousel-slider .swiper{
-  @apply flex -mx-[5px] w-[calc(100%+10px)] sm:px-0 rtl:pl-12 ltr:pr-12 rtl:lg:pl-0 ltr:lg:pr-0;
-}
-
-salla-slider[type]:not(.hydrated) > div > div,
-salla-slider[type]:not(.hydrated) .swiper > div > div > div,
-.carousel-slider .swiper-wrapper > div {
-  @apply shrink-0 px-[5px] sm:px-2.5;
-  
-}
-// fullwidth sliders
-salla-slider:not([type="carousel"]):not([type="thumbs"]),
-salla-slider.photos-slider{
-  &:not(.hydrated){ 
-    > div {
-      @apply mx-0 px-0 w-full;
-    }
-
-    > div > div{
-      @apply p-0;
-
-      &:nth-child(n+2){
-        @apply hidden;
-      }
-    }
-  }
-}
-
-salla-slider[type="carousel"]:not(.hydrated){
-  > div > div:nth-child(n+5){
-    @apply hidden;
-  }
-}
-
-.s-slider-has-notitle{
-  .s-slider-block__title{
-    @apply mb-0;
-  }
-}
-
-// photos-slider
-salla-slider.photos-slider{
-  .swiper{
-    @apply w-full mx-0;
-  }
-  
-  &:not(.hydrated){
-    > div {
-      @apply justify-center;
-    }
-  }
-}
-
-// thumbs slider
-salla-slider div[slot="thumbs"]{
-  @apply mt-2.5;
-
-  > div {
-    @apply h-20 px-[5px];
-  }
-}
-
-.s-slider-thumbs{
-  .s-slider-thumbs-container{
-    @apply -mx-[5px] w-[calc(100%+20px)] px-[5px] sm:px-0 pe-12 lg:pe-0 lg:w-[calc(100%+16px)];
-
-    .swiper-slide{
-      @apply w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 mx-[5px] p-0 cursor-pointer h-16 md:h-20 transition-opacity hover:opacity-80 duration-300 bg-gray-50 rounded-md #{!important};
-
-      &:after{
-        @apply transition-shadow duration-300 content-[''] absolute top-0 left-0 h-full w-full rounded-md z-1 ring-1 ring-gray-200 ring-inset;
-      }
-
-      &.swiper-slide-thumb-active:after{
-        @apply ring-2 ring-primary;
-      }
-    }
-  }
-}
-
-// offer modal component
-.s-offer-modal-slider{
-  .s-slider-block__title-nav{
-    @apply w-[calc(100%+90px)];
-  }
-
-  .s-offer-modal-product{
-    @apply w-[33.333%] min-w-[200px];
-  }
-
-  .s-offer-modal-cat-item{
-    @apply max-w-[180px] bg-white rounded-md h-36 p-3 text-center flex flex-col items-center justify-center text-gray-400 transition duration-500 hover:shadow-default hover:text-gray-500 border border-gray-100 my-4;
-  }
-
-  .s-offer-modal-badge-icon svg{
-    @apply inline-block fill-primary w-5 mb-4;
-  }
-
-  .s-offer-modal-badge-text{
-    @apply font-bold text-sm;
-  }
-
-  .s-offer-modal-product-sale-price{
-    @apply text-red-500;
-  }
-}
-
-// loyalty component
-.s-loyalty-slider{
-  @apply block mb-2.5;
-
-  .s-slider-block__title-nav{
-    @apply w-[calc(100%+90px)];
-  }
-
-  .s-loyalty-prize-item{
-    @apply mx-[5px] rounded-md p-0 w-[calc(33.333%-10px)] min-w-[200px] #{!important};
-  }
-}
-
-// gifting
-.s-gifting-slider{
-  .s-gifting-image{
-    @apply mx-[5px];
-  }
 }
