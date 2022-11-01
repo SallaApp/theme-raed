@@ -12,7 +12,10 @@
 | product.promotion_title                | string                      |                                                                        |
 | product.subtitle                       | string                      |                                                                        |
 | product.type                           | string                      | product, service, group_products, codes, digital, food, donating       |
-| product.status                         | string                      | sale, out, out-and-notify                                                              |
+| product.status                         | string                      | sale, out, out-and-notify                                              |
+| product.weight                         | ?string                     |                                                                        |
+| product.calories                       | ?float                      |                                                                        |
+| product.sku                            | ?string                     |                                                                        |
 | product.rating                         | Rating|null                 |                                                                        |
 | product.rating.count                   | int                         |                                                                        |
 | product.rating.stars                   | int                         |                                                                        |
@@ -62,6 +65,7 @@
 | product.is_donation                    | bool                        |                                                                        |
 | product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
+| is_quick_order_enabled                 | bool                        | Does this store has quick order feature and is active?                 |
 #}
 {% extends "layouts.master" %}
 {% block styles %}
@@ -367,6 +371,9 @@
                 </form>
 
                 {% hook 'product:single.description.end' %}
+                {% if is_quick_order_enabled %}
+                    <salla-quick-order class="mt-5 block"></salla-quick-order>
+                {% endif %}
             </div>
         </div>
         {% component 'product.offer' %}
