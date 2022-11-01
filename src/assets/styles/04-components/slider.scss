@@ -341,6 +341,14 @@ salla-slider{
 
         button{
           @apply pointer-events-auto border-none bg-white hover:shadow shadow-lg shadow-black/30;
+
+          &.swiper-button-disabled{
+            @apply opacity-100 shadow-none;
+
+            svg{
+              @apply fill-gray-300;
+            }
+          }
         }
       }
 
@@ -348,7 +356,7 @@ salla-slider{
         @apply w-[97%];
 
         @media (min-width: 1400px){
-          @apply w-[calc(100%+122px)]
+          @apply w-[calc(100%+32px)] 
         }
       }
     }
@@ -360,7 +368,7 @@ salla-slider{
 }
 
 .s-slider--nav-arrow {
-  @apply transition duration-300 inline-flex items-center justify-center border border-gray-300 text-gray-500 rounded-full w-10 h-10 text-xl;
+  @apply transition duration-300 inline-flex items-center justify-center border border-gray-300 rounded-full w-10 h-10 text-xl;
 
   svg{
     @apply w-[22px] fill-gray-500;
@@ -385,15 +393,15 @@ salla-slider:not(.hydrated),
 salla-slider[type]:not(.hydrated) > div,
 salla-slider[type]:not(.hydrated) .swiper > div > div,
 .carousel-slider .swiper{
-  @apply flex -mx-2.5 w-[calc(100%+20px)] px-[5px] sm:px-0 pe-12 lg:pe-0;
+  @apply flex -mx-[5px] w-[calc(100%+10px)] sm:px-0 rtl:pl-12 ltr:pr-12 rtl:lg:pl-0 ltr:lg:pr-0;
 }
 
 salla-slider[type]:not(.hydrated) > div > div,
 salla-slider[type]:not(.hydrated) .swiper > div > div > div,
 .carousel-slider .swiper-wrapper > div {
   @apply shrink-0 px-[5px] sm:px-2.5;
+  
 }
-
 // fullwidth sliders
 salla-slider:not([type="carousel"]):not([type="thumbs"]),
 salla-slider.photos-slider{
@@ -409,6 +417,12 @@ salla-slider.photos-slider{
         @apply hidden;
       }
     }
+  }
+}
+
+salla-slider[type="carousel"]:not(.hydrated){
+  > div > div:nth-child(n+5){
+    @apply hidden;
   }
 }
 
@@ -455,5 +469,52 @@ salla-slider div[slot="thumbs"]{
         @apply ring-2 ring-primary;
       }
     }
+  }
+}
+
+// offer modal component
+.s-offer-modal-slider{
+  .s-slider-block__title-nav{
+    @apply w-[calc(100%+90px)];
+  }
+
+  .s-offer-modal-product{
+    @apply w-[33.333%] min-w-[200px];
+  }
+
+  .s-offer-modal-cat-item{
+    @apply max-w-[180px] bg-white rounded-md h-36 p-3 text-center flex flex-col items-center justify-center text-gray-400 transition duration-500 hover:shadow-default hover:text-gray-500 border border-gray-100 my-4;
+  }
+
+  .s-offer-modal-badge-icon svg{
+    @apply inline-block fill-primary w-5 mb-4;
+  }
+
+  .s-offer-modal-badge-text{
+    @apply font-bold text-sm;
+  }
+
+  .s-offer-modal-product-sale-price{
+    @apply text-red-500;
+  }
+}
+
+// loyalty component
+.s-loyalty-slider{
+  @apply block mb-2.5;
+
+  .s-slider-block__title-nav{
+    @apply w-[calc(100%+90px)];
+  }
+
+  .s-loyalty-prize-item{
+    @apply mx-[5px] rounded-md p-0 w-[calc(33.333%-10px)] min-w-[200px] #{!important};
+  }
+}
+
+// gifting
+.s-gifting-slider{
+  .s-gifting-image{
+    @apply mx-[5px];
   }
 }

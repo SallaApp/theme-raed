@@ -81,6 +81,7 @@
                   id="details-slider-{{ product.id }}" 
                   class="details-slider rounded-md" 
                   type="thumbs"
+                  loop="false"
                   show-thumbs-controls="false">
                     {% if product.promotion_title %}
                       <div class="promotion-title">{{ product.promotion_title }}</div>
@@ -290,12 +291,12 @@
                     </div>
                 {% endif %}
                 {% if product.sku %}
-                    <div class="mb-4 flex justify-between sm:grid sm:grid-cols-3 border rounded-md px-4 py-2">
-                                <div class="flex items-center">
-                                    <i class="sicon-barcode mx-1"></i>
-                                    {{ trans('pages.products.sku') }}
-                                </div>
-                                <div class="text-unicode">{{ product.sku }}</div>
+                    <div class="mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2">
+                        <div class="flex items-center">
+                            <i class="sicon-barcode mx-1"></i>
+                            {{ trans('pages.products.sku') }}
+                        </div>
+                        <div class="text-unicode">{{ product.sku }}</div>
                     </div>
                 {% endif %}
                 {% hook 'product:single.description' %}
