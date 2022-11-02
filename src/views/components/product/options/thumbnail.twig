@@ -1,11 +1,12 @@
 {#
-| Variable   | Type          | Description                                             |
-|------------|---------------|---------------------------------------------------------|
-| option     | ProductOption | @see views/pages/partials/product/options.twig          |
-| attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `        |
-| disabled   | bool          |                                                         |
-| required   | bool          |                                                         |
-| value      | ?string       |                                                         |
+| Variable   | Type          | Description                                                  |
+|------------|---------------|--------------------------------------------------------------|
+| option     | ProductOption | @see views/pages/partials/product/options.twig               |
+| attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `            |
+| disabled   | bool          |                                                              |
+| required   | bool          |                                                              |
+| item_id    | int           | product.id when is product page/cart.items[].id when is cart |
+| value      | ?string       |                                                              |
 #}
 <div class="radio-images grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
     {% for detail_index, detail in option.details %}
@@ -14,13 +15,13 @@
                     required
                     type="radio"
                     class="image-option"
-                    id="option_{{ detail.id }}"
+                    id="option_{{ item_id }}_{{ detail.id }}"
                     {{ detail.is_out?"disabled":"" }}
                     data-itemid="{{ detail.id }}"
                     name="options[{{ option.id }}]"
                     data-img-id="{{ detail.option_value }}"
                     value="{{ detail.id }}"/>
-            <label for="option_{{ detail.id }}" data-img-id="{{ detail.option_value }}" class="go-to-slide radio-images__label">
+            <label for="option_{{ item_id }}_{{ detail.id }}" data-img-id="{{ detail.option_value }}" class="go-to-slide radio-images__label">
                 <img data-src="{{ detail.image }}" src="{{ 'images/s-empty.png' | asset }}" class="object-cover h-full w-full lazy" title="{{ detail.name }}" alt="{{ detail.name }}"/>
             </label>
             <p class="text-sm text-gray-400">{{ detail.name }}</p>

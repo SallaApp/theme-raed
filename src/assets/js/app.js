@@ -25,9 +25,8 @@ class App extends AppHelpers {
 
     salla.comment.event.onAdded(() => window.location.reload());
 
+    this.status = 'ready';
     document.dispatchEvent(new CustomEvent('theme::ready'));
-
-    this.status = 'ready'
     this.log('Theme Loaded 🎉');
   }
 
