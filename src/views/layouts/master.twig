@@ -87,7 +87,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
-    {% hook 'head:start' %}
+    {# {% hook 'head:start' %} #}
+    <script>
+      window.salla = window.Salla = window.Salla || {};
+      Salla.onReady = Salla.onReady || function (callback) {
+          if (['ready', 'completed'].includes(Salla.status)) {
+            callback();
+            return;
+          }
+        window.addEventListener('salla::ready', callback, {once: true});
+      };
+
+    </script>
+    <script type="module" src="http://localhost:3333/build/twilight.esm.js"></script>
+    <script nomodule src="http://localhost:3333/build/twilight.js"></script>
+
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
@@ -110,6 +124,7 @@
   {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
   {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
   ">
+  <h1>This is inject-salla-slider branch</h1>
 <noscript>
     To get full functionality of this site you need to enable JavaScript. Here is how
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
@@ -136,3 +151,4 @@
 {% block scripts %}{% endblock %}
 </body>
 </html>
+ 
