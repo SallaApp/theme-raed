@@ -16,17 +16,12 @@
 | offer.discounts_table.price                 | float                  |             |
 #}
 
-<section id="offer-slider" class="relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
-    <salla-slider type="carousel" class="default-slider slider-layout s-slider-controls-top" data-id="offer-slider">
-        <div class="center-between mb-9">
-            <span class="text-[200px] font-normal text-red-50 absolute leading-none -top-4 right-12 -z-1">%</span>
-
-            <div>
-                <h2 class="s-block__title offer">{{ offer.name }}</h2>
-                <p class="pe-16 mt-2">{{ offer.description|raw }}</p>
-            </div>
-        </div>
-
+<section class="offer-slider relative lg:overflow-hidden mb-8 md:mb-16 pt-4">
+    <salla-slider 
+      type="carousel"
+      block-title="{{ offer.name }}"
+      block-subTitle="{{ offer.description|raw }}"
+      id="offer-slider">
         <div slot="items">
             {% if offer.categories|length %}
                 {% for category in offer.categories %}

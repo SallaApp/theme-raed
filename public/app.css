@@ -461,8 +461,6 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .left-0{left:0px}
 .right-0{right:0px}
 .top-full{top:100%}
-.-top-4{top:-1rem}
-.right-12{right:3rem}
 .top-2{top:0.5rem}
 .bottom-0{bottom:0px}
 .top-4{top:1rem}
@@ -502,7 +500,6 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .mt-6{margin-top:1.5rem}
 .-mt-62{margin-top:-248px}
 .mt-16{margin-top:4rem}
-.mb-9{margin-bottom:2.25rem}
 .mb-0{margin-bottom:0px}
 .mb-3{margin-bottom:0.75rem}
 .mb-10{margin-bottom:2.5rem}
@@ -744,14 +741,13 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .text-xs{font-size:0.75rem;line-height:1rem}
 .text-7xl{font-size:4.5rem;line-height:1}
 .text-2xl{font-size:1.5rem;line-height:2rem}
-.text-\[200px\]{font-size:200px}
 .text-3xl{font-size:1.875rem;line-height:2.25rem}
 .text-6xl{font-size:3.75rem;line-height:1}
 .\!text-2xl{font-size:1.5rem !important;line-height:2rem !important}
 .font-bold{font-weight:700}
-.font-normal{font-weight:400}
 .font-extrabold{font-weight:800}
 .font-medium{font-weight:500}
+.font-normal{font-weight:400}
 .font-semibold{font-weight:600}
 .leading-6{line-height:1.5rem}
 .leading-8{line-height:2rem}
@@ -773,7 +769,6 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .text-amber-400{--tw-text-opacity:1;color:rgba(251, 191, 36, var(--tw-text-opacity))}
 .text-green-500{--tw-text-opacity:1;color:rgba(34, 197, 94, var(--tw-text-opacity))}
 .text-primary-reverse{color:#ff6767;color:var(--color-primary-reverse)}
-.text-red-50{--tw-text-opacity:1;color:rgba(254, 242, 242, var(--tw-text-opacity))}
 .text-red-500{--tw-text-opacity:1;color:rgba(239, 68, 68, var(--tw-text-opacity))}
 .text-gray-800{--tw-text-opacity:1;color:rgba(31, 41, 55, var(--tw-text-opacity))}
 .\!text-primary{color:#414042 !important;color:var(--color-primary) !important}
@@ -1824,7 +1819,8 @@ salla-slider[type]:not(.hydrated) > div > div,  salla-slider[type]:not(.hydrated
 salla-slider[type]:not(.hydrated) > div > div,  salla-slider[type]:not(.hydrated) .swiper > div > div > div,  .carousel-slider .swiper-wrapper > div{padding-left:0.625rem;padding-right:0.625rem}}
 salla-slider:not([type='carousel']):not([type='thumbs']):not(.hydrated) > div,  salla-slider.photos-slider:not(.hydrated) > div{margin-left:0px;margin-right:0px;width:100%;padding-left:0px;padding-right:0px}
 salla-slider:not([type='carousel']):not([type='thumbs']):not(.hydrated) > div > div,  salla-slider.photos-slider:not(.hydrated) > div > div{padding:0px}
-salla-slider:not([type='carousel']):not([type='thumbs']):not(.hydrated) > div > div:nth-child(n+2),  salla-slider.photos-slider:not(.hydrated) > div > div:nth-child(n+2),  salla-slider[type='carousel']:not(.hydrated) div > div:nth-child(n+5){display:none}
+salla-slider:not([type='carousel']):not([type='thumbs']):not(.hydrated) > div > div:nth-child(n+2){display:none}
+salla-slider:not(.hydrated){display:block;overflow:hidden}
 .s-slider-has-notitle .s-slider-block__title{margin-bottom:0px}
 salla-slider div[slot='thumbs']{margin-top:0.625rem}
 salla-slider div[slot='thumbs'] > div{height:5rem;padding-left:5px;padding-right:5px}
@@ -2026,8 +2022,6 @@ input[type=radio].sr-only:checked ~ div.s-verify-back {
 [dir="rtl"] .ps-8{padding-right:2rem}
 [dir="ltr"] .pe-10{padding-right:2.5rem}
 [dir="rtl"] .pe-10{padding-left:2.5rem}
-[dir="ltr"] .pe-16{padding-right:4rem}
-[dir="rtl"] .pe-16{padding-left:4rem}
 [dir="ltr"] .pe-24{padding-right:6rem}
 [dir="rtl"] .pe-24{padding-left:6rem}
 [dir="ltr"] .pe-px{padding-right:1px}
@@ -3497,9 +3491,6 @@ input[type=radio].sr-only:checked ~ div.s-table tbody tr a {
 @media (min-width: 768px){
 [dir="ltr"] .s-block__title p{padding-right:4rem}
 [dir="rtl"] .s-block__title p{padding-left:4rem}}
-.offer-slider .s-block__title{margin-bottom:1.25rem}
-.offer-slider .s-block__title h2{font-size:1.125rem;line-height:1.75rem}
-.offer-slider .s-block__title p{margin-top:0.25rem;line-height:1.5rem;-webkit-line-clamp:unset}
 .s-block__title-nav{display:none}
 .s-block__title-nav > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.625rem * var(--tw-space-x-reverse));margin-left:calc(0.625rem * (1 - var(--tw-space-x-reverse)));margin-left:calc(0.625rem * calc(1 - var(--tw-space-x-reverse)))}
 [dir="ltr"] .s-block__title-nav{margin-left:1.5rem;flex-direction:row-reverse}
@@ -4040,6 +4031,22 @@ input[type=radio].sr-only:checked ~ div.testimonials-slider .testimonial__icon {
 .swiper-button-disabled {
   opacity: 0.5;
 }
+.offer-slider .s-slider-block__title{position:relative;margin-bottom:1.25rem}
+.offer-slider .s-slider-block__title:before{position:absolute;top:1rem;z-index:-1;font-size:6rem;font-weight:400;line-height:1;--tw-text-opacity:1;color:rgba(254, 242, 242, var(--tw-text-opacity))}
+input[type=radio].sr-only div.offer-slider .s-slider-block__title:before {
+  transition: all 0.3s;
+}
+input[type=radio].sr-only:checked ~ div.offer-slider .s-slider-block__title:before {
+  border-color: var(--color-main);
+}
+[dir="ltr"] .offer-slider .s-slider-block__title:before{left:0px}
+[dir="rtl"] .offer-slider .s-slider-block__title:before{right:0px}
+.offer-slider .s-slider-block__title:before {
+  content: "\ee30";
+  font-family: "sallaicons";
+}
+.offer-slider .s-slider-block__title h2{font-size:1.125rem;line-height:1.75rem;--tw-text-opacity:1;color:rgba(248, 113, 113, var(--tw-text-opacity))}
+.offer-slider .s-slider-block__title p{margin-top:0.25rem;line-height:1.5rem;-webkit-line-clamp:unset}
 .product-entry{position:relative;display:flex;height:100%;justify-content:space-around;border-radius:0.5rem;--tw-bg-opacity:1;background-color:rgba(255, 255, 255, var(--tw-bg-opacity));transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:300ms}
 .product-entry:hover{--tw-shadow:5px 10px 30px #2B2D340D;;--tw-shadow-colored:5px 10px 30px var(--tw-shadow-color);box-shadow:0 0 rgba(0,0,0,0), 0 0 rgba(0,0,0,0), var(--tw-shadow);box-shadow:0 0 rgba(0,0,0,0), 0 0 rgba(0,0,0,0), var(--tw-shadow);box-shadow:var(--tw-ring-offset-shadow, 0 0 rgba(0,0,0,0)), var(--tw-ring-shadow, 0 0 rgba(0,0,0,0)), var(--tw-shadow)}
 .product-entry--full-image{height:20rem}
@@ -5393,7 +5400,6 @@ button.swiper-pagination-bullet {
 .lg\:overflow-hidden{overflow:hidden}
 .lg\:bg-white{--tw-bg-opacity:1;background-color:rgba(255, 255, 255, var(--tw-bg-opacity))}
 .lg\:p-8{padding:2rem}
-.lg\:py-4{padding-top:1rem;padding-bottom:1rem}
 .lg\:px-0{padding-left:0px;padding-right:0px}
 .lg\:pt-8{padding-top:2rem}
 .lg\:pb-11{padding-bottom:2.75rem}
