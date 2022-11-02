@@ -11,4 +11,4 @@ class ThankYou extends BasePage {
     }
 }
 
-ThankYou.initiateWhenReady( ['thank-you']);
+ThankYou.initiateWhenReady(['thank-you']);

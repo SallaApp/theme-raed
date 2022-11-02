@@ -3,10 +3,22 @@
 */
 .s-block{
   &__title{
-    @apply pe-8 font-bold text-lg text-gray-700;
+    @apply center-between mb-4 md:mb-8;
 
-    &.offer{
-      @apply text-red-400 text-xl;
+    .right-side{
+      @apply rtl:pl-8 ltr:pr-8;
+    }
+
+    h2{ 
+      @apply text-lg font-bold relative leading-[1.2];
+    }
+
+    p{
+      @apply text-sm opacity-60 mt-2 line-clamp-1 sm:line-clamp-2 rtl:md:pl-16 ltr:md:pr-16;
+    }
+
+    &-nav{
+      @apply hidden sm:flex ltr:flex-row-reverse rtl:space-x-reverse space-x-2.5 rtl:mr-6 ltr:ml-6;
     }
   }
 
@@ -256,6 +268,21 @@
     &:before{
       content: '';
       @apply h-full w-full bg-black opacity-60 absolute top-0 left-0;
+    }
+  }
+
+  .s-slider-block{
+    &__title-right{
+      @apply hidden;
+    }
+
+    &__title-left{
+      @apply w-full flex justify-between;
+    }
+
+    &__display-all{
+      @apply block btn btn--outline light btn--rounded-full;
+      @apply grow-0 bg-transparent text-white #{!important};
     }
   }
 }
