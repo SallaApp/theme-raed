@@ -111,49 +111,42 @@
 
                     <div slot="items">
                         {% for image in product.images %}
-                            <div class="swiper-slide 
-                              {{ image.video_url?'video-entry':'' }} 
-                              {{image.three_d_image_url? 'model-entry' : ''}}">
-                              <a data-fslightbox="product_{{ product.id }}"
-                                data-img-id="{{ image.id }}"
-                                data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
-                                data-caption="{{ image.alt }}"
-                                data-infinite="false"
-                                data-type="{{ image.video_url?'youtube':'image' }}"
-                                href="{{ image.video_url?image.video_url:image.url }}"
-                                aria-label="{{ product.name }}">
-                                  {% if loop.first %}
-                                      <img fetchpriority="high" loading="eager" src="{{ image.url }}"
-                                          alt="{{ image.alt }}"
-                                          class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
-                                  {% else %}
-                                      <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
-                                          alt="{{ image.alt }}"
-                                          class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
-                                  {% endif %}
-                              </a>
-
-                              {% if image.three_d_image_url %}
-                                  <div slot="action" class="switcher-3d-view">
-                                    <label class="s-toggle">
-                                      <input id="activate_3d_view"
-                                              class="s-toggle-input"
-                                              type="checkbox"
-                                              data-cover-url="{{ image.url }}"
-                                              data-model-url="{{ image.three_d_image_url }}">
-                                      <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
-                                      </div>
-                                    </label>
-                                  </div>
-                              {% endif %}
-                            </div>
+                            {% if image.three_d_image_url %}
+                                <model-viewer style="min-height: 500px;" class="swiper-slide model-entry w-full h-full"
+                                              loading="eager" camera-controls
+                                              touch-action="pan-y" auto-rotate
+                                              poster="{{ image.url }}"
+                                              src="{{ image.three_d_image_url }}"
+                                              shadow-intensity="1" alt="{{ image.alt }}">
+                                </model-viewer>
+                            {% else %}
+                                <a data-fslightbox="product_{{ product.id }}"
+                                   data-img-id="{{ image.id }}"
+                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                   data-caption="{{ image.alt }}"
+                                   data-infinite="false"
+                                   data-type="{{ image.video_url?'youtube':'image' }}"
+                                   href="{{ image.video_url?image.video_url:image.url }}"
+                                   aria-label="{{ product.name }}"
+                                   class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
+                                    {% if loop.first %}
+                                        <img fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    {% else %}
+                                        <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
+                                    {% endif %}
+                                </a>
+                            {% endif %}
                         {% endfor %}
                     </div>
 
                     {% if has_many_images %}
                         <div slot="thumbs">
                             {% for image in product.images %}
-                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }}">
+                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}">
                                     {% if loop.index < 5 %}
                                         <img src="{{ image.url }}"
                                              loading="eager"
@@ -171,32 +164,6 @@
                         </div>
                     {% endif %}
                 </salla-slider>
-
-                {# 3D image viewer #}
-                {% if product.has_3d_image %}
-                  <div id="model-viewer-wrapper" class="model-viewer-wrapper hidden" dir="ltr">
-                      <model-viewer
-                              id="model_viewer"
-                              alt="Product 3D Model"
-                              class="model-viewer"
-                              reveal="auto"
-                              data-js-focus-visible
-                              camera-controls>
-                          <div class="model-viewer__poster" slot="poster"></div>
-                      </model-viewer>
-                      <div slot="action" class="switcher-3d-view">
-                          <label class="s-toggle">
-                            <input id="deactivate_3d_view"
-                                  class="s-toggle-input"
-                                  type="checkbox"
-                                  data-cover-url="{{ image.url }}"
-                                  data-model-url="{{ image.three_d_image_url }}">
-                            <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
-                          </div>
-                        </label>
-                      </div>
-                  </div>
-                {% endif %}
             </div>
 
             <div class="main-content w-full md:w-2/4 md:pb-16">
