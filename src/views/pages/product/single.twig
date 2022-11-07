@@ -130,14 +130,14 @@
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
-                                        <img fetchpriority="high" loading="eager" src="{{ image.url }}"
-                                             alt="{{ image.alt }}"
-                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                    {% else %}
-                                        <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
-                                             alt="{{ image.alt }}"
-                                             class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                    {% endif %}
+                                      <img fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                          alt="{{ image.alt }}"
+                                          class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
+                                      {% else %}
+                                          <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                              alt="{{ image.alt }}"
+                                              class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
+                                      {% endif %}
                                 </a>
                             {% endif %}
                         {% endfor %}
