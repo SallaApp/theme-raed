@@ -1,0 +1,100 @@
+
+.store-loyalty-program{
+  .breadcrumbs {
+    @apply pb-0 pt-16;
+
+    ol{
+      @apply justify-center lg:justify-start;
+    }
+    
+    a,
+    span,
+    .arrow {
+      @apply text-white/90;
+    }
+  }
+}
+
+.loyalty{
+  &__banner{
+    @apply relative overflow-hidden bg-white m-auto p-10 lg:py-16 lg:px-20 rounded-md mb-28 mt-20 shadow-default;
+
+    &-inner{
+      @apply relative z-10 text-center sm:flex flex-1 items-center sm:space-s-12;
+    }
+
+    &-content{
+      @apply md:flex flex-1 justify-between items-center;
+
+      .info{
+        @apply mb-6 md:mb-0;
+
+        h1{
+          @apply font-bold text-3xl mb-2.5;
+        }
+
+        p{
+          @apply text-gray-500 max-w-xs leading-6 mb-2;
+        }
+      }
+    }
+
+    .loyalty-points{
+      @apply text-sm text-gray-500;
+
+      .count-number{
+        @apply text-4xl text-primary font-bold ltr:ml-2.5 rtl:mr-2.5;
+      }
+    }
+  }
+
+  &-star{
+    @apply absolute z-0 transform opacity-70;
+
+    i{
+      @apply text-gray-100 text-[400px];
+    }
+
+    &--first{
+      @apply -right-24 -top-48 -rotate-45;
+    }
+
+    &--second{
+      @apply -left-16 -bottom-40 -rotate-90;
+    }
+  }
+}
+
+.points-ways{
+  &__list{
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-8;
+
+    .way-item{
+      @apply flex flex-col bg-white w-full opacity-100 rounded-md shadow-default p-6;
+
+      &__icon{
+        @apply flex shrink-0 items-center justify-center relative h-12 w-12;
+
+        span{
+          @apply absolute z-0 w-full h-full inset-0 rounded-full opacity-10
+        }
+      }
+
+      &__content{
+        @apply flex flex-col justify-start;
+
+        h4{
+          @apply font-bold text-xl break-all;
+        }
+
+        p{
+          @apply text-sm text-gray-400;
+        }
+      }
+
+      &__action{
+        @apply mt-auto pt-4;
+      }
+    }
+  }
+}

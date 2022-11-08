@@ -12,8 +12,13 @@
 | product.promotion_title                | string                      |                                                                        |
 | product.subtitle                       | string                      |                                                                        |
 | product.type                           | string                      | product, service, group_products, codes, digital, food, donating       |
-| product.status                         | string                      | sale, out, out-and-notify                                                              |
-| product.rating                         | int                         |                                                                        |
+| product.status                         | string                      | sale, out, out-and-notify                                              |
+| product.weight                         | ?string                     |                                                                        |
+| product.calories                       | ?float                      |                                                                        |
+| product.sku                            | ?string                     |                                                                        |
+| product.rating                         | Rating|null                 |                                                                        |
+| product.rating.count                   | int                         |                                                                        |
+| product.rating.stars                   | int                         |                                                                        |
 | product.price                          | MoneyTaxable                | can be string too `-`, when merchant doesn't want to show zero         |
 | product.sale_price                     | MoneyTaxable                |                                                                        |
 | product.regular_price                  | MoneyTaxable                |                                                                        |
@@ -60,6 +65,7 @@
 | product.is_donation                    | bool                        |                                                                        |
 | product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
+| is_quick_order_enabled                 | bool                        | Does this store has quick order feature and is active?                 |
 #}
 {% extends "layouts.master" %}
 {% block styles %}
@@ -74,89 +80,124 @@
         <nav class="breadcrumbs w-full py-5">
             {% component 'header.breadcrumbs' %}
         </nav>
-
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
-                <div class="swiper relative details-slider rounded-md"
-                     id="details-slider-{{ product.id }}">
-                    {% if(product.promotion_title) %}
-                        <div class="absolute z-10 top-4 start-0">
-                            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
-                        </div>
+                {% set has_many_images = product.images|length > 1 %} 
+                <salla-slider 
+                  id="details-slider-{{ product.id }}" 
+                  class="details-slider rounded-md" 
+                  type="thumbs"
+                  loop="false"
+                  show-thumbs-controls="false">
+                    {% if product.promotion_title %}
+                      <div class="promotion-title">{{ product.promotion_title }}</div>
                     {% endif %}
 
-                    <salla-button 
-                      class="btn--wishlist animated" 
-                      data-id="{{ product.id }}" 
-                      onclick="salla.wishlist.toggle({{ product.id }})" 
-                      shape="icon" 
-                      fill="outline" 
-                      color="light">
+                    <salla-button
+                            class="btn--wishlist animated sws"
+                            data-id="{{ product.id }}"
+                            onclick="salla.wishlist.toggle({{ product.id }})"
+                            shape="icon"
+                            fill="outline"
+                            color="light">
                         <i class="sicon-heart"></i>
                     </salla-button>
 
                     {# Calories Badge #}
                     {% if product.calories %}
                         <div class="absolute z-[2] top-4 rtl:left-4 ltr:right-4 bg-white shadow-sm flex flex-col justify-center items-center rounded-full w-20 h-20 md:w-24 md:h-24">
-                            <span class="text-red-500 text-xl leading-none font-bold">{{ product.calories }}</span>
+                            <span class="text-red-500 text-xl leading-none font-bold">50</span>
                             <span class="text-xs text-gray-500">{{ trans('pages.products.calories') }}</span>
                         </div>
                     {% endif %}
 
-                    {% set has_many_images = product.images|length > 1 %}
-                    <div class="swiper-wrapper">
+                    <div slot="items">
                         {% for image in product.images %}
-                            <a data-fslightbox="product_{{ product.id }}"
-                               data-img-id="{{ image.id }}"
-                               data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
-                               data-caption="{{ image.alt }}"
-                               data-infinite="false"
-                               data-type="{{ image.video_url?'youtube':'image' }}"
-                               href="{{ image.video_url?image.video_url:image.url }}"
-                               aria-label="{{ product.name }}"
-                               class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
-                                {% if loop.first %}
-                                    <img fetchpriority="high" loading="eager" src="{{ image.url }}" alt="{{ image.alt }}" class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                {% else %}
-                                    <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}" alt="{{ image.alt }}" class="lazy-load h-full object-{{ theme.settings.get('slider_background_size') }} w-full">
-                                {% endif %}
-                            </a>
+                            <div class="swiper-slide 
+                              {{ image.video_url?'video-entry':'' }} 
+                              {{image.three_d_image_url? 'model-entry' : ''}}">
+                              <a data-fslightbox="product_{{ product.id }}"
+                                data-img-id="{{ image.id }}"
+                                data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                data-caption="{{ image.alt }}"
+                                data-infinite="false"
+                                data-type="{{ image.video_url?'youtube':'image' }}"
+                                href="{{ image.video_url?image.video_url:image.url }}"
+                                aria-label="{{ product.name }}">
+                                  {% if loop.first %}
+                                      <img fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                          alt="{{ image.alt }}"
+                                          class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
+                                  {% else %}
+                                      <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                          alt="{{ image.alt }}"
+                                          class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
+                                  {% endif %}
+                              </a>
+
+                              {% if image.three_d_image_url %}
+                                  <div slot="action" class="switcher-3d-view">
+                                    <label class="s-toggle">
+                                      <input id="activate_3d_view"
+                                              class="s-toggle-input"
+                                              type="checkbox"
+                                              data-cover-url="{{ image.url }}"
+                                              data-model-url="{{ image.three_d_image_url }}">
+                                      <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
+                                      </div>
+                                    </label>
+                                  </div>
+                              {% endif %}
+                            </div>
                         {% endfor %}
                     </div>
 
                     {% if has_many_images %}
-                        <button aria-label="Previous Slide" class="slider-prev btn--md-white-arrow">
-                            <i class="sicon-keyboard_arrow_right"></i>
-                        </button>
-                        <button aria-label="Next Slide" class="slider-next btn--md-white-arrow">
-                            <i class="sicon-keyboard_arrow_left"></i>
-                        </button>
-                    {% endif %}
-                </div>
-
-                {% if has_many_images %}
-                    <div thumbsSlider="" class="swiper slider-layout thumbs-slider mt-4 {{ product.images|length > 4 ? '!pe-10' : ''}}"
-                         id="thumbs-slider-{{ product.id }}">
-                        <div class="swiper-wrapper flex items-stretch">
+                        <div slot="thumbs">
                             {% for image in product.images %}
-                                <div class="swiper-slide slide--one-fourth {{ image.video_url?'video-entry':'' }}">
+                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.index < 5 %}
                                         <img src="{{ image.url }}"
-                                            loading="eager"
-                                            fetchpriority="high"
-                                            class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
-                                            title="{{ image.alt }}"
-                                            alt="{{ image.alt }}"/>
+                                             loading="eager"
+                                             class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
+                                             title="{{ image.alt }}"
+                                             alt="{{ image.alt }}"/>
                                     {% else %}
                                         <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
-                                            class="object-cover w-full h-full lazy-load bg-gray-100 rounded-md overflow-hidden"
-                                            title="{{ image.alt }}"
-                                            alt="{{ image.alt }}"/>
+                                             class="object-cover w-full h-full lazy bg-gray-100 rounded-md overflow-hidden"
+                                             title="{{ image.alt }}"
+                                             alt="{{ image.alt }}"/>
                                     {% endif %}
                                 </div>
                             {% endfor %}
                         </div>
-                    </div>
+                    {% endif %}
+                </salla-slider>
+
+                {# 3D image viewer #}
+                {% if product.has_3d_image %}
+                  <div id="model-viewer-wrapper" class="model-viewer-wrapper hidden" dir="ltr">
+                      <model-viewer
+                              id="model_viewer"
+                              alt="Product 3D Model"
+                              class="model-viewer"
+                              reveal="auto"
+                              data-js-focus-visible
+                              camera-controls>
+                          <div class="model-viewer__poster" slot="poster"></div>
+                      </model-viewer>
+                      <div slot="action" class="switcher-3d-view">
+                          <label class="s-toggle">
+                            <input id="deactivate_3d_view"
+                                  class="s-toggle-input"
+                                  type="checkbox"
+                                  data-cover-url="{{ image.url }}"
+                                  data-model-url="{{ image.three_d_image_url }}">
+                            <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
+                          </div>
+                        </label>
+                      </div>
+                  </div>
                 {% endif %}
             </div>
 
@@ -186,7 +227,9 @@
                     </h3>
                 {% endif %}
 
-                <salla-rating-stars value="{{ product.rating ? product.rating : -1 }}"></salla-rating-stars>
+                {% if product.rating %}
+                    <salla-rating-stars value="{{product.rating}}"></salla-rating-stars>
+                {% endif %}
 
                 <div class="mb-2 space-s-1">
                     <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
@@ -222,14 +265,15 @@
                     </div>
                 {% endif %}
 
-                <div class="flex space-s-3"> 
+                <div class="flex space-s-3">
                     <salla-social-share class="hidden sm:inline-flex mb-5"></salla-social-share>
 
-                    <salla-button class="btn--wishlist animated hidden sm:inline-flex"
-                      data-id="{{ product.id }}" 
-                      onclick="salla.wishlist.toggle({{ product.id }})" 
-                      shape="icon" 
-                      fill="outline" 
+                    <salla-button
+                      class="btn--wishlist animated hidden sm:inline-flex"
+                      data-id="{{ product.id }}"
+                      onclick="salla.wishlist.toggle({{ product.id }})"
+                      shape="icon"
+                      fill="outline"
                       color="light">
                         <i class="sicon-heart"></i>
                     </salla-button>
@@ -252,11 +296,39 @@
                         {% endif %}
                     </div>
                 {% endif %}
-
+                {% if product.sku %}
+                    <div class="mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2">
+                        <div class="flex items-center">
+                            <i class="sicon-barcode mx-1"></i>
+                            {{ trans('pages.products.sku') }}
+                        </div>
+                        <div class="text-unicode">{{ product.sku }}</div>
+                    </div>
+                {% endif %}
                 {% hook 'product:single.description' %}
 
                 {# Installment Methods #}
                 <salla-installment price="{{product.price}}"></salla-installment>
+
+                {% if product.show_availability %}
+                    <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+                        <div class="center-between">
+                            <label class="flex items-center text-base">
+                                <span class="sicon-location me-1"></span>
+                                <span class="inline-block">{{ trans('pages.products.availability') }}</span>
+                            </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                                <div class="flex space-s-3">
+                                    <a href="#!" onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
+                                       class="group text-primary flex items-center justify-center">
+                                        <span>{{ trans('pages.products.select_branch') }}</span>
+                                        <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onchange="salla.product.getPrice(new FormData(event.currentTarget))"
@@ -317,13 +389,14 @@
                         </salla-add-product-button>
                     </section>
                     {% if product.is_giftable %}
-                        <div class="mt-5">
-                            <salla-gifting product-id="{{ product.id }}"></salla-gifting>
-                        </div>
+                        <salla-gifting class="mt-5" product-id="{{ product.id }}"></salla-gifting>
                     {% endif %}
                 </form>
 
                 {% hook 'product:single.description.end' %}
+                {% if is_quick_order_enabled %}
+                    <salla-quick-order class="mt-5 block"></salla-quick-order>
+                {% endif %}
             </div>
         </div>
         {% component 'product.offer' %}
@@ -337,5 +410,9 @@
     <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'map.js' | asset }}"></script>
     <script defer src="{{ 'colorpicker.js' | asset }}"></script>
-    <script src="{{ 'product.js' | asset }}"></script>
+    <script defer src="{{ 'product.js' | asset }}"></script>
+    {% if product.has_3d_image %}
+        <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    {% endif %}
 {% endblock %}
+ 

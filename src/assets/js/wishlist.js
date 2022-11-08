@@ -15,7 +15,7 @@ class Wishlist extends BasePage {
 
             this.toggleFavoriteIcon(id, false);
 
-            // just a animation when the item removed from wishlist page
+            // just an animation when the item removed from wishlist page
             let item = document.querySelector('#wishlist-product-' + id);
 
             if(!item){
@@ -41,4 +41,4 @@ class Wishlist extends BasePage {
     }
 }
 
-Wishlist.intiateWhenReady('Wishlist');
+Wishlist.initiateWhenReady();

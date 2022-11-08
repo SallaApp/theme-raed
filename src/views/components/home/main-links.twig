@@ -12,20 +12,23 @@
 #}
 <section class="s-block s-block--categories {{ component.merge_with_top_component and position?'merge-with-top-component':'' }}">
     <div class="container">
+
+      <salla-slider  
+        type="carousel"
         {% if(component.title) or (component.merge_with_top_component) %}
-            <h2 class="s-block--categories__title">{{ component.title }}</h2>
+            block-title="{{ component.title }}"
         {% endif %}
-        <div class="swiper default-slider slider-layout" id="main-links-{{ position }}">
-            <div class="swiper-wrapper py-3 lg:py-4">
-                {% for link in component.links %}
-                    <div class="swiper-slide slide--one-sixth">
+        id="main-links-{{ position }}">
+          <div slot="items">
+              {% for link in component.links %}
+                    <div class="swiper-slide slide--one-sixth pb-6">
                         <a href="{{ link.url }}" class="slide--cat-entry">
                             <i class="{{ link.icon }}"></i>
                             <h4>{{ link.title }}</h4>
                         </a>
                     </div>
                 {% endfor %}
-            </div>
-        </div>
+          </div>
+      </salla-slider>
     </div>
-</section>
+</section> 

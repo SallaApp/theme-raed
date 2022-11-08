@@ -8,27 +8,22 @@
 | items[].image.alt | string  |                                                                  |
 | position          | Int     | Sorting number start from zero                                   |
 #}
-<section id="photos-{{ position }}" class="s-block s-block--photos-slider {{ is_repeated?'repeated-block':'' }}">
-    <div class="swiper home-slider photos-slider" data-id="photos-{{ position }}">
-        <div class="swiper-wrapper">
-            {% for item in items %}
-              <a href="{{item.url}}" class="swiper-slide">
-                <img loading="eager" fetchpriority="high" src="{{ item.image.url }}" class="w-full object-contain"></img>
-              {# {% if loop.first %}
-                <img loading="eager" fetchpriority="high" src="{{ item.image.url }}" class="w-full object-contain"></img>
-              {% else %}
-                <img src="{{ item.image.url }}" class="w-full object-contain swiper-lazy"></img>
-              {% endif %} #}
-              </a>
-            {% endfor %}
-        </div>
-        <div class="swiper-pagination"></div>
-
-        <button aria-label="Previous Slide" class="slider-prev btn--md-white-arrow">
-          <i class="sicon-keyboard_arrow_right"></i>
-        </button>
-        <button aria-label="Next Slide" class="slider-next btn--md-white-arrow">
-          <i class="sicon-keyboard_arrow_left"></i>
-        </button>
-    </div>
-</section>
+<section class="s-block s-block--photos-slider {{ is_repeated?'repeated-block':'' }}">
+    <salla-slider 
+      type="carousel" 
+      class="home-slider photos-slider"
+      centered 
+      auto-play 
+      pagination 
+      id="photos-{{ position }}-slider"> 
+      <div slot="items">
+        {% for item in items %}
+          <div class="swiper-slide">
+            <a href="{{item.url}}">
+              <img loading="eager" src="{{ item.image.url }}" class="w-full object-contain rounded-md"></img>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </salla-slider>
+</section> 

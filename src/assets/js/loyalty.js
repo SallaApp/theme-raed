@@ -1,9 +1,8 @@
 import BasePage from './base-page';
-import Slider from './partials/slider'
 
 class Loyalty extends BasePage {
     onReady() {
-        let count = document.querySelector(".count-anime").dataset.count;
+        let count = app.element(".count-anime")?.dataset?.count || 0;
         (new anime.timeline()).add({
             targets: '.loyality-item',
             opacity: [0, 1],
@@ -22,6 +21,7 @@ class Loyalty extends BasePage {
         }, '-=1000').add({
             targets: `.count-anime`,
             innerText: [0, count],
+            duration: 2000,
             easing: "linear",
             round: true,
             delay: function (el, i) {
@@ -36,18 +36,7 @@ class Loyalty extends BasePage {
                 return i * 100;
             },
         }, '-=3200')
-
-
-        /*
-         used in:
-           1- similar-products.twig
-           2- best offer home block (called again in home.js)
-           3- product offer products slider/ cats slider / discount slider
-           4- loyalty.twig
-       */
-        new Slider('.default-slider');
-
     }
 }
 
-Loyalty.intiateWhenReady('Loyalty');
+Loyalty.initiateWhenReady(['loyalty']);

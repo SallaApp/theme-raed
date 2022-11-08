@@ -69,42 +69,40 @@
 
             <div class="main-content lg:col-span-6">
                 {% if slides|length %}
-                    <div class="mb-8">
-                        <div class="swiper blog-slider rounded-md overflow-hidden" id="blog-slider">
-                            <div class="swiper-wrapper">
-                                {% for article in slides %}
-                                    <div class="swiper-slide has-overlay blog-slider__slide !h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
-                                        <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-50':'object-cover h-full w-full' }}"
-                                             src="{{ article.image.url }}" alt="{{ article.image.alt }}">
-                                        <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 lg:ps-10 lg:pb-20">
-                                            <div class="blog-slider__content relative">
-                                                <div class="z-20 w-full md:w-5/6 lg:w-6/12 text-white">
-                                                    <div class="block-slide-anime">
-                                                        <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
-                                                            <div class="flex items-center">
-                                                                <i class="sicon-calendar-date me-1 "></i>
-                                                                <span class="whitespace-nowrap">{{ article.created_at|date }}</span>
-                                                            </div>
-                                                            <a href="{{ article.author.url }}"
-                                                               class=" flex items-center hover:underline">
-                                                                <i class="sicon-user me-1"></i>
-                                                                <span class="whitespace-nowrap">{{ article.author.name }}</span>
-                                                            </a>
+                    <salla-slider type="blog" auto-play show-controls="false" pagination
+                                  class="blog-slider rounded-md overflow-hidden mb-8">
+                        <div slot="items">
+                            {% for article in slides %}
+                                <div class="swiper-slide has-overlay blog-slider__slide !h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
+                                    <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-50':'object-cover h-full w-full' }}"
+                                         src="{{ article.image.url }}" alt="{{ article.image.alt }}">
+                                    <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 lg:ps-10 lg:pb-20">
+                                        <div class="blog-slider__content relative">
+                                            <div class="z-20 w-full md:w-5/6 lg:w-6/12 text-white">
+                                                <div class="block-slide-anime">
+                                                    <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
+                                                        <div class="flex items-center">
+                                                            <i class="sicon-calendar-date me-1 "></i>
+                                                            <span class="whitespace-nowrap">{{ article.created_at|date }}</span>
                                                         </div>
-                                                        <h3 class="text-sm font-bold leading-normal mb-4">
-                                                            <a href="{{ article.url }}">{{ article.title }}</a>
-                                                        </h3>
+                                                        <a href="{{ article.author.url }}"
+                                                           class=" flex items-center hover:underline">
+                                                            <i class="sicon-user me-1"></i>
+                                                            <span class="whitespace-nowrap">{{ article.author.name }}</span>
+                                                        </a>
                                                     </div>
-                                                    <p class="line-clamp-2 block-slide-anime description">{{ article.summary }}</p>
+                                                    <h3 class="text-sm font-bold leading-normal mb-4">
+                                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                                    </h3>
                                                 </div>
+                                                <p class="line-clamp-2 block-slide-anime description">{{ article.summary }}</p>
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
-                            </div>
-                            <div class="swiper-pagination text-start px-4 lg:px-10  bottom-8 lg:bottom-16"></div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    </div>
+                    </salla-slider>
                 {% else %}
                     <div class="sr-only lg:not-sr-only ">
                         <h1 class="blog-category__title font-bold text-lg mb-8">{{ page.title }}</h1>
@@ -168,8 +166,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block scripts %}
-    <script src="{{ 'pages.js' | asset }}"></script>
 {% endblock %}

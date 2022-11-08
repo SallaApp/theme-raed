@@ -1,30 +1,9 @@
-.swiper{
-  &.slider-layout{
-    @apply -mx-2.5 w-[calc(100%+20px)] px-[5px] sm:px-0 pe-12 lg:pe-0;
-
-    &.thumbs-slider{
-      @apply -mx-2 lg:w-[calc(100%+16px)] px-0;
-
-      .swiper-slide{
-        @apply w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 mx-2 p-0 cursor-pointer h-16 md:h-20 transition-opacity duration-300 bg-gray-50 rounded-md;
-
-        &:hover{
-          @apply opacity-80
-        }
-
-        &:after{
-          @apply transition-shadow duration-300 content-[''] absolute top-0 left-0 h-full w-full rounded-md z-1 ring-1 ring-gray-200 ring-inset;
-        }
-
-        &-thumb-active:after{
-          @apply ring-2 ring-primary;
-        }
-      }
-    }
-  }
-
+salla-slider{ 
   &.details-slider{
-    @apply bg-white border-[1px];
+    .s-slider-container{ 
+      @apply bg-white border-[1px] rounded-md;
+    }
+
     .swiper-slide{
       @apply relative rounded-md bg-white ring-1 ring-inset ring-gray-100;
     }
@@ -32,21 +11,31 @@
     salla-button.btn--wishlist{
       @apply absolute rtl:right-4 ltr:left-4 bottom-4 z-[2] sm:hidden;
     }
+
+    .s-slider-block__title-nav{
+      @apply hidden sm:flex;
+    }
   }
 
   .slide--one-fourth{
-    @apply h-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[250px] sm:max-w-[320px] px-[5px] sm:px-2.5;
+    @apply h-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[250px] sm:max-w-[320px];
   }
 
   .slide--one-sixth{
-    @apply w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6 px-[5px] sm:px-2.5;
+    @apply w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6;
   }
+
 
   // Fix Flickering in Safari 
   .swiper-slide{
     -webkit-transform: translateZ(0);
     -webkit-backface-visibility: hidden;
   }
+}
+
+.promotion-title{
+  @apply absolute z-10 top-4 start-0 font-bold text-sm bg-red-400 text-white rounded-e-md;
+  @apply w-auto m-0 px-3 py-2 #{!important};
 }
 
 .home-slider {
@@ -61,29 +50,37 @@
       }
     }
   }
+}
 
-  // Photos block slider
-  &.photos-slider {
-    .swiper-slide {
-      @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
+// Photos block slider
+salla-slider.photos-slider {
+  .swiper{
+    @apply w-full mx-0;
+  }
+
+  &:not(.hydrated) > div {
+    @apply justify-center;
+  }
+
+  .swiper-slide {
+    @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
+  }
+
+  // pagination
+  .swiper-pagination-bullet {
+    width: 20px;
+    border-radius: 5px;
+    background: #fff;
+    opacity: 0.3;
+
+    &-active {
+      opacity: 1;
+      background-color: var(--color-primary);
     }
+  }
 
-    // pagination
-    .swiper-pagination-bullet {
-      width: 20px;
-      border-radius: 5px;
-      background: #fff;
-      opacity: 0.3;
-
-      &-active {
-        opacity: 1;
-        background-color: var(--color-primary);
-      }
-    }
-
-    .swiper-pagination-bullets.swiper-pagination-horizontal{
-      @apply bottom-3 sm:bottom-6; 
-    }
+  .swiper-pagination-bullets.swiper-pagination-horizontal{
+    @apply bottom-3 sm:bottom-6; 
   }
 }
 
@@ -95,17 +92,19 @@
 
 // testimonials-slider
 .s-block--testimonials{
-  .s-block__title{
-    @apply px-5 xl:px-0
+  &.container{
+    @apply p-0 lg:px-2.5;
   }
 
-  .container{
-    @apply p-0;
-  }
+  .s-slider-block__title{
+    @apply px-2.5 lg:px-0;
 
-  @media (min-width: 1024px){
-    .container{
-      max-width: 1240px;
+    &-nav{
+      @apply max-w-[88%] top-[65%] #{!important};
+
+      button{ 
+        @apply border-gray-100 shadow-gray-300 #{!important};
+      }
     }
   }
 }
@@ -113,16 +112,26 @@
 .testimonials-slider {
   @apply transition-opacity;
 
-  &:not(.swiper-initialized){
+  .swiper:not(.swiper-initialized){
     @apply opacity-0;
   }
 
-  &.swiper{
+  .swiper{
     @apply pe-12 lg:pe-0 ps-5 lg:ps-0;
 
     @media (min-width: 1024px){
       margin-left: -200px;
       margin-right: -200px;
+    }
+
+    @media (min-width: 1024px){
+      .s-slider-button-prev {
+        margin-left: 200px;
+      }
+
+      .s-slider-button-next {
+        margin-right: 200px;
+      }
     }
   }
 
@@ -219,12 +228,12 @@
   }
 
   // navigation arrows
-  .btn--md-white-arrow {
+  .s-slider--nav-arrow {
     @apply hidden lg:flex translate-y-1/2;
     right: 17%;
     top: 35%;
 
-    &.slider-next {
+    &.s-slider-next {
       @apply start-auto;
       left: 17%;
     }
@@ -233,7 +242,7 @@
       left: 17%;
       right: auto;
 
-      &.slider-next {
+      &.s-slider-next {
         right: 17%;
         left: auto
       }
@@ -256,4 +265,24 @@
 //general
 .swiper-button-disabled {
   opacity: 0.5;
+}
+
+
+// Offer slider
+.offer-slider .s-slider-block__title{
+  @apply mb-5 relative; 
+
+  &:before{
+    @apply text-8xl font-normal text-red-50 absolute leading-none top-4 rtl:right-0 ltr:left-0 -z-1;
+    content: "\ee30";
+    font-family: 'sallaicons';
+  }
+
+  h2{
+    @apply text-lg text-red-400;
+  }
+
+  p{
+    @apply mt-1 leading-6 line-clamp-none;
+  }
 }

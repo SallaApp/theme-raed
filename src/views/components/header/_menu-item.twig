@@ -1,11 +1,11 @@
 {# MOBILE #}
     <li class="lg:hidden text-sm font-bold" {{ menu.attrs }}>
         {% if not menu.has_children %}
-            <a {{ menu.link_attrs }} href="{{ menu.url }}" class="text-gray-500">{{ menu.title }}</a>
+            <a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500">{{ menu.title }}</a>
         {% else %}
             <span>{{ menu.title }}</span>
             <ul>
-                <li class="text-sm font-bold"><a href="{{ menu.url }}" class="text-gray-500">{{ menu.title }}</a></li>
+                <li class="text-sm font-bold"><a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500">{{ menu.title }}</a></li>
                 {% for submenu in menu.children %}
                     {% include _self with {menu:submenu} %}
                 {% endfor %}
@@ -18,7 +18,7 @@
         {{ menu.products?' mega-menu': '' }}
         {{ menu.has_children?' has-children': '' }}"
         {{ menu.attrs|raw }}>
-        <a href="{{ menu.url }}">
+        <a {{ menu.link_attrs|raw }} href="{{ menu.url }}">
             <span>{{ menu.title }}</span>
         </a>
         {% if menu.has_children %}
