@@ -236,6 +236,12 @@
                         <salla-button onclick="salla.cart.submit()" loader-position="end" width="wide">
                             {{ trans('pages.cart.complete_order') }}
                         </salla-button>
+
+                        {% if cart.is_offer_ptice_feature_available %}
+                            <salla-button onclick="salla.cart.submitOfferPrice()" loader-position="end" width="wide">
+                                {{ trans('pages.cart.send_offer_price') }}
+                            </salla-button>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
