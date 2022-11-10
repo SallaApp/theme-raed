@@ -6,6 +6,15 @@ class Cart extends BasePage {
         // keep update the dom base in the events
         salla.event.cart.onUpdated(data => this.updateCartPageInfo(data));
 
+        salla.event.cart.onItemUpdated(res => this.updateCartPageInfo(res.data.cart));
+        salla.event.cart.onItemDeleted(res => this.updateCartPageInfo(res.data.cart));
+
+        salla.event.cart.onCouponAdded(res => this.updateCartPageInfo(res.data.cart));
+        salla.event.cart.onCouponDeleted(res => this.updateCartPageInfo(res.data.cart));
+
+        salla.event.loyalty.onExchangeSucceeded(res => this.updateCartPageInfo(res.data.cart));
+        salla.event.loyalty.onResetSucceeded(res => this.updateCartPageInfo(res.data.cart));
+
         app.watchElements({
             couponCodeInput: '#coupon-input',
             couponBtn      : '#coupon-btn',
