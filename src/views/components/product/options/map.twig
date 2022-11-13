@@ -1,20 +1,17 @@
-<div class="map-wrapper map-wrapper--has-search">
-  <button id="current_location_button_[{{ option.id }}]" type="button" class="btn map-wrapper__current-button">
-    <i class="sicon-location-target"></i>
-  </button>
-  <input id="map_search_input_[{{ option.id }}]" class="form-control map-wrapper__map-search" type="text" placeholder="{{ trans('pages.cart.detect_location') }}">
-  <div 
-  class="map-wrapper__map-placeholder" 
-  id="init_map_div" 
-  style="height: 300px;"
-  data-current-location="current_location_button_[{{ option.id }}]"
-  data-search-input="map_search_input_[{{ option.id }}]"
+<salla-map
+  id="location_map"
+  api-key="AIzaSyBPhPJ4KG13ywvmeAovLRnbi7WzlsdcWKs"
+  zoom="15"
   data-input-geocode="location_input_geocode_[{{ option.id }}]"
-  data-geo-location="{{ value }}">
-  </div>
-  <input 
-    type="hidden" 
-    id="location_input_geocode_[{{ option.id }}]"
-    value="{{ value }}"
-    name="options[{{ option.id }}]"/>
-</div>
+  lat=""
+  lng="">
+</salla-map>
+
+
+
+ <input 
+  type="hidden" 
+  id="location_input_geocode_[{{ option.id }}]"
+  value="{{ value }}"
+  name="options[{{ option.id }}]"
+/>
