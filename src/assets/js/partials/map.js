@@ -13,6 +13,7 @@ MAPS.forEach(map => {
 
   // Apend the value to the input for submiting 
   map.addEventListener('selected', (event) => {
+    const locationInput = document.getElementById(map.dataset.locationInput);
     locationInput.value = `${event.detail.lat}, ${event.detail.lng}`;
   });
 });
