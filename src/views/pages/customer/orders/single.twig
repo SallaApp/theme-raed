@@ -244,24 +244,18 @@
                                           {% elseif option.is_color_picker %}
                                             <span class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.value }}" ></span>
                                           {% elseif option.is_map %}
-                                            <salla-button shape="link" onclick="document.querySelector('#location-modal-{{option.id}}').open()" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
-                                              <a class="font-medium text-xs underline">{{ trans('pages.products.show_location') }}</a>
-                                            </salla-button>
-                                            <salla-modal width="md" id="location-modal-{{option.id}}" modal-title="{{ option.name }}">
-                                                <div class="map-wrapper mb-6">
-                                                  <div class="map-wrapper__map-placeholder" 
-                                                  id="init_map_div" 
-                                                  style="height: 300px;"
-                                                  data-event="false"
-                                                  data-geo-location="{{option.value}}">
-                                                  </div>
-                                                </div>
-                                                <div slot="footer">
-                                                    <salla-button class="w-full" fill="outline" color="light" onclick="document.querySelector('#location-modal').close()">
-                                                        {{ trans('common.elements.cancel') }}
-                                                    </salla-button>
-                                                </div>
-                                            </salla-modal>
+                                            <salla-map
+                                                id="location_map"
+                                                api-key="AIzaSyBPhPJ4KG13ywvmeAovLRnbi7WzlsdcWKs"
+                                                zoom="15"
+                                                readonly
+                                                data-location="{{option.value}}">
+                                                  <div slot="button">
+                                                    <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map#location_map').open()">
+                                                      عرض الموقع
+                                                    </button>
+                                                  </div> 
+                                            </salla-map>
                                           {% else %}
                                             {{ option.value }}
                                           {% endif %}
