@@ -333,15 +333,9 @@
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" novalidate>
                     <input type="hidden" name="id" value="{{ product.id }}">
 
-                    <salla-conditional-fields>
-                        {% hook 'product:single.form.start' %}
-
-                        {% include 'pages.partials.product.options' %}
-
-                        {% hook 'product:single.form.end' %}
-                    </salla-conditional-fields>
-
-
+          
+                    <salla-product-options></salla-product-options>
+                    
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
                         {% if product.is_hidden_quantity %}
