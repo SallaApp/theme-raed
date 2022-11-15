@@ -246,12 +246,13 @@
                                           {% elseif option.is_map %}
                                             <salla-map
                                                 id="location_map"
+                                                class="map_{{option.id}}"
                                                 api-key="AIzaSyBPhPJ4KG13ywvmeAovLRnbi7WzlsdcWKs"
                                                 zoom="15"
                                                 readonly
                                                 data-location="{{option.value}}">
                                                   <div slot="button">
-                                                    <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map#location_map').open()">
+                                                    <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map.map_{{option.id}}').open()">
                                                       {{ trans('pages.products.show_location') }}
                                                     </button>
                                                   </div> 

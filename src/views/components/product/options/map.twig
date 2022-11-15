@@ -1,6 +1,7 @@
 {% if value %}
   <salla-map
     id="location_map"
+    class="map_{{option.id}}_{{item_id}}"
     api-key="AIzaSyBPhPJ4KG13ywvmeAovLRnbi7WzlsdcWKs"
     zoom="15"
     searchable
@@ -8,7 +9,7 @@
     data-location="{{value}}">
       <div slot="button">
         <p class="block text-sm">{{map_description}}</p>
-        <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map#location_map').open()">
+        <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map.map_{{option.id}}_{{item_id}}').open()">
           <i class="sicon-pencil text-xs me-1"></i>
           تعديل
         </button>
