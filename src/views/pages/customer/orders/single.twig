@@ -238,9 +238,7 @@
                                           {% elseif option.color %}
                                             <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
                                           {% elseif option.is_file %}
-                                            <salla-button shape="link" class="s-button-wrap hydrated" color="primary" fill="solid" size="medium" width="normal">
-                                              <a href="{{ option.value }}" target="_blank" class="font-medium text-xs underline">{{ trans('pages.products.add_file') }}</a>
-                                            </salla-button>
+                                            <a href="{{ option.value }}" target="_blank" class="text-sm text-primary underline">{{ trans('pages.products.add_file') }}</a>
                                           {% elseif option.is_color_picker %}
                                             <span class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.value }}" ></span>
                                           {% elseif option.is_map %}
@@ -266,36 +264,6 @@
                           </dl>
                       </div>
                   {% endif %}
-
-                            {% if item.options %}
-                                <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for option in item.options %}
-                                            <div class="py-2.5 center-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    {{ option.name }}:
-                                                </dt>
-                                                <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
-                                                    {% if option.is_image %}
-                                                        <div class="flex space-s-2.5">
-                                                            <a href="{{ option.value }}" target="_blank">
-                                                                <img class="h-6 w-6 object-cover rounded-md"
-                                                                     src="{{ option.value ?: 'images/placeholder.png' | asset }}"
-                                                                     alt="{{ option.name }}"/>
-                                                            </a>
-                                                        </div>
-                                                    {% elseif option.color %}
-                                                        <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
-                                                    {% else %}
-                                                        {{ option.value }}
-                                                    {% endif %}
-                                                </dd>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% endif %}
 
                             {% if item.sub_products %}
                                 <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
