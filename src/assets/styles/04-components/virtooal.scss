@@ -1,0 +1,53 @@
+.virtooal {
+  padding: 18px;
+  margin: 15px 0;
+  border-radius: 10px;
+  border: 1px solid rgb(229, 229, 229);
+  background: white;
+  &--content {
+  @include flexable(center, space-between, row);
+}
+  &--details{
+    @include flexable(flex-start, center, column);
+    @include desktop {
+      display: none;
+    }
+    &--title{
+        font-size: 16px;
+        font-weight: 700;
+        color: #1F2937;
+    }
+    &--desc{
+        font-size: 13px;
+        color: #7C8082;
+        font-weight: 400;
+    ;
+    }
+  }
+  &--action {
+    @include desktop {
+      width:100%;
+    }
+    & button{
+      @include flexable(center, center, row);
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+      font-weight: 700;
+      font-size:14px;
+      padding: 8px 30px;
+      border-radius: 1px;
+      @include desktop {
+        width:100%;
+      }
+      & .icon{
+        width: 14px;
+        height: 14px;
+        @if ($direction == 'rtl') {
+          margin-left: 0.75rem;
+        } @else {
+          margin-right: 0.75rem;
+        }
+      }
+    }
+  }
+}
