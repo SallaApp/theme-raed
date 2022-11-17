@@ -68,6 +68,27 @@
                     {{ trans('common.elements.mobile') }}
                 </label>
                 <salla-tel-input phone="{{ user.mobile }}"></salla-tel-input>
+            </div> 
+            <div class="profile-field-item">
+                <label for="text" class="block text-sm font-bold mb-2 text-gray-700">
+                    حقل نصي
+                </label>
+                <input type="text" name="text" value="" id="text" class="form-input">
+
+            </div>
+            <div class="profile-field-item">
+                <label for="number" class="block text-sm font-bold mb-2 text-gray-700">
+                    حقل رقمي
+                </label>
+                <input type="number" name="text" value="" id="number" class="form-input">
+
+            </div>  
+            <div class="profile-field-item">
+                <label for="number" class="block text-sm font-bold mb-2 text-gray-700">
+                    حقل صورة
+                </label>
+                <salla-file-upload></salla-file-upload>
+
             </div>
 
             {% hook 'customer:profile.form.fields.end' %}
@@ -91,4 +112,8 @@
 {% block scripts %}
     <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'customer.js' | asset }}"></script>
+    <script>
+        let uploader = document.querySelector('salla-file-upload');
+        uploader.labelIdle = `<div class="s-product-options-filepond-placeholder"><span class="s-product-options-filepond-placeholder-icon"><i class="sicon-camera"></i></span><p class="s-product-options-filepond-placeholder-text">اسحب او افلت الصورة هنا</p> <span class="filepond--label-action">او تصفح من جهازك</span></div>`
+    </script>
 {% endblock %}
