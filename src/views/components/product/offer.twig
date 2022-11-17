@@ -31,7 +31,7 @@
                                 <p class="mb-1">{{ trans('pages.offer.buy_quantity_and_take', {quantity:discount.quantity_text, price:''})|number }}</p>
                                 {% if discount.show_discounted_price %}
                                     <div class="text-sm text-gray-400">
-                                        <span class="font-extrabold text-red-400 text-3xl">{{ discount.price|number_format|number }}</span> {{ user.currency.symbol }}
+                                        <span class="font-extrabold text-red-400 text-3xl">{{ discount.price|number|replace({'.':','}) }}</span> {{ user.currency.symbol }}
                                     </div>
                                 {% endif %}
                             </div>
