@@ -88,6 +88,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
     {% hook 'head:start' %}
+    {# <script>
+      window.salla = window.Salla = window.Salla || {};
+      Salla.onReady = Salla.onReady || function (callback) {
+          if (['ready', 'completed'].includes(Salla.status)) {
+            callback();
+            return;
+          }
+        window.addEventListener('salla::ready', callback, {once: true});
+      };
+    </script>
+    <script type="module" src="http://localhost:3333/build/twilight.esm.js"></script>
+    <script nomodule src="http://localhost:3333/build/twilight.js"></script>
+     #}
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">

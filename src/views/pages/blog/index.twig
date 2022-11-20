@@ -69,17 +69,23 @@
 
             <div class="main-content lg:col-span-6">
                 {% if slides|length %}
-                    <salla-slider type="blog" auto-play show-controls="false" pagination
-                                  class="blog-slider rounded-md overflow-hidden mb-8">
+                    <salla-slider 
+                      id="blog-home-slider"
+                      type="blog" 
+                      auto-play 
+                      auto-height
+                      show-controls="false" 
+                      pagination
+                      class="blog-slider block rounded overflow-hidden mb-2.5 lg:mb-8">
                         <div slot="items">
                             {% for article in slides %}
-                                <div class="swiper-slide has-overlay blog-slider__slide !h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
+                                <div class="swiper-slide has-overlay blog-slider__slide h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
                                     <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-50':'object-cover h-full w-full' }}"
                                          src="{{ article.image.url }}" alt="{{ article.image.alt }}">
                                     <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 lg:ps-10 lg:pb-20">
                                         <div class="blog-slider__content relative">
                                             <div class="z-20 w-full md:w-5/6 lg:w-6/12 text-white">
-                                                <div class="block-slide-anime">
+                                                <div data-swiper-parallax="-500"  class="block-slide-anime">
                                                     <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
                                                         <div class="flex items-center">
                                                             <i class="sicon-calendar-date me-1 "></i>
@@ -95,7 +101,7 @@
                                                         <a href="{{ article.url }}">{{ article.title }}</a>
                                                     </h3>
                                                 </div>
-                                                <p class="line-clamp-2 block-slide-anime description">{{ article.summary }}</p>
+                                                <p data-swiper-parallax="-300"  class="line-clamp-2 block-slide-anime description">{{ article.summary }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +117,7 @@
                 {% if articles|length %}
                     {% hook 'blog:index.items.start' %}
 
-                    <salla-infinite-scroll class="grid md:grid-cols-2 gap-8" next-page="{{ articles.next_page }}" autoload>
+                    <salla-infinite-scroll class="grid md:grid-cols-2 gap-2.5 md:gap-8" next-page="{{ articles.next_page }}" autoload>
                         {% for article in articles %}
                             <div class='list-block post-entry relative h-full transition-shadow duration-500 bg-white hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col'>
                                 <a href="{{ article.url }}"

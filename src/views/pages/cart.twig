@@ -236,11 +236,11 @@
                         <salla-button onclick="salla.cart.submit()" loader-position="end" width="wide">
                             {{ trans('pages.cart.complete_order') }}
                         </salla-button>
+
+                        {% hook 'cart:summary.end' %}
                     </div>
                 </div>
             {% endif %}
-
-            {% hook 'cart:summary.end' %}
         </div>
     </div>
 {% endblock %}
