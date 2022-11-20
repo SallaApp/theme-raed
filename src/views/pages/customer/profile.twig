@@ -75,7 +75,11 @@
                         {{ field.label }}
                     </label>
                     {% if field.type == 'photo' %}
-                        <salla-file-upload instant-upload uploadedImage="{{ field.value }}"></salla-file-upload>
+                        <salla-file-upload
+                                instant-upload
+                                uploadedImage="{{ field.value }}"
+                                label-idle='<div class="profile-filepond-placholder"><span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span><p class="profile-filepond-placholder-text">{{trans('common.uploader.drag_and_drop')}}</p> <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span></div>'
+                        ></salla-file-upload>
                         <input type="hidden" name="custom_fields[{{ field.id }}]" value="{{ field.value }}">
                     {% else %}
                         <input type="{{ field.type }}"
@@ -108,8 +112,4 @@
 {% block scripts %}
     <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'customer.js' | asset }}"></script>
-    <script>
-      let uploader = document.querySelector('salla-file-upload');
-      uploader.labelIdle = `<div class="profile-filepond-placholder"><span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span><p class="profile-filepond-placholder-text">اسحب او افلت الصورة هنا</p> <span class="filepond--label-action">او تصفح من جهازك</span></div>`
-    </script>
 {% endblock %}
