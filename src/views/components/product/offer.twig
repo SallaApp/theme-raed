@@ -23,23 +23,7 @@
       block-subTitle="{{ offer.description|raw }}"
       id="offer-slider">
         <div slot="items">
-            {% if offer.categories|length %}
-                {% for category in offer.categories %}
-                    <div class="slide--one-sixth">
-                        <a href="{{ category.url }}" class="slide--cat-entry">
-                            <i class="{{ category.icon }}"></i>
-                            <h4>{{ category.name }}</h4>
-                        </a>
-                    </div>
-                {% endfor %}
-            {% elseif offer.products|length %}
-                {% for product in offer.products %}
-                    <div class="h-auto slide--one-fourth">
-                        {% include 'pages.partials.product.card' %}
-                    </div>
-                {% endfor %}
-
-            {% elseif offer.discounts_table|length %}
+            {% if offer.discounts_table|length %}
                 {% for discount in offer.discounts_table %}
                     <div class="slide--one-fourth">
                         <div class="slide--offer-entry">
@@ -54,6 +38,21 @@
                             <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">{{ trans('pages.products.with_a_discount') }}
                                 (<span class="font-bold">{{ discount.percent|number }}</span>)</p>
                         </div>
+                    </div>
+                {% endfor %}
+            {% elseif offer.categories|length %}
+                {% for category in offer.categories %}
+                    <div class="slide--one-sixth">
+                        <a href="{{ category.url }}" class="slide--cat-entry">
+                            <i class="{{ category.icon }}"></i>
+                            <h4>{{ category.name }}</h4>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% elseif offer.products|length %}
+                {% for product in offer.products %}
+                    <div class="h-auto slide--one-fourth">
+                        {% include 'pages.partials.product.card' %}
                     </div>
                 {% endfor %}
             {% endif %}
