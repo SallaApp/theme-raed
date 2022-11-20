@@ -65,23 +65,6 @@ salla-slider.photos-slider {
   .swiper-slide {
     @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
   }
-
-  // pagination
-  .swiper-pagination-bullet {
-    width: 20px;
-    border-radius: 5px;
-    background: #fff;
-    opacity: 0.3;
-
-    &-active {
-      opacity: 1;
-      background-color: var(--color-primary);
-    }
-  }
-
-  .swiper-pagination-bullets.swiper-pagination-horizontal{
-    @apply bottom-3 sm:bottom-6; 
-  }
 }
 
 .swiper:not(.swiper-initialized) {
@@ -267,6 +250,25 @@ salla-slider.photos-slider {
   opacity: 0.5;
 }
 
+// bullet pagination -------
+salla-slider{
+  .swiper-pagination-bullet {
+    width: 20px;
+    border-radius: 5px;
+    background: #fff;
+    opacity: 0.3;
+
+    &-active {
+      opacity: 1;
+      background-color: var(--color-primary);
+    }
+  }
+
+  .swiper-pagination-bullets.swiper-pagination-horizontal{
+    @apply bottom-3 sm:bottom-6; 
+  }
+}
+
 
 // Offer slider
 .offer-slider .s-slider-block__title{
@@ -290,4 +292,12 @@ salla-slider.photos-slider {
 // move to slider component
 model-viewer[style*="width"]:before{
   @apply hidden;
+}
+
+
+// Blog slider
+.blog-slider{
+  .swiper-slide img{
+    @apply min-h-[380px] max-h-[480px] md:max-h-[680px];
+  }
 }
