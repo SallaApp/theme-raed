@@ -68,28 +68,24 @@
                     {{ trans('common.elements.mobile') }}
                 </label>
                 <salla-tel-input phone="{{ user.mobile }}"></salla-tel-input>
-            </div> 
-            <div class="profile-field-item">
-                <label for="text" class="block text-sm font-bold mb-2 text-gray-700">
-                    حقل نصي
-                </label>
-                <input type="text" name="text" value="" id="text" class="form-input">
-
             </div>
-            <div class="profile-field-item">
-                <label for="number" class="block text-sm font-bold mb-2 text-gray-700">
-                    حقل رقمي
-                </label>
-                <input type="number" name="text" value="" id="number" class="form-input">
-
-            </div>  
-            <div class="profile-field-item">
-                <label for="number" class="block text-sm font-bold mb-2 text-gray-700">
-                    حقل صورة
-                </label>
-                <salla-file-upload></salla-file-upload>
-
-            </div>
+            {% for field in custom_fields %}
+                <div class="profile-field-item">
+                    <label for="{{ field.id }}" class="block text-sm font-bold mb-2 text-gray-700">
+                        {{ field.label }}
+                    </label>
+                    {% if field.type == 'photo' %}
+                        <salla-file-upload instant-upload uploadedImage="{{ field.value }}"></salla-file-upload>
+                        <input type="hidden" name="custom_fields[{{ field.id }}]" value="{{ field.value }}">
+                    {% else %}
+                        <input type="{{ field.type }}"
+                               id="{{ field.id }}"
+                               value="{{ field.value }}"
+                               name="custom_fields[{{ field.id }}]"
+                               class="form-input" {{ field.required?'required':'' }}/>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
             {% hook 'customer:profile.form.fields.end' %}
         </div>
@@ -113,7 +109,7 @@
     <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'customer.js' | asset }}"></script>
     <script>
-        let uploader = document.querySelector('salla-file-upload');
-        uploader.labelIdle = `<div class="profile-filepond-placholder"><span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span><p class="profile-filepond-placholder-text">اسحب او افلت الصورة هنا</p> <span class="filepond--label-action">او تصفح من جهازك</span></div>`
+      let uploader = document.querySelector('salla-file-upload');
+      uploader.labelIdle = `<div class="profile-filepond-placholder"><span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span><p class="profile-filepond-placholder-text">اسحب او افلت الصورة هنا</p> <span class="filepond--label-action">او تصفح من جهازك</span></div>`
     </script>
 {% endblock %}
