@@ -69,6 +69,27 @@
                 </label>
                 <salla-tel-input phone="{{ user.mobile }}"></salla-tel-input>
             </div>
+            {% for field in custom_fields %}
+                <div class="profile-field-item">
+                    <label for="{{ field.id }}" class="block text-sm font-bold mb-2 text-gray-700">
+                        {{ field.label }}
+                    </label>
+                    {% if field.type == 'photo' %}
+                        <salla-file-upload
+                                instant-upload
+                                uploadedImage="{{ field.value }}"
+                                label-idle='<div class="profile-filepond-placholder"><span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span><p class="profile-filepond-placholder-text">{{trans('common.uploader.drag_and_drop')}}</p> <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span></div>'
+                        ></salla-file-upload>
+                        <input type="hidden" name="custom_fields[{{ field.id }}]" value="{{ field.value }}">
+                    {% else %}
+                        <input type="{{ field.type }}"
+                               id="{{ field.id }}"
+                               value="{{ field.value }}"
+                               name="custom_fields[{{ field.id }}]"
+                               class="form-input" {{ field.required?'required':'' }}/>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
             {% hook 'customer:profile.form.fields.end' %}
         </div>
