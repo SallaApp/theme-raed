@@ -80,10 +80,10 @@
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
-                {% set has_many_images = product.images|length > 1 %} 
-                <salla-slider 
-                  id="details-slider-{{ product.id }}" 
-                  class="details-slider rounded-md" 
+                {% set has_many_images = product.images|length > 1 %}
+                <salla-slider
+                  id="details-slider-{{ product.id }}"
+                  class="details-slider rounded-md"
                   type="thumbs"
                   loop="false"
                   show-thumbs-controls="false">
@@ -207,9 +207,9 @@
                     {% endif %}
                 </div>
 
-                <div class="product__description leading-7 mb-3">
+                <div class="product__description p-2 sm:p-1 leading-7 mb-3">
                     {% if product.has_read_more %}
-                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
+                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 p-4" id="more-content" style="max-height:5.25rem">
                             {{ product.description|raw }}
                         </article>
 
@@ -378,4 +378,4 @@
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     {% endif %}
 {% endblock %}
- 
+
