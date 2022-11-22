@@ -1,30 +1,8 @@
-import Flatpickr from 'flatpickr';
-
+//todo:: drop this class, and the usage for filepond at all, use salla-file-upload instead
 export default class ProductOptions {
     constructor() {
-
-        Flatpickr('.date-element', {"dateFormat": "Y-m-d H:i"});
-        app.all('.date-time-element',element=>{
-            let days= JSON.parse(element.dataset.orderTimes||'{}');
-            days = Object.keys(days).length ? days : false;
-            Flatpickr(element ,{
-                enableTime: true,
-                    dateFormat: "Y-m-d H:i",
-                    minDate:element.dataset.fromDateTime,
-                    maxDate:element.dataset.toDateTime,
-                enable: [
-                     (date) => {
-                        if (!days) {
-                            return true;
-                        }
-                        return !!days[date.toLocaleString('en-us', {weekday: 'long'}).toLowerCase()];
-                    }
-                ]
-            });
-        })
-        Flatpickr('.time-element', {enableTime: true, noCalendar: true, dateFormat: "H:i",});
         let isCart = salla.url.is_page('cart');
-        let filepond = new FileUploader('.filepond', {
+        new FileUploader('.filepond--product-option', {
             name         : 'file',
             maxFileSize  : '3MB',
             instantUpload: isCart,
