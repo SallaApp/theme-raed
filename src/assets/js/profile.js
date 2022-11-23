@@ -3,7 +3,6 @@ import BasePage from './base-page';
 
 class Profile extends BasePage {
   onReady() {
-    Flatpickr('.date-element', {"dateFormat": "Y-m-d"});
     let label = salla.config.get('theme.is_rtl') ? 'اختر صورة مناسبة' : 'Choose your image';
 
     new FileUploader('#profile-img', {
