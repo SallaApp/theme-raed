@@ -29,31 +29,7 @@
 | product.options[].details[].is_out              | bool                       | Does current option out of stock?                                                                           |
 #}
 {% if product.options|length %}
-    <section class="bg-white p-5 rounded-md mb-5">
-        {% for option_index, option in product.options %}
-            {# if there is no need for a label, or it needs special handling in the element file #}
-            {% if option.type in ["splitter"] %}
-                {{ option.element|raw }}
-            {% else %}
-                <div class="mb-5 last:mb-0 {{ option.visibility_condition?'hidden':'' }}" {{ option.condition_attributes|raw }}>
-                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
-                        {% if option.type != "donation" %}
-                            <label for="options[{{ option.id }}]" class="form-label">
-                                <b class="block">
-                                    {{ option.name }}
-                                    {% if option.required %}<span class="text-red-500">*</span>{% endif %}
-                                </b>
-                                <small class="text-gray-500">{{ option.placeholder }}</small>
-                            </label>
-                        {% endif %}
-                        <div class="mt-1 sm:mt-0 {{ option.type != "donation" ? 'sm:col-span-2' : 'sm:col-span-3' }}">
-                            {{ option.element(product.id)|raw }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </section>
+  <salla-product-options options="{{ product.options }}" product-id="{{ product.id }}"></salla-product-options>
 {% endif %}
 
 {% if product.weight or product.has_size_guide %}
