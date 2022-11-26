@@ -82,7 +82,9 @@
         </div>
 
         {% if user.type=='guest' %}
-            <salla-login-modal></salla-login-modal>
+            <salla-login-modal is-email-allowed={{ store.settings.auth.email_allowed ? 'true' : 'false' }}
+                               is-mobile-allowed={{ store.settings.auth.mobile_allowed ? 'true' : 'false' }}
+                               is-email-required={{ store.settings.auth.is_email_required ? 'true' : 'false' }}></salla-login-modal>
         {% endif %}
     </div>
 </header>
