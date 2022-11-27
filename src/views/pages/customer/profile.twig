@@ -6,7 +6,6 @@
 | page.slug                      | string   |                                                     |
 #}
 {% extends "layouts.customer" %}
-
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
     <form class="form form--user-profile ajax" onsubmit="return salla.form.onSubmit('profile.update', event)">
@@ -34,8 +33,14 @@
                 <label for="birthday" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.birthday') }}
                 </label>
-                <input type="text" id="birthday" name="birthday" value="{{ user.birthday }}" required
-                       class="form-input date-element" placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
+                {# use onPicker if needed #}
+                <salla-datetime-picker
+                    dateFormat="Y-m-d"
+                    value="{{ user.birthday }}"
+                    placeholder="{{ trans('pages.profile.birthday_placeholder') }}"
+                    required
+                    name="birthday"
+                    ></salla-datetime-picker>
             </div>
 
             <div class="profile-field-item">
