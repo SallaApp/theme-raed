@@ -108,13 +108,16 @@
                             {% if not is_page('cart') %}
                                 <input type="file" name="file">
                             {% endif %}
-                            <input class="filepond filepond--product-option"
-                                   type="file"
-                                    {% if is_page('cart') %}
-                                        data-files="{{ product.attachments }}"
-                                        data-item-id="{{ product.id }}"
-                                    {% endif %}
-                            />
+
+                            <salla-file-upload 
+                                class="product-option-uploader"
+                                label-idle='<div class="product-option-uploader-placholder"><span class="product-option-uploader-placholder-icon"><i class="sicon-camera"></i></span><p class="profile-filepond-placholder-text">{{trans('common.uploader.drag_and_drop')}}</p> <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span></div>'
+                                {% if is_page('cart') %}
+                                    value="{{product.attachements}}" 
+                                    form-data="{'itemId':{{product.id}}}"
+                                {% endif %}
+                                >
+                            </salla-file-upload>
                         </div>
                     </div>
                 {% endif %}

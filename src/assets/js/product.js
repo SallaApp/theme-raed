@@ -1,7 +1,6 @@
 import 'lite-youtube-embed';
 import BasePage from './base-page';
 import Fslightbox from 'fslightbox';
-import ProductOptions from './partials/product-options';
 window.fslightbox = Fslightbox;
 
 class Product extends BasePage {

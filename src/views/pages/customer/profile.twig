@@ -6,10 +6,7 @@
 | page.slug                      | string   |                                                     |
 #}
 {% extends "layouts.customer" %}
-{% block styles %}
-    <link rel="stylesheet" href="{{ 'flatpickr.css' | asset }}">
-    <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
-{% endblock %}
+
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
     <form class="form form--user-profile ajax" onsubmit="return salla.form.onSubmit('profile.update', event)">
@@ -113,6 +110,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'customer.js' | asset }}"></script>
 {% endblock %}
