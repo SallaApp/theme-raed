@@ -16,6 +16,7 @@
 | id                    | int                          | pageId or ProductId |
 #}
 
+{% if display_customer_reviews %}
 <div class="s-comments s-comments-{{ type }}">
     <div class="container {{ type == 'page' ? 'px-0':'' }}">
         <h2 class="mb-2 sm:mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
@@ -35,3 +36,4 @@
         {% endif %}
     </div>
 </div>
+{% endif %}
