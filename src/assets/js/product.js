@@ -5,7 +5,6 @@ window.fslightbox = Fslightbox;
 
 class Product extends BasePage {
     onReady() {
-        // new ProductOptions();
         app.watchElements({
             totalPrice: '.total-price',
             beforePrice: '.before-price',

@@ -19,8 +19,6 @@ class Cart extends BasePage {
         });
 
         this.initiateCoupon();
-
-        new ProductOptions();
     }
 
     /**
