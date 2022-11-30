@@ -232,14 +232,17 @@
                                 </small>
                             </div>
                         {% endif %}
-
+                        
+                        {% hook 'cart:submit.start' %}
+                        
                         <div class="flex justify-between items-center space-x-2.5 rtl:space-x-reverse">
-                          {% hook 'cart:summary.end' %}
 
                           <salla-button onclick="salla.cart.submit()" loader-position="center" width="wide">
                               {{ trans('pages.cart.complete_order') }}
                           </salla-button>
                         </div>
+                        
+                        {% hook 'cart:submit.end' %}
                     </div>
                 </div>
             {% endif %}
