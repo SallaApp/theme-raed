@@ -35,12 +35,12 @@
                 </label>
                 {# use onPicker if needed #}
                 <salla-datetime-picker
-                    dateFormat="Y-m-d"
-                    value="{{ user.birthday }}"
-                    placeholder="{{ trans('pages.profile.birthday_placeholder') }}"
-                    required
-                    name="birthday"
-                    ></salla-datetime-picker>
+                        dateFormat="Y-m-d"
+                        value="{{ user.birthday }}"
+                        placeholder="{{ trans('pages.profile.birthday_placeholder') }}"
+                        required
+                        name="birthday"
+                ></salla-datetime-picker>
             </div>
 
             <div class="profile-field-item">
@@ -83,8 +83,13 @@
                                 url="{{ store.url|trim('/'~user.language_code) }}/upload-image"
                                 name="custom_fields[{{ field.id }}]"
                                 payload-name="image"
-                                label-idle='<div class="profile-filepond-placholder"><span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span><p class="profile-filepond-placholder-text">{{trans('common.uploader.drag_and_drop')}}</p> <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span></div>'
-                        ></salla-file-upload>
+                        >
+                            <div class="profile-filepond-placholder">
+                                <span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span>
+                                <p class="profile-filepond-placholder-text">{{ trans('common.uploader.drag_and_drop') }}</p>
+                                <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span>
+                            </div>
+                        </salla-file-upload>
                         <input type="hidden" name="custom_fields[{{ field.id }}]" value="{{ field.value }}">
                     {% else %}
                         <input type="{{ field.type }}"
