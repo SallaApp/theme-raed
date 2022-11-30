@@ -29,7 +29,7 @@
 | product.options[].details[].is_out              | bool                       | Does current option out of stock?                                                                           |
 #}
 {% if product.options|length %}
-  <salla-product-options options="{{ product.options }}" product-id="{{ product.id }}"></salla-product-options>
+    <salla-product-options options="{{ product.options }}" product-id="{{ product.id }}"></salla-product-options>
 {% endif %}
 
 {% if product.weight or product.has_size_guide %}
@@ -105,16 +105,19 @@
                     {# Notice that "product" is actually cart.items[*], so {product.id} is {item.id} #}
                     <div class="h-0 overflow-hidden opacity-0 is-closed" id="file_{{ product.id }}">
                         <div class="pt-4">
-                            {% if not is_page('cart') %}
-                                <input type="file" name="file">
-                            {% endif %}
-                            <input class="filepond filepond--product-option"
-                                   type="file"
+                            <salla-file-upload class="product-option-uploader"
                                     {% if is_page('cart') %}
-                                        data-files="{{ product.attachments }}"
-                                        data-item-id="{{ product.id }}"
-                                    {% endif %}
-                            />
+                                        files="{{ product.attachments|json_encode }}"
+                                        cart-item-id="{{ product.id }}"
+                                    {% endif %}>
+                                <div class="product-option-uploader-placholder">
+                                    <span class="product-option-uploader-placholder-icon">
+                                        <i class="sicon-camera"></i>
+                                    </span>
+                                    <p class="profile-filepond-placholder-text">{{ trans('common.uploader.drag_and_drop') }}</p>
+                                    <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span>
+                                </div>
+                            </salla-file-upload>
                         </div>
                     </div>
                 {% endif %}
