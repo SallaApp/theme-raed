@@ -13,11 +13,7 @@ module.exports = {
         checkout: [asset('js/cart.js'), asset('js/thankyou.js')],
         pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
         product : [asset('js/product.js'), asset('js/products.js')],
-        customer: [asset('js/profile.js'), asset('js/order.js')],
-
-        //plugins
-        filepond : [asset('styles/05-utilities/filepond.scss'), asset('js/partials/filepond.js')],
-        flatpickr: asset('styles/05-utilities/flatpicker.scss')
+        order: asset('js/order.js'),
     },
     output : {
         path: public(),

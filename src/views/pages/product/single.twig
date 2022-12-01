@@ -68,10 +68,6 @@
 | is_quick_order_enabled                 | bool                        | Does this store has quick order feature and is active?                 |
 #}
 {% extends "layouts.master" %}
-{% block styles %}
-    <link rel="stylesheet" href="{{ 'flatpickr.css' | asset }}">
-    <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
-{% endblock %}
 {% block content %}
     <div class="container">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
@@ -373,7 +369,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'product.js' | asset }}"></script>
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
