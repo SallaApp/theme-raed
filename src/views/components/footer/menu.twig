@@ -1,10 +1,11 @@
 {#
-| Variable        | Type    | Description |
-|-----------------|---------|-------------|
-| items           | link[]  |             |
-| items[].id      | int     |             |
-| items[].title   | String  |             |
-| items[].url     | String  |             |
+| Variable        | Type    | Description      |
+|-----------------|---------|------------------|
+| items           | link[]  |                  |
+| items[].id      | int     |                  |
+| items[].title   | String  |                  |
+| items[].url     | String  |                  |
+| items[].target  | String  | '_blank','_self' |
 #}
 {% if is_header %}
     {% if items|length %}
@@ -19,7 +20,7 @@
         <h3>{{ trans('blocks.footer.pages_links') }}</h3>
         <div class="footer-list {{ items|length > 4 ? 'store-links-items':'' }}">
             {% for item in items %}
-                <a href="{{ item.url }}" class="block mb-5 last:mb-0 text-sm leading-none">{{ item.title }}</a>
+                <a href="{{ item.url }}" target="{{ item.target }}" class="block mb-5 last:mb-0 text-sm leading-none">{{ item.title }}</a>
             {% endfor %}
         </div>
     </div>
