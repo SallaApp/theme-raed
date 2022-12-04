@@ -16,9 +16,10 @@ module.exports = {
         customer: [asset('js/profile.js'), asset('js/order.js')],
 
         //plugins
+        filepond : [asset('styles/05-utilities/filepond.scss'), asset('js/partials/filepond.js')],
+        flatpickr: asset('styles/05-utilities/flatpicker.scss'),
         colorpicker: asset('js/partials/color-picker.js'), 
         map: asset('js/partials/map.js'), 
-        order: asset('js/order.js'),
     },
     output : {
         path: public(),

@@ -1,0 +1,365 @@
+{# todo :: need more review #}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="product-section mt-50 mb-0">
+            {# TODO:: avoid class fucntions#}
+            <div class="quick-buy quick-buy--{{ quick_checkout.getClassName() }}" id="quick_order">
+                {% if oneClick %}
+                <form class="form ajax" id="one-click" action="{{ checkout_url }}" method="POST">
+                    {% for product in products %}
+                        <input type="hidden" name="product_ids[]" value="{{ product.getKey() }}">
+                    {% endfor %}
+                {% endif %}
+                    <div class="quick-buy__header qo-title">
+                        <div>
+                            <h2 class="title title--x-large">{{ quick_checkout.getTitle() }}</h2>
+                            <p class="no-m">{{ quick_checkout.getSubTitle() }}</p>
+                        </div>
+                        <button type="{{ oneClick ? 'submit' : 'button' }}"
+                                data-type="{{ user.type }}"
+                                class="btn btn--padded btn--large btn--oval quick-buy__toggle qo-order">
+                            <span class="text">{{ quick_checkout.getButtonAlertPlaceholder() }}</span>
+                            <i class="sicon-keyboard_arrow_up icon"></i>
+                        </button>
+                    </div>
+                {% if oneClick %}
+                </form>
+                {% endif %}
+                <div class="quick-buy__body">
+                    <div class="quick-buy-wrapper qo-form">
+                        <form class="form form--lg-fields form--quick-buy ajax" id="one-click"
+                              action="{{ checkout_url }}"
+                              data-filter-before-submit="beforeSubmit"
+                              data-on-success="onSuccess"
+                              data-on-fail="onFail"
+                              novalidate
+                              method="post">
+                            {% for product in products %}
+                                <input type="hidden" name="product_ids[]" value="{{ product.id }}">
+                            {% endfor %}
+
+                            {% if user.type=='guest' %}
+
+                                <div class="form-group">
+                                    <label>{{trans('pages.products.your_name')}}</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ customerPresenter.getName() }}"
+                                           name="full_name"
+                                           id="full_name"
+                                           placeholder="{{trans('pages.products.your_name')}}"/>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group phone-input">
+                                            <label>{{trans('common.elements.mobile')}}</label>
+                                            <input type="tel"
+                                                   class="form-control intl-input phone"
+                                                   name="phone"
+                                                   value="{{ customerPresenter.getNationalNumber() }}"
+                                                   data-digits
+                                                   id="mobile"
+                                                   placeholder="{{trans('common.elements.mobile_placeholder')}}"/>
+                                            <span id="error-msg"></span>
+                                        </div>
+                                        <input type="hidden"
+                                               name="countryCode"
+                                               id="country-code"
+                                               class="country-code"
+                                               value="{{ customerPresenter.getCountryCode()|default('SA') }}"
+                                        >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>{{ trans('common.elements.email') }}</label>
+                                            <input type="email"
+                                                   name="email"
+                                                   class="form-control {{ quick_checkout.isEmailRequired() ? 'required' : '' }}"
+                                                   id="email"
+                                                   placeholder="{{ trans('common.elements.email') }} {{ quick_checkout.isEmailRequired() ?'':trans('common.elements.optional') }}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if quick_checkout.isTermsRequired() %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox--large">
+                                                <input name="terms" id="qo_agreement"
+                                                       type="checkbox" {{ user.type=='user' ? 'checked' : '' }}>
+                                                {% if agreement_text|raw|length > 200 %}
+                                                    <label for="qo_agreement">
+                                                        {{ agreement_text|striptags|slice(0, 150) ~ '...' }}                                                        &ensp;
+                                                        <a class="popup-trigger btn btn--link color-primary text-underline d-inline-block"
+                                                           data-popup-trigger="agreement-modal">{{ trans('pages.checkout.show_full_agreement') }}</a>
+                                                    </label>
+                                                {% else %}
+                                                    <label for="qo_agreement">
+                                                        {{ agreement_text|raw|striptags  }}
+                                                    </label>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="form-group mb-0">
+                                <button type="submit"
+                                        id="submit_btn"
+                                        class="btn btn--wide btn--rounded btn--large bg-white btn--padded qo-submit">
+
+                                    <div class="line-scale">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                    <span class="btn__text">{{ quick_checkout.getButtonPlaceholder() }}</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if agreement_text|raw|length > 200 %}
+<div class="popup-modal-wrap popup-modal-wrap--scroll" data-popup-modal="agreement-modal">
+    <div class="popup-modal agreement-modal shadow">
+        <div class="popup-modal-inner">
+            <button class="btn btn--circular btn--modal-close no-p" data-close-modal="true">
+                <i class="sicon-cancel"></i>
+            </button>
+            <header class="popup-modal__header">
+                <h2 class="title title--medium title--primary">{{ trans('pages.checkout.full_agreement') }}</h2>
+            </header>
+            <section class="popup-modal__body">
+                <article class="article article--main article--small">
+                    {{ agreement_text|raw  }}
+                </article>
+            </section>
+            <footer class="popup-modal__footer anime-item">
+                <div>
+                    <button class="btn btn--wide btn--primary btn--oval btn--padded" data-close-modal="true">
+                        {{ trans('common.exit') }}
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+{% endif %}
+<script>
+    {% if supportedCountries %}
+    window.supportedCountries = {{ supportedCountries|json_encode()|raw }};
+    {% endif %}
+    // clear empty p tags in editor output --
+    document.addEventListener("DOMContentLoaded", function () {
+        $('#mobile').css('padding-left', '74px');
+        var isValid = function (el) {
+            return el.length ? true : false;
+        }
+
+        var productDescContainer = $('.product-detials__desc'),
+            pageDescContainer = $('.product-desc');
+
+        var removeEmptyTag = function (container) {
+            container.find('p br').remove();
+            container.find('p:empty').remove();
+
+        }
+        if (isValid(productDescContainer) || isValid(pageDescContainer)) {
+            removeEmptyTag(productDescContainer)
+            removeEmptyTag(pageDescContainer)
+        }
+
+
+        // quick order form ----
+        var quickOrderForm = $('#quick_order'),
+            qoOrder = quickOrderForm.find('.btn.qo-order'),
+            qoForm = quickOrderForm.find('.qo-form');
+        var confirmMsg = function (message) {
+
+            return `
+            <h1>
+                <span>
+                    <i class="sicon-party-horn"></i>
+                    ${message}
+                </span>
+            </h1>`;
+        };
+
+        var toggleFlags = function (flag) {
+            switch (flag) {
+                case 'open':
+                    qoOrder.addClass('close');
+                    quickOrderForm.addClass('open')
+                    break;
+                case 'close':
+                    qoOrder.removeClass('close');
+                    quickOrderForm.removeClass('open')
+            }
+        }
+
+        window.toggleForm = function (status, message = '') {
+            var qoFormHeight = qoForm.outerHeight();
+            switch (status) {
+
+                // open form ---
+                case 'open':
+                    quickOrderForm.animate({
+                        height: quickOrderForm.outerHeight() + qoFormHeight
+                    }, {
+                        duration: 250,
+                        done    : function () {
+                            qoForm
+                                .fadeIn('fast')
+                                .find('input:first').focus();
+                            quickOrderForm.removeAttr('style');
+                        }
+                    })
+                    toggleFlags('open')
+                    break;
+
+                // close form ---
+                case 'close':
+                    qoForm.animate({
+                        opacity: 0,
+                    }, {
+                        duration: 250,
+                        done    : function () {
+                            quickOrderForm.animate({
+                                height: quickOrderForm.outerHeight() - qoFormHeight
+                            }, {
+                                duration: 250,
+                                done    : function () {
+                                    qoForm.removeAttr('style')
+                                }
+                            })
+                        }
+                    })
+                    toggleFlags('close')
+                    break;
+                case 'confirm':
+                    qoForm.animate({
+                        opacity: 0,
+                    }, {
+                        duration: 250,
+                    })
+                    quickOrderForm.animate({
+                        height: quickOrderForm.outerHeight() - qoFormHeight
+                    }, {
+                        duration: 250,
+                        done    : function () {
+                            quickOrderForm.removeAttr('style')
+                            qoForm.remove();
+                        }
+                    })
+                    quickOrderForm.addClass('confirmed').find('.qo-title').fadeOut('fast', function () {
+                        $(this).empty().html(confirmMsg(message));
+                        $(this).fadeIn('slow')
+                    })
+                    toggleFlags('close')
+                    break;
+            }
+        }
+
+        qoOrder.on('click', function () {
+            if ($(this).data('type') === 'logged') {
+                return;
+            }
+
+            if (!$(this).parents('#quick_order').hasClass('open')) {
+                toggleForm('open');
+            } else {
+                toggleForm('close');
+                $(this).parents('#quick_order').removeClass('open');
+            }
+        });
+
+
+
+        var submitBtn = document.querySelector('.btn.qo-submit'),
+            email = document.querySelector('#quick_order #email'),
+            full_name = document.querySelector('#quick_order #full_name'),
+            mobile = document.querySelector('#quick_order #mobile');
+
+        // Keyup
+        if(full_name){
+          full_name.addEventListener('keyup', function(){
+            full_name.parentElement.classList.remove('error');
+          });
+        }
+
+        if(email){
+          email.addEventListener('keyup', function(){
+            if(validateEmail(email.value))
+              email.parentElement.classList.remove('error');
+          });
+        }
+
+        if(mobile){
+          mobile.addEventListener('keyup', function(){
+            mobile.parentElement.parentElement.classList.remove('error');
+          });
+        }
+
+
+        window.beforeSubmit = function (form_data, that, event) {
+          if (qoOrder.data('type') === 'gust') {
+            var isValidList = [];
+
+            if(full_name){
+              if(full_name.value !== '' && full_name.value.length > 3)
+                isValidList.push('name');
+              else
+                full_name.parentElement.classList.add('error');
+            }
+
+            if(email){
+              if((validateEmail(email.value) && email.className.match(/\brequired\b/)) ||
+                (!email.className.match(/\brequired\b/) && email.value =='') ||
+                (!email.className.match(/\brequired\b/) && email.value !=='' && validateEmail(email.value)))
+                isValidList.push('email');
+              else
+                email.parentElement.classList.add('error');
+            }
+
+            if(mobile){
+              if(mobile.value !== '')
+                isValidList.push('mobile');
+              else
+                mobile.parentElement.parentElement.classList.add('error');
+            }
+
+            if(isValidList.length == 3){
+              console.log('form_data: ', form_data);
+              submitBtn.classList.add('btn--has-loading');
+              return form_data;
+            }
+            else
+              throw 'Not Valid';
+          }
+          else{
+            submitBtn.classList.add('btn--has-loading');
+            return form_data;
+          }
+        };
+
+        window.onSuccess = function (form_data, that, event) {
+          submitBtn.classList.remove('btn--has-loading');
+        };
+
+        window.onFail = function (form_data, that, event) {
+          submitBtn.classList.remove('btn--has-loading');
+        };
+
+        function validateEmail(email) {
+          const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(String(email).toLowerCase());
+        }
+    })
+</script>

@@ -1,0 +1,11 @@
+{#
+| Variable   | Type          | Description                                             |
+|------------|---------------|---------------------------------------------------------|
+| option     | ProductOption | @see views/pages/partials/product/options.twig          |
+| attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `       |
+| disabled   | bool          |                                                         |
+| required   | bool          |                                                         |
+| value      | ?string       |                                                         |
+#}
+<input placeholder="{{ option.placeholder }}" name="options[{{ option.id }}]" type="text"
+       class="form-input{{ required?' required':'' }}" value="{{ value }}" {{ attirubtes|raw }}/>

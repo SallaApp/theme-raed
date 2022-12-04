@@ -94,9 +94,8 @@
                     </span>
                     {% endif %}
 
-                    {% if order.is_price_quote %}
-                        <span class="text-red-500">{{ trans('pages.orders.your_order_is_under_review') }}</span>
-                    {% elseif (can_print_invoice) %}
+
+                    {% if (can_print_invoice) %}
                         <salla-button fill="outline" size="small"
                                       onclick="window.open('{{ order.print_url()}}', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, width=900, height=700');">
                             <i class="sicon-printer2 v-align"></i>
@@ -539,5 +538,4 @@
 {% block scripts %}
     <script src="{{ 'customer.js' | asset }}"></script>
     <script defer src="{{ 'map.js' | asset }}"></script>
-    <script defer src="{{ 'order.js' | asset }}"></script>
 {% endblock %}

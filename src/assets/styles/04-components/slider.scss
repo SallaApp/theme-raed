@@ -1,6 +1,4 @@
 salla-slider{ 
-  @apply block;
-  
   &.details-slider{
     .s-slider-container{ 
       @apply bg-white border-[1px] rounded-md;
@@ -67,6 +65,23 @@ salla-slider.photos-slider {
   .swiper-slide {
     @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
   }
+
+  // pagination
+  .swiper-pagination-bullet {
+    width: 20px;
+    border-radius: 5px;
+    background: #fff;
+    opacity: 0.3;
+
+    &-active {
+      opacity: 1;
+      background-color: var(--color-primary);
+    }
+  }
+
+  .swiper-pagination-bullets.swiper-pagination-horizontal{
+    @apply bottom-3 sm:bottom-6; 
+  }
 }
 
 .swiper:not(.swiper-initialized) {
@@ -85,7 +100,7 @@ salla-slider.photos-slider {
     @apply px-2.5 lg:px-0;
 
     &-nav{
-      @apply hidden lg:flex max-w-[88%] top-[65%] #{!important};
+      @apply max-w-[88%] top-[65%] #{!important};
 
       button{ 
         @apply border-gray-100 shadow-gray-300 #{!important};
@@ -252,32 +267,13 @@ salla-slider.photos-slider {
   opacity: 0.5;
 }
 
-// bullet pagination -------
-salla-slider{
-  .swiper-pagination-bullet {
-    width: 20px;
-    border-radius: 5px;
-    background: #fff;
-    opacity: 0.3;
-
-    &-active {
-      opacity: 1;
-      background-color: var(--color-primary);
-    }
-  }
-
-  .swiper-pagination-bullets.swiper-pagination-horizontal{
-    @apply bottom-3 sm:bottom-6; 
-  }
-}
-
 
 // Offer slider
 .offer-slider .s-slider-block__title{
   @apply mb-5 relative; 
 
   &:before{
-    @apply text-5xl font-normal text-red-50 absolute leading-none top-4 rtl:right-0 ltr:left-0;
+    @apply text-8xl font-normal text-red-50 absolute leading-none top-4 rtl:right-0 ltr:left-0 -z-1;
     content: "\ee30";
     font-family: 'sallaicons';
   }
@@ -288,18 +284,5 @@ salla-slider{
 
   p{
     @apply mt-1 leading-6 line-clamp-none;
-  }
-}
-
-// move to slider component
-model-viewer[style*="width"]:before{
-  @apply hidden;
-}
-
-
-// Blog slider
-.blog-slider{
-  .swiper-slide img{
-    @apply min-h-[380px] max-h-[480px] md:max-h-[680px];
   }
 }

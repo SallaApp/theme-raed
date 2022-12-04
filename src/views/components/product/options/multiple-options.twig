@@ -1,0 +1,26 @@
+{#
+| Variable   | Type          | Description                                             |
+|------------|---------------|---------------------------------------------------------|
+| option     | ProductOption | @see views/pages/partials/product/options.twig          |
+| attirubtes | string        | ex: ` id="field_1819067185_562106943"  required `       |
+| disabled   | bool          |                                                         |
+| required   | bool          |                                                         |
+| value      | array         |                                                         |
+#}
+<div class=" md:flex flex-wrap items-center{{ required?' required':'' }}">
+    {% for key,detail in option.details %}
+        <div class="relative flex items-center mb-4 md:w-6/12">
+            <input id="field-{{ option.id }}-{{ detail.id }}"
+                    {{ disabled?"disabled":"" }}
+                    {{ detail.is_selected?"checked":"" }}
+                   name="options[{{ option.id }}][]"
+                   class="focus:ring-transparent h-6 w-6 text-primary border-gray-200 rounded-md"
+                   value="{{ detail.id }}"
+                   type="checkbox"
+                   {{ attirubtes|raw }}>
+            <label for="field-{{ option.id }}-{{ detail.id }}" class="ms-2 text-sm font-medium text-gray-700 pe-3">
+                {{ detail.full_name }}
+            </label>
+        </div>
+    {% endfor %}
+</div>

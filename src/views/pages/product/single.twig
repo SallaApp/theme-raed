@@ -68,6 +68,10 @@
 | is_quick_order_enabled                 | bool                        | Does this store has quick order feature and is active?                 |
 #}
 {% extends "layouts.master" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ 'flatpickr.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
+{% endblock %}
 {% block content %}
     <div class="container">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
@@ -76,10 +80,10 @@
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
-                {% set has_many_images = product.images|length > 1 %}
-                <salla-slider
-                  id="details-slider-{{ product.id }}"
-                  class="details-slider rounded-md"
+                {% set has_many_images = product.images|length > 1 %} 
+                <salla-slider 
+                  id="details-slider-{{ product.id }}" 
+                  class="details-slider rounded-md" 
                   type="thumbs"
                   loop="false"
                   show-thumbs-controls="false">
@@ -100,49 +104,56 @@
                     {# Calories Badge #}
                     {% if product.calories %}
                         <div class="absolute z-[2] top-4 rtl:left-4 ltr:right-4 bg-white shadow-sm flex flex-col justify-center items-center rounded-full w-20 h-20 md:w-24 md:h-24">
-                            <span class="text-red-500 text-xl leading-none font-bold">{{ product.calories }}</span>
+                            <span class="text-red-500 text-xl leading-none font-bold">50</span>
                             <span class="text-xs text-gray-500">{{ trans('pages.products.calories') }}</span>
                         </div>
                     {% endif %}
 
                     <div slot="items">
                         {% for image in product.images %}
-                            {% if image.three_d_image_url %}
-                                <model-viewer style="min-height: 500px;" class="swiper-slide model-entry w-full h-full"
-                                              loading="eager" camera-controls
-                                              touch-action="pan-y" auto-rotate
-                                              poster="{{ image.url }}"
-                                              src="{{ image.three_d_image_url }}"
-                                              shadow-intensity="1" alt="{{ image.alt }}">
-                                </model-viewer>
-                            {% else %}
-                                <a data-fslightbox="product_{{ product.id }}"
-                                   data-img-id="{{ image.id }}"
-                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
-                                   data-caption="{{ image.alt }}"
-                                   data-infinite="false"
-                                   data-type="{{ image.video_url?'youtube':'image' }}"
-                                   href="{{ image.video_url?image.video_url:image.url }}"
-                                   aria-label="{{ product.name }}"
-                                   class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
-                                    {% if loop.first %}
+                            <div class="swiper-slide 
+                              {{ image.video_url?'video-entry':'' }} 
+                              {{image.three_d_image_url? 'model-entry' : ''}}">
+                              <a data-fslightbox="product_{{ product.id }}"
+                                data-img-id="{{ image.id }}"
+                                data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                data-caption="{{ image.alt }}"
+                                data-infinite="false"
+                                data-type="{{ image.video_url?'youtube':'image' }}"
+                                href="{{ image.video_url?image.video_url:image.url }}"
+                                aria-label="{{ product.name }}">
+                                  {% if loop.first %}
                                       <img fetchpriority="high" loading="eager" src="{{ image.url }}"
                                           alt="{{ image.alt }}"
                                           class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
-                                      {% else %}
-                                          <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
-                                              alt="{{ image.alt }}"
-                                              class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
-                                      {% endif %}
-                                </a>
-                            {% endif %}
+                                  {% else %}
+                                      <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                          alt="{{ image.alt }}"
+                                          class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
+                                  {% endif %}
+                              </a>
+
+                              {% if image.three_d_image_url %}
+                                  <div slot="action" class="switcher-3d-view">
+                                    <label class="s-toggle">
+                                      <input id="activate_3d_view"
+                                              class="s-toggle-input"
+                                              type="checkbox"
+                                              data-cover-url="{{ image.url }}"
+                                              data-model-url="{{ image.three_d_image_url }}">
+                                      <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
+                                      </div>
+                                    </label>
+                                  </div>
+                              {% endif %}
+                            </div>
                         {% endfor %}
                     </div>
 
                     {% if has_many_images %}
                         <div slot="thumbs">
                             {% for image in product.images %}
-                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}">
+                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.index < 5 %}
                                         <img src="{{ image.url }}"
                                              loading="eager"
@@ -160,6 +171,32 @@
                         </div>
                     {% endif %}
                 </salla-slider>
+
+                {# 3D image viewer #}
+                {% if product.has_3d_image %}
+                  <div id="model-viewer-wrapper" class="model-viewer-wrapper hidden" dir="ltr">
+                      <model-viewer
+                              id="model_viewer"
+                              alt="Product 3D Model"
+                              class="model-viewer"
+                              reveal="auto"
+                              data-js-focus-visible
+                              camera-controls>
+                          <div class="model-viewer__poster" slot="poster"></div>
+                      </model-viewer>
+                      <div slot="action" class="switcher-3d-view">
+                          <label class="s-toggle">
+                            <input id="deactivate_3d_view"
+                                  class="s-toggle-input"
+                                  type="checkbox"
+                                  data-cover-url="{{ image.url }}"
+                                  data-model-url="{{ image.three_d_image_url }}">
+                            <div class="s-toggle-switcher s-toggle-switcher-large s-toggle-switcher-bg-white s-toggle-switcher-has-text" data-switcher-text="3D">
+                          </div>
+                        </label>
+                      </div>
+                  </div>
+                {% endif %}
             </div>
 
             <div class="main-content w-full md:w-2/4 md:pb-16">
@@ -203,9 +240,9 @@
                     {% endif %}
                 </div>
 
-                <div class="product__description p-2 sm:p-1 leading-7 mb-3">
+                <div class="product__description leading-7 mb-3">
                     {% if product.has_read_more %}
-                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 p-4" id="more-content" style="max-height:5.25rem">
+                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300" id="more-content" style="max-height:5.25rem">
                             {{ product.description|raw }}
                         </article>
 
@@ -296,13 +333,14 @@
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" novalidate>
                     <input type="hidden" name="id" value="{{ product.id }}">
 
-             
-                    {% hook 'product:single.form.start' %}
+                    <salla-conditional-fields>
+                        {% hook 'product:single.form.start' %}
 
-                    {% include 'pages.partials.product.options' %}
+                        {% include 'pages.partials.product.options' %}
 
-                    {% hook 'product:single.form.end' %}
-               
+                        {% hook 'product:single.form.end' %}
+                    </salla-conditional-fields>
+
 
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
@@ -355,9 +393,7 @@
 
                 {% hook 'product:single.description.end' %}
                 {% if is_quick_order_enabled %}
-                  <div>
-                    <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
-                  </div>
+                    <salla-quick-order class="mt-5 block"></salla-quick-order>
                 {% endif %}
             </div>
         </div>
@@ -369,6 +405,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script defer src="{{ 'filepond.js' | asset }}"></script>
     <script defer src="{{ 'map.js' | asset }}"></script>
     <script defer src="{{ 'colorpicker.js' | asset }}"></script>
     <script defer src="{{ 'product.js' | asset }}"></script>
@@ -376,4 +413,4 @@
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     {% endif %}
 {% endblock %}
-
+ 

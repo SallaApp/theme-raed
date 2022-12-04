@@ -15,16 +15,15 @@
                  class="shrink-0 lg:sticky top-24 lg:-mt-28 lg:shadow-default rounded-md lg:bg-white w-full lg:w-72 lg:me-8 lg:pt-8 lg:pb-11 sidebar space-y-px">
 
                 {% if is_page('customer.profile') %}
-                    <div class="text-center md:mb-9">
-                        <div class="h-20 w-20 m-auto avatar-wrap bg-gray-100 rounded-full">
-                            <salla-file-upload profile-image value="{{ user.avatar }}">
-                                <span class='avatar-placeholder flex justify-center items-center flex-col'>
-                                    <span class='sicon-user'></span>
-                                    <span class='text'>{{ trans('common.uploader.choose_suitable_picture') }}</span>
-                                </span>
-                            </salla-file-upload>
-                        </div>
-                    </div>
+                  <div class="text-center md:mb-9">
+                      <div class="h-20 w-20 m-auto avatar-wrap bg-gray-100 rounded-full">
+                        <input class="filepond file-pond--circular"
+                            data-default="{{ user.avatar }}"
+                            data-url="{{ '/api/v1/profile/update' }}"
+                            id="profile-img"
+                            type="file"/>
+                      </div>
+                  </div>
                 {% endif %}
 
                 <div class="hidden lg:block">

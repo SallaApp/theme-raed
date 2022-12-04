@@ -1,0 +1,28 @@
+{#
+| Variable           | Type          | Description                                                   |
+|--------------------|---------------|---------------------------------------------------------------|
+| option             | ProductOption | @see views/pages/partials/product/options.twig                |
+| attirubtes         | string        | ex: ` id="field_1819067185_562106943"  required `             |
+| disabled           | bool          |                                                               |
+| required           | bool          |                                                               |
+| value              | ?string       |                                                               |
+| time_zone          | string        | ex: `+0300`                                                   |
+| order_times        | array         | ex: `["saturday"=>["00:00-23:55"],"sunday"=>["00:00-23:55"]]` |
+| not_same_day_order | bool          |                                                               |
+| availability_range | bool          |                                                               |
+| from_date_time     | string        | date ex: `2021-12-21 21:21:21`                                |
+| to_date_time       | string        | date ex: `2021-12-21 21:21:21`                                |
+#}
+<input class="form-input date-time-element{{ required?' required':'' }}"
+       placeholder="{{ option.placeholder }}"
+       data-order-times="{{ order_times|json_encode }}"
+       data-timezone="{{ time_zone }}"
+       name="options[{{ option.id }}]"
+        {{ attirubtes|raw }}
+       {% if from_date_time %}
+       data-from-date-time='{{ from_date_time }}'
+       data-to-date-time='{{ to_date_time }}'
+       {% endif %}
+       readonly="readonly"
+       value="{{ value }}"
+       type="text"/>
