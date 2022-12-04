@@ -6,10 +6,6 @@
 | page.slug                      | string   |                                                     |
 #}
 {% extends "layouts.customer" %}
-{% block styles %}
-    <link rel="stylesheet" href="{{ 'flatpickr.css' | asset }}">
-    <link rel="stylesheet" href="{{ 'filepond.css' | asset }}">
-{% endblock %}
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
     <form class="form form--user-profile ajax" onsubmit="return salla.form.onSubmit('profile.update', event)">
@@ -37,8 +33,13 @@
                 <label for="birthday" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.birthday') }}
                 </label>
-                <input type="text" id="birthday" name="birthday" value="{{ user.birthday }}" required
-                       class="form-input date-element" placeholder="{{ trans('pages.profile.birthday_placeholder') }}">
+                <salla-datetime-picker
+                        dateFormat="Y-m-d"
+                        value="{{ user.birthday }}"
+                        placeholder="{{ trans('pages.profile.birthday_placeholder') }}"
+                        required
+                        name="birthday"
+                ></salla-datetime-picker>
             </div>
 
             <div class="profile-field-item">
@@ -69,13 +70,43 @@
                 </label>
                 <salla-tel-input phone="{{ user.mobile }}"></salla-tel-input>
             </div>
+            {% for field in custom_fields %}
+                <div class="profile-field-item">
+                    <label for="{{ field.id }}" class="block text-sm font-bold mb-2 text-gray-700">
+                        {{ field.label }}
+                    </label>
+                    {% if field.type == 'photo' %}
+                        <salla-file-upload
+                                instant-upload
+                                value="{{ field.value }}"
+                                url="{{ store.url|trim('/'~user.language_code) }}/upload-image"
+                                name="custom_fields[{{ field.id }}]"
+                                payload-name="image"
+                                height="120px"
+                        >
+                            <div class="profile-filepond-placholder">
+                                <span class="profile-filepond-placholder-icon"><i class="sicon-camera"></i></span>
+                                <p class="profile-filepond-placholder-text">{{ trans('common.uploader.drag_and_drop') }}</p>
+                                <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span>
+                            </div>
+                        </salla-file-upload>
+                        <input type="hidden" name="custom_fields[{{ field.id }}]" value="{{ field.value }}">
+                    {% else %}
+                        <input type="{{ field.type }}"
+                               id="{{ field.id }}"
+                               value="{{ field.value }}"
+                               name="custom_fields[{{ field.id }}]"
+                               class="form-input" {{ field.required?'required':'' }}/>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
             {% hook 'customer:profile.form.fields.end' %}
         </div>
 
         {% hook 'customer:profile.form.submit.start' %}
 
-        <salla-button type="submit" loader-position="end" class="w-full mt-2">
+        <salla-button type="submit" loader-position="end" class="w-full mt-6">
             {{ trans('common.elements.save') }}
         </salla-button>
 
@@ -86,9 +117,4 @@
     <salla-verify></salla-verify>
 
     <salla-user-settings {{ user.is_notifiable?'is-notifiable':0 }} class="mt-10 block"></salla-user-settings>
-{% endblock %}
-
-{% block scripts %}
-    <script defer src="{{ 'filepond.js' | asset }}"></script>
-    <script defer src="{{ 'customer.js' | asset }}"></script>
 {% endblock %}

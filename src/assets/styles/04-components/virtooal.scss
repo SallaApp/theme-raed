@@ -1,0 +1,64 @@
+.virtooal {
+  margin: 15px 0;
+  border-radius: 10px;
+  border: 1px solid rgb(229, 229, 229);
+  background: white;
+  @media screen and (min-width: 992px) {
+    padding: 18px;
+  }
+  &--content {
+  @include flexable(center, space-between, row);
+}
+  &--details{
+    @include flexable(flex-start, center, column);
+    @include desktop {
+      display: none;
+    }
+    &--title{
+        font-size: 16px;
+        font-weight: 700;
+        color: #1F2937;
+    }
+    &--desc{
+        font-size: 13px;
+        color: #7C8082;
+        font-weight: 400;
+    ;
+    }
+  }
+  &--action {
+    @include desktop {
+      width:100%;
+    }
+    & button{
+      @include flexable(center, center, row);
+      border: 1px solid var(--color-primary);
+      font-weight: 700;
+      font-size:14px;
+      padding: 8px 30px;
+      font-size:0.875rem;
+      padding: 0.5rem 1.5rem 0.625rem 1.5rem;
+      line-height: 1.25rem;
+      background: var(--color-primary);
+      color: var(--color-primary-reverse);
+      border-radius: 5px;
+      &:hover{
+        background: var(--color-primary-dark);
+        opacity: 0.8 !important;
+      }
+      @include desktop {
+        width:100%;
+      }
+      & .icon{
+        width: 14px;
+        height: 14px;
+        [dir="rtl"] & {
+          margin-left: 0.75rem;
+        }
+        [dir="ltr"] & {
+          margin-right: 0.75rem;
+        }
+      }
+    }
+  }
+}
