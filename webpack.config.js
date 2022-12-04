@@ -13,11 +13,8 @@ module.exports = {
         checkout: [asset('js/cart.js'), asset('js/thankyou.js')],
         pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
         product : [asset('js/product.js'), asset('js/products.js')],
-        customer: [asset('js/profile.js'), asset('js/order.js')],
 
-        //plugins
-        colorpicker: asset('js/partials/color-picker.js'), 
-        map: asset('js/partials/map.js'), 
+        //plugins 
         order: asset('js/order.js'),
     },
     output : {
