@@ -220,6 +220,28 @@
                                 <b>{{ item.total|money }}</b>
                             </div>
 
+                            {% if item.product.type == 'booking' and item.product_reservations is not empty %}
+                                <div class="product-options-wrapper">
+                                    {% if item.product_reservations.count() > 1 %}
+                                        <span class="mb-10 d-block">{{trans('pages.cart.reservations')}}</span>
+                                    {% else %}
+                                        <span class="mb-10 d-block">{{ trans('pages.orders.session_time') }}</span>
+                                    {% endif %}
+                                    <ul class="list list--vertical product-options">
+                                        {% for reservation in item.product_reservations %}
+                                        <li class="borderless">
+                                            <span class="text-unicode">
+                                                {{ reservation.day }}
+                                                {% if reservation.from_timestamp is not empty %}
+                                                    ({{ reservation.from }} - {{ reservation.to }})
+                                                {% endif %}
+                                            </span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
                             {% if item.options %}
                                 <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
                                 <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
