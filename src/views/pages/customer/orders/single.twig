@@ -221,15 +221,17 @@
                             </div>
 
                             {% if item.product.type == 'booking' and item.product_reservations is not empty %}
-                                <div class="product-options-wrapper">
-                                    {% if item.product_reservations.count() > 1 %}
-                                        <span class="mb-10 d-block">{{trans('pages.cart.reservations')}}</span>
-                                    {% else %}
-                                        <span class="mb-10 d-block">{{ trans('pages.orders.session_time') }}</span>
-                                    {% endif %}
-                                    <ul class="list list--vertical product-options">
+                                
+                                {% if item.product_reservations.count() > 1 %}
+                                    <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.reservations') }}</h2>
+                                {% else %}
+                                    <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
+                                {% endif %}
+
+                                <div class="rounded-md p-4 border border-gray-200 mb-2">
+                                    <ul class="font-medium text-xs text-gray-600">
                                         {% for reservation in item.product_reservations %}
-                                        <li class="borderless">
+                                        <li class="py-1">
                                             <span class="text-unicode">
                                                 {{ reservation.day }}
                                                 {% if reservation.from_timestamp is not empty %}
