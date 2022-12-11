@@ -233,10 +233,10 @@
                                         {% for reservation in item.product_reservations %}
                                         <li class="py-1">
                                             <span class="text-unicode">
-                                                {{ reservation.day }}
                                                 {% if reservation.from_timestamp is not empty %}
                                                     ({{ reservation.from }} - {{ reservation.to }})
                                                 {% endif %}
+                                                {{ reservation.day|date("D d M Y") }}
                                             </span>
                                         </li>
                                         {% endfor %}
