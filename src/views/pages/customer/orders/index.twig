@@ -36,6 +36,10 @@
                           <div>
                             <span class="mobile-title">{{ trans('pages.thank_you.order_id') }}:</span>
                             <span class="hidden md:inline-block">#{{ order.reference_id }}</span>
+                            {% if order.source is same as('buy_as_gift') %}
+                                <i class="sicon-gift-sharing d-inline-block ml-2 color-primary"></i>
+                            {% endif %}
+
                             <a href="{{ order.url }}"></a>
 
                             <div class="flex items-center md:hidden">
