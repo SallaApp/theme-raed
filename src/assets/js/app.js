@@ -22,6 +22,7 @@ class App extends AppHelpers {
     this.initCircleBar();
     this.initDonating();
     initTootTip();
+
     salla.comment.event.onAdded(() => window.location.reload());
 
     this.status = 'ready';
