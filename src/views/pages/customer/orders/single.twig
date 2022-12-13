@@ -235,7 +235,7 @@
                                             <span class="text-unicode">
                                                 {{ reservation.day|date|number }}
                                                 {% if reservation.from_timestamp is not empty %}
-                                                    ({{ reservation.from|number }} - {{ reservation.to|number }})
+                                                    ({{ reservation.from|number({'PM':'م', 'AM':'ص'}) }} - {{ reservation.to|number({'PM':'م', 'AM':'ص'}) }})
                                                 {% endif %}
                                             </span>
                                         </li>
