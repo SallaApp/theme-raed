@@ -228,11 +228,14 @@
                                 </small>
                             </div>
                         {% endif %}
-
-                        <salla-button onclick="salla.cart.submit()" loader-position="end" width="wide">
-                            {{ trans('pages.cart.complete_order') }}
-                        </salla-button>
-
+                        
+                        <div class="cart-submit-wrap">
+                            {% hook 'cart:submit.start' %}
+                            <salla-button onclick="salla.cart.submit()" loader-position="center" width="wide">
+                                {{ trans('pages.cart.complete_order') }}
+                            </salla-button>
+                            {% hook 'cart:submit.end' %}
+                        </div>
                         {% hook 'cart:summary.end' %}
                     </div>
                 </div>
