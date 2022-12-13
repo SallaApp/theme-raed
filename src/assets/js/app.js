@@ -22,9 +22,9 @@ class App extends AppHelpers {
     this.initCircleBar();
     this.initDonating();
     initTootTip();
-
     salla.comment.event.onAdded(() => window.location.reload());
 
+    window.copyToClipboard = this.copyToClipboard.bind(this);
     this.status = 'ready';
     document.dispatchEvent(new CustomEvent('theme::ready'));
     this.log('Theme Loaded 🎉');
