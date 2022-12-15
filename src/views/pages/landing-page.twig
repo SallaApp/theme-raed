@@ -1,0 +1,72 @@
+{#
+| Variable     | Type                  | Description |
+|--------------|-----------------------|-------------|
+| page         | Page                  |             |
+| page.title   | string                |             |
+| page.content | string                |             |
+| page.url     | string                |             |
+| page.slug    | string                |             |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+    <div class="container">
+
+        <div class="flex justify-center">
+            <div class="content content--single-page w-full lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
+                <h1 class="font-bold text-2xl mb-6">{{ landing.title }}</h1>
+                <div class="content-entry">
+                    {{ landing.content|replace({"&nbsp;":" "})|raw }}
+                </div>
+
+                {# Price #}
+                <div class="sticky-product-bar__price center-between">
+                    <label class="form-label">
+                        <b class="block">
+                            {{ trans('pages.products.price') }}
+                        </b>
+                    </label>
+                    <div class="space-s-1">
+                        <h4  class="total-price {{ landing.regular_price ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                            {{ landing.total_price|money }}
+                        </h4>
+                        {% if landing.regular_price %}
+                            <span class="before-price text-gray-400 line-through">
+                                {{ landing.regular_price|money }}
+                            </span>
+                        {% endif %}
+                        {% if landing.discount %}
+                            <h4  class="total-price font-bold text-xl inline-block">
+                                وفر {{ landing.discount|money }}
+                            </h4>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if landing.quantity %}
+                    {% if landing.settings.show_products_quantity %}
+                        <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
+                            <div class="px-4 even:border-s even:border-gray-200">
+                                <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
+                                {{ trans('pages.products.remained') }}
+                                <span>{{ landing.quantity }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
+                        <div class="px-4 even:border-s even:border-gray-200">
+                            <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
+                            نفذت الكمية
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% component 'home.testimonials' %}
+                <br>
+                {% component 'home.store-features' %}
+
+                {% component 'product.similar-products' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
