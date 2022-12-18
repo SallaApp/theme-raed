@@ -10,61 +10,63 @@
 {% extends "layouts.master" %}
 {% block content %}
     {# ======================== Landing Page ======================== #}
-    <div class="landing-page">
-        <header>
-            <div class="header-content container">
-                <img src="{{ store.logo }}" alt="logo" class="logo">
-                <div class="header-content-inner">
-                    <h1>{{ landing.title }}</h1>
-                    <p>{{ landing.content|replace({"&nbsp;":" "})|raw }}</p>
-                </div>
-                {% if landing.discount %}
-                    <div class="header-content-offer">
-                        <p>وفر {{ landing.discount|money }}</p>
-                        {% if landing.settings.sale_counter_time and landing.offer_expired_at %}
-                            <h3>المتبقي من العرض</h3>
-                            <ul id="countdown_id" class="timer countdown-timer mt-30" data-dunixtime="{{ landing.offer_expired_at }}"></ul>
-                        {% endif %}
+    {% if landing.settings.sale_counter_time and landing.offer_expired_at is not null %}
+        <div class="landing-page">
+            <header>
+                <div class="header-content container">
+                    <img src="{{ store.logo }}" alt="logo" class="logo">
+                    <div class="header-content-inner">
+                        <h1>{{ landing.title }}</h1>
+                        <p>{{ landing.content|replace({"&nbsp;":" "})|raw }}</p>
                     </div>
-                {% endif %}
-            </div>
-        </header>
-
-        <section class="s-block container overflow-hidden">
-            <salla-slider
-                    type="carousel"
-                    block-title="المنتجات المعروضة"
-                    id="landing-page-slider">
-                <div slot="items">
-                    {% for product in landing.products %}
-                        <div class="slide--one-fourth">
-                            {% include 'pages.partials.product.card' %}
+                    {% if landing.discount %}
+                        <div class="header-content-offer">
+                            <p>وفر {{ landing.discount|money }}</p>
+                            {% if landing.settings.sale_counter_time and landing.offer_expired_at %}
+                                <h3>المتبقي من العرض</h3>
+                                <ul id="countdown_id" class="timer countdown-timer mt-30" data-dunixtime="{{ landing.offer_expired_at }}"></ul>
+                            {% endif %}
                         </div>
-                    {% endfor %}
+                    {% endif %}
                 </div>
-            </salla-slider>
-            {#<div class="text-center mt-6">
-                <salla-button color="primary" class="btn--rounded-full !text-white">عرض الكل الآن</salla-button>
-            </div>#}
-        </section>
+            </header>
 
-        {% if landing.settings.show_store_features %}
-            <section  class="s-block container overflow-hidden">
-                {% include 'components.home.store-features' with {
-                    items:[
-                        {icon:'sicon-shipping', title:'شحن مجاني', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
-                        {icon:'sicon-sync', title:'إسترجاع خلال 14 يومًا', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
-                        {icon:'sicon-secure-credit-card-2', title:'مدفوعات آمنة', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
-                    ]
-                } %}
+            <section class="s-block container overflow-hidden">
+                <salla-slider
+                        type="carousel"
+                        block-title="المنتجات المعروضة"
+                        id="landing-page-slider">
+                    <div slot="items">
+                        {% for product in landing.products %}
+                            <div class="slide--one-fourth">
+                                {% include 'pages.partials.product.card' %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </salla-slider>
+                {#<div class="text-center mt-6">
+                    <salla-button color="primary" class="btn--rounded-full !text-white">عرض الكل الآن</salla-button>
+                </div>#}
             </section>
-        {% endif %}
-        <section class="s-block overflow-hidden bg-gray-50">
-            <div class="container">
-                {% component 'home.testimonials' %}
-            </div>
-        </section>
-    </div>
+
+            {% if landing.settings.show_store_features %}
+                <section  class="s-block container overflow-hidden">
+                    {% include 'components.home.store-features' with {
+                        items:[
+                            {icon:'sicon-shipping', title:'شحن مجاني', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
+                            {icon:'sicon-sync', title:'إسترجاع خلال 14 يومًا', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
+                            {icon:'sicon-secure-credit-card-2', title:'مدفوعات آمنة', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
+                        ]
+                    } %}
+                </section>
+            {% endif %}
+            <section class="s-block overflow-hidden bg-gray-50">
+                <div class="container">
+                    {% component 'home.testimonials' %}
+                </div>
+            </section>
+        </div>
+    {% endif %}
     {# ======================== Not Found ======================== #}
     {# <div class="landing-page notfound">
         <header>
@@ -80,7 +82,7 @@
         </header>
     </div>   #}
     {# ======================== Expired ======================== #}
-    {% if landing.settings.sale_counter_time and landing.offer_expired_at == null %}
+    {% if landing.settings.sale_counter_time and landing.offer_expired_at is null %}
         <div class="landing-page expired">
             <header>
                 <div class="header-content container">
@@ -130,6 +132,8 @@
                             </div>
                         </div>
                     {% endif %}
+
+                    {#@include('checkout::store.landingPage.partials.checkout')#}
                 {% else %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         <div class="px-4 even:border-s even:border-gray-200">
