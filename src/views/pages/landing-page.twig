@@ -33,21 +33,33 @@
             </header>
 
             <section class="s-block container overflow-hidden">
-                <salla-slider
-                        type="carousel"
-                        block-title="المنتجات المعروضة"
-                        id="landing-page-slider">
-                    <div slot="items">
+                {% if landing.settings.show_product_as_slider %}
+                    <salla-slider
+                            type="carousel"
+                            block-title="المنتجات المعروضة"
+                            id="landing-page-slider">
+                        <div slot="items">
+                            {% for product in landing.products %}
+                                <div class="slide--one-fourth">
+                                    {% include 'pages.partials.product.landing-card' %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </salla-slider>
+                {% else %}
+                    <salla-infinite-scroll
+                            next-page="{{ landing.products.next_page }}"
+                            autoload
+                            class="mb-8 products-container gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
                         {% for product in landing.products %}
-                            <div class="slide--one-fourth">
-                                {% include 'pages.partials.product.card' %}
-                            </div>
+                            {% include 'pages.partials.product.landing-card' %}
                         {% endfor %}
-                    </div>
-                </salla-slider>
-                {#<div class="text-center mt-6">
-                    <salla-button color="primary" class="btn--rounded-full !text-white">عرض الكل الآن</salla-button>
-                </div>#}
+                    </salla-infinite-scroll>
+                {% endif %}
+
+                <div class="text-center mt-6">
+                    <salla-button color="primary" class="btn--rounded-full !text-white">{{ landing.products|length > 1 ? 'شراء الكل الآن' : 'شراء الآن' }}</salla-button>
+                </div>
             </section>
 
             {% if landing.settings.show_store_features %}
@@ -61,11 +73,14 @@
                     } %}
                 </section>
             {% endif %}
-            <section class="s-block overflow-hidden bg-gray-50">
-                <div class="container">
-                    {% component 'home.testimonials' %}
-                </div>
-            </section>
+
+            {% if landing.settings.customer_feedback_type is not null %}
+                <section class="s-block overflow-hidden bg-gray-50">
+                    <div class="container">
+                        {% component 'home.testimonials' %}
+                    </div>
+                </section>
+            {% endif %}
         </div>
     {% endif %}
 
