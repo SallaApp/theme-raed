@@ -10,10 +10,11 @@ module.exports = {
     entry  : {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js')],
         home    : asset('js/home.js'),
+        landing : asset('js/landing-page.js'),
         checkout: [asset('js/cart.js'), asset('js/thankyou.js')],
         pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
         product : [asset('js/product.js'), asset('js/products.js')],
-        order: asset('js/order.js'),
+        order   : asset('js/order.js'),
     },
     output : {
         path: public(),

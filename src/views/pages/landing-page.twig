@@ -9,8 +9,9 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
+
     {# ======================== Landing Page ======================== #}
-    {% if landing.settings.sale_counter_time and landing.offer_expired_at is not null %}
+    {% if landing and landing.settings.sale_counter_time and landing.offer_expired_at is not null %}
         <div class="landing-page">
             <header>
                 <div class="header-content container">
@@ -67,22 +68,26 @@
             </section>
         </div>
     {% endif %}
+
     {# ======================== Not Found ======================== #}
-    {# <div class="landing-page notfound">
-        <header>
-            <div class="header-content container">
-                <img src="{{ store.logo }}" alt="logo" class="logo">
-                <div class="header-content-inner">
-                    <h1> هذه الصفحة لم تعد موجودة</h1>
-                    <div class="text-center mt-6">
-                        <salla-button color="primary" class="btn--rounded-full !text-white">العودة للمتجر</salla-button>
+    {% if landing is null %}
+        <div class="landing-page notfound">
+            <header>
+                <div class="header-content container">
+                    <img src="{{ store.logo }}" alt="logo" class="logo">
+                    <div class="header-content-inner">
+                        <h1> هذه الصفحة لم تعد موجودة</h1>
+                        <div class="text-center mt-6">
+                            <salla-button color="primary" class="btn--rounded-full !text-white">العودة للمتجر</salla-button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
-    </div>   #}
+            </header>
+        </div>
+    {% endif %}
+
     {# ======================== Expired ======================== #}
-    {% if landing.settings.sale_counter_time and landing.offer_expired_at is null %}
+    {% if landing and landing.settings.sale_counter_time and landing.offer_expired_at is null %}
         <div class="landing-page expired">
             <header>
                 <div class="header-content container">
@@ -99,54 +104,8 @@
         </div>
     {% endif %}
 
-    {# ====================== Missing Data ====================== #}
-    <div class="container">
-        <div class="flex justify-center">
-            <div class="content content--single-page w-full lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
-                {# Price #}
-                <div class="sticky-product-bar__price center-between">
-                    <label class="form-label">
-                        <b class="block">
-                            {{ trans('pages.products.price') }}
-                        </b>
-                    </label>
-                    <div class="space-s-1">
-                        <h4  class="total-price {{ landing.regular_price ? 'text-red-400' : '' }} font-bold text-xl inline-block">
-                            {{ landing.total_price|money }}
-                        </h4>
-                        {% if landing.regular_price %}
-                            <span class="before-price text-gray-400 line-through">
-                                {{ landing.regular_price|money }}
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
-
-                {% if landing.quantity %}
-                    {% if landing.settings.show_products_quantity %}
-                        <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
-                            <div class="px-4 even:border-s even:border-gray-200">
-                                <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
-                                {{ trans('pages.products.remained') }}
-                                <span>{{ landing.quantity }}</span>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {#@include('checkout::store.landingPage.partials.checkout')#}
-                {% else %}
-                    <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
-                        <div class="px-4 even:border-s even:border-gray-200">
-                            <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
-                            نفذت الكمية
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ 'home.js' | asset }}"></script>
+    <script defer src="{{ 'landing.js' | asset }}"></script>
 {% endblock %}
