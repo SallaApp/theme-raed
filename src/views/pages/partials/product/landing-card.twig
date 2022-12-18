@@ -1,0 +1,78 @@
+{#
+view options:
+ 1- is_horizontal = false  // display horizonal card
+ 2- is_special = false  // display special product with count down
+
+*Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
+#}
+<div id="product-{{ product.id }}" class='product-entry {{ block_classes ?: '' }}
+  {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
+  {{ is_special ? 'product-entry--special':'' }}
+  {{ main_product.product.discount_ends ? 'with-timer':'' }}
+  {{ store.settings.product.fit_type ? 'product-entry--fit-type':'' }}
+  {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
+
+    {# Image #}
+    <div class='product-entry__image {{ is_horizontal ? '' : 'flex-1'}}'>
+      <a href="{{ product.url }}">
+          <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy"
+              src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+          {% if landing.settings.show_products_quantity and product.quantity %}
+              <div class="absolute top-4 start-0 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-red-400 text-white rounded-e-md {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]'}}">{{ trans('pages.products.remained') }} {{ product.quantity|number }}</div>
+          {% endif %}
+      </a>
+    </div>
+
+    {# content #}
+    <div class="{{ is_horizontal ? 'flex-1' : ''}} p-3 sm:p-5 flex flex-col relative donating-wrap">
+        <div class="{{is_special ? 'pe-24':''}}">
+          <h3 class="product-entry__title mb-2.5 leading-6 max-w-full">
+              <a href="{{ product.url }}">{{ product.name }}</a>
+          </h3> 
+
+          {% if product.subtitle %}
+              <p class="text-sm text-gray-400 leading-6 mb-2.5">{{ product.subtitle }}</p>
+          {% endif %}
+        </div>
+
+        {% if product.is_donation %}
+            {% component 'product.donation-progress-bar' with {product:product} %}
+            <div class="border-color mb-2.5 w-full">
+              {% if product.can_donate %}
+                <label for="donation-amount" class="block text-sm mb-2.5">{{ trans('pages.products.donation_amount') }} <span class="text-red-500">*</span></label>
+                <input 
+                  type="text"
+                  data-digits
+                  id="donation-amount" 
+                  name="donating_amount" 
+                  class="h-9 form-input" 
+                  placeholder="{{ trans('pages.products.donation_amount') }}">
+              {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="w-full center-between mb-5 {{is_special ? 'pe-24':''}}">
+            {% if product.is_on_sale %}
+                <div class="space-s-1">
+                    <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                    {% if landing.settings.show_old_price %}
+                        <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                    {% endif %}
+                </div>                
+             {% elseif product.starting_price %}
+                 {{trans('pages.products.starting_price')}} 
+                 <h4 class="text-red-400 font-bold text-sm inline-block"> {{ product.starting_price|money }} </h4>
+            {% else %}
+                <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
+            {% endif %}
+            
+            {% if product.rating %}
+                <div class="product-rating text-sm text-gray-400">
+                    <i class="sicon-star2 text-amber-400"></i>
+                    <span>{{ product.rating|number }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
