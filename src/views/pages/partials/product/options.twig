@@ -105,7 +105,9 @@
                     {# Notice that "product" is actually cart.items[*], so {product.id} is {item.id} #}
                     <div class="h-0 overflow-hidden opacity-0 is-closed" id="file_{{ product.id }}">
                         <div class="pt-4 px-1">
-                            <salla-file-upload class="product-option-uploader"
+                            <salla-file-upload
+                                accept="image/png, image/jpeg, image/jpg, image/gif, video/*, application/pdf"
+                                class="product-option-uploader"
                                     {% if is_page('cart') %}
                                         files="{{ product.attachments|json_encode }}"
                                         cart-item-id="{{ product.id }}"
