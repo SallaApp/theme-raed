@@ -1,0 +1,150 @@
+{#
+| Variable     | Type                  | Description |
+|--------------|-----------------------|-------------|
+| page         | Page                  |             |
+| page.title   | string                |             |
+| page.content | string                |             |
+| page.url     | string                |             |
+| page.slug    | string                |             |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+    {# ======================== Landing Page ======================== #}
+    <div class="landing-page">
+        <header>
+            <div class="header-content container">
+                <img src="{{ store.logo }}" alt="logo" class="logo">
+                <div class="header-content-inner">
+                    <h1>{{ landing.title }}</h1>
+                    <p>{{ landing.content|replace({"&nbsp;":" "})|raw }}</p>
+                </div>
+                {% if landing.discount %}
+                    <div class="header-content-offer">
+                        <p>وفر {{ landing.discount|money }}</p>
+                        {% if landing.settings.sale_counter_time and landing.offer_expired_at %}
+                            <h3>المتبقي من العرض</h3>
+                            <ul id="countdown_id" class="timer countdown-timer mt-30" data-dunixtime="{{ landing.offer_expired_at }}"></ul>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </header>
+
+        <section class="s-block container overflow-hidden">
+            <salla-slider
+                    type="carousel"
+                    block-title="المنتجات المعروضة"
+                    id="landing-page-slider">
+                <div slot="items">
+                    {% for product in landing.products %}
+                        <div class="slide--one-fourth">
+                            {% include 'pages.partials.product.card' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </salla-slider>
+            {#<div class="text-center mt-6">
+                <salla-button color="primary" class="btn--rounded-full !text-white">عرض الكل الآن</salla-button>
+            </div>#}
+        </section>
+
+        {% if landing.settings.show_store_features %}
+            <section  class="s-block container overflow-hidden">
+                {% include 'components.home.store-features' with {
+                    items:[
+                        {icon:'sicon-shipping', title:'شحن مجاني', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
+                        {icon:'sicon-sync', title:'إسترجاع خلال 14 يومًا', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
+                        {icon:'sicon-secure-credit-card-2', title:'مدفوعات آمنة', text:'مدفوعات آمنة أقساط تصل إلى 12 شهرًا'},
+                    ]
+                } %}
+            </section>
+        {% endif %}
+        <section class="s-block overflow-hidden bg-gray-50">
+            <div class="container">
+                {% component 'home.testimonials' %}
+            </div>
+        </section>
+    </div>
+    {# ======================== Not Found ======================== #}
+    {# <div class="landing-page notfound">
+        <header>
+            <div class="header-content container">
+                <img src="{{ store.logo }}" alt="logo" class="logo">
+                <div class="header-content-inner">
+                    <h1> هذه الصفحة لم تعد موجودة</h1>
+                    <div class="text-center mt-6">
+                        <salla-button color="primary" class="btn--rounded-full !text-white">العودة للمتجر</salla-button>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>   #}
+    {# ======================== Expired ======================== #}
+    {% if landing.settings.sale_counter_time and landing.offer_expired_at == null %}
+        <div class="landing-page expired">
+            <header>
+                <div class="header-content container">
+                    <img src="{{ store.logo }}" alt="logo" class="logo">
+                    <div class="header-content-inner">
+                        <h1> انتهت صلاحية العرض</h1>
+                        <p>نأسف لكن مدة صلاحية هذا العرض قد انتهت، يمكنك تصفح بقية منتجاتنا ستجد الكثير من المنتجات المميزة والعروض الاخرى.</p>
+                        <div class="text-center mt-6">
+                            <salla-button color="primary" class="btn--rounded-full !text-white">العودة للمتجر</salla-button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+    {% endif %}
+
+    <div class="container">
+
+        <div class="flex justify-center">
+            <div class="content content--single-page w-full lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
+
+                {# Price #}
+                <div class="sticky-product-bar__price center-between">
+                    <label class="form-label">
+                        <b class="block">
+                            {{ trans('pages.products.price') }}
+                        </b>
+                    </label>
+                    <div class="space-s-1">
+                        <h4  class="total-price {{ landing.regular_price ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                            {{ landing.total_price|money }}
+                        </h4>
+                        {% if landing.regular_price %}
+                            <span class="before-price text-gray-400 line-through">
+                                {{ landing.regular_price|money }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if landing.quantity %}
+                    {% if landing.settings.show_products_quantity %}
+                        <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
+                            <div class="px-4 even:border-s even:border-gray-200">
+                                <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
+                                {{ trans('pages.products.remained') }}
+                                <span>{{ landing.quantity }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
+                        <div class="px-4 even:border-s even:border-gray-200">
+                            <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
+                            نفذت الكمية
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ 'home.js' | asset }}"></script>
+{% endblock %}
