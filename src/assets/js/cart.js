@@ -63,6 +63,7 @@ class Cart extends BasePage {
         let cartItem = document.querySelector('#item-' + item.id);
         if(!cartItem){
             salla.log(`Can't get the cart item dom for ${item.id}!`);
+            salla.loyalty.event.onExchangeSucceeded(()=>location.reload());
             return;
         }
         let totalElement = cartItem.querySelector('.item-total'),
