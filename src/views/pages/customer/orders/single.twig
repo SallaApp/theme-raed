@@ -66,9 +66,6 @@
 | order.rating.shipping            | ?Rating                           |                                                                                          |
 #}
 {% extends "layouts.customer" %}
-{% block styles %}
-  <link rel="stylesheet" href="{{ 'map.css' | asset }}">
-{% endblock %}
 {% block inner_content %}
     <div class="space-y-4 md:space-y-8">
 
@@ -245,7 +242,15 @@
                                           {% elseif option.is_file %}
                                             <a href="{{ option.value }}" target="_blank" class="text-sm text-primary underline">{{ trans('pages.products.add_file') }}</a>
                                           {% elseif option.is_color_picker %}
-                                            <span class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.value }}" ></span>
+                                            <div class="flex w-fit border border-gray-100 rounded">
+                                                <div class="flex-center ltr:border-r rtl:border-l border-gray-100 ltr:pr-1 rtl:pl-1">
+                                                    <span class="text-xs px-1">{{option.value}}</span>
+                                                    <span class="inline-block h-4 w-4 ms-1 rounded p-1 border border-gray-100 shadow" style="background-color: {{option.value}}"></span>
+                                                </div>
+                                                <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="dwdwd" class="pt-1 px-1">
+                                                    <i class="sicon-swap-stroke pointer-events-none text-sm text-gray-500"></i>
+                                                </salla-button>
+                                            </div>
                                           {% elseif option.is_map %}
                                             <salla-map
                                                 id="location_map"
