@@ -32,7 +32,11 @@
                 </div>
             </nav>
             <div class="main-content w-full flex-1 lg:pt-10 ">
-                <h1 class="font-bold text-lg text-center sm:text-start mb-2">{{ page.title }}</h1>
+                <h1 class="font-bold text-lg text-center sm:text-start mb-2">{{ page.title }}
+                {% if order.source is same as('buy_as_gift') %}
+                    <i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}
+                {% endif %}
+                </h1>
                 {#
                 All customer pages have same header, this layout will wrap the different content.
                 Use it like: `{% extends "layouts.customer" %}` instead of `{% extends "layouts.master" %}`
