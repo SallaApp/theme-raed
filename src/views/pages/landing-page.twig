@@ -58,7 +58,10 @@
                 {% endif %}
 
                 <div class="text-center mt-6">
-                    <salla-button color="primary" class="btn--rounded-full !text-white">{{ landing.products|length > 1 ? 'شراء الكل الآن' : 'شراء الآن' }}</salla-button>
+                    <form action="{{ landing.url }}" method="post">
+                        {{ csrf_field() }}
+                        <salla-button type="submit" color="primary" class="btn--rounded-full !text-white">{{ landing.products|length > 1 ? 'شراء الكل الآن' : 'شراء الآن' }}</salla-button>
+                    </form>
                 </div>
             </section>
 
