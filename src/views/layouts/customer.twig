@@ -33,9 +33,11 @@
             </nav>
             <div class="main-content w-full flex-1 lg:pt-10 ">
                 <h1 class="font-bold text-lg text-center sm:text-start mb-2">{{ page.title }}
-                {% if order.source is same as('buy_as_gift') %}
-                    <i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}
-                {% endif %}
+
+                  {% if is_current_url('order') and order.source is same as('buy_as_gift') %}
+                    <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
+                  {% endif %}
+
                 </h1>
                 {#
                 All customer pages have same header, this layout will wrap the different content.
