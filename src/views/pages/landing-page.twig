@@ -16,9 +16,10 @@
                 <div class="header-content container">
                     <img src="{{ store.logo }}" alt="logo" class="logo">
                     <div class="header-content-inner">
-                        <h1> هذه الصفحة لم تعد موجودة</h1>
+                        <h1> {{trans('common.errors.404')}}</h1>
                         <div class="text-center mt-6">
-                            <salla-button color="primary" class="btn--rounded-full !text-white">العودة للمتجر
+                            <salla-button color="primary" class="btn--rounded-full !text-white">
+                                {{trans('common.elements.back_home')}}
                             </salla-button>
                         </div>
                     </div>
@@ -31,11 +32,11 @@
                 <div class="header-content container">
                     <img src="{{ store.logo }}" alt="logo" class="logo">
                     <div class="header-content-inner">
-                        <h1> انتهت صلاحية العرض</h1>
-                        <p>نأسف لكن مدة صلاحية هذا العرض قد انتهت، يمكنك تصفح بقية منتجاتنا ستجد الكثير من المنتجات
-                            المميزة والعروض الاخرى.</p>
+                        <h1> {{trans('pages.offer.offer_finished')}}</h1>
+                        <p>{{ trans('pages.offer.offer_expired_message') }}</p>
                         <div class="text-center mt-6">
-                            <salla-button color="primary" class="btn--rounded-full !text-white">العودة للمتجر
+                            <salla-button color="primary" class="btn--rounded-full !text-white">
+                                {{trans('common.elements.back_home')}}
                             </salla-button>
                         </div>
                     </div>
@@ -49,12 +50,12 @@
                     <img src="{{ store.logo }}" alt="logo" class="logo">
                     <div class="header-content-inner">
                         <h1>{{ landing.title }}</h1>
-                        <p>{{ landing.content|replace({"&nbsp;":" "})|raw }}</p>
+                        <p>{{ landing.content|raw }}</p>
                     </div>
                     {% if landing.offer_ends_at %}
                         <div class="header-content-offer">
                             {% if landing.offer_ends_at %}
-                                <h3>المتبقي من العرض</h3>
+                                <h3>{{trans('pages.offer.offer_remaining_time')}}</h3>
                                 <ul id="countdown_id" class="timer countdown-timer mt-30"
                                     data-dunixtime="{{ landing.offer_ends_at }}"></ul>
                             {% endif %}
@@ -63,28 +64,18 @@
                 </div>
             </header>
 
+
             <section class="s-block container overflow-hidden">
                 {% if landing.is_slider %}
-                    <salla-slider type="carousel" block-title="المنتجات المعروضة" id="landing-page-slider">
-                        <div slot="items">
-                            {% for product in landing.products %}
-                                <div class="slide--one-fourth">
-                                    {% include 'pages.partials.product.card' with {hide_add_btn:true} %}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </salla-slider>
+                    {% include 'components.home.products-slider' with{products:landing.products, title:'المنتجات المعروضة', hide_add_btn:true} %}
                 {% else %}
-                    <div class="mb-8 products-container gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
-                        {% for product in landing.products %}
-                            {% include 'pages.partials.product.card' with {hide_add_btn:true} %}
-                        {% endfor %}
-                    </div>
+                    {% include 'components.home.fixed-products' with{products:landing.products, hide_add_btn:true} %}
                 {% endif %}
 
                 <div class="text-center mt-6">
-                    <salla-button type="submit" color="primary"
-                                  class="btn--rounded-full !text-white">{{ landing.products|length > 1 ? 'شراء الكل الآن' : 'شراء الآن' }}</salla-button>
+                    <salla-button onclick="salla.landing.createCartFromPage({{ landing.id }})" color="primary" class="btn--rounded-full !text-white">
+                        {{ trans('pages.products.buy_now') }}
+                    </salla-button>
                 </div>
             </section>
 
