@@ -63,28 +63,18 @@
                 </div>
             </header>
 
+
             <section class="s-block container overflow-hidden">
                 {% if landing.is_slider %}
-                    <salla-slider type="carousel" block-title="المنتجات المعروضة" id="landing-page-slider">
-                        <div slot="items">
-                            {% for product in landing.products %}
-                                <div class="slide--one-fourth">
-                                    {% include 'pages.partials.product.card' with {hide_add_btn:true} %}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </salla-slider>
+                    {% include 'components.home.products-slider' with{products:landing.products, title:'المنتجات المعروضة', hide_add_btn:true} %}
                 {% else %}
-                    <div class="mb-8 products-container gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
-                        {% for product in landing.products %}
-                            {% include 'pages.partials.product.card' with {hide_add_btn:true} %}
-                        {% endfor %}
-                    </div>
+                    {% include 'components.home.fixed-products' with{products:landing.products, hide_add_btn:true} %}
                 {% endif %}
 
                 <div class="text-center mt-6">
-                    <salla-button type="submit" color="primary"
-                                  class="btn--rounded-full !text-white">{{ landing.products|length > 1 ? 'شراء الكل الآن' : 'شراء الآن' }}</salla-button>
+                    <salla-button onclick="salla.landing.createCartFromPage({{ landing.id }})" color="primary" class="btn--rounded-full !text-white">
+                        {{ landing.products|length > 1 ? 'شراء الكل الآن' : 'شراء الآن' }}
+                    </salla-button>
                 </div>
             </section>
 
