@@ -20,10 +20,10 @@ export default function countDown() {
         dayWord = salla.lang.get('pages.checkout.day');
 
       countdownElem.innerHTML = `
-              <li>${sec}<span>${secWord}</span></li> 
-              <li>${min}<span>${minWord}</span></li>
-              <li>${hrs}<span>${hourWord}</span></li>
-              <li>${dys}<span>${dayWord}</span></li>`;
+              <li>${salla.helpers.number(sec)}<span>${salla.helpers.number(secWord)}</span></li>
+              <li>${salla.helpers.number(min)}<span>${salla.helpers.number(minWord)}</span></li>
+              <li>${salla.helpers.number(hrs)}<span>${salla.helpers.number(hourWord)}</span></li>
+              <li>${salla.helpers.number(dys)}<span>${salla.helpers.number(dayWord)}</span></li>`;
 
       if (distance < 0) {
         clearInterval(x);
