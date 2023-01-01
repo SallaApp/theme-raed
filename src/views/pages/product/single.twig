@@ -78,14 +78,14 @@
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
                 {% set has_many_images = product.images|length > 1 %}
                 <salla-slider
-                  id="details-slider-{{ product.id }}"
-                  class="details-slider rounded-md"
-                  type="thumbs"
-                  loop="false"
-                  listen-to-thumbnails-option
-                  show-thumbs-controls="false">
+                        id="details-slider-{{ product.id }}"
+                        class="details-slider rounded-md"
+                        type="thumbs"
+                        loop="false"
+                        listen-to-thumbnails-option
+                        show-thumbs-controls="false">
                     {% if product.promotion_title %}
-                      <div class="promotion-title">{{ product.promotion_title }}</div>
+                        <div class="promotion-title">{{ product.promotion_title }}</div>
                     {% endif %}
 
                     <salla-button
@@ -127,14 +127,14 @@
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
-                                      <img fetchpriority="high" loading="eager" src="{{ image.url }}"
-                                          alt="{{ image.alt }}"
-                                          class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
-                                      {% else %}
-                                          <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
-                                              alt="{{ image.alt }}"
-                                              class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : ''}}">
-                                      {% endif %}
+                                        <img fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                    {% else %}
+                                        <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                    {% endif %}
                                 </a>
                             {% endif %}
                         {% endfor %}
@@ -170,7 +170,8 @@
                 {% if product.brand %}
                     <div class="product-brand mb-5 w-12">
                         <a class="brand-logo" href="{{ product.brand.url }}" title="{{ product.brand.name }}">
-                            <img width="100%" height="100%" class="max-h-full object-contain" src="{{ product.brand.logo }}"
+                            <img width="100%" height="100%" class="max-h-full object-contain"
+                                 src="{{ product.brand.logo }}"
                                  title="{{ product.brand.name }}"
                                  alt="{{ product.brand.name }}">
                         </a>
@@ -190,11 +191,12 @@
                 {% endif %}
 
                 {% if product.rating %}
-                    <salla-rating-stars value="{{product.rating.stars}}" reviews="{{product.rating.count}}"></salla-rating-stars>
+                    <salla-rating-stars value="{{ product.rating.stars }}"
+                                        reviews="{{ product.rating.count }}"></salla-rating-stars>
                 {% endif %}
 
                 <div class="mb-2 space-s-1">
-                    <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                    <h4 class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                         {{ product.price|money }}
                     </h4>
                     {% if product.is_on_sale %}
@@ -206,7 +208,9 @@
 
                 <div class="product__description p-2 sm:p-1 leading-7 mb-3">
                     {% if product.has_read_more %}
-                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 p-4" id="more-content" style="max-height:5.25rem">
+                        <article
+                                class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 p-4"
+                                id="more-content" style="max-height:5.25rem">
                             {{ product.description|raw }}
                         </article>
 
@@ -222,7 +226,9 @@
                 {% if product.tags|length and theme.settings.get('show_tags') %}
                     <div class="mb-3">
                         {% for tag in product.tags %}
-                            <a href="{{ tag.url }}" class="me-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }},</a>
+                            <a href="{{ tag.url }}"
+                               class="me-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
+                                ,</a>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -231,12 +237,12 @@
                     <salla-social-share class="hidden sm:inline-flex mb-5"></salla-social-share>
 
                     <salla-button
-                      class="btn--wishlist animated hidden sm:inline-flex"
-                      data-id="{{ product.id }}"
-                      onclick="salla.wishlist.toggle({{ product.id }})"
-                      shape="icon"
-                      fill="outline"
-                      color="light">
+                            class="btn--wishlist animated hidden sm:inline-flex"
+                            data-id="{{ product.id }}"
+                            onclick="salla.wishlist.toggle({{ product.id }})"
+                            shape="icon"
+                            fill="outline"
+                            color="light">
                         <i class="sicon-heart"></i>
                     </salla-button>
                 </div>
@@ -270,7 +276,7 @@
                 {% hook 'product:single.description' %}
 
                 {# Installment Methods #}
-                <salla-installment price="{{product.price}}"></salla-installment>
+                <salla-installment price="{{ product.price }}"></salla-installment>
 
                 {% if product.show_availability %}
                     <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
@@ -281,7 +287,8 @@
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
                                 <div class="flex space-s-3">
-                                    <a href="#!" onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
+                                    <a href="#!"
+                                       onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
                                        class="group text-primary flex items-center justify-center">
                                         <span>{{ trans('pages.products.select_branch') }}</span>
                                         <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
@@ -297,13 +304,13 @@
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" novalidate>
                     <input type="hidden" name="id" value="{{ product.id }}">
 
-             
+
                     {% hook 'product:single.form.start' %}
 
                     {% include 'pages.partials.product.options' %}
 
                     {% hook 'product:single.form.end' %}
-               
+
 
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
@@ -327,7 +334,7 @@
                                 </b>
                             </label>
                             <div class="space-s-1">
-                                <h4  class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
+                                <h4 class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                                     {{ product.price|money }}
                                 </h4>
                                 {% if product.is_on_sale %}
@@ -337,15 +344,21 @@
                                 {% endif %}
                             </div>
                         </div>
-
                         {# Add to cart #}
-                        <salla-add-product-button type="submit" loader-position="end" width="wide"
-                                                  class="mt-5 w-full sticky-product-bar__btn"
-                                                  product-id="{{ product.id }}"
-                                                  product-status="{{ product.status }}"
-                                                  product-type="{{ product.type }}"
-                                                  channels="{{ product.notify_availability.channels|join(',') }}"
-                                {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}>
+                        <salla-add-product-button
+                                class="mt-5 w-full sticky-product-bar__btn"
+                                product-status="{{ product.status }}"
+                                product-type="{{ product.type }}"
+                                product-id="{{ product.id }}"
+                                loader-position="end"
+                                type="submit"
+                                width="wide"
+                                {# Notify availability props#}
+                                {% if product.notify_availability %}
+                                    {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}
+                                    channels="{{ product.notify_availability.channels|join(',') }}"
+                                    {{ product.notify_availability.options ? 'notify-options-availability' : '' }}
+                                {% endif %}>
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
                     </section>
@@ -356,9 +369,9 @@
 
                 {% hook 'product:single.description.end' %}
                 {% if is_quick_order_enabled %}
-                  <div>
-                    <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
-                  </div>
+                    <div>
+                        <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
+                    </div>
                 {% endif %}
             </div>
         </div>
