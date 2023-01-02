@@ -339,11 +339,12 @@
                         </div>
 
                         {# Add to cart #}
-                        <salla-add-product-button notify-availability type="submit" loader-position="end" width="wide"
+                        <salla-add-product-button notify-options-availability type="submit" loader-position="end" width="wide"
                                                   class="mt-5 w-full sticky-product-bar__btn"
                                                   product-id="{{ product.id }}"
                                                   product-status="{{ product.status }}"
                                                   product-type="{{ product.type }}"
+                                                  subscribed-options="{{ product.notify_availability.subscribed_options }}"
                                                   channels="{{ product.notify_availability.channels|join(',') }}"
                                 {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}>
                             {{ product.add_to_cart_label }}
