@@ -344,7 +344,7 @@
                                                   product-id="{{ product.id }}"
                                                   product-status="{{ product.status }}"
                                                   product-type="{{ product.type }}"
-                                                  subscribed-options="{{ product.notify_availability.subscribed_options }}"
+                                                  subscribed-options="{{ product.notify_availability.subscribed_options|json_encode }}"
                                                   channels="{{ product.notify_availability.channels|join(',') }}"
                                 {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}>
                             {{ product.add_to_cart_label }}
