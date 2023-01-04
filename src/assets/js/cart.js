@@ -70,7 +70,7 @@ class Cart extends BasePage {
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             offerElement = cartItem.querySelector('.offer-name'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
-            hasSpecialPrice = item.offer ? true : false || item.special_price > 0;
+            hasSpecialPrice = item.offer || item.special_price > 0;
 
         let total = salla.money(item.total);
         if (total !== totalElement.innerText) {
