@@ -364,7 +364,7 @@
                         </salla-add-product-button>
                     </section>
                     {% if product.is_giftable %}
-                        <salla-gifting class="mt-5" product-id="{{ product.id }}"></salla-gifting>
+                        <salla-gifting class="mt-5" widget-subtitle=“{{ store_text }}” product-id="{{ product.id }}"></salla-gifting>
                     {% endif %}
                 </form>
 
@@ -388,5 +388,6 @@
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     {% endif %}
+    console.log({{ store_text | json_encode | raw}});
 {% endblock %}
 
