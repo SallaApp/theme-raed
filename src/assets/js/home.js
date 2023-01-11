@@ -1,5 +1,4 @@
 import "lite-youtube-embed";
-import initCountdown from "./partials/count-down";
 import BasePage from "./base-page";
 import Lightbox from "fslightbox";
 window.fslightbox = Lightbox;
@@ -7,7 +6,6 @@ window.fslightbox = Lightbox;
 class Home extends BasePage {
     onReady() {
         this.initFeaturedTabs();
-        initCountdown();
     }
 
     /**
