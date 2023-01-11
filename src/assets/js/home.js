@@ -25,7 +25,6 @@ class Home extends BasePage {
         });
         document.querySelectorAll('.s-block-tabs').forEach(block => block.classList.add('tabs-initialized'));
     }
-
 }
 
 Home.initiateWhenReady(['index']);
