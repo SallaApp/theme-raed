@@ -357,13 +357,14 @@
                                 {% if product.notify_availability %}
                                     {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}
                                     channels="{{ product.notify_availability.channels|join(',') }}"
+                                    subscribed-options="{{ product.notify_availability.subscribed_options|json_encode }}"
                                     {{ product.notify_availability.options ? 'notify-options-availability' : '' }}
                                 {% endif %}>
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
                     </section>
                     {% if product.is_giftable %}
-                        <salla-gifting class="mt-5" product-id="{{ product.id }}"></salla-gifting>
+                        <salla-gifting class="mt-5" widget-subtitle=“{{ gifting_intro }}” product-id="{{ product.id }}"></salla-gifting>
                     {% endif %}
                 </form>
 
