@@ -301,7 +301,7 @@
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onchange="salla.product.getPrice(new FormData(event.currentTarget))"
-                      onsubmit="return salla.form.onSubmit('cart.addItem', event)" novalidate>
+                      onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
                     <input type="hidden" name="id" value="{{ product.id }}">
 
 
@@ -346,6 +346,7 @@
                         </div>
                         {# Add to cart #}
                         <salla-add-product-button
+                                quick-buy
                                 class="mt-5 w-full sticky-product-bar__btn"
                                 product-status="{{ product.status }}"
                                 product-type="{{ product.type }}"
@@ -364,7 +365,7 @@
                         </salla-add-product-button>
                     </section>
                     {% if product.is_giftable %}
-                        <salla-gifting class="mt-5" widget-subtitle=“{{ gifting_intro }}” product-id="{{ product.id }}"></salla-gifting>
+                        <salla-gifting class="mt-5" widget-subtitle="{{ gifting_intro }}" product-id="{{ product.id }}"></salla-gifting>
                     {% endif %}
                 </form>
 
