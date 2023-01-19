@@ -4,7 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const asset = file => path.resolve('src/assets', file || '');
-const public = file => path.resolve("public", file || '');
+const publicPath = file => path.resolve("public", file || '');
 
 module.exports = {
     entry  : {
@@ -16,7 +16,7 @@ module.exports = {
         order: asset('js/order.js'),
     },
     output : {
-        path: public(),
+        path: publicPath(),
         clean: true,
         chunkFilename: "[name].[contenthash].js"
     },
@@ -57,7 +57,7 @@ module.exports = {
     plugins: [
         new ThemeWatcher(),
         new MiniCssExtractPlugin(),
-        new CopyPlugin({patterns: [{from: asset('images'), to: public('images')}]}),
+        new CopyPlugin({patterns: [{from: asset('images'), to: publicPath('images')}]}),
     ],
 }
 ;
