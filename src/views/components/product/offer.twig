@@ -68,8 +68,9 @@
         {% for discount in offer.discounts_table %}
             <div class="discount-list__item flex justify-between border-t pt-2.5">
               <div>
-                <span>{{ trans('pages.offer.buy_quantity_and_take', {quantity:discount.quantity_text, price:''})|number }}</span>
-                {% if discount.show_discounted_price %} 
+                <span>{{ trans('pages.offer.buy_quantity', {quantity:discount.quantity_text})|number }}</span>
+                {% if discount.show_discounted_price %}
+                  <span>{{ trans('pages.offer.with_price', {price:''}) }}</span>
                   <span class="font-bold text-red-400">{{ discount.price|number({'.':'٫'}) }}</span> {{ user.currency.symbol }}
                 {% endif %}
               </div>
