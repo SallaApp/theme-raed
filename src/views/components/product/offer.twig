@@ -46,9 +46,10 @@
                     <div class="slide--one-fourth">
                         <div class="slide--offer-entry">
                             <div class="p-3 flex-grow flex flex-col justify-center w-full">
-                                <p class="mb-1">{{ trans('pages.offer.buy_quantity_and_take', {quantity:discount.quantity_text, price:''})|number }}</p>
+                                <p class="mb-1">{{ trans('pages.offer.buy_quantity', {quantity:discount.quantity_text})|number }}</p>
                                 {% if discount.show_discounted_price %}
                                     <div class="text-sm text-gray-400">
+                                        <span>{{ trans('pages.offer.with_price', {price:''}) }}</span>
                                         <span class="font-extrabold text-red-400 text-3xl">{{ discount.price|number({'.':'٫'}) }}</span> {{ user.currency.symbol }}
                                     </div>
                                 {% endif %}
@@ -68,8 +69,9 @@
         {% for discount in offer.discounts_table %}
             <div class="discount-list__item flex justify-between border-t pt-2.5">
               <div>
-                <span>{{ trans('pages.offer.buy_quantity_and_take', {quantity:discount.quantity_text, price:''})|number }}</span>
-                {% if discount.show_discounted_price %} 
+                <span>{{ trans('pages.offer.buy_quantity', {quantity:discount.quantity_text})|number }}</span>
+                {% if discount.show_discounted_price %}
+                  <span>{{ trans('pages.offer.with_price', {price:''}) }}</span>
                   <span class="font-bold text-red-400">{{ discount.price|number({'.':'٫'}) }}</span> {{ user.currency.symbol }}
                 {% endif %}
               </div>
