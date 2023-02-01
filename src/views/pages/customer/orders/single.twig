@@ -185,39 +185,41 @@
                     {% for item in package.items %}
                         <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}" class="order-item bg-white p-5 border-b border-gray-100 first:rounded-t-md last:rounded-b-md last:border-none">
 
-                            {% if item.product %}
-                                <div class="flex space-s-5 mb-4">
-                                    <a href="{{ item.product.url }}" class="shrink-0">
-                                        <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
-                                             alt="{{ item.name }}"
-                                             class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
-                                    </a>
-                                    <div>
-                                        <a href="{{ item.product.url }}"
-                                           class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
-                                            {{ item.name }}
+                            <div class="mb-5 last:mb-0">
+                                {% if item.product %}
+                                    <div class="flex space-s-5 mb-4">
+                                        <a href="{{ item.product.url }}" class="shrink-0">
+                                            <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
+                                                 alt="{{ item.name }}"
+                                                 class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
                                         </a>
+                                        <div>
+                                            <a href="{{ item.product.url }}"
+                                               class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
+                                                {{ item.name }}
+                                            </a>
+                                            <b>{{ item.price|money }}</b>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="w-full  flex  justify-between text-sm py-2.5">
+                                        <span class="w-40 inline-block font-normal">{{ item.name }}</span>
                                         <b>{{ item.price|money }}</b>
                                     </div>
+                                {% endif %}
+
+                                <div class="w-full flex justify-between text-sm py-2.5">
+                                    <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
+                                    <b>{{ item.quantity }}</b>
                                 </div>
-                            {% else %}
-                                <div class="w-full  flex  justify-between text-sm py-2.5">
-                                    <span class="w-40 inline-block font-normal">{{ item.name }}</span>
+                                <div class="flex justify-between text-sm py-2.5">
+                                    <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
                                     <b>{{ item.price|money }}</b>
                                 </div>
-                            {% endif %}
-
-                            <div class="w-full flex justify-between text-sm py-2.5">
-                                <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
-                                <b>{{ item.quantity }}</b>
-                            </div>
-                            <div class="flex justify-between text-sm py-2.5">
-                                <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
-                                <b>{{ item.price|money }}</b>
-                            </div>
-                            <div class="flex justify-between  text-sm py-2.5">
-                                <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
-                                <b>{{ item.total|money }}</b>
+                                <div class="flex justify-between  text-sm py-2.5">
+                                    <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
+                                    <b>{{ item.total|money }}</b>
+                                </div>
                             </div>
 
                             {% if item.options %}
@@ -277,10 +279,10 @@
                                                     {{ file.name }}
                                                 </dt>
                                                 <dd class="font-medium text-xs">
-                                                    <a href="{{ file.url }}" target="_blank"
-                                                       class="font-bold text-gray-600 hover:text-black">
+                                                    <salla-button href="{{ file.url }}" target="_blank"
+                                                       class="btn--rounded-full font-bold text-gray-600 hover:text-black">
                                                         <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
-                                                    </a>
+                                                    </salla-button>
                                                 </dd>
                                             </div>
                                         {% endfor %}
@@ -294,9 +296,9 @@
                                             <div class="py-2.5 center-between">
                                                 <dt class="flex-center">
                                                     <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
-                                                    <span>{{ code.code }}</span>
+                                                    <span class="break-all font-bold">{{ code.code }}</span>
                                                 </dt>
-                                                <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{ code.code }}">
+                                                <salla-button class="btn--rounded-full" onclick="app.copyToClipboard(event)" data-content="{{ code.code }}">
                                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
                                                     <span class="text-sm ms-2 pointer-events-non">{{ trans('common.elements.copy') }}</span>
                                                 </salla-button>
