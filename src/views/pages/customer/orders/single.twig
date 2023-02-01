@@ -221,7 +221,14 @@
                             </div>
 
                             {% if item.product.type == 'booking' and item.product_reservations is not empty %}
-                                
+                                {% if item.booking_location != null %}
+                                    <ul class="font-medium text-xs text-gray-600">
+                                        <li class="py-1">
+                                            <span class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.products.location') }}</span>
+                                            <span class="text-unicode">{{ item.booking_location }}</span>
+                                        </li>
+                                    </ul>
+                                {% endif %}
                                 {% if item.product_reservations.count() > 1 %}
                                     <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.reservations') }}</h2>
                                 {% else %}
