@@ -223,7 +223,7 @@
                             {% if item.product.type == 'booking' and item.product_reservations is not empty %}
                                 {% if item.booking_location != null %}
                                     <ul class="font-medium text-xs text-gray-600">
-                                        <li class="py-1">
+                                        <li class="py-1 flex justify-between items-baseline">
                                             <span class="mt-5 mb-3.5 text-sm font-bold">{{ trans('common.elements.location') }}</span>
                                             <span class="text-unicode">{{ item.booking_location }}</span>
                                         </li>
@@ -238,7 +238,7 @@
                                 <div class="rounded-md p-4 border border-gray-200 mb-2">
                                     <ul class="font-medium text-xs text-gray-600">
                                         {% for reservation in item.product_reservations %}
-                                        <li class="py-1">
+                                        <li class="py-1  ">
                                             <span class="text-unicode">
                                                 {{ reservation.day|date|number }}
                                                 {% if reservation.from_timestamp is not empty %}
