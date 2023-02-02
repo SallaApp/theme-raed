@@ -50,7 +50,7 @@
             </header>
         </div>
     {% else %}
-        <div class="landing-page">
+        <div class="landing-page pb-10">
             <header>
                 <div class="header-content container">
                 <a href="{{ store.url }}" class="header-content-logo"><img src="{{ store.logo }}" alt="logo" class="logo"></a>
@@ -69,7 +69,7 @@
                 </div>
             </header>
 
-            <section class="container overflow-hidden pb-10 {{landing.products|length <= 3 and not landing.is_slider ? 'center-products' : ''}}">
+            <section class="container overflow-hidden {{landing.products|length <= 3 and not landing.is_slider ? 'center-products' : ''}}">
                 {% set products=landing.products %}
                 {% set hide_add_btn=true %}
                 {% set show_quantity=landing.show_quantity %}
@@ -89,13 +89,13 @@
             </section>
 
             {% if landing.show_store_features %}
-                <section class="container overflow-hidden pb-16">
+                <section class="container overflow-hidden">
                     {% component 'home.store-features' %}
                 </section>
             {% endif %}
 
             {% if landing.testimonials_type %}
-                <section class="overflow-hidden bg-gray-50 pb-16">
+                <section class="overflow-hidden bg-gray-50 mt-10">
                     <div class="container">
                         {% component 'home.testimonials' with{type:landing.testimonials_type} %}
                     </div>
