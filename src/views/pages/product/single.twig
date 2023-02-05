@@ -66,7 +66,6 @@
 | product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
 | product.is_require_shipping            | bool                        |                                                                        |
-| is_quick_order_enabled                 | bool                        | Does this store has quick order feature and is active?                 |
 #}
 {% extends "layouts.master" %}
 {% block content %}
@@ -373,11 +372,7 @@
                 </form>
 
                 {% hook 'product:single.description.end' %}
-                {% if is_quick_order_enabled %}
-                    <div>
-                        <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
-                    </div>
-                {% endif %}
+                <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
             </div>
         </div>
         {% component 'product.offer' %}
