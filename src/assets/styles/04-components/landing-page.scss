@@ -1,0 +1,80 @@
+.landing-page{
+    @apply bg-white;
+    > header{
+        @apply min-h-[70vh] w-full relative overflow-hidden;
+        .header-content{
+            @apply mx-auto relative z-[1] max-w-[750px] text-center pb-[30px];
+            &-logo img{
+                @apply w-auto mx-auto mb-24 mt-10 max-w-full max-h-[75px] h-auto;
+            }
+            &-inner{
+                & > h1 {
+                    @apply text-2xl md:text-4xl font-bold text-[#444444] mb-4;
+                }
+                & > p {
+                    @apply text-[#888888] text-sm md:text-base;
+                }
+            }
+            &-offer{
+                @apply mt-16;
+                p{
+                    @apply text-[#EA5455] text-xl mb-6;
+                }
+                h3{
+                    @apply text-3xl mb-16 text-[#444444];
+                }
+            }
+        }
+        &:before{
+            border-radius: 0 0 50% 50%/ 0 0 100% 100%;
+            @apply hidden sm:block content-[''] absolute inset-0 w-full h-full bg-[#F5F7F9] scale-x-150;
+        }
+    }
+    .center-products{
+        .vertical-products{
+            @media (min-width: 768px){
+                @apply flex justify-center;
+            }
+            @media (max-width: 767px){
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+            }
+            .product-entry--vertical{
+                @media (min-width: 1024px){
+                    min-width: 286px;
+                    max-width: 286px;
+                } 
+                @media ((min-width: 768px) and (max-width: 1023px)){
+                    min-width: 220px;
+                }
+            }
+        }
+    }
+    .swiper-wrapper{
+        @apply pb-5;
+        .product-entry{
+            @apply border border-[#eee];
+        }
+    }
+    &.notfound{
+        > header{
+            @apply flex items-center justify-center mb-12;
+            img{
+                @apply mb-12;
+            }
+        }
+    }   
+    &.expired{
+        > header{
+            @apply flex items-center justify-center mb-12;
+            .header-content{
+                @apply max-w-[600px];
+                img{
+                    @apply mb-12;
+                }
+                h1{
+                    @apply text-[#EA5455]
+                }
+            }
+        }
+    }
+}

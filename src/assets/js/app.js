@@ -75,7 +75,12 @@ class App extends AppHelpers {
   }
 
   initiateMobileMenu() {
-    const menu = new MobileMenu(this.element("#mobile-menu"), "(max-width: 1024px)", "( slidingSubmenus: false)");
+    let menu = this.element("#mobile-menu");
+    //in landing menu will not be their
+    if (!menu) {
+      return;
+    }
+    menu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
     salla.lang.onLoaded(() => {
       menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
     });
@@ -87,7 +92,11 @@ class App extends AppHelpers {
 
   initiateStickyMenu() {
     let header = this.element('#mainnav'),
-      height = this.element('#mainnav .inner').clientHeight;
+      height = this.element('#mainnav .inner')?.clientHeight;
+    //when it's landing page, there is no header
+    if (!header) {
+      return;
+    }
 
     window.addEventListener('load', () => setTimeout(() => this.setHeaderHeight(), 500))
     window.addEventListener('resize', () => this.setHeaderHeight())
@@ -259,4 +268,4 @@ class App extends AppHelpers {
   }
 }
 
-salla.onReady(()=>(new App).loadTheApp());
+salla.onReady(() => (new App).loadTheApp());
