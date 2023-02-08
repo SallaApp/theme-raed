@@ -66,7 +66,6 @@
 | product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
 | product.is_require_shipping            | bool                        |                                                                        |
-| is_quick_order_enabled                 | bool                        | Does this store has quick order feature and is active?                 |
 #}
 {% extends "layouts.master" %}
 {% block content %}
@@ -348,6 +347,8 @@
                         {# Add to cart #}
                         <salla-add-product-button
                                 quick-buy
+                                support-sticky-bar
+                                amount="{{ product.base_currency_price }}"
                                 class="mt-5 w-full sticky-product-bar__btn"
                                 product-status="{{ product.status }}"
                                 product-type="{{ product.type }}"
@@ -371,11 +372,7 @@
                 </form>
 
                 {% hook 'product:single.description.end' %}
-                {% if is_quick_order_enabled %}
-                    <div>
-                        <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
-                    </div>
-                {% endif %}
+                <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
             </div>
         </div>
         {% component 'product.offer' %}
