@@ -1,0 +1,111 @@
+{#
+| Variable                    | Type                   | Description |   |   |
+|-----------------------------|------------------------|-------------|---|---|
+| landing                     | object                 |             |   |   |
+| landing.id                  | int                    |             |   |   |
+| landing.title               | string                 |             |   |   |
+| landing.content             | string                 |             |   |   |
+| landing.products            | Products[] *Collection |             |   |   |
+| landing.offer_ends_at       | ?date                  |             |   |   |
+| landing.testimonials_type   | string                 |             |   |   |
+| landing.show_quantity       | bool                   |             |   |   |
+| landing.is_slider           | bool                   |             |   |   |
+| landing.is_expired          | bool                   |             |   |   |
+| landing.show_store_features | bool                   |             |   |   |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+    {# ======================== Landing Page ======================== #}
+    {% if not landing %}
+        <div class="landing-page notfound">
+            <header>
+                <div class="header-content container">
+                <a href="{{ store.url }}" class="header-content-logo"><img src="{{ store.logo }}" alt="logo" class="logo"></a>
+                    <div class="header-content-inner">
+                        <h1> {{trans('common.errors.404')}}</h1>
+                        <div class="text-center mt-6">
+                            <salla-button href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
+                                {{trans('common.elements.back_home')}}
+                            </salla-button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+    {% elseif landing.is_expired %}
+        <div class="landing-page expired">
+            <header>
+                <div class="header-content container">
+                <a href="{{ store.url }}" class="header-content-logo"><img src="{{ store.logo }}" alt="logo" class="logo"></a>
+                    <div class="header-content-inner">
+                        <h1> {{trans('pages.offer.offer_finished')}}</h1>
+                        <p>{{ trans('pages.offer.offer_expired_message') }}</p>
+                        <div class="text-center mt-6">
+                            <salla-button href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
+                                {{trans('common.elements.back_home')}}
+                            </salla-button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+    {% else %}
+        <div class="landing-page pb-10">
+            <header>
+                <div class="header-content container">
+                <a href="{{ store.url }}" class="header-content-logo"><img src="{{ store.logo }}" alt="logo" class="logo"></a>
+                    <div class="header-content-inner">
+                        <h1>{{ landing.title }}</h1>
+                        <p>{{ landing.content|raw }}</p>
+                    </div>
+                    {% if landing.offer_ends_at %}
+                        <div class="header-content-offer">
+                            {% if landing.offer_ends_at %}
+                                <h3>{{trans('pages.offer.offer_remaining_time')}}</h3>
+                                <salla-count-down date="{{ landing.offer_ends_at }}" labeled size="lg"></salla-count-down>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </header>
+
+            <section class="container overflow-hidden {{landing.products|length <= 3 and not landing.is_slider ? 'center-products' : ''}}">
+                {% set products=landing.products %}
+                {% set hide_add_btn=true %}
+                {% set show_quantity=landing.show_quantity %}
+                {% set title=trans('pages.offer.included_products') %}
+
+                {% if landing.is_slider %}
+                    {% include 'components.home.products-slider' %}
+                {% else %}
+                    {% include 'components.home.fixed-products' %}
+                {% endif %}
+
+                <div class="text-center mt-6">
+                    <salla-button data-landing-id="{{ landing.id }}" color="primary" class="btn--rounded-full !text-white buy-all-btn">
+                        {{ trans('pages.products.buy_now') }}
+                    </salla-button>
+                </div>
+            </section>
+
+            {% if landing.show_store_features %}
+                <section class="container overflow-hidden">
+                    {% component 'home.store-features' %}
+                </section>
+            {% endif %}
+
+            {% if landing.testimonials_type %}
+                <section class="overflow-hidden bg-gray-50 mt-10">
+                    <div class="container">
+                        {% component 'home.testimonials' with{type:landing.testimonials_type} %}
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+    {% endif %}
+    <div class="hidden bottom-1"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ 'landing.js' | asset }}"></script>
+{% endblock %}
