@@ -1,0 +1,169 @@
+<div class="store-notify" style="display:none;background-color: #1A263D; color: #fff;">
+    <div class="store-alert-content">
+        <div class="text">
+            <div class="thumb hidden-xs">
+                <img src="{{ 'images/alert.png' | cdn }}" alt="Alert" />
+            </div>
+
+            <div>
+                <h2>{{ title }}</h2>
+                <p>{{ message }}</p>
+            </div>
+        </div>
+
+        <div>
+            <a class="btn btn-store-alert btn-full btn-xlg" href="{{ button_url }}">
+                <span class="visible-xs">{{ button_title }}</span>
+
+                <span class="hidden-xs">{{ button_full_title }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<style>
+.store-notify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+  min-height: 40px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 5px 30px 5px 30px;
+  z-index: 3500;
+}
+.store-notify * {
+  color: inherit;
+}
+.store-notify i {
+  display: inline-block;
+  margin-left: 10px;
+  color: inherit;
+  padding: 8px 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+.store-notify #notify-close {
+  display: block;
+  width: 27px;
+  height: 27px;
+  margin: 0;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 5px;
+  transition: background-color 0.35s ease;
+}
+.store-notify #notify-close i {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(50%);
+  right: 50%;
+}
+.store-notify #notify-close:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.store-notify #notify-close:hover:after {
+  display: none;
+}
+.store-notify p {
+  color: inherit;
+  line-height: 1;
+  font-size: 13px;
+  text-align: center;
+  margin: 0;
+}
+.store-notify .store-alert-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 30px;
+  padding-left: 30px;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.store-notify .store-alert-content .text {
+  display: flex;
+  align-items: center;
+}
+.store-notify .store-alert-content .text h2 {
+  line-height: 1.4;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.store-notify .store-alert-content .thumb {
+  margin-left: 20px;
+}
+.store-notify .store-alert-content .btn-store-alert {
+  background: #5DD5C4;
+  border-color: #5DD5C4;
+}
+.store-notify .store-alert-content .btn-store-alert:hover {
+  background: #35cbb5;
+}
+@media only screen and (max-width: 767px) {
+  .store-notify .store-alert-content {
+    flex-direction: row;
+    padding: 0;
+  }
+  .store-notify .store-alert-content .text h2 {
+    line-height: 1.4;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .store-notify .store-alert-content .text p {
+    font-size: 10px;
+    text-align: right;
+  }
+  .store-notify .store-alert-content .btn {
+    padding: 10px 10px;
+  }
+}
+.store-notify a {
+  display: inline-block;
+  margin: 0 4px;
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.store-notify a:after:not(.btn-store-alert) {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  bottom: -6px;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: all 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.store-notify a:hover {
+  color: inherit;
+}
+.store-notify a:hover:after {
+  transform: scaleX(1);
+}
+@media only screen and (max-width: 767px) {
+  .store-notify {
+    padding: 5px 10px 5px 10px;
+  }
+  .store-notify p {
+    line-height: 1.2;
+  }
+}
+</style>
