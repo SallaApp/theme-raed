@@ -1,0 +1,1 @@
+document.querySelectorAll("#location_map").forEach((function(t){var e=t.dataset.location;if(e){var a=e.split(",");t.setAttribute("lat",parseFloat(a[0])),t.setAttribute("lng",parseFloat(a[1]))}t.addEventListener("selected",(function(e){document.getElementById(t.dataset.locationInput).value="".concat(e.detail.lat,", ").concat(e.detail.lng)}))}));
