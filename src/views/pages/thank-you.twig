@@ -49,13 +49,13 @@
             {% hook 'thank-you:items.start' %}
 
             {% for item in order.items %}
-                {% if item.files|length %}
+                {% if item.thank_you_find_files_message%}
                     <div class="flex flex-col items-center pt-1 pb-10 justify-start rtl:space-x-reverse space-x-2">
-                        <span class="font-bold">{{ trans('pages.thank_you.find_files') }}</span>
+                        <span class="font-bold">{{ item.thank_you_find_files_message }}</span>
                     </div>
-                {% elseif item.codes|length %}
+                {% elseif item.thank_you_find_codes_message %}
                     <div class="flex flex-col items-center pt-1 pb-10 justify-start rtl:space-x-reverse space-x-2">
-                        <span class="font-bold">{{ trans('pages.thank_you.find_codes') }}</span>
+                        <span class="font-bold">{{ item.thank_you_find_codes_message }}</span>
                     </div>
                 {% endif %}
 
