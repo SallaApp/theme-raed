@@ -41,6 +41,7 @@ class App extends AppHelpers {
       return;
     }
 
+    console.log('raed');
     document.body.classList.add('has-maintenance-bar');
 
     document.querySelector('.store-notify').remove();
