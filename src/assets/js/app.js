@@ -42,10 +42,8 @@ class App extends AppHelpers {
     }
 
     document.body.classList.add('has-maintenance-bar');
-    if (document.querySelector('.store-notify')) {
-      salla.logger.warn('.store-notify element Existed before!');
-      return;
-    }
+
+    document.querySelector('.store-notify').remove();
 
     const alertElement = document.createElement('div');
     alertElement.classList.add('store-notify');
