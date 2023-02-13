@@ -21,6 +21,7 @@ class App extends AppHelpers {
     this.initiateCollapse();
     this.initCircleBar();
     this.initDonating();
+    this.injectMaintenanceAlert();
     initTootTip();
 
     salla.comment.event.onAdded(() => window.location.reload());
@@ -33,6 +34,56 @@ class App extends AppHelpers {
   log(message) {
     salla.log(`ThemeApp(Raed)::${message}`);
     return this;
+  }
+
+  injectMaintenanceAlert() {
+    if (!salla.config.get('maintenance')) {
+      return;
+    }
+
+    document.body.classList.add('has-maintenance-bar');
+    if (document.querySelector('.store-notify')) {
+      salla.logger.warn('.store-notify element Existed before!');
+      return;
+    }
+
+    const alertElement = document.createElement('div');
+    alertElement.classList.add('store-notify');
+    alertElement.classList.add('maintenance-alert');
+    alertElement.innerHTML = `
+            <div class="store-alert-content">
+                <div class="text">
+                    <div class="thumb hidden-xs">
+                        <img src="/images/alert.png" alt="Alert" />
+                    </div>
+                    <div>
+                        <h2>${salla.config.get('maintenance_details.title')}</h2>
+                        <p>${salla.config.get('maintenance_details.message')}</p>
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-store-alert btn-full btn-xlg" href="${salla.config.get('maintenance_details.button_url')}">
+                        <span class="visible-xs">${salla.config.get('maintenance_details.button_title')}</span>
+                        <span class="hidden-xs">${salla.config.get('maintenance_details.button_full_title')}</span>
+                    </a>
+                </div>
+            </div>`;
+
+    const style = document.createElement('style');
+    style.innerHTML = `.store-notify{display:flex;align-items:center;justify-content:center;flex-direction:row;width:100%;min-height:40px;position:fixed;top:0;right:0;left:0;padding:5px 30px 5px 60px;z-index:3500}
+            .store-notify *,.store-notify a:hover{color:inherit}.store-notify p{color:inherit;line-height:1;font-size:13px;text-align:center;margin:0}
+            .store-notify a{display:inline-block;margin:0 4px;position:relative;transition:.35s cubic-bezier(.2, 1, .3, 1)}
+            .store-notify a:after:not(.btn-store-alert){content:"";display:block;width:100%;height:1px;position:absolute;bottom:-6px;right:0;background-color:rgba(255,255,255,.3);transform-origin:right;transform:scaleX(0);transition:.35s cubic-bezier(.2, 1, .3, 1)}
+            .store-notify a:hover:after{transform:scaleX(1)}.maintenance-alert{background-color:#1a263d;color:#fff;position:inherit;padding:5px 30px}
+            .maintenance-alert .store-alert-content{display:flex;justify-content:space-between;width:100%;padding-right:30px;padding-left:30px;align-items:center;margin-top:15px;margin-bottom:15px}
+            .maintenance-alert .store-alert-content .text{display:flex;align-items:center}.maintenance-alert .store-alert-content .text h2{line-height:1.4;margin-bottom:10px;font-weight:700}.maintenance-alert .store-alert-content .thumb{margin-left:20px}
+            .maintenance-alert .store-alert-content .btn-store-alert{background:#5dd5c4;padding:10px 16px;font-size:14px;font-weight:400;line-height:1.4285715;border-radius:3px;text-align:center;white-space:nowrap;vertical-align:middle;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border:1px solid #5dd5c4}
+            .maintenance-alert .store-alert-content .btn-store-alert:hover{background:#35cbb5}@media only screen and (max-width:767px){.store-notify{padding:5px 10px 5px 60px}.store-notify p{line-height:1.2}.maintenance-alert .store-alert-content{flex-direction:row;padding:0}
+            .maintenance-alert .store-alert-content .btn .hidden-xs,.maintenance-alert .store-alert-content .thumb{display:none!important}.maintenance-alert .store-alert-content .text h2{line-height:1.4;margin-bottom:5px;font-size:14px;font-weight:700}
+            .maintenance-alert .store-alert-content .text p{font-size:10px;text-align:right}.maintenance-alert .store-alert-content .btn{padding:10px}.maintenance-alert .store-alert-content .btn .visible-xs{display:block!important}.maintenance-alert{padding:5px 10px}}`;
+
+    document.head.appendChild(style);
+    document.body.prepend(alertElement);
   }
 
   copyToClipboard(event) {
