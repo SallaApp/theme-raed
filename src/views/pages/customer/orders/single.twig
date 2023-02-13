@@ -185,96 +185,108 @@
                     {% for item in package.items %}
                         <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}" class="order-item bg-white p-5 border-b border-gray-100 first:rounded-t-md last:rounded-b-md last:border-none">
 
-                            {% if item.product %}
-                                <div class="flex space-s-5 mb-4">
-                                    <a href="{{ item.product.url }}" class="shrink-0">
-                                        <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
-                                             alt="{{ item.name }}"
-                                             class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
-                                    </a>
-                                    <div>
-                                        <a href="{{ item.product.url }}"
-                                           class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
-                                            {{ item.name }}
+                            <div class="mb-5 last:mb-0">
+                                {% if item.product %}
+                                    <div class="flex space-s-5 mb-4">
+                                        <a href="{{ item.product.url }}" class="shrink-0">
+                                            <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
+                                                 alt="{{ item.name }}"
+                                                 class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
                                         </a>
+                                        <div>
+                                            <a href="{{ item.product.url }}"
+                                               class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
+                                                {{ item.name }}
+                                            </a>
+                                            <b>{{ item.price|money }}</b>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="w-full  flex  justify-between text-sm py-2.5">
+                                        <span class="w-40 inline-block font-normal">{{ item.name }}</span>
                                         <b>{{ item.price|money }}</b>
                                     </div>
+                                {% endif %}
+
+                                <div class="w-full flex justify-between text-sm py-2.5">
+                                    <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
+                                    <b>{{ item.quantity }}</b>
                                 </div>
-                            {% else %}
-                                <div class="w-full  flex  justify-between text-sm py-2.5">
-                                    <span class="w-40 inline-block font-normal">{{ item.name }}</span>
+                                <div class="flex justify-between text-sm py-2.5">
+                                    <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
                                     <b>{{ item.price|money }}</b>
                                 </div>
-                            {% endif %}
 
-                  <div class="w-full flex justify-between text-sm py-2.5">
-                      <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
-                      <b>{{ item.quantity }}</b>
-                  </div>
-                  <div class="flex justify-between text-sm py-2.5">
-                      <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
-                      <b>{{ item.price|money }}</b>
-                  </div>
-                  <div class="flex justify-between  text-sm py-2.5">
-                      <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
-                      <b>{{ item.total|money }}</b>
-                  </div>
-                  {% if item.options %}
-                      <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
-                      <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
-                          <dl class="text-sm text-dark divide-y divide-border-color">
-                              {% for option in item.options %}
-                                  <div class="py-2.5 center-between">
-                                      <dt class="mb-2 md:mb-0">
-                                          {{ option.name }}:
-                                      </dt>
-                                      <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
-                                          {% if option.is_image %}
-                                              <div class="flex space-s-2.5">
-                                                  <a href="{{ option.value }}" target="_blank">
-                                                      <img class="h-6 w-6 object-cover rounded-md"
-                                                            src="{{ option.value ?: 'images/placeholder.png' | asset }}"
-                                                            alt="{{ option.name }}"/>
-                                                  </a>
-                                              </div>
-                                          {% elseif option.color %}
-                                            <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
-                                          {% elseif option.is_file %}
-                                            <a href="{{ option.value }}" target="_blank" class="text-sm text-primary underline">{{ trans('pages.products.attachments') }}</a>
-                                          {% elseif option.is_color_picker %}
-                                            <div class="flex w-fit border border-gray-100 rounded">
-                                                <div class="flex-center ltr:border-r rtl:border-l border-gray-100 ltr:pr-1 rtl:pl-1">
-                                                    <span class="text-xs px-1">{{option.value}}</span>
-                                                    <span class="inline-block h-4 ms-1 rounded p-1 border border-gray-100 shadow" style="background-color: {{option.value}};width: 1rem"></span>
-                                                </div>
-                                                <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{option.value}}" class="pt-1 px-1">
-                                                    <i class="sicon-swap-stroke pointer-events-none text-sm text-gray-500"></i>
-                                                </salla-button>
-                                            </div>
-                                          {% elseif option.is_map %}
-                                            <salla-map
-                                                id="location_map"
-                                                class="map_{{option.id}}"
-                                                zoom="15"
-                                                readonly
-                                                lat="{{option.latitude}}"
-                                                lng="{{option.longitude}}"
-                                                >
-                                                  <div slot="button">
-                                                    <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map.map_{{option.id}}').open()">
-                                                      {{ trans('pages.products.show_location') }}
-                                                    </button>
-                                                  </div> 
-                                            </salla-map>
-                                          {% else %}
-                                            {{ option.value }}
-                                          {% endif %}
-                                      </dd>
-                                  </div>
-                              {% endfor %}
-                          </dl>
-                      </div>
-                  {% endif %}
+                                <div class="w-full flex justify-between text-sm py-2.5">
+                                  <span class="w-40 inline-block font-normal">{{ trans('pages.products.quantity') }}</span>
+                                  <b>{{ item.quantity }}</b>
+                                </div>
+                                <div class="flex justify-between text-sm py-2.5">
+                                  <span class=" w-40 inline-block font-normal">{{ trans('pages.products.price') }}</span>
+                                  <b>{{ item.price|money }}</b>
+                                </div>
+                                <div class="flex justify-between  text-sm py-2.5">
+                                  <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
+                                  <b>{{ item.total|money }}</b>
+                                </div>
+                            </div>
+
+                            {% if item.options %}
+                              <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
+                              <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
+                                  <dl class="text-sm text-dark divide-y divide-border-color">
+                                      {% for option in item.options %}
+                                          <div class="py-2.5 center-between">
+                                              <dt class="mb-2 md:mb-0">
+                                                  {{ option.name }}:
+                                              </dt>
+                                              <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
+                                                  {% if option.is_image %}
+                                                      <div class="flex space-s-2.5">
+                                                          <a href="{{ option.value }}" target="_blank">
+                                                              <img class="h-6 w-6 object-cover rounded-md"
+                                                                    src="{{ option.value ?: 'images/placeholder.png' | asset }}"
+                                                                    alt="{{ option.name }}"/>
+                                                          </a>
+                                                      </div>
+                                                  {% elseif option.color %}
+                                                    <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
+                                                  {% elseif option.is_file %}
+                                                    <a href="{{ option.value }}" target="_blank" class="text-sm text-primary underline">{{ trans('pages.products.attachments') }}</a>
+                                                  {% elseif option.is_color_picker %}
+                                                    <div class="flex w-fit border border-gray-100 rounded">
+                                                        <div class="flex-center ltr:border-r rtl:border-l border-gray-100 ltr:pr-1 rtl:pl-1">
+                                                            <span class="text-xs px-1">{{option.value}}</span>
+                                                            <span class="inline-block h-4 ms-1 rounded p-1 border border-gray-100 shadow" style="background-color: {{option.value}};width: 1rem"></span>
+                                                        </div>
+                                                        <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{option.value}}" class="pt-1 px-1">
+                                                            <i class="sicon-swap-stroke pointer-events-none text-sm text-gray-500"></i>
+                                                        </salla-button>
+                                                    </div>
+                                                  {% elseif option.is_map %}
+                                                    <salla-map
+                                                        id="location_map"
+                                                        class="map_{{option.id}}"
+                                                        zoom="15"
+                                                        readonly
+                                                        lat="{{option.latitude}}"
+                                                        lng="{{option.longitude}}"
+                                                        >
+                                                          <div slot="button">
+                                                            <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map.map_{{option.id}}').open()">
+                                                              {{ trans('pages.products.show_location') }}
+                                                            </button>
+                                                          </div>
+                                                    </salla-map>
+                                                  {% else %}
+                                                    {{ option.value }}
+                                                  {% endif %}
+                                              </dd>
+                                          </div>
+                                      {% endfor %}
+                                  </dl>
+                              </div>
+                            {% endif %}
 
                             {% if item.sub_products %}
                                 <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
@@ -303,10 +315,10 @@
                                                     {{ file.name }}
                                                 </dt>
                                                 <dd class="font-medium text-xs">
-                                                    <a href="{{ file.url }}" target="_blank"
-                                                       class="font-bold text-gray-600 hover:text-black">
+                                                    <salla-button href="{{ file.url }}" target="_blank"
+                                                       class="btn--rounded-full font-bold text-gray-600 hover:text-black">
                                                         <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
-                                                    </a>
+                                                    </salla-button>
                                                 </dd>
                                             </div>
                                         {% endfor %}
@@ -320,9 +332,9 @@
                                             <div class="py-2.5 center-between">
                                                 <dt class="flex-center">
                                                     <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
-                                                    <span>{{ code.code }}</span>
+                                                    <span class="break-all font-bold">{{ code.code }}</span>
                                                 </dt>
-                                                <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{ code.code }}">
+                                                <salla-button class="btn--rounded-full" onclick="app.copyToClipboard(event)" data-content="{{ code.code }}">
                                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
                                                     <span class="text-sm ms-2 pointer-events-non">{{ trans('common.elements.copy') }}</span>
                                                 </salla-button>
