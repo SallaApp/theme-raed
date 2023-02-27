@@ -62,7 +62,8 @@
 | product.is_on_sale                     | bool                        | Product has discounted price                                           |
 | product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
 | product.is_available                   | bool                        |                                                                        |
-| product.is_donation                    | bool                        |                                                                        |
+| product.is_donation                    | bool                        |       
+| product.is_booking                     | bool                        |                                                                      |
 | product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
 | product.is_require_shipping            | bool                        |                                                                        |
@@ -314,7 +315,7 @@
 
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
-                        {% if product.is_hidden_quantity %}
+                        {% if product.is_hidden_quantity or product.is_booking %}
                             <input type="hidden" value="1" name="quantity"/>
                         {% else %}
                             <div class="sticky-product-bar__quantity center-between mb-5">
