@@ -77,7 +77,7 @@
             <tr class="bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap py-1.5 md:py-0">
                 <td class="single-order-header-item w-full md:w-auto  px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                     <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
-                    <b>{{ order.created_at|date }}</b>
+                    <b>{{ order.created_at|date|number }}</b>
                 </td>
 
                 <td class="single-order-header-item flex justify-between items-center w-full md:w-auto px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
@@ -230,6 +230,37 @@
                                   <b>{{ item.total|money }}</b>
                                 </div>
                             </div>
+
+                            {% if item.product.type == 'booking' and item.product_reservations is not empty %}
+                              {% if item.booking_location != null %}
+                                  <ul class="font-medium text-xs text-gray-600">
+                                      <li class="py-1 flex justify-between items-baseline">
+                                          <span class="mt-5 mb-3.5 text-sm font-bold">{{ trans('common.elements.location') }}</span>
+                                          <span class="text-unicode">{{ item.booking_location }}</span>
+                                      </li>
+                                  </ul>
+                              {% endif %}
+                              {% if item.product_reservations.count() > 1 %}
+                                  <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.reservations') }}</h2>
+                              {% else %}
+                                  <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
+                              {% endif %}
+
+                              <div class="rounded-md p-4 border border-gray-200 mb-2">
+                                  <ul class="font-medium text-xs text-gray-600">
+                                      {% for reservation in item.product_reservations %}
+                                      <li class="py-1  ">
+                                          <span class="text-unicode">
+                                              {{ reservation.day|date|number }}
+                                              {% if reservation.from_timestamp is not empty %}
+                                                  ({{ reservation.from|number({'PM':'م', 'AM':'ص'}) }} - {{ reservation.to|number({'PM':'م', 'AM':'ص'}) }})
+                                              {% endif %}
+                                          </span>
+                                      </li>
+                                      {% endfor %}
+                                  </ul>
+                              </div>
+                          {% endif %}
 
                             {% if item.options %}
                               <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
