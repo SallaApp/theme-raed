@@ -1,1 +1,0 @@
-document.querySelectorAll("#color_picker").forEach((function(e){var t=document.getElementById(e.dataset.colorInput);t.value&&e.setAttribute("color",t.value),e.addEventListener("submitted",(function(e){t.value="".concat(e.detail.hex)}))}));
