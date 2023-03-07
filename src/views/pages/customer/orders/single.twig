@@ -76,7 +76,7 @@
             <tbody>
             <tr class="bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap py-1.5 md:py-0">
                 <td class="single-order-header-item w-full md:w-auto  px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
-                    <div class="me-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
+                    <div class="rtl:ml-2 ltr:mr-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
                     <b>{{ order.created_at|date|number }}</b>
                 </td>
 
@@ -281,14 +281,14 @@
                                                           </a>
                                                       </div>
                                                   {% elseif option.color %}
-                                                    <span title="{{option.value}}" class="inline-block h-6 w-6 ms-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
+                                                    <span title="{{option.value}}" class="inline-block h-6 w-6 rtl:mr-2 ltr:ml-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
                                                   {% elseif option.is_file %}
                                                     <a href="{{ option.value }}" target="_blank" class="text-sm text-primary underline">{{ trans('pages.products.attachments') }}</a>
                                                   {% elseif option.is_color_picker %}
                                                     <div class="flex w-fit border border-gray-100 rounded">
                                                         <div class="flex-center ltr:border-r rtl:border-l border-gray-100 ltr:pr-1 rtl:pl-1">
                                                             <span class="text-xs px-1">{{option.value}}</span>
-                                                            <span class="inline-block h-4 ms-1 rounded p-1 border border-gray-100 shadow" style="background-color: {{option.value}};width: 1rem"></span>
+                                                            <span class="inline-block h-4 rtl:mr-1 ltr:ml-1 rounded p-1 border border-gray-100 shadow" style="background-color: {{option.value}};width: 1rem"></span>
                                                         </div>
                                                         <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{option.value}}" class="pt-1 px-1">
                                                             <i class="sicon-swap-stroke pointer-events-none text-sm text-gray-500"></i>
@@ -362,12 +362,12 @@
                                         {% for code in item.codes %}
                                             <div class="py-2.5 center-between">
                                                 <dt class="flex-center">
-                                                    <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
+                                                    <i class="sicon-debit-card-back text-xl rtl:ml-2 ltr:mr-2 text-gray-500 inline-block -mt-1"></i>
                                                     <span class="break-all font-bold">{{ code.code }}</span>
                                                 </dt>
                                                 <salla-button class="btn--rounded-full" onclick="app.copyToClipboard(event)" data-content="{{ code.code }}">
                                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
-                                                    <span class="text-sm ms-2 pointer-events-non">{{ trans('common.elements.copy') }}</span>
+                                                    <span class="text-sm rtl:mr-2 ltr:ml-2 pointer-events-non">{{ trans('common.elements.copy') }}</span>
                                                 </salla-button>
                                             </div>
                                         {% endfor %}
@@ -501,7 +501,7 @@
                                 <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
                             {% else %}
                                 <salla-button width="wide" href="{{ order.payment_url }}">
-                                    <i class="sicon sicon-wallet me-2"></i>
+                                    <i class="sicon sicon-wallet rtl:ml-2 ltr:mr-2"></i>
                                     <span>{{ trans('pages.orders.finish_payment') }}</span>
                                 </salla-button>
                             {% endif %}
@@ -511,7 +511,7 @@
                                 <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
                             </div>
                             <salla-button shape="link" onclick="document.querySelector('#reorder-modal').open()">
-                                <i class="sicon sicon-rotate me-2"></i>
+                                <i class="sicon sicon-rotate rtl:ml-2 ltr:mr-2"></i>
                                 <span>{{ trans('pages.orders.reorder') }}</span>
                             </salla-button>
                         {% endif %}
@@ -525,7 +525,7 @@
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
                         <salla-button shape="link" color="danger" onclick="document.querySelector('#modal-order-cancel').open()">
-                            <i class="sicon sicon-cancel-circle me-2"></i>
+                            <i class="sicon sicon-cancel-circle rtl:ml-2 ltr:mr-2"></i>
                             <span>{{ trans('pages.orders.cancel') }}</span>
                         </salla-button>
                     </div>
