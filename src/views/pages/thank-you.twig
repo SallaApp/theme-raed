@@ -41,7 +41,7 @@
                     </salla-button>
                 </p>
                 <salla-button onclick="salla.order.show({order_id:{{ order.id }}, url:'{{ order.url }}'})">
-                  <i class="sicon-newspaper me-1"></i>
+                  <i class="sicon-newspaper rtl:ml-1 ltr:mr-1"></i>
                   {{ trans('pages.thank_you.order_details') }}
                 </salla-button>
             </div>
@@ -63,12 +63,12 @@
                         {% for code in item.codes %}
                             <div class="md:flex justify-between items-center mb-2 pb-2 border-b border-b-gray-200 last:pb-0 last:border-0 last:mb-0">
                                 <p class="text-base flex items-center leading-none">
-                                    <i class="sicon-debit-card-back text-xl me-2 text-gray-500 inline-block -mt-1"></i>
+                                    <i class="sicon-debit-card-back text-xl rtl:ml-2 ltr:mr-2 text-gray-500 inline-block -mt-1"></i>
                                     <span>{{ code.code }}</span>
                                 </p>
                                 <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{ code.code }}">
                                     <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
-                                    <span class="text-sm ms-2 pointer-events-none">{{ trans('common.elements.copy') }}</span>
+                                    <span class="text-sm rtl:mr-2 ltr:ml-2 pointer-events-none">{{ trans('common.elements.copy') }}</span>
                                 </salla-button>
                             </div>
                         {% endfor %}

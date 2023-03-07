@@ -12,17 +12,17 @@
         <div class="flex-1">
             <div class="flex flex-wrap md:items-center justify-between mb-2 md:mb-0">
                 <div class="flex items-center mb-1">
-                    <h3 class="font-bold text-base me-10 fix-align">{{ comment.name }}</h3>
+                    <h3 class="font-bold text-base rtl:ml-10 ltr:mr-10 fix-align">{{ comment.name }}</h3>
                     {% if comment.has_order or comment.stars %}
                         <div class="flex">
                             {% if comment.has_order %}
                                 <i class="sicon-check rounded-full bg-amber-400 h-5 w-5 flex items-center justify-center text-xs"></i>
-                                <span class="fix-align ms-1 text-sm text-gray-600 mt-0.5">
+                                <span class="fix-align rtl:mr-1 ltr:ml-1 text-sm text-gray-600 mt-0.5">
                                   {{ trans('blocks.comments.has_bought') }}{{ comment.stars?', ':'' }}
                                 </span>
                             {% endif %}
                             {% if comment.stars %}
-                                <span class="fix-align ms-1 text-sm text-gray-600 mt-0.5">{{ trans('pages.rating.rated') }}</span>
+                                <span class="fix-align rtl:mr-1 ltr:ml-1 text-sm text-gray-600 mt-0.5">{{ trans('pages.rating.rated') }}</span>
                             {% endif %}
                         </div>
                     {% endif %}
