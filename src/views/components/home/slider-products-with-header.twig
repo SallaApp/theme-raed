@@ -24,8 +24,8 @@
 
     <div class="container -mt-62 relative overflow-hidden">
         <salla-products-slider 
-        source="json" 
-        source-value="{{component.products}}" 
+        source="selected"
+        source-value="[{{ component.products|map((product) => product.id)|join(',') }}]" 
         display-all-url="{{component.display_all_url}}" 
         block-title=" " 
         slider-id="slider-with-bg-{{ position }}"

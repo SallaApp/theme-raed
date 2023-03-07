@@ -21,8 +21,8 @@
     {% endif %}
     
     <salla-products-list 
-      source="json" 
-      source-value="{{products}}" 
+      source="selected" 
+      source-value="[{{ products|map((product) => product.id)|join(',') }}]" 
       class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"
       >
     </salla-products-list>
