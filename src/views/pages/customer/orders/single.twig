@@ -84,7 +84,7 @@
                     {% if order.is_pending_payment and order.pending_payment_ends_in == 0 %}
                         <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
                     {% else %}
-                        <span class="text-primary inline-flex items-center space-s-1"
+                        <span class="text-primary inline-flex items-center rtl:space-x-reverse space-x-1"
                               style="color: {{ order.status.color }}">
                         <i class="mt-1 {{ order.status.icon }}"></i>
                         <span class=""> {{ order.status.name }}</span>
@@ -187,7 +187,7 @@
 
                             <div class="mb-5 last:mb-0">
                                 {% if item.product %}
-                                    <div class="flex space-s-5 mb-4">
+                                    <div class="flex rtl:space-x-reverse space-x-5 mb-4">
                                         <a href="{{ item.product.url }}" class="shrink-0">
                                             <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
                                                  alt="{{ item.name }}"
@@ -273,7 +273,7 @@
                                               </dt>
                                               <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
                                                   {% if option.is_image %}
-                                                      <div class="flex space-s-2.5">
+                                                      <div class="flex rtl:space-x-reverse space-x-2.5">
                                                           <a href="{{ option.value }}" target="_blank">
                                                               <img class="h-6 w-6 object-cover rounded-md"
                                                                     src="{{ option.value ?: 'images/placeholder.png' | asset }}"
@@ -390,7 +390,7 @@
                                                 <dd class="font-medium {{ attachment.type == 'image' ? 'text-gray-900' : 'text-xs' }}">
                                                     <a href="{{ attachment.url }}">
                                                         {% if attachment.type == 'image' %}
-                                                            <div class="flex space-s-2.5">
+                                                            <div class="flex rtl:space-x-reverse space-x-2.5">
                                                                 <a href="{{ attachment.url }}" target="_blank">
                                                                     <img class="h-7 w-7 object-cover rounded-md"
                                                                          src="{{ attachment.url }}"
