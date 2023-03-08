@@ -20,7 +20,7 @@ view options:
                  src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}"
                  alt="{{ product.image.alt }}"/>
             {% if product.promotion_title %}
-                <div class="absolute top-4 start-0 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-red-400 text-white rounded-e-md {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]' }}">{{ product.promotion_title }}</div>
+                <div class="absolute top-4 rtl:right-0 ltr:left-0 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-red-400 text-white rounded-e-md {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]' }}">{{ product.promotion_title }}</div>
             {% elseif show_quantity and product.quantity  %}
                 <div class="absolute bottom-2 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-red-400 text-white rounded-md left-1/2 transform -translate-x-1/2 {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]' }}">{{ trans('pages.products.remained') }} {{ product.quantity|number }}</div>  
             {% elseif show_quantity and product.is_out_of_stock %}
