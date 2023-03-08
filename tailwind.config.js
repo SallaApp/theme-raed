@@ -119,7 +119,6 @@ module.exports = {
     },
     plugins: [
       require('@salla.sa/twilight-tailwind-theme'),
-      require('tailwindcss-rtl'),
       require('@tailwindcss/forms'),
       require('@tailwindcss/line-clamp'),
     ],
