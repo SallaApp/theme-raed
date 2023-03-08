@@ -24,7 +24,7 @@
 
         {# Categories filter dropdown #}
         <div class="dropdown-toggler cat-filter lg:hidden">
-          <button aria-label="Categories Trigger" type="button" class="dropdown__trigger space-s-1.5 flex text-sm text-primary" aria-expanded="true" aria-haspopup="true"> 
+          <button aria-label="Categories Trigger" type="button" class="dropdown__trigger rtl:space-x-reverse space-x-1.5 flex text-sm text-primary" aria-expanded="true" aria-haspopup="true"> 
             <i class="sicon-filter text-xs pointer-events-none"></i>
             <span class="fix-align pointer-events-none">{{ trans('pages.blog_categories.categories') }}</span>
           </button>
@@ -82,11 +82,11 @@
                                 <div class="swiper-slide has-overlay blog-slider__slide h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
                                     <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-50':'object-cover h-full w-full' }}"
                                          src="{{ article.image.url }}" alt="{{ article.image.alt }}">
-                                    <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 lg:ps-10 lg:pb-20">
+                                    <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 rtl:lg:pr-10 ltr:lg:pl-10 lg:pb-20">
                                         <div class="blog-slider__content relative">
                                             <div class="z-20 w-full md:w-5/6 lg:w-6/12 text-white">
                                                 <div data-swiper-parallax="-500"  class="block-slide-anime">
-                                                    <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
+                                                    <div class="mb-2.5 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
                                                         <div class="flex items-center">
                                                             <i class="sicon-calendar-date rtl:ml-1 ltr:mr-1"></i>
                                                             <span class="whitespace-nowrap">{{ article.created_at|date }}</span>
@@ -128,7 +128,7 @@
                                 </a>
 
                                 <div class="flex-1 px-5 pt-5 pb-7">
-                                    <div class="mb-2.5 text-gray-500 rounded-md inline-flex text-sm space-s-5">
+                                    <div class="mb-2.5 text-gray-500 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
                                         <div class="flex items-center">
                                             <i class="sicon-calendar-date rtl:ml-1 ltr:mr-1"></i>
                                             <span class="">{{ article.created_at|date }}</span>

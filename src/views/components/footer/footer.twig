@@ -1,7 +1,7 @@
 <footer class="store-footer">
   <div aria-label="footer" class="store-footer__inner">
     <div class="container grid grid-col-1 lg:grid-cols-6 gap-8 lg:gap-6">
-        <div class="lg:col-span-2 lg:pe-20">
+        <div class="lg:col-span-2 rtl:lg:pl-20 ltr:lg:pr-20">
           <a href="{{ link('/') }}" class="flex items-center m-0">
             <h3>{{store.name}}</h3>
           </a>
@@ -17,7 +17,7 @@
 
           {# vat #}
           {% if store.settings.tax.number %}
-            <div class="flex space-s-2 items-end">
+            <div class="flex rtl:space-x-reverse space-x-2 items-end">
               {% if store.settings.tax.certificate %}
                 <a onclick="document.querySelector('#modal-value-tax').open(); event.preventDefault();" href="#/" alt="{{ store.settings.tax.number }}">
                   <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}" data-src="{{'images/tax.png' | cdn}}" class="lazy w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
@@ -57,5 +57,5 @@
     <span class="text-sm opacity-75">{% hook copyright %}</span>
     {% component 'footer.payment-methods' %}
   </div>
-  <span class="hidden bottom-2"></span>
+  <span class="hidden bottom-2 rtl:pl-24 ltr:pr-24"></span>
 </footer>

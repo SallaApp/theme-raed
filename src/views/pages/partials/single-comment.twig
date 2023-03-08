@@ -2,7 +2,7 @@
 {% if not is_admin %}
 <div class="border-b last:border-0 mb-8 pb-8 border-gray-200 list-block">
     {% endif %}
-    <div class="{% if is_admin %} nested-comment reply ps-8 md:ps-16 mt-8 admin {% else %} comment {% endif %} flex text-sm space-s-3 comment_id_{{ comment.id }}">
+    <div class="{% if is_admin %} nested-comment reply rtl:pr-8 ltr:pl-8 rtl:md:pr-16 ltr:md:pl-16 mt-8 admin {% else %} comment {% endif %} flex text-sm rtl:space-x-reverse space-x-3 comment_id_{{ comment.id }}">
         {% if is_admin %} <i class="sicon-reply text-lg text-gray-400"></i>{% endif %}
         <div class="flex-none">
             <img data-src="{{ comment.avatar|is_placeholder ? 'images/avatar.png' | cdn : comment.avatar }}"
@@ -29,7 +29,7 @@
                 </div>
                 <p class="text-gray-400 text-sm">{{ comment.created_at|time_ago }}</p>
                 {% if comment.stars %}
-                    <div class="w-full comment__rating text-xs mb-2.5 space-s-1">
+                    <div class="w-full comment__rating text-xs mb-2.5 rtl:space-x-reverse space-x-1">
                         {% for i in 1..5 %}
                             <i class="sicon-star2 inline-block {{ comment.stars>=i  ? 'text-amber-400' : 'text-gray-400' }}"></i>
                         {% endfor %}

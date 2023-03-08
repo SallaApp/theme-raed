@@ -66,8 +66,8 @@
 
 
                                 <!-- product -->
-                                <div class="md:flex md:space-s-12 items-start justify-between mb-8 last:mb-0">
-                                    <div class="flex flex-1 space-s-4">
+                                <div class="md:flex rtl:space-x-reverse md:space-x-12 items-start justify-between mb-8 last:mb-0">
+                                    <div class="flex flex-1 rtl:space-x-reverse space-x-4">
                                         <a href="{{ item.url }}" class="shrink-0">
                                             <img src="{{ 'images/s-empty.png' | asset }}"
                                                  data-src="{{ item.product_image }}"
@@ -105,7 +105,7 @@
                                             </salla-quantity-input>
                                         {% endif %}
 
-                                        <p class="text-primary flex-none font-bold text-sm md:pe-12">
+                                        <p class="text-primary flex-none font-bold text-sm rtl:md:pl-12 ltr:md:pr-12">
                                             <span>{{ trans('pages.cart.total') }}:</span>
                                             <span class="inline-block item-total">{{ item.is_available?item.total|money: trans('pages.cart.out_of_stock') }}</span>
                                         </p>
@@ -143,7 +143,7 @@
             {% if cart.items|length %}
                 <div class="sticky top-24 w-full lg:w-96 rtl:lg:mr-8 ltr:lg:ml-8">
                     <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative {{ cart.free_shipping_bar ? '' : 'hidden' }}" id="free-shipping">
-                        <div class="flex space-s-3 items-center">
+                        <div class="flex rtl:space-x-reverse space-x-3 items-center">
                             <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             {% set is_free=cart.free_shipping_bar.has_free_shipping %}
                             <div class="flex-1">
@@ -195,7 +195,7 @@
                                 <div class="mt-2.5 relative">
                                     <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
                                             {{ cart.coupon ? 'disabled':'' }}
-                                           class="pe-24 form-input" value="{{ cart.coupon }}" id="coupon-input"
+                                           class="rtl:pl-24 ltr:pr-24 form-input" value="{{ cart.coupon }}" id="coupon-input"
                                            name="coupon"
                                            type="text">
 
