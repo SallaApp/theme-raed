@@ -16,7 +16,7 @@
 | product.weight                         | ?string                     |                                                                        |
 | product.calories                       | ?float                      |                                                                        |
 | product.sku                            | ?string                     |                                                                        |
-| product.rating                         | Rating|null                 |                                                                        |
+| product.rating                         | Rating                      | null                                                                   |
 | product.rating.count                   | int                         |                                                                        |
 | product.rating.stars                   | int                         |                                                                        |
 | product.price                          | MoneyTaxable                | can be string too `-`, when merchant doesn't want to show zero         |
@@ -62,11 +62,19 @@
 | product.is_on_sale                     | bool                        | Product has discounted price                                           |
 | product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
 | product.is_available                   | bool                        |                                                                        |
-| product.is_donation                    | bool                        |       
-| product.is_booking                     | bool                        |                                                                      |
+| product.is_donation                    | bool                        |                                                                        |
+| product.is_booking                     | bool                        |                                                                        |
 | product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
 | product.is_require_shipping            | bool                        |                                                                        |
+| product.base_currency_price            | Money                       | product.price with base currency (SAR)                                 |
+| product.discount_percentage            | ?string                     | ex: "20%"                                                              |
+| product.can_donate                     | bool                        |                                                                        |
+| product.has_3d_image                   | bool                        |                                                                        |
+| product.has_size_guide                 | bool                        |                                                                        |
+| product.is_giftable                    | bool                        |                                                                        |
+| product.brand_id                       | ?int                        |                                                                        |
+| product.add_to_cart_label              | string                      |                                                                        |
 #}
 {% extends "layouts.master" %}
 {% block content %}
