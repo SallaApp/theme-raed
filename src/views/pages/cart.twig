@@ -33,8 +33,6 @@
 | cart.items[].can_add_note                         | bool                |                                                                |
 | cart.items[].can_upload_file                      | bool                |                                                                |
 | cart.items[].is_available                         | bool                |                                                                |
-| cart.items[].is_donation                          | bool                |                                                                |
-| cart.items[].can_donate                           | bool                |                                                                |
 | cart.items[].offer                                | ?object             |                                                                |
 | cart.items[].offer.discount                       | float               |                                                                |
 | cart.items[].offer.is_free                        | bool                |                                                                |
@@ -92,8 +90,7 @@
                                     </div>
 
                                     <div class="flex-1 border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex justify-between items-center md:items-start">
-
-                                        {% if item.is_donation %}
+                                        {% if item.type == 'donating' %}
                                             <span></span>
                                         {% elseif item.is_hidden_quantity %}
                                             <input type="hidden" value="{{ item.quantity }}" name="quantity"/>

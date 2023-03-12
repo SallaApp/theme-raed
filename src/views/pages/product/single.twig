@@ -16,12 +16,12 @@
 | product.weight                         | ?string                     |                                                                        |
 | product.calories                       | ?float                      |                                                                        |
 | product.sku                            | ?string                     |                                                                        |
-| product.rating                         | Rating                      | null                                                                   |
+| product.rating                         | ?Rating                     |                                                                        |
 | product.rating.count                   | int                         |                                                                        |
 | product.rating.stars                   | int                         |                                                                        |
-| product.price                          | MoneyTaxable                | can be string too `-`, when merchant doesn't want to show zero         |
-| product.sale_price                     | MoneyTaxable                |                                                                        |
-| product.regular_price                  | MoneyTaxable                |                                                                        |
+| product.price                          | float                       | can be string too `-`, when merchant doesn't want to show zero         |
+| product.sale_price                     | float                       |                                                                        |
+| product.regular_price                  | float                       |                                                                        |
 | product.starting_price                 | ?float                      |                                                                        |
 | product.quantity                       | ?int                        | if it's null, means it's unlimited                                     |
 | product.sold_quantity                  | int                         |                                                                        |
@@ -40,10 +40,11 @@
 | product.images[].alt                   | ?string                     |                                                                        |
 | product.images[].video_url             | ?string                     |                                                                        |
 | product.images[].type                  | string                      | `image` `video`                                                        |
-| product.brand                          | object                      |                                                                        |
-| product.brand.url                      | string                      |                                                                        |
-| product.brand.name                     | string                      |                                                                        |
-| product.brand.logo                     | string                      |                                                                        |
+| product.brand                          | ?object                     |                                                                        |
+| product.brand.id                       | int                         |                                                                        |
+| product.brand.url                      | ?string                     |                                                                        |
+| product.brand.name                     | ?string                     |                                                                        |
+| product.brand.logo                     | ?string                     |                                                                        |
 | product.tags                           | ?Tags[] *Collection         |                                                                        |
 | product.tags[].name                    | string                      |                                                                        |
 | product.tags[].url                     | string                      |                                                                        |
@@ -51,7 +52,13 @@
 | product.notify_availability            | ?object                     | does product outOfStock & can visitor subscribe to notify availability |
 | product.notify_availability.channels   | array                       | ex: ['sms', 'email']                                                   |
 | product.notify_availability.subscribed | bool                        | Does user subscribed before                                            |
-| product.donation                       | ?ProductDonation            | @see views/components/product/donation-progress-bar.twig               |
+| product.donation                       | ?ProductDonation            |                                                                        |
+| product.donation.target_message        | ?string                     | Message if reached to target or target expired                         |
+| product.donation.collected_amount      | float                       |                                                                        |
+| product.donation.target_amount         | float                       |                                                                        |
+| product.donation.target_percent        | float                       |                                                                        |
+| product.donation.target_end_date       | ?Date                       |                                                                        |
+| product.donation.can_donate            | bool                        | `true` When there is no campaign or (target not reached & not expired) |
 | product.has_read_more                  | bool                        |                                                                        |
 | product.can_add_note                   | bool                        |                                                                        |
 | product.can_show_remained_quantity     | bool                        |                                                                        |
@@ -62,18 +69,14 @@
 | product.is_on_sale                     | bool                        | Product has discounted price                                           |
 | product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
 | product.is_available                   | bool                        |                                                                        |
-| product.is_donation                    | bool                        |                                                                        |
-| product.is_booking                     | bool                        |                                                                        |
 | product.is_in_wishlist                 | bool                        |                                                                        |
 | product.is_out_of_stock                | bool                        |                                                                        |
 | product.is_require_shipping            | bool                        |                                                                        |
-| product.base_currency_price            | Money                       | product.price with base currency (SAR)                                 |
+| product.base_currency_price            | float                       | product.price with base currency (SAR)                                 |
 | product.discount_percentage            | ?string                     | ex: "20%"                                                              |
-| product.can_donate                     | bool                        |                                                                        |
 | product.has_3d_image                   | bool                        |                                                                        |
 | product.has_size_guide                 | bool                        |                                                                        |
 | product.is_giftable                    | bool                        |                                                                        |
-| product.brand_id                       | ?int                        |                                                                        |
 | product.add_to_cart_label              | string                      |                                                                        |
 #}
 {% extends "layouts.master" %}
@@ -176,7 +179,7 @@
 
                 {% hook 'product:single.description.start' %}
 
-                {% if product.brand %}
+                {% if product.brand.name %}
                     <div class="product-brand mb-5 w-12">
                         <a class="brand-logo" href="{{ product.brand.url }}" title="{{ product.brand.name }}">
                             <img width="100%" height="100%" class="max-h-full object-contain"
@@ -323,7 +326,7 @@
 
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
-                        {% if product.is_hidden_quantity or product.is_booking %}
+                        {% if product.is_hidden_quantity or product.type == 'booking' %}
                             <input type="hidden" value="1" name="quantity"/>
                         {% else %}
                             <div class="sticky-product-bar__quantity center-between mb-5">
