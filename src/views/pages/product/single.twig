@@ -84,7 +84,7 @@
             {% component 'header.breadcrumbs' %}
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
-            <div class="sidebar md:sticky top-24 w-full md:!w-2/4  me-8 pb-8 md:pb-16 overflow-hidden shrink-0">
+            <div class="sidebar md:sticky top-24 w-full md:!w-2/4 rtl:ml-8 ltr:mr-8 pb-8 md:pb-16 overflow-hidden shrink-0">
                 {% set has_many_images = product.images|length > 1 %}
                 <salla-slider
                         id="details-slider-{{ product.id }}"
@@ -204,7 +204,7 @@
                                         reviews="{{ product.rating.count }}"></salla-rating-stars>
                 {% endif %}
 
-                <div class="mb-2 space-s-1">
+                <div class="mb-2 rtl:space-x-reverse space-x-1">
                     <h4 class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                         {{ product.price|money }}
                     </h4>
@@ -236,13 +236,13 @@
                     <div class="mb-3">
                         {% for tag in product.tags %}
                             <a href="{{ tag.url }}"
-                               class="me-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
+                               class="rtl:ml-2 ltr:mr-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
                                 ,</a>
                         {% endfor %}
                     </div>
                 {% endif %}
 
-                <div class="flex space-s-3">
+                <div class="flex rtl:space-x-reverse space-x-3">
                     <salla-social-share class="hidden sm:inline-flex mb-5"></salla-social-share>
 
                     <salla-button
@@ -260,13 +260,13 @@
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
                             <div class="px-4 text-red-400">
-                                <i class="sicon-fire me-1.5 "></i> {{ trans('pages.products.sold') }}
+                                <i class="sicon-fire rtl:ml-1.5 ltr:mr-1.5"></i> {{ trans('pages.products.sold') }}
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
                         {% if product.can_show_remained_quantity %}
-                            <div class="px-4 even:border-s even:border-gray-200">
-                                <i class="text-red-400 sicon-box-bankers me-1.5 "></i>
+                            <div class="px-4 rtl:even:border-r ltr:even:border-l even:border-gray-200">
+                                <i class="text-red-400 sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
                                 {{ trans('pages.products.remained') }}
                                 <span>{{ product.quantity }}</span>
                             </div>
@@ -291,11 +291,11 @@
                     <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
                         <div class="center-between">
                             <label class="flex items-center text-base">
-                                <span class="sicon-location me-1"></span>
+                                <span class="sicon-location rtl:ml-1 ltr:mr-1"></span>
                                 <span class="inline-block">{{ trans('pages.products.availability') }}</span>
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
-                                <div class="flex space-s-3">
+                                <div class="flex rtl:space-x-reverse space-x-3">
                                     <a href="#!"
                                        onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
                                        class="group text-primary flex items-center justify-center">
@@ -342,7 +342,7 @@
                                     {{ trans('pages.products.price') }}
                                 </b>
                             </label>
-                            <div class="space-s-1">
+                            <div class="rtl:space-x-reverse space-x-1">
                                 <h4 class="total-price {{ product.is_on_sale ? 'text-red-400' : '' }} font-bold text-xl inline-block">
                                     {{ product.price|money }}
                                 </h4>

@@ -8,8 +8,8 @@
 
     <!-- badage -->
     {% if product.promotion_title %}
-        <div class="absolute z-10 top-4 start-0">
-            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rounded-e-md">{{ product.promotion_title }}</div>
+        <div class="absolute z-10 top-4 rtl:right-0 ltr:left-0">
+            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rtl:rounded-l-md ltr:rounded-r-md">{{ product.promotion_title }}</div>
         </div>
     {% endif %}
 
@@ -29,7 +29,7 @@
 
         <div class="w-full center-between mb-5">
             {% if product.is_on_sale %}
-                <div class="space-s-1">
+                <div class="rtl:space-x-reverse space-x-1">
                     <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
                     <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
                 </div>

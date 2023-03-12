@@ -66,8 +66,8 @@
 
 
                                 <!-- product -->
-                                <div class="md:flex md:space-s-12 items-start justify-between mb-8 last:mb-0">
-                                    <div class="flex flex-1 space-s-4">
+                                <div class="md:flex rtl:space-x-reverse md:space-x-12 items-start justify-between mb-8 last:mb-0">
+                                    <div class="flex flex-1 rtl:space-x-reverse space-x-4">
                                         <a href="{{ item.url }}" class="shrink-0">
                                             <img src="{{ 'images/s-empty.png' | asset }}"
                                                  data-src="{{ item.product_image }}"
@@ -105,7 +105,7 @@
                                             </salla-quantity-input>
                                         {% endif %}
 
-                                        <p class="text-primary flex-none font-bold text-sm md:pe-12">
+                                        <p class="text-primary flex-none font-bold text-sm rtl:md:pl-12 ltr:md:pr-12">
                                             <span>{{ trans('pages.cart.total') }}:</span>
                                             <span class="inline-block item-total">{{ item.is_available?item.total|money: trans('pages.cart.out_of_stock') }}</span>
                                         </p>
@@ -116,7 +116,7 @@
 
 
 
-                            <span class="absolute top-1.5 end-1.5 xs:top-5 xs:end-5">
+                            <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
                                 <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete"
                                               onclick="salla.cart.deleteItem({{ item.id }}).then(() => document.querySelector('#item-{{ item.id }}').remove())">
                                     <i class="sicon-cancel"></i>
@@ -141,9 +141,9 @@
 
             <!-- sidebar -->
             {% if cart.items|length %}
-                <div class="sticky top-24 w-full lg:w-96  lg:ms-8">
+                <div class="sticky top-24 w-full lg:w-96 rtl:lg:mr-8 ltr:lg:ml-8">
                     <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative {{ cart.free_shipping_bar ? '' : 'hidden' }}" id="free-shipping">
-                        <div class="flex space-s-3 items-center">
+                        <div class="flex rtl:space-x-reverse space-x-3 items-center">
                             <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             {% set is_free=cart.free_shipping_bar.has_free_shipping %}
                             <div class="flex-1">
@@ -160,7 +160,7 @@
                         <div class="mt-8 bg-border-color rounded-full {{ is_free ? ' hidden' : '' }}" id="free-shipping-bar">
                             <div class="progress-bg transition-all duration-500 h-2.5 bg-primary relative rounded-full flex justify-end"
                                  style="width:{{ cart.free_shipping_bar.percent }}%">
-                                <i class="inline-block sicon-shipping-fast absolute -top-5 -end-0 {{ theme.is_rtl ? 'flip-x':'' }}"></i>
+                                <i class="inline-block sicon-shipping-fast absolute -top-5 rtl:left-0 ltr:right-0 {{ theme.is_rtl ? 'flip-x':'' }}"></i>
                             </div>
                         </div>
                     </div>
@@ -195,7 +195,7 @@
                                 <div class="mt-2.5 relative">
                                     <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
                                             {{ cart.coupon ? 'disabled':'' }}
-                                           class="pe-24 form-input" value="{{ cart.coupon }}" id="coupon-input"
+                                           class="rtl:pl-24 ltr:pr-24 form-input" value="{{ cart.coupon }}" id="coupon-input"
                                            name="coupon"
                                            type="text">
 
