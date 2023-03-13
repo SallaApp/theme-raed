@@ -3,7 +3,7 @@
 |-----------------|-------|-----------------------------------------------------------------|
 | payment_methods | array | List of active payments ex: [mada, credit_card, bank (Bank transfer (Transfer receipt)), cod (Cash On Delivery), ...] |
 #}
-<ul class="flex justify-center items-stretch space-s-2">
+<ul class="flex justify-center items-stretch rtl:space-x-reverse space-x-2">
   {% for method in payment_methods %}
     <li class="w-12 h-8 bg-white rounded flex items-center p-1">
       <img class="lazy object-contain max-h-full" width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ ('images/payment/'~ method ~'_mini.png') | cdn }}" alt="{{ method }}">

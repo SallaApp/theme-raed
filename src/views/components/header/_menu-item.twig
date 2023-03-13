@@ -23,7 +23,7 @@
         </a>
         {% if menu.has_children %}
             <div class="sub-menu {{ menu.products?'w-full left-0 flex': 'w-56' }}">
-                <ul class="{{ menu.products?'w-56 shrink-0 m-8 me-0': '' }}">
+                <ul class="{{ menu.products?'w-56 shrink-0 m-8 rtl:ml-0 ltr:mr-0': '' }}">
                     {% for submenu in menu.children %}
                         {% include _self with {menu:submenu, is_root_menu:false} %}
                     {% endfor %}
