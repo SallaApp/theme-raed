@@ -59,13 +59,7 @@
 
                     {% hook 'brands:single.items.start' %}
 
-                    <salla-infinite-scroll
-                            class="gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6 mb-6"
-                            next-page="{{ products.next_page }}" autoload>
-                        {% for product in products %}
-                            {% include 'pages.partials.product.card' with {block_classes:'list-block'} %}
-                        {% endfor %}
-                    </salla-infinite-scroll>
+                        <salla-products-list source="{{page.slug}}" source-value="{{page.id}}"></salla-products-list>
 
                     {% hook 'brands:single.items.end' %}
                 {% else %}

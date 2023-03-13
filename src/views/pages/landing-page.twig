@@ -72,7 +72,7 @@
             <section class="container overflow-hidden {{landing.products|length <= 3 and not landing.is_slider ? 'center-products' : ''}}">
                 {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
                 {% if landing.is_slider %}
-                    <salla-products-slider block-title="{{trans('pages.offer.included_products')}}" display-all-url></salla-products-slid
+                    <salla-products-slider source="landing-page" block-title="{{trans('pages.offer.included_products')}}" display-all-url></salla-products-slid
                 {% else %}
                     <section class="s-block">
                         <div class="s-block__title">
@@ -80,7 +80,7 @@
                             <h2>{{ trans('pages.offer.included_products') }}</h2>
                             </div>
                         </div>
-                        <salla-products-list class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"></salla-products-list>
+                        <salla-products-list source="landing-page" class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"></salla-products-list>
                     </section>
                 {% endif %}
 
