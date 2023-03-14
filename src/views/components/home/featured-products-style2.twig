@@ -33,19 +33,8 @@
       <div class="tabs-wrapper">
         {% for section in items %}
             <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
-                {% if is_slider %} 
-                    <salla-slider 
-                      type="carousel"
-                      controls-outer
-                      id="section-{{ section.id }}-slider">
-                        <div slot="items">
-                            {% for product in section.products %}
-                                <div class="slide--one-fourth">
-                                    <salla-product-card shadow-on-hover product="{{product}}"></salla-product-card>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </salla-slider>
+                {% if is_slider %}
+                    <salla-products-slider slider-id="section-{{ section.id }}-slider" source="json" source-value="{{section.products}}"></salla-products-slider>
                 {% else %}
                   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
                     {% for product in section.products %}
