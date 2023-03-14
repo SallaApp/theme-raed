@@ -42,11 +42,12 @@
                     </salla-products-slider>
                 {% else %}
                   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-                    {% for product in section.products %}
-                      <div class="featured-item">
-                        <salla-product-card shadow-on-hover product="{{product}}" horizontal></salla-product-card> 
-                      </div>
-                    {% endfor %}
+                      <salla-products-list  
+                        source="selected" 
+                        source-value="[{{ section.products|map((product) => product.id)|join(',') }}]" 
+                        horizontal-cards
+                        >
+                      </salla-products-list>
                   </div>
                 {% endif %}
             </div>
