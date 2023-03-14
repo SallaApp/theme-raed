@@ -34,7 +34,12 @@
         {% for section in items %}
             <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
                 {% if is_slider %}
-                    <salla-products-slider slider-id="section-{{ section.id }}-slider" source="json" source-value="{{section.products}}"></salla-products-slider>
+                    <salla-products-slider 
+                      slider-id="section-{{ section.id }}-slider" 
+                      source="selected" 
+                      source-value="[{{ section.products|map((product) => product.id)|join(',') }}]" 
+                      >
+                    </salla-products-slider>
                 {% else %}
                   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
                     {% for product in section.products %}

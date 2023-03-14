@@ -19,11 +19,12 @@
         {% endif %}
       </div>
     {% endif %}
-    
+  
     <salla-products-list 
       source="selected" 
       source-value="[{{ products|map((product) => product.id)|join(',') }}]" 
       class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"
+      {{is_vertical ? '' : 'horizontal-cards'}}
       >
     </salla-products-list>
 </section>
