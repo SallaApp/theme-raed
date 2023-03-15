@@ -24,7 +24,7 @@
 
         {# Categories filter dropdown #}
         <div class="dropdown-toggler cat-filter lg:hidden">
-          <button aria-label="Categories Trigger" type="button" class="dropdown__trigger space-s-1.5 flex text-sm text-primary" aria-expanded="true" aria-haspopup="true"> 
+          <button aria-label="Categories Trigger" type="button" class="dropdown__trigger rtl:space-x-reverse space-x-1.5 flex text-sm text-primary" aria-expanded="true" aria-haspopup="true"> 
             <i class="sicon-filter text-xs pointer-events-none"></i>
             <span class="fix-align pointer-events-none">{{ trans('pages.blog_categories.categories') }}</span>
           </button>
@@ -35,7 +35,7 @@
               tabindex="-1">
               <div class="flex items-center p-4 border-b mb-1 lg:hidden relative">
                   <h2 class="font-bold">{{ trans('pages.blog_categories.categories') }}</h2>
-                  <button class="dropdown__close h-12 w-12 text-red-500 text-lg rounded-full absolute top-2 end-1 z-50">
+                  <button class="dropdown__close h-12 w-12 text-red-500 text-lg rounded-full absolute top-2 rtl:left-1 ltr:right-1 z-50">
                       <i class="sicon-cancel pointer-events-none"></i>
                   </button>
               </div>
@@ -43,7 +43,7 @@
                 {% for category in categories %}
                     <li>
                         <a class="p-2.5 block text-sm hover:text-primary {{ category.is_current ? ' is-active' : '' }}" href="{{ category.url }}">
-                            <span class="me-auto">{{ category.name }}</span>
+                            <span class="rtl:ml-auto ltr:mr-auto">{{ category.name }}</span>
                         </a>
                     </li>
                   {% endfor %}
@@ -82,18 +82,18 @@
                                 <div class="swiper-slide has-overlay blog-slider__slide h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
                                     <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-50':'object-cover h-full w-full' }}"
                                          src="{{ article.image.url }}" alt="{{ article.image.alt }}">
-                                    <div class="absolute z-10 bottom-0 start-0 p-4 pb-10 lg:ps-10 lg:pb-20">
+                                    <div class="absolute z-10 bottom-0 rtl:right-0 ltr:left-0 p-4 pb-10 rtl:lg:pr-10 ltr:lg:pl-10 lg:pb-20">
                                         <div class="blog-slider__content relative">
                                             <div class="z-20 w-full md:w-5/6 lg:w-6/12 text-white">
                                                 <div data-swiper-parallax="-500"  class="block-slide-anime">
-                                                    <div class="mb-2.5 rounded-md inline-flex text-sm space-s-5">
+                                                    <div class="mb-2.5 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
                                                         <div class="flex items-center">
-                                                            <i class="sicon-calendar-date me-1 "></i>
+                                                            <i class="sicon-calendar-date rtl:ml-1 ltr:mr-1"></i>
                                                             <span class="whitespace-nowrap">{{ article.created_at|date }}</span>
                                                         </div>
                                                         <a href="{{ article.author.url }}"
                                                            class=" flex items-center hover:underline">
-                                                            <i class="sicon-user me-1"></i>
+                                                            <i class="sicon-user rtl:ml-1 ltr:mr-1"></i>
                                                             <span class="whitespace-nowrap">{{ article.author.name }}</span>
                                                         </a>
                                                     </div>
@@ -128,13 +128,13 @@
                                 </a>
 
                                 <div class="flex-1 px-5 pt-5 pb-7">
-                                    <div class="mb-2.5 text-gray-500 rounded-md inline-flex text-sm space-s-5">
+                                    <div class="mb-2.5 text-gray-500 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
                                         <div class="flex items-center">
-                                            <i class="sicon-calendar-date me-1 "></i>
+                                            <i class="sicon-calendar-date rtl:ml-1 ltr:mr-1"></i>
                                             <span class="">{{ article.created_at|date }}</span>
                                         </div>
                                         <a href="{{ article.author.url }}" class="flex items-center hover:text-dark">
-                                            <i class="sicon-user me-1 "></i>
+                                            <i class="sicon-user rtl:ml-1 ltr:mr-1"></i>
                                             <span class="">{{ article.author.name }}</span>
                                         </a>
                                     </div>
@@ -152,7 +152,7 @@
                                         {% for tag in article.tags %}
                                             <a href="{{ tag.url }}"
                                                class="py-2 px-4 rounded-large inline-flex items-center text-gray-500 hover:text-dark justify-center text-sm">
-                                                <i class="font-medium sicon-tag me-1.5 "></i>
+                                                <i class="font-medium sicon-tag rtl:ml-1.5 ltr:mr-1.5"></i>
                                                 <span class="fix-align whitespace-nowrap">{{ tag.name }}</span>
                                             </a>
                                         {% endfor %}

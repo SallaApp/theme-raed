@@ -17,8 +17,8 @@
                     {# Language & Currency Component #}
                     {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                         <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray basis-0">
-                            <span class="flag iti__flag iti__{{ user.language.country_code }} me-1.5 rounded-sm"></span>
-                            | <span class="ms-2 me-1">{{ currency.symbol }}</span>
+                            <span class="flag iti__flag iti__{{ user.language.country_code }} rounded-sm"></span>
+                            <span class="mx-1.5">|</span> <span>{{ currency.symbol }}</span>
                         </button>
                         <salla-localization-modal></salla-localization-modal>
                     {% endif %}
@@ -28,7 +28,7 @@
                 {% if store.scope %}
                     <button class="btn--rounded-gray"
                             onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
-                        <i class="sicon-location me-1"></i> {{ store.scope.name }}
+                        <i class="sicon-location rtl:ml-1 ltr:mr-1"></i> {{ store.scope.name }}
                     </button>
                 {% endif %}
 
@@ -53,7 +53,7 @@
                 <div class="flex items-stretch justify-between relative">
                     <div class="flex items-center">
                         <a class="lg:hidden mburger mburger--collapse leading-none" href="#mobile-menu">
-                            <i class="sicon-menu text-primary text-2xl me-2.5"></i>
+                            <i class="sicon-menu text-primary text-2xl rtl:ml-2.5 ltr:mr-2.5"></i>
                         </a>
                         <a class="navbar-brand" href="{{ store.url }}">
                             <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }}">
