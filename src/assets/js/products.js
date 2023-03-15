@@ -9,6 +9,7 @@ class Products extends BasePage {
         // Sort Products
         app.on('change','#product-filter', event =>{
             window.history.replaceState(null, null, "?sort=" + event.currentTarget.value);
+            //todo:: use it like this: app.element('salla-products-list').sortBy=event.currentTarget.value;
             app.element('salla-products-list').setAttribute('filters', `{"sort": "${event.currentTarget.value}"}`)
         });
     }
