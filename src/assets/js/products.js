@@ -2,6 +2,10 @@ import BasePage from './base-page';
 
 class Products extends BasePage {
     onReady() {
+        let urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('sort')) {
+            app.element('#product-filter').value = urlParams.get('sort');
+        }
         // Sort Products
         app.on('change','#product-filter', event =>{
             window.history.replaceState(null, null, "?sort=" + event.currentTarget.value);
