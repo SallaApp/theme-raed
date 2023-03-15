@@ -1,0 +1,143 @@
+{#
+view options:
+ 1- is_horizontal = false  // display horizonal card
+ 2- is_special = false  // display special product with count down
+ 3- hide_add_btn
+
+*Notice: if marchent wants equal image, {{store.settings.product.fit_type}} will be (contain|cover) if not, it will be empty.
+* Deprecated: use salla-product-card
+#}
+<div id="product-{{ product.id }}" class='product-entry {{ block_classes ?: '' }}
+  {{ is_horizontal ? 'product-entry--horizontal': 'product-entry--vertical' }}
+  {{ is_special ? 'product-entry--special':'' }}
+  {{ main_product.product.discount_ends ? 'with-timer':'' }}
+  {{ store.settings.product.fit_type and not is_special ? 'product-entry--fit-type':'' }}
+  {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
+
+    {# Image #}
+    <div class='product-entry__image {{ is_horizontal ? '' : 'flex-1' }}'>
+        <a href="{{ product.url }}">
+            <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain' : store.settings.product.fit_type ? :'cover' }} lazy"
+                 src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}"
+                 alt="{{ product.image.alt }}"/>
+            {% if product.promotion_title %}
+                <div class="absolute top-4 rtl:right-0 ltr:left-0 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-red-400 text-white rtl:rounded-l-md ltr:rounded-r-md {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]' }}">{{ product.promotion_title }}</div>
+            {% elseif show_quantity and product.quantity  %}
+                <div class="absolute bottom-2 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-red-400 text-white rounded-md left-1/2 transform -translate-x-1/2 {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]' }}">{{ trans('pages.products.remained') }} {{ product.quantity|number }}</div>  
+            {% elseif show_quantity and product.is_out_of_stock %}
+                <div class="absolute bottom-2 z-1 font-bold px-2.5 py-1.5 md:py-2 text-xs bg-gray-100 text-[#999999] rounded-md left-1/2 transform -translate-x-1/2 {{ is_horizontal ? '' : 'max-w-[calc(100%-60px)]' }}">{{ trans('pages.products.out_of_stock') }}</div>  
+            {% endif %}
+        </a>
+
+        {% if not is_horizontal %}
+            <salla-button
+                    shape="icon"
+                    fill="none"
+                    color="light"
+                    aria-label="Add or remove to wishlist"
+                    class="btn--wishlist animated"
+                    onclick="salla.wishlist.toggle({{ product.id }})"
+                    data-id="{{ product.id }}">
+                <i class="sicon-heart text-xl"></i>
+            </salla-button>
+        {% endif %}
+    </div>
+
+    {# content #}
+    <div class="{{ is_horizontal ? 'flex-1' : '' }} p-3 sm:p-5 flex flex-col relative donating-wrap">
+        {% if is_special and product.quantity %}
+            <div data-quantity="{{ product.quantity }}"
+                 data-total="{{ product.quantity > 100 ? product.quantity * 2 : 100 }}" class="pie-wrapper">
+                <span>
+                    <b id="staProductQty" title="{{ product.quantity|number }}"
+                       data-quantity="{{ product.quantity }}">{{ product.quantity|number }}</b>
+                    {{ trans('pages.products.remained') }}
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -1 36 34" class="pie-svg">
+                    <circle cx="16" cy="16" r="15.9155" class="circle_base"></circle>
+                    <circle cx="16" cy="16" r="15.9155" class="circle_bar"></circle>
+                </svg>
+            </div>
+        {% endif %}
+
+        <div class="{{ is_special ? 'rtl:pl-24 ltr:pr-24':'' }}">
+            <h3 class="product-entry__title mb-2.5 leading-6 max-w-full">
+                <a href="{{ product.url }}">{{ product.name }}</a>
+            </h3>
+
+            {% if product.subtitle %}
+                <p class="text-sm text-gray-400 leading-6 mb-2.5">{{ product.subtitle }}</p>
+            {% endif %}
+        </div>
+
+        {% if product.donation %}
+            <salla-progress-bar donation="{{ product.donation }}"></salla-progress-bar>
+            <div class="border-color mb-2.5 w-full">
+                {% if product.donation.can_donate %}
+                    <label for="donation-amount"
+                           class="block text-sm mb-2.5">{{ trans('pages.products.donation_amount') }} <span
+                                class="text-red-500">*</span></label>
+                    <input
+                            type="text"
+                            data-digits
+                            id="donation-amount"
+                            name="donating_amount"
+                            class="h-9 form-input"
+                            placeholder="{{ trans('pages.products.donation_amount') }}">
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="w-full center-between mb-5 {{ is_special ? 'rtl:pl-24 ltr:pr-24':'' }}">
+            {% if product.is_on_sale %}
+                <div class="rtl:space-x-reverse space-x-1">
+                    <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                    <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                </div>
+            {% elseif product.starting_price %}
+                {{ trans('pages.products.starting_price') }}
+                <h4 class="text-red-400 font-bold text-sm inline-block"> {{ product.starting_price|money }} </h4>
+            {% else %}
+                <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
+            {% endif %}
+
+            {% if product.rating %}
+                <div class="product-rating text-sm text-gray-400">
+                    <i class="sicon-star2 text-amber-400"></i>
+                    <span>{{ product.rating|number }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if is_special %}
+            {% if main_product.product.discount_ends %}
+                <salla-count-down date="{{ main_product.product.discount_ends }}" boxed labeled></salla-count-down>
+                {# {{main_product.product.discount_ends.timestamp*1000}} #}
+            {% endif %}
+        {% endif %}
+
+        {% if not hide_add_btn %}
+            <div class="flex items-center mt-auto">
+                <salla-add-product-button class="btn--add-to-cart" fill="outline" width="wide"
+                                          product-id="{{ product.id }}"
+                                          product-status="{{ product.status }}"
+                                          product-type="{{ product.type }}">
+                    {{ product.add_to_cart_label }}
+                </salla-add-product-button>
+
+                {% if is_horizontal %}
+                    <salla-button
+                            shape="icon"
+                            fill="none"
+                            color="light"
+                            aria-label="Add or remove to wishlist"
+                            class="btn--wishlist animated"
+                            onclick="salla.wishlist.toggle({{ product.id }})"
+                            data-id="{{ product.id }}">
+                        <i class="sicon-heart text-xl"></i>
+                    </salla-button>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>

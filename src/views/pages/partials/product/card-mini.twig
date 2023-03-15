@@ -1,0 +1,54 @@
+{# Deprecated: use salla-product-card #}
+<div id="product-{{ product.id }}"
+     class='product-entry product-entry--minimal {{ product.is_out_of_stock ? 'out-of-stock':'' }}'>
+
+    <div class="product-entry__image">
+      <a href="{{ product.url }}">
+          <img class="h-full w-full lazy object-{{ product.image.url|is_placeholder ? 'contain':'cover' }}"
+              src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+      </a>
+      <salla-button
+          shape="icon"
+          fill="none"
+          color="light"
+          aria-label="wishlist button"
+          class="btn--wishlist animated"
+          onclick="salla.wishlist.toggle({{ product.id }})"
+          data-id="{{ product.id }}">
+          <i class="sicon-heart"></i>
+      </salla-button>
+
+      {% if product.rating %}
+          <div class="product-rating text-sm text-gray-400">
+              <i class="sicon-star2 text-amber-400"></i>
+              <span>{{ product.rating|number }}</span>
+          </div>
+      {% endif %}
+    </div>
+
+    <div class="flex flex-col flex-1 overflow-hidden p-5">
+        <h3 class="product-entry__title leading-6 mb-1.5 max-w-full">
+            <a href="{{ product.url }}">{{ product.name }}</a>
+        </h3>
+
+        <div class="w-full center-between mb-4">
+            {% if product.is_on_sale %}
+                <div class="rtl:space-x-reverse space-x-1 whitespace-nowrap">
+                    <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                    <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                </div>
+            {% else %}
+                <h4 class="font-bold text-sm">{{ product.price|money }}</h4>
+            {% endif %}
+        </div>
+
+        <div class="flex items-center mt-auto">
+            <salla-add-product-button fill="outline" width="wide"
+                                      product-id="{{ product.id }}"
+                                      product-status="{{ product.status }}"
+                                      product-type="{{ product.type }}">
+                {{ product.add_to_cart_label }}
+            </salla-add-product-button>
+        </div>
+    </div>
+</div>

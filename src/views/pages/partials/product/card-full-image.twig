@@ -1,0 +1,69 @@
+{# Deprecated: use salla-product-card #}
+<div id="product-{{ product.id }}"
+     class="product-entry product-entry--full-image {{ product.is_out_of_stock ? 'out-of-stock':'' }}">
+
+    <a href="{{ product.url }}" class='relative overflow-hidden rounded-md hover:opacity-90 w-full h-full'>
+        <img class="h-full w-full object-{{ product.image.url|is_placeholder ? 'contain':'cover' }} lazy"
+             src="{{ 'images/s-empty.png' | asset }}" data-src="{{ product.image.url }}" alt="{{ product.image.alt }}"/>
+    </a>
+
+    <!-- badage -->
+    {% if product.promotion_title %}
+        <div class="absolute z-10 top-4 rtl:right-0 ltr:left-0">
+            <div class="font-bold px-3 py-2 text-sm bg-red-400 text-white rtl:rounded-l-md ltr:rounded-r-md">{{ product.promotion_title }}</div>
+        </div>
+    {% endif %}
+
+
+    <!-- content -->
+    <!-- overlay -->
+    <a href="{{ product.url }}"
+       class="overlay transition-opacity duration-700 opacity-50 hover:opacity-40 absolute top-0 bottom-0 left-0 right-0 bg-black"></a>
+
+    <div class="absolute z-10 bottom-0 px-10  w-full pt-5 pb-7 ">
+        <div class="flex  justify-between items-baseline">
+            <!-- title -->
+            <h3 class="product-entry__title  text-sm font-bold text-white leading-6 mb-2.5">
+                <a href="{{ product.url }}">{{ product.name }}</a>
+            </h3>
+        </div>
+
+        <div class="w-full center-between mb-5">
+            {% if product.is_on_sale %}
+                <div class="rtl:space-x-reverse space-x-1">
+                    <h4 class="text-red-400 font-bold text-sm inline-block">{{ product.sale_price|money }}</h4>
+                    <span class="text-sm text-gray-400 line-through">{{ product.regular_price|money }}</span>
+                </div>
+            {% else %}
+                <h4 class="text-white font-bold text-sm">{{ product.price|money }}</h4>
+            {% endif %}
+
+            {% if product.rating %}
+                <div class="text-sm text-white">
+                    <i class="sicon-star2 text-amber-400"></i>
+                    <span>{{ product.rating|number }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="flex items-center">
+            <salla-add-product-button  fill="outline" width="wide"
+                                      product-id="{{ product.id }}"
+                                      product-status="{{ product.status }}"
+                                      product-type="{{ product.type }}">
+                {{ product.add_to_cart_label }}
+            </salla-add-product-button>
+
+            <salla-button
+                    shape="icon"
+                    fill="none"
+                    color="light"
+                    aria-label="Add or remove to wishlist"
+                    class="btn--wishlist animated"
+                    onclick="salla.wishlist.toggle({{ product.id }})"
+                    data-id="{{ product.id }}">
+                <i class="sicon-heart"></i>
+            </salla-button>
+        </div>
+    </div>
+</div>
