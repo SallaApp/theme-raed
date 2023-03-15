@@ -7,14 +7,7 @@
 <section class="s-block s-block--latest-products container mt-6 sm:mt-8">
     <div class="s-block__title">
       <h2>{{ trans('blocks.home.latest_products') }}</h2>
-      {# <p>عنوان فرعي توصيفي صغير</p> #}
     </div>
-    {% if products|length %}
-        <salla-infinite-scroll class="gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6 mb-6"
-                               next-page="{{ products.next_page }}"  autoload>
-            {% for product in products %}
-                {% include 'pages.partials.product.card' %}
-            {% endfor %}
-        </salla-infinite-scroll>
-    {% endif %}
+    
+    <salla-products-list source="latest"></salla-products-list>
 </section> 

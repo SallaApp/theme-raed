@@ -70,15 +70,18 @@
             </header>
 
             <section class="container overflow-hidden {{landing.products|length <= 3 and not landing.is_slider ? 'center-products' : ''}}">
-                {% set products=landing.products %}
-                {% set hide_add_btn=true %}
-                {% set show_quantity=landing.show_quantity %}
-                {% set title=trans('pages.offer.included_products') %}
-
+                {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
                 {% if landing.is_slider %}
-                    {% include 'components.home.products-slider' %}
+                    <salla-products-slider source="landing-page" block-title="{{trans('pages.offer.included_products')}}" display-all-url></salla-products-slid
                 {% else %}
-                    {% include 'components.home.fixed-products' %}
+                    <section class="s-block">
+                        <div class="s-block__title">
+                            <div class="right-side">
+                            <h2>{{ trans('pages.offer.included_products') }}</h2>
+                            </div>
+                        </div>
+                        <salla-products-list source="landing-page" class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"></salla-products-list>
+                    </section>
                 {% endif %}
 
                 <div class="text-center mt-6">

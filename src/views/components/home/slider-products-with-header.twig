@@ -23,19 +23,13 @@
     </div>
 
     <div class="container -mt-62 relative overflow-hidden">
-        <salla-slider 
-          type="carousel"
-          block-title=" "
-          display-all-url="{{component.display_all_url}}"
-          id="slider-with-bg-{{ position }}">
-            <div slot="items">
-                {% for product in component.products %}
-                    <div class="slide--one-fourth">
-                        {% include 'pages.partials.product.card' %}
-                    </div>
-                {% endfor %}
-            </div>
-        </salla-slider>
+        <salla-products-slider 
+        source="selected"
+        source-value="[{{ component.products|map((product) => product.id)|join(',') }}]" 
+        display-all-url="{{component.display_all_url}}" 
+        block-title=" " 
+        slider-id="slider-with-bg-{{ position }}"
+        ></salla-products-slider>
     </div>
 </section>
  

@@ -54,23 +54,7 @@
                 </div>
 
                 {% hook 'product:index.items.start' %}
-
-                {% if products|length %}
-                    <salla-infinite-scroll 
-                    next-page="{{ products.next_page }}" 
-                    autoload
-                    class="mb-8 products-container gird-view grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
-                        {% for product in products %}
-                            {% include 'pages.partials.product.card' %}
-                        {% endfor %}
-                    </salla-infinite-scroll>
-                {% else %}
-                    <div class="no-content-placeholder">
-                        <i class="sicon-shopping-bag icon"></i>
-                        <p>{{ trans('pages.categories.no_products') }}</p>
-                    </div>
-                {% endif %}
-
+                    <salla-products-list source="{{page.slug}}" source-value="{{page.id}}"></salla-products-list>
                 {% hook 'product:index.items.end' %}
             </div>
         </div>

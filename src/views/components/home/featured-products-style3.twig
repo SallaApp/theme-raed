@@ -23,15 +23,15 @@
                 </div> 
                 <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
                     {% if section.featured_product %}
-                        {% include 'pages.partials.product.card-full-image' with {product:section.featured_product} %}
+                        <salla-product-card shadow-on-hover product="{{section.featured_product}}" full-image></salla-product-card>
                         <div class="grid gap-4 sm:gap-8">
                             {% for product in section.products|slice(0,3) %}
-                                {% include 'pages.partials.product.card-mini' %}
+                                <salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
                             {% endfor %}
                         </div>
                     {% else %}
                         {% for product in section.products %}
-                            {% include 'pages.partials.product.card-mini' %}
+                            <salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
                         {% endfor %}
                     {% endif %}
                 </div>
