@@ -41,14 +41,12 @@
                       >
                     </salla-products-slider>
                 {% else %}
-                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-                      <salla-products-list  
-                        source="selected" 
-                        source-value="[{{ section.products|map((product) => product.id)|join(',') }}]" 
-                        horizontal-cards
-                        >
-                      </salla-products-list>
-                  </div>
+                    <salla-products-list  
+                      source="selected" 
+                      source-value="[{{ section.products|map((product) => product.id)|join(',') }}]" 
+                      horizontal-cards
+                      >
+                    </salla-products-list>
                 {% endif %}
             </div>
         {% endfor %}
