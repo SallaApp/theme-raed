@@ -24,10 +24,12 @@
         </nav>
         <div class="flex items-start flex-col md:flex-row">
             <div class="main-content flex-1 w-full">
+                <h1 class="font-bold text-xl rtl:pl-3 ltr:pr-3 mb-4">{{ page.title|raw }}</h1>
                 <div class="mb-4 sm:mb-6 flex justify-between items-center">
-                    <h1 class="font-bold text-xl rtl:pl-3 ltr:pr-3">{{ page.title|raw }}</h1>
-                    <div class="center-between">
-                        <div class="flex items-center">
+                            <a href="#filters-menu" 
+                                class="filters-trigger bg-border-color text-primary md:hidden">
+                                <i class="sicon-filter text-gray-text text-2xl me-2.5"></i>
+                            </a>
                             {% if sort_options|length and products|length %}
                                 <div class="flex items-center">
                                     <label class="hidden sm:block rtl:ml-3 ltr:mr-3 whitespace-nowrap"
@@ -49,17 +51,24 @@
                                     <i class="sicon-list"></i>
                                 </a>
                             </div>
-                        </div>
-                    </div>
+                   
+              
                 </div>
 
                 {% hook 'product:index.items.start' %}
-                    <salla-products-list source="{{page.slug}}" source-value="{{page.id}}"></salla-products-list>
+                    
+                    <div class="flex min-h-screen">
+                        <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
+                        <salla-filters class="w-56 flex-none" id="filters-menu">
+                        </salla-filters>
+                        <salla-products-list class="flex-1 min-w-0 overflow-auto ltr:lg:ml-8 rtl:lg:mr-8" source="{{page.slug}}" source-value="{{page.id}}" filters-results></salla-products-list>
+                    </div>
                 {% hook 'product:index.items.end' %}
             </div>
         </div>
     </div>
 
+    
     {% if store.settings.category.testimonial_enabled %}
         {% component 'home.testimonials' %}
     {% endif %}

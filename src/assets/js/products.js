@@ -1,16 +1,44 @@
 import BasePage from './base-page';
-
+import MobileMenu from 'mmenu-light';
 class Products extends BasePage {
     onReady() {
-        let urlParams = new URLSearchParams(window.location.search);
+        let productsList = app.element('salla-products-list'),
+            urlParams = new URLSearchParams(window.location.search)
+
+
+        // Set Sort
         if (urlParams.has('sort')) {
             app.element('#product-filter').value = urlParams.get('sort');
         }
+
+
         // Sort Products
-        app.on('change','#product-filter', event =>{
+        app.on('change', '#product-filter', event => {
             window.history.replaceState(null, null, "?sort=" + event.currentTarget.value);
-            //todo:: use it like this: app.element('salla-products-list').sortBy=event.currentTarget.value;
-            app.element('salla-products-list').setAttribute('filters', `{"sort": "${event.currentTarget.value}"}`)
+            productsList.sortBy = event.currentTarget.value;
+        });
+
+
+        this.initiateMobileMenu()
+    }
+
+    initiateMobileMenu() {
+        let filters = app.element("#filters-menu"),
+            trigger = app.element("a[href='#filters-menu']"),
+            close = app.element("button.close-filters");
+
+        if (!filters) {
+            return;
+        }
+        filters = new MobileMenu(filters, "(max-width: 1024px)", "( slidingSubmenus: false)");
+        const drawer = filters.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
+        trigger.addEventListener('click', event => {
+            document.body.classList.add('filters-opened');
+            event.preventDefault() || drawer.close() || drawer.open()
+        });
+        close.addEventListener('click', event => {
+            document.body.classList.remove('filters-opened');
+            event.preventDefault() || drawer.close()
         });
     }
 }
