@@ -60,11 +60,11 @@
                 </div>
 
                 {% hook 'product:index.items.start' %}
-                    
                     <div class="flex min-h-screen">
-                        <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
-                        <salla-filters class="w-56 flex-none" id="filters-menu">
-                        </salla-filters>
+                        {% if has_filters %}
+                            <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
+                            <salla-filters class="w-56 flex-none" id="filters-menu"></salla-filters>
+                        {% endif %} 
                         <salla-products-list class="flex-1 min-w-0 overflow-auto ltr:lg:ml-8 rtl:lg:mr-8" source="{{page.slug}}" source-value="{{page.id}}" ></salla-products-list>
                     </div>
                 {% hook 'product:index.items.end' %}
