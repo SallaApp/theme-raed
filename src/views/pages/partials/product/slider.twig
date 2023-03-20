@@ -1,17 +1,12 @@
+{#TODO:: use in-line without include#}
 {% if products|length %}
-    <salla-slider  
-      type="carousel"
-      block-title="{{ title }}"
-      block-subTitle="{{ sub_title|raw }}"
-      display-all-url="{{display_all_url}}"
-      id="{{ type }}-slider">
-        <div slot="items">
-            {% for product in products %} 
-                <div class="slide--one-fourth">
-                    {% include 'pages.partials.product.card' %}
-                </div>
-            {% endfor %}
-        </div>
-    </salla-slider>
+    <salla-products-slider 
+    source="selected"
+    source-value="[{{ products|map((product) => product.id)|join(',') }}]" 
+    display-all-url="{{display_all_url}}" 
+    block-title="{{ title }}"
+    block-subTitle="{{ sub_title|raw }}"
+    slider-id="slider-with-bg-{{ position }}"
+    ></salla-products-slider>
 {% endif %}
  

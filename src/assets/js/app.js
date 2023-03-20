@@ -19,8 +19,6 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
-    this.initCircleBar();
-    this.initDonating();
     initTootTip();
 
     salla.comment.event.onAdded(() => window.location.reload());
@@ -239,31 +237,6 @@ class App extends AppHelpers {
 
     salla.cart.event.onItemAdded((response, prodId) => {
       app.element('salla-cart-summary').animateToCart(app.element(`#product-${prodId} img`));
-    });
-  }
-
-  initCircleBar() {
-    // Special offer Block ---
-    document.querySelectorAll('.pie-wrapper').forEach(elem => {
-      let qty = elem.dataset.quantity,
-        total = elem.dataset.total,
-        roundPercent = (qty / total) * 100,
-        $circle = elem.querySelector('.circle_bar'),
-        strokeDashOffsetValue = 100 - roundPercent;
-      $circle.style.strokeDashoffset = strokeDashOffsetValue;
-    })
-  }
-
-  /**
-   * Donation field
-   */
-  initDonating() {
-    // Digits Only field all over the theme
-    app.on('input', '[data-digits]', e => salla.helpers.inputDigitsOnly(e.target));
-
-    //add donating amount attr to salla-add-product-buton
-    app.on('input', '#donation-amount', e => {
-      e.target.closest('.donating-wrap').querySelector('salla-add-product-button').setAttribute('donating-amount', e.target.value);
     });
   }
 }
