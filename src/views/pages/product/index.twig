@@ -15,6 +15,7 @@
 | sort_options[].is_selected | bool        | Is current page sorted by it                                         |
 | search_query               | ?string     |                                                                      |
 #}
+{% set has_filters = true %}
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container px-2.5 ms:px-5 mb-10">
@@ -24,17 +25,20 @@
         </nav>
         <div class="flex items-start flex-col md:flex-row">
             <div class="main-content flex-1 w-full">
-                <h1 class="font-bold text-xl rtl:pl-3 ltr:pr-3 mb-4">{{ page.title|raw }}</h1>
                 <div class="mb-4 sm:mb-6 flex justify-between items-center">
-                            <a href="#filters-menu" 
-                                class="filters-trigger bg-border-color text-primary md:hidden">
-                                <i class="sicon-filter text-gray-text text-2xl me-2.5"></i>
-                            </a>
+                    <h1 class="font-bold text-xl rtl:pl-3 ltr:pr-3">{{ page.title|raw }}</h1>
+                         <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                            {% if has_filters %}
+                                <a href="#filters-menu" 
+                                    class="filters-trigger bg-border-color text-primary md:hidden mt-2">
+                                    <i class="sicon-filter text-gray-text text-2xl me-2.5"></i>
+                                </a>
+                            {% endif %} 
                             {% if sort_options|length and products|length %}
                                 <div class="flex items-center">
                                     <label class="hidden sm:block rtl:ml-3 ltr:mr-3 whitespace-nowrap"
                                            for="product-filter">{{ trans('pages.categories.sorting') }}</label>
-                                    <select id="product-filter" class="form-input pt-0 pb-1 rtl:pl-10 ltr:pr-10">
+                                    <select id="product-filter" class="form-input pt-0 pb-1 rtl:md:pl-10 ltr:md:pr-10">
                                         {% for sort in sort_options %}
                                             <option value="{{ sort.id }}" {{ sort.is_selected?'selected':'' }}>{{ sort.name }}</option>
                                         {% endfor %}
@@ -51,7 +55,7 @@
                                     <i class="sicon-list"></i>
                                 </a>
                             </div>
-                   
+                        </div>
               
                 </div>
 
@@ -61,7 +65,7 @@
                         <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
                         <salla-filters class="w-56 flex-none" id="filters-menu">
                         </salla-filters>
-                        <salla-products-list class="flex-1 min-w-0 overflow-auto ltr:lg:ml-8 rtl:lg:mr-8" source="{{page.slug}}" source-value="{{page.id}}" filters-results></salla-products-list>
+                        <salla-products-list class="flex-1 min-w-0 overflow-auto ltr:lg:ml-8 rtl:lg:mr-8" source="{{page.slug}}" source-value="{{page.id}}" ></salla-products-list>
                     </div>
                 {% hook 'product:index.items.end' %}
             </div>
