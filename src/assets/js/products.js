@@ -14,7 +14,9 @@ class Products extends BasePage {
 
         // Sort Products
         app.on('change', '#product-filter', event => {
-            window.history.replaceState(null, null, "?sort=" + event.currentTarget.value);
+            let url = new URL(window.location.href);
+            url.searchParams.set('sort', event.currentTarget.value);
+            window.history.pushState({}, '', url);
             productsList.sortBy = event.currentTarget.value;
         });
 
