@@ -42,6 +42,13 @@ class Products extends BasePage {
             document.body.classList.remove('filters-opened');
             event.preventDefault() || drawer.close()
         });
+        salla.event.on('salla-filters::changed', filters => {
+            if (!Object.entries(filters).length) {
+                return
+            }
+            document.body.classList.remove('filters-opened');
+            drawer.close()
+        })
     }
 }
 
