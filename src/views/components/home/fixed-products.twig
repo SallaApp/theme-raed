@@ -5,6 +5,7 @@
 | title           | string     |                                                                  |
 | products        | Products[] |                                                                  |
 | position        | Int        | Sorting number start from zero                                   |
+| limit           | Int        | Number of products to be shown
 #}
 {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
 <section class="s-block container">
@@ -19,14 +20,15 @@
         {% endif %}
       </div>
     {% endif %}
-  
-    <salla-products-list 
-      source="selected" 
-      source-value="[{{ products|map((product) => product.id)|join(',') }}]" 
+
+    <salla-products-list
+      source="selected"
+      limit="{{ limit }}"
+      source-value="[{{ products|map((product) => product.id)|join(',') }}]"
       class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"
       {{is_vertical ? '' : 'horizontal-cards'}}
       >
     </salla-products-list>
 </section>
 
- 
+
