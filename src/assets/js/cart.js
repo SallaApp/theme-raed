@@ -7,16 +7,24 @@ class Cart extends BasePage {
 
         app.watchElements({
             couponCodeInput: '#coupon-input',
-            couponBtn      : '#coupon-btn',
-            couponError    : '#coupon-error',
-            subTotal       : '#sub-total',
-            totalDiscount  : '#total-discount',
-            shippingCost   : '#shipping-cost',
-            freeShipping   : '#free-shipping',
+            couponBtn: '#coupon-btn',
+            couponError: '#coupon-error',
+            subTotal: '#sub-total',
+            totalDiscount: '#total-discount',
+            shippingCost: '#shipping-cost',
+            freeShipping: '#free-shipping',
             freeShippingBar: '#free-shipping-bar',
             freeShippingMsg: '#free-shipping-msg',
             freeShipApplied: '#free-shipping-applied'
         });
+
+        salla.cart.event.onItemUpdatedFailed((data, itemId) => {
+            if (!data.response?.data?.error?.fields?.quantity) { return }
+            const elem = document.querySelector(`#item-${itemId} salla-quantity-input`);
+            
+            return elem?.setValue(elem.getAttribute('value'), false);
+            
+        })
 
         this.initiateCoupon();
     }
@@ -51,7 +59,7 @@ class Cart extends BasePage {
 
         app.freeShippingMsg.innerHTML = isFree
             ? salla.lang.get('pages.cart.has_free_shipping')
-            : salla.lang.get('pages.cart.free_shipping_alert', {amount: salla.money(cartData.free_shipping_bar.remaining)});
+            : salla.lang.get('pages.cart.free_shipping_alert', { amount: salla.money(cartData.free_shipping_bar.remaining) });
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
     }
 
@@ -61,7 +69,7 @@ class Cart extends BasePage {
     updateItemInfo(item) {
         // lets get the elements for this item
         let cartItem = document.querySelector('#item-' + item.id);
-        if(!cartItem){
+        if (!cartItem) {
             salla.log(`Can't get the cart item dom for ${item.id}!`);
             return;
         }
@@ -75,7 +83,7 @@ class Cart extends BasePage {
         let total = salla.money(item.total);
         if (total !== totalElement.innerText) {
             totalElement.innerText = total;
-            app.anime(totalElement, {scale: [.88, 1]});
+            app.anime(totalElement, { scale: [.88, 1] });
         }
 
         app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
