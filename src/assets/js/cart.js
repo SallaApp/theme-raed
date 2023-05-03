@@ -19,8 +19,14 @@ class Cart extends BasePage {
         });
 
         salla.cart.event.onItemUpdatedFailed((data, itemId) => {
-            let elem = document.querySelector('#item-' + itemId + ' salla-quantity-input');
-            return elem ? elem.setValue(elem.getAttribute('value'), false) : null;
+            const quantityError = data.response?.data?.error?.fields?.quantity;
+            if (!quantityError || (Array.isArray(quantityError) && !quantityError.length)) {
+                return
+            }
+            const elem = document.querySelector(`#item-${itemId} salla-quantity-input`);
+            
+            return elem?.setValue(elem.getAttribute('value'), false);
+            
         })
 
         this.initiateCoupon();
