@@ -20,7 +20,7 @@ class Cart extends BasePage {
 
         salla.cart.event.onItemUpdatedFailed((data, itemId) => {
             let elem = document.querySelector('#item-' + itemId + ' salla-quantity-input');
-            return elem.setValue(elem.getAttribute('value'), false)
+            return elem ? elem.setValue(elem.getAttribute('value'), false) : null;
         })
 
         this.initiateCoupon();
