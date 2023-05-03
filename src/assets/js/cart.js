@@ -19,10 +19,7 @@ class Cart extends BasePage {
         });
 
         salla.cart.event.onItemUpdatedFailed((data, itemId) => {
-            const quantityError = data.response?.data?.error?.fields?.quantity;
-            if (!quantityError || (Array.isArray(quantityError) && !quantityError.length)) {
-                return
-            }
+            if (!data.response?.data?.error?.fields?.quantity) { return }
             const elem = document.querySelector(`#item-${itemId} salla-quantity-input`);
             
             return elem?.setValue(elem.getAttribute('value'), false);
