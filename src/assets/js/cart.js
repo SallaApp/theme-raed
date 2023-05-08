@@ -18,14 +18,6 @@ class Cart extends BasePage {
             freeShipApplied: '#free-shipping-applied'
         });
 
-        salla.cart.event.onItemUpdatedFailed((data, itemId) => {
-            if (!data.response?.data?.error?.fields?.quantity) { return }
-            const elem = document.querySelector(`#item-${itemId} salla-quantity-input`);
-            
-            return elem?.setValue(elem.getAttribute('value'), false);
-            
-        })
-
         this.initiateCoupon();
     }
 
