@@ -5,14 +5,14 @@
     <div class="{% if is_admin %} nested-comment reply rtl:pr-8 ltr:pl-8 rtl:md:pr-16 ltr:md:pl-16 mt-8 admin {% else %} comment {% endif %} flex text-sm rtl:space-x-reverse space-x-3 comment_id_{{ comment.id }}">
         {% if is_admin %} <i class="sicon-reply text-lg text-gray-400"></i>{% endif %}
         <div class="flex-none">
-            <img data-src="{{ comment.avatar|is_placeholder ? 'images/avatar.png' | cdn : comment.avatar }}"
-                 alt="{{ comment.name }}" src="{{ 'images/s-empty.png' | asset }}"
+            <img data-src="{{ comment.avatar|is_placeholder or hide_user ? 'images/avatar.png' | cdn : comment.avatar }}"
+                 alt="{{ hide_user ? '' : comment.name }}" src="{{ 'images/s-empty.png' | asset }}"
                  class="w-10 h-10 bg-gray-100 object-cover rounded-full lazy">
         </div>
         <div class="flex-1">
             <div class="flex flex-wrap md:items-center justify-between mb-2 md:mb-0">
                 <div class="flex items-center mb-1">
-                    <h3 class="font-bold text-base rtl:ml-10 ltr:mr-10 fix-align">{{ comment.name }}</h3>
+                    <h3 class="font-bold text-base rtl:ml-10 ltr:mr-10 fix-align">{{ hide_user ? '' : comment.name }}</h3>
                     {% if comment.has_order or comment.stars %}
                         <div class="flex">
                             {% if comment.has_order %}
@@ -49,7 +49,7 @@
             </div>
         </div>
     </div>
-    {% if not is_admin %}
+    {% if not hide_replies %}
     {% for replay in comment.replies %}
         {% include _self with {comment:replay} %}
     {% endfor %}
