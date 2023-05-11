@@ -13,7 +13,7 @@
             <div class="flex flex-wrap md:items-center justify-between mb-2 md:mb-0">
                 <div class="flex items-center mb-1">
                     <h3 class="font-bold text-base rtl:ml-10 ltr:mr-10 fix-align">{{ hide_user ? '' : comment.name }}</h3>
-                    {% if comment.has_order or comment.stars %}
+                    {% if (comment.has_order or comment.stars) and not hide_bought %}
                         <div class="flex">
                             {% if comment.has_order %}
                                 <i class="sicon-check rounded-full bg-amber-400 h-5 w-5 flex items-center justify-center text-xs"></i>
