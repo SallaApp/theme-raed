@@ -15,6 +15,7 @@
 | is_slider                     | Bool      | Products should be movable or static                                |
 #}
 {% set component_id='featured-products-style2-' ~ position %}
+{% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
 <section class="s-block s-block-tabs s-block--tabs-produtcs s-block--full-bg {{ is_slider ? 'as-slider':'as-grid' }} bg-gray-100 py-8 sm:py-16" id="{{ component_id }}">
   <div class="container">
 
@@ -43,8 +44,8 @@
                 {% else %}
                     <salla-products-list  
                       source="selected" 
-                      source-value="[{{ section.products|map((product) => product.id)|join(',') }}]" 
-                      horizontal-cards
+                      source-value="[{{ section.products|map((product) => product.id)|join(',') }}]"
+                      {{is_vertical ? '' : 'horizontal-cards'}}
                       >
                     </salla-products-list>
                 {% endif %}
