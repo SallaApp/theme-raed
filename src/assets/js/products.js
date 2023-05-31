@@ -20,6 +20,10 @@ class Products extends BasePage {
             productsList.sortBy = event.currentTarget.value;
         });
 
+        salla.event.once('salla-products-list::products.fetched', res=>{
+            res.title && (app.element('#page-main-title').innerHTML = res.title);
+        });
+
 
         this.initiateMobileMenu()
     }
