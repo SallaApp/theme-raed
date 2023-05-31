@@ -11,6 +11,7 @@ class App extends AppHelpers {
   }
 
   loadTheApp() {
+    this.commonThings();
     this.initiateNotifier();
     this.initiateMobileMenu();
     this.initiateStickyMenu();
@@ -31,6 +32,20 @@ class App extends AppHelpers {
   log(message) {
     salla.log(`ThemeApp(Raed)::${message}`);
     return this;
+  }
+
+  commonThings(){
+    this.cleanContentArticles('.content-entry');
+  }
+
+  cleanContentArticles(elementsSelector){
+    let articleElements = document.querySelectorAll(elementsSelector);
+
+    if (articleElements.length) {
+      articleElements.forEach(article => {
+        article.innerHTML = article.innerHTML.replace(/\&nbsp;/g, ' ')
+      })
+    }
   }
 
   copyToClipboard(event) {
