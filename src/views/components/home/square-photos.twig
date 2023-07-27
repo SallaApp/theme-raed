@@ -12,21 +12,19 @@
 #}
 <section class="s-block s-block--banners container">
     {% if title %}
-      <div class="s-block__title">
-        <div class="right-side">
-          <h2>{{ title }}</h2>
+        <div class="s-block__title">
+            <div class="right-side">
+                <h2>{{ title }}</h2>
+            </div>
         </div>
-      </div>
     {% endif %}
-    
+
     <div class="grid {{ items|length <= 3 ? 'one-row md:grid-cols-' ~ items|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
         {% for item in items %}
-            <div class="banner-entry {{ item.text ? 'has-overlay with-hover' : '' }}">
+            <a class="banner-entry {{ item.text ? 'has-overlay with-hover' : '' }}" href="{{ item.url }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
                 <div class="lazy__bg lazy" data-bg="{{ item.image.url }}"></div>
-                <a  class="{{item.text ? 'text-with-border' : ''}}" href="{{ item.url }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
-                  {% if item.text %} <h3>{{ item.text }}</h3> {% endif %}
-                </a>
-            </div>
+                {% if item.text %} <h3 class="text-with-border">{{ item.text }}</h3> {% endif %}
+            </a>
         {% endfor %}
     </div>
-</section> 
+</section>
