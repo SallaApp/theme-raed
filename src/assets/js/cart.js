@@ -19,8 +19,37 @@ class Cart extends BasePage {
         });
 
         this.initiateCoupon();
+        this.initSubmitCart();
     }
 
+    initSubmitCart() {
+        let submitBtn = document.querySelector('#cart-submit');
+        let cartForms = document.querySelectorAll('form[id^="item-"]');
+        
+        if (!submitBtn) {
+            return;
+        }
+        
+        app.onClick(submitBtn, event => {
+            let isValid = true;
+            cartForms.forEach(form => {
+                isValid = isValid && form.reportValidity();
+                if (!isValid) {
+                    event.preventDefault();
+                    salla.notify.error(salla.lang.get('common.messages.required_fields'));
+                    return;
+                }
+            });
+    
+            if (isValid) {
+                /** @type HTMLSallaButtonElement */
+                let btn = event.currentTarget;
+                btn.load()
+                    .then(() => salla.cart.submit())
+            }
+        });
+    }
+    
     /**
      * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
      */
