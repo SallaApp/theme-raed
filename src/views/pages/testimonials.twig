@@ -1,0 +1,74 @@
+{#
+| Variable              | Type                         | Description         |
+|-----------------------|------------------------------|---------------------|
+| comments              | Comment[] *Paginator         |                     |
+| comments[].id         | int                          |                     |
+| comments[].avatar     | string                       |                     |
+| comments[].name       | string                       |                     |
+| comments[].has_order  | bool                         |                     |
+| comments[].created_at | Date *Carbon                 |                     |
+| comments[].stars      | int                          |                     |
+| comments[].content    | string                       |                     |
+| comments[].is_pending | bool                         | Is not approved yet |
+| comments[].replies    | Comment[] *Collection        |                     |
+| comments[].type       | string 'admin','customer'    |                     |
+| type                  | string                       | page, product       |
+| id                    | int                          | pageId or ProductId |
+#}
+
+{% extends "layouts.master" %}
+{% block content %}
+<div class="container">
+
+    {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+    <nav class="breadcrumbs w-full py-5">
+        {% component 'header.breadcrumbs' %}
+    </nav>
+    {% if items|length %}
+    <div class="flex justify-center">
+        <div class="content content--single-page w-full lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
+
+            <div class="mb-4 sm:mb-6 flex justify-between items-center">
+                <h1 class="font-bold text-2xl">{{ page . title }}</h1>
+                <div class="flex items-center">
+                    <label class="hidden sm:block rtl:ml-3 ltr:mr-3 whitespace-nowrap"
+                        for="testimonials-filter">{{ trans('pages.categories.sorting') }}</label>
+                    <select id="testimonials-filter" class="form-input pt-0 pb-1 rtl:pl-10 ltr:pr-10">
+                        <option value="desc">{{ trans('pages.testimonials.sort_by_date_desc') }}</option>
+                        <option value="asc">{{ trans('pages.testimonials.sort_by_date_asc') }}</option>
+                        <option value="rating-desc">{{ trans('pages.testimonials.sort_by_rating_desc') }}</option>
+                        <option value="rating-asc">{{ trans('pages.testimonials.sort_by_rating_asc') }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="content-entry">
+                <div class="s-comments s-comments-{{ type }}">
+                    <div class="container {{ type == 'page' ? 'px-0' : '' }}">
+                        {% if items|length %}
+                        <salla-infinite-scroll next-page="{{ items.next_page }}">
+                            {% for comment in items %}
+                            {% include 'pages.partials.single-comment' with {hide_replies:true, hide_bought:true} %}
+                            {% endfor %}
+                        </salla-infinite-scroll>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% elseif not items|length %}
+    <div class="no-content-placeholder">
+        <i class="sicon-star-o icon"></i>
+        <p>{{ trans('pages.rating.no_ratings') }}</p>
+        <a href="{{ link('/') }}"
+            class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back_home') }}</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ 'testimonials.js' | asset }}"></script>
+{% endblock %}
