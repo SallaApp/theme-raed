@@ -13,30 +13,55 @@
 | items[].id                    | string    | Section id                                                          |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
+
+<div id="slidePanel" class="fixed z-[9999] h-screen pointer-events-auto w-screen max-w-2xl transform transition ease-in-out duration-500 sm:duration-700 translate-x-full">
+	<div class="slidePanel__wrapper flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+		<div class="px-4 sm:px-6">
+			<div class="flex items-start justify-between">
+				<h2 class="text-base font-semibold leading-6 text-gray-900" id="slide-over-title">إكمال الدفع</h2>
+				<div class="ml-3 flex h-7 items-center">
+					<button id="closePanel" type="button" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+						<span class="absolute -inset-2.5"></span>
+						<span class="sr-only">Close panel</span>
+						<svg class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="relative mt-6 flex-1 px-4 sm:px-6">
+			<salla-mini-checkout type="inline" class="min-h-screen"></salla-mini-checkout>
+		</div>
+	</div>
+</div>
+
+
+<button class="btn" id="open-checkout">إكمال الدفع</button>
+
 <section class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container">
-    <div class="inner">
-        {% for section in items %}
-            <div>
-                <div class="s-block__title">
-                  <h2>{{ section.title }}</h2>
-                  {# <p>عنوان فرعي توصيفي صغير</p> #}
-                </div> 
-                <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
-                    {% if section.featured_product %}
-                        <salla-product-card shadow-on-hover product="{{section.featured_product}}" full-image></salla-product-card>
-                        <div class="grid gap-4 sm:gap-8">
-                            {% for product in section.products|slice(0,3) %}
-                                <salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {% for product in section.products %}
-                            <salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+	<div class="inner">
+		{% for section in items %}
+			<div>
+				<div class="s-block__title">
+					<h2>{{ section.title }}</h2>
+					{# <p>عنوان فرعي توصيفي صغير</p> #}
+				</div>
+				<div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
+					{% if section.featured_product %}
+						<salla-product-card shadow-on-hover product="{{section.featured_product}}" full-image></salla-product-card>
+						<div class="grid gap-4 sm:gap-8">
+							{% for product in section.products|slice(0,3) %}
+								<salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
+							{% endfor %}
+						</div>
+					{% else %}
+						{% for product in section.products %}
+							<salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
 </section>
- 

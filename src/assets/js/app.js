@@ -21,9 +21,9 @@ class App extends AppHelpers {
     this.initiateModals();
     this.initiateCollapse();
     initTootTip();
+    this.initMiniCheckout()
 
     salla.comment.event.onAdded(() => window.location.reload());
-
     this.status = 'ready';
     document.dispatchEvent(new CustomEvent('theme::ready'));
     this.log('Theme Loaded 🎉');
@@ -34,11 +34,11 @@ class App extends AppHelpers {
     return this;
   }
 
-  commonThings(){
+  commonThings() {
     this.cleanContentArticles('.content-entry');
   }
 
-  cleanContentArticles(elementsSelector){
+  cleanContentArticles(elementsSelector) {
     let articleElements = document.querySelectorAll(elementsSelector);
 
     if (articleElements.length) {
@@ -63,6 +63,37 @@ class App extends AppHelpers {
     }, 1000);
   }
 
+  initMiniCheckout() {
+    let trigger = document.querySelector('#open-checkout');
+    let slidePanel = document.querySelector('#slidePanel');
+    let closePanel = slidePanel.querySelector('#closePanel');
+    let overlay = document.createElement('div');
+    trigger.addEventListener('click', () => {
+      slidePanel.querySelector('iframe').style.height = slidePanel.querySelector('iframe').contentWindow.document.body.scrollHeight + 'px';
+      overlay.classList.add('fixed', 'inset-0', 'bg-black', 'bg-opacity-50', 'z-[101]');
+      document.body.appendChild(overlay);
+      slidePanel.classList.remove('translate-x-full');
+      slidePanel.classList.add('translate-x-0');
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+    });
+
+    closePanel.addEventListener("click", () => {
+      slidePanel.classList.remove("translate-x-0");
+      slidePanel.classList.add("translate-x-full");
+      overlay.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    });
+
+    overlay.addEventListener('click', () => {
+      slidePanel.classList.remove("translate-x-0");
+      slidePanel.classList.add("translate-x-full");
+      overlay.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    });
+    
+  }
   initiateNotifier() {
     salla.notify.setNotifier(function (message, type, data) {
       if (typeof message == 'object') {
@@ -70,18 +101,18 @@ class App extends AppHelpers {
       }
 
       return Swal.mixin({
-        toast            : true,
-        position         : salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
+        toast: true,
+        position: salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
         showConfirmButton: false,
-        timer            : 3500,
-        didOpen          : (toast) => {
+        timer: 3500,
+        didOpen: (toast) => {
           toast.addEventListener('mouseenter', Swal.stopTimer)
           toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
       }).fire({
-        icon            : type,
-        title           : message,
-        showCloseButton : true,
+        icon: type,
+        title: message,
+        showCloseButton: true,
         timerProgressBar: true
       })
     });
@@ -95,9 +126,9 @@ class App extends AppHelpers {
     }
     menu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
     salla.lang.onLoaded(() => {
-      menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
+      menu.navigation({ title: salla.lang.get('blocks.header.main_menu') });
     });
-    const drawer = menu.offcanvas({position: salla.config.get('theme.is_rtl') ? "right" : 'left'});
+    const drawer = menu.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
 
     this.onClick("a[href='#mobile-menu']", event => event.preventDefault() || drawer.close() || drawer.open());
     this.onClick(".close-mobile-menu", event => event.preventDefault() || drawer.close());
@@ -117,7 +148,7 @@ class App extends AppHelpers {
     window.addEventListener('scroll', () => {
       window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
       window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
-    }, {passive: true});
+    }, { passive: true });
   }
 
   setHeaderHeight() {
@@ -146,21 +177,21 @@ class App extends AppHelpers {
       salla.storage.set('statusAd-' + ad.dataset.id, 'dismissed');
 
       anime({
-        targets : '.salla-advertisement',
-        opacity : [1, 0],
+        targets: '.salla-advertisement',
+        opacity: [1, 0],
         duration: 300,
-        height  : [ad.clientHeight, 0],
-        easing  : 'easeInOutQuad',
+        height: [ad.clientHeight, 0],
+        easing: 'easeInOutQuad',
       });
     });
   }
 
   initiateDropdowns() {
-    this.onClick('.dropdown__trigger', ({target: btn}) => {
+    this.onClick('.dropdown__trigger', ({ target: btn }) => {
       btn.parentElement.classList.toggle('is-opened');
       document.body.classList.toggle('dropdown--is-opened');
       // Click Outside || Click on close btn
-      window.addEventListener('click', ({target: element}) => {
+      window.addEventListener('click', ({ target: element }) => {
         if (!element.closest('.dropdown__menu') && element !== btn || element.classList.contains('dropdown__close')) {
           btn.parentElement.classList.remove('is-opened');
           document.body.classList.remove('dropdown--is-opened');
@@ -194,22 +225,22 @@ class App extends AppHelpers {
     document.querySelectorAll('.btn--collapse')
       .forEach((trigger) => {
         const content = document.querySelector('#' + trigger.dataset.show);
-        const state = {isOpen: false}
+        const state = { isOpen: false }
 
         const onOpen = () => anime({
-          targets : content,
+          targets: content,
           duration: 225,
-          height  : content.scrollHeight,
-          opacity : [0, 1],
-          easing  : 'easeOutQuart',
+          height: content.scrollHeight,
+          opacity: [0, 1],
+          easing: 'easeOutQuart',
         });
 
         const onClose = () => anime({
-          targets : content,
+          targets: content,
           duration: 225,
-          height  : 0,
-          opacity : [1, 0],
-          easing  : 'easeOutQuart',
+          height: 0,
+          opacity: [1, 0],
+          easing: 'easeOutQuart',
         })
 
         const toggleState = (isOpen) => {
@@ -218,7 +249,7 @@ class App extends AppHelpers {
         }
 
         trigger.addEventListener('click', () => {
-          const {isOpen} = state
+          const { isOpen } = state
           toggleState(isOpen)
           isOpen ? onClose() : onOpen();
         })
