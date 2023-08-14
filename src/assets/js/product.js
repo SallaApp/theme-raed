@@ -8,11 +8,13 @@ class Product extends BasePage {
         app.watchElements({
             totalPrice: '.total-price',
             beforePrice: '.before-price',
+            startingPriceTitle: '.starting-price-title',
         });
     }
 
     registerEvents() {
         salla.product.event.onPriceUpdated((res) => {
+            app.startingPriceTitle?.classList.add('hidden');
 
             app.totalPrice.forEach(el => el.innerText = salla.money(res.data.price));
             // app.totalPrice.innerText = salla.money(res.data.price);
