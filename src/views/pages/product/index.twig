@@ -9,6 +9,7 @@
 | category.name              | string      |                                                                      |
 | category.url               | string      |                                                                      |
 | category.sub_categories    | ?Category[] |                                                                      |
+| filters                    | bool        | is filters allowed here or not                                       |
 | sort_options[]             | SortList[]  |                                                                      |
 | sort_options[].id          | string      | ourSuggest, bestSell, topRated, priceFromTopToLow, priceFromLowToTop |
 | sort_options[].name        | string      |                                                                      |
@@ -23,42 +24,55 @@
             {% component 'header.breadcrumbs' %}
         </nav>
         <div class="flex items-start flex-col md:flex-row">
-            <div class="main-content flex-1 w-full">
+            {% if filters %}
+                <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
+                <salla-filters class="md:w-72 flex-none" id="filters-menu"></salla-filters>
+            {% endif %}
+            <div class="main-content flex-1 w-full {{ filters ? 'ltr:lg:ml-8 rtl:lg:mr-8' : '' }}">
                 <div class="mb-4 sm:mb-6 flex justify-between items-center">
-                    <h1 class="font-bold text-xl rtl:pl-3 ltr:pr-3">{{ page.title|raw }}</h1>
-                    <div class="center-between">
-                        <div class="flex items-center">
-                            {% if sort_options|length and products|length %}
-                                <div class="flex items-center">
-                                    <label class="hidden sm:block rtl:ml-3 ltr:mr-3 whitespace-nowrap"
-                                           for="product-filter">{{ trans('pages.categories.sorting') }}</label>
-                                    <select id="product-filter" class="form-input pt-0 pb-1 rtl:pl-10 ltr:pr-10">
-                                        {% for sort in sort_options %}
-                                            <option value="{{ sort.id }}" {{ sort.is_selected?'selected':'' }}>{{ sort.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            {% endif %} 
-                            <div class="hidden items-center rtl:mr-2 ltr:ml-2">
-                                <a href="#" data-type="grid"
-                                   class="grid-trigger bg-border-color text-primary">
-                                    <i class="sicon-grid"></i>
-                                </a>
-                                <a href="#" data-type="list"
-                                   class="grid-trigger">
-                                    <i class="sicon-list"></i>
-                                </a>
+                    <h1 class="font-bold text-xl rtl:pl-3 ltr:pr-3" id="page-main-title">{{ page.title|raw }}</h1>
+                    <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                        {% if filters %}
+                            <a href="#filters-menu"
+                               class="filters-trigger bg-border-color text-primary lg:hidden mt-2">
+                                <i class="sicon-filter text-gray-text text-2xl me-2.5"></i>
+                            </a>
+                        {% endif %}
+                        {% if sort_options|length and products|length %}
+                            <div class="flex items-center">
+                                <label class="hidden sm:block rtl:ml-3 ltr:mr-3 whitespace-nowrap"
+                                       for="product-filter">{{ trans('pages.categories.sorting') }}</label>
+                                <select id="product-filter" class="form-input pt-0 pb-1 rtl:md:pl-10 ltr:md:pr-10">
+                                    {% for sort in sort_options %}
+                                        <option value="{{ sort.id }}" {{ sort.is_selected?'selected':'' }}>{{ sort.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
+                        {% endif %}
+                        <div class="hidden items-center rtl:mr-2 ltr:ml-2">
+                            <a href="#" data-type="grid" class="grid-trigger bg-border-color text-primary">
+                                <i class="sicon-grid"></i>
+                            </a>
+                            <a href="#" data-type="list" class="grid-trigger">
+                                <i class="sicon-list"></i>
+                            </a>
                         </div>
                     </div>
+
                 </div>
 
                 {% hook 'product:index.items.start' %}
-                    <salla-products-list source="{{page.slug}}" source-value="{{page.id}}"></salla-products-list>
+                <div class="flex min-h-screen">
+                    <salla-products-list class="flex-1 min-w-0 overflow-auto "
+                                         source="{{ page.slug }}"
+                                         source-value="{{ page.id }}"
+                            {{ filters?'filters-Results':'' }}></salla-products-list>
+                </div>
                 {% hook 'product:index.items.end' %}
             </div>
         </div>
     </div>
+
 
     {% if store.settings.category.testimonial_enabled %}
         {% component 'home.testimonials' %}

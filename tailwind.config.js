@@ -48,6 +48,7 @@ module.exports = {
                 'large': '22px',
                 'big'  : '40px',
                 'tiny' : '3px',
+                DEFAULT: '.75rem',
             },
             fontSize           : {
                 'icon-lg'   : '33px',
