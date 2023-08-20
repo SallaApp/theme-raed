@@ -328,22 +328,8 @@
                     {% hook 'product:single.form.end' %}
 
 
-                    <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
-                        {# Quantity #}
-                        {% if product.is_hidden_quantity or product.type == 'booking' %}
-                            <input type="hidden" value="1" name="quantity"/>
-                        {% else %}
-                            <div class="sticky-product-bar__quantity center-between mb-5">
-                                <label class="form-label font-bold">
-                                    {{ trans('pages.products.quantity') }}
-                                </label>
-                                <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
-                                                      class="border-gray-200 flex justify-end"></salla-quantity-input>
-                            </div>
-                        {% endif %}
-
-                        {# Price #}
-                        <div class="sticky-product-bar__price center-between">
+                    <section class="flex bg-white p-5 rounded-md rounded-b-none">
+                        <div class="center-between w-full">
                             <label class="form-label">
                                 <b class="block">
                                     {{ trans('pages.products.price') }}
@@ -363,6 +349,20 @@
                               {% endif %} 
                             </div>
                         </div>
+                    </section>
+                    <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
+                        {# Quantity #}
+                        {% if product.is_hidden_quantity or product.type == 'booking' %}
+                            <input type="hidden" value="1" name="quantity"/>
+                        {% else %}
+                            <div class="sticky-product-bar__quantity center-between mb-5">
+                                <label class="form-label font-bold">
+                                    {{ trans('pages.products.quantity') }}
+                                </label>
+                                <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
+                                                      class="border-gray-200 flex justify-end"></salla-quantity-input>
+                            </div>
+                        {% endif %}
                         {# Add to cart #}
                         <salla-add-product-button
                                 quick-buy
