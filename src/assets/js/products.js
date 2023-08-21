@@ -5,7 +5,6 @@ class Products extends BasePage {
         let productsList = app.element('salla-products-list'),
             urlParams = new URLSearchParams(window.location.search)
 
-
         // Set Sort
         if (urlParams.has('sort')) {
             app.element('#product-filter').value = urlParams.get('sort');
@@ -14,9 +13,9 @@ class Products extends BasePage {
         // Sort Products
         app.on('change','#product-filter', async event =>{
             window.history.replaceState(null, null, salla.helpers.addParamToUrl('sort',event.currentTarget.value));
-            app.element('salla-products-list').sortBy=event.currentTarget.value;
-            await app.element('salla-products-list').reload();
-            app.element('salla-products-list').setAttribute('filters', `{"sort": "${event.currentTarget.value}"}`)
+            productsList.sortBy=event.currentTarget.value;
+            await productsList.reload();
+            productsList.setAttribute('filters', `{"sort": "${event.currentTarget.value}"}`)
         });
         
         salla.event.once('salla-products-list::products.fetched', res=>{
