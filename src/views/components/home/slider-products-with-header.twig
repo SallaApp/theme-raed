@@ -22,13 +22,16 @@
         </div>
     </div>
 
+    {% set display_all = component.display_all_url  %}
     <div class="container -mt-62 relative overflow-hidden">
         <salla-products-slider 
-        source="selected"
-        source-value="[{{ component.products|map((product) => product.id)|join(',') }}]" 
-        display-all-url="{{component.display_all_url}}" 
-        block-title=" " 
-        slider-id="slider-with-bg-{{ position }}"
+            source="selected"
+            source-value="[{{ component.products|map((product) => product.id)|join(',') }}]" 
+            {% if display_all != '' and  display_all != '#' %}
+                display-all-url="{{display_all}}" 
+            {% endif %}
+            block-title="" 
+            slider-id="slider-with-bg-{{ position }}"
         ></salla-products-slider>
     </div>
 </section>
