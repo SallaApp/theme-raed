@@ -5,13 +5,16 @@
 | cart.items_count | int     |                                 |
 | cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
 #}
+{{ set important_links = theme.settings.get('important_links')}}
 <header class="store-header">
     {# Top Nav #}
     <div class="top-navbar">
         <div class="container flex justify-between">
             <div class="flex-1 flex items-center rtl:space-x-reverse space-x-2">
               {# Footer Menu #}
-              {% component 'footer.menu' with {is_header:true} %}
+              {% if important_links %}
+                {% component 'footer.menu' with {is_header:true} %}
+              {% endif %}
 
                 <div class="header-buttons">
                     {# Language & Currency Component #}
