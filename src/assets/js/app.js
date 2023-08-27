@@ -20,6 +20,7 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
+    this.loadModalImgOnclick();
     initTootTip();
 
     salla.comment.event.onAdded(() => window.location.reload());
@@ -36,6 +37,20 @@ class App extends AppHelpers {
 
   commonThings(){
     this.cleanContentArticles('.content-entry');
+  }
+
+  loadModalImgOnclick(){
+    document.querySelectorAll('.load-img-onclick').forEach(link => {
+      link.addEventListener('click', (event)=> {
+        event.preventDefault();
+        let modal = document.querySelector('#' + link.dataset.modalId),
+            img = modal.querySelector('img'),
+            imgSrc = img.dataset.src;
+        
+        modal.open();
+        img.src = imgSrc;
+      })
+    })
   }
 
   cleanContentArticles(elementsSelector){
