@@ -74,22 +74,20 @@
 .banner-entry{
   @apply h-[200px] bg-gray-100 text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative bg-cover bg-no-repeat bg-center;
 
-  h3{
-    @apply  leading-6;
-    @apply flex opacity-0 hover:opacity-100  transition-opacity duration-500 flex-col justify-center h-full xs:p-6 relative z-1;
+  &__text{
+    @apply flex leading-6 opacity-0 hover:opacity-100  transition-opacity duration-500 flex-col justify-center h-full xs:p-6 relative z-1;
 
     &.text-with-border{
       @apply xs:border border-dashed border-gray-200 rounded-md
     }
   }
+
   .two-row &{
     &:first-child{
       @apply md:h-full sm:col-span-1 sm:row-span-2 p-5;
 
-      &.with-hover{
-        &:after{
-          opacity: 1;
-        }
+      &.with-hover:after{
+        opacity: 1;
       }
 
       > a{

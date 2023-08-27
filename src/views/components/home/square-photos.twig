@@ -19,11 +19,13 @@
         </div>
     {% endif %}
 
-    <div class="grid {{ items|length <= 3 ? 'one-row md:grid-cols-' ~ items|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
+    <div class="grid {{ items|length <= 2 ? 'one-row md:grid-cols-' ~ items|length : 'md:grid-cols-2' }} grid-flow-row gap-3 sm:gap-8">
         {% for item in items %}
             <a class="banner-entry {{ item.text ? 'has-overlay with-hover' : '' }}" href="{{ item.url }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
                 <div class="lazy__bg lazy" data-bg="{{ item.image.url }}"></div>
-                {% if item.text %} <h3 class="text-with-border">{{ item.text }}</h3> {% endif %}
+                {% if item.text %} 
+                  <h3 class="banner-entry__text">{{ item.text }}</h3> 
+                {% endif %}
             </a>
         {% endfor %}
     </div>
