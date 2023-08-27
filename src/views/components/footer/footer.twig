@@ -32,7 +32,10 @@
             {% if store.settings.tax.certificate %}
               <salla-modal sub-title-first sub-title="{{ trans('common.elements.tax_number') }}" modal-title="{{ store.settings.tax.number }}" id="modal-value-tax">
                 <div class="flex justify-center max-w-full">
-                  <img class="w-full" loading="lazy" src="{{ store.settings.tax.certificate }}" alt="{{ store.settings.tax.number }}"/>
+                  <img class="w-full" loading="lazy" 
+                  src="{{ 'images/s-empty.png' | asset }}" 
+                  data-src="{{ store.settings.tax.certificate }}" 
+                  alt="{{ store.settings.tax.number }}"/>
                 </div>
               </salla-modal>
             {% endif %}
