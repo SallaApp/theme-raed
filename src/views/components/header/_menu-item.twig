@@ -5,7 +5,7 @@
         {% else %}
             <span>{{ menu.title }}</span>
             <ul>
-                <li class="text-sm font-bold"><a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500">{{ menu.title }}</a></li>
+                <li class="text-sm font-bold"><a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500">{{ trans('blocks.home.display_all') }}</a></li>
                 {% for submenu in menu.children %}
                     {% include _self with {menu:submenu} %}
                 {% endfor %}
