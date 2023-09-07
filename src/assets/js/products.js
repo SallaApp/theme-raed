@@ -19,7 +19,7 @@ class Products extends BasePage {
         });
         
         salla.event.once('salla-products-list::products.fetched', res=>{
-            res.title && (app.element('#page-main-title').innerHTML = res.title);
+            // res.title && (app.element('#page-main-title').innerHTML = res.title);
         });
 
 
