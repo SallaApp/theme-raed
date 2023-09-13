@@ -222,13 +222,12 @@
                   {% endif %} 
                 </div>
 
-                <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
-                    {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
+                <div class="product__description p-2 sm:p-1 leading-7 mb-3">
                     {% if product.has_read_more %}
                         <article
                                 class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 p-4"
                                 id="more-content" style="max-height:5.25rem">
-                            {{ product_desc|raw }}
+                            {{ product.description|raw }}
                         </article>
 
                         {# Read More Button #}
@@ -236,7 +235,7 @@
                             {{ trans('pages.products.read_more') }}
                         </a>
                     {% else %}
-                        <p class="pb-1">{{ product_desc|raw }}</p>
+                        <p class="pb-1">{{ product.description|raw }}</p>
                     {% endif %}
                 </div>
 
@@ -328,6 +327,7 @@
 
                     {% hook 'product:single.form.end' %}
 
+
                     <section class="flex bg-white p-5 sm:pb-0 rounded-md rounded-b-none">
                         <div class="center-between w-full">
                             <label class="form-label">
@@ -337,16 +337,16 @@
                             </label>
 
                             <div class="flex whitespace-nowrap gap-4 items-center">
-                                {% if product.is_on_sale %}
-                                    <div class="flex items-center space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                                        <h4 class="total-price text-red-400 font-bold text-xl inline-block">{{product.sale_price > 0 ? product.sale_price|money : '0 ' ~ user.currency.symbol}}</h4>
-                                        <span class="before-price text-gray-400 line-through opacity-70">{{product.regular_price|money}}</span>
-                                    </div>
-                                {% elseif product.starting_price %}
-                                    <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span> <h4 class="total-price font-bold text-xl inline-block"> {{product.starting_price|money}}</h4>
-                                {% else %}
-                                    <h4 class="total-price font-bold text-xl inline-block">{{product.price|money }}</h4>
-                                {% endif %} 
+                              {% if product.is_on_sale %}
+                                <div class="flex items-center space-x-2 rtl:space-x-reverse whitespace-nowrap">
+                                  <h4 class="total-price text-red-400 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
+                                  <span class="before-price text-gray-400 line-through opacity-70">{{product.regular_price|money}}</span>
+                                </div>
+                              {% elseif product.starting_price %}
+                                <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span> <h4 class="total-price font-bold text-xl inline-block"> {{product.starting_price|money}}</h4>
+                              {% else %}
+                                <h4 class="total-price font-bold text-xl inline-block">{{product.price|money}}</h4>`
+                              {% endif %} 
                             </div>
                         </div>
                     </section>
@@ -360,7 +360,7 @@
                                     {{ trans('pages.products.quantity') }}
                                 </label>
                                 <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
-                                        class="border-gray-200 flex justify-end"></salla-quantity-input>
+                                                      class="border-gray-200 flex justify-end"></salla-quantity-input>
                             </div>
                         {% endif %}
                         {# Add to cart #}
