@@ -222,12 +222,13 @@
                   {% endif %} 
                 </div>
 
-                <div class="product__description p-2 sm:p-1 leading-7 mb-3">
+                <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
+                    {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
                     {% if product.has_read_more %}
                         <article
                                 class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 p-4"
                                 id="more-content" style="max-height:5.25rem">
-                            {{ product.description|raw }}
+                            {{ product_desc|raw }}
                         </article>
 
                         {# Read More Button #}
@@ -235,7 +236,7 @@
                             {{ trans('pages.products.read_more') }}
                         </a>
                     {% else %}
-                        <p class="pb-1">{{ product.description|raw }}</p>
+                        <p class="pb-1">{{ product_desc|raw }}</p>
                     {% endif %}
                 </div>
 
