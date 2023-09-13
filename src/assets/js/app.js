@@ -20,7 +20,7 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
-    this.loadModalImgOnclick();
+    this.reloadPageAfterFiltering();
     initTootTip();
 
     salla.comment.event.onAdded(() => window.location.reload());
@@ -30,6 +30,13 @@ class App extends AppHelpers {
     this.log('Theme Loaded 🎉');
   }
 
+  // reload page after filtering 
+  reloadPageAfterFiltering(){
+    document.querySelector('#product-filter')?.addEventListener('change',()=>{
+      location.reload();
+    })
+  }
+
   log(message) {
     salla.log(`ThemeApp(Raed)::${message}`);
     return this;
@@ -37,20 +44,6 @@ class App extends AppHelpers {
 
   commonThings(){
     this.cleanContentArticles('.content-entry');
-  }
-
-  loadModalImgOnclick(){
-    document.querySelectorAll('.load-img-onclick').forEach(link => {
-      link.addEventListener('click', (event)=> {
-        event.preventDefault();
-        let modal = document.querySelector('#' + link.dataset.modalId),
-            img = modal.querySelector('img'),
-            imgSrc = img.dataset.src;
-        
-        modal.open();
-        img.src = imgSrc;
-      })
-    })
   }
 
   cleanContentArticles(elementsSelector){

@@ -5,19 +5,21 @@ class Products extends BasePage {
         let productsList = app.element('salla-products-list'),
             urlParams = new URLSearchParams(window.location.search)
 
+
         // Set Sort
         if (urlParams.has('sort')) {
             app.element('#product-filter').value = urlParams.get('sort');
         }
 
+
         // Sort Products
-        app.on('change','#product-filter', async event =>{
-            window.history.replaceState(null, null, salla.helpers.addParamToUrl('sort',event.currentTarget.value));
-            productsList.sortBy=event.currentTarget.value;
-            await productsList.reload();
-            productsList.setAttribute('filters', `{"sort": "${event.currentTarget.value}"}`)
+        app.on('change', '#product-filter', event => {
+            let url = new URL(window.location.href);
+            url.searchParams.set('sort', event.currentTarget.value);
+            window.history.pushState({}, '', url);
+            productsList.sortBy = event.currentTarget.value;
         });
-        
+
         salla.event.once('salla-products-list::products.fetched', res=>{
             res.title && (app.element('#page-main-title').innerHTML = res.title);
         });
