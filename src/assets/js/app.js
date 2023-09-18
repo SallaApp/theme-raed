@@ -50,9 +50,12 @@ class App extends AppHelpers {
         let modal = document.querySelector('#' + link.dataset.modalId),
             img = modal.querySelector('img'),
             imgSrc = img.dataset.src;
-
         modal.open();
+        
+        if(img.classList.contains('loaded')) return;
+
         img.src = imgSrc;
+        img.classList.add('loaded');
       })
     })
   }
