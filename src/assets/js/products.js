@@ -13,11 +13,9 @@ class Products extends BasePage {
 
 
         // Sort Products
-        app.on('change', '#product-filter', event => {
-            let url = new URL(window.location.href);
-            url.searchParams.set('sort', event.currentTarget.value);
-            window.history.pushState({}, '', url);
-            productsList.sortBy = event.currentTarget.value;
+        themeApp.on('change', '#product-filter', event => {
+            window.location.href = salla.helpers.addParamToUrl('sort', event.target.value);
+            productsList.sortBy = event.target.value;
         });
 
         salla.event.once('salla-products-list::products.fetched', res=>{
