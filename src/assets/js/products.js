@@ -7,15 +7,19 @@ class Products extends BasePage {
 
 
         // Set Sort
-        if (urlParams.has('by')) {
+        if (urlParams.has('sort')) {
+            app.element('#product-filter').value = urlParams.get('sort');
+        }else if(urlParams.has('by')){
             app.element('#product-filter').value = urlParams.get('by');
         }
 
 
         // Sort Products
         app.on('change', '#product-filter', event => {
-            window.location.href = salla.helpers.addParamToUrl('by', event.currentTarget.value);
-            productsList.sortBy = event.target.value;
+            let url = new URL(window.location.href);
+            url.searchParams.set('sort', event.currentTarget.value);
+            window.history.pushState({}, '', url);
+            productsList.sortBy = event.currentTarget.value;
         });
 
         salla.event.once('salla-products-list::products.fetched', res=>{
