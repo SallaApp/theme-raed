@@ -13,11 +13,11 @@ class Products extends BasePage {
 
 
         // Sort Products
-        app.on('change', '#product-filter', event => {
-            let url = new URL(window.location.href);
-            url.searchParams.set('sort', event.currentTarget.value);
-            window.history.pushState({}, '', url);
+        app.on('change', '#product-filter', async event => {
+            window.history.replaceState(null, null, salla.helpers.addParamToUrl('sort', event.currentTarget.value));
             productsList.sortBy = event.currentTarget.value;
+            await productsList.reload();
+            productsList.setAttribute('filters', `{"sort": "${event.currentTarget.value}"}`)
         });
 
         salla.event.once('salla-products-list::products.fetched', res=>{
