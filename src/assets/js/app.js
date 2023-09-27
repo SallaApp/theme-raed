@@ -20,7 +20,6 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
-    this.reloadPageAfterFiltering();
     initTootTip();
     this.loadModalImgOnclick();
 
@@ -29,13 +28,6 @@ class App extends AppHelpers {
     this.status = 'ready';
     document.dispatchEvent(new CustomEvent('theme::ready'));
     this.log('Theme Loaded 🎉');
-  }
-
-  // reload page after filtering 
-  reloadPageAfterFiltering(){
-    document.querySelector('#product-filter')?.addEventListener('change',()=>{
-      location.reload();
-    })
   }
 
   log(message) {
