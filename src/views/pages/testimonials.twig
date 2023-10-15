@@ -1,19 +1,17 @@
 {#
 | Variable              | Type                         | Description         |
 |-----------------------|------------------------------|---------------------|
-| comments              | Comment[] *Paginator         |                     |
-| comments[].id         | int                          |                     |
-| comments[].avatar     | string                       |                     |
-| comments[].name       | string                       |                     |
-| comments[].has_order  | bool                         |                     |
-| comments[].created_at | Date *Carbon                 |                     |
-| comments[].stars      | int                          |                     |
-| comments[].content    | string                       |                     |
-| comments[].is_pending | bool                         | Is not approved yet |
-| comments[].replies    | Comment[] *Collection        |                     |
-| comments[].type       | string 'admin','customer'    |                     |
-| type                  | string                       | page, product       |
-| id                    | int                          | pageId or ProductId |
+| items                 | Comment[] *Paginator         |                     |
+| items[].id            | int                          |                     |
+| items[].avatar        | string                       |                     |
+| items[].name          | string                       |                     |
+| items[].has_order     | bool                         |                     |
+| items[].created_at    | Date *Carbon                 |                     |
+| items[].stars         | int                          |                     |
+| items[].content       | string                       |                     |
+| items[].is_pending    | bool                         | Is not approved yet |
+| items[].replies       | Comment[] *Collection        |                     |
+| items[].type          | string 'admin','customer'    |                     |
 #}
 
 {% extends "layouts.master" %}
@@ -43,8 +41,8 @@
             </div>
 
             <div class="content-entry">
-                <div class="s-comments s-comments-{{ type }}">
-                    <div class="container {{ type == 'page' ? 'px-0' : '' }}">
+                <div class="s-comments s-comments-">
+                    <div class="container">
                         {% if items|length %}
                         <salla-infinite-scroll next-page="{{ items.next_page }}">
                             {% for comment in items %}

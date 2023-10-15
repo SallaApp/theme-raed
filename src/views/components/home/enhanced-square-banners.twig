@@ -13,12 +13,12 @@
 <section class="s-block s-block--banners container">
     <div class="grid {{ component.banners|length <= 3 ? 'md:grid-cols-' ~ component.banners|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
         {% for banner in component.banners %}
-            <div class="banner-entry lazy {{banner.title ? 'has-overlay' : ''}} {{ component.banners|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-bg="{{ banner.image }}">
-                <a  href="{{banner.url}}" class="banner-entry__text text-with-border">
+            <a  href="{{banner.url}}" class="banner-entry lazy {{banner.title ? 'has-overlay' : ''}} {{ component.banners|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-bg="{{ banner.image }}">
+                <article class="banner-entry__text text-with-border">
                   <h3 class="banner__title font-bold mb-1 leading-6">{{banner.title}}</h3>
                   <p class="banner__description">{{banner.description}}</p>
-                </a>
-            </div>
+                </article>
+            </a>
         {% endfor %}
     </div>
 </section>
