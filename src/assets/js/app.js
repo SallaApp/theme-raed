@@ -14,7 +14,9 @@ class App extends AppHelpers {
     this.commonThings();
     this.initiateNotifier();
     this.initiateMobileMenu();
-    this.initiateStickyMenu();
+    if(header_is_sticky){
+      this.initiateStickyMenu();
+    }
     this.initAddToCart();
     this.initiateAdAlert();
     this.initiateDropdowns();
