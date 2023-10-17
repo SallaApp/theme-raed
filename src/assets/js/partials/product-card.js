@@ -18,7 +18,7 @@ class ProductCard extends HTMLElement {
     this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
       
       salla.wishlist.event.onAdded((event, id) => this.toggleFavoriteIcon(id));
-      salla.wishlist.event.onRemoved((event,id) => this.toggleFavoriteIcon(id));
+      salla.wishlist.event.onRemoved((event,id) => this.toggleFavoriteIcon(id, false));
       
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
@@ -57,11 +57,10 @@ class ProductCard extends HTMLElement {
 
 
   toggleFavoriteIcon(id, isAdded = true) {
-    document.querySelectorAll('salla-button.s-product-card-wishlist-btn[data-id="' + id + '"]')
-        .forEach(btn => {
-          app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
-            // app.toggleElementClassIf(btn, 'pulse', 'un-favorited', () => isAdded);
-        });
+    document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
+      app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
+      app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
+    });
   }
 
   formatDate(date) {
