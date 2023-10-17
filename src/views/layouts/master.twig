@@ -86,8 +86,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
-
-    {# <script defer src="{{ 'product-card.js'|asset }}"></script> #}
+  
+    <script defer src="{{ 'product-card.js'|asset }}"></script>
+    <script data-cfasync="false">
+        window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
+    </script>
     
     {% hook 'head:start' %}
     {% hook head %}
@@ -95,11 +98,6 @@
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
-
-    <script defer src="{{ 'product-card.js'|asset }}"></script>
-    <script data-cfasync="false">
-        window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
-    </script>
     
     <style>
         :root {
