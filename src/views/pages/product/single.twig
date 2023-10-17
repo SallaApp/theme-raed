@@ -385,8 +385,13 @@
                                 {% endif %}>
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
-
-                        <salla-mini-checkout-widget class="mt-3" store-id="{{ store.id }}"  products="[{{ product.id }}]" language="{{ user.language_code }}" url="https://web-bfd970b9fc54d80b9217c4882206858d.salla.group/_app/checkout"></salla-mini-checkout-widget>
+                        <salla-mini-checkout-widget
+                                url="https://web-bfd970b9fc54d80b9217c4882206858d.salla.group/_app/checkout"
+                                language="{{ user.language_code }}"
+                                products="[{{ product.id }}]"
+                                store-id="{{ store.id }}"
+                                api="{{ store.api }}"
+                                class="mt-3"></salla-mini-checkout-widget>
 
                     </section>
                     {% if product.is_giftable %}
@@ -409,7 +414,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="module" src="https://cdn.assets.salla.network/mini-checkout/widget/widget.esm.js?v=0.0.8"></script>
+    <script type="module" src="https://cdn.assets.salla.network/mini-checkout/widget/widget.esm.js?v=0.0.9"></script>
     <script defer src="{{ 'product.js' | asset }}"></script>
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
