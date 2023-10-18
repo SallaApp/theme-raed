@@ -75,27 +75,13 @@
   @apply h-[200px] bg-gray-100 text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative bg-cover bg-no-repeat bg-center;
 
   h3{
-    @apply flex flex-col justify-center xs:p-6 leading-6;
-   
+    @apply  leading-6;
+    @apply flex opacity-0 hover:opacity-100  transition-opacity duration-500 flex-col justify-center h-full xs:p-6 relative z-1;
+
     &.text-with-border{
-      @apply xs:border border-dashed border-gray-200 rounded-md;
+      @apply xs:border border-dashed border-gray-200 rounded-md
     }
   }
-
-  h3,p{
-    @apply opacity-0 hover:opacity-100 transition-all duration-300 relative z-1 translate-y-6;
-  }
-  
-  &:hover{
-    h3{
-      @apply opacity-100 translate-y-0;
-    }
-
-    p{
-      @apply opacity-80 translate-y-0;
-    }
-  }
-
   .two-row &{
     &:first-child{
       @apply md:h-full sm:col-span-1 sm:row-span-2 p-5;
