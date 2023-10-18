@@ -21,18 +21,9 @@
     {# Business certificate - SBC #}
     {% if store.settings.certificate %}
         <li class="w-12 bg-white rounded p-1 flex-center">
-            <a class="load-img-onclick" data-modal-id="modal-certificate" href="#/" alt="{{ store.settings.certificate.id }}">
+            <a target="_blank" href="https://eauthenticate.saudibusiness.gov.sa/certificate-details/{{ store.settings.certificate.id }}" alt="{{ store.settings.certificate.id }}">
                 <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ 'images/sbc.png' | cdn }}" class="lazy rounded-sm hover:opacity-80 transition-opacity h-6" alt="value added tax">
             </a>
         </li>
-
-        <salla-modal sub-title-first sub-title="{{ store.settings.certificate.id }}" modal-title="{{ store.settings.certificate.id }}" id="modal-certificate">
-            <div class="flex justify-center max-w-full">
-                <img class="w-full" loading="lazy"
-                     src="{{ 'images/s-empty.png' | asset }}"
-                     data-src="{{ store.settings.certificate.image }}"
-                     alt="{{ store.settings.certificate.id }}"/>
-            </div>
-        </salla-modal>
     {% endif %}
 </ul>
