@@ -84,10 +84,14 @@
                     </section>
                 {% endif %}
 
-                <div class="text-center mt-6">
-                    <salla-button data-landing-id="{{ landing.id }}" color="primary" class="btn--rounded-full !text-white buy-all-btn">
-                        {{ trans('pages.products.buy_now') }}
-                    </salla-button>
+                <div class="landing-page--quick-buy">
+                    <salla-mini-checkout-widget
+                            products="[{{ landing.products|map((product) => product.id)|join(',') }}]"
+                            language="{{ user.language_code }}"
+                            store-id="{{ store.id }}"
+                            api="{{ store.api }}"
+                            class="mt-3"
+                    ></salla-mini-checkout-widget>
                 </div>
             </section>
 
@@ -110,5 +114,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script defer src="{{ 'landing.js' | asset }}"></script>
+    <script type="module" src="https://cdn.assets.salla.network/mini-checkout/widget/widget.esm.js?v=0.0.9"></script>
 {% endblock %}

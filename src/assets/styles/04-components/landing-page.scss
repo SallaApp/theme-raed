@@ -1,13 +1,16 @@
-.landing-page{
+.landing-page {
     @apply bg-white;
-    > header{
-        @apply min-h-[70vh] w-full relative overflow-hidden;
-        .header-content{
+    @media (max-width: 640px) {
+        @apply pb-16;
+    }
+    > header {
+        @apply w-full relative overflow-hidden;
+        .header-content {
             @apply mx-auto relative z-[1] max-w-[750px] text-center pb-[30px];
-            &-logo img{
+            &-logo img {
                 @apply w-auto mx-auto mb-24 mt-10 max-w-full max-h-[75px] h-auto;
             }
-            &-inner{
+            &-inner {
                 & > h1 {
                     @apply text-2xl md:text-4xl font-bold text-[#444444] mb-4;
                 }
@@ -15,64 +18,85 @@
                     @apply text-[#888888] text-sm md:text-base;
                 }
             }
-            &-offer{
+            &-offer {
                 @apply mt-16;
-                p{
+                p {
                     @apply text-[#EA5455] text-xl mb-6;
                 }
-                h3{
+                h3 {
                     @apply text-3xl mb-16 text-[#444444];
                 }
             }
         }
-        &:before{
+        &:before {
             border-radius: 0 0 50% 50%/ 0 0 100% 100%;
             @apply hidden sm:block content-[''] absolute inset-0 w-full h-full bg-[#F5F7F9] scale-x-150;
         }
     }
-    .center-products{
-        .vertical-products .s-products-list-wrapper{
-            @media (min-width: 768px){
+    .center-products {
+        .vertical-products .s-products-list-wrapper {
+            @media (min-width: 768px) {
                 @apply flex justify-center;
             }
-            @media (max-width: 767px){
+            @media (max-width: 767px) {
                 grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
             }
-            .s-product-card-vertical{
-                @media (min-width: 1024px){
+            .s-product-card-vertical {
+                @media (min-width: 1024px) {
                     min-width: 286px;
                     max-width: 286px;
-                } 
-                @media ((min-width: 768px) and (max-width: 1023px)){
+                }
+                @media ((min-width: 768px) and (max-width: 1023px)) {
                     min-width: 220px;
                 }
             }
         }
     }
-    .swiper-wrapper{
+    .swiper-wrapper {
         @apply pb-5;
-        .s-product-card-entry{
+        .s-product-card-entry {
             @apply border border-[#eee];
         }
     }
-    &.notfound{
-        > header{
-            @apply flex items-center justify-center mb-12;
-            img{
+    &--quick-buy {
+        @apply text-center mt-6;
+        salla-mini-checkout-widget {
+            @apply flex justify-center;
+            --salla-fast-checkout-button-width: 260px;
+            @media (max-width: 640px) {
+                @apply flex-1;
+                --salla-fast-checkout-button-width: 100%;
+            }
+            
+        }
+        @media (max-width: 640px) {
+            @apply flex flex-wrap gap-2.5 sm:gap-4 fixed z-[2] bottom-0 left-0 p-3 w-full justify-between items-center shadow-[-1px_-2px_9px_0_rgba(0,0,0,0.05)] transition duration-700 delay-500 translate-y-100 opacity-0 ease-elastic bg-white;
+            .hydrated & {
+                &,
+                salla-mini-checkout-widget {
+                    @apply translate-y-0 opacity-100;
+                }
+            }
+        }
+    }
+    &.notfound {
+        > header {
+            @apply min-h-[50vh] flex items-center justify-center mb-12;
+            img {
                 @apply mb-12;
             }
         }
-    }   
-    &.expired{
-        > header{
-            @apply flex items-center justify-center mb-12;
-            .header-content{
+    }
+    &.expired {
+        > header {
+            @apply min-h-[50vh] flex items-center justify-center mb-12;
+            .header-content {
                 @apply max-w-[600px];
-                img{
+                img {
                     @apply mb-12;
                 }
-                h1{
-                    @apply text-[#EA5455]
+                h1 {
+                    @apply text-[#EA5455];
                 }
             }
         }
