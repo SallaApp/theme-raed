@@ -23,7 +23,9 @@
         {% for item in items %}
             <a class="banner-entry square-photos {{ item.text ? 'has-overlay with-hover' : '' }}" href="{{ item.url }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
                 <div class="lazy__bg lazy" data-bg="{{ item.image.url }}"></div>
-                {% if item.text %} <h3 class="text-with-border">{{ item.text }}</h3> {% endif %}
+                {% if item.text %}
+                        <h3 class="text-with-border"><span>{{ item.text }}</span></h3> 
+                {% endif %}
             </a>
         {% endfor %}
     </div>
