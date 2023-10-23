@@ -14,6 +14,7 @@ module.exports = {
         pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
         product : [asset('js/product.js'), asset('js/products.js')],
         order   : asset('js/order.js'),
+        'product-card' : asset('js/partials/product-card.js'),
         testimonials   : asset('js/testimonials.js'),
     },
     output : {
