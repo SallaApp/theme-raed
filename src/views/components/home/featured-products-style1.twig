@@ -37,8 +37,7 @@
     <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
-                <salla-product-card shadow-on-hover product="{{main_product.product}}" is-special></salla-product-card> 
-                {# <custom-salla-product-card shadow-on-hover product="{{main_product.product}}" is-special></custom-salla-product-card>  #}
+                <custom-salla-product-card shadow-on-hover product="{{main_product.product}}" is-special></custom-salla-product-card> 
             </div>
         {% endif %}
         <div class="flex flex-col">
@@ -57,8 +56,7 @@
                 {% for section in items %}
                     <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
                         {% for product in section.products|slice(0,main_product?4:8) %}
-                            <salla-product-card product="{{product}}"></salla-product-card>
-                            {# <custom-salla-product-card product="{{product}}"></custom-salla-product-card> #}
+                            <custom-salla-product-card product="{{product}}"></custom-salla-product-card>
                         {% endfor %}
                     </div>
                 {% endfor %}

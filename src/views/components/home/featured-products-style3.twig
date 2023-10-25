@@ -23,18 +23,15 @@
                 </div> 
                 <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
                     {% if section.featured_product %}
-                        <salla-product-card shadow-on-hover product="{{section.featured_product}}" full-image></salla-product-card>
-                        {# <custom-salla-product-card shadow-on-hover product="{{section.featured_product}}" full-image></custom-salla-product-card> #}
+                        <custom-salla-product-card shadow-on-hover product="{{section.featured_product}}" full-image></custom-salla-product-card>
                         <div class="grid gap-4 sm:gap-8">
                             {% for product in section.products|slice(0,3) %}
-                                <salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
-                                {# <custom-salla-product-card shadow-on-hover product="{{product}}" minimal></custom-salla-product-card> #}
+                                <custom-salla-product-card shadow-on-hover product="{{product}}" minimal></custom-salla-product-card>
                             {% endfor %}
                         </div>
                     {% else %}
                         {% for product in section.products %}
-                            <salla-product-card shadow-on-hover product="{{product}}" minimal></salla-product-card>
-                            {# <custom-salla-product-card shadow-on-hover product="{{product}}" minimal></custom-salla-product-card> #}
+                            <custom-salla-product-card shadow-on-hover product="{{product}}" minimal></custom-salla-product-card>
                         {% endfor %}
                     {% endif %}
                 </div>
