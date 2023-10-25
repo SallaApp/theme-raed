@@ -5,6 +5,7 @@
 | component.brands               | Brand[] | list of selected brands @see views/pages/brands/single.twig                  |
 | position                       | int     | Sorting number start from zero                                               |
 #}
+{% set display_all_url = theme.settings.get('is_more_button_enabled') %}
 <section class="s-block s-block--logos-slider s-block--full-bg bg-gray-100 pt-8 sm:pt-12 pb-8 sm:pb-20">
     <div class="container">
     
@@ -16,7 +17,7 @@
                 {# <p>عنوان فرعي توصيفي صغير</p> #}
               </div>
             {% endif %}
-            {% if component.show_all %}
+            {% if display_all_url %}
               <a href="{{ link('brands') }}" class="s-block__display-all"> {{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left"></i></a>
             {% endif %}
           </div>
@@ -39,4 +40,3 @@
         </div>
     </div>
 </section>
- 
