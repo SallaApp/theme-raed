@@ -8,5 +8,16 @@
 #}
 
 <section id="best-offers-{{ position }}-slider" class="s-block s-block--best-offers container overflow-hidden">
-  {% include 'pages.partials.product.slider' with {type: 'best-offers-' ~ position,autoplay:true} %}
+  {% if products|length %}
+    <salla-products-slider
+            source="selected"
+            limit="{{ limit }}"
+            autoplay
+            source-value="[{{ products|map((product) => product.id)|join(',') }}]"
+            display-all-url="{{display_all_url}}"
+            block-title="{{ title }}"
+            block-subTitle="{{ sub_title|raw }}"
+            slider-id="slider-with-bg-{{ position }}"
+    ></salla-products-slider>
+  {% endif %}
 </section>
