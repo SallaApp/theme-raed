@@ -2,10 +2,7 @@ import BasePage from '../base-page';
 class ProductCard extends HTMLElement {
   connectedCallback(){
     // Parse product data
-    this.product = this.product || JSON.parse(this.getAttribute('product'));   
-
-  // Parse product data
-  this.product = this.product || JSON.parse(this.getAttribute('product'));
+    this.product = this.product || JSON.parse(this.getAttribute('product')); 
 
     if (window.app?.status === 'ready') {
       this.onReady();
@@ -15,11 +12,9 @@ class ProductCard extends HTMLElement {
   }
 
   onReady(){
-    this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
-      
+      this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
       salla.wishlist.event.onAdded((event, id) => this.toggleFavoriteIcon(id));
       salla.wishlist.event.onRemoved((event,id) => this.toggleFavoriteIcon(id, false));
-      
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
 
@@ -33,6 +28,8 @@ class ProductCard extends HTMLElement {
       if (!salla.config.isGuest()){
         salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id));
       }
+
+      document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
   }
 
   initTranslation(){
@@ -83,9 +80,10 @@ class ProductCard extends HTMLElement {
   }
 
   getPriceFormat(price) {
-    if (!price) {
-      return;
+    if (!price || price == 0) {
+      return salla.config.get('store.settings.product.show_price_as_dash')?'-':'';
     }
+
     return salla.money(price);
   }
 
