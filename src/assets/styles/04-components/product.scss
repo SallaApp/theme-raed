@@ -1,136 +1,6 @@
-// Product card
+// Wishlist Product entry
 .product-entry {
   @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-between flex relative;
-
-  &--full-image {
-    @apply h-80 md:h-auto;
-
-    .product-entry__title a {
-      @apply text-white line-clamp-3;
-      text-shadow: 0 0 1px #999;
-    }
-  }
-
-  &__image {
-    @apply bg-gray-100 relative overflow-hidden hover:opacity-90 w-full h-full shrink-0;
-
-    &::before{
-      font-family: 'sallaicons';
-      content: '\ec1f';
-      @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inline-block text-gray-200 text-3xl;
-    }
-
-    img{
-      @apply transition-opacity duration-500 opacity-0;
-
-      &.loaded{
-        @apply opacity-100 relative;
-      }
-    }
-  }
-
-  .out-of-stock &__image img,
-  &--full-image.out-of-stock img {
-    @apply grayscale
-  }
-
-  &__title a {
-    @apply block text-sm font-bold text-gray-800 hover:text-primary;
-
-    .product-entry--horizontal & {
-      @apply line-clamp-2;
-    }
-  }
-
-  &--minimal {
-    .product-entry__title a {
-      @apply line-clamp-2;
-    }
-
-    .btn--wishlist {
-      @apply absolute top-2 rtl:left-2 ltr:right-2;
-
-      .sicon-heart {
-        text-shadow: 0 0 2px #999;
-        color: #fff;
-      }
-    }
-  }
-
-  &--minimal,
-  &--special {
-    .product-rating{
-      @apply absolute bottom-2 rtl:left-2 ltr:right-2;
-
-      span{
-        color: #fff;
-        text-shadow: 0 0 2px #666;
-      }
-    }
-  }
-
-  &--fit-type {
-    .product-entry__image {
-      @apply h-44 max-h-60;
-    }
-  }
-
-  &--horizontal {
-    .product-entry__image {
-      @apply h-auto w-32 sm:w-56 rtl:rounded-r-md ltr:rounded-l-md;
-    }
-  }
-
-  &--vertical {
-    @apply flex-col;
-
-    .product-entry__image {
-      @apply rounded-t-md;
-    }
-
-    salla-button.btn--wishlist {
-      @apply absolute top-4 rtl:left-2 ltr:right-2 rtl:md:left-4 ltr:md:right-4 opacity-75 hover:opacity-100;
-
-      button{
-        background-color: #fff !important;
-      }
-    }
-
-    @media (max-width: 480px){
-      .product-rating{
-        @apply absolute rtl:right-3 ltr:left-3 -top-8;
-
-        span{
-          color: #fff;
-          text-shadow: 0 0 2px #666;
-        }
-      }
-    }
-  }
-
-  &--special {
-    .product-rating{
-      @apply absolute bottom-auto -top-8 rtl:left-5 ltr:right-5;
-    }
-
-    &.product-entry--fit-type {
-      .product-entry__image {
-        @apply sm:h-500;
-      }
-    }
-
-    &.with-timer{
-      &.product-entry--fit-type {
-        .product-entry__image {
-          @apply sm:h-[420px];
-        }
-      }
-    }
-  }
-
-  .s-block--special-products .tabs__item &{
-    @apply self-start h-full;
-  }
 
   &--wishlist {
     @apply justify-between p-4 flex-col sm:flex-row;
@@ -141,21 +11,6 @@
 
     salla-button{
       @apply flex;
-    }
-  }
-}
-
-.products-container {
-  &.list {
-    .product-entry {
-      @media (min-width: 768px) {
-        flex-direction: row;
-
-        &__image {
-          height: 100%;
-          width: 240px;
-        }
-      }
     }
   }
 }
@@ -367,4 +222,9 @@
         @apply m-0 rtl:m-0 ltr:m-0 w-auto;
     }
   }
+}
+
+// Minimal card
+.s-product-card-minimal .s-product-card-image{
+  @apply rtl:rounded-r ltr:rounded-l;
 }
