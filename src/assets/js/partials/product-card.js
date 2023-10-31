@@ -1,5 +1,9 @@
 import BasePage from '../base-page';
 class ProductCard extends HTMLElement {
+  constructor(){
+    super()
+  }
+  
   connectedCallback(){
     // Parse product data
     this.product = this.product || JSON.parse(this.getAttribute('product')); 
@@ -19,35 +23,25 @@ class ProductCard extends HTMLElement {
       this.getProps()
 
       salla.lang.translationsLoaded || salla.lang.onLoaded(() => {
-        this.initTranslation();
-      })
-      
-      this.render() 
-      
-      // reinti favorite icon
-      if (!salla.config.isGuest()){
-        salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id));
-      }
-
-      document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
-  }
-
-  initTranslation(){
-      // Language
-      salla.lang.onLoaded(() => {
+        // Language
         this.remained = salla.lang.get('pages.products.remained');
         this.donationAmount = salla.lang.get('pages.products.donation_amount');
         this.startingPrice = salla.lang.get('pages.products.starting_price');
         this.addToCart = salla.lang.get('pages.cart.add_to_cart');
         this.outOfStock = salla.lang.get('pages.products.out_of_stock');
+
+        // re-render to update translations
+        this.render();
       })
+      
+      this.render()
   }
 
   initCircleBar() {
     let qty = this.product.quantity,
       total = this.product.quantity > 100 ? this.product.quantity * 2 : 100,
       roundPercent = (qty / total) * 100,
-      bar = this.pie.querySelector('.s-product-card-content-pie-svg-bar'),
+      bar = this.querySelector('.s-product-card-content-pie-svg-bar'),
       strokeDashOffsetValue = 100 - roundPercent;
     bar.style.strokeDashoffset = strokeDashOffsetValue;
   }
@@ -88,20 +82,24 @@ class ProductCard extends HTMLElement {
   }
 
   getProductPrice() {
+    let price = '';
     if (this.product.is_on_sale) {
-      return `<div class="s-product-card-sale-price">
-        <h4>${this.getPriceFormat(this.product.sale_price)}</h4>
-        <span>${this.getPriceFormat(this.product?.regular_price)}</span>
-      </div>`;
+      price = `<div class="s-product-card-sale-price">
+                <h4>${this.getPriceFormat(this.product.sale_price)}</h4>
+                <span>${this.getPriceFormat(this.product?.regular_price)}</span>
+              </div>`;
     }
-    if (this.product.starting_price) {
-      return 
-      `<div class="s-product-card-starting-price">
-          <p>${this.startingPrice}</p>
-          <h4> ${this.getPriceFormat(this.product?.starting_price)} </h4>
-      </div>`
+    else if (this.product.starting_price) {
+      price = `<div class="s-product-card-starting-price">
+                  <p>${this.startingPrice}</p>
+                  <h4> ${this.getPriceFormat(this.product?.starting_price)} </h4>
+              </div>`
     }
-    return `<h4 class="s-product-card-price">${this.getPriceFormat(this.product?.price)}</h4>`
+    else{
+      price = `<h4 class="s-product-card-price">${this.getPriceFormat(this.product?.price)}</h4>`
+    }
+
+    return price;
   }
 
   getAddButtonLabel() {
@@ -160,7 +158,7 @@ class ProductCard extends HTMLElement {
   }
 
   render(){
-    this.classList.add('s-product-card-entry');
+    this.classList.add('s-product-card-entry'); 
     this.setAttribute('id', this.product.id);
     !this.horizontal && !this.fullImage && !this.minimal? this.classList.add('s-product-card-vertical') : '';
     this.horizontal && !this.fullImage && !this.minimal? this.classList.add('s-product-card-horizontal') : '';
@@ -246,7 +244,7 @@ class ProductCard extends HTMLElement {
             ${this.getProductPrice()}
             ${this.product?.rating?.stars && !this.minimal ?
               `<div class="s-product-card-rating">
-                <span innerHTML=${Star}/>
+                <i class="sicon-star2"></i>
                 <span>${this.product.rating.stars}</span>
               </div>`
                : ``}
@@ -287,6 +285,17 @@ class ProductCard extends HTMLElement {
             : ``}
         </div>
       `
+
+      // reinti favorite icon
+      if (!salla.config.isGuest()){
+        salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id));
+      }
+
+      document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
+
+      if (this.product?.quantity && this.isSpecial) {
+        this.initCircleBar();
+      }
     }
 }
 
