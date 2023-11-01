@@ -22,7 +22,7 @@ class ProductCard extends HTMLElement {
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
 
-      salla.lang.translationsLoaded || salla.lang.onLoaded(() => {
+      salla.lang.onLoaded(() => {
         // Language
         this.remained = salla.lang.get('pages.products.remained');
         this.donationAmount = salla.lang.get('pages.products.donation_amount');
