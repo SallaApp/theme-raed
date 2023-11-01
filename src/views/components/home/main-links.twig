@@ -12,7 +12,6 @@
 #}
 <section class="s-block s-block--categories {{ component.merge_with_top_component and position ?'merge-with-top-component' : '' }} {{ not component.title and component.merge_with_top_component ? 'merged-has-no-title' : '' }}">
     <div class="container">
-
       <salla-slider  
         type="carousel"
         {% if(component.title) or (component.merge_with_top_component) %}
@@ -22,7 +21,7 @@
         show-controls="{{ component.show_controls ? 'true' : 'false'}}" 
         id="main-links-{{ position }}">
           <div slot="items">
-              {% if show_cats %}
+              {% if component.show_cats %}
                 {% for cat in component.categories %}
                     <div class="swiper-slide slide--one-sixth">
                         <a href="{{ cat.url }}" class="slide--cat-entry">
