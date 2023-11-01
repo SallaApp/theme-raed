@@ -22,7 +22,21 @@
         show-controls="{{ component.show_controls ? 'true' : 'false'}}" 
         id="main-links-{{ position }}">
           <div slot="items">
-              {% for link in component.links %}
+              {% if show_cats %}
+                {% for cat in component.categories %}
+                    <div class="swiper-slide slide--one-sixth">
+                        <a href="{{ cat.url }}" class="slide--cat-entry">
+                            {% if cat.image %}
+                              <img src="{{ cat.image ? cat.image : 'images/placeholder.png' | asset }}" class="w-16 h-16 object-cover rounded-full mb-2.5 {{ cat.image ? '' : 'has-placeholder'}}" width="64" height="64" alt="{{ menu.title }}"/>
+                            {% else %}
+                              <i class="{{ cat.icon }}"></i>
+                            {% endif %}
+                            <h4>{{ cat.name }}</h4>
+                        </a>
+                    </div>
+                {% endfor %}
+              {% else %}
+                {% for link in component.links %}
                     <div class="swiper-slide slide--one-sixth">
                         <a href="{{ link.url }}" class="slide--cat-entry">
                             <i class="{{ link.icon }}"></i>
@@ -30,6 +44,7 @@
                         </a>
                     </div>
                 {% endfor %}
+              {% endif %}
           </div>
       </salla-slider>
     </div>
