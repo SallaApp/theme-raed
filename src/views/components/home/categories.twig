@@ -22,11 +22,15 @@
         show-controls="{{ component.show_controls ? 'true' : 'false'}}" 
         id="categories-{{ position }}">
           <div slot="items">
-              {% for link in component.links %}
+              {% for cat in categories %}
                     <div class="swiper-slide slide--one-sixth">
-                        <a href="{{ link.url }}" class="slide--cat-entry">
-                            <i class="{{ link.icon }}"></i>
-                            <h4>{{ link.title }}</h4>
+                        <a href="{{ cat.url }}" class="slide--cat-entry">
+                            {% if image_url %}
+                              <img src="{{ image_url ? image_url : 'images/placeholder.png' | asset }}" class="{{ image_url ? '' : 'has-placeholder'}} {{ is_rounded_image ? 'rounded-full' : ''}}" width="48" height="48" alt="{{ menu.title }}"/>
+                            {% else %}
+                              <i class="{{ cat.icon }}"></i>
+                            {% endif %}
+                            <h4>{{ cat.title }}</h4>
                         </a>
                     </div>
                 {% endfor %}
