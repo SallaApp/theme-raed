@@ -10,7 +10,7 @@
 | component.links[].url              | string   |                                                                              |
 | position                           | int      | Sorting number start from zero                                               |
 #}
-<section class="s-block s-block--categories {{ component.merge_with_top_component and position ?'merge-with-top-component' : '' }} {{ not component.title and component.merge_with_top_component ? 'merged-has-no-title' : '' }}">
+<section class="s-block s-block--categories s-block--categories-with-images {{ component.merge_with_top_component and position ?'merge-with-top-component' : '' }} {{ not component.title and component.merge_with_top_component ? 'merged-has-no-title' : '' }}">
     <div class="container">
 
       <salla-slider  
@@ -20,7 +20,7 @@
         {% endif %}
         controls-outer
         show-controls="{{ component.show_controls ? 'true' : 'false'}}" 
-        id="main-links-{{ position }}">
+        id="categories-{{ position }}">
           <div slot="items">
               {% for link in component.links %}
                     <div class="swiper-slide slide--one-sixth">
