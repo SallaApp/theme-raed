@@ -1,0 +1,36 @@
+{#
+| Variable                           | Type     | Description                                                                  |
+|------------------------------------|----------|------------------------------------------------------------------------------|
+| component                          | object   | Contains merchant settings for fields from twilight.json `component` section |
+| component.merge_with_top_component | bool     |                                                                              |
+| component.title                    | ?string  |                                                                              |
+| component.links                    | object[] | list of links                                                                |
+| component.links[].icon             | string   |                                                                              |
+| component.links[].title            | string   |                                                                              |
+| component.links[].url              | string   |                                                                              |
+| position                           | int      | Sorting number start from zero                                               |
+#}
+<section class="s-block s-block--categories {{ component.merge_with_top_component and position ?'merge-with-top-component' : '' }} {{ not component.title and component.merge_with_top_component ? 'merged-has-no-title' : '' }}">
+    <div class="container">
+
+      <salla-slider  
+        type="carousel"
+        {% if(component.title) or (component.merge_with_top_component) %}
+            block-title="{{ component.title }}"
+        {% endif %}
+        controls-outer
+        show-controls="{{ component.show_controls ? 'true' : 'false'}}" 
+        id="main-links-{{ position }}">
+          <div slot="items">
+              {% for link in component.links %}
+                    <div class="swiper-slide slide--one-sixth">
+                        <a href="{{ link.url }}" class="slide--cat-entry">
+                            <i class="{{ link.icon }}"></i>
+                            <h4>{{ link.title }}</h4>
+                        </a>
+                    </div>
+                {% endfor %}
+          </div>
+      </salla-slider>
+    </div>
+</section> 
