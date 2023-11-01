@@ -16,11 +16,22 @@ class ProductCard extends HTMLElement {
   }
 
   onReady(){
+      
       this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
       salla.wishlist.event.onAdded((event, id) => this.toggleFavoriteIcon(id));
       salla.wishlist.event.onRemoved((event,id) => this.toggleFavoriteIcon(id, false));
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
+
+      // Get page slug
+      this.source = salla.config.get("page.slug");
+
+      
+      // If the card is in the landing page, hide the add button and show the quantity
+      if (this.source == "landing-page") {
+        this.hideAddBtn = true;
+        this.showQuantity = true;
+      }
 
       salla.lang.onLoaded(() => {
         // Language
@@ -286,7 +297,7 @@ class ProductCard extends HTMLElement {
         </div>
       `
 
-      // reinti favorite icon
+      // re-init favorite icon
       if (!salla.config.isGuest()){
         salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id));
       }
