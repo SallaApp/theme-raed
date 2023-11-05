@@ -5,7 +5,7 @@
  * @param zoom the zoom strength
  * @returns void
  */
-function zoom(imgID, zoom) {
+export function zoom(imgID, zoom) {
     var img, glass, w, h, bw;
     img = document.getElementById(imgID);
     /*create magnifier glass:*/

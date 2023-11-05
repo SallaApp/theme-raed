@@ -2,6 +2,7 @@ import 'lite-youtube-embed';
 import BasePage from './base-page';
 import Fslightbox from 'fslightbox';
 window.fslightbox = Fslightbox;
+import { zoom } from './partials/image-zoom';
 
 class Product extends BasePage {
     onReady() {
@@ -10,7 +11,26 @@ class Product extends BasePage {
             beforePrice: '.before-price',
             startingPriceTitle: '.starting-price-title',
         });
+
+		this.initImagesZooming();	
     }
+
+	initImagesZooming() {
+		const image = document.querySelector('#magnify-image img');
+		zoom(image.id, 2);
+
+		document.querySelector('salla-slider').addEventListener('slideChange', (e) => {
+			// set delay till the active class is ready
+			setTimeout(() => {
+				const imageZoom = document.querySelector('.image-slider .swiper-slide-active .img-magnifier-glass');
+			
+				// if the zoom glass is already created skip
+				if (imageZoom) return;
+				const image = document.querySelector('.image-slider .swiper-slide-active img');
+				zoom(image.id, 2);
+			}, 200)
+		})
+	}
 
     registerEvents() {
         salla.product.event.onPriceUpdated((res) => {

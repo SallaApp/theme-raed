@@ -92,7 +92,7 @@
                 {% set has_many_images = product.images|length > 1 %}
                 <salla-slider
                         id="details-slider-{{ product.id }}"
-                        class="details-slider rounded-md"
+                        class="details-slider rounded-md image-slider"
                         type="thumbs"
                         loop="false"
                         listen-to-thumbnails-option
@@ -135,16 +135,17 @@
                                    data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
                                    data-caption="{{ image.alt }}"
                                    data-infinite="false"
+								   id="magnify-image"
                                    data-type="{{ image.video_url?'youtube':'image' }}"
                                    href="{{ image.video_url?image.video_url:image.url }}"
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
-                                        <img fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                        <img id="{{image.id}}" fetchpriority="high" loading="eager" src="{{ image.url }}"
                                              alt="{{ image.alt }}"
                                              class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% else %}
-                                        <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                        <img id="{{image.id}}" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
                                              alt="{{ image.alt }}"
                                              class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% endif %}

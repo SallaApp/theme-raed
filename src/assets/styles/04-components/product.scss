@@ -1,3 +1,4 @@
+  
 // Wishlist Product entry
 .product-entry {
   @apply h-full transition-shadow duration-300 bg-white hover:shadow-default rounded-lg justify-between flex relative;
@@ -250,4 +251,30 @@
 
 .s-product-card-minimal salla-button.s-product-card-wishlist-btn{
   @apply rtl:left-2.5 ltr:right-2.5 top-2.5;
+}
+
+// image zooming
+#magnify-image {
+	.img-magnifier-glass {
+	  position: absolute;
+	  z-index: 3;
+	  border-radius: 50%;
+	  cursor: none;
+	  /*Set the size of the magnifier glass:*/
+	  width: 300px;
+	  height: 300px;
+	  opacity:0;
+	  pointer-events:none;
+	  transform: scale(0);
+	  transition: transform .5s ease;
+	  box-shadow: inset 0px 0px 30px #949494;
+	}
+	&:hover{
+	  .img-magnifier-glass{
+		opacity:1;
+		pointer-events:initial;
+		transform: scale(1);
+		transition-delay: 0.3s;
+	  }
+	} 
 }
