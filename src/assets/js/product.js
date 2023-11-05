@@ -19,7 +19,7 @@ class Product extends BasePage {
 		const image = document.querySelector('#magnify-image img');
 		zoom(image.id, 2);
 
-		document.querySelector('salla-slider').addEventListener('slideChange', (e) => {
+		document.querySelector('salla-slider.details-slider').addEventListener('slideChange', (e) => {
 			// set delay till the active class is ready
 			setTimeout(() => {
 				const imageZoom = document.querySelector('.image-slider .swiper-slide-active .img-magnifier-glass');
