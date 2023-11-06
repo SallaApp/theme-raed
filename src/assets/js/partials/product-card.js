@@ -234,10 +234,10 @@ class ProductCard extends HTMLElement {
               : ``}
           </div>
           ${this.product?.donation && !this.minimal && !this.fullImage ?
-          `[<salla-progress-bar donation=${this.product?.donation} />
+          `<salla-progress-bar donation=${this.product?.donation} />
           <div class="s-product-card-donation-input">
             ${this.product?.donation?.can_donate ?
-              `[<label htmlFor="donation-amount">${this.donationAmount} <span>*</span></label>,
+              `<label htmlFor="donation-amount">${this.donationAmount} <span>*</span></label>
               <input
                 type="text"
                 onInput="${e => {
@@ -247,9 +247,9 @@ class ProductCard extends HTMLElement {
                 id="donation-amount"
                 name="donating_amount"
                 class="s-form-control"
-                placeholder="${this.donationAmount}" />]`
+                placeholder="${this.donationAmount}" />`
               : ``}
-          </div>]`
+          </div>`
             : ''}
           <div class="s-product-card-content-sub ${this.isSpecial ? 's-product-card-content-extra-padding' : ''}">
             ${this.getProductPrice()}
