@@ -12,12 +12,24 @@ class Product extends BasePage {
             startingPriceTitle: '.starting-price-title',
         });
 
-		this.initImagesZooming();	
+		// call the function when the page is ready
+		this.initImagesZooming();
+		// listen to screen resizing
+		window.addEventListener('resize', () => this.initImagesZooming());
     }
 
 	initImagesZooming() {
-		const image = document.querySelector('#magnify-image img');
-		zoom(image.id, 2);
+		// skip if the screen is not desktop or if glass magnifier
+		// is already crated for the image before
+		const imageZoom = document.querySelector('.image-slider .swiper-slide-active .img-magnifier-glass');
+		if (window.innerWidth  < 1024 || imageZoom) return;
+		setTimeout(() => {
+			// set delay after the resizing is done, start creating the glass
+			// to create the glass in the proper position
+			const image = document.querySelector('.image-slider .swiper-slide-active img');
+			zoom(image.id, 2);
+		}, 200);
+		
 
 		document.querySelector('salla-slider.details-slider').addEventListener('slideChange', (e) => {
 			// set delay till the active class is ready
