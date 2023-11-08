@@ -23,15 +23,12 @@ class ProductCard extends HTMLElement {
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
 
-      // Get page slug
-      this.source = salla.config.get("page.slug");
-
-      
+	  this.source = salla.config.get("page.slug");
       // If the card is in the landing page, hide the add button and show the quantity
-      if (this.source == "landing-page") {
-        this.hideAddBtn = true;
-        this.showQuantity = true;
-      }
+	  if (this.source == "landing-page") {
+	  	this.hideAddBtn = true;
+	  	this.showQuantity = window.showQuantity;
+	  }
 
       salla.lang.onLoaded(() => {
         // Language
