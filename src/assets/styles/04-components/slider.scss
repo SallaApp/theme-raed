@@ -56,6 +56,14 @@ salla-slider{
 
 // Photos block slider
 salla-slider.photos-slider {
+  .swiper-pagination-bullets.swiper-pagination-horizontal{
+    @apply bottom-0;
+  }
+
+  .swiper{
+    @apply rtl:pl-6 ltr:pr-6 rtl:md:pl-12 ltr:md:pr-12 pb-10;
+  }
+
   .swiper{
     @apply w-full mx-0;
   }
@@ -65,7 +73,21 @@ salla-slider.photos-slider {
   }
 
   .swiper-slide {
-    @apply h-auto w-[80%] relative rounded-md overflow-hidden mx-2 md:mx-3 lg:mx-4;
+    @apply h-auto w-full lg:w-[80%] relative rounded-md overflow-hidden mx-1.5 md:mx-3 lg:mx-4;
+  }
+  
+  @media (max-width: 1024px) {
+    .swiper{
+      @apply rtl:pr-4 ltr:pl-4;
+    }
+
+    .swiper-slide {
+      @apply px-0;
+    }
+
+    .swiper-pagination-bullet:not(.swiper-pagination-bullet-active){
+      @apply bg-gray-300;
+    }
   }
 }
 
