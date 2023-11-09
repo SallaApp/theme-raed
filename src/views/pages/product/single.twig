@@ -178,7 +178,7 @@
                 </salla-slider>
             </div>
 
-            <div class="main-content w-full md:w-2/4 md:pb-16">
+            <div class="main-content md:sticky top-24 w-full md:w-2/4 md:pb-16">
 
                 {% hook 'product:single.description.start' %}
 
@@ -227,8 +227,7 @@
                 <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
                     {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
                     {% if product.has_read_more %}
-                        <article
-                                class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 p-4"
+                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 py-4 opacity-70"
                                 id="more-content" style="max-height:5.25rem">
                             {{ product_desc|raw }}
                         </article>
