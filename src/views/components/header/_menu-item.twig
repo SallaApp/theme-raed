@@ -1,22 +1,16 @@
 {# MOBILE #}
-{% set has_image_icon = true %}
-{% set is_rounded_image = true %}
-{% set image_url = 'https://cdn.salla.sa/zBnEG/UXv0HHyHgH0dLMMCJv5S83L2sD7Qa54DSUz39gSA.jpg' %}
-
 	<li class="lg:hidden text-sm font-bold" {{ menu.attrs }}>
 		{% set item_image %}
-	  	{% if has_image_icon %}
-			<img src="{{ image_url ? image_url : 'images/placeholder.png' | asset }}" class="{{ image_url ? '' : 'has-placeholder'}} {{ is_rounded_image ? 'rounded-full' : ''}}" width="48" height="48" alt="{{ menu.title }}"/>  
-	  	{% endif %}
+			<img src="{{ menu.image ? menu.image : 'images/placeholder.png' | asset }}" class="rounded-full {{ menu.image ? '' : 'has-placeholder'}}  width="48" height="48" alt="{{ menu.title }}"/>  
 		{% endset %} 
 
 		{% if not menu.has_children %}
-			<a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500 {{ has_image_icon ? '!py-3' : '' }}">
+			<a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500 {{ menu.image ? '!py-3' : '' }}">
 		  		{{ item_image }}
 		  		<span>{{ menu.title }}</span>
 			</a>
 		{% else %}
-			<span class="{{ has_image_icon ? '!py-3' : '' }}">
+			<span class="{{ menu.image ? '!py-3' : '' }}">
 		  		{{ item_image }}
 		  		{{ menu.title }}
 				</span>
