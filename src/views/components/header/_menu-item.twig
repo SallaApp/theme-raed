@@ -1,52 +1,52 @@
 {# MOBILE #}
-	<li class="lg:hidden text-sm font-bold" {{ menu.attrs }}>
-		{% set item_image %}
-			<img src="{{ menu.image ? menu.image : 'images/placeholder.png' | asset }}" class="rounded-full {{ menu.image ? '' : 'has-placeholder'}}  width="48" height="48" alt="{{ menu.title }}"/>  
-		{% endset %} 
+<li class="lg:hidden text-sm font-bold" {{ menu.attrs }}>
+    {% set item_image %}
+      <img src="{{ menu.image ? menu.image : 'images/placeholder.png' | asset }}" class="rounded-full {{ menu.image ? '' : 'has-placeholder'}}  width="48" height="48" alt="{{ menu.title }}"/>  
+    {% endset %} 
 
-		{% if not menu.has_children %}
-			<a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500 {{ menu.image ? '!py-3' : '' }}">
-		  		{{ item_image }}
-		  		<span>{{ menu.title }}</span>
-			</a>
-		{% else %}
-			<span class="{{ menu.image ? '!py-3' : '' }}">
-		  		{{ item_image }}
-		  		{{ menu.title }}
-				</span>
-			<ul>
-                <li class="text-sm font-bold"><a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500">{{ trans('blocks.home.display_all') }}</a></li>
-                {% for submenu in menu.children %}
-                    {% include _self with {menu:submenu} %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
+    {% if not menu.has_children %}
+      <a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500 {{ menu.image ? '!py-3' : '' }}">
+          {{ item_image }}
+          <span>{{ menu.title }}</span>
+      </a>
+    {% else %}
+      <span class="{{ menu.image ? '!py-3' : '' }}">
+        {{ item_image }}
+        {{ menu.title }}
+      </span>
+      <ul>
+          <li class="text-sm font-bold"><a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500">{{ trans('blocks.home.display_all') }}</a></li>
+          {% for submenu in menu.children %}
+              {% include _self with {menu:submenu} %}
+          {% endfor %}
+      </ul>
+    {% endif %}
+</li>
 
 {# DESKTOP #}
-    <li class="!hidden lg:!block {{ is_root_menu?'root-level lg:!inline-block':'relative' }}
-        {{ menu.products?' mega-menu': '' }}
-        {{ menu.has_children?' has-children': '' }}"
-        {{ menu.attrs|raw }}>
-        <a {{ menu.link_attrs|raw }} href="{{ menu.url }}">
-            <span>{{ menu.title }}</span>
-        </a>
-        {% if menu.has_children %}
-            <div class="sub-menu {{ menu.products?'w-full left-0 flex': 'w-56' }}">
-                <ul class="{{ menu.products?'w-56 shrink-0 m-8 rtl:ml-0 ltr:mr-0': '' }}">
-                    {% for submenu in menu.children %}
-                        {% include _self with {menu:submenu, is_root_menu:false} %}
-                    {% endfor %}
-                </ul>
-                {% if menu.products %}
-                    <div class="grow p-8">
-                        <div class="grid gap-4 grid-cols-4">
-                            {% for product in menu.products|slice(0, 4) %}
-                                <custom-salla-product-card shadow-on-hover product="{{product}}"></custom-salla-product-card>
-                            {% endfor %}
-                        </div>
+<li class="!hidden lg:!block {{ is_root_menu?'root-level lg:!inline-block':'relative' }}
+    {{ menu.products?' mega-menu': '' }}
+    {{ menu.has_children?' has-children': '' }}"
+    {{ menu.attrs|raw }}>
+    <a {{ menu.link_attrs|raw }} href="{{ menu.url }}">
+        <span>{{ menu.title }}</span>
+    </a>
+    {% if menu.has_children %}
+        <div class="sub-menu {{ menu.products?'w-full left-0 flex': 'w-56' }}">
+            <ul class="{{ menu.products?'w-56 shrink-0 m-8 rtl:ml-0 ltr:mr-0': '' }}">
+                {% for submenu in menu.children %}
+                    {% include _self with {menu:submenu, is_root_menu:false} %}
+                {% endfor %}
+            </ul>
+            {% if menu.products %}
+                <div class="grow p-8">
+                    <div class="grid gap-4 grid-cols-4">
+                        {% for product in menu.products|slice(0, 4) %}
+                            <custom-salla-product-card shadow-on-hover product="{{product}}"></custom-salla-product-card>
+                        {% endfor %}
                     </div>
-                {% endif %}
-            </div>
-        {% endif %}
-    </li>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</li>
