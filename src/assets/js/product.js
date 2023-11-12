@@ -12,10 +12,12 @@ class Product extends BasePage {
             startingPriceTitle: '.starting-price-title',
         });
 
-		// call the function when the page is ready
-		this.initImagesZooming();
-		// listen to screen resizing
-		window.addEventListener('resize', () => this.initImagesZooming());
+        if(imageZoom){
+            // call the function when the page is ready
+            this.initImagesZooming();
+            // listen to screen resizing
+            window.addEventListener('resize', () => this.initImagesZooming());
+        }
     }
 
 	initImagesZooming() {
