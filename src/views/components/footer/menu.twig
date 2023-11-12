@@ -11,7 +11,9 @@
     {% if items|length %}
         <ul class="hidden lg:flex items-center rtl:pl-4 ltr:pr-4 whitespace-nowrap">
             {% for key, item in items|slice(0,3) %}
-              <a href="{{ item.url }}" class="topnav-link-item right-side">{{ item.title }}</a>
+			  <li class="topnav-link-item right-side">
+				<a href="{{ item.url }}">{{ item.title }}</a>
+			  </li>
             {% endfor %}
         </ul>
     {% endif %}
