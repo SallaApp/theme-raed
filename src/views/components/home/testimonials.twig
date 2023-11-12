@@ -35,13 +35,13 @@
        
     
             <div slot="items">
-                {% for item in items %}
+                {% for index, item in items %}
                     <div class="swiper-slide">
                         <div class="testimonial">
                             <div class="testimonial__inner">
                                 <div class="testimonial__avatar">
                                     <img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.avatar }}"
-                                         alt="{{ item.name }}"
+                                         alt="{{ item.name|trim ? item.name : 'testimonial-' ~ index }}"
                                          class="lazy w-full h-full object-cover">
                                 </div>
                                 <div class="flex-1 testimonial__text">
