@@ -16,6 +16,7 @@ class ProductCard extends HTMLElement {
   }
 
   onReady(){
+      
       this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
       salla.wishlist.event.onAdded((event, id) => this.toggleFavoriteIcon(id));
       salla.wishlist.event.onRemoved((event,id) => this.toggleFavoriteIcon(id, false));
@@ -293,7 +294,7 @@ class ProductCard extends HTMLElement {
         </div>
       `
 
-      // reinti favorite icon
+      // re-init favorite icon
       if (!salla.config.isGuest()){
         salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id));
       }
