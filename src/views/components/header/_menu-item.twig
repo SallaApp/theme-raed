@@ -1,7 +1,9 @@
 {# MOBILE #}
 <li class="lg:hidden text-sm font-bold" {{ menu.attrs }}>
     {% set item_image %}
-      <img src="{{ menu.image ? menu.image : 'images/placeholder.png' | asset }}" class="rounded-full {{ menu.image ? '' : 'has-placeholder'}}  width="48" height="48" alt="{{ menu.title }}"/>  
+      {% if menu.image %}
+        <img src="{{ menu.image }}" class="rounded-full" width="48" height="48" alt="{{ menu.title }}"/>  
+      {% endif %}
     {% endset %} 
 
     {% if not menu.has_children %}
