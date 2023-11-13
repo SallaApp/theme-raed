@@ -234,14 +234,14 @@ class ProductCard extends HTMLElement {
           `<salla-progress-bar donation=${this.product?.donation} />
           <div class="s-product-card-donation-input">
             ${this.product?.donation?.can_donate ?
-              `<label htmlFor="donation-amount">${this.donationAmount} <span>*</span></label>
+              `<label for="donation-amount-${this.product.id}">${this.donationAmount} <span>*</span></label>
               <input
                 type="text"
                 onInput="${e => {
                   salla.helpers.inputDigitsOnly(e.target);
                   this.addBtn.donatingAmount = (e.target).value;
                 }}"
-                id="donation-amount"
+                id="donation-amount-${this.product.id}"
                 name="donating_amount"
                 class="s-form-control"
                 placeholder="${this.donationAmount}" />`
@@ -249,7 +249,7 @@ class ProductCard extends HTMLElement {
           </div>`
             : ''}
           <div class="s-product-card-content-sub ${this.isSpecial ? 's-product-card-content-extra-padding' : ''}">
-            ${this.getProductPrice()}
+            ${this.product?.donation?.can_donate ? '' : this.getProductPrice()}
             ${this.product?.rating?.stars && !this.minimal ?
               `<div class="s-product-card-rating">
                 <i class="sicon-star2"></i>
@@ -293,6 +293,15 @@ class ProductCard extends HTMLElement {
             : ``}
         </div>
       `
+
+      this.querySelectorAll('[name="donating_amount"]').forEach((element)=>{
+        element.addEventListener('input', (e) => {
+          e.target
+            .closest(".s-product-card-content")
+            .querySelector("salla-add-product-button")
+            .setAttribute("donating-amount", e.target.value); 
+        });
+      })
 
       // re-init favorite icon
       if (!salla.config.isGuest()){
