@@ -271,9 +271,9 @@ class ProductCard extends HTMLElement {
                 product-status="${this.product.status}"
                 product-type="${this.product.type}">
                 ${this.product.status == 'sale' ? 
-                    `<i class="text-[16px] sicon-${ this.product.type == 'booking' ? 'calendar-time' : 'shopping-bag'}"></i>` : ``
+                    `<i class="text-base sicon-${ this.product.type == 'booking' ? 'calendar-time' : 'shopping-bag'}"></i>` : ``
                   }
-                ${this.product.add_to_cart_label ? this.product.add_to_cart_label : this.getAddButtonLabel() }
+                <span>${this.product.add_to_cart_label ? this.product.add_to_cart_label : this.getAddButtonLabel() }</span>
               </salla-add-product-button>
 
               ${this.horizontal || this.fullImage ?
