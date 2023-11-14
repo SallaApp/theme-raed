@@ -49,14 +49,6 @@
                                 </select>
                             </div>
                         {% endif %}
-                        <div class="hidden items-center rtl:mr-2 ltr:ml-2">
-                            <a href="#" data-type="grid" class="grid-trigger bg-border-color text-primary">
-                                <i class="sicon-grid"></i>
-                            </a>
-                            <a href="#" data-type="list" class="grid-trigger">
-                                <i class="sicon-list"></i>
-                            </a>
-                        </div>
                     </div>
 
                 </div>
@@ -64,9 +56,10 @@
                 {% hook 'product:index.items.start' %}
                 <div class="flex min-h-screen">
                     <salla-products-list class="flex-1 min-w-0 overflow-auto "
-                                         source="{{ page.slug }}"
-                                         source-value="{{ page.id }}"
-                            {{ filters?'filters-Results':'' }}></salla-products-list>
+                        source="{{ page.slug }}"
+                        source-value="{{ page.id }}"
+                        {{ filters?'filters-Results':'' }}>
+					</salla-products-list>
                 </div>
                 {% hook 'product:index.items.end' %}
             </div>
