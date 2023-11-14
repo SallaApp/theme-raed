@@ -7,7 +7,7 @@
     {% endset %} 
 
     {% if not menu.has_children %}
-      <a {{ menu.link_attrs|raw }} href="{{ menu.url }}" class="text-gray-500 {{ menu.image ? '!py-3' : '' }}">
+      <a {{ menu.link_attrs|raw }} aria-label="{{menu.title ? menu.title : 'category'}}" href="{{ menu.url }}" class="text-gray-500 {{ menu.image ? '!py-3' : '' }}">
           {{ item_image }}
           <span>{{ menu.title }}</span>
       </a>
@@ -30,7 +30,7 @@
     {{ menu.products?' mega-menu': '' }}
     {{ menu.has_children?' has-children': '' }}"
     {{ menu.attrs|raw }}>
-    <a {{ menu.link_attrs|raw }} href="{{ menu.url }}">
+    <a {{ menu.link_attrs|raw }} href="{{ menu.url }}" aria-label="{{menu.title ? menu.title : 'category'}}">
         <span>{{ menu.title }}</span>
     </a>
     {% if menu.has_children %}
