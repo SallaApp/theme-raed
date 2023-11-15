@@ -67,10 +67,16 @@
                                 <div class="md:flex rtl:space-x-reverse md:space-x-12 items-start justify-between mb-8 last:mb-0">
                                     <div class="flex flex-1 rtl:space-x-reverse space-x-4">
                                         <a href="{{ item.url }}" class="shrink-0">
-                                            <img src="{{ 'images/s-empty.png' | asset }}"
-                                                 data-src="{{ item.product_image }}"
-                                                 alt="{{ item.product_name }}"
-                                                 class="lazy flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
+                                            {% if loop.first %}
+												<img src="{{ item.product_image }}"
+													alt="{{ item.product_name }}"
+													class="flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
+											{% else %}
+												<img src="{{ 'images/s-empty.png' | asset }}"
+													data-src="{{ item.product_image }}"
+													alt="{{ item.product_name }}"
+													class="lazy flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
+											{% endif %}
                                         </a>
 
                                         <div class="space-y-1">
@@ -93,12 +99,13 @@
                                         {% if item.type == 'donating' %}
                                             <span></span>
                                         {% elseif item.is_hidden_quantity %}
-                                            <input type="hidden" value="{{ item.quantity }}" name="quantity"/>
+                                            <input type="hidden" value="{{ item.quantity }}" name="quantity" aria-label="Quantity"/>
                                             <span class="w-10 text-center">{{ item.quantity }}</span>
                                         {% else %}
                                             <salla-quantity-input cart-item-id="{{ item.id }}"  max="{{ product.max_quantity }}"
-                                                                  class="transtion transition-color duration-300"
-                                                                  value="{{ item.quantity }}" name="quantity">
+                                                class="transtion transition-color duration-300"
+												aria-label="Quantity"
+                                                value="{{ item.quantity }}" name="quantity">
                                             </salla-quantity-input>
                                         {% endif %}
 
@@ -114,8 +121,8 @@
 
 
                             <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
-                                <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete"
-                                              onclick="salla.cart.deleteItem({{ item.id }}).then(() => document.querySelector('#item-{{ item.id }}').remove())">
+                                <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
+                                        onclick="salla.cart.deleteItem({{ item.id }}).then(() => document.querySelector('#item-{{ item.id }}').remove())">
                                     <i class="sicon-cancel"></i>
                                 </salla-button>
                             </span>
@@ -164,8 +171,8 @@
                     {% if loyalty and user.loyalty_points %}
                         <div class="shadow-default mb-5 rounded-md p-3 xs:p-7 bg-white">
                             <salla-loyalty customer-points='{{ user.loyalty_points }}'
-                                    prize-points='{{ loyalty.prize.points }}'
-                                    prize-title='{{ loyalty.prize.title }}'
+                                prize-points='{{ loyalty.prize.points }}'
+                                prize-title='{{ loyalty.prize.title }}'
                             ></salla-loyalty>
                         </div>
                     {% endif %}
@@ -194,6 +201,7 @@
                                             {{ cart.coupon ? 'disabled':'' }}
                                            class="rtl:pl-24 ltr:pr-24 form-input" value="{{ cart.coupon }}" id="coupon-input"
                                            name="coupon"
+										   aria-label="Apply coupon"
                                            type="text">
 
                                     <salla-button
