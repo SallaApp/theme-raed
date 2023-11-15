@@ -18,7 +18,7 @@
   {# Brand banner #}
   {% if brand.banner %} 
         <div class="brand-page__banner">
-            <img class="lazy w-full max-h-[300px] object-cover rounded-md bg-gray-100" data-src="{{ brand.banner }}" src="{{ 'images/s-empty.png' | asset }}" alt="{{ brand.name }}"/>
+            <img loading="eager" width="1200" height="300" class="w-full max-h-[300px] object-cover rounded-md bg-gray-100" src="{{ brand.banner }}" alt="{{ brand.name }}"/>
         </div>
     {% endif %}
 
@@ -34,7 +34,7 @@
             <img class="rounded-md w-40 h-24 object-contain shadow-md p-4 bg-white lazy shrink-0" data-src="{{ brand.logo }}" src="{{ 'images/s-empty.png' | asset }}" alt="{{ brand.name }}">
             <div class="px-5 pt-3 rtl:text-right">
                 <h1 class="text-2xl font-bold mb-1">{{ brand.name }}</h1>
-                <p class="text-base text-gray-500">{{ brand.description|raw }}</p>
+                <h2 class="text-base text-gray-500 font-medium">{{ brand.description|raw }}</h2>
             </div>
         </header>
 
@@ -43,23 +43,8 @@
         <div class="flex items-start flex-col md:flex-row">
             <div class="main-content w-full">
                 {% if products|length %}
-                    <div class="mb-5 md:flex justify-between items-center">
-                        <div class="center-between">
-                            <div class="hidden items-center rtl:mr-2 ltr:ml-2">
-                                <a href="#" data-type="grid" class="grid-trigger bg-border-color !text-primary">
-                                    <i class="sicon-grid"></i>
-                                </a>
-                                <a href="#" data-type="list" class="grid-trigger">
-                                    <i class="sicon-list"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
                     {% hook 'brands:single.items.start' %}
-
                         <salla-products-list source="{{page.slug}}" source-value="{{page.id}}"></salla-products-list>
-
                     {% hook 'brands:single.items.end' %}
                 {% else %}
                     <div class="no-content-placeholder">
