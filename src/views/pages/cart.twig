@@ -61,8 +61,6 @@
                     <form onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ item.id }}">
                         <section class="cart-item bg-white p-5 xs:p-7 rounded-md mb-5 relative">
                             <input type="hidden" name="id" value="{{ item.id }}">
-
-
                                 <!-- product -->
                                 <div class="md:flex rtl:space-x-reverse md:space-x-12 items-start justify-between mb-8 last:mb-0">
                                     <div class="flex flex-1 rtl:space-x-reverse space-x-4">
@@ -78,20 +76,19 @@
 													class="lazy flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
 											{% endif %}
                                         </a>
-
                                         <div class="space-y-1">
-                                            <h3 class="text-gray-900 leading-6">
+                                            <h1 class="text-gray-900 leading-6 text-lg">
                                                 <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
-                                            </h3>
-                                            <span class="text-sm text-gray-400 line-through item-regular-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
-                                            <span class="item-price {{ item.offer?'text-red-400':'text-sm text-gray-400' }}">{{ item.price|money }}</span>
+                                            </h1>
+                                            <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
+                                            <span class="item-price {{ item.offer?'text-danger':'text-sm text-gray-500' }}">{{ item.price|money }}</span>
                                             {% if item.weight_label %}
-                                            <p class="text-sm text-gray-400 "> {{ trans('pages.products.weight') }}
+                                            <p class="text-sm text-gray-500 "> {{ trans('pages.products.weight') }}
                                              <span>{{ item.weight_label }}</span>
                                             </p>
                                             {% endif %}
-                                            <i class="sicon-discount-calculator text-gray-400 offer-icon {{ item.offer?'':'hidden' }}"></i>
-                                            <span class="text-sm text-gray-400 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
+                                            <i class="sicon-discount-calculator text-gray-500 offer-icon {{ item.offer?'':'hidden' }}"></i>
+                                            <span class="text-sm text-gray-500 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
                                         </div>
                                     </div>
 
@@ -117,9 +114,6 @@
                                 </div>
 
                                 {% include 'pages.partials.product.options' with {product:item} %}
-
-
-
                             <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
                                 <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
                                         onclick="salla.cart.deleteItem({{ item.id }}).then(() => document.querySelector('#item-{{ item.id }}').remove())">
@@ -152,7 +146,7 @@
                             {% set is_free=cart.free_shipping_bar.has_free_shipping %}
                             <div class="flex-1">
                                 <h4 class="shipping-item font-bold text-sm mb-1.5">{{ trans('pages.cart.free_shipping') }}</h4>
-                                <p class="shipping-item text-sm font- text-gray-400">
+                                <p class="shipping-item text-sm font- text-gray-500">
                                         <span id="free-shipping-msg">{{ (is_free
                                             ?trans('pages.cart.has_free_shipping')
                                             :trans('pages.cart.free_shipping_alert', {'amount': cart.free_shipping_bar.remaining|money}))
@@ -178,16 +172,16 @@
                     {% endif %}
 
                     <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
-                        <h4 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h4>
+                        <h2 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h2>
 
                         <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-400">{{ trans("pages.cart.items_total") }}</span>
+                            <span class="text-gray-500">{{ trans("pages.cart.items_total") }}</span>
                             <b id="sub-total">{{ cart.sub_total|money }}</b>
                         </div>
 
                         <div id="shipping-cost"
                              class="flex justify-between text-sm mb-5 {{ cart.has_shipping?'':'hidden' }}">
-                            <span class="text-gray-400">{{ trans('pages.cart.shipping_cost') }}</span>
+                            <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
                             <b>{{ cart.real_shipping_cost|money }}</b>
                         </div>
 
@@ -217,18 +211,18 @@
 
                         <!-- coupon discount -->
                         <div id="total-discount" class="flex justify-between text-sm {{ cart.discount?'':'hidden' }}">
-                            <span class="text-gray-400 block  h-10">{{ trans('pages.cart.discount') }}</span>
+                            <span class="text-gray-500 block  h-10">{{ trans('pages.cart.discount') }}</span>
                             <b>- {{ cart.real_discount|money }}</b>
                         </div>
 
                         <div class="flex justify-between text-lg mb-5">
-                            <span class="text-gray-400">{{ trans('pages.cart.final_total') }}</span>
+                            <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>
                             <b data-cart-total>{{ cart.total|money }}</b>
                         </div>
 
                         {% if store.settings.tax.taxable_prices_enabled %}
                             <div class="flex justify-between text-sm mb-5">
-                                <small class="text-gray-400">
+                                <small class="text-gray-500">
                                     * {{ trans('pages.cart.prices_taxed') }}
                                 </small>
                             </div>
