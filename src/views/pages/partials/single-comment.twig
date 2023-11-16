@@ -6,13 +6,13 @@
         {% if is_admin %} <i class="sicon-reply text-lg text-gray-400"></i>{% endif %}
         <div class="flex-none">
             <img data-src="{{ comment.avatar|is_placeholder ? 'images/avatar.png' | cdn : comment.avatar }}"
-                 alt="{{ comment.name }}" src="{{ 'images/s-empty.png' | asset }}"
+                 alt="{{ comment.name|trim ? comment.name : 'comment-' ~ index }}" src="{{ 'images/s-empty.png' | asset }}"
                  class="w-10 h-10 bg-gray-100 object-cover rounded-full lazy">
         </div>
         <div class="flex-1">
             <div class="flex flex-wrap md:items-center justify-between mb-2 md:mb-0">
                 <div class="flex items-center mb-1">
-                    <h3 class="font-bold text-base rtl:ml-10 ltr:mr-10 fix-align">{{ comment.name }}</h3>
+                    <h2 class="font-bold text-base rtl:ml-10 ltr:mr-10 fix-align">{{ comment.name ? 'ssss' : 'ggg' }}</h2>
                     {% if (comment.has_order or comment.stars) and not hide_bought %}
                         <div class="flex">
                             {% if comment.has_order %}
@@ -27,7 +27,7 @@
                         </div>
                     {% endif %}
                 </div>
-                <p class="text-gray-400 text-sm">{{ comment.created_at|time_ago }}</p>
+                <p class="text-gray-500 text-sm">{{ comment.created_at|time_ago }}</p>
                 {% if comment.stars %}
                     <div class="w-full comment__rating text-xs mb-2.5 rtl:space-x-reverse space-x-1">
                         {% for i in 1..5 %}

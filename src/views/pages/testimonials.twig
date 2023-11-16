@@ -45,7 +45,7 @@
                     <div class="container">
                         {% if items|length %}
                         <salla-infinite-scroll next-page="{{ items.next_page }}">
-                            {% for comment in items %}
+                            {% for index, comment in items %}
                             {% include 'pages.partials.single-comment' with {hide_replies:true, hide_bought:true} %}
                             {% endfor %}
                         </salla-infinite-scroll>
