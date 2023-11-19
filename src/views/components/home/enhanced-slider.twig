@@ -15,12 +15,8 @@
       type="fullwidth">
         <div slot="items">
             {% for slide in component.slides %}
-                <div class="{{loop.first ? '' : 'swiper-lazy-wrap'}} w-full min-h-[300px] lg:min-h-[528px] bg-dark">
-					{% if loop.first %}
-					  <div style="background-image: url({{ slide.image }});" class="w-full h-full overlay-bg bg-cover bg-center absolute top-0"></div>
-					{% else %}
-					  <div data-background="{{ slide.image }}" class="swiper-lazy"></div>
-					{% endif %}
+                <div class="w-full min-h-[300px] lg:min-h-[528px] bg-dark">
+					<div style="background-image: url({{ slide.image }});" class="w-full h-full overlay-bg bg-cover bg-center absolute top-0"></div>
                     
                     <div class="flex-center container pb-16 sm:pb-0 home-slider__content relative h-full">
                         <div class=" w-4/6 text-center md:w-7/12 lg:w-5/12 text-white">
