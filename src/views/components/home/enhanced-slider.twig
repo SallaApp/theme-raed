@@ -12,14 +12,14 @@
     <salla-slider 
       id="main-slider-{{ position }}" 
       class="home-slider main-slider" 
-      auto-play 
-      loop
+      {# auto-play 
+      loop #}
       type="fullwidth">
         <div slot="items">
             {% for slide in component.slides %}
                 <div class="{{loop.first ? '' : 'swiper-lazy-wrap'}} w-full min-h-[300px] lg:min-h-[528px] bg-dark">
 					{% if loop.first %}
-					  <div style="background-image: url({{ slide.image }}); height: 100%; width: 100%;" class="overlay-bg bg-cover bg-center absolute top-0"></div>
+					  <div style="background-image: url({{ slide.image }});" class="w-full h-full overlay-bg bg-cover bg-center absolute top-0"></div>
 					{% else %}
 					  <div data-background="{{ slide.image }}" class="swiper-lazy"></div>
 					{% endif %}
