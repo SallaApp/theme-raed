@@ -30,7 +30,7 @@ class Product extends BasePage {
 			// to create the glass in the proper position
 			const image = document.querySelector('.image-slider .swiper-slide-active img');
 			zoom(image.id, 2);
-		}, 200);
+		}, 250);
 		
 
 		document.querySelector('salla-slider.details-slider').addEventListener('slideChange', (e) => {
@@ -42,7 +42,7 @@ class Product extends BasePage {
 				if (imageZoom) return;
 				const image = document.querySelector('.image-slider .swiper-slide-active img');
 				zoom(image.id, 2);
-			}, 200)
+			}, 250)
 		})
 	}
 

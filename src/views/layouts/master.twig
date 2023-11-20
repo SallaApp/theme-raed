@@ -133,6 +133,7 @@
         const loader = document.querySelector(".loader-init");
         loader.classList.add("loader-init--hidden");
         loader.addEventListener("transitionend", () => {
+		  if (!document.querySelector(".loader-init")) return;
           document.body.removeChild(loader);
           });
       });

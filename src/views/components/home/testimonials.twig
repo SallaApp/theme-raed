@@ -17,12 +17,11 @@
 <section class="s-block s-block--testimonials container overflow-hidden">
     <div class="lg:overflow-hidden">
         <div class="flex justify-between">
-            <h2 class="mb-4 mr-2 text-lg font-bold leading-[1.2]">{{ trans('blocks.home.testimonials') }}</h2>
+            <h1 class="mb-4 mr-2 text-lg font-bold leading-[1.2]">{{ trans('blocks.home.testimonials') }}</h1>
             {% if display_all_url %}
                 <a href="{{ link('testimonials') }}" class="s-block__display-all">{{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left"></i></a>
             {% endif %}
         </div>
-
         <salla-slider 
           centered
           slides-per-view="1"
@@ -32,8 +31,6 @@
           controls-outer
           auto-play
           id="testimonials-{{ position }}-slider">
-       
-    
             <div slot="items">
                 {% for index, item in items %}
                     <div class="swiper-slide">
@@ -48,11 +45,11 @@
                                     <p class="leading-6 mb-2 mt-4 sm:mt-0">{{ item.text }}</p>
                                     <div class="flex flex-col lg:flex-row justify-center lg:justify-between items-center">
                                         <div class="testimonial__info">
-                                            <h4 class="font-bold text-xs xs:text-sm">{{ item.name }}</h4>
+                                            <h2 class="font-bold text-xs xs:text-sm">{{ item.name }}</h2>
                                         </div>
                                         <div class="testimonial__rating text-sm">
                                             <salla-rating-stars size="small"
-                                                                value="{{ item.stars }}"></salla-rating-stars>
+                                            value="{{ item.stars }}"></salla-rating-stars>
                                         </div>
                                     </div>
                                 </div>
