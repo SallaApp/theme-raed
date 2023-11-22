@@ -6,6 +6,8 @@
  * @returns void
  */
 export function zoom(imgID, zoom) {
+	/*do not create magnifier glass if no image id is passed:*/
+	if (!imgID) return;
 	var img, glass, w, h, bw;
 	img = document.getElementById(imgID);
 	/*create magnifier glass:*/
