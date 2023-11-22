@@ -136,11 +136,10 @@
                                    data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
                                    data-caption="{{ image.alt }}"
                                    data-infinite="false"
-								   id="magnify-image"
                                    data-type="{{ image.video_url?'youtube':'image' }}"
                                    href="{{ image.video_url?image.video_url:image.url }}"
                                    aria-label="{{ product.name }}"
-                                   class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
+                                   class="swiper-slide magnify-wrapper homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
                                         <img id="{{image.id}}" fetchpriority="high" loading="eager" src="{{ image.url }}"
                                              alt="{{ image.alt }}"
@@ -269,14 +268,14 @@
                 {% if product.sold_quantity or product.can_show_remained_quantity %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
-                            <div class="px-4 text-danger">
+                            <div class="px-4 !text-danger">
                                 <i class="sicon-fire rtl:ml-1.5 ltr:mr-1.5"></i> {{ trans('pages.products.sold') }}
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
                         {% if product.can_show_remained_quantity %}
                             <div class="px-4 rtl:even:border-r ltr:even:border-l even:border-gray-200">
-                                <i class="text-danger sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
+                                <i class="!text-danger sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
                                 {{ trans('pages.products.remained') }}
                                 <span>{{ product.quantity }}</span>
                             </div>
