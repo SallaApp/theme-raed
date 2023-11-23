@@ -15,12 +15,14 @@
 | offer.discounts_table.percent               | string ex: 20%         |             |
 | offer.discounts_table.price                 | float                  |             |
 #}
+{% set bank_name = user.language.code == 'ar' ? 'الراجحي' : 'Al Rajhi' %}
 {% set is_multiple = false %}
 {% set title = is_multiple ? 'خصم على استخدام البطاقات البنكية' : 'العرض البنكي لليوم الوطني' %}
-{% set sub_title = is_multiple ? 'ادفع قيمة مشترياتك عبر أحد البطاقات البنكة التالية واحصل على الخصم المحدد' : 'ادفع قيمة مشترياتك عبر أحد بطاقات بنك الراجحي واحصل على خصم بنسبة ' %}
+{% set sub_title = is_multiple ? trans('bank_offer_sub_title_multiple') : trans('bank_offer_sub_title_single', {bank_name: bank_name }) %}
 {% if is_bank_offer %}
+
 <section class="bank-offer bg-white rounded-lg border border-gray-100 p-5 relative overflow-hidden">
-	<p id="offer-corner-badge">عرض خاص</p>
+	<p id="offer-corner-badge">{{ trans('pages.products.special_offer') }}</p>
 	<div class="flex {{is_multiple ? 'flex-col-reverse items-start' : 'flex-row items-center' }} gap-3">
 		<div class="{{is_multiple ? 'pt-3 px-3 flex flex-row gap-3 flex-wrap' : ''}}">
 			{% if is_multiple %}
@@ -40,7 +42,7 @@
 					</li>
 				</ul>
 				{% if is_multiple %}
-				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">خصم 20%</p>
+				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">{{ trans('pages.products.discount') }} 20%</p>
 				{% endif %}
 			</div>
 			<div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-3' : ''}}">
@@ -59,7 +61,7 @@
 					</li>
 				</ul>
 				{% if is_multiple %}
-				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">خصم 20%</p>
+				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">{{ trans('pages.products.discount') }} 20%</p>
 				{% endif %}
 			</div>
 			<div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-3' : ''}}">
@@ -78,7 +80,7 @@
 					</li>
 				</ul>
 				{% if is_multiple %}
-				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">خصم 20%</p>
+				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">{{ trans('pages.products.discount') }} 20%</p>
 				{% endif %}
 			</div>
 			<div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-3' : ''}}">
@@ -97,7 +99,7 @@
 					</li>
 				</ul>
 				{% if is_multiple %}
-				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">خصم 20%</p>
+				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">{{ trans('pages.products.discount') }} 20%</p>
 				{% endif %}
 			</div>
 			{% else %}
@@ -117,7 +119,7 @@
 					</li>
 				</ul>
 				{% if is_multiple %}
-				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">خصم 20%</p>
+				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">{{ trans('pages.products.discount') }} 20%</p>
 				{% endif %}
 			</div>
 			{% endif %}			
