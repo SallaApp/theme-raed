@@ -16,11 +16,10 @@
 | offer.discounts_table.price                 | float                  |             |
 #}
 {% set bank_name = user.language.code == 'ar' ? 'الراجحي' : 'Al Rajhi' %}
-{% set is_multiple = true %}
+{% set is_multiple = false %}
 {% set title = is_multiple ? 'خصم على استخدام البطاقات البنكية' : 'العرض البنكي لليوم الوطني' %}
 {% set sub_title = is_multiple ? trans('common.bank_offer_sub_title_multiple') : trans('common.bank_offer_sub_title_single', {bank_name: bank_name }) %}
 {% if is_bank_offer %}
-
 <section class="bank-offer bg-white rounded-lg border border-gray-100 p-5 relative overflow-hidden">
 	<p id="offer-corner-badge">{{ trans('pages.products.special_offer') }}</p>
 	<div class="flex {{is_multiple ? 'flex-col-reverse items-start' : 'flex-row items-center' }} gap-3">
