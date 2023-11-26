@@ -45,7 +45,21 @@
 | cart.items[].attachments[].item_id                | int                 |                                                                |
 | cart.items[].attachments[].name                   | int                 | image file name                                                |
 #}
+
 {% extends "layouts.master" %}
+<!--TODO: delete the static data when it is ready from Backend -->
+{% set bank_name = user.language.code == 'ar' ? 'الراجحي' : 'Al Rajhi' %}
+{% set data = {
+	'title': 'خصم على استخدام البطاقات البنكية', 
+	'banks': [{
+		'name': bank_name,
+		'logo' : 'https://cdn.salla.sa/form-builder/W4O1shadAmGK2IWcwkaVhY6QA5iuRQRlZBrcMyfN.jpg',
+		'percent': '20',
+		'payments' : [{'method': 'mada'}, {'method': 'credit_card'}, {'method': 'mada'}]
+	}]
+} %}
+{% set is_multiple = data.banks|length > 1 %}
+{% set sub_title = is_multiple ? trans('common.bank_offer_sub_title_multiple') : trans('common.bank_offer_sub_title_single', {bank_name: bank_name }) %}
 {% block content %}
     <div class="container">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
@@ -140,7 +154,40 @@
             <!-- sidebar -->
             {% if cart.items|length %}
                 <div class="sticky top-24 w-full lg:w-96 rtl:lg:mr-8 ltr:lg:ml-8">
-					{% component 'product.offer' with { is_bank_offer: true } %}
+					<!--TODO: call the product.offer and delete the static dom when it is fully supported-->
+					{# {% component 'product.offer' with { is_bank_offer: true } %} #}
+					<!--TODO: delete the static dom when product.offer is fully supported-->
+					{% if data.banks|length > 0 %}
+					<section class="bank-offer bg-white rounded-lg border border-gray-100 p-5 relative overflow-hidden mb-4">
+						<p id="offer-corner-badge">{{ trans('pages.products.special_offer') }}</p>
+						<div class="flex {{is_multiple ? 'flex-col-reverse items-start' : 'flex-row items-center' }} gap-3">
+							<div class="{{is_multiple ? 'pt-3 px-3 flex flex-row gap-3 flex-wrap' : ''}}">
+								{% for bank in data.banks %}
+								<div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-3' : ''}}">
+									<div class="w-14 h-14">
+										<img class="lazy" src="{{ 'images/s-empty.png' | asset }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
+									</div>
+									<ul class="flex justify-center min-w-[84px]">
+										{% for payment in bank.payments %}
+										<li class="w-7 h-5 bg-white rounded flex items-center">
+											<img class="lazy object-contain max-h-full" width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ ('images/payment/'~ payment.method ~'_mini.png') | cdn }}" alt="payment">
+										</li>
+										{% endfor %}
+									</ul>
+									{% if is_multiple %}
+									<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">{{ trans('pages.products.discount') ~ bank.percent }}%</p>
+									{% endif %}
+								</div>
+								{% endfor %}		
+							</div>
+							<div class="w-full">
+								<h2 class="text-base font-medium text-red-600 max-w-[92%]">{{data.title}}</h2>
+								<p class="text-sm font-normal text-gray-600 leading-normal max-w-[95%]">{{sub_title}} 
+								{% if not is_multiple %}<strong class="text-red-600">{{data.banks|first.percent}}%</strong></p>{% endif %}
+							</div>
+						</div>
+					</section>
+					{% endif %}
                     <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative {{ cart.free_shipping_bar ? '' : 'hidden' }}" id="free-shipping">
                         <div class="flex rtl:space-x-reverse space-x-3 items-center">
                             <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x':'' }}"></i>
