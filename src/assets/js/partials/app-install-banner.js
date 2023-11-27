@@ -1,3 +1,6 @@
+/**
+ * Salla app install banner component.
+ */
 import BasePage from '../base-page';
 class AppInstall extends HTMLElement {
 	connectedCallback(){
@@ -9,28 +12,41 @@ class AppInstall extends HTMLElement {
 	}
   
 	onReady(){
+		this.notMobile = false;
 		this.logo = salla.config.get('store.logo');
 		this.name = salla.config.get('store.name');
-		this.position = false ? 'top-0' : 'bottom-0';
+		this.position = true ? 'top-0' : 'bottom-0';
 		this.title = 'جربت تطبيق سلة ؟';
 		this.sub_title = 'قم بتحميل التطبيق وأحصل على خصومات وعروض تصل لـ 70%';
 		this.cta_text = ' حمله الان';
 		
-		this.render()
+		if(this.notMobile) return;
+		setTimeout(() => {
+			this.render()
+		}, 2000)
+		
+	}
+
+	closeBanner() {
+		this.setAttribute('open', false);
 	}
   
 	render(){
-	  this.innerHTML = `<div class="flex flex-row items-center fixed ${this.position} left-0 right-0 w-[95%] my-4 mx-auto bg-[#ffe4cc] z-[999] rounded-md p-3 gap-3">
+	  this.setAttribute('open', true);
+	  this.classList.add('s-app-install-banner', this.position);
+	  this.innerHTML = `
 	  <div>
 	    <img src=${this.logo} width="58" height="58" alt="${this.name}">
 	  </div>
 	  <div>
-	    <h2 class="text-base font-bold text-primary">${this.title}</h2>
-		<span class="text-sm font-normal">${this.sub_title}<u class="text-primary">${this.cta_text}</u></span>
+	    <h2 class="s-app-install-banner-title">${this.title}</h2>
+		<span class="s-app-install-banner-sub-title">${this.sub_title}
+		  <u class="s-app-install-banner-cta">${this.cta_text}</u>
+		</span>
 	  </div>
-	  <span class="absolute top-2 left-3"><i class="sicon-cancel"></i></span>
-	  </div>`
-		
+	  <button onclick="this.parentElement.closeBanner()" 
+	    class="s-app-install-banner-cancel-button"><i class="sicon-cancel"></i>
+	  </button>`	
 	}
   }
   
