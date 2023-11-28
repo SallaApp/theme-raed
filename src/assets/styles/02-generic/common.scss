@@ -354,9 +354,29 @@ salla-modal {
 
 // salla app install banner
 .s-app-install-banner {
-	@apply flex flex-row items-center fixed left-0 right-0 w-[95%] my-4 mx-auto bg-[#ffe4cc] z-[99] rounded-md p-3 gap-3 transition-all duration-300 ease-out;
+	@apply hidden flex-row items-center fixed left-0 right-0 w-[95%] my-4 mx-auto bg-[#ffe4cc] z-[99] rounded-md p-3 gap-3;
 	&[open=false] {
 		@apply hidden;
+	}
+	&[open=true][position=top] {
+		@apply flex animate-slideDownFromTop;
+	}
+	&[open=true][position=bottom] {
+		@apply flex animate-slideUpFromBottom;
+	}
+	&[position=top] {
+		@apply top-0;
+	}
+	&[position=bottom] {
+		@apply bottom-0;
+	}
+	&[closing][position=top] {
+		@apply animate-slideUPFromTop;
+		animation-fill-mode: forwards;
+	}
+	&[closing][position=bottom] {
+		@apply animate-slideDownFromBottom;
+		animation-fill-mode: forwards;
 	}
 	&-title {
 		@apply text-base font-bold text-primary;
@@ -365,7 +385,7 @@ salla-modal {
 		@apply text-sm font-normal;
 	}
 	&-cta {
-		@apply text-primary;
+		@apply text-primary underline;
 	}
 	&-cancel-button {
 		@apply absolute top-2 rtl:left-3 ltr:right-3;

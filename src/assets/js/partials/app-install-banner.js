@@ -19,32 +19,89 @@ class AppInstall extends HTMLElement {
 	}
 
 	onReady() {
-		this.notMobile = false;
+		// fetch the banner data
+		this.fetchTheAppMarketingData();
+		// set the
 		this.logo = salla.config.get('store.logo');
 		this.name = salla.config.get('store.name');
-		this.position = true ? 'top-0' : 'bottom-0';
-		this.title = 'جربت تطبيق سلة ؟';
-		this.sub_title = 'قم بتحميل التطبيق وأحصل على خصومات وعروض تصل لـ 70%';
+		this.is_app_installed = false;
+		/**NOTE: */
+		// suggestion to be come from the BE
+		// this.is_app_installed = salla.config.get('user.is_app_installed');
 		this.cta_text = ' حمله الان';
-		this.isInstalled = false;
+		this.cta_link =
+			this.getMobileOS() === 'iOS'
+				? salla.config.get('store.apps.appstore')
+				: salla.config.get('store.apps.googleplay');
+	}
 
-		if (!isMobileOrTabletDevice() || this.isInstalled) return;
+	renderTheBanner() {
+		// check for user session and dismiss state
 		if (!this.shouldShowTheBanner()) return;
+		this.render();
 		setTimeout(() => {
-			this.render();
+			this.setAttribute('open', true);
 		}, 2000);
 	}
 
-	closeBanner() {
-		this.setAttribute('open', false);
-		localStorage.setItem('bannerDismissed', true);
+	setData(data) {
+		this.position = data.position === 'top' ? 'top' : 'bottom';
+		this.title = data.title;
+		this.sub_title = data.sub_title;
+	}
 
-		updateUserSessionCount(1);
+	getMobileOS = () => {
+		const ua = navigator.userAgent;
+		if (/android/i.test(ua)) {
+			return 'Android';
+		} else if (
+			/iPad|iPhone|iPod/.test(ua) ||
+			(/Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document)
+		) {
+			return 'iOS';
+		}
+		return 'Other';
+	};
+
+	fetchTheAppMarketingData() {
+		salla.api.request('http://localhost:3000/data', 'get').then((res) => {
+			if (res) {
+				this.setData(res);
+				// do not render the banner if the device in not (tablet/mobile) or
+				// if the user already have the app in his mobile or the banner is disabled,
+				// or the store does not have apps
+				if (
+					!isMobileOrTabletDevice() ||
+					this.is_app_installed ||
+					!res.is_enabled ||
+					!salla.config.get('store.apps')
+				)
+					return;
+				this.renderTheBanner();
+			}
+		});
+	}
+
+	closeBanner(resetTheSession = true) {
+		// handle closing animation first, then close the banner
+		this.setAttribute('closing', '');
+		localStorage.setItem('bannerDismissed', true);
+		this.addEventListener(
+			'animationend',
+			() => {
+				this.removeAttribute('closing');
+				this.setAttribute('open', false);
+			},
+			{ once: true }
+		);
+
+		if (resetTheSession) updateUserSessionCount(1);
 	}
 
 	shouldShowTheBanner() {
+		// if the user dismissed the banner check the session count
 		if (localStorage.getItem('bannerDismissed') === 'true') {
-			if (getSessionCount() === 10) {
+			if (getSessionCount() === 3) {
 				localStorage.setItem('bannerDismissed', false);
 				return true;
 			}
@@ -54,8 +111,9 @@ class AppInstall extends HTMLElement {
 	}
 
 	render() {
-		this.setAttribute('open', true);
-		this.classList.add('s-app-install-banner', this.position);
+		this.setAttribute('open', false);
+		this.setAttribute('position', this.position);
+		this.classList.add('s-app-install-banner');
 		this.innerHTML = `
 	    <div>
 	      <img src=${this.logo} width="58" height="58" alt="${this.name}">
@@ -63,7 +121,9 @@ class AppInstall extends HTMLElement {
 	    <div>
 	      <h2 class="s-app-install-banner-title">${this.title}</h2>
 		  <span class="s-app-install-banner-sub-title">${this.sub_title}
-		    <u class="s-app-install-banner-cta">${this.cta_text}</u>
+		    <a href="${this.cta_link}" target="_blank" aria-label="download app" class="s-app-install-banner-cta">
+			${this.cta_text}
+			</a>
 		  </span>
 	    </div>
 	    <button onclick="this.parentElement.closeBanner()" 
