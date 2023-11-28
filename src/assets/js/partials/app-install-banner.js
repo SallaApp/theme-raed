@@ -2,8 +2,12 @@
  * Salla app install banner component.
  */
 import BasePage from '../base-page';
-import { getSessionCount, updateUserSession } from '../utils/getUserSessionCount';
-import { isMobileOrTabletDevice } from '../utils/isMobileOrTabletDevice';
+// simplify the imports from one place
+import {
+	getSessionCount,
+	updateUserSessionCount,
+	isMobileOrTabletDevice,
+} from '../utils';
 
 class AppInstall extends HTMLElement {
 	connectedCallback() {
@@ -22,8 +26,10 @@ class AppInstall extends HTMLElement {
 		this.title = 'جربت تطبيق سلة ؟';
 		this.sub_title = 'قم بتحميل التطبيق وأحصل على خصومات وعروض تصل لـ 70%';
 		this.cta_text = ' حمله الان';
+		this.isInstalled = false;
 
-		if (!isMobileOrTabletDevice || getSessionCount() % 10 !== 0) return;
+		if (!isMobileOrTabletDevice() || this.isInstalled) return;
+		if (!this.shouldShowTheBanner()) return;
 		setTimeout(() => {
 			this.render();
 		}, 2000);
@@ -31,7 +37,20 @@ class AppInstall extends HTMLElement {
 
 	closeBanner() {
 		this.setAttribute('open', false);
-		updateUserSession(1)
+		localStorage.setItem('bannerDismissed', true);
+
+		updateUserSessionCount(1);
+	}
+
+	shouldShowTheBanner() {
+		if (localStorage.getItem('bannerDismissed') === 'true') {
+			if (getSessionCount() === 10) {
+				localStorage.setItem('bannerDismissed', false);
+				return true;
+			}
+			return false;
+		}
+		return true;
 	}
 
 	render() {

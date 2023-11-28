@@ -4,7 +4,7 @@
  * @param {number} screen the width of biggest screen to be checked
  * @returns {boolean} true if it is mobile or tablet else false
  */
-export const isMobileOrTabletDevice = (screen = 1024) => {
+const isMobileOrTabletDevice = (screen = 1024) => {
 	const screenWidth = window.innerWidth <= screen;
 	const userAgentCheck =
 		/Mobile|Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -17,3 +17,5 @@ export const isMobileOrTabletDevice = (screen = 1024) => {
 
 	return userAgentCheck || (screenWidth && hasTouch);
 };
+
+export default isMobileOrTabletDevice;
