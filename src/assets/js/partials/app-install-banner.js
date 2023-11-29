@@ -115,7 +115,7 @@ class AppInstall extends HTMLElement {
 		    <a href="${
 					this.cta_link
 				}" target="_blank" aria-label="download app" class="s-app-install-banner-cta">
-			${salla.lang.get('app_banner.download_now')}
+			${salla.lang.get('blocks.appBanner.download_now')}
 			</a>
 		  </span>
 	    </div>
