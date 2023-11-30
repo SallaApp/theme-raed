@@ -36,117 +36,118 @@
 		'name': bank_name,
 		'logo' : 'https://cdn.salla.sa/form-builder/W4O1shadAmGK2IWcwkaVhY6QA5iuRQRlZBrcMyfN.jpg',
 		'percent': '20',
-		'payments' : ['mada', 'credit_card', 'mada']
+		'payments' : ['mada', 'credit_card', 'mada'] 
 	}]
 } %}
 
-{% set is_multiple = data.banks|length > 1 %}
+{% set is_multiple = data.banks|length > 1 %} 
 {% set sub_title = is_multiple ? trans('common.bank_offer_sub_title_multiple') : trans('common.bank_offer_sub_title_single', {bank_name: bank_name }) %}
-{% if is_bank_offer %}
-{% if data.banks|length > 0 %}
-<section class="bank-offer bg-white rounded-lg border border-gray-100 p-5 relative overflow-hidden">
-	<p id="offer-corner-badge">{{ trans('pages.products.special_offer') }}</p>
-	<div class="flex {{is_multiple ? 'flex-col-reverse items-start' : 'flex-row items-center' }} gap-3">
-		<div class="{{is_multiple ? 'pt-3 px-3 flex flex-row gap-3 flex-wrap' : ''}}">
-			{% for bank in data.banks %}
-			<div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-3' : ''}}">
-				<div class="w-14 h-14">
-					<img class="lazy" src="{{ 'images/s-empty.png' | asset }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
-				</div>
-				<ul class="flex justify-center min-w-[84px]">
-					{% for payment in bank.payments %}
-					<li class="w-7 h-5 bg-white rounded flex items-center">
-						<img 
-							class="lazy object-contain max-h-full" 
-							width="100%" height="100%" 
-							src="{{ 'images/s-empty.png' | asset }}" 
-							data-src="{{ ('images/payment/'~ payment ~'_mini.png') | cdn }}" 
-							alt="payment">
-					</li>
-					{% endfor %}
-				</ul>
-				{% if is_multiple %}
-				<p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">
-					{{ trans('pages.products.discount') ~ bank.percent }}%
-				</p>
-				{% endif %}
-			</div>
-			{% endfor %}		
-		</div>
-		<div class="w-full">
-			<h2 class="text-base font-medium text-red-600 max-w-[92%]">{{data.title}}</h2>
-			<p class="text-sm font-normal text-gray-600 leading-normal max-w-[95%]">{{sub_title}} 
-			{% if not is_multiple %}<strong class="text-red-600">{{data.banks|first.percent}}%</strong></p>{% endif %}
-		</div>
-	</div>
-</section>
-{% endif %}
-{% else %}
-<section class="offer-slider relative lg:overflow-hidden mb-8 md:mb-16 rounded p-2.5 sm:p-5 bg-white">
-    {% set is_displayed = false %}
 
-    <salla-slider 
-      type="carousel"
-      block-title="{{ offer.name }}"
-      block-subTitle="{{ offer.description|raw }}"
-      id="offer-slider">
-        <div slot="items">
-            {% if offer.categories|length %}
-                {% for category in offer.categories %}
-                    <div class="slide--one-sixth">
-                        <a href="{{ category.url }}" class="slide--cat-entry">
-                            <i class="{{ category.icon }}"></i>
-                            <h3 class="text-base">{{ category.name }}</h3>
-                        </a>
-                    </div>
-                {% endfor %}
-            {% elseif offer.products|length %}
-                {% for product in offer.products %}
-                    <div class="h-auto slide--one-fourth">
-                        <custom-salla-product-card shadow-on-hover product="{{product}}"></custom-salla-product-card>
-                    </div>
-                {% endfor %}
-            {% elseif offer.discounts_table|length %}
-                {% set is_displayed = true %}
-                {% for discount in offer.discounts_table %}
-                    <div class="slide--one-fourth">
-                        <div class="slide--offer-entry">
-                            <div class="p-3 flex-grow flex flex-col justify-center w-full">
-                                <p class="mb-1">{{ trans('pages.offer.buy_quantity', {quantity:discount.quantity_text})|number }}</p>
-                                {% if discount.show_discounted_price %}
-                                    <div class="text-sm text-gray-400">
-                                        <span>{{ trans('pages.offer.with_price', {price:''}) }}</span>
-                                        <span class="font-extrabold text-red-400 text-3xl">{{ discount.price|number({'.':'٫'}) }}</span> {{ user.currency.symbol }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">{{ trans('pages.products.with_a_discount') }}
-                                (<span class="font-bold">{{ discount.percent|number }}</span>)</p>
-                        </div>
-                    </div>
-                {% endfor %}
+{% if is_bank_offer %} 
+  {% if data.banks|length > 0 %}
+    <section class="bank-offer bg-white rounded-lg border border-gray-100 p-5 relative overflow-hidden">
+      <p id="offer-corner-badge">{{ trans('pages.products.special_offer') }}</p>
+      <div class="flex {{is_multiple ? 'flex-col-reverse items-start' : 'flex-row items-center' }} gap-3">
+        <div class="{{is_multiple ? 'pt-3 px-3 flex flex-row gap-3 flex-wrap' : ''}}">
+          {% for bank in data.banks %}
+          <div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-3' : ''}}">
+            <div class="w-14 h-14">
+              <img class="lazy" src="{{ 'images/s-empty.png' | asset }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
+            </div>
+            <ul class="flex justify-center min-w-[84px]">
+              {% for payment in bank.payments %}
+              <li class="w-7 h-5 bg-white rounded flex items-center">
+                <img 
+                  class="lazy object-contain max-h-full" 
+                  width="100%" height="100%" 
+                  src="{{ 'images/s-empty.png' | asset }}" 
+                  data-src="{{ ('images/payment/'~ payment ~'_mini.png') | cdn }}" 
+                  alt="payment">
+              </li>
+              {% endfor %}
+            </ul>
+            {% if is_multiple %}
+            <p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">
+              {{ trans('pages.products.discount') ~ bank.percent }}%
+            </p>
             {% endif %}
+          </div>
+          {% endfor %}		
         </div>
-    </salla-slider>
-
-    {# Offer Discount Table #}
-    {% if offer.discounts_table|length and not is_displayed %}
-      <div class="discount-list space-y-2.5 mt-5">
-        {% for discount in offer.discounts_table %}
-            <div class="discount-list__item flex justify-between border-t pt-2.5">
-              <div>
-                <span>{{ trans('pages.offer.buy_quantity', {quantity:discount.quantity_text})|number }}</span>
-                {% if discount.show_discounted_price %}
-                  <span>{{ trans('pages.offer.with_price', {price:''}) }}</span>
-                  <span class="font-bold text-red-400">{{ discount.price|number({'.':'٫'}) }}</span> {{ user.currency.symbol }}
-                {% endif %}
-              </div>
-              <p class="text-sm">{{ trans('pages.products.with_a_discount') }}
-                (<span class="font-bold">{{ discount.percent|number }}</span>)
-              </p>
-            </div> 
-        {% endfor %}
+        <div class="w-full">
+          <h2 class="text-base font-medium text-red-600 max-w-[92%]">{{data.title}}</h2>
+          <p class="text-sm font-normal text-gray-600 leading-normal max-w-[95%]">{{sub_title}} 
+          {% if not is_multiple %}<strong class="text-red-600">{{data.banks|first.percent}}%</strong></p>{% endif %}
+        </div>
       </div>
-    {% endif %}
-</section>	
+    </section>
+  {% endif %}
+{% else %}
+  <section class="offer-slider relative lg:overflow-hidden mb-8 md:mb-16 rounded p-2.5 sm:p-5 bg-white">
+      {% set is_displayed = false %}
+
+      <salla-slider 
+        type="carousel"
+        block-title="{{ offer.name }}"
+        block-subTitle="{{ offer.description|raw }}"
+        id="offer-slider">
+          <div slot="items">
+              {% if offer.categories|length %}
+                  {% for category in offer.categories %}
+                      <div class="slide--one-sixth">
+                          <a href="{{ category.url }}" class="slide--cat-entry">
+                              <i class="{{ category.icon }}"></i>
+                              <h3 class="text-base">{{ category.name }}</h3>
+                          </a>
+                      </div>
+                  {% endfor %}
+              {% elseif offer.products|length %}
+                  {% for product in offer.products %}
+                      <div class="h-auto slide--one-fourth">
+                          <custom-salla-product-card shadow-on-hover product="{{product}}"></custom-salla-product-card>
+                      </div>
+                  {% endfor %}
+              {% elseif offer.discounts_table|length %}
+                  {% set is_displayed = true %}
+                  {% for discount in offer.discounts_table %}
+                      <div class="slide--one-fourth">
+                          <div class="slide--offer-entry">
+                              <div class="p-3 flex-grow flex flex-col justify-center w-full">
+                                  <p class="mb-1">{{ trans('pages.offer.buy_quantity', {quantity:discount.quantity_text})|number }}</p>
+                                  {% if discount.show_discounted_price %}
+                                      <div class="text-sm text-gray-400">
+                                          <span>{{ trans('pages.offer.with_price', {price:''}) }}</span>
+                                          <span class="font-extrabold text-red-400 text-3xl">{{ discount.price|number({'.':'٫'}) }}</span> {{ user.currency.symbol }}
+                                      </div>
+                                  {% endif %}
+                              </div>
+                              <p class="border-t bg-gray-50 border-border-color text-sm p-2 w-full">{{ trans('pages.products.with_a_discount') }}
+                                  (<span class="font-bold">{{ discount.percent|number }}</span>)</p>
+                          </div>
+                      </div>
+                  {% endfor %}
+              {% endif %}
+          </div>
+      </salla-slider>
+
+      {# Offer Discount Table #}
+      {% if offer.discounts_table|length and not is_displayed %}
+        <div class="discount-list space-y-2.5 mt-5">
+          {% for discount in offer.discounts_table %}
+              <div class="discount-list__item flex justify-between border-t pt-2.5">
+                <div>
+                  <span>{{ trans('pages.offer.buy_quantity', {quantity:discount.quantity_text})|number }}</span>
+                  {% if discount.show_discounted_price %}
+                    <span>{{ trans('pages.offer.with_price', {price:''}) }}</span>
+                    <span class="font-bold text-red-400">{{ discount.price|number({'.':'٫'}) }}</span> {{ user.currency.symbol }}
+                  {% endif %}
+                </div>
+                <p class="text-sm">{{ trans('pages.products.with_a_discount') }}
+                  (<span class="font-bold">{{ discount.percent|number }}</span>)
+                </p>
+              </div> 
+          {% endfor %}
+        </div>
+      {% endif %}
+  </section>	
 {% endif %}
