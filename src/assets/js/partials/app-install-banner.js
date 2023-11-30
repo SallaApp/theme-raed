@@ -86,17 +86,21 @@ class AppInstall extends HTMLElement {
 	}
 
 	closeBanner() {
-		// handle closing animation first, then close the banner
-		this.setAttribute('closing', '');
 		localStorage.setItem('bannerDismissed', true);
-		this.addEventListener(
-			'animationend',
-			() => {
-				this.removeAttribute('closing');
-				this.setAttribute('open', false);
-			},
-			{ once: true }
-		);
+		if (this.position === 'top') {
+			this.setAttribute('open', false);
+		} else {
+			// handle closing animation first, then close the banner
+			this.setAttribute('closing', '');
+			this.addEventListener(
+				'animationend',
+				() => {
+					this.removeAttribute('closing');
+					this.setAttribute('open', false);
+				},
+				{ once: true }
+			);
+		}
 	}
 
 	render() {
