@@ -121,19 +121,21 @@ module.exports = {
 					'100%': { transform: 'translateY(100%)', opacity: '0' },
 				},
 				slideUPFromTop: {
-					'0%': { transform: 'translateY(-0%)', opacity: '1' },
-					'100%': { transform: 'translateY(-100%)', opacity: '0' },
-				},
-				slideDownFromTop: {
-					'0%': { transform: 'translateY(-100%)', opacity: '0' },
-					'100%': { transform: 'translateY(-0%)', opacity: '1' },
+                    from: {
+                        transform: 'translate3d(0, 0, 0)',
+                        opacity: 1
+                    },
+					
+                    to: {
+                        transform: 'translate3d(0, -15px, 0)',
+                        opacity: 0
+                    },
 				},
 			},
 			animation: {
 				slideUpFromBottom: 'slideUpFromBottom .6s linear',
 				slideDownFromBottom: 'slideDownFromBottom .6s linear',
-				slideDownFromTop: 'slideDownFromTop .6s linear',
-				slideUPFromTop: 'slideUPFromTop .6s linear',
+				slideUPFromTop: 'slideUPFromTop .5s linear',
 			},
 		},
 	},
