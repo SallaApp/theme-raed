@@ -111,13 +111,13 @@ class AppInstall extends HTMLElement {
 	    </div>
 	    <div>
 	      <h2 class="s-app-install-banner-title">${this.title}</h2>
-		  <span class="s-app-install-banner-sub-title">${this.sub_title}
+		  <p class="s-app-install-banner-sub-title">${this.sub_title}
 		    <a href="${
 					this.cta_link
 				}" target="_blank" aria-label="download app" class="s-app-install-banner-cta">
-			${salla.lang.get('blocks.appBanner.download_now')}
+			${salla.lang.get('blocks.footer.download_apps')}
 			</a>
-		  </span>
+		  </p>
 	    </div>
 	    <button onclick="this.parentElement.closeBanner()" 
 	      class="s-app-install-banner-cancel-button"><i class="sicon-cancel"></i>
