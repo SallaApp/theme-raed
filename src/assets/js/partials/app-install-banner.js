@@ -93,24 +93,21 @@ class AppInstall extends HTMLElement {
     this.setAttribute('position', this.data.position);
     this.classList.add('s-app-install-banner');
     this.innerHTML = `
-	    <div>
-	      <img src=${this.data.icon} width="58" height="58" alt="${salla.config.get(
-      'store.name'
-    )}">
-	    </div>
-	    <div>
-	      <h2 class="s-app-install-banner-title">${this.data.title}</h2>
-		  <p class="s-app-install-banner-sub-title">${this.data.sub_title}
-		    <a href="${
-          this.cta_link
-        }" target="_blank" aria-label="download app" class="s-app-install-banner-cta">
-			${salla.lang.get('blocks.footer.download_apps')}
-			</a>
-		  </p>
-	    </div>
-	    <button onclick="this.parentElement.closeBanner()" 
-	      class="s-app-install-banner-cancel-button"><i class="sicon-cancel"></i>
-	    </button>`;
+      <div>
+	      <img src=${this.data.icon} width="58" height="58" alt="${salla.config.get('store.name')}">
+      </div>
+      <div>
+        <h2 class="s-app-install-banner-title">${this.data.title}</h2>
+        <p class="s-app-install-banner-sub-title">${this.data.sub_title}
+          <a href="${this.cta_link}"
+            target="_blank" aria-label="download app" class="s-app-install-banner-cta">
+            ${salla.lang.get('blocks.footer.download_apps')}
+          </a>
+        </p>
+      </div>
+      <button onclick="this.parentElement.closeBanner()" 
+        class="s-app-install-banner-cancel-button"><i class="sicon-cancel"></i>
+      </button>`;
   }
 }
 
