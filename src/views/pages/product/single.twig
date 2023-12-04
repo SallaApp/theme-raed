@@ -124,11 +124,11 @@
                         {% for image in product.images %}
                             {% if image.three_d_image_url %}
                                 <model-viewer style="min-height: 500px;" class="swiper-slide model-entry w-full h-full"
-                                              loading="eager" camera-controls
-                                              touch-action="pan-y" auto-rotate
-                                              poster="{{ image.url }}"
-                                              src="{{ image.three_d_image_url }}"
-                                              shadow-intensity="1" alt="{{ image.alt }}">
+                                    loading="eager" camera-controls
+                                    touch-action="pan-y" auto-rotate
+                                    poster="{{ image.url }}"
+                                    src="{{ image.three_d_image_url }}"
+                                    shadow-intensity="1" alt="{{ image.alt }}">
                                 </model-viewer>
                             {% else %}
                                 <a data-fslightbox="product_{{ product.id }}"
@@ -136,11 +136,10 @@
                                    data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
                                    data-caption="{{ image.alt }}"
                                    data-infinite="false"
-								   id="magnify-image"
                                    data-type="{{ image.video_url?'youtube':'image' }}"
                                    href="{{ image.video_url?image.video_url:image.url }}"
                                    aria-label="{{ product.name }}"
-                                   class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
+                                   class="swiper-slide magnify-wrapper homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
                                         <img id="{{image.id}}" fetchpriority="high" loading="eager" src="{{ image.url }}"
                                              alt="{{ image.alt }}"
@@ -200,9 +199,9 @@
                 <h1 class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
-                    <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5">
+                    <h2 class="product-entry__sub-title text-sm text-gray-500 leading-6 mb-2.5">
                         {{ product.subtitle }}
-                    </h3>
+                    </h2>
                 {% endif %}
 
                 {% if product.rating %}
@@ -214,8 +213,8 @@
                 <div class="flex whitespace-nowrap gap-4 items-center">
                   {% if product.is_on_sale %}
                     <div class="flex items-center space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                      <h4 class="text-red-400 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
-                      <span class="text-gray-400 line-through opacity-70">{{product.regular_price|money}}</span>
+                      <h3 class="!text-danger font-bold text-xl inline-block">{{product.sale_price|money}}</h3>
+                      <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
                     </div>
                   {% elseif product.starting_price %}
                     <span>{{ trans('pages.products.starting_price') }}</span> <h4 class="font-bold text-xl inline-block"> {{product.starting_price|money}}</h4>
@@ -228,7 +227,7 @@
                     {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
                     {% if product.has_read_more %}
                         <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 py-4 opacity-70"
-                                id="more-content" style="max-height:5.25rem">
+                            id="more-content" style="max-height:5.25rem">
                             {{ product_desc|raw }}
                         </article>
 
@@ -252,7 +251,7 @@
                 {% endif %}
 
                 <div class="flex rtl:space-x-reverse space-x-3">
-                    <salla-social-share class="inline-flex mb-5"></salla-social-share>
+                    <salla-social-share class="inline-flex mb-5" aria-label="social share"></salla-social-share>
 
                     <salla-button
                             class="btn--wishlist animated hidden sm:inline-flex"
@@ -260,7 +259,8 @@
                             onclick="salla.wishlist.toggle({{ product.id }})"
                             shape="icon"
                             fill="outline"
-                            color="light">
+                            color="light"
+							aria-label="add to wishlist">
                         <i class="sicon-heart"></i>
                     </salla-button>
                 </div>
@@ -268,14 +268,14 @@
                 {% if product.sold_quantity or product.can_show_remained_quantity %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
-                            <div class="px-4 text-red-400">
+                            <div class="px-4 !text-danger">
                                 <i class="sicon-fire rtl:ml-1.5 ltr:mr-1.5"></i> {{ trans('pages.products.sold') }}
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
                         {% if product.can_show_remained_quantity %}
                             <div class="px-4 rtl:even:border-r ltr:even:border-l even:border-gray-200">
-                                <i class="text-red-400 sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
+                                <i class="!text-danger sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
                                 {{ trans('pages.products.remained') }}
                                 <span>{{ product.quantity }}</span>
                             </div>
@@ -341,8 +341,8 @@
                             <div class="flex whitespace-nowrap gap-4 items-center">
                               {% if product.is_on_sale %}
                                 <div class="flex items-center space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                                  <h4 class="total-price text-red-400 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
-                                  <span class="before-price text-gray-400 line-through opacity-70">{{product.regular_price|money}}</span>
+                                  <h4 class="total-price text-danger font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
+                                  <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
                                 </div>
                               {% elseif product.starting_price %}
                                 <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span> <h4 class="total-price font-bold text-xl inline-block"> {{product.starting_price|money}}</h4>
@@ -355,14 +355,14 @@
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
                         {% if product.is_hidden_quantity or product.type == 'booking' %}
-                            <input type="hidden" value="1" name="quantity"/>
+                            <input type="hidden" value="1" name="quantity" aria-label="Quantity"/>
                         {% else %}
                             <div class="sticky-product-bar__quantity center-between mb-5">
                                 <label class="form-label font-bold">
                                     {{ trans('pages.products.quantity') }}
                                 </label>
-                                <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
-                                                      class="border-gray-200 flex justify-end"></salla-quantity-input>
+                                <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity" aria-label="Quantity"
+                                  class="border-gray-200 flex justify-end"></salla-quantity-input>
                             </div>
                         {% endif %}
                         {# Add to cart #}
