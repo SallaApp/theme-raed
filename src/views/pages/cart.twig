@@ -45,6 +45,7 @@
 | cart.items[].attachments[].item_id                | int                 |                                                                |
 | cart.items[].attachments[].name                   | int                 | image file name                                                |
 #}
+
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container">
@@ -122,7 +123,9 @@
                             </span>
                         </section>
                     </form>
-
+                    {% if cart.offer %}
+                      {% include 'components.product.offer' with { offer: cart.offer } %}
+                    {% endif %}
                 {% else %}
                     <div class="no-content-placeholder">
                         <i class="sicon-shopping-bag icon"></i>
