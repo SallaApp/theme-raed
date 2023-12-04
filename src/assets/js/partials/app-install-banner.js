@@ -17,10 +17,10 @@ class AppInstall extends HTMLElement {
       )
         return;
 
-      // render the banner
-      this.renderTheBanner();
       // TODO: replace it with deep links when they are ready
       this.cta_link = salla.config.get('store.apps')[this.getMobileOS() === 'iOS' ? 'appstore' : 'googleplay'];
+      // render the banner
+      this.renderTheBanner();
     });
   }
 
