@@ -113,7 +113,21 @@ module.exports = {
             },
             transitionProperty : {
                 'height': 'height'
-            }
+            },
+            keyframes: {
+                slideUpFromBottom: {
+                    '0%': { transform: 'translateY(100%)', opacity: '0' },
+                    '100%': { transform: 'translateY(0%)', opacity: '1' },
+                },
+                slideDownFromBottom: {
+                    '0%': { transform: 'translateY(0%)', opacity: '1' },
+                    '100%': { transform: 'translateY(100%)', opacity: '0' },
+                },
+            },
+            animation: {
+                slideUpFromBottom: 'slideUpFromBottom .6s linear',
+                slideDownFromBottom: 'slideDownFromBottom .6s linear',
+            },
         },
     },
     corePlugins: {

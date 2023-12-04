@@ -11,6 +11,7 @@ module.exports = {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js')],
         home    : asset('js/home.js'),
         'product-card' : asset('js/partials/product-card.js'),
+        'app-install-banner' : asset('js/partials/app-install-banner.js'),
         checkout: [asset('js/cart.js'), asset('js/thankyou.js')],
         pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
         product : [asset('js/product.js'), asset('js/products.js')],
