@@ -17,7 +17,7 @@ class AppInstall extends HTMLElement {
       )
         return;
 
-      // set the banner data
+      // render the banner
       this.renderTheBanner();
       // TODO: replace it with deep links when they are ready
       this.cta_link = salla.config.get('store.apps')[this.getMobileOS() === 'iOS' ? 'appstore' : 'googleplay'];
@@ -67,7 +67,7 @@ class AppInstall extends HTMLElement {
 
   closeBanner() {
     salla.storage.set('app_install_prompt_disabled', true);
-    if (this.position === 'top') {
+    if (this.data.position === 'top') {
       this.setAttribute('open', false);
     } else {
       // handle closing animation first, then close the banner
