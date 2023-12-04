@@ -1,27 +1,35 @@
 {#
-| Variable                                    | Type                   | Description |
-|---------------------------------------------|------------------------|-------------|
-| offer                                       | Offer                  |             |
-| offer.id                                    | int                    |             |
-| offer.name                                  | string                 |             |
-| offer.description                           | string *HTML           |             |
-| offer.categories                            | Category[] *Collection |             |
-| offer.products                              | Product[] *Collection  |             |
-| offer.discounts_table                       | Discount[]             |             |
-| offer.discounts_table.show_discounted_price | bool                   |             |
-| offer.discounts_table.regular_price         | float                  |             |
-| offer.discounts_table.quantity              | int                    |             |
-| offer.discounts_table.quantity_text         | string                 |             |
-| offer.discounts_table.percent               | string ex: 20%         |             |
-| offer.discounts_table.price                 | float                  |             |
+| Variable                                    | Type                    | Description |
+|---------------------------------------------|-------------------------|-------------|
+| offer                                       | Offer                   |             |
+| offer.id                                    | int                     |             |
+| offer.name                                  | string                  |             |
+| offer.description                           | string *HTML            |             |
+| offer.categories                            | Category[] *Collection  |             |
+| offer.products                              | Product[] *Collection   |             |
+| offer.discounts_table                       | Discount[]              |             |
+| offer.discounts_table.show_discounted_price | bool                    |             |
+| offer.discounts_table.regular_price         | float                   |             |
+| offer.discounts_table.quantity              | int                     |             |
+| offer.discounts_table.quantity_text         | string                  |             |
+| offer.discounts_table.percent               | string ex: 20%          |             |
+| offer.discounts_table.price                 | float                   |             |
+| offer.banks                                 | ?Banks[]                |             |
+| offer.banks[].name                          | string                  |             |
+| offer.banks[].logo                          | string url              |             |
+| offer.banks[].percent                       | string ex '20'          |             |
+| offer.banks[].payments                      | Payments[] ex: ['card'] |             |
 #}
-
-<section class="offer-slider relative lg:overflow-hidden mb-8 md:mb-16 rounded p-2.5 sm:p-5 bg-white">
+{% set is_multiple = offer.banks|length > 1 %}
+<section class="offer-slider relative overflow-hidden mb-8 md:mb-16 rounded p-2.5 sm:p-5 bg-white">
     {% set is_displayed = false %}
+
+    <p id="offer-corner-badge">{{ trans('pages.products.special_offer') }}</p>
     <salla-slider 
       type="carousel"
       block-title="{{ offer.name }}"
       block-subTitle="{{ offer.description|raw }}"
+      class="{{offer.banks|length == 1 ? 'bank-offer' : ''}}"
       id="offer-slider">
         <div slot="items">
             {% if offer.categories|length %}
@@ -58,7 +66,38 @@
                         </div>
                     </div>
                 {% endfor %}
-            {% endif %}
+            {% for bank in offer.banks %}
+              <div class="{{is_multiple ? 'slide--one-sixth' : 'flex !items-center gap-3'}}">
+                <div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-4' : ''}}">
+                  <div class="w-14 h-14">
+                    <img class="lazy" src="{{ 'images/s-empty.png' | asset }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
+                  </div>
+                  <ul class="flex justify-center min-w-[84px]">
+                  {% for payment in bank.payments %}
+                    <li class="w-7 h-5 bg-white rounded flex items-center">
+                      <img 
+                        class="lazy object-contain max-h-full" 
+                        width="100%" height="100%" 
+                        src="{{ 'images/s-empty.png' | asset }}" 
+                        data-src="{{ ('images/payment/'~ payment ~'_mini.png') | cdn }}" 
+                        alt="payment">
+                    </li>
+                  {% endfor %}
+                  </ul>
+                  {% if is_multiple %}
+                    <p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">
+                      {{ trans('pages.products.discount') ~ bank.percent }}%
+                    </p>
+                  {% endif %}
+                </div>
+                {% if not is_multiple %}
+                <div class="w-full">
+                  <h2 class="text-base font-medium text-red-600 max-w-[92%]">{{offer.name}}</h2>
+                  <p class="text-sm font-normal text-gray-600 leading-normal max-w-[95%]">{{offer.description|raw}}</p>
+                </div>
+                {% endif %}
+              </div>
+            {% endfor %}
         </div>
     </salla-slider>
 
