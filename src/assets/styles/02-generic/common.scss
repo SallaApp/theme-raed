@@ -351,3 +351,40 @@ salla-modal {
 .s-button-btn, .s-price-range-number-input{
   @apply rounded;
 }
+
+// salla app install banner
+.s-app-install-banner {
+  @apply hidden flex-row items-center fixed left-0 right-0 w-[95%] my-4 mx-auto z-[999] rounded-md p-3 gap-2 drop-shadow-md;
+  background-color:  color-mix(in srgb, var(--color-primary) 15%, white);
+  &[open=false] {
+    @apply hidden;
+  }
+  &[open=true][position=top] {
+    @apply flex transform duration-500;
+  }
+  &[open=true][position=bottom] {
+    @apply flex animate-slideUpFromBottom;
+  }
+  &[position=top] {
+    @apply top-0 relative m-0 w-full rounded-none;
+  }
+  &[position=bottom] {
+    @apply bottom-0;
+  }
+  &[closing][position=bottom] {
+    @apply animate-slideDownFromBottom;
+    animation-fill-mode: forwards;
+  }
+  &-title {
+    @apply text-base font-bold text-primary;
+  }
+  &-sub-title {
+    @apply text-sm font-normal max-w-[95%];
+  }
+  &-cta {
+    @apply text-primary underline;
+  }
+  &-cancel-button {
+    @apply absolute top-2 rtl:left-3 ltr:right-3;
+  }
+}
