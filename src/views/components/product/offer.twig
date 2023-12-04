@@ -1,19 +1,24 @@
 {#
-| Variable                                    | Type                   | Description |
-|---------------------------------------------|------------------------|-------------|
-| offer                                       | Offer                  |             |
-| offer.id                                    | int                    |             |
-| offer.name                                  | string                 |             |
-| offer.description                           | string *HTML           |             |
-| offer.categories                            | Category[] *Collection |             |
-| offer.products                              | Product[] *Collection  |             |
-| offer.discounts_table                       | Discount[]             |             |
-| offer.discounts_table.show_discounted_price | bool                   |             |
-| offer.discounts_table.regular_price         | float                  |             |
-| offer.discounts_table.quantity              | int                    |             |
-| offer.discounts_table.quantity_text         | string                 |             |
-| offer.discounts_table.percent               | string ex: 20%         |             |
-| offer.discounts_table.price                 | float                  |             |
+| Variable                                    | Type                    | Description |
+|---------------------------------------------|-------------------------|-------------|
+| offer                                       | Offer                   |             |
+| offer.id                                    | int                     |             |
+| offer.name                                  | string                  |             |
+| offer.description                           | string *HTML            |             |
+| offer.categories                            | Category[] *Collection  |             |
+| offer.products                              | Product[] *Collection   |             |
+| offer.discounts_table                       | Discount[]              |             |
+| offer.discounts_table.show_discounted_price | bool                    |             |
+| offer.discounts_table.regular_price         | float                   |             |
+| offer.discounts_table.quantity              | int                     |             |
+| offer.discounts_table.quantity_text         | string                  |             |
+| offer.discounts_table.percent               | string ex: 20%          |             |
+| offer.discounts_table.price                 | float                   |             |
+| offer.banks                                 | ?Banks[]                 |             |
+| offer.banks[].name                          | string                  |             |
+| offer.banks[].logo                          | string url              |             |
+| offer.banks[].percent                       | string ex '20'          |             |
+| offer.banks[].payments                      | Payments[] ex: ['card'] |             |
 #}
 {% set is_multiple = offer.banks|length > 1 %}
 <section class="offer-slider relative overflow-hidden mb-8 md:mb-16 rounded p-2.5 sm:p-5 bg-white">
