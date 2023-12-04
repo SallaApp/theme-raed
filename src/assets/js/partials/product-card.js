@@ -252,7 +252,7 @@ class ProductCard extends HTMLElement {
             ${this.product?.donation?.can_donate ? '' : this.getProductPrice()}
             ${this.product?.rating?.stars && !this.minimal ?
               `<div class="s-product-card-rating">
-                <i class="sicon-star2"></i>
+                <i class="sicon-star2 before:text-orange-300"></i>
                 <span>${this.product.rating.stars}</span>
               </div>`
                : ``}
