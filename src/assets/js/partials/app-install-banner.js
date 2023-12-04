@@ -4,6 +4,7 @@
 class AppInstall extends HTMLElement {
   connectedCallback() {
     salla.onReady(() => {
+      this.data = salla.config.get('store.app_install_prompt');
       // Early check to avoid unneeded render and api request
       // do not render the component if the device in not (tablet/mobile) or
       // if the store does not have apps or banner was dismissed by the user
@@ -11,27 +12,21 @@ class AppInstall extends HTMLElement {
       if (
         !this.isMobileOrTabletDevice() ||
         !salla.config.get('store.apps') ||
-        localStorage.getItem('bannerDismissed') === 'true' ||
-        !salla.config.get('store.app_install_prompt')
+        salla.storage.get('app_install_prompt_disabled')||
+        !this.data
       )
         return;
 
       // set the banner data
-      this.data = salla.config.get('store.app_install_prompt');
       this.renderTheBanner();
       // TODO: replace it with deep links when they are ready
-      this.cta_link =
-        this.getMobileOS() === 'iOS'
-          ? salla.config.get('store.apps.appstore')
-          : salla.config.get('store.apps.googleplay');
+      this.cta_link = salla.config.get('store.apps')[this.getMobileOS() === 'iOS' ? 'appstore' : 'googleplay'];
     });
   }
 
   renderTheBanner() {
     this.render();
-    setTimeout(() => {
-      this.setAttribute('open', true);
-    }, 3000);
+    setTimeout(() => this.setAttribute('open', true), 3000);
   }
 
   /**
@@ -71,7 +66,7 @@ class AppInstall extends HTMLElement {
   };
 
   closeBanner() {
-    localStorage.setItem('bannerDismissed', true);
+    salla.storage.set('app_install_prompt_disabled', true);
     if (this.position === 'top') {
       this.setAttribute('open', false);
     } else {
@@ -101,7 +96,7 @@ class AppInstall extends HTMLElement {
         <p class="s-app-install-banner-sub-title">${this.data.sub_title}
           <a href="${this.cta_link}"
             target="_blank" aria-label="download app" class="s-app-install-banner-cta">
-            ${salla.lang.get('blocks.footer.download_apps')}
+            ${salla.lang.getWithDefault('blocks.footer.download_app_now','حمله الآن')}
           </a>
         </p>
       </div>
