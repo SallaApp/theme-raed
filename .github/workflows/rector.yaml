@@ -1,0 +1,100 @@
+name: Rector
+on:
+  push:
+    branches:
+      - master 
+  workflow_dispatch:
+jobs: 
+  build:
+    if: "!contains(github.event.head_commit.message, 'rector enhance')"
+    runs-on:  
+      group: default
+
+    container: 
+      image: sallasa/rector:0.6
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASS }}
+    env:  
+      BRANCH_NAME: "bugfix/rector-1-refactor"
+
+    steps:
+     
+     - name: CHECKOUT
+       uses: actions/checkout@v4
+       with:
+         token: ${{ secrets.GIT_ACTION_TOKEN }}
+
+     - name: GET rector.php 
+       run: curl https://salla-dev.oss-eu-central-1.aliyuncs.com/devops/rector.php --output rector.php
+
+     - name: RUN RECTOR  
+       run: /app/vendor/bin/rector process
+
+     - name: FIX GIT PERMISSION 
+       run: |
+        git config --global --add safe.directory /github/workspace
+
+     - name: REMOVE RECTOR FILE 
+       continue-on-error: true
+       run: |
+        rm rector.php 
+        
+     - name: CHEECK RECTOR CHANGE
+       id: changes
+       uses: UnicornGlobal/has-changes-action@v1.0.11
+       
+
+     - name: CLOSE PULL REQUEST 
+       if: steps.changes.outputs.changed == 1
+       uses: kyslik/close-pull-requests-based-on-label@v1.0.0
+       env:
+          LABEL: rector-enhance
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+     - name: DELETE RECTOR OLD BRANCH
+       continue-on-error: true
+       if: steps.changes.outputs.changed == 1
+       uses: dawidd6/action-delete-branch@v3
+       with:
+          github_token: ${{github.token}}
+          branches: ${{ env.BRANCH_NAME }}
+
+     - name: CREATE BRANCH  
+       if: steps.changes.outputs.changed == 1 
+       uses: peterjgrainger/action-create-branch@v2.2.0
+       with:
+          branch: ${{ env.BRANCH_NAME }}
+          sha: '${{ github.event.pull_request.head.sha }}' 
+       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+     - name: COMMIT CHANGES
+       if: steps.changes.outputs.changed == 1
+       uses: planetscale/ghcommit-action@v0.1.6
+       with:
+          commit_message: "🛠 CI: rector refactor ⚙️"
+          repo: ${{ github.repository }}
+          branch: ${{ env.BRANCH_NAME }}
+          author_name: github_actions
+       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+     - name: create pull-request
+       uses: repo-sync/pull-request@v2
+       with:
+        source_branch: ${{ env.BRANCH_NAME }}              
+        destination_branch: "master"                      
+        pr_title: "refactor(core): 🚧 [Rector Enhancement]🚧" 
+        pr_body: |
+          ## Rector upgrading to PHP 7.4 ⬆️
+          This pr is auto generated with every push to master 
+        # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"  
+        # pr_reviewer: "wei,worker"                           
+        pr_assignee: "salkhwlani,${{ github.event.commits[0].committer.name }}"                        
+        pr_label: "rector-enhance"                   
+        # pr_milestone: "Milestone 1"                      
+        pr_draft: false                                   
+        pr_allow_empty: true                              
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+ 
