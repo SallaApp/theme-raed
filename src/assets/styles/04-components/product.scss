@@ -146,11 +146,19 @@
 .s-tabs-header * {
   pointer-events: auto !important;
 }
-.product__description ul , .product__description li{
-  list-style: inherit !important;
-}
-.product__description ol{
-  list-style: auto !important;
+.product__description {
+  ul,
+  li{
+    list-style: inherit !important;
+  }
+
+  ol{
+    list-style: auto !important;
+  }
+
+  a{
+    @apply text-blue-700;
+  }
 }
 
 
@@ -254,7 +262,7 @@
 }
 
 // image zooming
-#magnify-image {
+.magnify-wrapper {
 	.img-magnifier-glass {
 	  @apply hidden sm:block;
 	  position: absolute;
@@ -298,6 +306,10 @@
   }
 }
 
+.s-rating-stars-reviews {
+	@apply text-gray-500
+}
+
 .s-product-card-promotion-title{
   @apply bg-danger text-white;
 }
@@ -320,4 +332,9 @@
       @apply px-5 #{!important};
     }
   }
+}
+
+//bank offer corner badge
+#offer-corner-badge{
+	@apply float-left absolute bg-red-600 text-white transform rtl:-rotate-45 ltr:rotate-45 px-12 py-1 h-auto w-auto border-0 m-0 z-1 rtl:top-3 ltr:top-5 rtl:-left-12 ltr:-right-14;
 }
