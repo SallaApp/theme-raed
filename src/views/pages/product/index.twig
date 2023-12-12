@@ -18,23 +18,22 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    {% set filters_is_active = filters and products|length %}
     <div class="container px-2.5 ms:px-5 mb-10">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
         <nav class="breadcrumbs w-full py-5">
             {% component 'header.breadcrumbs' %}
         </nav>
         <div class="flex items-start flex-col md:flex-row">
-            {% if filters_is_active %}
+            {% if filters %}
                 <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
                 <salla-filters class="md:w-72 lg:sticky lg:top-20 flex-none" id="filters-menu"></salla-filters>
             {% endif %}
 
-            <div class="main-content flex-1 w-full {{ filters_is_active ? 'ltr:lg:ml-8 rtl:lg:mr-8' : '' }}">
+            <div class="main-content flex-1 w-full {{ filters ? 'ltr:lg:ml-8 rtl:lg:mr-8' : '' }}">
                 <div class="mb-4 sm:mb-6 flex justify-between items-center">
                     <h1 class="font-bold text-xl rtl:pl-3 ltr:pr-3" id="page-main-title">{{ page.title|raw }}</h1>
                     <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                        {% if filters_is_active %}
+                        {% if filters %}
                             <a href="#filters-menu"
                                class="filters-trigger bg-border-color text-primary lg:hidden mt-2">
                                 <i class="sicon-filter text-gray-text text-2xl me-2.5"></i>
@@ -60,7 +59,7 @@
                     <salla-products-list class="flex-1 min-w-0 overflow-auto "
                         source="{{ page.slug }}"
                         source-value="{{ page.id }}"
-                        {{ filters_is_active ?'filters-Results':'' }}>
+                        {{ filters ?'filters-Results':'' }}>
 					          </salla-products-list>
                 </div>
                 {% hook 'product:index.items.end' %}
