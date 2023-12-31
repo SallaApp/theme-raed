@@ -1,0 +1,24 @@
+name: "Lint Branch"
+on: 
+  workflow_call:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    name: Validate branch name
+
+    steps:
+
+      - name: Lint branch name
+        uses: lekterable/branchlint-action@2.0.0
+        with:
+          allowed: |
+            /(bugfix|hotfix|feature|ref)\/[a-zA-Z]+-\d{1,10}(?:-[^\/]+)?$/i
+          errorMessage: 'The allowed prefixs for branch name are (bugfix|hotfix|feature)'
+          startAfter: '2023-12-03 00:00:00'
