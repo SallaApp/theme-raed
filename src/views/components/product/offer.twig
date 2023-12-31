@@ -66,38 +66,39 @@
                         </div>
                     </div>
                 {% endfor %}
-            {% for bank in offer.banks %}
-              <div class="{{is_multiple ? 'slide--one-sixth' : 'flex !items-center gap-3'}}">
-                <div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-4' : ''}}">
-                  <div class="w-14 h-14">
-                    <img class="lazy" src="{{ 'images/s-empty.png' | asset }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
+            {% elseif offer.banks|length %}
+              {% for bank in offer.banks %}
+                <div class="{{is_multiple ? 'slide--one-sixth' : 'flex !items-center gap-3'}}">
+                  <div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-4' : ''}}">
+                    <div class="w-14 h-14">
+                      <img class="lazy" src="{{ 'images/s-empty.png' | asset }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
+                    </div>
+                    <ul class="flex justify-center min-w-[84px]">
+                    {% for payment in bank.payments %}
+                      <li class="w-7 h-5 bg-white rounded flex items-center">
+                        <img 
+                          class="lazy object-contain max-h-full" 
+                          width="100%" height="100%" 
+                          src="{{ 'images/s-empty.png' | asset }}" 
+                          data-src="{{ ('images/payment/'~ payment ~'_mini.png') | cdn }}" 
+                          alt="payment">
+                      </li>
+                    {% endfor %}
+                    </ul>
+                    {% if is_multiple %}
+                      <p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">
+                        {{ trans('pages.products.discount') ~ bank.percent }}%
+                      </p>
+                    {% endif %}
                   </div>
-                  <ul class="flex justify-center min-w-[84px]">
-                  {% for payment in bank.payments %}
-                    <li class="w-7 h-5 bg-white rounded flex items-center">
-                      <img 
-                        class="lazy object-contain max-h-full" 
-                        width="100%" height="100%" 
-                        src="{{ 'images/s-empty.png' | asset }}" 
-                        data-src="{{ ('images/payment/'~ payment ~'_mini.png') | cdn }}" 
-                        alt="payment">
-                    </li>
-                  {% endfor %}
-                  </ul>
-                  {% if is_multiple %}
-                    <p class="absolute -top-4 left-auto text-xs font-normal p-1 rounded-full bg-red-100 text-red-600">
-                      {{ trans('pages.products.discount') ~ bank.percent }}%
-                    </p>
+                  {% if not is_multiple %}
+                  <div class="w-full">
+                    <h2 class="text-base font-medium text-red-600 max-w-[92%]">{{offer.name}}</h2>
+                    <p class="text-sm font-normal text-gray-600 leading-normal max-w-[95%]">{{offer.description|raw}}</p>
+                  </div>
                   {% endif %}
                 </div>
-                {% if not is_multiple %}
-                <div class="w-full">
-                  <h2 class="text-base font-medium text-red-600 max-w-[92%]">{{offer.name}}</h2>
-                  <p class="text-sm font-normal text-gray-600 leading-normal max-w-[95%]">{{offer.description|raw}}</p>
-                </div>
-                {% endif %}
-              </div>
-            {% endfor %}
+              {% endfor %}
             {% endif %}
         </div>
     </salla-slider>
