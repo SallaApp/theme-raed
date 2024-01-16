@@ -1,0 +1,5 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+System.register(["./p-52326bc0.system.js"],(function(t){"use strict";var i,e,s,r;return{setters:[function(t){i=t.r;e=t.c;s=t.h;r=t.H}],execute:function(){var n="salla-loyalty-prize-item:hover{-webkit-box-shadow:0 5px 15px 1px rgba(0, 0, 0, 0.04) !important;box-shadow:0 5px 15px 1px rgba(0, 0, 0, 0.04) !important}";var l=t("salla_loyalty_prize_item",function(){function t(t){i(this,t);this.prizeItemSelected=e(this,"prizeItemSelected",7);this.item=undefined}t.prototype.onPrizeItemClick=function(){this.prizeItemSelected.emit(this.item)};t.prototype.render=function(){return s(r,null,s("div",{onClick:this.onPrizeItemClick.bind(this)},s("img",{class:"s-loyalty-prize-item-image",src:this.item.image,alt:this.item.name}),s("div",{class:"s-loyalty-prize-item-title"},this.item.name),s("div",{class:"s-loyalty-prize-item-subtitle"},this.item.description),s("div",{class:"s-loyalty-prize-item-points"},this.item.cost_points," Points")))};return t}());l.style=n}}}));
+//# sourceMappingURL=p-f577c779.system.entry.js.map
