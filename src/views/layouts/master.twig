@@ -145,7 +145,20 @@
         window.imageZoom = "{{theme.settings.get('imageZoom')}}"
     </script>
     
-    {% hook 'head:start' %}
+        {# {% hook 'head:start' %} #}
+
+        <script>
+          window.salla = window.Salla = window.Salla || {};
+          Salla.onReady = Salla.onReady || function (callback) {
+              if (['ready', 'completed'].includes(Salla.status)) {
+                callback();
+                return;
+              }
+            window.addEventListener('twilight::initiated', callback, {once: true});
+          };
+        </script>
+        
+        <script async src="{{ 'twilight/twilight.js' | asset }}"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
