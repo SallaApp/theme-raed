@@ -20,6 +20,7 @@
 | cart.free_shipping_bar.percent                    | float               | `0 - 100`                                                      |
 | cart.free_shipping_bar.remaining                  | float               | `830`                                                          |
 | cart.items                                        | CartItem[]          |                                                                |
+| cart.options                                      | CartOptions[]       | array of options                                               |
 | cart.items[].id                                   | int                 |                                                                |
 | cart.items[].is_hidden_quantity                   | bool                |                                                                |
 | cart.items[].url                                  | string              | Product url                                                    |
@@ -123,6 +124,13 @@
                             </span>
                         </section>
                     </form>
+                    
+                    {% if cart.options|length %}
+                      {% for productOption in cart.options %}
+                        <salla-product-options options="{{ productOption.options }}" product-id="{{ productOption.id }}"></salla-product-options>
+                      {% endfor %}
+                    {% endif %}
+                    
                     {% if cart.offer %}
                       {% include 'components.product.offer' with { offer: cart.offer } %}
                     {% endif %}
