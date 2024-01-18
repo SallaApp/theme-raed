@@ -12,35 +12,7 @@
 				{% endif %}
 
 				<div class="hidden lg:block">
-					<salla-social class="mb-6">
-						{# 
-							| Need to customize the social item?
-							| --------------------------------
-							| This component has a smart slot that have access to the advertisement data.
-							| By calling the replaceable keys you can access each part of the social item.
-							| 
-							| 
-							| Accessible keys
-							| --------------------------------
-							| |     Key     |
-							| |-------------|
-							| |   {icon}    |
-							| |   {type}    |
-							| |   {link}    |
-							| 
-							| 
-							| Usage
-							|--------------
-							| <salla-social>
-							|   <div slot="social">
-							|     // Your custom html here, you can use the keys as below
-							|       <div>...{type}...<div>
-							|       <i class="{icon}"></i>
-							|   </div>
-							| </salla-social>
-							|
-						#}
-					</salla-social>
+					<salla-social class="mb-6"></salla-social>
 				</div>
 
 				{# vat #}
@@ -73,98 +45,21 @@
 			</div>
 
 			<div>
-				<salla-contacts>
-					{# 
-						| Need to customize the contact item?
-						| --------------------------------
-						| This component has a smart slot that have access to the contacts data.
-						| By calling the replaceable keys you can access each part of the contact item.
-						| 
-						| 
-						| Accessible keys
-						| --------------------------------
-						| |     Key     |
-						| |-------------|
-						| |   {icon}    |
-						| |   {value}   |
-						| |   {link}    |
-						| 
-						| 
-						| Usage
-						|--------------
-						| <salla-contacts>
-						|   <div slot="contact">
-						|     // Your custom html here, you can use the keys as below
-						|       <div>...{value}...<div>
-						|       <i class="{icon}"></i>
-						|   </div>
-						| </salla-contacts>
-						|
-					#}
-				</salla-contacts>
+				<salla-contacts></salla-contacts>
 
 				<div class="lg:hidden contact-social">
 					<salla-social></salla-social>
 				</div>
 			</div>
 
-			<salla-apps-icons class="lg:col-span-2 rtl:lg:pr-20 ltr:lg:pl-20">
-					{# 
-						| Need to customize the app icon item?
-						| --------------------------------
-						| 
-						| Accessible keys
-						| --------------------------------
-						| |     Key     |
-						| |-------------|
-						| |   {icon}    |
-						| |   {name}    |
-						| 
-						| 
-						| Usage
-						|--------------
-						| <salla-apps-icons>
-						|   <div slot="contact">
-						|     // Your custom html here, you can use the keys as below
-						|       <div>...{name}...<div>
-						|       <img src="{icon}" alt="{name}">
-						|   </div>
-						| </salla-apps-icons>
-						|
-					#}
-			</salla-apps-icons>
+			<salla-apps-icons class="lg:col-span-2 rtl:lg:pr-20 ltr:lg:pl-20"></salla-apps-icons>
 
 		</div>
 	</div>
 
 	<div class="md:flex items-center justify-between py-4 container text-center">
 		<span class="text-sm copyright-text">{% hook copyright %}</span>
-		<salla-payments {% if store.settings.certificate %} with-sbc sbc-id="{{ store.settings.certificate.id }}" {% endif %} {{store.settings.made_in_ksa ? 'with-made-in-ksa' : ''}}>
-			{# 
-				| Need to customize the payment item?
-				| --------------------------------
-				| 
-				| Available Slots / Keys |
-				| ---------------------- |
-				| Slot     | Description               | Keys           |
-				| -------- | ------------------------- | -------------- |
-				| payment  | Payment methods           | {image}, {name}|
-				| sbc      | SBC method                | {image}        |
-				| cod      | Cash on delivery method   | {image}        |
-				|
-				|
-				| Usage
-				|--------------
-				| <salla-payments>
-				|   <div slot="payment-slot">
-				|     // Your custom html here, you can use the keys as below
-				|       <div>...{name}...<div>
-				|       <img src="{image}" alt="{name}">
-				|   </div>
-				| </salla-payments>
-				|
-			#}
-		</salla-payments>
+		<salla-payments {% if store.settings.certificate %} with-sbc sbc-id="{{ store.settings.certificate.id }}" {% endif %} {{store.settings.made_in_ksa ? 'with-made-in-ksa' : ''}}></salla-payments>
 	</div>
 </div>
 
