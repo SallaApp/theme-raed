@@ -124,16 +124,6 @@
                             </span>
                         </section>
                     </form>
-                    
-                    {% if cart.options|length %}
-                      {% for productOption in cart.options %}
-                        <salla-product-options options="{{ productOption.options }}" product-id="{{ productOption.id }}"></salla-product-options>
-                      {% endfor %}
-                    {% endif %}
-                    
-                    {% if cart.offer %}
-                      {% include 'components.product.offer' with { offer: cart.offer } %}
-                    {% endif %}
                 {% else %}
                     <div class="no-content-placeholder">
                         <i class="sicon-shopping-bag icon"></i>
@@ -143,6 +133,16 @@
                     </div>
                 {% endfor %}
 
+                {% if cart.options|length %}
+                  {% for productOption in cart.options %}
+                    {% include 'pages.partials.product.options' with { product: productOption } %}
+                  {% endfor %}
+                {% endif %}
+                    
+                {% if cart.offer %}
+                  {% include 'components.product.offer' with { offer: cart.offer } %}
+                {% endif %}
+                
                 {% hook 'cart:items.end' %}
             </div>
 
