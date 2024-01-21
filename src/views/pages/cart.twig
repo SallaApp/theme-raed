@@ -133,10 +133,12 @@
                     </div>
                 {% endfor %}
 
-                {% if cart.options|length %}
-                  {% for productOption in cart.options %}
-                    {% include 'pages.partials.product.options' with { product: productOption } %}
-                  {% endfor %}
+                {% if cart.items|length %}
+                  <div class="cart-options">
+                    {% for productOption in cart.items %}
+                      {% include 'pages.partials.product.options' with { product: productOption } %}
+                    {% endfor %}
+                  </div>
                 {% endif %}
                     
                 {% if cart.offer %}
