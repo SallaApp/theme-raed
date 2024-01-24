@@ -9,7 +9,7 @@
 | category.url               | string      |                                                                      |
 | category.sub_categories    | ?Category[] |                                                                      |
 | category.image             | ?string     |                                                                      |
-| filters                    | bool        | is filters allowed here or not                                       |
+| filters                     | bool        | is filters allowed here or not                                        |
 | sort_options[]             | SortList[]  |                                                                      |
 | sort_options[].id          | string      | ourSuggest, bestSell, topRated, priceFromTopToLow, priceFromLowToTop |
 | sort_options[].name        | string      |                                                                      |
@@ -39,7 +39,7 @@
                                 <i class="sicon-filter text-gray-text text-2xl me-2.5"></i>
                             </a>
                         {% endif %}
-                        {% if sort_options|length and products|length %}
+                        {% if sort_options|length %}
                             <div class="flex items-center">
                                 <label class="hidden sm:block rtl:ml-3 ltr:mr-3 whitespace-nowrap"
                                        for="product-filter">{{ trans('pages.categories.sorting') }}</label>
