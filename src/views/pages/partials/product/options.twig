@@ -32,7 +32,7 @@
     <salla-product-options options="{{ product.options }}" product-id="{{ product.id }}"></salla-product-options>
 {% endif %}
 
-{% if product.weight or product.has_size_guide %}
+{% if not isCartOption and (product.weight or product.has_size_guide) %}
     <section class="bg-white p-5 rounded-md mb-5">
         {% if product.weight %}
             <div class="center-between {% if product.has_size_guide %} pb-5 mb-5 border-b-[1px] {% endif %}">
@@ -60,7 +60,7 @@
 {% endif %}
 
 
-{% if product.can_add_note or product.can_upload_file %}
+{% if not isCartOption and (product.can_add_note or product.can_upload_file) %}
     <section class="bg-white p-5 rounded-md mb-5">
         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
             <label class="form-label">
