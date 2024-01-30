@@ -133,10 +133,15 @@
                     </div>
                 {% endfor %}
 
-                {% if cart.items|length %}
+                {% if cart.options|length %}
                   <div class="cart-options">
-                    {% for productOption in cart.items %}
-                      {% include 'pages.partials.product.options' with { product: productOption } %}
+                    {% for productOption in cart.options %}
+                      <div class="first:pt-5">
+                        {% if productOption.price != '0' %}
+                          <span class="px-5 text-sm">{{'(' ~ productOption.price|money ~ ')'}}</span>
+                        {% endif %}
+                        {% include 'pages.partials.product.options' with { product: productOption } %}
+                      </div>                   
                     {% endfor %}
                   </div>
                 {% endif %}
