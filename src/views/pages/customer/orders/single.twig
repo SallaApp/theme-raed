@@ -414,20 +414,19 @@
                 </div>
             {% endfor %}
 
-            {# TODO: replace the items options with cart options when they are done from BE #}
-            {% if order.items|length %}
+            {% if order.options|length %}
               <div class="bg-white p-5 rounded-md">
-                <h2 class="mb-3.5 text-sm font-bold">خيارات السلة</h2>
+                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.cart.cart_options') }}</h2>
                 <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
                   <dl class="text-sm text-dark divide-y divide-border-color">
-                    {% for item in order.items %}
+                    {% for item in order.options %}
                       {% for option in item.options %}
                         <div class="py-2.5 center-between">
                           <dt class="mb-2 md:mb-0">
-                            {{ option.name }}:
+                            {{ option.name }} {{'(' ~ item.amounts.total.amount|money ~ ')'}}:
                           </dt>
                           <dd class="font-medium text-xs">    
-                            {{ option.value }}
+                            {{ option.value.value }}
                           </dd>
                         </div>  
                       {% endfor %}
