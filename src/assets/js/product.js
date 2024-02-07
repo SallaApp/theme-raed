@@ -47,25 +47,37 @@ class Product extends BasePage {
     }
 
     registerEvents() {
+        // salla.product.event.onPriceUpdated((res) => {
+        //     app.startingPriceTitle?.classList.add('hidden');
+
+        //     app.totalPrice.forEach(el => el.innerText = salla.money(res.data.price));
+        //     // app.totalPrice.innerText = salla.money(res.data.price);
+
+        //     app.anime('.total-price', { scale: [0.88, 1] });
+
+        //     if (res.data.has_sale_price) {
+        //         app.beforePrice.forEach(el => {
+        //             el.style.display = 'inline'
+        //             el.innerText = salla.money(res.data.regular_price)
+        //         });
+        //         // app.beforePrice.style.display = 'inline';
+        //         // app.beforePrice.innerText = salla.money(res.data.regular_price);
+        //         return;
+        //     }
+        //     app.beforePrice.length && app.beforePrice.forEach(el => el.style.display = 'none');
+        //     // app.beforePrice && (app.beforePrice.style.display = 'none')
+        // });
+        
         salla.product.event.onPriceUpdated((res) => {
-            app.startingPriceTitle?.classList.add('hidden');
-
-            app.totalPrice.forEach(el => el.innerText = salla.money(res.data.price));
-            // app.totalPrice.innerText = salla.money(res.data.price);
-
-            app.anime('.total-price', { scale: [0.88, 1] });
-
-            if (res.data.has_sale_price) {
-                app.beforePrice.forEach(el => {
-                    el.style.display = 'inline'
-                    el.innerText = salla.money(res.data.regular_price)
-                });
-                // app.beforePrice.style.display = 'inline';
-                // app.beforePrice.innerText = salla.money(res.data.regular_price);
-                return;
-            }
-            app.beforePrice.length && app.beforePrice.forEach(el => el.style.display = 'none');
-            // app.beforePrice && (app.beforePrice.style.display = 'none')
+          app.startingPriceTitle?.classList.add('hidden');
+          
+          app.totalPrice.forEach(el => {el.innerText = salla.money(res.data.price)});
+          app.beforePrice.forEach(el => {el.innerText = salla.money(res.data.regular_price) });
+          
+          app.toggleClassIf('.price-is-on-sale', 'showed', 'hidden', () => res.data.has_sale_price);
+          app.toggleClassIf('.starting-or-normal-price', 'hidden', 'showed', () => res.data.has_sale_price);
+          
+          app.anime('.total-price', { scale: [0.88, 1] });
         });
 
         app.onClick('#btn-show-more', e => app.all('#more-content', div => {
