@@ -135,14 +135,14 @@
 
                 {% if cart.options|length %}
                   <div class="cart-options">
-                    {% for productOption in cart.options %}
-                      <form class="first:pt-5 relative" onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ productOption.id }}">
-                        <input type="hidden" name="id" value="{{ productOption.id }}">
-                        <input type="hidden" name="quantity" value="{{ productOption.quantity }}">
-                        {% if productOption.price != '0' %}
-                          <span class="block px-5 text-sm absolute rtl:left-0 ltr:right-0">{{'(' ~ productOption.price|money ~ ')'}}</span>
+                    {% for product_option in cart.options %}
+                      <form class="first:pt-5 relative" onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ product_option.id }}">
+                        <input type="hidden" name="id" value="{{ product_option.id }}">
+                        <input type="hidden" name="quantity" value="{{ product_option.quantity }}">
+                        {% if product_option.price != '0' %}
+                          <span class="block px-5 text-sm absolute rtl:left-0 ltr:right-0">{{'(' ~ product_option.price|money ~ ')'}}</span>
                         {% endif %}
-                        {% include 'pages.partials.product.options' with { product: productOption, isCartOption: true } %}
+                        {% include 'pages.partials.product.options' with { product: product_option } %}
                       </form>                   
                     {% endfor %}
                   </div>
