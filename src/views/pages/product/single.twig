@@ -353,16 +353,15 @@
                             </div> #}
                             
                             <div class="flex whitespace-nowrap gap-4 items-center">
+                                {% if product.starting_price %} 
+                                  <span class="starting-price-title opacity-60">{{ trans('pages.products.starting_price') }}</span>
+                                {% endif %}  
+
                                 <div class="{{ product.is_on_sale ? '' : 'hidden' }} price-is-on-sale space-x-2 rtl:space-x-reverse whitespace-nowrap">
                                     <h2 class="total-price text-danger font-bold text-xl inline-block">{{product.sale_price|money}}</h2>
                                     <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
                                 </div>  
-                                <div class="starting-or-normal-price gap-4 {{product.is_on_sale ? 'hidden' : 'flex' }}">
-                                    {% if product.starting_price %} 
-                                        <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span>
-                                    {% endif %} 
-                                    <h2 class="total-price font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
-                                </div>
+                                <h2 class="total-price font-bold text-xl inline-block starting-or-normal-price {{product.is_on_sale ? 'hidden' : 'flex' }}"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
                             </div> 
                         </div>
                     </section>
