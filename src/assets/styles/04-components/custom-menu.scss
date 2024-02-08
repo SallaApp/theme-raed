@@ -1,0 +1,109 @@
+
+salla-menu {
+
+    
+    .main-menu > li > a[href*="offer"]{
+        @apply text-danger
+      }
+      
+      @media only screen and (min-width: 1024px) {
+        .main-menu {
+          @apply hidden lg:flex flex-wrap items-center mx-6 pt-8 pb-0;
+            
+          .fixed-pinned & {
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+      
+          li{
+            > a{
+              @apply flex justify-between items-center transition duration-300 p-3 text-sm hover:text-primary hover:no-underline; 
+            }
+      
+            &.s-menu-root-level{
+              @apply inline-block;
+              
+              > a{
+                @apply font-bold pt-0 pb-8;
+              }
+            }
+          }
+      
+          > .s-menu-has-children:hover > a{
+            color: var(--color-primary);
+          }
+      
+          .s-menu-has-children{
+            li a:hover,
+            .s-menu-has-children:hover > a{
+              color: var(--color-primary);
+              @apply bg-gray-200/20;
+            }
+      
+            > a:after{
+              font-family: 'sallaicons';
+              content: "\e970";
+              @apply inline-block transition-transform duration-300 self-end mx-0.5 text-lg opacity-50 leading-4;
+            }
+      
+            &.s-menu-root-level {
+              > a:after{
+                content: "\e96e";
+              }
+      
+              &:hover > a:after{
+                opacity: 1;
+                transform: scaleY(-1);
+              }
+            }
+          }
+      
+          .s-menu-submenu {
+            @apply z-20 transition opacity-0 invisible absolute bg-white -translate-y-3 shadow-default rounded-b-md border-t border-gray-300/30;
+      
+            .s-menu-submenu {
+              top: -1px;
+              right: 100%;
+      
+              [dir="ltr"] & {
+                left: 100%;
+                right: auto;
+              }
+            }
+      
+            .s-product-card-entry{
+              @apply border border-gray-100;
+            }
+      
+            .btn {
+              padding: 8px 10px 10px;
+            }
+      
+            li.s-menu-mega-menu .s-menu-products-container {
+              ul{
+                @apply p-0 m-0 border-none;
+              }
+        
+              > div{
+                @apply hidden;
+              }
+            }
+          }
+  
+          li:hover {
+            > .s-menu-submenu {
+              opacity: 1;
+              visibility: visible;
+              transform: translateY(0);
+            }
+          }
+        }
+      
+        .main-menu .s-menu-submenu ul > li:not(:first-child) > .s-menu-submenu{
+          border-top-right-radius: 0.375rem;
+          border-top-left-radius: 0.375rem;
+          border: none;
+        }
+      }
+}
+ 
