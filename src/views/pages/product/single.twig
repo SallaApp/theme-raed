@@ -213,7 +213,7 @@
                 {# Price #}
                 <div class="flex whitespace-nowrap gap-4 items-center">
                     <div class="{{ product_is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                        <h4 class="text-danger font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
+                        <h4 class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
                         <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
                     </div>
                     <div class="gap-4 {{ product_is_on_sale ? 'hidden' : 'flex' }}">
@@ -271,14 +271,14 @@
                 {% if product.sold_quantity or product.can_show_remained_quantity %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
-                            <div class="px-4 !text-danger">
+                            <div class="px-4 !text-red-800">
                                 <i class="sicon-fire rtl:ml-1.5 ltr:mr-1.5"></i> {{ trans('pages.products.sold') }}
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
                         {% if product.can_show_remained_quantity %}
                             <div class="px-4 rtl:even:border-r ltr:even:border-l even:border-gray-200">
-                                <i class="!text-danger sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
+                                <i class="!text-red-800 sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
                                 {{ trans('pages.products.remained') }}
                                 <span>{{ product.quantity }}</span>
                             </div>
@@ -342,7 +342,7 @@
 
                             <div class="flex whitespace-nowrap gap-4 items-center">
                                 <div class="{{ product_is_on_sale ? '' : 'hidden' }} price_is_on_sale space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                                    <h4 class="total-price text-danger font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
+                                    <h4 class="total-price text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
                                     <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
                                 </div>
                                 <div class="starting-or-normal-price gap-4 {{ product_is_on_sale ? 'hidden' : 'flex' }}">
