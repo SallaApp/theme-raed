@@ -80,6 +80,7 @@
 | product.add_to_cart_label              | string                      |                                                                        |
 | product.currency                       | string                      |                                                                        |
 #}
+{% set is_sticky_product_bar = theme.settings.get('sticky_add_to_cart') %}
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container">
@@ -369,7 +370,9 @@
                         {# Add to cart #}
                         <salla-add-product-button
                                 quick-buy
+                                {% if is_sticky_product_bar %}
                                 support-sticky-bar
+                                {% endif %}
                                 amount="{{ product.base_currency_price }}"
                                 class="mt-5 w-full sticky-product-bar__btn"
                                 product-status="{{ product.status }}"
@@ -407,6 +410,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script type="module" src="https://cdn.assets.salla.network/mini-checkout/widget/widget.esm.js?v=1.0.12"></script>
     <script defer src="{{ 'product.js' | asset }}"></script>
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>

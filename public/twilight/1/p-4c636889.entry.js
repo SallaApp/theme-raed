@@ -1,0 +1,5 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import{r as i,h as t}from"./p-e72c32ba.js";const s="";const n=class{constructor(t){i(this,t);this.notification=undefined}render(){return t("a",{href:this.notification.url,class:{"s-notifications-item":true,"s-notifications-item-read":!this.notification.is_new}},t("span",{class:"s-notifications-item-icon"},t("i",{class:{"s-notifications-item-icon sicon-bell-ring":true,"s-notifications-item-icon-new":this.notification.is_new}})),t("div",{class:"s-notifications-item-content"},t("div",{class:"s-notifications-item-content-leading"},t("h4",null,this.notification.title),t("p",null,this.notification.sub_title)),t("span",{class:"s-notifications-item-content-trailing"},t("i",{class:"sicon-time s-notifications-item-content-trailing-icon"}),t("span",null,this.notification.date))))}};n.style=s;export{n as salla_notification_item};
+//# sourceMappingURL=p-4c636889.entry.js.map

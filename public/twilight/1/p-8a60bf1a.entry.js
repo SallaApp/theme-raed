@@ -1,0 +1,5 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import{r as t,c as i,h as s,H as e}from"./p-e72c32ba.js";const l="salla-loyalty-prize-item:hover{-webkit-box-shadow:0 5px 15px 1px rgba(0, 0, 0, 0.04) !important;box-shadow:0 5px 15px 1px rgba(0, 0, 0, 0.04) !important}";const a=class{constructor(s){t(this,s);this.prizeItemSelected=i(this,"prizeItemSelected",7);this.item=undefined}onPrizeItemClick(){this.prizeItemSelected.emit(this.item)}render(){return s(e,null,s("div",{onClick:this.onPrizeItemClick.bind(this)},s("img",{class:"s-loyalty-prize-item-image",src:this.item.image,alt:this.item.name}),s("div",{class:"s-loyalty-prize-item-title"},this.item.name),s("div",{class:"s-loyalty-prize-item-subtitle"},this.item.description),s("div",{class:"s-loyalty-prize-item-points"},this.item.cost_points," Points")))}};a.style=l;export{a as salla_loyalty_prize_item};
+//# sourceMappingURL=p-8a60bf1a.entry.js.map
