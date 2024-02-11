@@ -1,21 +1,17 @@
 {#
-| Variable             | Type                   | Description                                        |
+| Variable | Type | Description |
 |----------------------|------------------------|----------------------------------------------------|
-| menus                | Menu[] *Collection     | List of menus                                      |
-| menus[].has_children | Bool                   |                                                    |
-| menus[].url          | string                 |                                                    |
-| menus[].title        | string                 |                                                    |
-| menus[].attrs        | string                 | Menu dom attributes ex: ` id="offers"`             |
-| menus[].link_attrs   | string                 | Menu link dom attributes ex: `class="offers-link"` |
-| menus[].children     | Menu[] *Collection     |                                                    |
-| menus[].products     | ?Product[] *Collection | List of selected products or null                  |
+| menus | Menu[] *Collection | List of menus |
+| menus[].has_children | Bool | |
+| menus[].url | string | |
+| menus[].title | string | |
+| menus[].attrs | string | Menu dom attributes ex: ` id="offers"` |
+| menus[].link_attrs | string | Menu link dom attributes ex: `class="offers-link"` |
+| menus[].children | Menu[] *Collection | |
+| menus[].products | ?Product[] *Collection | List of selected products or null |
 #}
 
-<nav id="mobile-menu" class="mobile-menu">
-    <ul class="main-menu">
-      <salla-menu></salla-menu>
-    </ul>
-    <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
-</nav>
+<salla-menu>
+  <button slot="close-button" class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
+</salla-menu>
 <button class="btn--close-sm close-mobile-menu sicon-cancel hidden"></button>
-
