@@ -48,16 +48,18 @@ class Product extends BasePage {
 
     registerEvents() {
       salla.product.event.onPriceUpdated((res) => {
+          let data = res.data,
+              is_on_sale = data.has_sale_price && data.regular_price > data.price;
+          
           app.startingPriceTitle?.classList.add('hidden');
-          app.anime('.total-price', { scale: [0.88, 1] });
-          let data = res.data;
 
           app.totalPrice.forEach(el => {el.innerText = salla.money(data.regular_price < data.price ? data.regular_price : data.price)});
           app.beforePrice.forEach(el => {el.innerText = salla.money(data.regular_price) });
 
-          let is_on_sale = data.has_sale_price && data.regular_price > data.price;
           app.toggleClassIf('.price_is_on_sale','showed','hidden', ()=> is_on_sale)
-          app.toggleClassIf('.starting-or-normal-price','hidden','shoewed', ()=> is_on_sale)
+          app.toggleClassIf('.starting-or-normal-price','hidden','showed', ()=> is_on_sale)
+
+          app.anime('.total-price', { scale: [0.88, 1] });
       });
 
       app.onClick('#btn-show-more', e => app.all('#more-content', div => {
