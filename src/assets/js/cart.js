@@ -53,7 +53,7 @@ class Cart extends BasePage {
     updateCartOptions(options) {
       if (!options || !options.length) return;
 
-      const arrayTwoId = options.map(item => (item.id));
+      const arrayTwoId = options.map((item) => (item.id));
 
       document.querySelectorAll('.cart-options form')?.forEach((form) => {
         if (!arrayTwoId.includes(parseInt(form.id.value))) {
