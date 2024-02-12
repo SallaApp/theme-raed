@@ -49,6 +49,18 @@ class Cart extends BasePage {
             }
         });
     }
+
+    updateCartOptions(options) {
+      if (!options || !options.length) return;
+
+      const arrayTwoId = options.map(item => (item.id));
+
+      document.querySelectorAll('.cart-options form')?.forEach((form) => {
+        if (!arrayTwoId.includes(parseInt(form.id.value))) {
+          form.remove();
+        }
+      })
+    }
     
     /**
      * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
@@ -56,8 +68,13 @@ class Cart extends BasePage {
     updateCartPageInfo(cartData) {
         //if item deleted & there is no more items, just reload the page
         if (!cartData.count) {
+            // clear cart options from the dom before page reload
+            document.querySelector('.cart-options')?.remove();
             return window.location.reload();
         }
+
+        // update the dom for cart options
+        this.updateCartOptions(cartData?.options);
         // update each item data
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
