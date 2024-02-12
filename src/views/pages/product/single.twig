@@ -226,7 +226,7 @@
                 <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
                     {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
                     {% if product.has_read_more %}
-                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 py-4 opacity-70"
+                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 py-4"
                             id="more-content" style="max-height:5.25rem">
                             {{ product_desc|raw }}
                         </article>
@@ -236,7 +236,9 @@
                             {{ trans('pages.products.read_more') }}
                         </a>
                     {% else %}
-                        <p class="pb-1">{{ product_desc|raw }}</p>
+                        <article class="article--main pb-1">
+                            {{ product_desc|raw }}
+                        </article>
                     {% endif %}
                 </div>
 
@@ -368,6 +370,7 @@
                         <salla-add-product-button
                                 quick-buy
                                 support-sticky-bar
+                                {{product.is_require_shipping ? 'required-shipping' : ''}}
                                 amount="{{ product.base_currency_price }}"
                                 class="mt-5 w-full sticky-product-bar__btn"
                                 product-status="{{ product.status }}"

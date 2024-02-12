@@ -152,6 +152,11 @@
     list-style: inherit !important;
   }
 
+  ul,
+  ol {
+    @apply px-6;
+  }
+
   ol{
     list-style: auto !important;
   }
@@ -334,7 +339,35 @@
   }
 }
 
-//bank offer corner badge
+// bank offer corner badge
 #offer-corner-badge{
-	@apply float-left absolute bg-red-600 text-white transform rtl:-rotate-45 ltr:rotate-45 px-12 py-1 h-auto w-auto border-0 m-0 z-1 rtl:top-3 ltr:top-5 rtl:-left-12 ltr:-right-14;
+  @apply float-left absolute bg-red-600 text-white transform rtl:-rotate-45 ltr:rotate-45 px-12 py-1 h-auto w-auto border-0 m-0 z-1 rtl:top-3 ltr:top-5 rtl:-left-12 ltr:-right-14;
+}
+
+// cart options
+.cart-options {
+  @apply bg-white border-dashed border border-gray-400 rounded-md;
+  salla-product-options {
+    @apply mb-0 pt-0;
+  
+    .s-product-options-option {
+      @apply block #{!important};
+
+      &-label {
+        @apply mb-3;
+      }
+
+      .s-form-control {
+        @apply rounded-md border-gray-200
+      }
+
+      .s-datetime-picker-input {
+        @apply rounded-md border-gray-200
+      }
+
+      .s-product-options-multiple-options-wrapper {
+        @apply block #{!important};
+      }
+    }
+  }
 }
