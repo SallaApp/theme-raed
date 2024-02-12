@@ -69,11 +69,10 @@ class App extends AppHelpers {
   }
 
   async isElementLoaded(selector){
-    const element= document.querySelector(selector)
-    while (element=== null) {
+    while (document.querySelector(selector)=== null) {
       await new Promise( resolve =>  requestAnimationFrame(resolve) )
     }
-    return element;
+    return document.querySelector(selector);
   };
 
   copyToClipboard(event) {
@@ -119,6 +118,7 @@ class App extends AppHelpers {
   initiateMobileMenu() {
 
   this.isElementLoaded('#mobile-menu').then((menu) => {
+
  
   const mobileMenu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
 
