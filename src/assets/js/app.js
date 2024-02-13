@@ -68,12 +68,15 @@ class App extends AppHelpers {
     }
   }
 
-  async isElementLoaded(selector){
-    while (document.querySelector(selector)=== null) {
-      await new Promise( resolve =>  requestAnimationFrame(resolve) )
+isElementLoaded(selector){
+  return new Promise((resolve=>{
+    const interval=setInterval(()=>{
+    if(document.querySelector(selector)){
+      clearInterval(interval)
+      return resolve(document.querySelector(selector))
     }
-    return document.querySelector(selector);
-  };
+   },160)
+}))}
 
   copyToClipboard(event) {
     event.preventDefault();
