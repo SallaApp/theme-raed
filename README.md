@@ -1,4 +1,3 @@
-
 <div id="top"></div>
 <br />
 <div align="center"> 
@@ -15,6 +14,7 @@
     <a href="https://github.com/SallaApp/theme-raed/discussions/new">Request Feature</a> . <a href="https://t.me/salladev">&lt;/Salla Developers&gt;</a> . <a href="https://docs.salla.dev/docs/twilight-themes-documentation">Official Documentation</a> 
   </p>
 </div>
+
 
 <!-- TABLE OF CONTENTS -->
 <details open>
