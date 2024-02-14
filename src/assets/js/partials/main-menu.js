@@ -2,6 +2,7 @@ class NavigationMenu extends HTMLElement {
     constructor() {
         super();
         this.displayAllText = null;
+        this.brandsText = null
         this.menus = [];
     }
 
@@ -13,8 +14,9 @@ class NavigationMenu extends HTMLElement {
             salla.api.component.getMenus('header').then(({ data }) => {
                 this.menus = data;
                 this.displayAllText = salla.lang.get('blocks.home.display_all');
+                this.brandsText = salla.lang.get('common.titles.brands')
                 this.render();
-            }).catch(error => {
+            }).catch((error) => {
                 console.error('Error fetching menus:', error);
             });
         });
@@ -38,13 +40,15 @@ class NavigationMenu extends HTMLElement {
         return menu && menu.products && menu.products.length > 0;
     }
 
-    /**
-    * Get the classes for the menu
-    * @param {String} classes
-    * @returns {String}
+
+    /** could be removed in the future
+    * this is a fallback in case brands title is not set in the brands settings in merchant dashboard
+    * @param {Object} menu
+    * @returns {string}
     */
-    clx(classes) {
-        return classes;
+    getMenuTitle(menu) {
+        if (menu.title) { return menu.title }
+        if (menu.id === 'brands') { return this.brandsText }
     }
 
     /**
@@ -54,8 +58,8 @@ class NavigationMenu extends HTMLElement {
     * @returns {String}
     */
     getDesktopClasses(menu, isRootMenu) {
-        return this.clx(`!hidden lg:!block ${isRootMenu ? 'root-level lg:!inline-block' : 'relative'} ${menu.products ? ' mega-menu' : ''}
-        ${this.hasChildren(menu) ? ' has-children' : ''}`);
+        return `!hidden lg:!block ${isRootMenu ? 'root-level lg:!inline-block' : 'relative'} ${menu.products ? ' mega-menu' : ''}
+        ${this.hasChildren(menu) ? ' has-children' : ''}`
     }
 
     /**
@@ -65,25 +69,25 @@ class NavigationMenu extends HTMLElement {
     * @returns {String}
     */
     getMobileMenu(menu, displayAllText) {
-        const menuImage = menu.image ? `<img src="${menu.image}" class="rounded-full" width="48" height="48" alt="${menu.title}" />` : '';
+        const menuImage = menu.image ? `<img src="${menu.image}" class="rounded-full" width="48" height="48" alt="${this.getMenuTitle(menu)}" />` : '';
 
         return `
         <li class="lg:hidden text-sm font-bold">
             ${!this.hasChildren(menu) ? `
-                <a href="${menu.url}" aria-label="${menu.title || 'category'}" class="${this.clx(`text-gray-500 ${menu.image ? '!py-3' : ''}`)}">
+                <a href="${menu.url}" aria-label="${this.getMenuTitle(menu)|| 'category'}" class="text-gray-500 ${menu.image ? '!py-3' : ''}">
                     ${menuImage}
-                    <span>${menu.title || ''}</span>
+                    <span>${this.getMenuTitle(menu) || ''}</span>
                 </a>` :
             `
-                <span class="${this.clx(menu.image ? '!py-3' : '')}">
+                <span class="${menu.image ? '!py-3' : ''}">
                     ${menuImage}
-                    ${menu.title}
+                    ${this.getMenuTitle(menu)}
                 </span>
                 <ul>
                     <li class="text-sm font-bold">
                         <a href="${menu.url}" class="text-gray-500">${displayAllText}</a>
                     </li>
-                    ${menu.children.map(subMenu => this.getMobileMenu(subMenu, displayAllText)).join('')}
+                    ${menu.children.map((subMenu) => this.getMobileMenu(subMenu, displayAllText)).join('')}
                 </ul>
             `}
         </li>`;
@@ -98,20 +102,20 @@ class NavigationMenu extends HTMLElement {
     getDesktopMenu(menu, isRootMenu) {
         return `
         <li class="${this.getDesktopClasses(menu, isRootMenu)}">
-            <a href="${menu.url}" aria-label="${menu.title || 'category'}">
-                <span>${menu.title || ''}</span>
+            <a href="${menu.url}" aria-label="${this.getMenuTitle(menu) || 'category'}">
+                <span>${this.getMenuTitle(menu)}</span>
             </a>
             ${this.hasChildren(menu) ? `
-                <div class="${this.clx(`sub-menu ${this.hasProducts(menu) ? 'w-full left-0 flex' : 'w-56'}`)}">
-                    <ul class="${this.clx(this.hasProducts(menu) ? 'w-56 shrink-0 m-8 rtl:ml-0 ltr:mr-0' : '')}">
-                        ${menu.children.map(subMenu => this.getDesktopMenu(subMenu, false)).join('')}
+                <div class="sub-menu ${this.hasProducts(menu) ? 'w-full left-0 flex' : 'w-56'}">
+                    <ul class="${this.hasProducts(menu) ? 'w-56 shrink-0 m-8 rtl:ml-0 ltr:mr-0' : ''}">
+                        ${menu.children.map((subMenu) => this.getDesktopMenu(subMenu, false)).join('\n')}
                     </ul>
                     ${this.hasProducts(menu) ? `
                         <div class="s-menu-products-wrapper">
                             <salla-products-list
                                 source="selected"
                                 shadow-on-hover
-                                source-value="${menu.products.map(({ id }) => id).join(',')}"
+                                source-value="[${menu.products.map(({ id }) => id).join(',')}]"
                             />
                         </div>` : ''}
                 </div>` : ''}
@@ -124,10 +128,10 @@ class NavigationMenu extends HTMLElement {
     * @returns {String}
     */
     getMenus(menus) {
-        return menus.map(menu => `
+        return menus.map((menu) => `
             ${this.getMobileMenu(menu, this.displayAllText)}
             ${this.getDesktopMenu(menu, true)}
-        `).join('');
+        `).join('\n');
     }
 
     /**
