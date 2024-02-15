@@ -80,6 +80,7 @@
 | product.add_to_cart_label              | string                      |                                                                        |
 | product.currency                       | string                      |                                                                        |
 #}
+{% set product_is_on_sale = product.is_on_sale and product.regular_price > product.sale_price %}
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container">
@@ -211,16 +212,16 @@
 
                 {# Price #}
                 <div class="flex whitespace-nowrap gap-4 items-center">
-                  {% if product.is_on_sale %}
-                    <div class="flex items-center space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                      <h3 class="!text-danger font-bold text-xl inline-block">{{product.sale_price|money}}</h3>
+                  <div class="{{ product_is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
+                      <h4 class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
                       <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
-                    </div>
-                  {% elseif product.starting_price %}
-                    <span>{{ trans('pages.products.starting_price') }}</span> <h4 class="font-bold text-xl inline-block"> {{product.starting_price|money}}</h4>
-                  {% else %}
-                    <h4 class="font-bold text-xl inline-block">{{product.price|money}}</h4>
-                  {% endif %} 
+                  </div>
+                  <div class="gap-4 {{ product_is_on_sale ? 'hidden' : 'flex' }}">
+                      {% if product.starting_price %} 
+                          <span class="">{{ trans('pages.products.starting_price') }}</span>
+                      {% endif %} 
+                          <h2 class=" font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
+                  </div>
                 </div>
 
                 <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
@@ -340,16 +341,16 @@
                             </label>
 
                             <div class="flex whitespace-nowrap gap-4 items-center">
-                              {% if product.is_on_sale %}
-                                <div class="flex items-center space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                                  <h4 class="total-price text-danger font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
-                                  <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
-                                </div>
-                              {% elseif product.starting_price %}
-                                <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span> <h4 class="total-price font-bold text-xl inline-block"> {{product.starting_price|money}}</h4>
-                              {% else %}
-                                <h4 class="total-price font-bold text-xl inline-block">{{product.price|money}}</h4>
-                              {% endif %} 
+                              <div class="{{ product_is_on_sale ? '' : 'hidden' }} price_is_on_sale space-x-2 rtl:space-x-reverse whitespace-nowrap">
+                                <h2 class="total-price text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h2>
+                                <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
+                              </div>
+                              <div class="starting-or-normal-price gap-4 {{ product_is_on_sale ? 'hidden' : 'flex' }}">
+                                {% if product.starting_price %} 
+                                  <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span>
+                                {% endif %} 
+                                <h2 class="total-price font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
+                              </div>
                             </div>
                         </div>
                     </section>
