@@ -80,7 +80,6 @@
 | product.add_to_cart_label              | string                      |                                                                        |
 | product.currency                       | string                      |                                                                        |
 #}
-{% set product_is_on_sale = product.is_on_sale and product.regular_price > product.sale_price %}
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container">
@@ -212,11 +211,11 @@
 
                 {# Price #}
                 <div class="flex whitespace-nowrap gap-4 items-center">
-                  <div class="{{ product_is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
+                  <div class="{{ product.is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
                       <h4 class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
                       <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
                   </div>
-                  <div class="gap-4 {{ product_is_on_sale ? 'hidden' : 'flex' }}">
+                  <div class="gap-4 {{ product.is_on_sale ? 'hidden' : 'flex' }}">
                       {% if product.starting_price %} 
                           <span class="">{{ trans('pages.products.starting_price') }}</span>
                       {% endif %} 
@@ -341,11 +340,11 @@
                             </label>
 
                             <div class="flex whitespace-nowrap gap-4 items-center">
-                              <div class="{{ product_is_on_sale ? '' : 'hidden' }} price_is_on_sale space-x-2 rtl:space-x-reverse whitespace-nowrap">
+                              <div class="{{ product.is_on_sale ? '' : 'hidden' }} price_is_on_sale space-x-2 rtl:space-x-reverse whitespace-nowrap">
                                 <h2 class="total-price text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h2>
                                 <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
                               </div>
-                              <div class="starting-or-normal-price gap-4 {{ product_is_on_sale ? 'hidden' : 'flex' }}">
+                              <div class="starting-or-normal-price gap-4 {{ product.is_on_sale ? 'hidden' : 'flex' }}">
                                 {% if product.starting_price %} 
                                   <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span>
                                 {% endif %} 
