@@ -22,6 +22,7 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
+    this.changeMenuDirection()
     initTootTip();
     this.loadModalImgOnclick();
 
@@ -35,6 +36,14 @@ class App extends AppHelpers {
   log(message) {
     salla.log(`ThemeApp(Raed)::${message}`);
     return this;
+  }
+
+  // fix Menu Direction at the third level >> The menu at the third level was popping off the page
+  changeMenuDirection(){
+    app.all('.sub-menu',submenu=>{
+      let rect = submenu.getBoundingClientRect();
+      (rect.left < 10 || rect.right > window.innerWidth - 10) && submenu.closest('.root-level').classList.add('change-menu-dir');
+    })
   }
 
   loadModalImgOnclick(){
