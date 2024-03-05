@@ -270,14 +270,14 @@
                 {% if product.sold_quantity or product.can_show_remained_quantity %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
-                            <div class="px-4 !text-danger">
+                            <div class="px-4 !text-red-800">
                                 <i class="sicon-fire rtl:ml-1.5 ltr:mr-1.5"></i> {{ trans('pages.products.sold') }}
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
                         {% if product.can_show_remained_quantity %}
                             <div class="px-4 rtl:even:border-r ltr:even:border-l even:border-gray-200">
-                                <i class="!text-danger sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
+                                <i class="!text-red-800 sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
                                 {{ trans('pages.products.remained') }}
                                 <span>{{ product.quantity }}</span>
                             </div>
