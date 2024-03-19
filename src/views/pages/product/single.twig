@@ -65,6 +65,7 @@
 | product.can_show_sold                  | bool                        |                                                                        |
 | product.can_upload_file                | bool                        |                                                                        |
 | product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
+| product.has_metadata                   | bool                        |                                                                        |
 | product.has_options                    | bool                        |                                                                        |
 | product.is_on_sale                     | bool                        | Product has discounted price                                           |
 | product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
@@ -297,6 +298,9 @@
 
                 {# Installment Methods #}
                 <salla-installment price="{{ product.price }}"></salla-installment>
+                {% if product.has_metadata %}
+                <salla-metadata></salla-metadata>
+                {% endif %}
 
                 {% if product.show_availability %}
                     <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
