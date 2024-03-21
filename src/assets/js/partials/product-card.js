@@ -227,7 +227,7 @@ class ProductCard extends HTMLElement {
             </h3>
 
             ${this.product?.subtitle && !this.minimal ?
-              `<p class="s-product-card-content-subtitle">${this.product?.subtitle}</p>`
+              `<p class="s-product-card-content-subtitle opacity-80">${this.product?.subtitle}</p>`
               : ``}
           </div>
           ${this.product?.donation && !this.minimal && !this.fullImage ?
