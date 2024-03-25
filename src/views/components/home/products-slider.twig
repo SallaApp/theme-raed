@@ -1,23 +1,22 @@
 {#
-| Variable        | Type      | Description                                                      |
-|-----------------|-----------|------------------------------------------------------------------|
-| products        | Product[] | List of products                                                 |
-| title           | string    | Section title                                                    |
-| display_all_url | ?string   | If it's existed, mean should show load more link to this url     |
-| position        | Int       | Sorting number start from zero                                   |
+| Variable              | Type      | Description                                                      |
+|-----------------------|-----------|------------------------------------------------------------------|
+| title                 | string    | Section title                                                    |
+| display_all_url       | ?string   | If it's existed, mean should show load more link to this url     |
+| products.source       | string    |                                                                  |
+| products.source_value | ?int[]    | ids of sources (product_ids, categories_ids, brands_id..etc)     |
+| limit                 | int       | Number of products to be shown                                   |
 #}
 
 <section id="best-offers-{{ position }}-slider" class="s-block s-block--best-offers container overflow-hidden">
-  {% if products|length %}
     <salla-products-slider
-            source="selected"
-            limit="{{ limit }}"
             autoplay
-            source-value="[{{ products|map((product) => product.id)|join(',') }}]"
+            source="{{ products.source }}"
+            limit="{{ limit }}"
+            source-value="{{ products.source_value|json_encode }}"
             display-all-url="{{display_all_url}}"
             block-title="{{ title }}"
             block-subTitle="{{ sub_title|raw }}"
             slider-id="slider-with-bg-{{ position }}"
     ></salla-products-slider>
-  {% endif %}
 </section>
