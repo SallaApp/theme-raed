@@ -814,6 +814,15 @@
             "path": "ssaa.js",
             "fields": [
                 {
+                    "id": "description",
+                    "type": "static",
+                    "format": "description",
+                    "label": "Description",
+                    "value": "* {   box-sizing: border-box; }  :root {   --gold: #ffb338;   --light-shadow: #77571d;   --dark-shadow: #3e2904; } body {   margin: 0; } .wrapper {   background: radial-gradient(#272727, #1b1b1b);   display: grid;   grid-template-areas: 'overlap';   place-content: center;   text-transform: uppercase;   height: 100vh; } .wrapper > div {   background-clip: text;     -webkit-background-clip: text;   color: #363833;   font-family: 'Poppins', sans-serif;   font-weight: 900;   font-size: clamp( 3em, 18vw, 15rem);   grid-area: overlap;   letter-spacing: 1px;   -webkit-text-stroke: 4px transparent; } div.bg {   background-image: repeating-linear-gradient( 105deg,      var(--gold) 0% ,      var(--dark-shadow) 5%,     var(--gold) 12%);   color: transparent;   filter: drop-shadow(5px 15px 15px black);   transform: scaleY(1.05);   transform-origin: top; } div.fg{   background-image: repeating-linear-gradient( 5deg,       var(--gold) 0% ,      var(--light-shadow) 23%,      var(--gold) 31%);   color: #1e2127;   transform: scale(1); }",
+                    "variant": "h1",
+                    "icon": "sicon-format-size"
+                },
+                {
                     "id": "code",
                     "type": "string",
                     "format": "code",
@@ -822,9 +831,128 @@
                     "labelHTML": null,
                     "placeholder": "body { color: green; }",
                     "icon": "sicon-browser-code",
-                    "value": null,
+                    "value": "* {\n  box-sizing: border-box;\n}\n\n:root {\n  --gold: #ffb338;\n  --light-shadow: #77571d;\n  --dark-shadow: #3e2904;\n}\nbody {\n  margin: 0;\n}\n.wrapper {\n  background: radial-gradient(#272727, #1b1b1b);\n  display: grid;\n  grid-template-areas: 'overlap';\n  place-content: center;\n  text-transform: uppercase;\n  height: 100vh;\n}\n.wrapper > div {\n  background-clip: text;  \n  -webkit-background-clip: text;\n  color: #363833;\n  font-family: 'Poppins', sans-serif;\n  font-weight: 900;\n  font-size: clamp( 3em, 18vw, 15rem);\n  grid-area: overlap;\n  letter-spacing: 1px;\n  -webkit-text-stroke: 4px transparent;\n}\ndiv.bg {\n  background-image: repeating-linear-gradient( 105deg, \n    var(--gold) 0% , \n    var(--dark-shadow) 5%,\n    var(--gold) 12%);\n  color: transparent;\n  filter: drop-shadow(5px 15px 15px black);\n  transform: scaleY(1.05);\n  transform-origin: top;\n}\ndiv.fg{\n  background-image: repeating-linear-gradient( 5deg,  \n    var(--gold) 0% , \n    var(--light-shadow) 23%, \n    var(--gold) 31%);\n  color: #1e2127;\n  transform: scale(1);\n}",
+                    "required": false
+                },
+                {
+                    "id": "date_time",
+                    "type": "string",
+                    "format": "datetime",
+                    "inputType": "datetime-local",
+                    "label": "Date Time",
+                    "description": null,
+                    "labelHTML": null,
+                    "icon": "sicon-calendar-time",
+                    "value": "2021-10-01T15:23",
                     "required": true,
                     "public": true
+                },
+                {
+                    "id": "icon_picker",
+                    "type": "string",
+                    "format": "icon",
+                    "label": "Icon Picker",
+                    "description": null,
+                    "labelHTML": null,
+                    "icon": "sicon-user-circle",
+                    "value": "sicon-tiktok",
+                    "required": false
+                },
+                {
+                    "id": "switch",
+                    "type": "boolean",
+                    "format": "switch",
+                    "label": "Switch",
+                    "description": null,
+                    "labelHTML": null,
+                    "icon": "sicon-toggle-off",
+                    "value": true,
+                    "selected": true,
+                    "required": false
+                },
+                {
+                    "id": "checkbox",
+                    "type": "boolean",
+                    "format": "checkbox",
+                    "label": "Checkbox",
+                    "description": null,
+                    "labelHTML": null,
+                    "icon": "sicon-check-square",
+                    "value": true,
+                    "selected": false,
+                    "required": false
+                },
+                {
+                    "id": "number",
+                    "type": "number",
+                    "format": "float",
+                    "inputType": "number",
+                    "label": "Number",
+                    "description": null,
+                    "labelHTML": null,
+                    "placeholder": "Input a number between -10.10 and 100.",
+                    "icon": "sicon-hashtag",
+                    "value": 0,
+                    "required": false,
+                    "step": 0.1,
+                    "minimum": -10.1,
+                    "maximum": 100
+                },
+                {
+                    "id": "dropdown_list",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "Dropdown List",
+                    "description": null,
+                    "labelHTML": null,
+                    "icon": "sicon-keyboard_arrow_down",
+                    "selected": [],
+                    "options": [],
+                    "source": "Products",
+                    "multichoice": true,
+                    "searchable": true,
+                    "required": false,
+                    "value": []
+                },
+                {
+                    "id": "radio_list",
+                    "type": "items",
+                    "format": "radio-list",
+                    "label": "Radio List",
+                    "description": null,
+                    "labelHTML": null,
+                    "icon": "sicon-list",
+                    "selected": [
+                        {
+                            "label": "لالا",
+                            "value": "Value 1ؤبليل",
+                            "key": "ba65900e-5ad6-425b-93e1-2f6640267117"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "لالا",
+                            "value": "Value 1ؤبليل",
+                            "key": "ba65900e-5ad6-425b-93e1-2f6640267117"
+                        }
+                    ],
+                    "source": "Manual",
+                    "required": false
+                },
+                {
+                    "id": "url",
+                    "type": "string",
+                    "format": "url",
+                    "inputType": "url",
+                    "label": "URL",
+                    "description": null,
+                    "labelHTML": null,
+                    "placeholder": "e.g. https://salla.sa",
+                    "icon": "sicon-link",
+                    "value": null,
+                    "required": false,
+                    "minLength": 6,
+                    "maxLength": 30
                 }
             ]
         }
