@@ -65,6 +65,7 @@
 | product.can_show_sold                  | bool                        |                                                                        |
 | product.can_upload_file                | bool                        |                                                                        |
 | product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
+| product.has_metadata                   | bool                        |                                                                        |
 | product.has_options                    | bool                        |                                                                        |
 | product.is_on_sale                     | bool                        | Product has discounted price                                           |
 | product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
@@ -145,7 +146,7 @@
                                              alt="{{ image.alt }}"
                                              class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% else %}
-                                        <img id="{{image.id}}" src="{{ 'images/s-empty.png' | asset }}" data-src="{{ image.url }}"
+                                        <img id="{{image.id}}" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{ image.url }}"
                                              alt="{{ image.alt }}"
                                              class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% endif %}
@@ -165,7 +166,7 @@
                                              title="{{ image.alt }}"
                                              alt="{{ image.alt }}"/>
                                     {% else %}
-                                        <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | asset }}"
+                                        <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | cdn }}"
                                              class="object-cover w-full h-full lazy bg-gray-100 rounded-md overflow-hidden"
                                              title="{{ image.alt }}"
                                              alt="{{ image.alt }}"/>
@@ -270,14 +271,14 @@
                 {% if product.sold_quantity or product.can_show_remained_quantity %}
                     <div class="bg-white py-2.5 mb-5 rounded-md inline-flex text-sm">
                         {% if product.sold_quantity %}
-                            <div class="px-4 !text-danger">
+                            <div class="px-4 !text-red-800">
                                 <i class="sicon-fire rtl:ml-1.5 ltr:mr-1.5"></i> {{ trans('pages.products.sold') }}
                                 <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
                             </div>
                         {% endif %}
                         {% if product.can_show_remained_quantity %}
                             <div class="px-4 rtl:even:border-r ltr:even:border-l even:border-gray-200">
-                                <i class="!text-danger sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
+                                <i class="!text-red-800 sicon-box-bankers rtl:ml-1.5 ltr:mr-1.5"></i>
                                 {{ trans('pages.products.remained') }}
                                 <span>{{ product.quantity }}</span>
                             </div>
@@ -297,6 +298,9 @@
 
                 {# Installment Methods #}
                 <salla-installment price="{{ product.price }}"></salla-installment>
+                {% if product.has_metadata %}
+                <salla-metadata></salla-metadata>
+                {% endif %}
 
                 {% if product.show_availability %}
                     <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
@@ -398,10 +402,13 @@
                 <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
             </div>
         </div>
-        {% component 'product.offer' %}
+        <salla-offer></salla-offer>
     </div>
 
+    {# Comments Area #}
     {% component 'comments' %}
+    
+    {# Similar Products Area #}
     <div class="container">
         <salla-products-slider source="related" source-value="{{product.id}}" block-title="{{trans('pages.products.similar_products')}}" display-all-url></salla-products-slider>
     </div>

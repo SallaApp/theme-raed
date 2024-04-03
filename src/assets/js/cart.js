@@ -44,8 +44,7 @@ class Cart extends BasePage {
             if (isValid) {
                 /** @type HTMLSallaButtonElement */
                 let btn = event.currentTarget;
-                btn.load()
-                    .then(() => salla.cart.submit())
+                salla.config.get('user.type') == 'guest' ? salla.cart.submit() : btn.load().then(() => salla.cart.submit())
             }
         });
     }

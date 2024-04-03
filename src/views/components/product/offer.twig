@@ -71,7 +71,7 @@
                 <div class="{{is_multiple ? 'slide--one-sixth' : 'flex !items-center gap-3'}}">
                   <div class="flex flex-col items-center bg-white rounded-lg border border-gray-100 p-2 relative {{is_multiple ? 'mt-4' : ''}}">
                     <div class="w-14 h-14">
-                      <img class="lazy" src="{{ 'images/s-empty.png' | asset }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
+                      <img class="lazy" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{bank.logo}}" alt="{{bank.name ~ 'offer'}}" width="100%" height="100%">
                     </div>
                     <ul class="flex justify-center min-w-[84px]">
                     {% for payment in bank.payments %}
@@ -79,7 +79,7 @@
                         <img 
                           class="lazy object-contain max-h-full" 
                           width="100%" height="100%" 
-                          src="{{ 'images/s-empty.png' | asset }}" 
+                          src="{{ 'images/s-empty.png' | cdn }}" 
                           data-src="{{ ('images/payment/'~ payment ~'_mini.png') | cdn }}" 
                           alt="payment">
                       </li>
