@@ -72,9 +72,9 @@ class NavigationMenu extends HTMLElement {
         const menuImage = menu.image ? `<img src="${menu.image}" class="rounded-full" width="48" height="48" alt="${this.getMenuTitle(menu)}" />` : '';
 
         return `
-        <li class="lg:hidden text-sm font-bold" ${menu.attrs}>
+        <li class="lg:hidden text-sm font-bold">
             ${!this.hasChildren(menu) ? `
-                <a href="${menu.url}" aria-label="${this.getMenuTitle(menu)|| 'category'}" class="text-gray-500 ${menu.image ? '!py-3' : ''}" ${menu.link_attrs}>
+                <a href="${menu.url}" aria-label="${this.getMenuTitle(menu)|| 'category'}" class="text-gray-500 ${menu.image ? '!py-3' : ''}">
                     ${menuImage}
                     <span>${this.getMenuTitle(menu) || ''}</span>
                 </a>` :
@@ -101,8 +101,8 @@ class NavigationMenu extends HTMLElement {
     */
     getDesktopMenu(menu, isRootMenu) {
         return `
-        <li class="${this.getDesktopClasses(menu, isRootMenu)}" ${menu.attrs}>
-            <a href="${menu.url}" aria-label="${this.getMenuTitle(menu) || 'category'}" ${menu.link_attrs}>
+        <li class="${this.getDesktopClasses(menu, isRootMenu)}">
+            <a href="${menu.url}" aria-label="${this.getMenuTitle(menu) || 'category'}">
                 <span>${this.getMenuTitle(menu)}</span>
             </a>
             ${this.hasChildren(menu) ? `
