@@ -11,14 +11,34 @@ class NavigationMenu extends HTMLElement {
     */
     connectedCallback() {
         salla.onReady(() => {
+            const lang = salla.lang.locale
+            const menusKey = `menus_${lang}`
+
+            /**
+            * Avoid saving the menu to localStorage (default) when in the development environment
+            * or when modifying the theme in the dashboard
+            */
+            const shouldSkipCaching = process.env.NODE_ENV === "development" || window.self !== window.top
+
+            const cachedMenus = salla.storage.getWithTTL(menusKey, [])
+
+            this.displayAllText = salla.lang.get('blocks.home.display_all');
+            this.brandsText = salla.lang.get('common.titles.brands')
+
+            if (cachedMenus.length > 0 && !shouldSkipCaching) {
+                this.menus = cachedMenus
+                return this.render();
+            }
+
             salla.api.component.getMenus('header').then(({ data }) => {
                 this.menus = data;
-                this.displayAllText = salla.lang.get('blocks.home.display_all');
-                this.brandsText = salla.lang.get('common.titles.brands')
+                salla.storage.setWithTTL(menusKey, this.menus)
                 this.render();
+
             }).catch((error) => {
                 console.error('Error fetching menus:', error);
             });
+
         });
     }
 
@@ -28,7 +48,7 @@ class NavigationMenu extends HTMLElement {
     * @returns {Boolean}
     */
     hasChildren(menu) {
-        return menu && menu.children && menu.children.length > 0;
+        return menu?.children && menu.children.length > 0;
     }
 
     /**
@@ -37,7 +57,7 @@ class NavigationMenu extends HTMLElement {
     * @returns {Boolean}
     */
     hasProducts(menu) {
-        return menu && menu.products && menu.products.length > 0;
+        return menu?.products && menu.products.length > 0;
     }
 
 
@@ -74,11 +94,11 @@ class NavigationMenu extends HTMLElement {
         return `
         <li class="lg:hidden text-sm font-bold" ${menu.attrs}>
             ${!this.hasChildren(menu) ? `
-                <a href="${menu.url}" aria-label="${this.getMenuTitle(menu)|| 'category'}" class="text-gray-500 ${menu.image ? '!py-3' : ''}" ${menu.link_attrs}>
+                <a href="${menu.url}" aria-label="${this.getMenuTitle(menu) || 'category'}" class="text-gray-500 ${menu.image ? '!py-3' : ''}" ${menu.link_attrs}>
                     ${menuImage}
                     <span>${this.getMenuTitle(menu) || ''}</span>
                 </a>` :
-            `
+                `
                 <span class="${menu.image ? '!py-3' : ''}">
                     ${menuImage}
                     ${this.getMenuTitle(menu)}
@@ -115,7 +135,7 @@ class NavigationMenu extends HTMLElement {
                             <salla-products-list
                                 source="selected"
                                 shadow-on-hover
-                                source-value="[${menu.products.map(({ id }) => id).join(',')}]"
+                                source-value="[${menu.products}]"
                             />
                         </div>` : ''}
                 </div>` : ''}
