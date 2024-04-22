@@ -15,50 +15,5 @@
 #}
 
 <section class="s-block s-block--testimonials container overflow-hidden">
-    <div class="lg:overflow-hidden">
-        <div class="flex justify-between">
-            <h1 class="mb-4 mr-2 text-lg font-bold leading-[1.2]">{{ trans('blocks.home.testimonials') }}</h1>
-            {% if display_all_url %}
-                <a href="{{ link('testimonials') }}" class="s-block__display-all">{{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left"></i></a>
-            {% endif %}
-        </div>
-        <salla-slider 
-          centered
-          slides-per-view="1"
-          type="testimonials" 
-          class="testimonials-slider" 
-          centered
-          controls-outer
-          auto-play
-          id="testimonials-{{ position }}-slider">
-            <div slot="items">
-                {% for index, item in items %}
-                    <div class="swiper-slide">
-                        <div class="testimonial">
-                            <div class="testimonial__inner">
-                                <div class="testimonial__avatar">
-                                    <img src="{{ 'images/s-empty.png' | cdn }}" data-src="{{ item.avatar }}"
-                                         alt="{{ item.name|trim ? item.name : 'testimonial-' ~ index }}"
-                                         class="lazy w-full h-full object-cover">
-                                </div>
-                                <div class="flex-1 testimonial__text">
-                                    <p class="leading-6 mb-2 mt-4 sm:mt-0">{{ item.text }}</p>
-                                    <div class="flex flex-col lg:flex-row justify-center lg:justify-between items-center">
-                                        <div class="testimonial__info">
-                                            <h2 class="font-bold text-xs xs:text-sm">{{ item.name }}</h2>
-                                        </div>
-                                        <div class="testimonial__rating text-sm">
-                                            <salla-rating-stars size="small"
-                                            value="{{ item.stars }}"></salla-rating-stars>
-                                        </div>
-                                    </div>
-                                </div>
-                                <i class="testimonial__icon sicon-quote-open"></i>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %} 
-            </div>
-        </salla-slider>
-    </div> 
+    <salla-review display-all-link="{{ display_all_url }}"></salla-review>
 </section> 
