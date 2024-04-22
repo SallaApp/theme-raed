@@ -12,12 +12,19 @@ class Product extends BasePage {
             startingPriceTitle: '.starting-price-title',
         });
 
+        setTimeout(() => this.handleMaxQuantity(), 1000);
+
         if(imageZoom){
             // call the function when the page is ready
             this.initImagesZooming();
             // listen to screen resizing
             window.addEventListener('resize', () => this.initImagesZooming());
         }
+    }
+
+    handleMaxQuantity() {
+      const readOnlyInput = document.querySelector("salla-quantity-input input[max='1']");
+      if (readOnlyInput) readOnlyInput.setAttribute('readonly', true);
     }
 
     initImagesZooming() {
