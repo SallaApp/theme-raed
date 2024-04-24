@@ -12,12 +12,29 @@ class Product extends BasePage {
             startingPriceTitle: '.starting-price-title',
         });
 
+        this.initProductOptionValidations();
+
         if(imageZoom){
             // call the function when the page is ready
             this.initImagesZooming();
             // listen to screen resizing
             window.addEventListener('resize', () => this.initImagesZooming());
         }
+    }
+
+    initProductOptionValidations() {
+      const productForm = document.querySelector('.product-form');
+
+      productForm?.addEventListener('change', async () => {
+        const productOptions = productForm.querySelector('salla-product-options');
+
+        if (!productOptions) {
+          salla.product.getPrice(new FormData(productForm))
+        } else {
+          const isValid = await productOptions?.reportValidity();
+          if (isValid) salla.product.getPrice(new FormData(productForm));
+        }
+      });
     }
 
     initImagesZooming() {
