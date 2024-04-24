@@ -23,17 +23,8 @@ class Product extends BasePage {
     }
 
     initProductOptionValidations() {
-      const productForm = document.querySelector('.product-form');
-
-      productForm?.addEventListener('change', async () => {
-        const productOptions = productForm.querySelector('salla-product-options');
-
-        if (!productOptions) {
-          salla.product.getPrice(new FormData(productForm))
-        } else {
-          const isValid = await productOptions?.reportValidity();
-          if (isValid) salla.product.getPrice(new FormData(productForm));
-        }
+      document.querySelector('.product-form')?.addEventListener('change', function(){
+        this.reportValidity() && salla.product.getPrice(new FormData(this));
       });
     }
 
