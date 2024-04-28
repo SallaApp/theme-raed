@@ -1,6 +1,13 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+On this page, you will find all about Salla's Theme Raed updates, including frequent updates, bug fixes, new features, and deprecated elements. We will be displaying only released updates on [Theme Read's ChangeLog(https://github.com/SallaApp/theme-raed/blob/master/CHANGELOG.md) here on GitHub
+
+> 📝 Note
+> 
+> Make sure to visit this page regularly for updates before working on your Theme based on Theme Raed, as we will be documenting any notable changes here.
+
+> ℹ️ Info
+>The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 # ✨ [1.143.0](https://github.com/SallaApp/theme-raed/compare/1.142.0...1.143.0) (2024-03-27)
 ### Features

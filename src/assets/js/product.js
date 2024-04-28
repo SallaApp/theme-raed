@@ -12,12 +12,20 @@ class Product extends BasePage {
             startingPriceTitle: '.starting-price-title',
         });
 
+        this.initProductOptionValidations();
+
         if(imageZoom){
             // call the function when the page is ready
             this.initImagesZooming();
             // listen to screen resizing
             window.addEventListener('resize', () => this.initImagesZooming());
         }
+    }
+
+    initProductOptionValidations() {
+      document.querySelector('.product-form')?.addEventListener('change', function(){
+        this.reportValidity() && salla.product.getPrice(new FormData(this));
+      });
     }
 
     initImagesZooming() {
