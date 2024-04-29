@@ -13,7 +13,7 @@
 | type               | string                    | `default:store` all, product, store |
 | position           | string                    | Sorting number start from zero      |
 #}
-
+{% set display_all_url = theme.settings.get('is_more_button_enabled')%}
 <section class="s-block s-block--testimonials container overflow-hidden">
-    <salla-reviews display-all-link="{{ display_all_url }}"></salla-reviews>
+    <salla-reviews {{ display_all_url ? "display-all-link" : ''  }}></salla-reviews>
 </section> 
