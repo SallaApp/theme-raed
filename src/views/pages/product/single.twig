@@ -86,7 +86,7 @@
     <div class="container">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
         <nav class="breadcrumbs w-full py-5">
-            {% component 'header.breadcrumbs' %}
+            <salla-breadcrumb></salla-breadcrumb>
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4 rtl:ml-8 ltr:mr-8 pb-8 md:pb-16 overflow-hidden shrink-0">
@@ -324,7 +324,6 @@
                 {% endif %}
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
-                      onchange="salla.product.getPrice(new FormData(event.currentTarget))"
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
                     <input type="hidden" name="id" value="{{ product.id }}">
 
