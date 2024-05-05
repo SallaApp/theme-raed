@@ -2,17 +2,10 @@
 | Variable           | Type                      | Description                         |
 |--------------------|---------------------------|-------------------------------------|
 | limit              | string                    | Maximum number of the testimonials  |
-| items[]            | Testimonial[]  *Paginator |                                     |
-| items[].id         | int                       |                                     |
-| items[].avatar     | string                    |                                     |
-| items[].name       | string                    |                                     |
-| items[].has_order  | bool                      |                                     |
-| items[].created_at | Date *Carbon              |                                     |
-| items[].stars      | int                       |                                     |
-| items[].content    | string                    |                                     |
 | type               | string                    | `default:store` all, product, store |
-| position           | string                    | Sorting number start from zero      |
+| sort               | string                    |                                     |
+| without_customer   | bool                      | show info customers                 |
 #}
 <section class="s-block s-block--testimonials container overflow-hidden">
-    <salla-reviews {{ display_all_url ?"display-all-link":"" }}></salla-reviews>
+    <salla-reviews {{ display_all_url ? "display-all-link" : "" }} limit="{{ limit }}" sort="{{ sort }}" {{ without_customer ? 'without-customer' : '' }} type="{{type}}"></salla-reviews>
 </section> 
