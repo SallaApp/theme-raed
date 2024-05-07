@@ -9,6 +9,9 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🛠 [1.146.0](2024-05-06)
+### Bug Fixes
+- Review component fixes and enhancements
 
 # ✨ [1.145.0](https://github.com/SallaApp/theme-raed/compare/1.143.0...1.145.0)(2024-04-29)
 ### Features:
