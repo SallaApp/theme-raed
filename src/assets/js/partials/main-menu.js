@@ -32,7 +32,7 @@ class NavigationMenu extends HTMLElement {
 
             salla.api.component.getMenus('header').then(({ data }) => {
                 this.menus = data;
-                salla.storage.setWithTTL(menusKey, this.menus)
+                !shouldSkipCaching && salla.storage.setWithTTL(menusKey, this.menus)
                 this.render();
 
             }).catch((error) => {
