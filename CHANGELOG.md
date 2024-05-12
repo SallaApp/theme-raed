@@ -1,6 +1,6 @@
 # Changelog
 
-On this page, you will find all about Salla's Theme Raed updates, including frequent updates, bug fixes, new features, and deprecated elements. We will be displaying only released updates on [Theme Read's ChangeLog(https://github.com/SallaApp/theme-raed/blob/master/CHANGELOG.md) here on GitHub
+On this page, you will find all about Salla's Theme Raed updates, including frequent updates, bug fixes, new features, and deprecated elements. We will be displaying only released updates on [Theme Read's ChangeLog](https://github.com/SallaApp/theme-raed/blob/master/CHANGELOG.md) here on GitHub
 
 > 📝 Note
 > 
@@ -9,6 +9,23 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🛠 [1.146.0](https://github.com/SallaApp/theme-raed/compare/1.145.0...1.147.1)(2024-05-06)
+### Bug Fixes
+- Reviews component fixes and enhancements
+- Support `salla-notifications` component
+
+# ✨ [1.145.0](https://github.com/SallaApp/theme-raed/compare/1.143.0...1.145.0)(2024-04-29)
+### Features:
+- Support `main menus` via api
+- Support `salla-reviews` component
+- Support `salla-breadcrumb` component
+- Support `salla-order` component
+
+# 🏎️ 1.144.0 (2024-04-25)
+### Features
+- Validate all product options before updating the price request with better words such as "`Don't call update price request unless all product options are valid.`"
+- Make quantity input as `readonly` when the maximum quantity is equal to the value `1`
+  
 # ✨ [1.143.0](https://github.com/SallaApp/theme-raed/compare/1.142.0...1.143.0) (2024-03-27)
 ### Features
 - Support New Twilight Components using `salla.config` and Ajax requests.
