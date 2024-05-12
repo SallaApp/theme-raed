@@ -1,33 +1,31 @@
 class NavigationMenu extends HTMLElement {
-    constructor() {
-        super();
-        this.displayAllText = null;
-        this.menus = [];
-    }
-
     connectedCallback() {
-        return salla.onReady(() => {
-            /**
-            * Avoid saving the menu to localStorage (default) when in the development environment
-            * or when modifying the theme in the dashboard
-            */
-            const isPreview = false
-            const cacheKey = `menus_${salla.lang.locale}`
-            const cachedMenus = salla.storage.getWithTTL(cacheKey, [])
+        salla.onReady()
+            .then(() => salla.lang.onLoaded())
+            .then(() => {
+                this.menus = [];
+                this.displayAllText = salla.lang.get('blocks.home.display_all');
+                /**
+                * Avoid saving the menu to localStorage (default) when in the development environment
+                * or when modifying the theme in the dashboard
+                */
+                const isPreview = salla.config.isDebug()
+                const cacheKey = `menus_${salla.lang.locale}`
+                const cachedMenus = salla.storage.getWithTTL(cacheKey, [])
 
-            if (cachedMenus.length > 0 && !isPreview) {
-                this.menus = cachedMenus
-                return this.render()
-            }
-            return salla.api.component.getMenus().then(({ data }) => {
-                this.menus = data;
-                !isPreview && salla.storage.setWithTTL(cacheKey, this.menus)
-                return this.render()
+                if (cachedMenus.length > 0 && !isPreview) {
+                    this.menus = cachedMenus
+                    return this.render()
+                }
 
-            }).catch((error) => {
-                salla.logger.error('salla-menu::Error fetching menus', error)
+                return salla.api.component.getMenus()
+                .then(({ data }) => {
+                    this.menus = data;
+                    !isPreview && salla.storage.setWithTTL(cacheKey, this.menus)
+                    return this.render()
+
+                }).catch((error) => salla.logger.error('salla-menu::Error fetching menus', error));
             });
-        })
     }
 
     /** 
@@ -118,38 +116,25 @@ class NavigationMenu extends HTMLElement {
 
     /**
     * Get the menus
-    * @param {Array} menus
     * @returns {String}
     */
-    getMenus(menus) {
-        return menus.map((menu) => `
+    getMenus() {
+        return this.menus.map((menu) => `
             ${this.getMobileMenu(menu, this.displayAllText)}
             ${this.getDesktopMenu(menu, true)}
         `).join('\n');
     }
 
     /**
-    * Get the header menu
-    * @param {Array} menus
-    * @returns {String}
-    */
-    getHeaderMenu(menus) {
-        return `
-        <nav id="mobile-menu" class="mobile-menu">
-            <ul class="main-menu">
-                ${this.getMenus(menus)}
-            </ul>
-            <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
-        </nav>
-        <button class="btn--close-sm close-mobile-menu sicon-cancel hidden"></button>`;
-    }
-
-    /**
     * Render the header menu
     */
     render() {
-        this.innerHTML = this.getHeaderMenu(this.menus);
-        return this.innerHTML
+        this.innerHTML =  `
+        <nav id="mobile-menu" class="mobile-menu">
+            <ul class="main-menu">${this.getMenus()}</ul>
+            <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
+        </nav>
+        <button class="btn--close-sm close-mobile-menu sicon-cancel hidden"></button>`;
     }
 }
 
