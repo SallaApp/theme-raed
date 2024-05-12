@@ -82,14 +82,14 @@
 					</td>
 					<td class="w-full px-3 py-2 text-sm single-order-header-item md:w-auto md:px-6 md:py-4 md:h-20 whitespace-nowrap ">
 						<div class="font-normal text-gray-400 rtl:ml-2 ltr:mr-2">{{ trans('pages.orders.order_tracking') }}</div>
-						<salla-button fill="outline" class="md:hidden">
-                        <i class="mt-1 sicon-keyboard-arrow-left"></i>
-							<span class="s-order-tracking-link-button">
-								{{trans('pages.orders.tracking')}}
-							</span>
+						<salla-button size="small" fill="outline" class="md:hidden track-order-button ">
+							{{trans('pages.orders.order_tracking')}}
+							<i class=" ms-1 text-primary-d track-order-icon"></i>
 						</salla-button>
-                        <i class="mt-1 sicon-link fill-primary-d"></i>
-                        <a href="/order/{{order.id}}" class="underline text-primary-d">{{trans('pages.orders.tracking_url')}}</a>
+						<div class="items-center hidden gap-2 md:flex text-primary">
+							<i class="mt-1 text-sm sicon-link text-primary"></i>
+							<a href="/order/{{order.id}}" class="underline text-primary">{{trans('pages.orders.tracking_url')}}</a>
+						</div>
 					</td>
 					<td class="flex items-center justify-between w-full px-3 py-2 text-sm single-order-header-item md:w-auto md:px-6 md:py-4 md:h-20 whitespace-nowrap ">
 						{% if order.is_pending_payment and order.pending_payment_ends_in == 0 %}
