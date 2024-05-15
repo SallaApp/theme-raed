@@ -1,26 +1,26 @@
 <footer class="store-footer">
-  <div aria-label="footer" class="store-footer__inner">
-    <div class="container grid grid-col-1 lg:grid-cols-6 gap-8 lg:gap-6">
-        <div class="lg:col-span-2 rtl:lg:pl-20 ltr:lg:pr-20">
-          <a href="{{ link('/') }}" class="flex items-center m-0">
-            <h3>{{store.name}}</h3>
-          </a>
-          {% if store.description %}
-            <p class="max-w-sm leading-6 mb-6">
-              {{ store.description|raw }}
-            </p>
-          {% endif %}
+	<div aria-label="footer" class="store-footer__inner">
+		<div class="container grid grid-col-1 lg:grid-cols-6 gap-8 lg:gap-6">
+			<div class="lg:col-span-2 rtl:lg:pl-20 ltr:lg:pr-20">
+				<a href="{{ link('/') }}" class="flex items-center m-0">
+					<h3>{{store.name}}</h3>
+				</a>
+				{% if store.description %}
+					<p class="max-w-sm leading-6 mb-6">
+						{{ store.description|raw }}
+					</p>
+				{% endif %}
 
-          <div class="hidden lg:block">
-            {% component 'footer.social' %}
-          </div>
+				<div class="hidden lg:block">
+					<salla-social class="mb-6"></salla-social>
+				</div>
 
           {# vat #}
           {% if store.settings.tax.number %}
             <div class="flex rtl:space-x-reverse space-x-2 items-end">
               {% if store.settings.tax.certificate %}
                 <a class="load-img-onclick" data-modal-id="modal-value-tax" href="#/" alt="{{ store.settings.tax.number }}">
-                  <img width="100%" height="100%" src="{{ 'images/s-empty.png' | asset }}" data-src="{{'images/tax.png' | cdn}}" class="lazy w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
+                  <img width="100%" height="100%" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{'images/tax.png' | cdn(70,70)}}" class="lazy w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
                 </a>
               {% endif %}
               <div>
@@ -33,7 +33,7 @@
               <salla-modal sub-title-first sub-title="{{ trans('common.elements.tax_number') }}" modal-title="{{ store.settings.tax.number }}" id="modal-value-tax">
                 <div class="flex justify-center max-w-full">
                   <img class="w-full" loading="lazy" 
-                  src="{{ 'images/s-empty.png' | asset }}" 
+                  src="{{ 'images/s-empty.png' | cdn }}" 
                   data-src="{{ store.settings.tax.certificate }}" 
                   alt="{{ store.settings.tax.number }}"/>
                 </div>
@@ -42,24 +42,28 @@
           {% endif %}
         </div>
 
-        {% component 'footer.menu' %}
+			<div>
+				<h3>{{ trans('blocks.footer.pages_links') }}</h3>
+				<salla-menu source="footer"></salla-menu>
+			</div>
 
-        <div>
-          {% component 'footer.contacts' %}
+			<div>
+				<salla-contacts></salla-contacts>
 
-          <div class="lg:hidden contact-social">
-            {% component 'footer.social' %}
-          </div>
-        </div>
+				<div class="lg:hidden contact-social">
+					<salla-social></salla-social>
+				</div>
+			</div>
 
-        {% component 'footer.mobile-apps' %}
-    </div>
-  </div>
+			<salla-apps-icons class="lg:col-span-2 rtl:lg:pr-20 ltr:lg:pl-20"></salla-apps-icons>
 
-  <div class="md:flex items-center justify-between py-4 container text-center">
-    <span class="text-sm copyright-text">{% hook copyright %}</span>
-    {% component 'footer.payment-methods' %}
-  </div>
+		</div>
+	</div>
 
-  <span class="hidden bottom-2 rtl:pl-24 ltr:pr-24 md:grid-cols-3"></span>
-</footer>
+	<div class="md:flex items-center justify-between py-4 container text-center">
+		<span class="text-sm copyright-text">{% hook copyright %}</span>
+		<salla-payments></salla-payments>
+	</div>
+</div>
+
+<span class="hidden bottom-2 rtl:pl-24 ltr:pr-24 md:grid-cols-3"></span></footer>

@@ -1,4 +1,3 @@
-
 <div id="top"></div>
 <br />
 <div align="center"> 
@@ -12,9 +11,10 @@
     <a href="https://salla.dev/"><strong>Explore our blogs »</strong></a>
     <br />
     <a href="https://github.com/SallaApp/theme-raed/issues/new">Report Bug</a> · 
-    <a href="https://github.com/SallaApp/theme-raed/discussions/new">Request Feature</a> . <a href="https://t.me/salladev">&lt;/Salla Developers&gt;</a> . <a href="https://docs.salla.dev/docs/twilight-themes-documentation">Official Documentation</a> 
+    <a href="https://github.com/SallaApp/theme-raed/discussions/new">Request Feature</a> . <a href="https://t.me/salladev">&lt;/Salla Developers&gt;</a> . <a href="https://docs.salla.dev/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM">Official Documentation</a> 
   </p>
 </div>
+
 
 <!-- TABLE OF CONTENTS -->
 <details open>
@@ -51,7 +51,7 @@
 <br>
 
 ## Overview
-Theme Raed is the starting point for developers to design themes for merchant stores that reflect the uniqueness of each store on the [Salla Platform](https://s.salla.sa). Custom themes will make it much easier for developers to tailor the merchant's store to its changing demands over time. It shipped as the default theme along with the [Twilight Themes](https://salla.stoplight.io/docs/twilight-themes-documentation), which is the Salla themes engine for developers to create customizable themes to be used on the [Salla Platform](https://salla.sa/site/).
+Theme Raed is the starting point for developers to design themes for merchant stores that reflect the uniqueness of each store on the [Salla Platform](https://s.salla.sa). Custom themes will make it much easier for developers to tailor the merchant's store to its changing demands over time. It shipped as the default theme along with the [Twilight Themes](https://docs.salla.dev/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM), which is the Salla themes engine for developers to create customizable themes to be used on the [Salla Platform](https://salla.sa/site/).
   
 ## Getting Started 
 Developers can use Salla Theme Raed to not only design Salla themes with custom HTML/CSS/JS files and reusable custom UI components, but also to build custom actions that trigger JS events and hooks.
@@ -67,11 +67,11 @@ Developers can use Salla Theme Raed to not only design Salla themes with custom 
 ### Install  
 Theme Raed gets installed by default upon installing the Twilight Themes. Twilight can be installed in two ways:
 
-- Through the [Salla Partners Portal](https://salla.stoplight.io/docs/twilight-themes-documentation/332b3dc9231e8-create-a-theme#salla-partners-portal)
+- Through the [Salla Partners Portal](https://docs.salla.dev/doc-421877/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM#creating-theme-via-salla-partners-portal)
 
-- Through the [Salla CLI](https://salla.stoplight.io/docs/twilight-themes-documentation/332b3dc9231e8-create-a-theme#salla-cli).
+- Through the [Salla CLI](https://docs.salla.dev/doc-422775/?nav=01HNA8QHCPJTCY5VSEZ616JCAK).
 
-Either way, it will trigger the installation of the Twilight Engine and the Theme Raed.  This a complete article for how to [install and create](https://salla.stoplight.io/docs/twilight-themes-documentation/332b3dc9231e8-create-a-theme) the Twilight Themes.
+Either way, it will trigger the installation of the Twilight Engine and the Theme Raed.  This a complete article for how to [install and create](https://docs.salla.dev/doc-421877/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM) the Twilight Themes.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -156,33 +156,33 @@ By default, Theme Raed home page displays a collection of Pre-Defined and Custom
 ### Theme Features  
  Pre-Defined  Components, which are know as Theme Features, listed in the [twilight.json](https://github.com/SallaApp/theme-raed/blob/master/twilight.json) under the `features` section. Below is a list of these components.
  
- | <div style="width:220px">Component</div> | Discription |
-|---|---|
-| [Youtube](../4.2-Components/4.2.1-Home-components/4.2.1.01-Home-Youtube-components.md) | This component is responsible for displaying Youtube videos that the developer preselects. |
-| [Fixed Banner](../4.2-Components/4.2.1-Home-components/4.2.1.02-Home-fixed-banner-components.md) | Fixed banner is the area in charge of displaying a banner that is fixated on the home page. |
-| [Featured prodcuts style 1](../4.2-Components/4.2.01-Home-components/4.2.12-Home-featured-products-style1-components.md) | Using this component, featured products are exhibited in a pre-defined style. |
-| [Featured prodcuts style 2](../4.2-Components/4.2.01-Home-components/4.2.13-Home-featured-products-style2-components.md) | Using this component, featured products are exhibited in a pre-defined style. |
-| [Featured prodcuts style 3](../4.2-Components/4.2.01-Home-components/4.2.14-Home-featured-products-style3-components.md) | Using this component, featured products are exhibited in a pre-defined style. |
-| [Testimonials](../4.2-Components/4.2.01-Home-components/4.2.04-Home-testimonials-components.md) | This component displays testimonials that the developer preselects. 
-|[Parallax backgorund](../4.2-Components/4.2.1-Home-components/4.2.1.05-Home-parallax-background.md)|This component displays products with a backgournd that zooms out slowly giving a 2D effect. |
-| [Photos slider](../4.2-Components/4.2.01-Home-components/4.2.07-Home-photos-slider-components.md) | Photos are displayed in a slider by using this component. |
-| [Store Features](../4.2-Components/4.2.01-Home-components/4.2.08-Home-store-features-components.md) | This component is responsible for showcasing the store features such as a detailed product description, customer reviews of the product, and a fast guest check-out option. |
-| [Square photos](../4.2-Components/4.2.01-Home-components/4.2.09-Home-square-photos-components.md) | Use this component to display photos in a square shape. |
-| [Fixed products](../4.2-Components/4.2.01-Home-components/4.2.10-Home-fixed-products-components.md) | Use this component to pin the products that you wish to have displayed always. |
-| [Products slider](../4.2-Components/4.2.01-Home-components/4.2.11-Home-products-slider-components.md) | This slider component helps navigate between products vertically/horizontally. |
-| [Latest Products](../4.2-Components/4.2.1-Home-components/4.2.1.19-Home-latest-products.md) | This component displays the latest products added to the store automatically. |
-|[Vertical menu with slider](../4.2-Components/4.2.1-Home-components/4.2.20-Home-vertical-menu-with-slider.md)| Used to display a menu for a group of the sub-pages' links in a vertical menu. |
+ | <div style="width:220px">Component</div>                                                       | Discription                                                                                                                                                                 |
+ | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+ | [Youtube](https://docs.salla.dev/doc-422582/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)                   | This component is responsible for displaying Youtube videos that the developer preselects.                                                                                  |
+ | [Fixed Banner](https://docs.salla.dev/doc-422583/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)              | Fixed banner is the area in charge of displaying a banner that is fixated on the home page.                                                                                 |
+ | [Testimonials](https://docs.salla.dev/doc-422584/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)              | This component displays testimonials that the developer preselects.                                                                                                         |
+ | [Parallax backgorund](https://docs.salla.dev/doc-422585/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)       | This component displays products with a backgournd that zooms out slowly giving a 2D effect.                                                                                |
+ | [Photos slider](https://docs.salla.dev/doc-422586/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)             | Photos are displayed in a slider by using this component.                                                                                                                   |
+ | [Store Features](https://docs.salla.dev/doc-422587/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)            | This component is responsible for showcasing the store features such as a detailed product description, customer reviews of the product, and a fast guest check-out option. |
+ | [Square photos](https://docs.salla.dev/doc-422588/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)             | Use this component to display photos in a square shape.                                                                                                                     |
+ | [Fixed products](https://docs.salla.dev/doc-422589/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)            | Use this component to pin the products that you wish to have displayed always.                                                                                              |
+ | [Products slider](https://docs.salla.dev/doc-422590/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)           | This slider component helps navigate between products vertically/horizontally.                                                                                              |
+ | [Featured prodcuts style 1](https://docs.salla.dev/doc-422591/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM) | Using this component, featured products are exhibited in a pre-defined style.                                                                                               |
+ | [Featured prodcuts style 2](https://docs.salla.dev/doc-422592/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM) | Using this component, featured products are exhibited in a pre-defined style.                                                                                               |
+ | [Featured prodcuts style 3](https://docs.salla.dev/doc-422593/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM) | Using this component, featured products are exhibited in a pre-defined style.                                                                                               |
+ | [Latest Products](https://docs.salla.dev/doc-422599/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)           | This component displays the latest products added to the store automatically.                                                                                               |
+ | [Vertical menu with slider](https://docs.salla.dev/doc-422600/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM) | Used to display a menu for a group of the sub-pages' links in a vertical menu.                                                                                              |
 
 ### Theme Components
 The Custom Components can be easily modified by the developer. They are known as Theme Components. Below is the list of the Custom Components that are shipped by default along with Theme Raed.
 
-| Components                                        | Description                                                      |
-|----------------------------------------------------------------|-----------------------------------------------------|
-| [Brands](../4.2-Components/4.2.1-Home-components/4.2.1.14-Home-Brands-components.md)| Brands' logos of the store are displayed in this component section. |
-| [Enhanced Squared Image](../4.2-Components/4.2.1-Home-components/4.2.1.15-Home-Enhanced-squared-image-components.md) | Enhanced images in a square shape are displayed with the help of this component. |
-| [Main links](../4.2-Components/4.2.01-Home-components/4.2.17-Home-Main-links-components.md)                          | This component helps to portray the store main links.                             |
-| [Enhanced Slider](../4.2-Components/4.2.01-Home-components/4.2.18-Home-enhanced-slider-component.md)                 | The slider component helps navigate vertically/horizontally.                      |
-| [Slider products with header](../4.2-Components/4.2.1-Home-components/4.2.1.18-Home-slider-products-with-headers-component.md)           | Slider products with header displays the products in a slide and give the sldier a header title.                                                                              |
+| Components                                                                                       | Description                                                                                      |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| [Brands](https://docs.salla.dev/doc-422594/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)                      | Brands' logos of the store are displayed in this component section.                              |
+| [Enhanced Squared Image](https://docs.salla.dev/doc-422595/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)      | Enhanced images in a square shape are displayed with the help of this component.                 |
+| [Main links](https://docs.salla.dev/doc-422596/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)                  | This component helps to portray the store main links.                                            |
+| [Enhanced Slider](https://docs.salla.dev/doc-422597/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM)             | The slider component helps navigate vertically/horizontally.                                     |
+| [Slider products with header](https://docs.salla.dev/doc-422598/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM) | Slider products with header displays the products in a slide and give the sldier a header title. |
 
 
 ## Support

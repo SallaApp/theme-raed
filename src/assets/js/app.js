@@ -14,7 +14,7 @@ class App extends AppHelpers {
     this.commonThings();
     this.initiateNotifier();
     this.initiateMobileMenu();
-    if(header_is_sticky){
+    if (header_is_sticky) {
       this.initiateStickyMenu();
     }
     this.initAddToCart();
@@ -22,6 +22,7 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
+    this.changeMenuDirection()
     initTootTip();
     this.loadModalImgOnclick();
 
@@ -37,16 +38,28 @@ class App extends AppHelpers {
     return this;
   }
 
+    // fix Menu Direction at the third level >> The menu at the third level was popping off the page
+    changeMenuDirection(){
+      app.all('.root-level.has-children',item=>{
+        if(item.classList.contains('change-menu-dir')) return;
+        app.on('mouseover',item,()=>{
+          let submenu = item.querySelector('.sub-menu .sub-menu'),
+              rect = submenu.getBoundingClientRect();
+            (rect.left < 10 || rect.right > window.innerWidth - 10) && app.addClass(item,'change-menu-dir')
+        })
+      })
+    }
+
   loadModalImgOnclick(){
     document.querySelectorAll('.load-img-onclick').forEach(link => {
-      link.addEventListener('click', (event)=> {
+      link.addEventListener('click', (event) => {
         event.preventDefault();
         let modal = document.querySelector('#' + link.dataset.modalId),
-            img = modal.querySelector('img'),
-            imgSrc = img.dataset.src;
+          img = modal.querySelector('img'),
+          imgSrc = img.dataset.src;
         modal.open();
-        
-        if(img.classList.contains('loaded')) return;
+
+        if (img.classList.contains('loaded')) return;
 
         img.src = imgSrc;
         img.classList.add('loaded');
@@ -54,11 +67,11 @@ class App extends AppHelpers {
     })
   }
 
-  commonThings(){
+  commonThings() {
     this.cleanContentArticles('.content-entry');
   }
 
-  cleanContentArticles(elementsSelector){
+  cleanContentArticles(elementsSelector) {
     let articleElements = document.querySelectorAll(elementsSelector);
 
     if (articleElements.length) {
@@ -68,10 +81,23 @@ class App extends AppHelpers {
     }
   }
 
+isElementLoaded(selector){
+  return new Promise((resolve=>{
+    const interval=setInterval(()=>{
+    if(document.querySelector(selector)){
+      clearInterval(interval)
+      return resolve(document.querySelector(selector))
+    }
+   },160)
+}))
+
+  
+  };
+
   copyToClipboard(event) {
     event.preventDefault();
     let aux = document.createElement("input"),
-      btn = event.currentTarget;
+    btn = event.currentTarget;
     aux.setAttribute("value", btn.dataset.content);
     document.body.appendChild(aux);
     aux.select();
@@ -90,43 +116,47 @@ class App extends AppHelpers {
       }
 
       return Swal.mixin({
-        toast            : true,
-        position         : salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
+        toast: true,
+        position: salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
         showConfirmButton: false,
-        timer            : 3500,
-        didOpen          : (toast) => {
+        timer: 3500,
+        didOpen: (toast) => {
           toast.addEventListener('mouseenter', Swal.stopTimer)
           toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
       }).fire({
-        icon            : type,
-        title           : message,
-        showCloseButton : true,
+        icon: type,
+        title: message,
+        showCloseButton: true,
         timerProgressBar: true
       })
     });
   }
 
-  initiateMobileMenu() {
-    let menu = this.element("#mobile-menu");
-    //in landing menu will not be their
-    if (!menu) {
-      return;
-    }
-    menu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
-    salla.lang.onLoaded(() => {
-      menu.navigation({title: salla.lang.get('blocks.header.main_menu')});
-    });
-    const drawer = menu.offcanvas({position: salla.config.get('theme.is_rtl') ? "right" : 'left'});
 
-    this.onClick("a[href='#mobile-menu']", event => {
-      document.body.classList.add('menu-opened');
-      event.preventDefault() || drawer.close() || drawer.open()
-    });
-    this.onClick(".close-mobile-menu", event => {
-      document.body.classList.remove('menu-opened');
-      event.preventDefault() || drawer.close()
-    });
+  initiateMobileMenu() {
+
+  this.isElementLoaded('#mobile-menu').then((menu) => {
+
+ 
+  const mobileMenu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
+
+  salla.lang.onLoaded(() => {
+    mobileMenu.navigation({ title: salla.lang.get('blocks.header.main_menu') });
+  });
+  const drawer = mobileMenu.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
+
+  this.onClick("a[href='#mobile-menu']", event => {
+    document.body.classList.add('menu-opened');
+    event.preventDefault() || drawer.close() || drawer.open()
+    
+  });
+  this.onClick(".close-mobile-menu", event => {
+    document.body.classList.remove('menu-opened');
+    event.preventDefault() || drawer.close()
+  });
+  });
+
   }
 
   initiateStickyMenu() {
@@ -143,7 +173,7 @@ class App extends AppHelpers {
     window.addEventListener('scroll', () => {
       window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
       window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
-    }, {passive: true});
+    }, { passive: true });
   }
 
   setHeaderHeight() {
@@ -172,21 +202,21 @@ class App extends AppHelpers {
       salla.storage.set('statusAd-' + ad.dataset.id, 'dismissed');
 
       anime({
-        targets : '.salla-advertisement',
-        opacity : [1, 0],
+        targets: '.salla-advertisement',
+        opacity: [1, 0],
         duration: 300,
-        height  : [ad.clientHeight, 0],
-        easing  : 'easeInOutQuad',
+        height: [ad.clientHeight, 0],
+        easing: 'easeInOutQuad',
       });
     });
   }
 
   initiateDropdowns() {
-    this.onClick('.dropdown__trigger', ({target: btn}) => {
+    this.onClick('.dropdown__trigger', ({ target: btn }) => {
       btn.parentElement.classList.toggle('is-opened');
       document.body.classList.toggle('dropdown--is-opened');
       // Click Outside || Click on close btn
-      window.addEventListener('click', ({target: element}) => {
+      window.addEventListener('click', ({ target: element }) => {
         if (!element.closest('.dropdown__menu') && element !== btn || element.classList.contains('dropdown__close')) {
           btn.parentElement.classList.remove('is-opened');
           document.body.classList.remove('dropdown--is-opened');
@@ -220,22 +250,22 @@ class App extends AppHelpers {
     document.querySelectorAll('.btn--collapse')
       .forEach((trigger) => {
         const content = document.querySelector('#' + trigger.dataset.show);
-        const state = {isOpen: false}
+        const state = { isOpen: false }
 
         const onOpen = () => anime({
-          targets : content,
+          targets: content,
           duration: 225,
-          height  : content.scrollHeight,
-          opacity : [0, 1],
-          easing  : 'easeOutQuart',
+          height: content.scrollHeight,
+          opacity: [0, 1],
+          easing: 'easeOutQuart',
         });
 
         const onClose = () => anime({
-          targets : content,
+          targets: content,
           duration: 225,
-          height  : 0,
-          opacity : [1, 0],
-          easing  : 'easeOutQuart',
+          height: 0,
+          opacity: [1, 0],
+          easing: 'easeOutQuart',
         })
 
         const toggleState = (isOpen) => {
@@ -244,7 +274,7 @@ class App extends AppHelpers {
         }
 
         trigger.addEventListener('click', () => {
-          const {isOpen} = state
+          const { isOpen } = state
           toggleState(isOpen)
           isOpen ? onClose() : onOpen();
         })
