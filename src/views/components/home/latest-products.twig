@@ -1,13 +1,14 @@
 {#
-| Variable        | Type       | Description                    |
-|-----------------|------------|--------------------------------|
-| products        | Products[] |                                |
-| position        | Int        | Sorting number start from zero |
+| Variable                      | Type       | Description                                                         |
+|-------------------------------|------------|---------------------------------------------------------------------|
+| products                      | Products[] |                                                                     |
+| products.source               | string     |                                                                     |
+| products.source_value         | ?int[]     | ids of sources (product_ids, categories_ids, brands_id..etc)        |
 #}
 <section class="s-block s-block--latest-products container mt-6 sm:mt-8">
     <div class="s-block__title">
       <h2>{{ trans('blocks.home.latest_products') }}</h2>
     </div>
     
-    <salla-products-list source="latest"></salla-products-list>
+    <salla-products-list source="{{ products.source }}"></salla-products-list>
 </section> 
