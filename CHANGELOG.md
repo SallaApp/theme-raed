@@ -9,6 +9,34 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🛠 [1.150.0](https://github.com/SallaApp/theme-raed/compare/1.147.0...1.150.0)(2024-05-16)
+### Enhancements
+- Unused files removed
+  - Footer's files 
+    - contacts.twig
+    - menu.twig
+    - mobile-apps.twig
+    - payment-methods.twig
+    - social.twig
+  - Header's files 
+    - menu-item.twig
+    - breadcrumbs.twig
+    - menu.twig
+  - Product's file
+    - offer.twig
+
+# 🛠 [1.146.0](https://github.com/SallaApp/theme-raed/compare/1.145.0...1.147.1)(2024-05-06)
+### Bug Fixes
+- Reviews component fixes and enhancements
+- Support `salla-notifications` component
+
+# ✨ [1.145.0](https://github.com/SallaApp/theme-raed/compare/1.143.0...1.145.0)(2024-04-29)
+### Features:
+- Support `main menus` via api
+- Support `salla-reviews` component
+- Support `salla-breadcrumb` component
+- Support `salla-order` component
+
 # 🏎️ 1.144.0 (2024-04-25)
 ### Features
 - Validate all product options before updating the price request with better words such as "`Don't call update price request unless all product options are valid.`"

@@ -1,45 +1,31 @@
 class NavigationMenu extends HTMLElement {
-    constructor() {
-        super();
-        this.displayAllText = null;
-        this.brandsText = null
-        this.menus = [];
-    }
-
-    /**
-    * Fetch the menus
-    */
     connectedCallback() {
-        salla.onReady(() => {
-            const lang = salla.lang.locale
-            const menusKey = `menus_${lang}`
+        salla.onReady()
+            .then(() => salla.lang.onLoaded())
+            .then(() => {
+                this.menus = [];
+                this.displayAllText = salla.lang.get('blocks.home.display_all');
+                /**
+                * Avoid saving the menu to localStorage (default) when in the development environment
+                * or when modifying the theme in the dashboard
+                */
+                const isPreview = salla.config.isDebug()
+                const cacheKey = `menus_${salla.lang.locale}`
+                const cachedMenus = salla.storage.getWithTTL(cacheKey, [])
 
-            /**
-            * Avoid saving the menu to localStorage (default) when in the development environment
-            * or when modifying the theme in the dashboard
-            */
-            const shouldSkipCaching = process.env.NODE_ENV === "development" || window.self !== window.top
+                if (cachedMenus.length > 0 && !isPreview) {
+                    this.menus = cachedMenus
+                    return this.render()
+                }
 
-            const cachedMenus = salla.storage.getWithTTL(menusKey, [])
+                return salla.api.component.getMenus()
+                .then(({ data }) => {
+                    this.menus = data;
+                    !isPreview && salla.storage.setWithTTL(cacheKey, this.menus)
+                    return this.render()
 
-            this.displayAllText = salla.lang.get('blocks.home.display_all');
-            this.brandsText = salla.lang.get('common.titles.brands')
-
-            if (cachedMenus.length > 0 && !shouldSkipCaching) {
-                this.menus = cachedMenus
-                return this.render();
-            }
-
-            salla.api.component.getMenus('header').then(({ data }) => {
-                this.menus = data;
-                salla.storage.setWithTTL(menusKey, this.menus)
-                this.render();
-
-            }).catch((error) => {
-                console.error('Error fetching menus:', error);
+                }).catch((error) => salla.logger.error('salla-menu::Error fetching menus', error));
             });
-
-        });
     }
 
     /** 
@@ -48,7 +34,7 @@ class NavigationMenu extends HTMLElement {
     * @returns {Boolean}
     */
     hasChildren(menu) {
-        return menu?.children && menu.children.length > 0;
+        return menu?.children?.length > 0;
     }
 
     /**
@@ -57,18 +43,7 @@ class NavigationMenu extends HTMLElement {
     * @returns {Boolean}
     */
     hasProducts(menu) {
-        return menu?.products && menu.products.length > 0;
-    }
-
-
-    /** could be removed in the future
-    * this is a fallback in case brands title is not set in the brands settings in merchant dashboard
-    * @param {Object} menu
-    * @returns {string}
-    */
-    getMenuTitle(menu) {
-        if (menu.title) { return menu.title }
-        if (menu.id === 'brands') { return this.brandsText }
+        return menu?.products?.length > 0;
     }
 
     /**
@@ -89,19 +64,19 @@ class NavigationMenu extends HTMLElement {
     * @returns {String}
     */
     getMobileMenu(menu, displayAllText) {
-        const menuImage = menu.image ? `<img src="${menu.image}" class="rounded-full" width="48" height="48" alt="${this.getMenuTitle(menu)}" />` : '';
+        const menuImage = menu.image ? `<img src="${menu.image}" class="rounded-full" width="48" height="48" alt="${menu.title}" />` : '';
 
         return `
         <li class="lg:hidden text-sm font-bold" ${menu.attrs}>
             ${!this.hasChildren(menu) ? `
-                <a href="${menu.url}" aria-label="${this.getMenuTitle(menu) || 'category'}" class="text-gray-500 ${menu.image ? '!py-3' : ''}" ${menu.link_attrs}>
+                <a href="${menu.url}" aria-label="${menu.title || 'category'}" class="text-gray-500 ${menu.image ? '!py-3' : ''}" ${menu.link_attrs}>
                     ${menuImage}
-                    <span>${this.getMenuTitle(menu) || ''}</span>
+                    <span>${menu.title || ''}</span>
                 </a>` :
                 `
                 <span class="${menu.image ? '!py-3' : ''}">
                     ${menuImage}
-                    ${this.getMenuTitle(menu)}
+                    ${menu.title}
                 </span>
                 <ul>
                     <li class="text-sm font-bold">
@@ -122,8 +97,8 @@ class NavigationMenu extends HTMLElement {
     getDesktopMenu(menu, isRootMenu) {
         return `
         <li class="${this.getDesktopClasses(menu, isRootMenu)}" ${menu.attrs}>
-            <a href="${menu.url}" aria-label="${this.getMenuTitle(menu) || 'category'}" ${menu.link_attrs}>
-                <span>${this.getMenuTitle(menu)}</span>
+            <a href="${menu.url}" aria-label="${menu.title || 'category'}" ${menu.link_attrs}>
+                <span>${menu.title}</span>
             </a>
             ${this.hasChildren(menu) ? `
                 <div class="sub-menu ${this.hasProducts(menu) ? 'w-full left-0 flex' : 'w-56'}">
@@ -131,50 +106,35 @@ class NavigationMenu extends HTMLElement {
                         ${menu.children.map((subMenu) => this.getDesktopMenu(subMenu, false)).join('\n')}
                     </ul>
                     ${this.hasProducts(menu) ? `
-                        <div class="s-menu-products-wrapper">
-                            <salla-products-list
-                                source="selected"
-                                shadow-on-hover
-                                source-value="[${menu.products}]"
-                            />
-                        </div>` : ''}
+                    <salla-products-list
+                    source="selected"
+                    shadow-on-hover
+                    source-value="[${menu.products}]" />` : ''}
                 </div>` : ''}
         </li>`;
     }
 
     /**
     * Get the menus
-    * @param {Array} menus
     * @returns {String}
     */
-    getMenus(menus) {
-        return menus.map((menu) => `
+    getMenus() {
+        return this.menus.map((menu) => `
             ${this.getMobileMenu(menu, this.displayAllText)}
             ${this.getDesktopMenu(menu, true)}
         `).join('\n');
     }
 
     /**
-    * Get the header menu
-    * @param {Array} menus
-    * @returns {String}
-    */
-    getHeaderMenu(menus) {
-        return `
-        <nav id="mobile-menu" class="mobile-menu">
-            <ul class="main-menu">
-                ${this.getMenus(menus)}
-            </ul>
-            <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
-        </nav>
-        <button class="btn--close-sm close-mobile-menu sicon-cancel hidden"></button>`;
-    }
-
-    /**
     * Render the header menu
     */
     render() {
-        this.innerHTML = this.getHeaderMenu(this.menus);
+        this.innerHTML =  `
+        <nav id="mobile-menu" class="mobile-menu">
+            <ul class="main-menu">${this.getMenus()}</ul>
+            <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
+        </nav>
+        <button class="btn--close-sm close-mobile-menu sicon-cancel hidden"></button>`;
     }
 }
 
