@@ -11,8 +11,7 @@
 | items[].products[]            | Product[] |                                                                     |
 | items[].limit                 | Int       | Number of products to be shown                                      |
 | items[].id                    | String    | Section id                                                          |
-| products.source               | string    |                                                                     |
-| products.source_value         | ?int[]    | ids of sources (product_ids, categories_ids, brands_id..etc)        |
+| postion                       | int       | Sorting number starts from zero                                     |
 | is_slider                     | Bool      | Products should be movable or static                                |
 #}
 {% set component_id='featured-products-style2-' ~ position %}
@@ -38,14 +37,14 @@
                 {% if is_slider %}
                     <salla-products-slider 
                       slider-id="section-{{ section.id }}-slider" 
-                      source="{{ products.source }}"
-                      source-value="{{ products.source_value|json_encode }}"
+                      source="selected"
+                      source-value="[{{ section.products|map((product) => product.id)|join(',') }}]" 
                       >
                     </salla-products-slider>
                 {% else %}
                     <salla-products-list  
-                      source="{{ products.source }}"
-                      source-value="{{ products.source_value|json_encode }}"
+                      source="selected"
+                      source-value="[{{ section.products|map((product) => product.id)|join(',') }}]" 
                       {{is_vertical ? '' : 'horizontal-cards'}}
                       >
                     </salla-products-list>
