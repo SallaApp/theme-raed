@@ -50,120 +50,124 @@
 | theme.settings.get(settingName, default=null)      | mixed    | get theme setting ex `theme.settings.get('my_var', 'fallback')`                                          |
 #}
 <!DOCTYPE html>
-<html lang="{{ user.language.code }}" dir="{{ user.language.dir }}">
-<!-- بسم الله الرحمن الرحيم -->
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
+<html
+	lang="{{ user.language.code }}" dir="{{ user.language.dir }}">
+	<!-- بسم الله الرحمن الرحيم -->
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		{{ theme.settings.set('placeholder', 'images/placeholder.png') }}
 
-    <!-- To eliminate all render blocking CSS & JS and start with the critical css-->
-    <!-- To show loader to the user till the page content are  loaded-->
-    <style>
-      .loader-init {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: white;
-          transition: opacity 0.75s, visibility 0.75s;
-          z-index: 9999;
-      }
+		<!-- To eliminate all render blocking CSS & JS and start with the critical css-->
+		<!-- To show loader to the user till the page content are  loaded-->
+			<style>
+.loader-init {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: white;
+	transition: opacity 0.75s, visibility 0.75s;
+	z-index: 9999;
+}
 
-      .loader-init--hidden {
-          opacity: 0;
-          visibility: hidden;
-      }
+.loader-init--hidden {
+	opacity: 0;
+	visibility: hidden;
+}
 
-      .loader-init::after {
-          content: "";
-          width: 36px;
-          height: 36px;
-          border: 3px solid #eee;
-          border-top-color: #5bd5c4;
-          border-radius: 50%;
-          animation: loading 0.75s ease infinite;
-      }
+.loader-init::after {
+	content: "";
+	width: 36px;
+	height: 36px;
+	border: 3px solid #eee;
+	border-top-color: #5bd5c4;
+	border-radius: 50%;
+	animation: loading 0.75s ease infinite;
+}
 
-      @keyframes loading {
-          from {
-            transform: rotate(0turn);
-          }
-          to {
-            transform: rotate(1turn);
-          }
-      }
-    </style>
-    <script>
-      window.addEventListener("load", () => {
-        const loader = document.querySelector(".loader-init");
-        loader.classList.add("loader-init--hidden");
-        loader.addEventListener("transitionend", () => {
-		  if (!document.querySelector(".loader-init")) return;
-          document.body.removeChild(loader);
-          });
-      });
-    </script>
-  
-    <script defer src="{{ 'product-card.js'|asset }}"></script>
-    <script defer src="{{ 'main-menu.js'|asset }}"></script>
+@keyframes loading {
+	from {
+		transform: rotate(0turn);
+	}
+	to {
+		transform: rotate(1turn);
+	}
+}
+		</style>
+			<script>
+window.addEventListener("load", () => {
+const loader = document.querySelector(".loader-init");
+loader.classList.add("loader-init--hidden");
+loader.addEventListener("transitionend", () => {
+if (!document.querySelector(".loader-init")) 
+return;
 
-    <script data-cfasync="false">
-        window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
-        window.imageZoom = "{{theme.settings.get('imageZoom')}}"
-    </script>
-    
-    {% hook 'head:start' %}
-    {% hook head %}
-    {% block styles %}{% endblock %}
-    <link rel="stylesheet" href="{{ 'app.css' | asset }}">
-    <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
-    <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
-    
-    <style>
-        :root {
-            --font-main: '{{theme.font.name}}';
-            --color-primary: {{ theme.color.primary }};
-            --color-primary-dark: {{ theme.color.darker(0.15) }};
-            --color-primary-light: {{ theme.color.lighter(0.15) }};
-            --color-primary-reverse: {{ theme.color.reverse_text }};
-        }
-    </style>
-    {# tracking services, custom css feature. #}
-    {% hook 'head:end' %}
+document.body.removeChild(loader);
+});
+});
+		</script><script defer src="{{ 'product-card.js'|asset }}"> </script>
+		<script defer src="{{ 'main-menu.js'|asset }}"></script>
+		<script defer src="{{ 'wishlist-card.js'|asset }}"></script>
+
+		<script data-cfasync="false">
+			window.header_is_sticky = "{{ theme.settings.get('header_is_sticky', 'Default Value') }}"
+window.imageZoom = "{{ theme.settings.get('imageZoom') }}"
+		</script>
+
+		{% hook 'head:start' %}
+		{% hook head %}
+		{% block styles %}{% endblock %}
+		<link rel="stylesheet" href="{{ 'app.css' | asset }}">
+		<link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
+		<link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
+
+		<style>:root
+		{
+			--font-main: '{{theme.font.name}}';
+			--color-primary: {{theme.color.primary}}
+			;
+			--color-primary-dark: {{theme.color.darker(0.15)}}
+			;
+			--color-primary-light: {{theme.color.lighter(0.15)}}
+			;
+			--color-primary-reverse: {{theme.color.reverse_text}}
+			;
+		}
+	</style>
+	{# tracking services, custom css feature. #}
+	{% hook 'head:end' %}
 </head>
 <body id="app" class="overflow-x-hidden {% hook 'body:classes' %}
-  {{ theme.settings.get('footer_is_dark') ? ' footer-is-dark' : ' footer-is-light' }}
-  {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
-  {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
-  ">
-  <div class="loader-init"></div>
-<noscript>
-    To get full functionality of this site you need to enable JavaScript. Here is how
-    <a href="https://www.enable-javascript.com/" rel="noreferrer"
-       target="_blank">To enable JavaScript on webpage</a>.
-</noscript>
-<div class="app-inner flex flex-col min-h-full">
-    {% hook 'body:start' %}
-    {% component 'header.header' %}
-    {% block content %}{% endblock %}
-    {% component 'footer.footer' %}
-</div>
-{% hook 'body:end' %}
-<script defer src="{{ 'app.js' | asset }}"></script>
+		  {{ theme.settings.get('footer_is_dark') ? ' footer-is-dark' : ' footer-is-light' }}
+		  {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
+		  {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
+		  ">
+	<div class="loader-init"></div>
+	<noscript>
+		To get full functionality of this site you need to enable JavaScript. Here is how
+		<a href="https://www.enable-javascript.com/" rel="noreferrer" target="_blank">To enable JavaScript on webpage</a>.
+	</noscript>
+	<div class="app-inner flex flex-col min-h-full">
+		{% hook 'body:start' %}
+		{% component 'header.header' %}
+		{% block content %}{% endblock %}
+		{% component 'footer.footer' %}
+	</div>
+	{% hook 'body:end' %}
+	<script defer src="{{ 'app.js' | asset }}"></script>
 
-{# Twilight Components #}
-<salla-offer-modal></salla-offer-modal>
-<salla-search></salla-search>
+	{# Twilight Components #}
+	<salla-offer-modal></salla-offer-modal>
+	<salla-search></salla-search>
 
-{% if user.type=='guest' %}
-    <salla-login-modal></salla-login-modal>
-{% endif %}
-{% block scripts %}{% endblock %}
-</body>
-</html>
+	{% if user.type=='guest' %}
+		<salla-login-modal></salla-login-modal>
+	{% endif %}
+	{% block scripts %}{% endblock %}
+</body></html>
