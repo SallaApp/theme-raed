@@ -200,6 +200,14 @@
                             <b id="sub-total">{{ cart.sub_total|money }}</b>
                         </div>
 
+                        {% if cart.options|length %}
+                          <div class="flex justify-between text-sm mb-5">
+                            <span class="text-gray-500">{{ trans('pages.cart.cart_options_cost') }}</span>
+                            <b id="cart-options-cost">{{ cart.options_total|money }}</b>
+                          </div>
+                        {% endif %}
+												
+
                         <div id="shipping-cost"
                              class="flex justify-between text-sm mb-5 {{ cart.has_shipping?'':'hidden' }}">
                             <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
