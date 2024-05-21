@@ -7,6 +7,10 @@
 | products[] | Product[] *Paginator |             |
 #}
 {% extends "layouts.customer" %}
+{% block head_scripts %}
+	<script defer src="{{ 'customer.js' | asset }}"></script>
+{% endblock %}
+
 {% block inner_content %}
 	<div class="space-y-5" id="wishlist">
 		{% hook 'customer:wishlist.items.start' %}
@@ -14,9 +18,7 @@
 		{% hook 'customer:wishlist.items.end' %}
 	</div>
 {% endblock %}
-{% block scripts %}
-	<script defer src="{{ 'customer.js' | asset }}"></script>
-{% endblock %}
+
 {% block page_scripts %}
 	<script defer src="{{ 'wishlist-card.js'|asset }}"></script>
 {% endblock %}
