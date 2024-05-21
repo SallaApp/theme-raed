@@ -1,20 +1,4 @@
-{#
-| Variable              | Type                         | Description         |
-|-----------------------|------------------------------|---------------------|
-| comments              | Comment[] *Paginator         |                     |
-| comments[].id         | int                          |                     |
-| comments[].avatar     | string                       |                     |
-| comments[].name       | string                       |                     |
-| comments[].has_order  | bool                         |                     |
-| comments[].created_at | Date *Carbon                 |                     |
-| comments[].stars      | int                          |                     |
-| comments[].content    | string                       |                     |
-| comments[].is_pending | bool                         | Is not approved yet |
-| comments[].replies    | Comment[] *Collection        |                     |
-| comments[].type       | string 'admin','customer'    |                     |
-| type                  | string                       | page, product       |
-| id                    | int                          | pageId or ProductId |
-#}
+{# @deprecated file, will be deleted soon #}
 {% if (comments|length or user.can_comment) and show_comments  %}
 <div class="s-comments s-comments-{{ type }}">
     <div class="container {{ type == 'page' ? 'px-0':'' }}">
