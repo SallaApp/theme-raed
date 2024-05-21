@@ -1,0 +1,26 @@
+{# @deprecated file, will be deleted soon #}
+{% if (comments|length or user.can_comment) and show_comments  %}
+<div class="s-comments s-comments-{{ type }}">
+    <div class="container {{ type == 'page' ? 'px-0':'' }}">
+        <h2 class="mb-2 sm:mb-5 text-lg font-bold text-dark">{{ trans('blocks.comments.title') }}</h2>
+        
+        {% if user.can_comment %}
+        <salla-comment-form type="{{ type }}" item-id="{{ id }}"></salla-comment-form>
+        {% endif %} 
+
+        {% if comments|length %}
+            <h2 class="text-lg font-bold text-gray-500 mb-8"> {{ pluralize('blocks.comments.comment', comments.total|number)|raw }}</h2>
+            <salla-infinite-scroll next-page="{{ comments.next_page }}">
+                {% for comment in comments %}
+                    {% include 'pages.partials.single-comment' %}
+                {% endfor %}
+            </salla-infinite-scroll>
+        {% else %}
+            <div class="no-content-placeholder--comments">
+                <i class="sicon-chat-bubbles text-5xl block mb-5 text-gray-400"></i>
+                <p class="text-sm">{{ trans('blocks.comments.no_comments') }}</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
