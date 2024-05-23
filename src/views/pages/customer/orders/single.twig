@@ -448,6 +448,17 @@
                         </dd>
                     </div>
 
+                    {% if order.options|length %}
+                      <div class="py-5 center-between">
+                        <dt class="text-gray-600">
+                          {{ trans('pages.cart.order_options_total') }}
+                        </dt>
+                        <dd class="font-medium">
+                          {{ order.options_total|money }}
+                        </dd>
+                      </div>
+                    {% endif %}
+
                     {% for discount in order.discounts %}
                         <div class="py-5 center-between">
                             <dt class="discount">
