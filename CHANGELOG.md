@@ -9,6 +9,11 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🛠 [1.154.0](https://github.com/SallaApp/theme-raed/compare/1.150.0...1.154.0)(2024-05-23)
+### Enhancements
+ - Wishlist page enhancement: using Custom Component For the Product Card.
+
+
 # 🛠 [1.150.0](https://github.com/SallaApp/theme-raed/compare/1.147.0...1.150.0)(2024-05-16)
 ### Enhancements
 - Unused files removed
