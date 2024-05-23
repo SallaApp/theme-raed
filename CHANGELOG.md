@@ -9,7 +9,13 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-# 💎 [1.148.0](https://github.com/SallaApp/theme-raed/compare/1.148.0...1.150.0)(2024-05-16)
+# 📰 [1.149.0](https://github.com/SallaApp/theme-raed/compare/1.149.0...1.150.0)(2024-05-21)
+### Enhancement
+- Custom Component enabled for the Product Card on the Wishlist page
+### Bug Fixes
+- Typographical error found on the Wishlist page
+  
+# 💎 [1.148.0](https://github.com/SallaApp/theme-raed/compare/1.148.0...1.150.0)(2024-05-21)
 ### Features
 - Support the [`salla-comments`](https://docs.salla.dev/doc-482455/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web Component
 - Support cart options total on both cart and order pages
