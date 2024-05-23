@@ -10,6 +10,7 @@ class Cart extends BasePage {
             couponBtn: '#coupon-btn',
             couponError: '#coupon-error',
             subTotal: '#sub-total',
+            orderOptionsTotal: '#cart-options-total',
             totalDiscount: '#total-discount',
             shippingCost: '#shipping-cost',
             freeShipping: '#free-shipping',
@@ -78,7 +79,8 @@ class Cart extends BasePage {
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
         app.subTotal.innerText = salla.money(cartData.sub_total);
-
+        if (app.orderOptionsTotal) app.orderOptionsTotal.innerText = salla.money(cartData.options_total);
+        
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.discount)
             .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost)
             .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
