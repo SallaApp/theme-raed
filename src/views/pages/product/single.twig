@@ -81,7 +81,6 @@
 | product.add_to_cart_label              | string                      |                                                                        |
 | product.currency                       | string                      |                                                                        |
 #}
-{% set is_sticky_product_bar = theme.settings.get('sticky_add_to_cart') %}
 {% extends "layouts.master" %}
 {% block content %}
     <div class="container">
@@ -373,7 +372,7 @@
                         {# Add to cart #}
                         <salla-add-product-button
                                 quick-buy
-                                {{is_sticky_product_bar ? ' support-sticky-bar' : ''}}
+                                {{theme.settings.get('sticky_add_to_cart') ? ' support-sticky-bar' : ''}}
                                 {{product.is_require_shipping ? 'required-shipping' : ''}}
                                 amount="{{ product.base_currency_price }}"
                                 class="mt-5 w-full sticky-product-bar__btn"
