@@ -107,15 +107,15 @@
 @media (max-width: 640px) {
   .is-sticky-product-bar{
     &.product-single{
-      @apply pb-16;
+      @apply pb-28;
     }
 
     .sticky-product-bar{
-      @apply flex flex-wrap gap-2.5 sm:gap-4 fixed z-[2] bottom-0 left-0 p-3 w-full justify-between items-center shadow-[-1px_-2px_9px_0_rgba(0,0,0,0.05)] transition duration-700 delay-500 translate-y-100 opacity-0 ease-elastic;
+      @apply flex flex-wrap flex-col gap-2.5 sm:gap-4 fixed z-[2] bottom-0 left-0 p-3 w-full justify-between items-center shadow-[-1px_-2px_9px_0_rgba(0,0,0,0.05)] transition duration-700 delay-500 translate-y-100 opacity-0 ease-elastic;
 
       &__quantity,
       salla-add-product-button{
-        @apply translate-y-5 opacity-0 transition duration-700 ease-elastic;
+        @apply translate-y-5 opacity-0 transition duration-700 ease-elastic w-full;
       }
 
       &__price,
@@ -124,6 +124,15 @@
       }
 
       &__quantity{
+        salla-quantity-input{
+          @apply w-full;
+          .s-quantity-input-container{
+            @apply w-full;
+          }
+          .s-quantity-input-input{
+            @apply w-[80%]
+          }
+        }
         @apply m-0 delay-[900ms];
       }
 
