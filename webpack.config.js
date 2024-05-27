@@ -14,7 +14,7 @@ module.exports = {
         'main-menu' : asset('js/partials/main-menu.js'),
         'wishlist-card': asset('js/partials/wishlist-card.js'),
         checkout: [asset('js/cart.js'), asset('js/thankyou.js')],
-        pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
+        pages   : asset('js/brands.js'),
         product : [asset('js/product.js'), asset('js/products.js')],
         order   : asset('js/order.js'),
         testimonials   : asset('js/testimonials.js'),
