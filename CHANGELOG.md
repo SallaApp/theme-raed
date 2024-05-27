@@ -9,12 +9,13 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-# 🛠 [1.154.0](https://github.com/SallaApp/theme-raed/compare/1.150.0...1.154.0)(2024-05-23)
+# 🔎 [1.154.0](https://github.com/SallaApp/theme-raed/compare/1.150.0...1.154.0)(2024-05-23)
 ### Enhancements
- - Support `salla-comments` in the product single page.
+ - Support the [`salla-comments`](https://docs.salla.dev/doc-482455/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component in the product single page.
  - Cart options fixes and enhancements.
- - Use `salla-products-list` on wishlist page using custom components.
-
+ - Use the [`salla-products-list`](https://docs.salla.dev/doc-422719/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component on the Wishlist page using custom components.
+### Features
+ - Support new component, the [`salla-conditional-offer`](https://docs.salla.dev/doc-537931/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component
 
 # 🛠 [1.150.0](https://github.com/SallaApp/theme-raed/compare/1.147.0...1.150.0)(2024-05-16)
 ### Enhancements
@@ -34,15 +35,15 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🛠 [1.146.0](https://github.com/SallaApp/theme-raed/compare/1.145.0...1.147.1)(2024-05-06)
 ### Bug Fixes
-- Reviews component fixes and enhancements
+- The [`salla-reviews`](https://docs.salla.dev/doc-508226/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component fixes and enhancements
 - Support `salla-notifications` component
 
 # ✨ [1.145.0](https://github.com/SallaApp/theme-raed/compare/1.143.0...1.145.0)(2024-04-29)
-### Features:
-- Support `main menus` via api
-- Support `salla-reviews` component
-- Support `salla-breadcrumb` component
-- Support `salla-order` component
+### Features
+- Support `main menus` via API
+- Support the [`salla-reviews`](https://docs.salla.dev/doc-508226/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component
+- Support the [`salla-breadcrumb`](https://docs.salla.dev/doc-482370/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component
+- Support the [`salla-order`](https://docs.salla.dev/doc-508225/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component
 
 # 🏎️ 1.144.0 (2024-04-25)
 ### Features
@@ -51,11 +52,11 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
   
 # ✨ [1.143.0](https://github.com/SallaApp/theme-raed/compare/1.142.0...1.143.0) (2024-03-27)
 ### Features
-- Support New Twilight Components using `salla.config` and Ajax requests.
+- Support new Twilight Components using `salla.config` and Ajax requests.
 
 # 🚀 [1.142.0](https://github.com/SallaApp/theme-raed/compare/1.141.0...1.142.0) (2024-03-21)
 ### Features
-- Support new twilight component `salla-offer`.
+- Support the [`salla-offer`](https://docs.salla.dev/doc-440408/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component
 
 # 🌟 [1.141.0](https://github.com/SallaApp/theme-raed/compare/1.140.8...1.141.0) (2024-03-19)
 ### Features
@@ -79,7 +80,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 - Fix product option price with discount.
 
 # ⭐ [1.139.0](https://github.com/SallaApp/theme-raed/compare/1.138.7...1.139.0) (2024-02-14)
-### Features
+### Enhancements
 - Enhance Cart options.
 
 # 🔧 [1.138.7](https://github.com/SallaApp/theme-raed/compare/1.138.3...1.138.7) (2024-02-11)
@@ -88,7 +89,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🌐 [1.138.3](https://github.com/SallaApp/theme-raed/compare/1.138.0...1.138.3) (2024-02-08)
 ### Features
-- Card options' feature is released.
+- Card options feature released.
 
 <!-- # 🔥 [1.137.43](https://github.com/SallaApp/theme-raed/compare/1.137.39...1.137.43) (2024-02-07)
 ### Added
