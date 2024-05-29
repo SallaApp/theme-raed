@@ -231,7 +231,7 @@ class ProductCard extends HTMLElement {
               : ``}
           </div>
           ${this.product?.donation && !this.minimal && !this.fullImage ?
-          `<salla-progress-bar donation=${JSON.stringify(this.product.donation)} /></salla-progress-bar>
+          `<salla-progress-bar donation=${JSON.stringify(this.product?.donation)}></salla-progress-bar>
           <div class="s-product-card-donation-input">
             ${this.product?.donation?.can_donate ?
               `<label for="donation-amount-${this.product.id}">${this.donationAmount} <span>*</span></label>
