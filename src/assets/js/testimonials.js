@@ -10,7 +10,7 @@ class Testimonials extends BasePage {
             app.element('#testimonials-filter').value = urlParams.get('sort');
         }
 
-        app.on('change', '#testimonials-filter', async event => {
+        app.on('change', '#testimonials-filter', async (event) => {
             window.history.replaceState(null, null, salla.helpers.addParamToUrl('sort', event.currentTarget.value));
             commentsList.sort = event.currentTarget.value;
             await commentsList.reload();
