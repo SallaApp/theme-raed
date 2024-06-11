@@ -226,7 +226,7 @@
 
                 <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
                     {% set desc = product.description|replace({"&nbsp;":"\n"}) %}
-                    {% set is_read_more = desc and not product.has_read_more and desc|striptags|length > 150 %}
+                    {% set is_read_more = desc and product.has_read_more and desc|striptags|length > 150 %}
                     {% if product.description %}
                         <article class="article article--main relative text-base font-normal break-words">
                             {% if is_read_more %}
