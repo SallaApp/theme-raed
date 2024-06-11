@@ -225,20 +225,31 @@
                 </div>
 
                 <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
-                    {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
-                    {% if product.has_read_more %}
-                        <article class="article article--main relative overflow-hidden transition-all max-h-0 duration-300 py-4"
-                            id="more-content" style="max-height:5.25rem">
-                            {{ product_desc|raw }}
-                        </article>
-
-                        {# Read More Button #}
-                        <a id="btn-show-more" class="link--primary inline-block mt-2 cursor-pointer">
-                            {{ trans('pages.products.read_more') }}
-                        </a>
-                    {% else %}
-                        <article class="article--main pb-1">
-                            {{ product_desc|raw }}
+                    {% set desc = product.description|replace({"&nbsp;":"\n"}) %}
+                    {% set is_read_more = desc and not product.has_read_more and desc|striptags|length > 150 %}
+                    {% if product.description %}
+                        <article class="article article--main relative text-base font-normal break-words">
+                            {% if is_read_more %}
+                            {# article-inner if desc > 200 char #}
+                            <div class="">
+                                <div class="sub-desc">
+                                    <div class="overflow-hidden">{{ desc|slice(0, 150 )|raw }}<span class="three-dots transition-all duration-300">...</span></div>
+                                </div> 
+                                <div class="desc-completed">
+                                    <div class="overflow-hidden">{{ desc|raw }}</div>
+                                </div> 
+                            </div>
+                            
+                            <a class="article-read-more link--primary inline-block mt-2 cursor-pointer">
+                                {{ trans('pages.products.read_more') }}
+                            </a>
+                        
+                            {% else %}
+                            {# article-inner if description < 250 char #}
+                            <div class="">
+                                {{ desc|raw }}
+                            </div>
+                            {% endif %}
                         </article>
                     {% endif %}
                 </div>

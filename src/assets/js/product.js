@@ -69,12 +69,14 @@ class Product extends BasePage {
 
         app.anime('.total-price', { scale: [0.88, 1] });
       });
-
-      app.onClick('#btn-show-more', e => app.all('#more-content', div => {
-        e.target.classList.add('is-expanded');
-        div.style = `max-height:${div.scrollHeight}px`;
-      }) || e.target.remove());
+      
+      app.onClick('.article-read-more', e =>{
+          e.preventDefault();
+          e.target.parentElement.classList.add('is-expanded');
+          e.target.remove()
+      })
     }
+
 }
 
 Product.initiateWhenReady(['product.single']);
