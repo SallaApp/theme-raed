@@ -9,6 +9,11 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🛠 [1.161.0](https://github.com/SallaApp/theme-raed/compare/1.160.0...1.161.0)(2024-05-23)
+### Bug Fixes
+
+- Fix Style of the product's description
+
 # 🛠 [1.154.0](https://github.com/SallaApp/theme-raed/compare/1.150.0...1.154.0)(2024-05-23)
 ### Enhancements
  - Support `salla-comments` in the product single page.
@@ -34,7 +39,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🛠 [1.146.0](https://github.com/SallaApp/theme-raed/compare/1.145.0...1.147.1)(2024-05-06)
 ### Bug Fixes
-- Reviews component fixes and enhancements
+- The salla-reviews JS Web Component has fixes and enhancements
 - Support `salla-notifications` component
 
 # ✨ [1.145.0](https://github.com/SallaApp/theme-raed/compare/1.143.0...1.145.0)(2024-04-29)
