@@ -43,9 +43,11 @@ class App extends AppHelpers {
       app.all('.root-level.has-children',item=>{
         if(item.classList.contains('change-menu-dir')) return;
         app.on('mouseover',item,()=>{
-          let submenu = item.querySelector('.sub-menu .sub-menu'),
-              rect = submenu.getBoundingClientRect();
+          let submenu = item.querySelector('.sub-menu .sub-menu');
+          if(submenu){
+            let rect = submenu.getBoundingClientRect();
             (rect.left < 10 || rect.right > window.innerWidth - 10) && app.addClass(item,'change-menu-dir')
+          }      
         })
       })
     }
