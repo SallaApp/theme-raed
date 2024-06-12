@@ -121,7 +121,17 @@
         window.imageZoom = "{{theme.settings.get('imageZoom')}}"
     </script>
     
-    {% hook 'head:start' %}
+   		<script>
+			window.salla = window.Salla = window.Salla || {};
+Salla.onReady = Salla.onReady || function (callback) {
+return new Promise(function (resolve) {
+return Salla.status == 'ready' ? resolve(callback ? callback(salla.config.all()) : salla.config.all()) : window.addEventListener('twilight::initiated', function (config) {
+resolve(callback ? callback(config.detail) : config.detail)
+}, {once: true});
+});
+};
+ <script async src="https://cdn.salla.network/js/twilight/tests/featureTD-547-digital-card-options-refactor/95cd8badf13b3cae950ec87d63b15262599024d7/twilight.js"></script>
+		</script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
@@ -151,7 +161,7 @@
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
        target="_blank">To enable JavaScript on webpage</a>.
 </noscript>
-<div class="app-inner flex flex-col min-h-full">
+<div class="flex flex-col min-h-full app-inner">
     {% hook 'body:start' %}
     {% component 'header.header' %}
     {% block content %}{% endblock %}
