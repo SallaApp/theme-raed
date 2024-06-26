@@ -24,7 +24,7 @@ class Product extends BasePage {
 
     initProductOptionValidations() {
       document.querySelector('.product-form')?.addEventListener('change', function(){
-        this.reportValidity() && salla.product.getPrice(new FormData(this));
+        [...this.querySelectorAll('[required]')].some((input) => input.value.trim() === '')  && salla.product.getPrice(new FormData(this));
       });
     }
 
