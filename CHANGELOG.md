@@ -21,7 +21,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 ### Bug Fixes
 - Fix Style of the product's description
 
-# 🎈 [1.160.0](https://github.com/SallaApp/theme-raed/compare/1.160.0...1.161.0)(2024-06-10)
+# 📎 [1.160.0](https://github.com/SallaApp/theme-raed/compare/1.160.0...1.161.0)(2024-06-10)
 ### Enhancements
 - Enhancements for the Testimonials Page
 
@@ -29,7 +29,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 ### Bug Fixes
  - Eager Loading on the WishlistCard
 
-# 🛠 [1.154.0](https://github.com/SallaApp/theme-raed/compare/1.150.0...1.154.0)(2024-05-23)
+# 🏷️ [1.154.0](https://github.com/SallaApp/theme-raed/compare/1.150.0...1.154.0)(2024-05-23)
 ### Enhancements
  - Support the [`salla-comments`](https://docs.salla.dev/doc-482455/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component in the product single page.
  - Cart options fixes and enhancements.
@@ -84,7 +84,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 - Validate all product options before updating the price request with better words such as "`Don't call update price request unless all product options are valid.`"
 - Make quantity input as `readonly` when the maximum quantity is equal to the value `1`
   
-# ✨ [1.143.0](https://github.com/SallaApp/theme-raed/compare/1.142.0...1.143.0) (2024-03-27)
+# 🖌️ [1.143.0](https://github.com/SallaApp/theme-raed/compare/1.142.0...1.143.0) (2024-03-27)
 ### Features
 - Support new Twilight Components using `salla.config` and Ajax requests.
 
@@ -96,7 +96,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 ### Features
 - Support product specifications.
 
-# 🛠 [1.140.8](https://github.com/SallaApp/theme-raed/compare/1.140.2...1.140.8) (2024-03-13)
+# 🔖 [1.140.8](https://github.com/SallaApp/theme-raed/compare/1.140.2...1.140.8) (2024-03-13)
 ### Features
 - Support infinite scroll in the wishlist.
 - Replace 'images/s-empty.png' asset to 'images/s-empty.png' CDN.
@@ -109,11 +109,11 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 ### Features
 - Enhance best practices score for SEO.
 
-# 🛠 [1.140.0](https://github.com/SallaApp/theme-raed/compare/1.139.0...1.140.0) (2024-02-15)
+# 🗳️ [1.140.0](https://github.com/SallaApp/theme-raed/compare/1.139.0...1.140.0) (2024-02-15)
 ### Bug Fixes
 - Fix product option price with discount.
 
-# ⭐ [1.139.0](https://github.com/SallaApp/theme-raed/compare/1.138.7...1.139.0) (2024-02-14)
+# 📜 [1.139.0](https://github.com/SallaApp/theme-raed/compare/1.138.7...1.139.0) (2024-02-14)
 ### Enhancements
 - Enhance Cart options.
 
