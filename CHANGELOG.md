@@ -9,6 +9,14 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 💈 [1.165.0](https://github.com/SallaApp/theme-raed/compare/1.164.0...1.165.0)(2024-07-02)
+### Enhancements
+- Support order option book appointment field in the salla-booking-field JS Web Component
+
+# 🖼️ [1.164.0](https://github.com/SallaApp/theme-raed/compare/1.163.0...1.164.0)(2024-06-29)
+### Bug Fixes
+- Update price based on product's options
+  
 # 🛎️ [1.163.0](https://github.com/SallaApp/theme-raed/compare/1.162.0...1.163.0)(2024-06-27)
 ### Bug Fixes
 - Fix the product options validation
