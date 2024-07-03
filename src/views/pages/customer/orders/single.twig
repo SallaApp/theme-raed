@@ -407,7 +407,7 @@
                                     {% if item.rating.is_pending %}
                                         <span>{{ trans('pages.rating.pending') }}</span>
                                     {% endif %}
-                                    <salla-rating-stars size="small" value="{{item.rating.stars}}"></salla-rating-stars>
+                                    <salla-rating-stars with-label size="small" value="{{item.rating.stars}}"></salla-rating-stars>
                                     {% if item.rating.images|length %}
                                         <div class="flex items-center gap-2 mt-2">
                                             {% for image in item.rating.images %}
@@ -600,7 +600,7 @@
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
                 <p class="mb-2">{{ order.rating.store.content|raw }}</p>
-                <salla-rating-stars value="{{order.rating.store.stars}}"></salla-rating-stars>
+                <salla-rating-stars with-label value="{{order.rating.store.stars}}"></salla-rating-stars>
             </section>
         {% endif %}
 
@@ -609,7 +609,7 @@
             <section class="bg-white p-5 rounded-md">
                 <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
                 <p class="mb-2">{{ order.rating.shipping.content|raw }}</p>
-                <salla-rating-stars value="{{order.rating.shipping.stars}}"></salla-rating-stars>
+                <salla-rating-stars with-label value="{{order.rating.shipping.stars}}"></salla-rating-stars>
             </section>
         {% endif %}
 
