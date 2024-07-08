@@ -120,27 +120,27 @@
         window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
         window.imageZoom = "{{theme.settings.get('imageZoom')}}"
     </script>
-  {#{% hook 'head:start' %}#}
+{#{% hook 'head:start' %}#}
 <script data-cfasync="false">
-window.salla = window.Salla = window.Salla || {};
-Salla.onReady =
-  Salla.onReady ||
-  function (callback) {
-    return new Promise(function (resolve) {
-      return Salla.status == "ready"
-        ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
-        : window.addEventListener(
-            "twilight::initiated",
-            function (config) {
-              resolve(callback ? callback(config.detail) : config.detail);
-            },
-            { once: true },
-          );
-    });
-  };
+  window.salla = window.Salla = window.Salla || {};
+  Salla.onReady =
+  	Salla.onReady ||
+  	function (callback) {
+  		return new Promise(function (resolve) {
+  			return Salla.status == "ready"
+  				? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+  				: window.addEventListener(
+  						"twilight::initiated",
+  						function (config) {
+  							resolve(callback ? callback(config.detail) : config.detail);
+  						},
+  						{ once: true },
+  					);
+  		});
+  	};
 </script>
 
-<script async src="https://cdn.salla.network/js/twilight/tests/featureSTORE-1611-enhanced-review-system/1d26a2cc2c62ebd6732221fed17da9bd08086eac/twilight.js"></script>
+<script async src="https://cdn.salla.network/js/twilight/tests/featureSTORE-1611-enhanced-review-system/9da12e96e2e1233786b6fa8b99023f8a3bd5ef1b/twilight.js"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
