@@ -334,14 +334,15 @@
                                 <div class="flow-root rounded-md px-4 border border-gray-200">
                                     <dl class="text-sm text-dark divide-y divide-border-color">
                                         {% for file in item.files %}
-                                            <div class="py-2.5 center-between">
+                                            {% set is_protected = "/download" in file.url ? false : true %}
+                                            <div class="order-file py-2.5 center-between">
                                                 <dt class="mb-2 md:mb-0">
                                                     {{ file.name }}
                                                 </dt>
                                                 <dd class="font-medium text-xs">
                                                     <salla-button href="{{ file.url }}" target="_blank"
                                                        class="btn--rounded-full font-bold text-gray-600 hover:text-black">
-                                                        <i class="sicon-download"></i> {{ trans('pages.thank_you.download') }}
+                                                        <i class="sicon-{{is_protected ? 'eye' : 'download'}}"></i> {{ is_protected ? trans('common.uploader.browse') : trans('pages.thank_you.download') }}
                                                     </salla-button>
                                                 </dd>
                                             </div>
