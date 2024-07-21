@@ -41,7 +41,7 @@ export default function toolTip() {
     tooltipToggleClick.forEach(element => {
       element.classList.remove('visible');
     });
-    tooltipToggleHover.forEach(element => {
+    tooltipToggleHover.forEach((element) => {
       element.classList.remove('visible');
     });
   });
