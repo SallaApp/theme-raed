@@ -5,7 +5,7 @@ export default function toolTip() {
 
   // Show the tooltip if the type is clickable
   if (tooltipToggleClick.length) {
-    tooltipToggleClick.forEach(element => {
+    tooltipToggleClick.forEach((element) => {
       element.addEventListener('click', (e) => {
         e.stopPropagation();
         element.classList.add('visible');
@@ -15,7 +15,7 @@ export default function toolTip() {
 
   // Show the tooltip if the type is hover
   if (tooltipToggleHover.length) {
-    tooltipToggleHover.forEach(element => {
+    tooltipToggleHover.forEach((element) => {
       element.addEventListener('mouseenter', () => {
         element.classList.add('visible');
       });
@@ -41,7 +41,7 @@ export default function toolTip() {
     tooltipToggleClick.forEach(element => {
       element.classList.remove('visible');
     });
-    tooltipToggleHover.forEach(element => {
+    tooltipToggleHover.forEach((element) => {
       element.classList.remove('visible');
     });
   });
