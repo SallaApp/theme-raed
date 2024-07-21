@@ -15,7 +15,7 @@ export default function toolTip() {
 
   // Show the tooltip if the type is hover
   if (tooltipToggleHover.length) {
-    tooltipToggleHover.forEach(element => {
+    tooltipToggleHover.forEach((element) => {
       element.addEventListener('mouseenter', () => {
         element.classList.add('visible');
       });
