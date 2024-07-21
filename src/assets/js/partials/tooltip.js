@@ -38,7 +38,7 @@ export default function toolTip() {
 
   // Hide the tooltip on window click
   window.addEventListener('click', () => {
-    tooltipToggleClick.forEach(element => {
+    tooltipToggleClick.forEach((element) => {
       element.classList.remove('visible');
     });
     tooltipToggleHover.forEach((element) => {
