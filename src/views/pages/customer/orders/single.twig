@@ -149,7 +149,7 @@
                 <salla-button color="light" class="btn--rounded-full !text-primary" onclick="salla.event.dispatch('rating::open')">{{ trans('pages.rating.rate') }}</salla-button>
             </div>
         {% endif %}
-        <salla-rating-modal></salla-rating-modal>
+        
 
         {# Order Summary #}
         <div class="overflow-hidden space-y-5">
@@ -703,7 +703,10 @@
                                 color="danger" 
                                 fill="outline" 
                                 size="medium" 
-                                onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.store.id}} })">
+                                {% if order.rating.store.can_delete %} 
+                                    onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.store.id}} })" 
+                                {% endif %} 
+                                >
                                 <i class="sicon-trash-2 text-xl"></i>
                             </salla-button>
                         </div>
@@ -735,7 +738,10 @@
                             fill="outline" 
                             color="dark" 
                             size="medium" 
-                            onclick="salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: {{order.rating.shipping.id}} })">
+                            {% if order.rating.shipping.can_update %} 
+                                onclick="salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: {{order.rating.shipping.id}} })" 
+                            {% endif %}
+                            >
                             <i class="sicon-format-border-color text-xl"></i>
                         </salla-button>
                     </div>
@@ -754,7 +760,10 @@
                             color="danger" 
                             fill="outline" 
                             size="medium" 
-                            onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.shipping.id}} })">
+                            {% if order.rating.shipping.can_delete %} 
+                                onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.shipping.id}} })" 
+                            {% endif %} 
+                            > 
                             <i class="sicon-trash-2 text-xl"></i>
                         </salla-button>
                     </div>
@@ -764,6 +773,10 @@
         {% endif %}
 
         {% hook 'customer:orders.single.details.end' %}
+
+        {% if order.can_rate or store.settings.rating.allow_delete or store.settings.rating.allow_update %} 
+            <salla-rating-modal></salla-rating-modal>
+        {% endif %}
     </div>
 {% endblock %}
 
