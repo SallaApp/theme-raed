@@ -3,26 +3,43 @@ export default function toolTip() {
     tooltipToggleHover = document.querySelectorAll('.tooltip-toggle--hover'),
     closeTooltip = document.querySelectorAll('.close-tooltip');
 
+  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+  const showTooltip = (element) => {
+    element.classList.add('visible');
+  };
+
+  const hideTooltip = (element) => {
+    element.classList.remove('visible');
+  };
+
   // Show the tooltip if the type is clickable
   if (tooltipToggleClick.length) {
     tooltipToggleClick.forEach((element) => {
       element.addEventListener('click', (e) => {
         e.stopPropagation();
-        element.classList.add('visible');
+        showTooltip(element);
       });
     });
   }
 
-  // Show the tooltip if the type is hover
+  // Show the tooltip if the type is hover or click on touch devices
   if (tooltipToggleHover.length) {
     tooltipToggleHover.forEach((element) => {
-      element.addEventListener('mouseenter', () => {
-        element.classList.add('visible');
-      });
+      if (isTouchDevice) {
+        element.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showTooltip(element);
+        });
+      } else {
+        element.addEventListener('mouseenter', () => {
+          showTooltip(element);
+        });
 
-      element.addEventListener('mouseleave', () => {
-        element.classList.remove('visible');
-      });
+        element.addEventListener('mouseleave', () => {
+          hideTooltip(element);
+        });
+      }
     });
   }
 
@@ -31,7 +48,7 @@ export default function toolTip() {
     closeTooltip.forEach(element => {
       element.addEventListener('click', (e) => {
         e.stopPropagation();
-        element.parentElement.parentElement.classList.remove('visible');
+        hideTooltip(element.parentElement.parentElement);
       });
     });
   }
@@ -39,10 +56,10 @@ export default function toolTip() {
   // Hide the tooltip on window click
   window.addEventListener('click', () => {
     tooltipToggleClick.forEach((element) => {
-      element.classList.remove('visible');
+      hideTooltip(element);
     });
     tooltipToggleHover.forEach((element) => {
-      element.classList.remove('visible');
+      hideTooltip(element);
     });
   });
-};
+}
