@@ -126,17 +126,10 @@
             </tbody>
         </table>
 
-        {% if store.settings.rating.allow_update or store.settings.rating.allow_delete %}    
+        {% if store.settings.rating.allow_update %}    
             <div class="flex items-start gap-2 bg-blue-50 border border-blue-200 text-blue-500 px-2 py-3 rounded-md text-sm">
-                <i class="sicon-info "></i>
-                <ul>
-                    {% if store.settings.rating.allow_update %} 
-                        <li>{{trans('pages.order.can_edit_your_review_within')}} {{store.settings.rating.update_period}} {{trans('pages.order.days_since_added')}}.</li>
-                    {% endif %}
-                    {% if store.settings.rating.allow_delete %} 
-                        <li>{{trans('pages.order.can_delete_your_review_within')}} {{store.settings.rating.delete_period}} {{trans('pages.order.days_since_added')}}.</li>
-                    {% endif %}
-                </ul>
+                <i class="sicon-info"></i>   
+                <p>{{trans('pages.order.can_edit_or_delete_your_review_within')}} {{store.settings.rating.update_period}} {{trans('pages.order.days_since_added')}}.</p>
             </div>
         {% endif %}
         {# Order Rating Message & Modal #}
@@ -454,10 +447,8 @@
                                                     <i class="sicon-format-border-color text-xl"></i>
                                                 </salla-button>
                                             </div>
-                                        {% endif %}
-                                        {% if store.settings.rating.allow_delete %}
                                             <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
-                                                {% if not item.rating.can_delete %}
+                                                {% if not item.rating.can_update %}
                                                     <div class="tooltip-content shadow-md rounded">
                                                         <small> {{trans('pages.order.delete_period_ended')}}.</small>
                                                     </div>
@@ -465,11 +456,11 @@
                                                 <salla-button 
                                                     loader-position="center" 
                                                     shape="icon" 
-                                                    {% if not item.rating.can_delete %} disabled {% endif %} 
+                                                    {% if not item.rating.can_update %} disabled {% endif %} 
                                                     color="danger" 
                                                     fill="outline" 
                                                     size="medium" 
-                                                    {% if item.rating.can_delete %}
+                                                    {% if item.rating.can_update %}
                                                         onclick="salla.event.dispatch('rating::delete', {feedback_id: {{item.rating.id}} })"
                                                     {% endif %} 
                                                     >
@@ -688,10 +679,8 @@
                                 <i class="sicon-format-border-color text-xl"></i>
                             </salla-button>
                         </div>
-                    {% endif %}
-                    {% if store.settings.rating.allow_delete %}
                         <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
-                            {% if not order.rating.store.can_delete %}
+                            {% if not order.rating.store.can_update %}
                                 <div class="tooltip-content shadow-md rounded">
                                     <small> {{trans('pages.order.delete_period_ended')}}.</small>
                                 </div>
@@ -699,11 +688,11 @@
                             <salla-button 
                                 loader-position="center" 
                                 shape="icon" 
-                                {% if not order.rating.store.can_delete %} disabled {% endif %} 
+                                {% if not order.rating.store.can_update %} disabled {% endif %} 
                                 color="danger" 
                                 fill="outline" 
                                 size="medium" 
-                                {% if order.rating.store.can_delete %} 
+                                {% if order.rating.store.can_update %} 
                                     onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.store.id}} })" 
                                 {% endif %} 
                                 >
@@ -745,22 +734,20 @@
                             <i class="sicon-format-border-color text-xl"></i>
                         </salla-button>
                     </div>
-                {% endif %}
-                {% if store.settings.rating.allow_delete %}
                     <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
-                        {% if not order.rating.shipping.can_delete %}
+                        {% if not order.rating.shipping.can_update %}
                             <div class="tooltip-content shadow-md rounded">
-                                <small> {{trans('pages.order.cant_delete_feedback_after')}} {{store.settings.rating.delete_period}} {{trans('pages.order.days_since_added')}}.</small>
+                                <small> {{trans('pages.order.delete_period_ended')}}.</small>                            
                             </div>
                         {% endif %}
                         <salla-button 
                             loader-position="center" 
                             shape="icon" 
-                            {% if not order.rating.shipping.can_delete %} disabled {% endif %} 
+                            {% if not order.rating.shipping.can_update %} disabled {% endif %} 
                             color="danger" 
                             fill="outline" 
                             size="medium" 
-                            {% if order.rating.shipping.can_delete %} 
+                            {% if order.rating.shipping.can_update %} 
                                 onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.shipping.id}} })" 
                             {% endif %} 
                             > 
@@ -774,7 +761,7 @@
 
         {% hook 'customer:orders.single.details.end' %}
 
-        {% if order.can_rate or store.settings.rating.allow_delete or store.settings.rating.allow_update %} 
+        {% if order.can_rate or store.settings.rating.allow_update %} 
             <salla-rating-modal></salla-rating-modal>
         {% endif %}
     </div>
