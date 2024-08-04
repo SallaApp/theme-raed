@@ -126,7 +126,7 @@
             </tbody>
         </table>
 
-        {% if store.settings.rating.allow_update %}    
+        {% if store.settings.rating.allow_update and order.rating is not empty %}    
             <div class="flex items-start gap-2 bg-blue-50 border border-blue-200 text-blue-500 px-2 py-3 rounded-md text-sm">
                 <i class="sicon-info"></i>   
                 <p>{{trans('pages.order.can_edit_or_delete_your_review_within')}} {{store.settings.rating.update_period}} {{trans('pages.order.days_since_added')}}.</p>
