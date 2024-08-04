@@ -211,7 +211,7 @@
                 {% endif %}
 
                 {# Price #}
-                <div class="flex whitespace-nowrap gap-4 items-center">
+                <div class="flex whitespace-nowrap price-wrapper gap-4 items-center">
                   <div class="{{ product.is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
                       <h4 class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
                       <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
@@ -223,6 +223,8 @@
                           <h2 class=" font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
                   </div>
                 </div>
+                
+                <div class="out-of-stock hidden text-base text-red-600 !opacity-50 font-bold">{{ trans('pages.products.out_of_stock')}}</div>
 
                 <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
                     {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}

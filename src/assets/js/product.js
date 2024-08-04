@@ -55,7 +55,16 @@ class Product extends BasePage {
     }
 
     registerEvents() {
+      salla.event.on('product::price.updated.failed',()=>{
+        app.element('.price-wrapper').classList.add('hidden');
+        app.element('.out-of-stock').classList.remove('hidden')
+        app.anime('.out-of-stock', { scale: [0.88, 1] });
+      })
       salla.product.event.onPriceUpdated((res) => {
+
+        app.element('.out-of-stock').classList.add('hidden')
+        app.element('.price-wrapper').classList.remove('hidden')
+
         let data = res.data,
             is_on_sale = data.has_sale_price && data.regular_price > data.price;
 
