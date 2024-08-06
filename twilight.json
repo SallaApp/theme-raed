@@ -51,6 +51,212 @@
             "type": "static",
             "format": "title",
             "id": "static-label2",
+            "value": "خيارات الخط",
+            "variant": "h6"
+        },
+        {
+          "id": "store_font_type",
+          "type": "items",
+          "format": "radio-list",
+          "label": "اختر الخط المناسب",
+          "labelHTML": null,
+          "icon": "sicon-list",
+          "selected": [
+              {
+                  "label": "خط سلة الافتراضي",
+                  "value": "default",
+                  "key": "0580d8e5-8883-4874-a617-eef37355cdb6"
+              }
+          ],
+          "options": [
+              {
+                  "label": "خط سلة الافتراضي",
+                  "value": "default",
+                  "key": "0580d8e5-8883-4874-a617-eef37355cdb6"
+              },
+              {
+                  "label": "اختر خط من خطوط جوجل",
+                  "value": "google-font",
+                  "key": "cf52ee59-f222-47c0-8a20-786e3e1c0233"
+              },
+              {
+                  "label": "خط خاص",
+                  "value": "custom-font",
+                  "key": "9f34f63b-11a1-4942-bc70-466683ad9d9c"
+              }
+          ],
+          "source": "Manual",
+          "required": false
+        },
+
+        {
+          "id": "google_font_name",
+          "type": "items",
+          "format": "dropdown-list",
+          "label": "خط المتجر",
+          "description": "",
+          "labelHTML": null,
+          "icon": "sicon-list",
+          "selected": [
+              {
+                  "label": "Cairo",
+                  "value": "Cairo"
+              }
+          ],
+          "options": [
+              {
+                  "label": "Rubik",
+                  "value": "Rubik"
+              },
+              {
+                  "label": "Cairo",
+                  "value": "Cairo"
+              },
+              {
+                  "label": "Tajawal",
+                  "value": "Tajawal"
+              },
+              {
+                  "label": "Almarai",
+                  "value": "Almarai"
+              },
+              {
+                  "label": "Baloo Bhaijaan 2",
+                  "value": "Baloo Bhaijaan 2"
+              },
+              {
+                  "label": "IBM Plex Sans Arabic",
+                  "value": "IBM Plex Sans Arabic"
+              },
+              {
+                  "label": "Changa",
+                  "value": "Changa"
+              },
+              {
+                  "label": "Amiri",
+                  "value": "Amiri"
+              },
+              {
+                  "label": "El Messiri",
+                  "value": "El Messiri"
+              },
+              {
+                  "label": "Readex Pro",
+                  "value": "Readex Pro"
+              },
+              {
+                  "label": "Noto Naskh Arabic",
+                  "value": "Noto Naskh Arabic"
+              },
+              {
+                  "label": "Mada",
+                  "value": "Mada"
+              },
+              {
+                  "label": "Alexandria",
+                  "value": "Alexandria"
+              },
+              {
+                  "label": "Vazirmatn",
+                  "value": "Vazirmatn"
+              },
+              {
+                  "label": "Markazi Text",
+                  "value": "Markazi Text"
+              },
+              {
+                  "label": "Aref Ruqaa",
+                  "value": "Aref Ruqaa"
+              },
+              {
+                  "label": "Harmattan",
+                  "value": "Harmattan"
+              },
+              {
+                  "label": "Scheherazade New",
+                  "value": "Scheherazade New"
+              },
+              {
+                  "label": "Amiri Quran",
+                  "value": "Amiri Quran"
+              },
+              {
+                  "label": "Marhey",
+                  "value": "Marhey"
+              },
+              {
+                  "label": "Noto Sans Arabic",
+                  "value": "Noto Sans Arabic"
+              },
+              {
+                  "label": "Noto Kufi Arabic",
+                  "value": "Noto Kufi Arabic"
+              }
+          ],
+          "source": "Manual",
+          "required": true,
+          "conditions": [
+              {
+                  "id": "store_font_type",
+                  "operation": "=",
+                  "value": "google-font"
+              }
+          ]
+        },
+
+        {
+          "id": "custom_font_css_url",
+          "key": "6bd7ea8e-70b7-4486-aed2-250c3cb9c056",
+          "type": "string",
+          "format": "url",
+          "inputType": "url",
+          "label": "رابط مباشر بصيغة css لملف الخط",
+          "description": "يجب أن يكون رابط مباشر للملف ويجب ان يحتوي الملف على استدعاء لملفات الفونت المرفوع مسبقاً على أي مساحة تخزين",
+          "labelHTML": null,
+          "placeholder": "e.g. https://example.com/fonts/font_name.css",
+          "icon": "sicon-link",
+          "value": null,
+          "required": false,
+          "defaulted": true,
+          "conditions": [
+              {
+                  "id": "store_font_type",
+                  "operation": "=",
+                  "value": "custom-font"
+              }
+          ]
+        },
+
+        {
+          "id": "custom_font_name",
+          "type": "string",
+          "icon": "sicon-format-text-alt",
+          "label": "اسم الفونت الخاص",
+          "multilanguage": true,
+          "value": "",
+          "required": false,
+          "format": "text",
+          "description": "اسم الفونت كما هوا مستخدم في الملف المُستدعى بالأعلى",
+          "placeholder": "",
+          "conditions": [
+              {
+                  "id": "store_font_type",
+                  "operation": "=",
+                  "value": "custom-font"
+              }
+          ]
+        },
+
+
+        {
+            "type": "static",
+            "id": "static-line1",
+            "format": "line"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "static-label2",
             "value": "خيارات أعلى الصفحة",
             "variant": "h6"
         },
