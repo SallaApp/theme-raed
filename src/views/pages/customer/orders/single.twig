@@ -69,7 +69,7 @@
 #}
 {% extends "layouts.customer" %}
 {% block inner_content %}
-    <div class="space-y-4 md:space-y-8">
+    <div class="space-y-4">
 
         {% hook 'customer:orders.single.details.start' %}
 
@@ -126,6 +126,12 @@
             </tbody>
         </table>
 
+        {% if store.settings.rating.allow_update and order.rating is not empty %}    
+            <div class="flex items-start gap-2 bg-blue-50 border border-blue-200 text-blue-500 px-2 py-3 rounded-md text-sm">
+                <i class="sicon-info"></i>   
+                <p>{{trans('pages.order.can_edit_or_delete_your_review_within')}} {{store.settings.rating.update_period}} {{trans('pages.order.days_since_added')}}.</p>
+            </div>
+        {% endif %}
         {# Order Rating Message & Modal #}
         {% if order.can_rate %}
             <div class="rating-header gradient-bg center-between">
@@ -135,8 +141,8 @@
                 </div>
                 <salla-button color="light" class="btn--rounded-full !text-primary" onclick="salla.event.dispatch('rating::open')">{{ trans('pages.rating.rate') }}</salla-button>
             </div>
-            <salla-rating-modal></salla-rating-modal>
         {% endif %}
+        
 
         {# Order Summary #}
         <div class="overflow-hidden space-y-5">
@@ -402,21 +408,67 @@
                                     </dl>
                                 </div>
                             {% endif %}
-
+                            
                             {% if item.rating %}
-                                <section class="border-t mt-10 pt-8">
-                                    <p>{{ item.rating.content|raw }}</p>
-                                    {% if item.rating.is_pending %}
-                                        <span>{{ trans('pages.rating.pending') }}</span>
-                                    {% endif %}
-                                    <salla-rating-stars with-label size="small" value="{{item.rating.stars}}"></salla-rating-stars>
-                                    {% if item.rating.images|length %}
-                                        <div class="flex items-center gap-2 mt-2">
-                                            {% for image in item.rating.images %}
-                                                <img class="w-20 h-20 object-cover rounded-md" src="{{image}}"/>
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
+                                <section class="flex justify-between items-start border-t mt-10 pt-8">
+                                    <div>
+                                        <p>{{ item.rating.content|raw }}</p>
+                                        {% if item.rating.is_pending %}
+                                            <span>{{ trans('pages.rating.pending') }}</span>
+                                        {% endif %}
+                                        <salla-rating-stars with-label size="small" value="{{item.rating.stars}}"></salla-rating-stars>
+                                        {% if item.rating.images|length %}
+                                            <div class="flex items-center gap-2 mt-2">
+                                                {% for image in item.rating.images %}
+                                                    <img class="w-20 h-20 object-cover rounded-md" src="{{image}}"/>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="rating-actions">
+                                        {% if store.settings.rating.allow_update %}
+                                            <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
+                                                {% if not item.rating.can_update %}
+                                                    <div class="tooltip-content shadow-md rounded">
+                                                        <small> {{trans('pages.order.edit_period_ended')}}.</small>
+                                                    </div>
+                                                {% endif %}
+                                                <salla-button 
+                                                    loader-position="center" 
+                                                    {% if not item.rating.can_update %} disabled {% endif %} 
+                                                    shape="icon" 
+                                                    fill="outline" 
+                                                    color="dark" 
+                                                    size="medium" 
+                                                    {% if item.rating.can_update %} 
+                                                        onclick="salla.event.dispatch('rating::edit', {type: 'product', feedback_id: {{item.rating.id}} })"
+                                                    {% endif %} 
+                                                    >
+                                                    <i class="sicon-format-border-color text-xl"></i>
+                                                </salla-button>
+                                            </div>
+                                            <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
+                                                {% if not item.rating.can_update %}
+                                                    <div class="tooltip-content shadow-md rounded">
+                                                        <small> {{trans('pages.order.delete_period_ended')}}.</small>
+                                                    </div>
+                                                {% endif %}
+                                                <salla-button 
+                                                    loader-position="center" 
+                                                    shape="icon" 
+                                                    {% if not item.rating.can_update %} disabled {% endif %} 
+                                                    color="danger" 
+                                                    fill="outline" 
+                                                    size="medium" 
+                                                    {% if item.rating.can_update %}
+                                                        onclick="salla.event.dispatch('rating::delete', {feedback_id: {{item.rating.id}} })"
+                                                    {% endif %} 
+                                                    >
+                                                    <i class="sicon-trash-2 text-xl"></i>
+                                                </salla-button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
                                 </section>
                             {% endif %}
                         </div>
@@ -599,23 +651,119 @@
 
         {# Store Rating #}
         {% if order.rating.store.stars %}
-            <section class="bg-white p-5 rounded-md">
-                <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
-                <p class="mb-2">{{ order.rating.store.content|raw }}</p>
-                <salla-rating-stars with-label value="{{order.rating.store.stars}}"></salla-rating-stars>
+            <section class="flex justify-between items-start bg-white p-5 rounded-md">
+                <div>
+                    <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_the_store') }}</h2>
+                    <p class="mb-2">{{ order.rating.store.content|raw }}</p>
+                    <salla-rating-stars with-label value="{{order.rating.store.stars}}"></salla-rating-stars>
+                </div>
+                <div class="rating-actions">
+                    {% if store.settings.rating.allow_update %}
+                        <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
+                            {% if not order.rating.store.can_update %}
+                                <div class="tooltip-content shadow-md rounded">
+                                    <small> {{trans('pages.order.edit_period_ended')}}.</small>
+                                </div>
+                            {% endif %}
+                            <salla-button 
+                                loader-position="center" 
+                                {% if not order.rating.store.can_update %} disabled {% endif %} 
+                                shape="icon" 
+                                fill="outline" 
+                                color="dark" 
+                                size="medium" 
+                                {% if order.rating.store.can_update %}
+                                    onclick="salla.event.dispatch('rating::edit', {type: 'store', feedback_id: {{order.rating.store.id}} })"
+                                {% endif %} 
+                                >
+                                <i class="sicon-format-border-color text-xl"></i>
+                            </salla-button>
+                        </div>
+                        <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
+                            {% if not order.rating.store.can_update %}
+                                <div class="tooltip-content shadow-md rounded">
+                                    <small> {{trans('pages.order.delete_period_ended')}}.</small>
+                                </div>
+                            {% endif %}
+                            <salla-button 
+                                loader-position="center" 
+                                shape="icon" 
+                                {% if not order.rating.store.can_update %} disabled {% endif %} 
+                                color="danger" 
+                                fill="outline" 
+                                size="medium" 
+                                {% if order.rating.store.can_update %} 
+                                    onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.store.id}} })" 
+                                {% endif %} 
+                                >
+                                <i class="sicon-trash-2 text-xl"></i>
+                            </salla-button>
+                        </div>
+                    {% endif %}
+                </div>
             </section>
         {% endif %}
 
         {# Shipping Rating #}
         {% if order.rating.shipping.stars %}
-            <section class="bg-white p-5 rounded-md">
-                <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
-                <p class="mb-2">{{ order.rating.shipping.content|raw }}</p>
-                <salla-rating-stars with-label value="{{order.rating.shipping.stars}}"></salla-rating-stars>
+            <section class="flex justify-between items-start bg-white p-5 rounded-md">
+                <div>
+                    <h2 class="text-lg font-bold mb-5">{{ trans('pages.rating.rate_shipping') }}</h2>
+                    <p class="mb-2">{{ order.rating.shipping.content|raw }}</p>
+                    <salla-rating-stars with-label value="{{order.rating.shipping.stars}}"></salla-rating-stars>
+                </div>
+                <div class="rating-actions">
+                {% if store.settings.rating.allow_update %}
+                    <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
+                        {% if not order.rating.shipping.can_update %}
+                            <div class="tooltip-content shadow-md rounded">
+                                <small> {{trans('pages.order.edit_period_ended')}}.</small>
+                            </div>
+                        {% endif %}
+                        <salla-button 
+                            loader-position="center" 
+                            {% if not order.rating.shipping.can_update %} disabled {% endif %} 
+                            shape="icon" 
+                            fill="outline" 
+                            color="dark" 
+                            size="medium" 
+                            {% if order.rating.shipping.can_update %} 
+                                onclick="salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: {{order.rating.shipping.id}} })" 
+                            {% endif %}
+                            >
+                            <i class="sicon-format-border-color text-xl"></i>
+                        </salla-button>
+                    </div>
+                    <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
+                        {% if not order.rating.shipping.can_update %}
+                            <div class="tooltip-content shadow-md rounded">
+                                <small> {{trans('pages.order.delete_period_ended')}}.</small>                            
+                            </div>
+                        {% endif %}
+                        <salla-button 
+                            loader-position="center" 
+                            shape="icon" 
+                            {% if not order.rating.shipping.can_update %} disabled {% endif %} 
+                            color="danger" 
+                            fill="outline" 
+                            size="medium" 
+                            {% if order.rating.shipping.can_update %} 
+                                onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.shipping.id}} })" 
+                            {% endif %} 
+                            > 
+                            <i class="sicon-trash-2 text-xl"></i>
+                        </salla-button>
+                    </div>
+                {% endif %}
+                </div>
             </section>
         {% endif %}
 
         {% hook 'customer:orders.single.details.end' %}
+
+        {% if order.can_rate or store.settings.rating.allow_update %} 
+            <salla-rating-modal></salla-rating-modal>
+        {% endif %}
     </div>
 {% endblock %}
 
