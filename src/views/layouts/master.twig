@@ -127,10 +127,24 @@
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
-    
+
+    {# Store Fonts #}
+    {% set store_font_type = theme.settings.get('store_font_type', 'default') %}
+    {% set font_name = 'PingARLT' %}
+    {% if store_font_type == 'google-font' %}
+      {% set font_name = theme.settings.get('google_font_name', '') %}
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ font_name|replace({' ': '+'}) }}:wght@300;400;700&display=swap">
+    {% elseif store_font_type == 'custom-font' %}
+      {% set custom_font_css_url = theme.settings.get('custom_font_css_url', '') %}
+      {% set font_name = theme.settings.get('custom_font_name', '') %}
+      <link rel="stylesheet" href="{{custom_font_css_url}}">
+    {% else %}
+      <link rel="stylesheet" href="https://cdn.salla.network/fonts/pingarlt.css?v=0.2">
+    {% endif %}
+
     <style>
         :root {
-            --font-main: '{{theme.font.name}}';
+            --font-main: '{{font_name}}';
             --color-primary: {{ theme.color.primary }};
             --color-primary-dark: {{ theme.color.darker(0.15) }};
             --color-primary-light: {{ theme.color.lighter(0.15) }};
