@@ -1,0 +1,5 @@
+{% if cat.image %}
+  <img src="{{ cat.image ? cat.image : 'images/placeholder.png' | asset }}" class="w-16 h-16 object-cover rounded-full mb-2.5 {{ cat.image ? '' : 'has-placeholder'}}" width="64" height="64" alt="{{ menu.title }}"/>
+{% else %}
+  <i class="{{ cat.icon }}"></i>
+{% endif %}
