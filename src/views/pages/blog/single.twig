@@ -42,16 +42,23 @@
                          class="h-80 mb-10 w-full object-cover rounded-md"/>
                 {% endif %}
                 
+                {% if store.settings.blog.allow_likes_and_comments %}
                 <div class="flex items-center gap-2.5 text-gray-500 text-base mb-2">
-                    <button id="blog-like" class="flex items-center gap-1">
-                        <i class="sicon-thumbs-up text-primary"></i>
-                        <span>100</span>
-                    </button>
-                    <div class="flex items-center gap-1">
-                    <i class="sicon-chat text-primary"></i>
-                        163
-                    </div>
+                    {% if article.likes_count %}
+                        <button id="blog-like" data-blog-id="{{ article.key }}" class="flex items-center gap-1">
+                            <i class="sicon-thumbs-up text-primary"></i>
+                            <span>{{article.likes_count}}</span>
+                        </button>
+                    {% endif %}
+                    
+                    {% if article.comments_count %}
+                        <div class="flex items-center gap-1">
+                            <i class="sicon-chat text-primary"></i>
+                            {{article.comments_count}}
+                        </div>
+                    {% endif %}
                 </div>
+                {% endif %}
 
                 <article class="leading-7 text-sm mb-10">{{ article.body|raw }}</article>
                 {% if article.tags|length %}
@@ -66,7 +73,7 @@
                     </div>
                 {% endif %}
 
-                <salla-comments item-id="{{blog.id}}" type="blog"></salla-comments>
+                <salla-comments item-id="{{article.key}}" type="blogs"></salla-comments>
             </div>
 
             <aside aria-label="Sidebar" class="sticky shrink-0 top-24 md:w-96 rtl:lg:mr-8 ltr:lg:ml-8 pb-11">

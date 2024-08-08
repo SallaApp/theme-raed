@@ -146,16 +146,22 @@
                                         {{ article.summary }}
                                     </p>
                                     
-                                    <div class="post-entry__icons flex items-center gap-2.5 text-gray-500 text-sm">
-                                        <div class="flex items-center gap-1">
-                                            <i class="sicon-thumbs-up"></i>
-                                            100
+                                    {% if store.settings.blog.allow_likes_and_comments %}
+                                        <div class="post-entry__icons flex items-center gap-2.5 text-gray-500 text-sm">
+                                            {% if article.likes_counts %}
+                                                <div class="flex items-center gap-1">
+                                                    <i class="sicon-thumbs-up"></i>
+                                                    {{ article.likes_counts }}
+                                                </div>
+                                            {% endif %}
+                                            {% if article.comments_count %}
+                                                <div class="flex items-center gap-1">
+                                                <i class="sicon-chat"></i>
+                                                    {{ article.comments_count }}
+                                                </div>
+                                            {% endif %}
                                         </div>
-                                        <div class="flex items-center gap-1">
-                                        <i class="sicon-chat"></i>
-                                            163
-                                        </div>
-                                    </div>
+                                    {% endif %}
                                 </div>
 
                                 {% if article.tags|length %}
