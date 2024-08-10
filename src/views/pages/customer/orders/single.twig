@@ -24,6 +24,7 @@
 | order.shipping.number            | string                            | number/string/link (..) for shipment number (tracking number)                            |
 | order.shipping.logo              | ?string                           |                                                                                          |
 | order.shipping.cost              | ?Money                            |                                                                                          |
+| order.shipments[]                | ShipmentObject[]                  |                                                                                          |
 | order.tax                        | ?object                           |                                                                                          |
 | order.tax.amount                 | float                             |                                                                                          |
 | order.tax.percent                | float                             |                                                                                          |
@@ -68,6 +69,20 @@
 | order.rating.shipping            | ?Rating                           |                                                                                          |
 #}
 {% extends "layouts.customer" %}
+{% block inner_title %}
+<div class="flex justify-between items-center mb-2">
+    <h1 class="font-bold text-lg text-center sm:text-start">{{ page.title }}</h1>
+    {% if order.shipments | length %}
+        <div class="flex space-x-2 rtl:space-x-reverse">
+            {% for shipment in order.shipments %}
+                {% if shipment.tracking_url %}
+                <a href="{{shipment.tracking_url}}" class="text-primary sicon-share"> {{ trans('pages.orders.order_tracking') }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
 {% block inner_content %}
     <div class="space-y-4">
 
