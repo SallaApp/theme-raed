@@ -32,15 +32,15 @@ class Blog extends BasePage {
             const endpoint = this.isLiked ? `blogs/${blogId}/unlike` : `blogs/${blogId}/like`;
             try {
                 await salla.api.request(endpoint, '', this.isLiked ? 'delete' : 'put');
+                likeBtn.innerHTML = originalContent;
                 this.updateLikedBlogs(blogId, !this.isLiked);
                 this.updateLikesCount(!this.isLiked);
-                this.isLiked = !this.isLiked; // Update the state
+                this.isLiked = !this.isLiked;
             } catch (e) {
+                 likeBtn.innerHTML = originalContent;
                 if (e.response?.status === 409) {
                     this.handleExistingLike(likeBtn, blogId);
                 }
-            } finally {
-                likeBtn.innerHTML = originalContent;
             }
         });
     }
@@ -49,7 +49,7 @@ class Blog extends BasePage {
         const isLiked = likeBtn.classList.contains('liked');
         this.updateLikedBlogs(blogId, !isLiked);
         this.updateLikesCount(!isLiked);
-        this.isLiked = !isLiked; // Update the state
+        this.isLiked = !isLiked; 
     }
 
     updateLikedBlogs(blogId, add) {
@@ -61,7 +61,7 @@ class Blog extends BasePage {
     updateLikesCount(isLiked) {
         const likeButton = document.querySelector('#blog-like');
         const countSpan = likeButton.querySelector('span');
-        const currentCount = parseInt(countSpan?.innerText);
+        let currentCount = parseInt(countSpan?.innerText) || 0;
 
         likeButton.classList.toggle("liked", isLiked);
 
