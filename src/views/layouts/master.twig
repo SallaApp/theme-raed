@@ -120,28 +120,24 @@
         window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
         window.imageZoom = "{{theme.settings.get('imageZoom')}}"
     </script>
-    
-    {#{% hook 'head:start' %}#}
-<script data-cfasync="false">
-window.salla = window.Salla = window.Salla || {};
-Salla.onReady =
-  Salla.onReady ||
-  function (callback) {
-    return new Promise(function (resolve) {
-      return Salla.status == "ready"
-        ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
-        : window.addEventListener(
-            "twilight::initiated",
-            function (config) {
-              resolve(callback ? callback(config.detail) : config.detail);
-            },
-            { once: true },
-          );
-    });
-  };
-</script>
 
-<script async src="https://cdn.salla.network/js/twilight/tests/featureTD-228-create-loyalty-program-component/4722bebee1d08f611d21ab8dd72853a84d90ce7e/twilight.js"></script>
+    {# {% hook 'head:start' %} #}
+    <script data-cfasync="false">
+
+        window.salla = window.Salla = window.Salla || {};
+        Salla.onReady = Salla.onReady || function (callback) {
+            return new Promise(function(resolve){
+                return Salla.status == 'ready'
+                    ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+                    : window.addEventListener('twilight::initiated', function(config){ resolve(callback ? callback(config.detail) : config.detail)}, {once: true});
+            });
+        };
+    </script>
+    {#
+    <script async src="https://cdn.salla.network/js/twilight/tests/featureTD-228-create-loyalty-program-component/18be29e83284d3cc7213445cb625560de10db979/twilight.js"></script>
+    #}
+    <script type="module" src="https://localhost:3334/build/twilight.esm.js"></script>
+    <script nomodule src="https://localhost:3334/build/twilight.js"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
