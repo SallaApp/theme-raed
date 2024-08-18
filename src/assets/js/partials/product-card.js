@@ -188,7 +188,7 @@ class ProductCard extends HTMLElement {
     this.product?.donation?  this.classList.add('s-product-card-donation') : '';
     this.shadowOnHover?  this.classList.add('s-product-card-shadow') : '';
     this.product?.is_out_of_stock?  this.classList.add('s-product-card-out-of-stock') : '';
-    this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(String(this.product.id));
+    this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(this.product.id);
 
     this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
