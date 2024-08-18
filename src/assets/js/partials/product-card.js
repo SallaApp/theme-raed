@@ -1,4 +1,26 @@
 import BasePage from '../base-page';
+
+// Attach global wishlist listeners
+(function attachGlobalWishlistListeners() {
+  salla.onReady(() => { 
+  let isListenerAttached = false;
+
+  function toggleFavoriteIcon(id, isAdded = true) {
+    document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
+      app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
+      app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
+    });
+  }
+
+  if (!isListenerAttached) {
+    salla.wishlist.event.onAdded((event, id) => toggleFavoriteIcon(id));
+    salla.wishlist.event.onRemoved((event, id) => toggleFavoriteIcon(id, false));
+    isListenerAttached = true; // Mark the listener as attached
+  }
+})
+})();
+
+
 class ProductCard extends HTMLElement {
   constructor(){
     super()
@@ -16,10 +38,7 @@ class ProductCard extends HTMLElement {
   }
 
   onReady(){
-      
       this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
-      salla.wishlist.event.onAdded((event, id) => this.toggleFavoriteIcon(id));
-      salla.wishlist.event.onRemoved((event,id) => this.toggleFavoriteIcon(id, false));
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
 
