@@ -1,8 +1,29 @@
 import BasePage from '../base-page';
+
+// Attach global wishlist listeners
+(function attachGlobalWishlistListeners() {
+  salla.onReady(() => { 
+  let isListenerAttached = false;
+
+  function toggleFavoriteIcon(id, isAdded = true) {
+    document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
+      app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
+      app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
+    });
+  }
+
+  if (!isListenerAttached) {
+    salla.wishlist.event.onAdded((event, id) => toggleFavoriteIcon(id));
+    salla.wishlist.event.onRemoved((event, id) => toggleFavoriteIcon(id, false));
+    isListenerAttached = true; // Mark the listener as attached
+  }
+})
+})();
+
+
 class ProductCard extends HTMLElement {
   constructor(){
     super()
-    this.isListenerAttached = false;
   }
   
   connectedCallback(){
@@ -60,13 +81,6 @@ class ProductCard extends HTMLElement {
     });
   }
 
-  attachGlobalWishlistListeners() {
-    if (this.isListenerAttached) return;
-
-    salla.wishlist.event.onAdded((_event, id) => this.toggleFavoriteIcon(id));
-    salla.wishlist.event.onRemoved((_event, id) => this.toggleFavoriteIcon(id, false));
-    this.isListenerAttached = true; // Mark the listener as attached
-  }
   formatDate(date) {
     let d = new Date(date);
     return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
