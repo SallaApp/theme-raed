@@ -1,24 +1,24 @@
 {% extends "layouts.master" %}
 {% block content %}
     <div class="profile-header gradient-bg">
-        <div class="container relative flex items-center justify-between h-full">
+        <div class="container relative flex justify-between h-full items-center">
             {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
-            <nav class="self-start w-full py-5 breadcrumbs">
+            <nav class="breadcrumbs w-full py-5 self-start">
                 <salla-breadcrumb></salla-breadcrumb>
             </nav>
         </div>
     </div>
 
     <div class="container lg:mb-24">
-        <div class="flex flex-col items-start lg:flex-row ">
+        <div class="flex items-start flex-col lg:flex-row ">
             <nav aria-label="Sidebar"
-                 class="w-full space-y-px rounded-md shrink-0 lg:sticky top-24 lg:-mt-28 lg:shadow-default lg:bg-white lg:w-72 rtl:lg:ml-8 ltr:lg:mr-8 lg:pt-8 lg:pb-11 sidebar">
+                 class="shrink-0 lg:sticky top-24 lg:-mt-28 lg:shadow-default rounded-md lg:bg-white w-full lg:w-72 rtl:lg:ml-8 ltr:lg:mr-8 lg:pt-8 lg:pb-11 sidebar space-y-px">
 
                 {% if is_page('customer.profile') %}
                     <div class="text-center md:mb-9">
-                        <div class="w-20 h-20 m-auto bg-gray-100 rounded-full avatar-wrap">
+                        <div class="h-20 w-20 m-auto avatar-wrap bg-gray-100 rounded-full">
                             <salla-file-upload profile-image value="{{ user.avatar }}">
-                                <span class='flex flex-col items-center justify-center avatar-placeholder'>
+                                <span class='avatar-placeholder flex justify-center items-center flex-col'>
                                     <span class='sicon-user'></span>
                                     <span class='text'>{{ trans('common.uploader.choose_suitable_picture') }}</span>
                                 </span>
@@ -31,33 +31,15 @@
                     <salla-user-menu inline></salla-user-menu>
                 </div>
             </nav>
-            <div class="flex-1 w-full main-content lg:pt-10 ">
-            
-			{% set is_single_order_page = is_current_url('order/*') and not is_current_url('order/*/*') %}
-
-			{% if is_single_order_page and package.shipping_company.tracing_link %}
-
-				<div class="flex flex-wrap items-center justify-between mb-2 gap-x-3">
-					<h1 class="text-lg font-bold text-center sm:text-start">{{ page.title }}</h1>
-					<a class="flex items-center text-base gap-x-1 text-primary hover:opacity-80 "
-                     href="{{ package.shipping_company.tracing_link|raw }}" target="_blank">
-						{{ trans('pages.orders.track_your_shipment')}}
-						<span class="sicon-arrow-up-left"></span>
-					</a>
-				</div>
-
-			{% else %}
-
-                {% block inner_title %}<h1 class="mb-2 text-lg font-bold text-center sm:text-start">{{ page.title }}{% endblock %}
+            <div class="main-content w-full flex-1 lg:pt-10 ">
+                {% block inner_title %}<h1 class="font-bold text-lg text-center sm:text-start mb-2">{{ page.title }}{% endblock %}
                 
 
                   {% if is_current_url('order') and order.source is same as('buy_as_gift') %}
-                    <span class="inline-block mx-2 text-primary"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
+                    <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
                   {% endif %}
 
                 </h1>
-
-                {% endif %}
                 {#
                 All customer pages have same header, this layout will wrap the different content.
                 Use it like: `{% extends "layouts.customer" %}` instead of `{% extends "layouts.master" %}`
@@ -68,7 +50,3 @@
         </div>
     </div>
 {% endblock %}
-
-
-
-
