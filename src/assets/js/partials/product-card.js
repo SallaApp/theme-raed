@@ -16,10 +16,7 @@ class ProductCard extends HTMLElement {
   }
 
   onReady(){
-      
       this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
-      salla.wishlist.event.onAdded((event, id) => this.toggleFavoriteIcon(id));
-      salla.wishlist.event.onRemoved((event,id) => this.toggleFavoriteIcon(id, false));
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
 
@@ -52,14 +49,6 @@ class ProductCard extends HTMLElement {
       bar = this.querySelector('.s-product-card-content-pie-svg-bar'),
       strokeDashOffsetValue = 100 - roundPercent;
     bar.style.strokeDashoffset = strokeDashOffsetValue;
-  }
-
-
-  toggleFavoriteIcon(id, isAdded = true) {
-    document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
-      app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
-      app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
-    });
   }
 
   formatDate(date) {
@@ -177,6 +166,7 @@ class ProductCard extends HTMLElement {
     this.product?.donation?  this.classList.add('s-product-card-donation') : '';
     this.shadowOnHover?  this.classList.add('s-product-card-shadow') : '';
     this.product?.is_out_of_stock?  this.classList.add('s-product-card-out-of-stock') : '';
+    this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(this.product.id);
 
     this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
@@ -200,7 +190,7 @@ class ProductCard extends HTMLElement {
               color="light"
               name="product-name-${this.product.id}"
               aria-label="Add or remove to wishlist"
-              class="s-product-card-wishlist-btn animated "
+              class="s-product-card-wishlist-btn animated ${this.isInWishlist ? 's-product-card-wishlist-added pulse-anime' : 'not-added un-favorited'}"
               onclick="salla.wishlist.toggle(${this.product.id})"
               data-id="${this.product.id}">
               <i class="sicon-heart"></i>
@@ -283,7 +273,7 @@ class ProductCard extends HTMLElement {
                   color="light" 
                   id="card-wishlist-btn-${this.product.id}-horizontal"
                   aria-label="Add or remove to wishlist"
-                  class="s-product-card-wishlist-btn animated"
+                  class="s-product-card-wishlist-btn animated ${this.isInWishlist ? 's-product-card-wishlist-added pulse-anime' : 'not-added un-favorited'}"
                   onclick="salla.wishlist.toggle(${this.product.id})"
                   data-id="${this.product.id}">
                   <i class="sicon-heart"></i> 
@@ -302,11 +292,6 @@ class ProductCard extends HTMLElement {
             .setAttribute("donating-amount", e.target.value); 
         });
       })
-
-      // re-init favorite icon
-      if (!salla.config.isGuest()){
-        salla.storage.get('salla::wishlist', []).forEach(id => this.toggleFavoriteIcon(id));
-      }
 
       document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
 
