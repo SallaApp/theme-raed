@@ -72,8 +72,9 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-
-                <salla-comments item-id="{{article.key}}" type="blog"></salla-comments>
+                {% if store.settings.blog.allow_likes_and_comments %}
+                    <salla-comments item-id="{{article.key}}"   type="blog"></salla-comments>
+                {% endif %}
             </div>
 
             <aside aria-label="Sidebar" class="sticky shrink-0 top-24 md:w-96 rtl:lg:mr-8 ltr:lg:ml-8 pb-11">
