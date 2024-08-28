@@ -181,7 +181,7 @@ class ProductCard extends HTMLElement {
               data-src=${this.product?.image?.url || this.product?.thumbnail}
             />
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
-            ${this.product.has_3d_image && productHas3dImage ? '<span class="sicon-d-rotate s-product-card-3d-icon"></span>' : ''}
+            ${this.product.has_3d_image || show3dImageIcon ? '<span class="sicon-d-rotate s-product-card-3d-icon"></span>' : ''}
           </a>
           ${this.fullImage ? `<a href="${this.product?.url}" aria-label=${this.product.name} class="s-product-card-overlay"></a>`:''}
           ${!this.horizontal && !this.fullImage ?
