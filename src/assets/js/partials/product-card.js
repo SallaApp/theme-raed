@@ -7,7 +7,6 @@ class ProductCard extends HTMLElement {
   connectedCallback(){
     // Parse product data
     this.product = this.product || JSON.parse(this.getAttribute('product')); 
-    this.has_3d_image = true;
 
     if (window.app?.status === 'ready') {
       this.onReady();
@@ -182,7 +181,7 @@ class ProductCard extends HTMLElement {
               data-src=${this.product?.image?.url || this.product?.thumbnail}
             />
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
-            ${this.has_3d_image ? '<span class="sicon-home 3d-image-icon"></span>' : ''}
+            ${this.product.has_3d_image && productHas3dImage ? '<span class="sicon-d-rotate s-product-card-3d-icon"></span>' : ''}
           </a>
           ${this.fullImage ? `<a href="${this.product?.url}" aria-label=${this.product.name} class="s-product-card-overlay"></a>`:''}
           ${!this.horizontal && !this.fullImage ?
