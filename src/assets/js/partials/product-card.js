@@ -7,6 +7,7 @@ class ProductCard extends HTMLElement {
   connectedCallback(){
     // Parse product data
     this.product = this.product || JSON.parse(this.getAttribute('product')); 
+    this.has_3d_image = true;
 
     if (window.app?.status === 'ready') {
       this.onReady();
@@ -27,19 +28,19 @@ class ProductCard extends HTMLElement {
 	  	this.showQuantity = window.showQuantity;
 	  }
 
-      salla.lang.onLoaded(() => {
-        // Language
-        this.remained = salla.lang.get('pages.products.remained');
-        this.donationAmount = salla.lang.get('pages.products.donation_amount');
-        this.startingPrice = salla.lang.get('pages.products.starting_price');
-        this.addToCart = salla.lang.get('pages.cart.add_to_cart');
-        this.outOfStock = salla.lang.get('pages.products.out_of_stock');
+    salla.lang.onLoaded(() => {
+      // Language
+      this.remained = salla.lang.get('pages.products.remained');
+      this.donationAmount = salla.lang.get('pages.products.donation_amount');
+      this.startingPrice = salla.lang.get('pages.products.starting_price');
+      this.addToCart = salla.lang.get('pages.cart.add_to_cart');
+      this.outOfStock = salla.lang.get('pages.products.out_of_stock');
 
-        // re-render to update translations
-        this.render();
-      })
-      
-      this.render()
+      // re-render to update translations
+      this.render();
+    })
+    
+    this.render()
   }
 
   initCircleBar() {
@@ -181,6 +182,7 @@ class ProductCard extends HTMLElement {
               data-src=${this.product?.image?.url || this.product?.thumbnail}
             />
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
+            ${this.has_3d_image ? '<span class="sicon-home 3d-image-icon"></span>' : ''}
           </a>
           ${this.fullImage ? `<a href="${this.product?.url}" aria-label=${this.product.name} class="s-product-card-overlay"></a>`:''}
           ${!this.horizontal && !this.fullImage ?
