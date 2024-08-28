@@ -182,16 +182,16 @@ class ProductCard extends HTMLElement {
     this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
           <a href="${this.product?.url}">
-            ${multipleImages ?
+            ${productcard_images ?
               `<salla-slider
                 id="product-slider-${this.product.id}-${this.getRandomInt(1, 10000)}"
                 show-controls="false" 
                 pagination
-                auto-play=${images_autoplay ? 'true' : 'false'}
+                auto-play=${productcard_autoplay ? 'true' : 'false'}
                 >
                 <div slot="items">
                   ${this.product.images.map((item, index) => (
-                    `<div><img data-src=${item} src=${this.placeholder} alt=${this.product?.image?.alt} class="lazy" /></div>`  
+                    `<img data-src=${item} src=${this.placeholder} alt=${this.product?.image?.alt} class="lazy"/>`  
                   ))}
                 </div>
               </salla-slider>`
@@ -207,7 +207,7 @@ class ProductCard extends HTMLElement {
               />`
             }
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
-            ${this.product.has_3d_image || show3dImageIcon ? '<span class="sicon-d-rotate s-product-card-3d-icon"></span>' : ''}
+            ${this.product.has_3d_image || productcard_show_3d_icon ? '<span class="sicon-d-rotate s-product-card-3d-icon"></span>' : ''}
           </a>
           ${this.fullImage ? `<a href="${this.product?.url}" aria-label=${this.product.name} class="s-product-card-overlay"></a>`:''}
           ${!this.horizontal && !this.fullImage ?
@@ -217,7 +217,7 @@ class ProductCard extends HTMLElement {
               color="light"
               name="product-name-${this.product.id}"
               aria-label="Add or remove to wishlist"
-              class="s-product-card-wishlist-btn animated ${this.isInWishlist ? 's-product-card-wishlist-added pulse-anime' : 'not-added un-favorited'}"
+              class="s-product-card-wishlist-btn z-1 animated ${this.isInWishlist ? 's-product-card-wishlist-added pulse-anime' : 'not-added un-favorited'}"
               onclick="salla.wishlist.toggle(${this.product.id})"
               data-id="${this.product.id}">
               <i class="sicon-heart"></i>
@@ -300,7 +300,7 @@ class ProductCard extends HTMLElement {
                   color="light" 
                   id="card-wishlist-btn-${this.product.id}-horizontal"
                   aria-label="Add or remove to wishlist"
-                  class="s-product-card-wishlist-btn animated ${this.isInWishlist ? 's-product-card-wishlist-added pulse-anime' : 'not-added un-favorited'}"
+                  class="s-product-card-wishlist-btn z-1 animated ${this.isInWishlist ? 's-product-card-wishlist-added pulse-anime' : 'not-added un-favorited'}"
                   onclick="salla.wishlist.toggle(${this.product.id})"
                   data-id="${this.product.id}">
                   <i class="sicon-heart"></i> 

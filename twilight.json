@@ -114,11 +114,11 @@
           "icon": "sicon-toggle-off",
           "label": "دعم صور متعددة في بطاقة المنتج",
           "description": "",
-          "id": "productcard_support_images",
+          "id": "productcard_images",
           "format": "switch",
           "required": false,
-          "value": true,
-          "selected": true
+          "value": false,
+          "selected": false
         },
         {
           "type": "number",
@@ -133,7 +133,7 @@
           "minLength": 2,
           "conditions": [
               {
-                  "id": "productcard_support_images",
+                  "id": "productcard_images",
                   "operation": "=",
                   "value": true
               }
@@ -142,16 +142,55 @@
         {
           "type": "boolean",
           "icon": "sicon-toggle-off",
-          "label": "التحرك التلقائي للصور",
+          "label": "التنقل التلقائي للصور",
           "description": "",
-          "id": "productcard_images_autoplay",
+          "id": "productcard_autoplay",
           "format": "switch",
           "required": false,
           "value": false,
           "selected": false,
           "conditions": [
               {
-                  "id": "productcard_support_images",
+                  "id": "productcard_images",
+                  "operation": "=",
+                  "value": true
+              }
+          ]
+        },
+        {
+          "type": "static",
+          "id": "static-line1",
+          "format": "line"
+        },
+
+        {
+          "type": "boolean",
+          "icon": "sicon-toggle-off",
+          "label": "دعم خيارات المنتج في بطاقة المنتج",
+          "description": "",
+          "id": "productcard_options",
+          "format": "switch",
+          "required": false,
+          "value": false,
+          "selected": false
+        },
+        {
+          "id": "productcard_options_cats",
+          "type": "items",
+          "format": "dropdown-list",
+          "label": "حدد التصنيفات",
+          "description": "اختر التصنيفات للمنتجات التي ستظهر فيها خيارات المنتج",
+          "labelHTML": null,
+          "icon": "sicon-keyboard_arrow_down",
+          "selected": [],
+          "options": [],
+          "source": "categories",
+          "multichoice": true,
+          "searchable": true,
+          "required": false,
+          "conditions": [
+              {
+                  "id": "productcard_options",
                   "operation": "=",
                   "value": true
               }
