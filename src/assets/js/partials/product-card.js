@@ -8,6 +8,11 @@ class ProductCard extends HTMLElement {
     // Parse product data
     this.product = this.product || JSON.parse(this.getAttribute('product')); 
 
+    this.product.images = [
+      'https://cdn.salla.sa/mQgZlG/9f98b50b-e9cd-4495-9d58-001746481dc2-500x500-IBuNZoBCb9g3TwvL1ZQP2VVSwJekjhskynz0sdzS.jpg',
+      'https://cdn.salla.sa/mQgZlG/FaWuBveWH22EqE2qUX9gbUVfG3dVO7vzTyNPBaGf.jpg'
+    ]
+
     if (window.app?.status === 'ready') {
       this.onReady();
     } else {
@@ -154,6 +159,12 @@ class ProductCard extends HTMLElement {
     this.showQuantity = this.hasAttribute('showQuantity');
   }
 
+  getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   render(){
     this.classList.add('s-product-card-entry'); 
     this.setAttribute('id', this.product.id);
@@ -171,15 +182,30 @@ class ProductCard extends HTMLElement {
     this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
           <a href="${this.product?.url}">
-            <img class="s-product-card-image-${salla.url.is_placeholder(this.product?.image?.url)
-              ? 'contain'
-              : this.fitImageHeight
-                ? this.fitImageHeight
-                : 'cover'} lazy"
-              src=${this.placeholder}
-              alt=${this.product?.image?.alt}
-              data-src=${this.product?.image?.url || this.product?.thumbnail}
-            />
+            ${multipleImages ?
+              `<salla-slider
+                id="product-slider-${this.product.id}-${this.getRandomInt(1, 10000)}"
+                show-controls="false" 
+                pagination
+                auto-play=${images_autoplay ? 'true' : 'false'}
+                >
+                <div slot="items">
+                  ${this.product.images.map((item, index) => (
+                    `<div><img data-src=${item} src=${this.placeholder} alt=${this.product?.image?.alt} class="lazy" /></div>`  
+                  ))}
+                </div>
+              </salla-slider>`
+              :
+              `<img class="s-product-card-image-${salla.url.is_placeholder(this.product?.image?.url)
+                ? 'contain'
+                : this.fitImageHeight
+                  ? this.fitImageHeight
+                  : 'cover'} lazy"
+                src=${this.placeholder}
+                alt=${this.product?.image?.alt}
+                data-src=${this.product?.image?.url || this.product?.thumbnail}
+              />`
+            }
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
             ${this.product.has_3d_image || show3dImageIcon ? '<span class="sicon-d-rotate s-product-card-3d-icon"></span>' : ''}
           </a>

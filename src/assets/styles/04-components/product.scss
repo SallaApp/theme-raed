@@ -394,5 +394,22 @@ salla-quantity-input[max='1']{
 
 // 3D icon in product card
 .s-product-card-3d-icon{
-  @apply absolute rtl:right-2.5 ltr:left-2.5 bottom-2.5 rounded-full flex-center w-8 h-8 bg-black/40 text-white text-xl;
+  @apply absolute z-1 rtl:right-2.5 ltr:left-2.5 bottom-2.5 rounded-full flex-center w-8 h-8 bg-black/40 text-white text-xl;
+}
+
+.s-product-card-entry{
+  salla-slider {
+    .swiper-pagination-bullets.swiper-pagination-horizontal{
+      @apply bottom-1;
+    }
+  
+    .swiper-pagination-bullet{
+      --swiper-pagination-bullet-horizontal-gap: 2px;
+      @apply w-2;
+
+      &:not(.swiper-pagination-bullet-active){
+        @apply opacity-70;
+      }
+    }
+  }
 }
