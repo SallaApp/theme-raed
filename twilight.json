@@ -112,9 +112,40 @@
         {
           "type": "boolean",
           "icon": "sicon-toggle-off",
+          "label": "دعم صور متعددة في بطاقة المنتج",
+          "description": "",
+          "id": "productcard_support_images",
+          "format": "switch",
+          "required": false,
+          "value": true,
+          "selected": true
+        },
+        {
+          "type": "number",
+          "format": "integer",
+          "id": "productcard_images_limit",
+          "icon": "sicon-format-text-alt",
+          "label": "عدد الصور",
+          "value": null,
+          "required": false,
+          "description": null,
+          "placeholder": "",
+          "minLength": 2,
+          "conditions": [
+              {
+                  "id": "productcard_support_images",
+                  "operation": "=",
+                  "value": true
+              }
+          ]
+        },
+
+        {
+          "type": "boolean",
+          "icon": "sicon-toggle-off",
           "label": "دعم أيقونة الصور ثلاثية الأبعاد في بطاقة المنتج",
           "description": "في حالة توفر صورة ثلاثية الأبعاد في المنتج، سيتم وضع أيقونة معبرة في بطاقة المنتج",
-          "id": "show_3d_image_icon",
+          "id": "productcard_show_3d_icon",
           "format": "switch",
           "required": false,
           "value": true,
