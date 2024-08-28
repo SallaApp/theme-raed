@@ -121,17 +121,6 @@
           "selected": true
         },
         {
-          "type": "boolean",
-          "icon": "sicon-toggle-off",
-          "label": "التحرك التلقائي للصور",
-          "description": "",
-          "id": "productcard_images_autoplay",
-          "format": "switch",
-          "required": false,
-          "value": false,
-          "selected": false
-        },
-        {
           "type": "number",
           "format": "integer",
           "id": "productcard_images_limit",
@@ -142,6 +131,24 @@
           "description": null,
           "placeholder": "الحد الأدنى ٢",
           "minLength": 2,
+          "conditions": [
+              {
+                  "id": "productcard_support_images",
+                  "operation": "=",
+                  "value": true
+              }
+          ]
+        },
+        {
+          "type": "boolean",
+          "icon": "sicon-toggle-off",
+          "label": "التحرك التلقائي للصور",
+          "description": "",
+          "id": "productcard_images_autoplay",
+          "format": "switch",
+          "required": false,
+          "value": false,
+          "selected": false,
           "conditions": [
               {
                   "id": "productcard_support_images",
