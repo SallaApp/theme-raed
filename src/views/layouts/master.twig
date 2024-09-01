@@ -125,11 +125,11 @@
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
-    {% if theme.font.type == 'google' %}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    {% if theme.font.type == 'google' or theme.font.type == 'custom' %}
+        <link rel="stylesheet" href="{{ theme.font.path|asset }}"/>
+    {% else %}
+        <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     {% endif %}
-    <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
     
     <style>
