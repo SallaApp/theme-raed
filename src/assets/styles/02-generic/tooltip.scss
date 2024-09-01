@@ -1,5 +1,5 @@
-.tooltip{
-  &-content{
+.tooltip {
+  &-content {
     position: absolute;
     transform: translate(82px, -120px);
     background: #fff;
@@ -9,31 +9,83 @@
     opacity: 0;
     transition: all 0.3s;
 
-  &:after {
-      content: '';
-      display: block;  
+    &:after {
+      content: "";
+      display: block;
       position: absolute;
-      z-index: 1;
+      z-index: -1;
       left: auto;
       background: #fff;
       width: 20px;
       height: 20px;
       transform: rotate(45deg);
       border-radius: 2px;
-     @apply shadow-md;
+      @apply shadow-md;
       left: 43%;
       bottom: -7px;
-  }
-
-    .visible &{
+    }
+    .icon-trigger & {
+      background-color: var(--color-primary);
+      color: var(--color-primary-reverse);
+      padding: 10px;
+      width: 140px;
+      line-height: 1;
+      text-align: center;
+      @media (max-width: 991px) {
+        width: 110px;
+      }
+      &:after {
+        background-color: var(--color-primary);
+      }
+    }
+    
+    [dir="rtl"] .icon-trigger.mobile-shifted & {
+      transform: translate(53px, -73px);
+      @media (max-width: 991px) {
+        transform: translate(70px, -90px);
+      }
+      &:after {
+        @media (max-width: 991px) {
+          left: 13%;
+        }
+      }
+    }
+    [dir="ltr"] .icon-trigger.mobile-shifted & {
+      transform: translate(-53px, -75px);
+      @media (max-width: 991px) {
+        transform: translate(-70px, -90px);
+      }
+      &:after {
+        @media (max-width: 991px) {
+          left: 69%;
+        }
+      }
+    }
+    .visible & {
       visibility: visible;
       opacity: 1;
       transform: translate(82px, -110px);
     }
+    [dir="rtl"] .icon-trigger.visible & {
+      transform: translate(53px, -63px);
+    }
+    [dir="ltr"] .icon-trigger.visible & {
+      transform: translate(-54px, -65px);
+    }
+    [dir="rtl"] .icon-trigger.mobile-shifted.visible & {
+      @media (max-width: 991px) {
+        transform: translate(70px, -80px);
+      }
+    } 
+    [dir="ltr"] .icon-trigger.mobile-shifted.visible & {
+      @media (max-width: 991px) {
+        transform: translate(-70px, -80px);
+      }
+    }
   }
 }
 
-.close-tooltip{
+.close-tooltip {
   position: absolute;
   top: 0;
   left: 0;
