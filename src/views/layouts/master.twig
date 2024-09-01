@@ -128,7 +128,7 @@
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
 
     {# Store Fonts #}
-    {% set font_name = store.font.name or 'PingARLT' %}
+    {% set font_name = store.font.name ? store.font.name : 'PingARLT' %}
     {% if store.font.type == 'google' and font_name != 'PingARLT' %}
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ font_name|replace({' ': '+'}) }}:wght@300;400;700&display=swap">
     {% elseif store.font.type == 'custom' and font_name != 'PingARLT' %}
@@ -139,7 +139,7 @@
     
     <style>
         :root {
-            --font-main: '{{theme.font.name}}';
+            --font-main: '{{font_name}}';
             --color-primary: {{ theme.color.primary }};
             --color-primary-dark: {{ theme.color.darker(0.15) }};
             --color-primary-light: {{ theme.color.lighter(0.15) }};
