@@ -485,6 +485,19 @@
               <div class="bg-white p-5 rounded-md">
                 <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.cart.cart_options') }}</h2>
                 <table class="table-fixed w-full border border-gray-200">
+                  <thead>
+                    <tr class="border-b border-gray-200">
+                      <th scope="col" class="p-3 text-start text-sm">
+                        {{ trans('pages.order.option_name') }}
+                      </th>
+                      <th scope="col" class="p-3 text-sm">
+                        {{ trans('pages.order.option_content') }}
+                      </th>
+                      <th scope="col" class="p-3 rtl:text-left ltr:text-right text-sm">
+                        {{ trans('pages.products.price') }}
+                      </th>
+                    </tr>
+                  </thead>
                   <tbody>
                     {% for item in order.options %}
                       {% for option in item.options %}
