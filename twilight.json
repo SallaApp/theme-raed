@@ -25,6 +25,281 @@
         "filters"
     ],
     "settings": [
+      {
+        "id": "store_font_type",
+        "type": "items",
+        "format": "radio-list",
+        "label": "اختر الخط",
+        "labelHTML": null,
+        "icon": "sicon-list",
+        "selected": [
+            {
+                "label": "خط خاص",
+                "value": "custom",
+                "key": "9f34f63b-11a1-4942-bc70-466683ad9d9c"
+            }
+        ],
+        "options": [
+            {
+                "label": "خط سلة الافتراضي",
+                "value": "default",
+                "key": "0580d8e5-8883-4874-a617-eef37355cdb6"
+            },
+            {
+                "label": "اختر خط من خطوط جوجل",
+                "value": "google",
+                "key": "cf52ee59-f222-47c0-8a20-786e3e1c0233"
+            },
+            {
+                "label": "خط خاص",
+                "value": "custom",
+                "key": "9f34f63b-11a1-4942-bc70-466683ad9d9c"
+            }
+        ],
+        "source": "Manual",
+        "required": false,
+        "s_value": [
+            {
+                "label": "خط خاص",
+                "value": "custom",
+                "key": "9f34f63b-11a1-4942-bc70-466683ad9d9c"
+            }
+        ]
+    },
+    {
+      "type": "items",
+      "id": "font_id",
+      "label": "خط المتجر",
+      "icon": "sicon-list",
+      "format": "dropdown-list",
+      "source": "Manual",
+      "required": true,
+      "options": [
+          {
+              "value": 1,
+              "label": "خط سلة الافتراضي",
+              "key": "DINNextLTArabic-Regular"
+          },
+          {
+              "value": 2,
+              "label": "امازون",
+              "key": "Amazon-Ember"
+          },
+          {
+              "value": 3,
+              "label": "آبل",
+              "key": "Apple"
+          },
+          {
+              "value": 4,
+              "label": "دبي",
+              "key": "Dubai"
+          },
+          {
+              "value": 5,
+              "label": "استعداد",
+              "key": "Estedad"
+          }
+      ],
+      "selected": [
+          {
+              "value": 2,
+              "label": "امازون",
+              "key": "Amazon-Ember"
+          }
+      ],
+      "conditions": [
+          {
+              "id": "store_font_type",
+              "operation": "=",
+              "value": "default"
+          }
+      ],
+      "s_value": [
+          {
+              "value": 2,
+              "label": "امازون",
+              "key": "Amazon-Ember"
+          }
+      ]
+  },
+
+    {
+      "id": "google_font_name",
+      "type": "items",
+      "format": "dropdown-list",
+      "label": "اختر خط من خطوط جوجل",
+      "description": "",
+      "labelHTML": null,
+      "icon": "sicon-list",
+      "selected": [
+          {
+              "label": "Amiri Quran",
+              "value": "Amiri Quran"
+          }
+      ],
+      "options": [
+          {
+              "label": "Rubik",
+              "value": "Rubik"
+          },
+          {
+              "label": "Cairo",
+              "value": "Cairo"
+          },
+          {
+              "label": "Tajawal",
+              "value": "Tajawal"
+          },
+          {
+              "label": "Almarai",
+              "value": "Almarai"
+          },
+          {
+              "label": "Baloo Bhaijaan 2",
+              "value": "Baloo Bhaijaan 2"
+          },
+          {
+              "label": "IBM Plex Sans Arabic",
+              "value": "IBM Plex Sans Arabic"
+          },
+          {
+              "label": "Changa",
+              "value": "Changa"
+          },
+          {
+              "label": "Amiri",
+              "value": "Amiri"
+          },
+          {
+              "label": "El Messiri",
+              "value": "El Messiri"
+          },
+          {
+              "label": "Readex Pro",
+              "value": "Readex Pro"
+          },
+          {
+              "label": "Noto Naskh Arabic",
+              "value": "Noto Naskh Arabic"
+          },
+          {
+              "label": "Mada",
+              "value": "Mada"
+          },
+          {
+              "label": "Alexandria",
+              "value": "Alexandria"
+          },
+          {
+              "label": "Vazirmatn",
+              "value": "Vazirmatn"
+          },
+          {
+              "label": "Markazi Text",
+              "value": "Markazi Text"
+          },
+          {
+              "label": "Aref Ruqaa",
+              "value": "Aref Ruqaa"
+          },
+          {
+              "label": "Harmattan",
+              "value": "Harmattan"
+          },
+          {
+              "label": "Scheherazade New",
+              "value": "Scheherazade New"
+          },
+          {
+              "label": "Amiri Quran",
+              "value": "Amiri Quran"
+          },
+          {
+              "label": "Marhey",
+              "value": "Marhey"
+          },
+          {
+              "label": "Noto Sans Arabic",
+              "value": "Noto Sans Arabic"
+          },
+          {
+              "label": "Noto Kufi Arabic",
+              "value": "Noto Kufi Arabic"
+          }
+      ],
+      "source": "Manual",
+      "required": true,
+      "conditions": [
+          {
+              "id": "store_font_type",
+              "operation": "=",
+              "value": "google"
+          }
+      ],
+      "s_value": [
+          {
+              "label": "Amiri Quran",
+              "value": "Amiri Quran"
+          }
+      ]
+  },
+  {
+    "id": "custom_font_css_url",
+    "key": "6bd7ea8e-70b7-4486-aed2-250c3cb9c056",
+    "type": "string",
+    "format": "url",
+    "inputType": "url",
+    "label": "رابط مباشر بصيغة css لملف الخط",
+    "description": "يجب أن يكون رابط مباشر للملف ويجب ان يحتوي الملف على استدعاء لملفات الفونت المرفوع مسبقاً على أي مساحة تخزين",
+    "labelHTML": null,
+    "placeholder": "e.g. https://example.com/fonts/font_name.css",
+    "icon": "sicon-link",
+    "value": "https://quranacademy.github.io/test-arabic-fonts/fonts.css",
+    "required": false,
+    "defaulted": true,
+    "conditions": [
+        {
+            "id": "store_font_type",
+            "operation": "=",
+            "value": "custom"
+        }
+    ],
+    "s_value": "https://quranacademy.github.io/test-arabic-fonts/fonts.css"
+},
+{
+  "id": "custom_font_name",
+  "type": "string",
+  "icon": "sicon-format-text-alt",
+  "label": "اسم الفونت الخاص",
+  "multilanguage": false,
+  "value": "albayan",
+  "required": false,
+  "format": "text",
+  "description": "اسم الفونت كما هو مستخدم في الملف المُستدعى بالأعلى",
+  "placeholder": "",
+  "conditions": [
+      {
+          "id": "store_font_type",
+          "operation": "=",
+          "value": "custom"
+      }
+  ],
+  "s_value": "albayan"
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
         {
             "type": "boolean",
             "icon": "sicon-toggle-off",
