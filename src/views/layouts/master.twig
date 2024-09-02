@@ -133,12 +133,15 @@
     {% elseif theme.font.type == 'custom' %}
       <link rel="stylesheet" href="{{theme.font.url}}">
     {% else %}
-      <link rel="stylesheet" href="https://cdn.salla.network/fonts/pingarlt.css?v=0.2">
+      {# <link rel="stylesheet" href="https://cdn.salla.network/fonts/pingarlt.css?v=0.2"> #}
+      <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     {% endif %}
- 
+
+    {# TODO: will used when new font options will released #}
+    {# --font-main: '{{ (theme.font.type == 'google' or theme.font.type == 'custom') ? theme.font.name : 'PingARLT'}}'; #}
     <style>
         :root {
-            --font-main: '{{ (theme.font.type == 'google' or theme.font.type == 'custom') ? theme.font.name : 'PingARLT'}}';
+            --font-main: '{{ theme.font.name }}';
             --color-primary: {{ theme.color.primary }};
             --color-primary-dark: {{ theme.color.darker(0.15) }};
             --color-primary-light: {{ theme.color.lighter(0.15) }};
