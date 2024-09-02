@@ -125,9 +125,20 @@
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
-    <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
-    
+
+    {# Store Fonts #}
+    {% if theme.font.type == 'google' %}
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ theme.font.name|replace({' ': '+'}) }}:wght@300;400;700&display=swap">
+    {% elseif theme.font.type == 'custom' %}
+      <link rel="stylesheet" href="{{theme.font.url}}">
+    {% else %}
+      {# <link rel="stylesheet" href="https://cdn.salla.network/fonts/pingarlt.css?v=0.2"> #}
+      <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
+    {% endif %}
+
+    {# TODO: will used when new font options will released #}
+    {# --font-main: '{{ (theme.font.type == 'google' or theme.font.type == 'custom') ? theme.font.name : 'PingARLT'}}'; #}
     <style>
         :root {
             --font-main: '{{theme.font.name}}';
