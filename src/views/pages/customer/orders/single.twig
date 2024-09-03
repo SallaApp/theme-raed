@@ -263,18 +263,7 @@
                               {% endif %}
 
                               <div class="rounded-md p-4 border border-gray-200 mb-2">
-                                  <ul class="font-medium text-xs text-gray-600">
-                                      {% for reservation in item.product_reservations %}
-                                      <li class="py-1  ">
-                                          <span class="text-unicode">
-                                              {{ reservation.day|date|number }}
-                                              {% if reservation.from_timestamp is not empty %}
-                                                  ({{ reservation.from|number({'PM':'م', 'AM':'ص'}) }} - {{ reservation.to|number({'PM':'م', 'AM':'ص'}) }})
-                                              {% endif %}
-                                          </span>
-                                      </li>
-                                      {% endfor %}
-                                  </ul>
+                                {% include 'pages.partials.product.reservations' with { reservations: item.product_reservations } %}
                               </div>
                           {% endif %}
 
@@ -496,13 +485,34 @@
               <div class="bg-white p-5 rounded-md">
                 <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.cart.cart_options') }}</h2>
                 <table class="table-fixed w-full border border-gray-200">
+                  <thead>
+                    <tr class="border-b border-gray-200">
+                      <th scope="col" class="p-3 text-start text-sm">
+                        {{ trans('pages.order.option_name') }}
+                      </th>
+                      <th scope="col" class="p-3 text-sm">
+                        {{ trans('pages.order.option_content') }}
+                      </th>
+                      <th scope="col" class="p-3 rtl:text-left ltr:text-right text-sm">
+                        {{ trans('pages.products.price') }}
+                      </th>
+                    </tr>
+                  </thead>
                   <tbody>
-                    {% for option in order.options %}
+                    {% for item in order.options %}
+                      {% for option in item.options %}
                         <tr class="border-b last:border-b-0 border-gray-200">
                           <td class="text-sm p-3">{{ option.name }} :</td>
-                          <td class="text-center p-3 font-medium text-xs">{{ option.value }}</td>
+                          <td class="text-center p-3 font-medium text-xs">
+                          {% if option.reservations %}
+                            {% include 'pages.partials.product.reservations' with { reservations: option.reservations } %}
+                          {% else %}
+                            {{ option.value }}
+                          {% endif %}
+                          </td>
                           <td class="rtl:text-start ltr:text-end p-3 font-medium text-xs"><strong>{{option.price|money}}</strong></td>
                         </tr>
+                      {% endfor %}
                     {% endfor %}
                   </tbody>
                 </table>
