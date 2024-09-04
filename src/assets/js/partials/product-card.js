@@ -9,15 +9,22 @@ class ProductCard extends HTMLElement {
     // Parse product data
     this.product = this.product || JSON.parse(this.getAttribute('product')); 
 
-    if(this.product.id == 1303461379 && !this.isfired){
+    if((this.product.id == 73203761 || this.product.id == 1303461379) && !this.isfired){
       this.product.images = [
         'https://cdn.salla.sa/mQgZlG/9f98b50b-e9cd-4495-9d58-001746481dc2-500x500-IBuNZoBCb9g3TwvL1ZQP2VVSwJekjhskynz0sdzS.jpg',
         'https://cdn.salla.sa/mQgZlG/FaWuBveWH22EqE2qUX9gbUVfG3dVO7vzTyNPBaGf.jpg'
       ]
+     
+      salla.product.getDetails(this.product.id, ['category','images', 'options']).then(({data: product}) => {
+        if(productcard_images && this.product.images.length > 1){
+          this.renderImages(this.product.images)
+        }
+  
+        if(productcard_options && product.options){
+          this.renderOptions(product.options)
+        }
+      })
 
-
-      console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 product details fetched")
-      this.getProductDetails();
       this.isfired = true;
     }
 
@@ -54,45 +61,56 @@ class ProductCard extends HTMLElement {
     
     this.render()
   }
+ 
+  renderImages(images){
+    this.querySelector('.product-slider').innerHTML = 
+      `<salla-slider
+          id="product-slider-${this.product.id}-${this.getRandomInt(1, 10000)}"
+          show-controls="false" 
+          pagination
+          auto-play=${productcard_autoplay ? 'true' : 'false'}
+          >
+          <div slot="items">
+            ${images?.map((item) => (
+              `<img data-src=${item} src=${this.placeholder} alt=${this.product?.image?.alt} class="lazy"/>`  
+            ))}
+          </div>
+        </salla-slider>`
+  }
 
-  getProductDetails(){
-    salla.product.getDetails(this.product.id, ['category','images', 'options']).then(({data: product}) => {
-      if(productcard_images && product.images.length > 1){
-        this.querySelector('.product-slider').innerHTML = 
-          `<salla-slider
-              id="product-slider-${this.product.id}-${this.getRandomInt(1, 10000)}"
-              show-controls="false" 
-              pagination
-              auto-play=${productcard_autoplay ? 'true' : 'false'}
-              >
-              <div slot="items">
-                ${this.product.images?.map((item, index) => (
-                  `<img data-src=${item} src=${this.placeholder} alt=${this.product?.image?.alt} class="lazy"/>`  
-                ))}
-              </div>
-            </salla-slider>`
-      }
+  renderOptions(options){
+    this.querySelector('.product-options').innerHTML = `
+      <salla-product-options options="${JSON.stringify(options)}" product-id="${this.product.id}"></salla-product-options>
+    `
 
-      if(productcard_options && product.options){
-        this.querySelector('.product-options').innerHTML = `
-          <salla-product-options options="${JSON.stringify(product.options)}" product-id="${product.id}"></salla-product-options>
-        `
+    this.querySelector('salla-product-options').addEventListener('changed', () => {
 
-        this.querySelector('salla-product-options').addEventListener('changed', () => {
+      salla.event.once('product::price.updated.failed',(event)=>{
+        let outOfStock = this.querySelector('.out-of-stock'),
+            wrapper = this.querySelector('.price-wrapper');
 
-          salla.event.on('product::price.updated.failed',()=>{
-            this.querySelector('.price-wrapper').classList.add('hidden');
-            this.querySelector('.out-of-stock').classList.remove('hidden')
-            app.anime('.out-of-stock', { scale: [0.88, 1] });
-          })
 
-          salla.event.on('product::price.updated',(event)=>{            
-            this.updateInnerPrice(event);
-          })
-        })
+            console.log("🚀 ~ ProductCard ~ salla.event.once ~ outOfStock:", outOfStock, event)
 
-      }
+        wrapper.classList.add('hidden');
+        outOfStock.classList.remove('hidden')
+        
+        app.anime(outOfStock, { scale: [0.88, 1] });
+      })
+
+      salla.event.once('product::price.updated',(event)=>{     
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>> Price updated');
+        this.updateInnerPrice(event);
+      })
+
+      // setTimeout(()=> this.removeEventListeners,300)
     })
+  }
+
+  removeEventListeners(){
+    console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 remove event")
+    this.querySelector('salla-product-options').removeEventListener('changed', this.updateInnerPrice); 
+    document.removeEventListener('onPriceUpdated', this.updateInnerPrice ); 
   }
  
   updateInnerPrice = (res) => {
@@ -117,10 +135,6 @@ class ProductCard extends HTMLElement {
     app.toggleElementClassIf(startingOrNormalPrice ,'hidden','showed', ()=> is_on_sale)
 
     app.anime(totalPrice, { scale: [0.88, 1] });
-
-
-    // this.querySelector('salla-product-options').removeEventListener('changed', this.updateInnerPrice ); 
-    // document.removeEventListener('onPriceUpdated', this.updateInnerPrice ); 
   }
 
   initCircleBar() {
@@ -292,8 +306,10 @@ class ProductCard extends HTMLElement {
             enctype="multipart/form-data" 
             method="post" 
             onchange="salla.product.getPrice(new FormData(event.currentTarget))"
-            onsubmit="return salla.form.onSubmit('cart.addItem', event)">
+            onsubmit="return salla.form.onSubmit('cart.addItem', event)"
+            >
           <input type="hidden" name="id" value="${this.product.id}">
+          <input type="hidden" name="quantity" value="1">
 
           <div class="s-product-card-content">
             ${this.isSpecial && this.product?.quantity ?
@@ -359,6 +375,7 @@ class ProductCard extends HTMLElement {
                 <salla-add-product-button 
                   fill="outline" 
                   width="wide"
+                  quick-buy
                   type="submit"
                   product-id="${this.product.id}"
                   product-status="${this.product.status}"
