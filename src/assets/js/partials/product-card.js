@@ -85,34 +85,27 @@ class ProductCard extends HTMLElement {
 
     this.querySelector('salla-product-options').addEventListener('changed', () => {
 
-      salla.event.once('product::price.updated.failed',(event)=>{
-        let outOfStock = this.querySelector('.out-of-stock'),
-            wrapper = this.querySelector('.price-wrapper');
-
-
-            console.log("🚀 ~ ProductCard ~ salla.event.once ~ outOfStock:", outOfStock, event)
-
-        wrapper.classList.add('hidden');
-        outOfStock.classList.remove('hidden')
-        
-        app.anime(outOfStock, { scale: [0.88, 1] });
+      salla.event.once('product::price.updated.failed',(res, product_id)=>{
+        if(product_id == this.product.id){
+          let outOfStock = this.querySelector('.out-of-stock'),
+              wrapper = this.querySelector('.price-wrapper');
+ 
+          wrapper.classList.add('hidden');
+          outOfStock.classList.remove('hidden')
+          
+          app.anime(outOfStock, { scale: [0.88, 1] });
+          }
       })
 
-      salla.event.once('product::price.updated',(event)=>{     
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>> Price updated');
-        this.updateInnerPrice(event);
+      salla.event.once('product::price.updated',(event, product_id)=>{     
+        if(product_id == this.product.id){
+          this.updateInnerPrice(event);
+        }
       })
 
-      // setTimeout(()=> this.removeEventListeners,300)
     })
   }
-
-  removeEventListeners(){
-    console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 remove event")
-    this.querySelector('salla-product-options').removeEventListener('changed', this.updateInnerPrice); 
-    document.removeEventListener('onPriceUpdated', this.updateInnerPrice ); 
-  }
- 
+  
   updateInnerPrice = (res) => {
     let totalPrice = this.querySelectorAll('.total-price'),
         beforePrice = this.querySelector('.before-price'),
