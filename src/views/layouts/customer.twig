@@ -32,7 +32,12 @@
                 </div>
             </nav>
             <div class="main-content w-full flex-1 lg:pt-10 ">
-                {% block inner_title %}<h1 class="font-bold text-lg text-center sm:rtl:text-right sm:ltr:text-left mb-2">{{ page.title }}{% endblock %}
+                {% block inner_title %}
+                <div class="w-full flex flex-row items-center justify-between">
+                  <h1 class="font-bold text-lg text-center sm:rtl:text-right sm:ltr:text-left mb-2">{{ page.title }}</h1>
+                  <a href="https://accounts.salla.com/user/profile" target="_blank" class="flex flex-row items-center gap-1 text-red-400 text-sm"> {{ trans('common.elements.edit') }} <i class="sicon-link"></i></a>
+                </div>
+                {% endblock %}
                 
 
                   {% if is_current_url('order') and order.source is same as('buy_as_gift') %}
