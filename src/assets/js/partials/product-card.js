@@ -9,25 +9,11 @@ class ProductCard extends HTMLElement {
     // Parse product data
     this.product = this.product || JSON.parse(this.getAttribute('product')); 
 
-    if((this.product.id == 73203761 || this.product.id == 1303461379) && !this.isfired){
-      this.product.images = [
-        'https://cdn.salla.sa/mQgZlG/9f98b50b-e9cd-4495-9d58-001746481dc2-500x500-IBuNZoBCb9g3TwvL1ZQP2VVSwJekjhskynz0sdzS.jpg',
-        'https://cdn.salla.sa/mQgZlG/FaWuBveWH22EqE2qUX9gbUVfG3dVO7vzTyNPBaGf.jpg'
-      ]
-     
-      salla.product.getDetails(this.product.id, ['category','images', 'options']).then(({data: product}) => {
-        if(productcard_images && this.product.images.length > 1){
-          this.renderImages(this.product.images)
-        }
-  
-        if(productcard_options && product.options){
-          this.renderOptions(product.options)
-        }
-      })
-
-      this.isfired = true;
-    }
-
+    this.product.images = [
+      'https://cdn.salla.sa/mQgZlG/9f98b50b-e9cd-4495-9d58-001746481dc2-500x500-IBuNZoBCb9g3TwvL1ZQP2VVSwJekjhskynz0sdzS.jpg',
+      'https://cdn.salla.sa/mQgZlG/FaWuBveWH22EqE2qUX9gbUVfG3dVO7vzTyNPBaGf.jpg'
+    ]
+    
     if (window.app?.status === 'ready') {
       this.onReady();
     } else {
@@ -105,7 +91,7 @@ class ProductCard extends HTMLElement {
 
     })
   }
-  
+
   updateInnerPrice = (res) => {
     let totalPrice = this.querySelectorAll('.total-price'),
         beforePrice = this.querySelector('.before-price'),
@@ -398,20 +384,31 @@ class ProductCard extends HTMLElement {
         </form>
       `
 
-      this.querySelectorAll('[name="donating_amount"]').forEach((element)=>{
-        element.addEventListener('input', (e) => {
-          e.target
-            .closest(".s-product-card-content")
-            .querySelector("salla-add-product-button")
-            .setAttribute("donating-amount", e.target.value); 
-        });
-      })
+    this.querySelectorAll('[name="donating_amount"]').forEach((element)=>{
+      element.addEventListener('input', (e) => {
+        e.target
+          .closest(".s-product-card-content")
+          .querySelector("salla-add-product-button")
+          .setAttribute("donating-amount", e.target.value); 
+      });
+    })
 
-      document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
+    document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
 
-      if (this.product?.quantity && this.isSpecial) {
-        this.initCircleBar();
-      }
+    if (this.product?.quantity && this.isSpecial) {
+      this.initCircleBar();
+    }
+ 
+
+    if(productcard_images && this.product.images.length > 1 && this.querySelector('.product-slider')){
+      this.renderImages(this.product.images)
+    }
+
+    if(productcard_options && this.product.options && this.querySelector('.product-options')){
+      this.renderOptions(this.product.options)
+    }
+ 
+
   }
 }
 
