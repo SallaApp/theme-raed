@@ -15,37 +15,9 @@
 #}
 {% extends "layouts.customer" %}
 {% block inner_content %}
-    {% if  notifications|length %}
-        {% hook 'customer:notifications.items.start' %}
+	{% hook 'customer:notifications.items.start' %}
 
-        <salla-infinite-scroll 
-          class="space-y-2.5 md:space-y-5" 
-          next-page="{{ notifications.next_page }}">
-            {% for notification in notifications %}
-                <a href="{{ notification.url }}"
-                   class="notification-item {{ notification.is_new?'unread':'read text-gray-500' }}">
-                    <span class="notification-item__icon">
-                        <i class="{{ notification.is_new?'text-red-400':'' }} sicon-bell-ring"></i>
-                    </span>
-                    <div class="flex-1 md:flex">
-                        <div class="flex-1">
-                            <h4>{{ notification.title }}</h4>
-                            <p>{{ notification.sub_title }}</p>
-                        </div>
-                        <span class="inline-flex items-center text-sm">
-                            <i class="sicon-time rtl:ml-1.5 ltr:mr-1.5"></i>
-                            <span>{{ notification.date }}</span>
-                        </span>
-                    </div>
-                </a>
-            {% endfor %}
-        </salla-infinite-scroll>
+	<salla-notifications></salla-notifications>
 
-        {% hook 'customer:notifications.items.end' %}
-    {% else %}
-        <div class="no-content-placeholder">
-            <i class="sicon-inbox icon"></i>
-            <p>{{ trans('blocks.header.no_notifications') }}</p>
-        </div>
-    {% endif %}
+	{% hook 'customer:notifications.items.end' %}
 {% endblock %}
