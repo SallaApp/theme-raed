@@ -9,6 +9,30 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# ✨ [1.143.0](https://github.com/SallaApp/theme-raed/compare/1.142.0...1.143.0) (2024-03-27)
+### Features
+- Support New Twilight Components using `salla.config` and Ajax requests.
+
+# 🚀 [1.142.0](https://github.com/SallaApp/theme-raed/compare/1.141.0...1.142.0) (2024-03-21)
+### Features
+- Support new twilight component `salla-offer`.
+
+# 🌟 [1.141.0](https://github.com/SallaApp/theme-raed/compare/1.140.8...1.141.0) (2024-03-19)
+### Features
+- Support product specifications.
+
+# 🛠 [1.140.8](https://github.com/SallaApp/theme-raed/compare/1.140.2...1.140.8) (2024-03-13)
+### Features
+- Support infinite scroll in the wishlist.
+- Replace 'images/s-empty.png' asset to 'images/s-empty.png' CDN.
+- Disable loading on the submit button and open the login modal directly if the user is a guest on the cart page.
+### Bug Fixes
+- Cover missed case of price update on the Product details page.
+- Fix off-screen dropdown sub-menus.
+  
+# ⚡ [1.140.2](https://github.com/SallaApp/theme-raed/compare/1.140.0...1.140.2) (2024-03-05)
+### Features
+- Enhance best practices score for SEO.
 # ⛓️‍💥 [1.167.0](https://github.com/SallaApp/theme-raed/compare/1.165.0...1.167.0)(10-07-2024)
 ### Features
 - Support Digital Product Option
@@ -121,26 +145,41 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 ### Features
 - Enhance best practices score for SEO.
 
+# 🛠 [1.140.0](https://github.com/SallaApp/theme-raed/compare/1.139.0...1.140.0) (2024-02-15)
+### Bug Fixes
 # 🗳️ [1.140.0](https://github.com/SallaApp/theme-raed/compare/1.139.0...1.140.0) (15-02-2024)
 ### Bug Fixes
 - Fix product option price with discount.
 
+# ⭐ [1.139.0](https://github.com/SallaApp/theme-raed/compare/1.138.7...1.139.0) (2024-02-14)
+### Features
+- Enhance Cart options.
 # 📜 [1.139.0](https://github.com/SallaApp/theme-raed/compare/1.138.7...1.139.0) (14-02-2024)
 ### Enhancements
 - Enhance Cart options.
 
+# 🔧 [1.138.7](https://github.com/SallaApp/theme-raed/compare/1.138.3...1.138.7) (2024-02-11)
+### Features
+- Twilight Upgrade, supporting Apple Pay with required shipping property.
 # 🔧 [1.138.7](https://github.com/SallaApp/theme-raed/compare/1.138.3...1.138.7) (11-02-2024)
 ### Features
 - Twilight Upgrade, supporting Apple Pay with required shipping property.
 
+# 🌐 [1.138.3](https://github.com/SallaApp/theme-raed/compare/1.138.0...1.138.3) (2024-02-08)
+### Features
+- Card options' feature is released.
 # 🌐 [1.138.3](https://github.com/SallaApp/theme-raed/compare/1.138.0...1.138.3) (08-02-2024)
 ### Features
 - Card options feature released.
 
+<!-- # 🔥 [1.137.43](https://github.com/SallaApp/theme-raed/compare/1.137.39...1.137.43) (2024-02-07)
 <!-- # 🔥 [1.137.43](https://github.com/SallaApp/theme-raed/compare/1.137.39...1.137.43) (07-02-2024)
 ### Added
 - Release New Feature: Card options. -->
 
+# 🔄 [1.137.39](https://github.com/SallaApp/theme-raed/compare/1.8.0...1.137.39) (2024-01-29)
+### Features
+- Start of documentation
 # 🔄 [1.137.39](https://github.com/SallaApp/theme-raed/compare/1.8.0...1.137.39) (29-01-2024)
 ### Features
 - Start of documentation
