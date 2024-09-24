@@ -1,0 +1,51 @@
+<!-- To eliminate all render blocking CSS & JS and start with the critical css-->
+<!-- To show loader to the user till the page content are  loaded-->
+<style>
+  .loader-init {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      transition: opacity 0.75s, visibility 0.75s;
+      z-index: 9999;
+  }
+
+  .loader-init--hidden {
+      opacity: 0;
+      visibility: hidden;
+  }
+
+  .loader-init::after {
+      content: "";
+      width: 36px;
+      height: 36px;
+      border: 3px solid #eee;
+      border-top-color: #5bd5c4;
+      border-radius: 50%;
+      animation: loading 0.75s ease infinite;
+  }
+
+  @keyframes loading {
+      from {
+        transform: rotate(0turn);
+      }
+      to {
+        transform: rotate(1turn);
+      }
+  }
+</style>
+<script>
+  window.addEventListener("load", () => {
+    const loader = document.querySelector(".loader-init");
+    loader.classList.add("loader-init--hidden");
+    loader.addEventListener("transitionend", () => {
+  if (!document.querySelector(".loader-init")) return;
+      document.body.removeChild(loader);
+      });
+  });
+</script>
