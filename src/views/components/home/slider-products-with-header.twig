@@ -8,33 +8,30 @@
 | component.products    | Product[] *Collection | @see views/pages/product.twig                                                |
 | position              | int                   | Sorting number start from zero                                               |
 #}
-<section class="s-block s-block--slider-with-bg s-block--full-bg">
-    <div class="slider-bg" style="background-image: url('{{ component.background }}');">
-        <div class="container pt-8 sm:pt-20 relative">
-            <div>
-                <h3 class="text-lg font-bold leading-12">
-                    {{ component.title }}
-                </h3>
-                <p class="text-sm mb-8 line-clamp-2 max-w-lg">
-                    {{ component.description }}
-                </p>
-            </div>
-        </div>
-    </div>
 
-    {% set display_all = component.display_all_url  %}
-    <div class="container -mt-62 relative overflow-hidden">
-        <salla-products-slider
-            {% if component.products|length %}
-              source="selected" 
-              source-value="[{{ component.products|map((product) => product.id)|join(',') }}]" 
-            {% endif %}
-            {% if display_all != '' and  display_all != '#' %}
-                display-all-url="{{display_all}}" 
-            {% endif %}
-            block-title=" " 
-            slider-id="slider-with-bg-{{ position }}"
-        ></salla-products-slider>
+<section class="s-block s-block--slider-with-bg s-block--full-bg">
+  <div class="slider-bg" style="background-image: url('{{ component.background }}');">
+    <div class="container pt-8 sm:pt-20 relative">
+      <div>
+        <h3 class="text-lg font-bold leading-12">{{ component.title }}</h3>
+        <p class="text-sm mb-8 line-clamp-2 max-w-lg">{{ component.description }}</p>
+      </div>
     </div>
+  </div>
+
+  {% set display_all = component.display_all_url %}
+  
+  <div class="container -mt-62 relative overflow-hidden">
+    <salla-products-slider
+      {% if component.products | length %}
+        source="selected" 
+        source-value="[{{ component.products | map((product) => product.id) | join(',') }}]" 
+      {% endif %}
+      {% if display_all != '' and display_all != '#' %}
+        display-all-url="{{ display_all }}" 
+      {% endif %}
+      block-title=" " 
+      slider-id="slider-with-bg-{{ position }}">
+    </salla-products-slider>
+  </div>
 </section>
- 

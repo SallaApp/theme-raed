@@ -37,7 +37,7 @@ class Blog extends BasePage {
                 this.updateLikesCount(!this.isLiked);
                 this.isLiked = !this.isLiked;
             } catch (e) {
-                 likeBtn.innerHTML = originalContent;
+                likeBtn.innerHTML = originalContent;
                 if (e.response?.status === 409) {
                     this.handleExistingLike(likeBtn, blogId);
                 }
@@ -49,7 +49,7 @@ class Blog extends BasePage {
         const isLiked = likeBtn.classList.contains('liked');
         this.updateLikedBlogs(blogId, !isLiked);
         this.updateLikesCount(!isLiked);
-        this.isLiked = !isLiked; 
+        this.isLiked = !isLiked;
     }
 
     updateLikedBlogs(blogId, add) {

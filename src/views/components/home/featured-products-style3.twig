@@ -13,30 +13,30 @@
 | items[].id                    | string    | Section id                                                          |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
+
 <section class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container">
-    <div class="inner">
-        {% for section in items %}
-            <div>
-                <div class="s-block__title">
-                  <h2>{{ section.title }}</h2>
-                  {# <p>عنوان فرعي توصيفي صغير</p> #}
-                </div> 
-                <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
-                    {% if section.featured_product %}
-                        <custom-salla-product-card shadow-on-hover product="{{section.featured_product}}" fullImage></custom-salla-product-card>
-                        <div class="grid gap-4 sm:gap-8">
-                            {% for product in section.products|slice(0,3) %}
-                                <custom-salla-product-card shadow-on-hover product="{{product}}" minimal></custom-salla-product-card>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {% for product in section.products %}
-                            <custom-salla-product-card shadow-on-hover product="{{product}}" minimal></custom-salla-product-card>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+  <div class="inner">
+    {% for section in items %}
+      <div>
+        <div class="s-block__title">
+          <h2>{{ section.title }}</h2>
+          {# <p>عنوان فرعي توصيفي صغير</p> #}
+        </div> 
+        <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
+          {% if section.featured_product %}
+            <custom-salla-product-card shadow-on-hover product="{{ section.featured_product }}" fullImage></custom-salla-product-card>
+            <div class="grid gap-4 sm:gap-8">
+              {% for product in section.products | slice(0, 3) %}
+                <custom-salla-product-card shadow-on-hover product="{{ product }}" minimal></custom-salla-product-card>
+              {% endfor %}
             </div>
-        {% endfor %}
-    </div>
+          {% else %}
+            {% for product in section.products %}
+              <custom-salla-product-card shadow-on-hover product="{{ product }}" minimal></custom-salla-product-card>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 </section>
- 

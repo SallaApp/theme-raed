@@ -13,109 +13,113 @@
 | landing.is_expired          | bool                   |             |   |   |
 | landing.show_store_features | bool                   |             |   |   |
 #}
+
 {% extends "layouts.master" %}
+
 {% block content %}
 <script>
-	window.showQuantity = {{landing.show_quantity ? 'true' : 'false'}}
+    window.showQuantity = {{ landing.show_quantity ? 'true' : 'false' }};
 </script>
-    {# ======================== Landing Page ======================== #}
-    {% if not landing %}
-        <div class="landing-page notfound">
-            <header>
-                <div class="header-content container">
-                <a href="{{ store.url }}" class="header-content-logo" aria-label="{{store.name}} logo">
-					<img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo"></a>
-                    <div class="header-content-inner">
-                        <h1> {{trans('common.errors.404')}}</h1>
-                        <div class="text-center mt-6">
-                            <salla-button href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
-                                {{trans('common.elements.back_home')}}
-                            </salla-button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        </div>
-    {% elseif landing.is_expired %}
-        <div class="landing-page expired">
-            <header>
-                <div class="header-content container">
-                <a href="{{ store.url }}" aria-label="{{store.name}} logo" class="header-content-logo">
-					<img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo"></a>
-                    <div class="header-content-inner">
-                        <h1> {{trans('pages.offer.offer_finished')}}</h1>
-                        <p>{{ trans('pages.offer.offer_expired_message') }}</p>
-                        <div class="text-center mt-6">
-                            <salla-button href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
-                                {{trans('common.elements.back_home')}}
-                            </salla-button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        </div>
-    {% else %}
-        <div class="landing-page pb-10">
-            <header>
-                <div class="header-content container">
-                <a href="{{ store.url }}" aria-label="{{store.name}} logo" class="header-content-logo">
-					<img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo"></a>
-                    <div class="header-content-inner">
-                        <h1>{{ landing.title }}</h1>
-                        <p>{{ landing.content|raw }}</p>
-                    </div>
-                    {% if landing.offer_ends_at %}
-                        <div class="header-content-offer">
-                            {% if landing.offer_ends_at %}
-                                <h3>{{trans('pages.offer.offer_remaining_time')}}</h3>
-                                <salla-count-down date="{{ landing.offer_ends_at }}" labeled size="lg"></salla-count-down>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
-            </header>
 
-            <section class="container overflow-hidden {{landing.products|length <= 3 and not landing.is_slider ? 'center-products' : ''}}">
-                {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
-                {% if landing.is_slider %}
-                    <salla-products-slider source="landing-page" block-title="{{trans('pages.offer.included_products')}}" display-all-url></salla-products-slider>
-                {% else %}
-                    <section class="s-block">
-                        <div class="s-block__title">
-                            <div class="right-side">
-                            <h2>{{ trans('pages.offer.included_products') }}</h2>
-                            </div>
-                        </div>
-                        <salla-products-list source="landing-page" class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"></salla-products-list>
-                    </section>
+{# ======================== Landing Page ======================== #}
+{% if not landing %}
+    <div class="landing-page notfound">
+        <header>
+            <div class="header-content container">
+                <a href="{{ store.url }}" class="header-content-logo" aria-label="{{ store.name }} logo">
+                    <img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo">
+                </a>
+                <div class="header-content-inner">
+                    <h1>{{ trans('common.errors.404') }}</h1>
+                    <div class="text-center mt-6">
+                        <salla-button href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
+                            {{ trans('common.elements.back_home') }}
+                        </salla-button>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+{% elseif landing.is_expired %}
+    <div class="landing-page expired">
+        <header>
+            <div class="header-content container">
+                <a href="{{ store.url }}" aria-label="{{ store.name }} logo" class="header-content-logo">
+                    <img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo">
+                </a>
+                <div class="header-content-inner">
+                    <h1>{{ trans('pages.offer.offer_finished') }}</h1>
+                    <p>{{ trans('pages.offer.offer_expired_message') }}</p>
+                    <div class="text-center mt-6">
+                        <salla-button href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
+                            {{ trans('common.elements.back_home') }}
+                        </salla-button>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+{% else %}
+    <div class="landing-page pb-10">
+        <header>
+            <div class="header-content container">
+                <a href="{{ store.url }}" aria-label="{{ store.name }} logo" class="header-content-logo">
+                    <img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo">
+                </a>
+                <div class="header-content-inner">
+                    <h1>{{ landing.title }}</h1>
+                    <p>{{ landing.content|raw }}</p>
+                </div>
+                {% if landing.offer_ends_at %}
+                    <div class="header-content-offer">
+                        <h3>{{ trans('pages.offer.offer_remaining_time') }}</h3>
+                        <salla-count-down date="{{ landing.offer_ends_at }}" labeled size="lg"></salla-count-down>
+                    </div>
                 {% endif %}
+            </div>
+        </header>
 
-                <div class="landing-page--quick-buy">
-                    <salla-mini-checkout-widget
-                            products="[{{ landing.products|map((product) => product.id)|join(',') }}]"
-                            language="{{ user.language_code }}"
-                            label="{{ trans('pages.orders.finish_payment') }}"
-                            store-id="{{ store.id }}"
-                            api="{{ store.api }}"
-                            class="mt-3"
-                    ></salla-mini-checkout-widget>
+        <section class="container overflow-hidden {{ landing.products|length <= 3 and not landing.is_slider ? 'center-products' : '' }}">
+            {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
+            {% if landing.is_slider %}
+                <salla-products-slider source="landing-page" block-title="{{ trans('pages.offer.included_products') }}" display-all-url></salla-products-slider>
+            {% else %}
+                <section class="s-block">
+                    <div class="s-block__title">
+                        <div class="right-side">
+                            <h2>{{ trans('pages.offer.included_products') }}</h2>
+                        </div>
+                    </div>
+                    <salla-products-list source="landing-page" class="{{ is_vertical ? 'vertical-products' : 'horizontal-products' }}"></salla-products-list>
+                </section>
+            {% endif %}
+
+            <div class="landing-page--quick-buy">
+                <salla-mini-checkout-widget
+                    products="[{{ landing.products|map((product) => product.id)|join(',') }}]"
+                    language="{{ user.language_code }}"
+                    label="{{ trans('pages.orders.finish_payment') }}"
+                    store-id="{{ store.id }}"
+                    api="{{ store.api }}"
+                    class="mt-3"
+                ></salla-mini-checkout-widget>
+            </div>
+        </section>
+
+        {% if landing.show_store_features %}
+            <section class="container overflow-hidden">
+                {% component 'home.store-features' %}
+            </section>
+        {% endif %}
+
+        {% if landing.testimonials_type %}
+            <section class="overflow-hidden bg-gray-50 mt-10">
+                <div class="container">
+                    {% component 'home.testimonials' with { type: landing.testimonials_type } %}
                 </div>
             </section>
-
-            {% if landing.show_store_features %}
-                <section class="container overflow-hidden">
-                    {% component 'home.store-features' %}
-                </section>
-            {% endif %}
-
-            {% if landing.testimonials_type %}
-                <section class="overflow-hidden bg-gray-50 mt-10">
-                    <div class="container">
-                        {% component 'home.testimonials' with{type:landing.testimonials_type} %}
-                    </div>
-                </section>
-            {% endif %}
-        </div>
-    {% endif %}
-    <div class="hidden bottom-1"></div>
+        {% endif %}
+    </div>
+{% endif %}
+<div class="hidden bottom-1"></div>
 {% endblock %}

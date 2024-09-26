@@ -8,14 +8,14 @@
 #}
 {% extends "layouts.customer" %}
 {% block inner_content %}
-    {% if orders|length %}
-        {% hook 'customer:orders.index.items.start' %}
-          <salla-orders></salla-orders>
-        {% hook 'customer:orders.index.items.end' %}
-    {% else %}
-        <div class="no-content-placeholder">
-            <i class="sicon-packed-box icon"></i>
-            <p>{{ trans('pages.orders.non_orders') }}</p>
-        </div>
-    {% endif %}
+  {% if orders|length %}
+    {% hook 'customer:orders.index.items.start' %}
+      <salla-orders></salla-orders>
+    {% hook 'customer:orders.index.items.end' %}
+  {% else %}
+    <div class="no-content-placeholder">
+      <i class="sicon-packed-box icon"></i>
+      <p>{{ trans('pages.orders.non_orders') }}</p>
+    </div>
+  {% endif %}
 {% endblock %}

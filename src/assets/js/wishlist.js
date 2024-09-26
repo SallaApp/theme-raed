@@ -18,7 +18,7 @@ class Wishlist extends BasePage {
             // just an animation when the item removed from wishlist page
             let item = document.querySelector('#wishlist-product-' + id);
 
-            if(!item){
+            if (!item) {
                 return;
             }
 

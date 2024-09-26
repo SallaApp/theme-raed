@@ -7,10 +7,10 @@ class NavigationMenu extends HTMLElement {
                 this.displayAllText = salla.lang.get('blocks.home.display_all');
 
                 return salla.api.component.getMenus()
-                .then(({ data }) => {
-                    this.menus = data;
-                    return this.render()
-                }).catch((error) => salla.logger.error('salla-menu::Error fetching menus', error));
+                    .then(({ data }) => {
+                        this.menus = data;
+                        return this.render()
+                    }).catch((error) => salla.logger.error('salla-menu::Error fetching menus', error));
             });
     }
 
@@ -115,7 +115,7 @@ class NavigationMenu extends HTMLElement {
     * Render the header menu
     */
     render() {
-        this.innerHTML =  `
+        this.innerHTML = `
         <nav id="mobile-menu" class="mobile-menu">
             <ul class="main-menu">${this.getMenus()}</ul>
             <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>

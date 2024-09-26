@@ -19,6 +19,7 @@
                   d="M0,96L120,112C240,128,480,160,720,165.3C960,171,1200,149,1320,138.7L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path>
         </svg>
     </div>
+    
     <div class="container mb-20">
         <nav class="w-full py-5">
             <ol class="list-reset flex items-center text-sm text-primary-reverse">
@@ -27,11 +28,11 @@
                 <li><span class="fix-align">{{ thank_you_title }}</span></li>
             </ol>
         </nav>
+        
         <div class="bg-white p-4 md:p-8 rounded-md mb-6 md:mb-8">
             <div class="flex flex-col items-center pt-16 pb-10">
                 <div class="rtl:-scale-x-100">
-                  <img src="{{ 'images/delivery-bro.svg' | asset }}" alt="{{ thank_you_title }}"
-                     class="thanks-item opacity-0 w-40 mb-8">
+                    <img src="{{ 'images/delivery-bro.svg' | asset }}" alt="{{ thank_you_title }}" class="thanks-item opacity-0 w-40 mb-8">
                 </div>
                 <h1 class="font-bold text-lg mb-2.5 thanks-item opacity-0">{{ thank_you_title }}</h1>
                 <p class="thanks-item opacity-0 text-gray-500 max-w-xs text-center text-sm leading-6 mb-6">
@@ -144,21 +145,20 @@
                     {% if store.contacts.mobile %}
                         <div class="text-sm unicode flex items-center">
                             <i class="sicon-phone"></i>
-                            <a href="tel:{{ store.contacts.mobile }}" class="hover:text-primary transition"><b
-                                        class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
+                            <a href="tel:{{ store.contacts.mobile }}" class="hover:text-primary transition"><b class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
                         </div>
                     {% endif %}
 
                     {% if store.social.whatsapp %}
                         <div class="text-sm unicode flex items-center">
                             <i class="sicon-whatsapp"></i>
-                            <a href="{{ store.contacts.whatsapp }}" class="hover:text-primary transition"><b
-                                        class="unicode mx-1.5">{{ store.social.whatsapp }}</b></a>
+                            <a href="{{ store.contacts.whatsapp }}" class="hover:text-primary transition"><b class="unicode mx-1.5">{{ store.social.whatsapp }}</b></a>
                         </div>
                     {% endif %}
                 </div>
             </div>
         </div>
+        
         {% hook 'thank-you:end' %}
     </div>
 {% endblock %}

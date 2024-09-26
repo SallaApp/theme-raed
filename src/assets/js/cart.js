@@ -26,11 +26,11 @@ class Cart extends BasePage {
     initSubmitCart() {
         let submitBtn = document.querySelector('#cart-submit');
         let cartForms = document.querySelectorAll('form[id^="item-"]');
-        
+
         if (!submitBtn) {
             return;
         }
-        
+
         app.onClick(submitBtn, event => {
             let isValid = true;
             cartForms.forEach(form => {
@@ -41,7 +41,7 @@ class Cart extends BasePage {
                     return;
                 }
             });
-    
+
             if (isValid) {
                 /** @type HTMLSallaButtonElement */
                 let btn = event.currentTarget;
@@ -51,17 +51,17 @@ class Cart extends BasePage {
     }
 
     updateCartOptions(options) {
-      if (!options || !options.length) return;
+        if (!options || !options.length) return;
 
-      const arrayTwoId = options.map((item) => (item.id));
+        const arrayTwoId = options.map((item) => (item.id));
 
-      document.querySelectorAll('.cart-options form')?.forEach((form) => {
-        if (!arrayTwoId.includes(parseInt(form.id.value))) {
-          form.remove();
-        }
-      })
+        document.querySelectorAll('.cart-options form')?.forEach((form) => {
+            if (!arrayTwoId.includes(parseInt(form.id.value))) {
+                form.remove();
+            }
+        })
     }
-    
+
     /**
      * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
      */
@@ -80,7 +80,7 @@ class Cart extends BasePage {
 
         app.subTotal.innerText = salla.money(cartData.sub_total);
         if (app.orderOptionsTotal) app.orderOptionsTotal.innerText = salla.money(cartData.options_total);
-        
+
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.discount)
             .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost)
             .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);

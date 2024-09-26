@@ -5,9 +5,9 @@ window.anime = AnimeJS;
 class Anime {
     constructor(selector, options) {
         this.options = {
-            targets : selector,
-            opacity : [0, 1],
-            delay   : (el, i) => i * 100,
+            targets: selector,
+            opacity: [0, 1],
+            delay: (el, i) => i * 100,
             duration: 2000,
         };
         this.setOptions(options);

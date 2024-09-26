@@ -10,43 +10,45 @@
 | component.links[].url              | string   |                                                                              |
 | position                           | int      | Sorting number start from zero                                               |
 #}
-<section class="s-block s-block--categories {{ component.merge_with_top_component and position ?'merge-with-top-component' : '' }} {{ not component.title and component.merge_with_top_component ? 'merged-has-no-title' : '' }}">
-    <div class="container">
-      <salla-slider  
-        type="carousel"
-        {% if(component.title) or (component.merge_with_top_component) %}
-            block-title="{{ component.title }}"
+
+<section class="s-block s-block--categories {{ component.merge_with_top_component and position ? 'merge-with-top-component' : '' }} {{ not component.title and component.merge_with_top_component ? 'merged-has-no-title' : '' }}">
+  <div class="container">
+    <salla-slider  
+      type="carousel"
+      {% if component.title or component.merge_with_top_component %}
+        block-title="{{ component.title }}"
+      {% endif %}
+      controls-outer
+      show-controls="{{ component.show_controls ? 'true' : 'false' }}" 
+      id="main-links-{{ position }}">
+
+      <div slot="items">
+        {% if component.show_cats %}
+          {% for cat in component.categories %}
+            <div class="swiper-slide slide--one-sixth">
+              <a href="{{ cat.url }}" class="slide--cat-entry">
+                {% if cat.image %}
+                  <img src="{{ cat.image ? cat.image : 'images/placeholder.png' | asset }}" class="w-16 h-16 object-cover rounded-full mb-2.5 {{ cat.image ? '' : 'has-placeholder' }}" width="64" height="64" alt="{{ cat.name }}"/>
+                {% else %}
+                  <i class="{{ cat.icon }}"></i>
+                {% endif %}
+                <h2>{{ cat.name }}</h2>
+              </a>
+            </div>
+          {% endfor %}
+        {% else %}
+          {% for link in component.links %}
+            {% if link.title %}
+              <div class="swiper-slide slide--one-sixth">
+                <a href="{{ link.url }}" class="slide--cat-entry">
+                  <i class="{{ link.icon }}"></i>
+                  <h2>{{ link.title }}</h2>
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
         {% endif %}
-        controls-outer
-        show-controls="{{ component.show_controls ? 'true' : 'false'}}" 
-        id="main-links-{{ position }}">
-          <div slot="items">
-              {% if component.show_cats %}
-                {% for cat in component.categories %}
-                    <div class="swiper-slide slide--one-sixth">
-                        <a href="{{ cat.url }}" class="slide--cat-entry">
-                            {% if cat.image %}
-                              <img src="{{ cat.image ? cat.image : 'images/placeholder.png' | asset }}" class="w-16 h-16 object-cover rounded-full mb-2.5 {{ cat.image ? '' : 'has-placeholder'}}" width="64" height="64" alt="{{ menu.title }}"/>
-                            {% else %}
-                              <i class="{{ cat.icon }}"></i>
-                            {% endif %}
-                            <h2>{{ cat.name }}</h2>
-                        </a>
-                    </div>
-                {% endfor %}
-              {% else %}
-                {% for link in component.links %}
-                  {% if link.title %}
-                    <div class="swiper-slide slide--one-sixth">
-                        <a href="{{ link.url }}" class="slide--cat-entry">
-                            <i class="{{ link.icon }}"></i>
-                            <h2>{{ link.title }}</h2>
-                        </a>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-          </div>
-      </salla-slider>
-    </div>
-</section> 
+      </div>
+    </salla-slider>
+  </div>
+</section>

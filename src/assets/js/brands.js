@@ -3,10 +3,10 @@ class Brands extends BasePage {
     onReady() {
         // set initial height;
         const nav = document.querySelector('#brands-nav'),
-              navWrap = document.querySelector('.brands-nav-wrap');
+            navWrap = document.querySelector('.brands-nav-wrap');
         navWrap.style.height = nav.clientHeight + 'px';
 
-        app.onClick('.brands-nav__item', ({target:btn}) => {
+        app.onClick('.brands-nav__item', ({ target: btn }) => {
             app.all('.brands-nav__item', el => app.toggleElementClassIf(el, 'is-selected', 'unselected', () => el == btn));
         });
 
