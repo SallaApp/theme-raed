@@ -9,13 +9,86 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🌪️ [1.184.0](https://github.com/SallaApp/theme-raed/compare/1.183.0...1.184.0)(25-09-2024)
+### Feature
+- Support Blog Interaction with Comments and Likes:
+  - Support for liking and unliking on the blog single page.
+  - Display likes count and comments count on blog cards.
+  - Enable comments and replies on the blog post page. 
+
+# 🌂 [1.183.0](https://github.com/SallaApp/theme-raed/compare/1.182.0...1.183.0)(25-09-2024)
+### Feature
+- Support comments and like in the Merchant blog
+
+# 🎓 [1.182.0](https://github.com/SallaApp/theme-raed/compare/1.181.0...1.182.0)(24-09-2024)
+### Bug Fixes
+- Display rating in the `product-card`
+
+# 👔 [1.181.0](https://github.com/SallaApp/theme-raed/compare/1.180.0...1.181.0)(24-09-2024)
+### Bug Fixes
+- Display rating in the `product-card`
+
+# 💈 [1.180.0](https://github.com/SallaApp/theme-raed/compare/1.179.0...1.180.0)(31-08-2024)
+### Enhancement
+- Enhancements in the Menus
+
+# 🪡 [1.179.0](https://github.com/SallaApp/theme-raed/compare/1.178.0...1.179.0)(30-08-2024)
+### Bug Fixes
+- Avoid storing menu items in the browser
+
+# 👣 [1.178.0](https://github.com/SallaApp/theme-raed/compare/1.177.0...1.178.0)(29-08-2024)
+### Bug Fixes
+- Fix align of text in the My Account page
+
+
+# 🃏 [1.177.0](https://github.com/SallaApp/theme-raed/compare/1.176.0...1.177.0)(19-08-2024)
+### Bug Fixes
+-  Fix memory leak error in the `product-card`
+
+# 🔅 [1.176.0](https://github.com/SallaApp/theme-raed/compare/1.175.0...1.176.0)(12-08-2024)
+### Bug Fixes
+- Fix the error message style when a user uploads an avatar with size more than 2MB
+
+# 🧮 [1.175.0](https://github.com/SallaApp/theme-raed/compare/1.174.0...1.175.0)(08-08-2024)
+### Enhancement
+- Enhance the reviews system 
+
+# 📊 [1.174.0](https://github.com/SallaApp/theme-raed/compare/1.173.0...1.174.0)(06-08-2024)
+### Bug Fixes
+- Fix unavailable options
+
+# 🪞 [1.173.0](https://github.com/SallaApp/theme-raed/compare/1.172.0...1.173.0)(05-08-2024)
+### Bug Fixes
+- Update Product Price with unavailable Option
+
+# 🔮 [1.172.0](https://github.com/SallaApp/theme-raed/compare/1.171.0...1.172.0)(01-08-2024)
+### Bug Fixes
+- Upgrade to the `twilight-components`
+
+# 🖼️ [1.171.0](https://github.com/SallaApp/theme-raed/compare/1.170.0...1.171.0)(01-08-2024)
+### Bug Fixes
+- Fix the product's image in the product's details page
+
+# 🔦 [1.170.0](https://github.com/SallaApp/theme-raed/compare/1.169.0...1.170.0)(25-07-2024)
+### Bug Fixes
+- Upgrade twilight-components package
+
+
+# 🖲️ [1.169.0](https://github.com/SallaApp/theme-raed/compare/1.168.0...1.169.0)(23-07-2024)
+### Enhancements 
+- Upgrade Twilight & Twilight components
+
+#💈[1.168.0](https://github.com/SallaApp/theme-raed/compare/1.167.0...1.168.0)(17-07-2024)
+### Enhancements 
+- Handle protected digital files
+
 # ⛓️‍💥 [1.167.0](https://github.com/SallaApp/theme-raed/compare/1.165.0...1.167.0)(10-07-2024)
 ### Features
 - Support Digital Product Option
 
 # 💈 [1.165.0](https://github.com/SallaApp/theme-raed/compare/1.164.0...1.165.0)(02-07-2024)
 ### Enhancements
-- Support order option book appointment field in the salla-booking-field JS Web Component
+- Support order option book appointment field in the `salla-booking-field` JS Web Component
 
 # 🖼️ [1.164.0](https://github.com/SallaApp/theme-raed/compare/1.163.0...1.164.0)(29-06-2024)
 ### Bug Fixes
