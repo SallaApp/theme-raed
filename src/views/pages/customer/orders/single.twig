@@ -1,74 +1,72 @@
 {#
-| Variable | Type | Description |
+| Variable                         | Type                              | Description                                                                              |
 |----------------------------------|-----------------------------------|------------------------------------------------------------------------------------------|
-| page | object | |
-| page.title | string | |
-| page.slug | string | |
-| order | Order | |
-| order.id | integer | |
-| order.reference_id | integer | |
-| order.created_at | date | |
-| order.sub_total | float | |
-| order.total | float | |
-| order.cod_cost | float | * Cash On Delivery |
-| order.can_reorder | bool | |
-| order.can_cancel | bool | |
-| order.can_rate | bool | |
-| order.cancel_url | string | |
-| order.payment_url | string | |
-| order.is_pending_payment | bool | |
-| order.pending_payment_ends_in | int | How much many seconds untile pending payment ends, zero if it's already expired
-|
-| order.shipping | ?object | |
-| order.shipping.id | integer | |
-| order.shipping.name | string | |
-| order.shipping.number | string | number/string/link (..) for shipment number (tracking number) |
-| order.shipping.logo | ?string | |
-| order.shipping.cost | ?Money | |
-| order.shipments[] | ShipmentObject[] | |
-| order.tax | ?object | |
-| order.tax.amount | float | |
-| order.tax.percent | float | |
-| order.status | object | |
-| order.status.name | string | |
-| order.status.icon | string | |
-| order.status.color | string | |
-| order.items | OrderItem[] | |
-| order.options | OrderOption[] | |
-| order.items[].name | | |
-| order.items[].image | | |
-| order.items[].price | TaxableMoney | |
-| order.items[].quantity | | |
-| order.items[].total | TaxableMoney | |
-| order.items[].product | ?Product | There are cases product is null, when merchant adds special product to the order |
-| order.items[].sub_products | ?Product[] *Collection | |
-| order.items[].note | | |
-| order.items[].attachments | OrderItemAttachment[] *Collection | if it's empty will be empty array so you can use it as
-check `{% if item.attachments %}` |
-| order.items[].attachments[].type | string | |
-| order.items[].attachments[].url | string | |
-| order.items[].files | ?array | |
-| order.items[].files[].name | string | |
-| order.items[].files[].url | string | |
-| order.items[].codes | array | list of codes for item |
-| order.items[].options | ?OrderItemOption[] *Collection | |
-| order.items[].options[].name | string | |
-| order.items[].options[].value | string | |
-| order.items[].options[].is_image | bool | |
-| order.items[].options[].color | string | option hex color |
-| order.items[].rating | ?Rating | |
-| order.items[].rating.content | string | *HTML |
-| order.items[].rating.is_pending | bool | |
-| order.items[].rating.stars | int | |
-| order.items[].rating.images | array | |
-| order.items[].rating.created_at | date | |
-| order.discounts | array | |
-| order.discounts[].name | string | |
-| order.discounts[].discount | float | minus number |
-| order.is_rated | bool | |
-| order.rating | ?OrderRatings | |
-| order.rating.store | ?Rating | |
-| order.rating.shipping | ?Rating | |
+| page                             | object                            |                                                                                          |
+| page.title                       | string                            |                                                                                          |
+| page.slug                        | string                            |                                                                                          |
+| order                            | Order                             |                                                                                          |
+| order.id                         | integer                           |                                                                                          |
+| order.reference_id               | integer                           |                                                                                          |
+| order.created_at                 | date                              |                                                                                          |
+| order.sub_total                  | float                             |                                                                                          |
+| order.total                      | float                             |                                                                                          |
+| order.cod_cost                   | float                             | * Cash On Delivery                                                                       |
+| order.can_reorder                | bool                              |                                                                                          |
+| order.can_cancel                 | bool                              |                                                                                          |
+| order.can_rate                   | bool                              |                                                                                          |
+| order.cancel_url                 | string                            |                                                                                          |
+| order.payment_url                | string                            |                                                                                          |
+| order.is_pending_payment         | bool                              |                                                                                          |
+| order.pending_payment_ends_in    | int                               | How much many seconds untile pending payment ends, zero if it's already expired          |
+| order.shipping                   | ?object                           |                                                                                          |
+| order.shipping.id                | integer                           |                                                                                          |
+| order.shipping.name              | string                            |                                                                                          |
+| order.shipping.number            | string                            | number/string/link (..) for shipment number (tracking number)                            |
+| order.shipping.logo              | ?string                           |                                                                                          |
+| order.shipping.cost              | ?Money                            |                                                                                          |
+| order.shipments[]                | ShipmentObject[]                  |                                                                                          |
+| order.tax                        | ?object                           |                                                                                          |
+| order.tax.amount                 | float                             |                                                                                          |
+| order.tax.percent                | float                             |                                                                                          |
+| order.status                     | object                            |                                                                                          |
+| order.status.name                | string                            |                                                                                          |
+| order.status.icon                | string                            |                                                                                          |
+| order.status.color               | string                            |                                                                                          |
+| order.items                      | OrderItem[]                       |                                                                                          |
+| order.options                    | OrderOption[]                     |                                                                                          |
+| order.items[].name               |                                   |                                                                                          |
+| order.items[].image              |                                   |                                                                                          |
+| order.items[].price              | TaxableMoney                      |                                                                                          |
+| order.items[].quantity           |                                   |                                                                                          |
+| order.items[].total              | TaxableMoney                      |                                                                                          |
+| order.items[].product            | ?Product                          | There are cases product is null, when merchant adds special product to the order         |
+| order.items[].sub_products       | ?Product[] *Collection            |                                                                                          |
+| order.items[].note               |                                   |                                                                                          |
+| order.items[].attachments        | OrderItemAttachment[] *Collection | if it's empty will be empty array so you can use it as check `{% if item.attachments %}` |
+| order.items[].attachments[].type | string                            |                                                                                          |
+| order.items[].attachments[].url  | string                            |                                                                                          |
+| order.items[].files              | ?array                            |                                                                                          |
+| order.items[].files[].name       | string                            |                                                                                          |
+| order.items[].files[].url        | string                            |                                                                                          |
+| order.items[].codes              | array                             | list of codes for item                                                                   |
+| order.items[].options            | ?OrderItemOption[] *Collection    |                                                                                          |
+| order.items[].options[].name     | string                            |                                                                                          |
+| order.items[].options[].value    | string                            |                                                                                          |
+| order.items[].options[].is_image | bool                              |                                                                                          |
+| order.items[].options[].color    | string                            | option hex color                                                                         |
+| order.items[].rating             | ?Rating                           |                                                                                          |
+| order.items[].rating.content     | string                            | *HTML                                                                                    |
+| order.items[].rating.is_pending  | bool                              |                                                                                          |
+| order.items[].rating.stars       | int                               |                                                                                          |
+| order.items[].rating.images      | array                             |                                                                                          |
+| order.items[].rating.created_at  | date                              |                                                                                          |
+| order.discounts                  | array                             |                                                                                          |
+| order.discounts[].name           | string                            |                                                                                          |
+| order.discounts[].discount       | float                             | minus number                                                                             |
+| order.is_rated                   | bool                              |                                                                                          |
+| order.rating                     | ?OrderRatings                     |                                                                                          |
+| order.rating.store               | ?Rating                           |                                                                                          |
+| order.rating.shipping            | ?Rating                           |                                                                                          |
 #}
 
 {% extends "layouts.customer" %}
