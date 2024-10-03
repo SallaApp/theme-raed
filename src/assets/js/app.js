@@ -39,21 +39,21 @@ class App extends AppHelpers {
     return this;
   }
 
-    // fix Menu Direction at the third level >> The menu at the third level was popping off the page
-    changeMenuDirection(){
-      app.all('.root-level.has-children',item=>{
-        if(item.classList.contains('change-menu-dir')) return;
-        app.on('mouseover',item,()=>{
-          let submenu = item.querySelector('.sub-menu .sub-menu');
-          if(submenu){
-            let rect = submenu.getBoundingClientRect();
-            (rect.left < 10 || rect.right > window.innerWidth - 10) && app.addClass(item,'change-menu-dir')
-          }      
-        })
+  // fix Menu Direction at the third level >> The menu at the third level was popping off the page
+  changeMenuDirection() {
+    app.all('.root-level.has-children', item => {
+      if (item.classList.contains('change-menu-dir')) return;
+      app.on('mouseover', item, () => {
+        let submenu = item.querySelector('.sub-menu .sub-menu');
+        if (submenu) {
+          let rect = submenu.getBoundingClientRect();
+          (rect.left < 10 || rect.right > window.innerWidth - 10) && app.addClass(item, 'change-menu-dir')
+        }
       })
-    }
+    })
+  }
 
-  loadModalImgOnclick(){
+  loadModalImgOnclick() {
     document.querySelectorAll('.load-img-onclick').forEach(link => {
       link.addEventListener('click', (event) => {
         event.preventDefault();
@@ -84,23 +84,23 @@ class App extends AppHelpers {
     }
   }
 
-isElementLoaded(selector){
-  return new Promise((resolve=>{
-    const interval=setInterval(()=>{
-    if(document.querySelector(selector)){
-      clearInterval(interval)
-      return resolve(document.querySelector(selector))
-    }
-   },160)
-}))
+  isElementLoaded(selector) {
+    return new Promise((resolve => {
+      const interval = setInterval(() => {
+        if (document.querySelector(selector)) {
+          clearInterval(interval)
+          return resolve(document.querySelector(selector))
+        }
+      }, 160)
+    }))
 
-  
+
   };
 
   copyToClipboard(event) {
     event.preventDefault();
     let aux = document.createElement("input"),
-    btn = event.currentTarget;
+      btn = event.currentTarget;
     aux.setAttribute("value", btn.dataset.content);
     document.body.appendChild(aux);
     aux.select();
@@ -139,38 +139,38 @@ isElementLoaded(selector){
 
   initiateMobileMenu() {
 
-  this.isElementLoaded('#mobile-menu').then((menu) => {
+    this.isElementLoaded('#mobile-menu').then((menu) => {
 
- 
-  const mobileMenu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
 
-  salla.lang.onLoaded(() => {
-    mobileMenu.navigation({ title: salla.lang.get('blocks.header.main_menu') });
-  });
-  const drawer = mobileMenu.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
+      const mobileMenu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
 
-  this.onClick("a[href='#mobile-menu']", event => {
-    document.body.classList.add('menu-opened');
-    event.preventDefault() || drawer.close() || drawer.open()
-    
-  });
-  this.onClick(".close-mobile-menu", event => {
-    document.body.classList.remove('menu-opened');
-    event.preventDefault() || drawer.close()
-  });
-  });
+      salla.lang.onLoaded(() => {
+        mobileMenu.navigation({ title: salla.lang.get('blocks.header.main_menu') });
+      });
+      const drawer = mobileMenu.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
+
+      this.onClick("a[href='#mobile-menu']", event => {
+        document.body.classList.add('menu-opened');
+        event.preventDefault() || drawer.close() || drawer.open()
+
+      });
+      this.onClick(".close-mobile-menu", event => {
+        document.body.classList.remove('menu-opened');
+        event.preventDefault() || drawer.close()
+      });
+    });
 
   }
- initAttachWishlistListeners() {
+  initAttachWishlistListeners() {
     let isListenerAttached = false;
-  
+
     function toggleFavoriteIcon(id, isAdded = true) {
       document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
         app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
         app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
       });
     }
-  
+
     if (!isListenerAttached) {
       salla.wishlist.event.onAdded((event, id) => toggleFavoriteIcon(id));
       salla.wishlist.event.onRemoved((event, id) => toggleFavoriteIcon(id, false));

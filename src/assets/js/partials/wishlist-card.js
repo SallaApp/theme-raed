@@ -1,20 +1,20 @@
 
 class WishlistCard extends HTMLElement {
 
-    connectedCallback() {
+  connectedCallback() {
 
-        if (!this.product) {
-            return salla.logger.warn('custom-wishlist-card:: product does not exist!');
-        }
-        salla.onReady(() => this.render())
-
+    if (!this.product) {
+      return salla.logger.warn('custom-wishlist-card:: product does not exist!');
     }
+    salla.onReady(() => this.render())
 
-    render() {
-        this.setAttribute('id', `wishlist-product-${this.product.id}`)
-        this.classList.add('product-entry', 'product-entry--wishlist')
+  }
 
-        this.innerHTML = `
+  render() {
+    this.setAttribute('id', `wishlist-product-${this.product.id}`)
+    this.classList.add('product-entry', 'product-entry--wishlist')
+
+    this.innerHTML = `
         <div class="flex items-center mb-4 sm:mb-0">
           <a href="${this.product.url}" class="product-entry__image">
             <img class="object-cover w-full h-full lazy" data-src="${this.product.image.url}" alt="${this.product.image.alt}" />
@@ -43,9 +43,9 @@ class WishlistCard extends HTMLElement {
           </salla-button>
         </div>
   `
-        document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
+    document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
 
-    }
+  }
 }
 
 customElements.define('custom-wishlist-card', WishlistCard);

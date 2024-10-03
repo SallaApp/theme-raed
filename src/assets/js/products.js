@@ -20,7 +20,7 @@ class Products extends BasePage {
             productsList.setAttribute('filters', `{"sort": "${event.currentTarget.value}"}`)
         });
 
-        salla.event.once('salla-products-list::products.fetched', res=>{
+        salla.event.once('salla-products-list::products.fetched', res => {
             res.title && (app.element('#page-main-title').innerHTML = res.title);
         });
 

@@ -7,11 +7,12 @@
 | page.url     | string                |             |
 | page.slug    | string                |             |
 #}
+
 {% extends "layouts.master" %}
+
 {% block content %}
     <div class="container">
-
-        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+        {# Breadcrumbs navigation #}
         <nav class="breadcrumbs w-full py-5">
             <salla-breadcrumb></salla-breadcrumb>
         </nav>
@@ -22,7 +23,7 @@
                 <div class="content-entry">
                     {{ page.content|raw }}
                 </div>
-                <salla-comments item-id="{{page.id}}" type="page"></salla-comments>
+                <salla-comments item-id="{{ page.id }}" type="page"></salla-comments>
             </div>
         </div>
     </div>
