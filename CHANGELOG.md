@@ -9,6 +9,13 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🪐 [1.185.0](https://github.com/SallaApp/theme-raed/compare/1.184.0...1.185.0)(09-10-2024)
+### Enhancement
+- Remove the advertisement.twig file, and render its content automatically
+  - Developers Actions:
+    - Leverage New Feature:
+      - Remove the `advertisement.twig` file so the [`salla-advertisement`](https://docs.salla.dev/doc-478502/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component renders automatically, and ensure you test the styles.
+
 # 🌪️ [1.184.0](https://github.com/SallaApp/theme-raed/compare/1.183.0...1.184.0)(25-09-2024)
 ### Feature
 - Support Blog Interaction with Comments and Likes:
