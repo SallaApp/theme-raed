@@ -5,25 +5,11 @@ class NavigationMenu extends HTMLElement {
             .then(() => {
                 this.menus = [];
                 this.displayAllText = salla.lang.get('blocks.home.display_all');
-                /**
-                * Avoid saving the menu to localStorage (default) when in the development environment
-                * or when modifying the theme in the dashboard
-                */
-                const isPreview = salla.config.isDebug()
-                const cacheKey = `menus_${salla.lang.locale}`
-                const cachedMenus = salla.storage.getWithTTL(cacheKey, [])
-
-                if (cachedMenus.length > 0 && !isPreview) {
-                    this.menus = cachedMenus
-                    return this.render()
-                }
 
                 return salla.api.component.getMenus()
                 .then(({ data }) => {
                     this.menus = data;
-                    !isPreview && salla.storage.setWithTTL(cacheKey, this.menus)
                     return this.render()
-
                 }).catch((error) => salla.logger.error('salla-menu::Error fetching menus', error));
             });
     }

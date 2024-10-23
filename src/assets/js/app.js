@@ -22,6 +22,7 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
+    this.initAttachWishlistListeners();
     this.changeMenuDirection()
     initTootTip();
     this.loadModalImgOnclick();
@@ -159,6 +160,22 @@ isElementLoaded(selector){
   });
   });
 
+  }
+ initAttachWishlistListeners() {
+    let isListenerAttached = false;
+  
+    function toggleFavoriteIcon(id, isAdded = true) {
+      document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
+        app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
+        app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
+      });
+    }
+  
+    if (!isListenerAttached) {
+      salla.wishlist.event.onAdded((event, id) => toggleFavoriteIcon(id));
+      salla.wishlist.event.onRemoved((event, id) => toggleFavoriteIcon(id, false));
+      isListenerAttached = true; // Mark the listener as attached
+    }
   }
 
   initiateStickyMenu() {
