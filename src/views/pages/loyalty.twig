@@ -4,37 +4,10 @@
 | page                                 | Page          |                                              |
 | page.title                           | string        |                                              |
 | page.slug                            | string        |                                              |
-| loyalty                              | Loyalty       |                                              |
-| loyalty.name                         | string        |                                              |
-| loyalty.description                  | string        |                                              |
-| loyalty.image                        | string        |                                              |
-| loyalty.promotion_title              | string        |                                              |
-| loyalty.promotion_description        | string        |                                              |
-| loyalty.points                       | Point[]       |                                              |
-| loyalty.points[].name                | string        |                                              |
-| loyalty.points[].description         | string        |                                              |
-| loyalty.points[].type                | string        | share, rating, order, profile                |
-| loyalty.points[].url                 | ?string       |                                              |
-| loyalty.points[].points              | int           |                                              |
-| loyalty.points[].icon                | string        |                                              |
-| loyalty.points[].color               | string        |                                              |
-| loyalty.prizes[]                     | PrizesGroup[] |                                              |
-| loyalty.prizes[].title               | string        |                                              |
-| loyalty.prizes[].type                | string        | free_product, coupon_discount, free_shipping |
-| loyalty.prizes[].items[]             | Prize[]       |                                              |
-| loyalty.prizes[].items[].id          | int           |                                              |
-| loyalty.prizes[].items[].name        | string        |                                              |
-| loyalty.prizes[].items[].description | string        |                                              |
-| loyalty.prizes[].items[].image       | string        |                                              |
-| loyalty.prizes[].items[].url         | ?string       |                                              |
-| loyalty.prizes[].items[].cost_points | int           |                                              |
-| user.loyalty_points                  | ?int          |                                              |
-| user.is_profile_completed            | bool          |                                              |
 #}
 {% extends "layouts.master" %}
 
 {% block content %}
-{#    <salla-loyalty-program data-points='{{ user.loyalty_points }}' data-loyalty='{{ loyalty | json_encode | raw }}'></salla-loyalty-program>#}
     <salla-loyalty-program></salla-loyalty-program>
 {% endblock %}
 
