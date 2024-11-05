@@ -237,9 +237,9 @@
                         </div>
 
                         {% if store.settings.tax.taxable_prices_enabled %}
-                            <div id="tax-amount" class="flex justify-between text-sm {{ cart.tax_amount?'':'hidden' }}">
+                            <div class="flex justify-between text-sm">
                                 <span class="text-gray-500 block  h-10">{{ trans('pages.cart.VAT_tax_amount') }}</span>
-                                <b>{{ cart.tax_amount|money }}</b>
+                                <b id="tax-amount">{{ cart.tax_amount|money }}</b>
                             </div>
                         {% endif %}
 

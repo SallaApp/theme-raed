@@ -16,7 +16,8 @@ class Cart extends BasePage {
             freeShipping: '#free-shipping',
             freeShippingBar: '#free-shipping-bar',
             freeShippingMsg: '#free-shipping-msg',
-            freeShipApplied: '#free-shipping-applied'
+            freeShipApplied: '#free-shipping-applied',
+            taxAmount: '#tax-amount'
         });
 
         this.initiateCoupon();
@@ -79,6 +80,7 @@ class Cart extends BasePage {
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
         app.subTotal.innerText = salla.money(cartData.sub_total);
+        app.taxAmount.innerText = salla.money(cartData.tax_amount);
         if (app.orderOptionsTotal) app.orderOptionsTotal.innerText = salla.money(cartData.options_total);
         
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.discount)
