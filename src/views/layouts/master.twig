@@ -72,27 +72,27 @@
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
     
-    {#{% hook 'head:start' %}#}
-    <script data-cfasync="false">
-    window.salla = window.Salla = window.Salla || {};
-    Salla.onReady =
-        Salla.onReady ||
-        function (callback) {
-            return new Promise(function (resolve) {
-                return Salla.status == "ready"
-                    ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
-                    : window.addEventListener(
-                            "twilight::initiated",
-                            function (config) {
-                                resolve(callback ? callback(config.detail) : config.detail);
-                            },
-                            { once: true },
-                        );
-            });
-        };
-    </script>
-    <script async src="https://cdn.salla.network/js/twilight/tests/featureCHOD-2234-support-physical-gifting/5ba7febe2c667aade9fafd66bac770483aa3aa33/twilight.js"></script>
+   {#{% hook 'head:start' %}#}
+<script data-cfasync="false">
+window.salla = window.Salla = window.Salla || {};
+Salla.onReady =
+    Salla.onReady ||
+    function (callback) {
+        return new Promise(function (resolve) {
+            return Salla.status == "ready"
+                ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+                : window.addEventListener(
+                        "twilight::initiated",
+                        function (config) {
+                            resolve(callback ? callback(config.detail) : config.detail);
+                        },
+                        { once: true },
+                    );
+        });
+    };
+</script>
 
+<script async src="https://cdn.salla.network/js/twilight/tests/featureCHOD-2234-support-physical-gifting/d7dd7537053b0f4ec9dac033bc8aa8dd91399b70/twilight.js"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
