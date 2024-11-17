@@ -248,14 +248,6 @@
                             <b data-cart-total>{{ cart.cart_total|money }}</b>
                         </div>
 
-                        {% if store.settings.tax.taxable_prices_enabled %}
-                            <div class="flex justify-between text-sm mb-5">
-                                <small class="text-gray-500">
-                                    * {{ trans('pages.cart.prices_taxed') }}
-                                </small>
-                            </div>
-                        {% endif %}
-
                         <div class="cart-submit-wrap">
                             {% hook 'cart:submit.start' %}
                             <salla-button id="cart-submit" loader-position="center" width="wide">
