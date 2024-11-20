@@ -73,26 +73,25 @@
     </script>
     
    {#{% hook 'head:start' %}#}
-<script data-cfasync="false">
-window.salla = window.Salla = window.Salla || {};
-Salla.onReady =
-    Salla.onReady ||
-    function (callback) {
-        return new Promise(function (resolve) {
-            return Salla.status == "ready"
-                ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
-                : window.addEventListener(
-                        "twilight::initiated",
-                        function (config) {
-                            resolve(callback ? callback(config.detail) : config.detail);
-                        },
-                        { once: true },
-                    );
-        });
-    };
-</script>
-
-<script async src="https://cdn.salla.network/js/twilight/tests/featureCHOD-2234-support-physical-gifting/aac2e0a81f55ef70ea358257b0f131e0133f3d20/twilight.js"></script>
+    <script data-cfasync="false">
+    window.salla = window.Salla = window.Salla || {};
+    Salla.onReady =
+        Salla.onReady ||
+        function (callback) {
+            return new Promise(function (resolve) {
+                return Salla.status == "ready"
+                    ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+                    : window.addEventListener(
+                            "twilight::initiated",
+                            function (config) {
+                                resolve(callback ? callback(config.detail) : config.detail);
+                            },
+                            { once: true },
+                        );
+            });
+        };
+    </script>
+    <script async src="https://cdn.salla.network/js/twilight/tests/featureCHOD-2234-support-physical-gifting/aac2e0a81f55ef70ea358257b0f131e0133f3d20/twilight.js"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
