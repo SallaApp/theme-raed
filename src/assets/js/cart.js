@@ -74,7 +74,7 @@ class Cart extends BasePage {
             return window.location.reload();
         }
         // toggle physical gifting depned on giftable flag
-        app.toggleElementClassIf(app.physicalGifting, 'active', 'hidden', () => cartData.giftable);
+        app.toggleElementClassIf(app.physicalGifting, 'active', 'hidden', () => cartData.gift.enabled);
 
         // update the dom for cart options
         this.updateCartOptions(cartData?.options);
