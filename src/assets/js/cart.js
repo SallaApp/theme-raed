@@ -73,6 +73,8 @@ class Cart extends BasePage {
             document.querySelector('.cart-options')?.remove();
             return window.location.reload();
         }
+        // toggle physical gifting depned on giftable flag
+        app.toggleElementClassIf(app.physicalGifting, 'active', 'hidden', () => cartData.giftable);
 
         // update the dom for cart options
         this.updateCartOptions(cartData?.options);
@@ -102,7 +104,6 @@ class Cart extends BasePage {
             : salla.lang.get('pages.cart.free_shipping_alert', { amount: salla.money(cartData.free_shipping_bar.remaining) });
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
 
-        app.toggleElementClassIf(app.physicalGifting, 'active', 'hidden', () => cartData.giftable);
     }
 
     /**
