@@ -13,6 +13,7 @@ class Cart extends BasePage {
             orderOptionsTotal: '#cart-options-total',
             totalDiscount: '#total-discount',
             shippingCost: '#shipping-cost',
+            physicalGifting: '#physical-gifting',
             freeShipping: '#free-shipping',
             freeShippingBar: '#free-shipping-bar',
             freeShippingMsg: '#free-shipping-msg',
@@ -100,6 +101,8 @@ class Cart extends BasePage {
             ? salla.lang.get('pages.cart.has_free_shipping')
             : salla.lang.get('pages.cart.free_shipping_alert', { amount: salla.money(cartData.free_shipping_bar.remaining) });
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
+
+        app.toggleElementClassIf(app.physicalGifting, 'active', 'hidden', () => cartData.giftable);
     }
 
     /**
