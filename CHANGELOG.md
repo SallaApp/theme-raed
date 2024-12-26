@@ -9,6 +9,11 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🧶 [1.187.0](https://github.com/SallaApp/theme-raed/compare/1.185.0...1.187.0)(17-12-2024)
+### Enhancement
+
+- Upgrade the `twilight-components` to fix the style of product's options
+
 # 🪐 [1.185.0](https://github.com/SallaApp/theme-raed/compare/1.184.0...1.185.0)(09-10-2024)
 ### Enhancement
 - Remove the `advertisement.twig` file, and render its content automatically
