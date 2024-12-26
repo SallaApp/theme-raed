@@ -194,7 +194,7 @@
                         <h2 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h2>
 
                         <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500">{{ trans("pages.cart.items_total") }}</span>
+                            <span class="text-gray-500">{{ trans("pages.cart.items_total_without_tax") }}</span>
                             <b id="sub-total">{{ cart.sub_total|money }}</b>
                         </div>
 
@@ -207,7 +207,7 @@
 												
 
                         <div id="shipping-cost"
-                             class="flex justify-between text-sm mb-5 {{ cart.has_shipping?'':'hidden' }}">
+                             class="flex justify-between text-sm mb-5 {{ (cart.has_shipping and cart.real_shipping_cost > 0) ? '' : 'hidden' }}">
                             <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
                             <b>{{ cart.real_shipping_cost|money }}</b>
                         </div>
@@ -239,7 +239,12 @@
                         <!-- coupon discount -->
                         <div id="total-discount" class="flex justify-between text-sm {{ cart.discount?'':'hidden' }}">
                             <span class="text-gray-500 block  h-10">{{ trans('pages.cart.discount') }}</span>
-                            <b>- {{ cart.real_discount|money }}</b>
+                            <b>- {{ cart.discount|money }}</b>
+                        </div>
+
+                        <div class="flex justify-between text-sm mb-5">
+                            <span class="text-gray-500">{{ trans('pages.cart.cart_tax') }}</span>
+                            <b data-cart-tax_amount>{{ cart.tax_amount|money }}</b>
                         </div>
 
                         <div class="flex justify-between text-lg mb-5">
