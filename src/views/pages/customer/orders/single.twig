@@ -67,21 +67,40 @@
 | order.rating                     | ?OrderRatings                     |                                                                                          |
 | order.rating.store               | ?Rating                           |                                                                                          |
 | order.rating.shipping            | ?Rating                           |                                                                                          |
+| order.links                      | array                             |                                                                                          |
+| order.links[].url                | string                            |                                                                                          |
+| order.links[].label              | string                            |                                                                                          |
+| order.links[].type               | string                            | One of ['print', 'shipment', 'digital']                                                  |
 #}
 
 {% extends "layouts.customer" %}
 {% block inner_title %}
 <div class="flex justify-between items-center mb-2">
-  <h1 class="font-bold text-lg text-center sm:text-start">{{ page.title }}</h1>
-  {% if order.shipments | length %}
-  <div class="flex space-x-2 rtl:space-x-reverse">
-    {% for shipment in order.shipments %}
-    {% if shipment.tracking_url %}
-    <a href="{{shipment.tracking_url}}" class="text-primary" target="_blank">{{ trans('pages.orders.tracking') }} <i
-        class="{{user.language.dir == 'rtl' ? 'sicon-arrow-up-left' : 'sicon-arrow-up-right' }}"></i></a>
+  <h1 class="font-bold text-lg text-center sm:text-start">
+    {{ page.title }}
+    {% if order.source is same as('buy_as_gift') %}
+        <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
     {% endif %}
-    {% endfor %}
-  </div>
+  </h1> 
+  {% if order.shipments | length %}
+    <div class="flex space-x-2 rtl:space-x-reverse">
+      {% for shipment in order.shipments %}
+        {% if shipment.tracking_url %}
+        <a href="{{shipment.tracking_url}}" class="text-primary" target="_blank">{{ trans('pages.orders.tracking') }} <i
+            class="{{user.language.dir == 'rtl' ? 'sicon-arrow-up-left' : 'sicon-arrow-up-right' }}"></i></a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if order.links | length %}
+    <div class="flex space-x-2 rtl:space-x-reverse">
+      {% for link in order.links %}
+        <a href="{{link.url}}" class="text-primary" target="_blank">
+          {{ link.label }}
+            <i class="{{user.language.dir == 'rtl' ? 'sicon-arrow-up-left' : 'sicon-arrow-up-right' }}"></i>
+        </a>
+      {% endfor %}
+    </div>
   {% endif %}
 </div>
 {% endblock %}

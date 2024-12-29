@@ -55,7 +55,7 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
 
     {% include 'pages.partials.loading-screen-assets' %}
@@ -66,8 +66,9 @@
     {% block head_scripts %}{% endblock %}
 
     <script data-cfasync="false">
-      window.header_is_sticky = "{{ theme.settings.get('header_is_sticky', 'Default Value') }}";
-      window.imageZoom = "{{ theme.settings.get('imageZoom') }}";
+        window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
+        window.imageZoom = "{{theme.settings.get('imageZoom')}}"
+        window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
     
     {% hook 'head:start' %}
