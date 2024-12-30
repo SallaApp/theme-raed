@@ -9,6 +9,12 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# ⛵ [1.189.0](https://github.com/SallaApp/theme-raed/compare/1.187.0...1.189.0)(29-12-2024)
+### Feature
+
+- Support the `is_default` property for homepage components as well as default data for some components
+- Add preview images for each component in Theme Raed using the image key in the `twilight.json` file
+
 # 🧶 [1.187.0](https://github.com/SallaApp/theme-raed/compare/1.185.0...1.187.0)(17-12-2024)
 ### Enhancement
 
