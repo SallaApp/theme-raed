@@ -9,7 +9,6 @@
 | cart.is_require_shipping                          | bool                | Does one of cart items require shipping?                       |
 | cart.has_shipping                                 | bool                | Does shipping company selected?                                |
 | cart.real_shipping_cost                           | float               | Shipping cost can become free by an offer, coupon              |
-| cart.real_discount                                | float               | real discount considering tax (this for show only)             |
 | cart.sub_total                                    | float               | The sum of items price without shipping or other costs         |
 | cart.discount                                     | float               | final discount                                                 |
 | cart.coupon                                       | ?string             |                                                                |
@@ -181,6 +180,7 @@
                             </div>
                         </div>
                     </div>
+
                     {% if loyalty and user.loyalty_points %}
                         <div class="shadow-default mb-5 rounded-md p-3 xs:p-7 bg-white">
                             <salla-loyalty customer-points='{{ user.loyalty_points }}'
@@ -205,7 +205,6 @@
                           </div>
                         {% endif %}
 												
-
                         <div id="shipping-cost"
                              class="flex justify-between text-sm mb-5 {{ (cart.has_shipping and cart.real_shipping_cost > 0) ? '' : 'hidden' }}">
                             <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
@@ -242,8 +241,8 @@
                             <b>- {{ cart.discount|money }}</b>
                         </div>
 
-                        <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500">{{ trans('pages.cart.cart_tax') }}</span>
+                        <div id="tax-amount" class="flex justify-between text-sm mb-5">
+                            <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
                             <b data-cart-tax_amount>{{ cart.tax_amount|money }}</b>
                         </div>
 
@@ -251,15 +250,6 @@
                             <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>
                             <b data-cart-total>{{ cart.total|money }}</b>
                         </div>
-
-                        
-                        {% if store.settings.tax.taxable_prices_enabled %}
-                            <div class="flex justify-between text-sm mb-5">
-                                <small class="text-gray-500">
-                                    * {{ trans('pages.cart.prices_taxed') }}
-                                </small>
-                            </div>
-                        {% endif %}
 
                         <div class="cart-submit-wrap">
                             {% hook 'cart:submit.start' %}
