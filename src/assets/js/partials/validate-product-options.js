@@ -10,12 +10,13 @@ export function validateProductOptions() {
         const quantityComponent = item.querySelector('salla-quantity-input');
 
         if (quantityComponent) {
-            observeQuantityChanges(quantityComponent, itemId);
+            observeQuantityChanges(quantityComponent, itemId, item);
         }
 
         // Listen for product options changes
         if (productOptions) {
             productOptions.addEventListener('changed', (e) => {
+                if (!item.reportValidity()) return;
                 if (Number(itemId) === Number(e.detail?.productId)) {
                     appendLoadingOverlay(e.detail?.productId);
                 }
@@ -42,6 +43,7 @@ function observeQuantityChanges(quantityComponent, itemId) {
         if (quantityInput) {
             observer.disconnect(); // Stop observing once input is found
             quantityInput.addEventListener('change', (e) => {
+                if (!item.reportValidity()) return;
                 if (Number(itemId) === Number(e.detail?.productId)) {
                     appendLoadingOverlay(e.detail?.productId);
                 }
