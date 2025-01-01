@@ -72,14 +72,14 @@
 {% extends "layouts.customer" %}
 {% block inner_title %}
 <div class="flex justify-between items-center mb-2">
-    <h1 class="font-bold text-lg text-center sm:text-start">
+    <h1 class="font-bold text-lg text-center text-start flex-1">
         {{ page.title }}
         {% if order.source is same as('buy_as_gift') %}
             <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
         {% endif %}
     </h1>
     {% if order.links | length %}
-        <div class="flex space-x-2 rtl:space-x-reverse">
+        <div class="flex space-x-2 rtl:space-x-reverse text-start flex-none px-2">
             {% for link in order.links %}
                 <a href="{{link.url}}" class="text-primary" target="_blank">
                     {{ link.label }}
@@ -341,45 +341,6 @@
                                                         {{ product.name }}
                                                     </a>
                                                 </dt>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% endif %}
-{% if item.files %}
-                                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.files') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for file in item.files %}
-                                            {% set is_protected = "/download" in file.url ? false : true %}
-                                            <div class="order-file py-2.5 center-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    {{ file.name }}
-                                                </dt>
-                                                <dd class="font-medium text-xs">
-                                                    <salla-button href="{{ file.url }}" target="_blank"
-                                                       class="btn--rounded-full font-bold text-gray-600 hover:text-black">
-                                                        <i class="sicon-{{is_protected ? 'eye' : 'download'}}"></i> {{ is_protected ? trans('common.uploader.browse') : trans('pages.thank_you.download') }}
-                                                    </salla-button>
-                                                </dd>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% elseif item.codes %}
-                                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.codes') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for code in item.codes %}
-                                            <div class="py-2.5 center-between">
-                                                <dt class="flex-center">
-                                                    <i class="sicon-debit-card-back text-xl rtl:ml-2 ltr:mr-2 text-gray-500 inline-block -mt-1"></i>
-                                                    <span class="break-all font-bold">{{ code.code }}</span>
-                                                </dt>
-                                                <salla-button class="btn--rounded-full" onclick="app.copyToClipboard(event)" data-content="{{ code.code }}">
-                                                    <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
-                                                    <span class="text-sm rtl:mr-2 ltr:ml-2 pointer-events-non">{{ trans('common.elements.copy') }}</span>
-                                                </salla-button>
                                             </div>
                                         {% endfor %}
                                     </dl>
