@@ -244,8 +244,16 @@
                 </div>
 
                 {% if product.tags|length and theme.settings.get('show_tags', true) %}
+                
                     <div class="mb-3">
                         {% for tag in product.tags %}
+
+                            {% if tag.name starts with 's-sam-' %}
+                              {% set tag_id = tag.url|split('-')|last %}
+                              <salla-products-list source="tags" source-value="[{{tag_id}}]" product-card-component="similar-product-card">
+                              </salla-products-list>
+                            {% endif %}
+
                             <a href="{{ tag.url }}"
                                class="rtl:ml-2 ltr:mr-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
                                 ,</a>
