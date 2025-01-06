@@ -21,7 +21,7 @@ export function validateProductOptions() {
                     if ((Number(itemId) === Number(e.detail?.productId) || cartId)) {
                         appendLoadingOverlay(cartId ? itemId : e.detail?.productId, cartId);
                     }
-                });
+                }, 100);
             });
         }
     });
