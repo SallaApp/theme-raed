@@ -16,10 +16,12 @@ export function validateProductOptions() {
         // Listen for product options changes
         if (productOptions) {
             productOptions.addEventListener('changed', (e) => {
-                if (!item.reportValidity()) return;
-                if (Number(itemId) === Number(e.detail?.productId)) {
-                    appendLoadingOverlay(e.detail?.productId);
-                }
+                setTimeout(() => {
+                    if (!item.reportValidity()) return;
+                    if ((Number(itemId) === Number(e.detail?.productId) || cartId)) {
+                        appendLoadingOverlay(cartId ? itemId : e.detail?.productId, cartId);
+                    }
+                });
             });
         }
     });
