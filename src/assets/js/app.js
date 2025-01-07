@@ -41,21 +41,29 @@ class App extends AppHelpers {
   }
 
   showHideDropdwonOrderList() {
+    const dropdownWrapper = app.element('#dropdwonWrapper');
     const dropdownMenu = app.element('#dropdownMenu');
     const dropdownButton = app.element('#dropdownButton');
+    const buttonContent = app.element('#dropdownButton .btn-content')
     // const menuItems = dropdownMenu.querySelectorAll('a');
 
     // Toggle dropdown visibility when the button is clicked
     app.on('click',dropdownButton,function () {
       dropdownMenu.classList.toggle('hidden');
+      setTimeout(() => {
+        dropdownWrapper.classList.toggle('open-menu')
+      }, 100);
     })
 
     // Change button text and close the dropdown when an item is clicked
     app.all('.order-link', item => {
       item.addEventListener('click', function (event) {
         event.preventDefault(); 
-        dropdownButton.innerHTML = item.innerHTML; 
+        // window.location.href = item.href; 
+        window.open(item.href, '_blank');
+        buttonContent.innerHTML = item.innerHTML; 
         dropdownMenu.classList.add('hidden'); 
+        dropdownWrapper.classList.remove('open-menu')
       });
     })
 

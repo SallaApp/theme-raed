@@ -401,3 +401,37 @@ salla-modal {
     list-style: auto;
   } 
 }
+
+#dropdwonWrapper {
+  * {
+    @apply transition-all;
+  }
+
+  #dropdownMenu {
+    @apply opacity-0 scale-95;
+
+    .open-menu & {
+      @apply opacity-100 scale-100;
+    }
+  }
+
+  &.open-menu {
+    #dropdownMenu {
+      @apply opacity-100 scale-100;
+    }
+
+    #dropdownButton {
+      @apply border-primary;
+      .arrow-icon {
+        @apply -scale-y-100;
+      }
+    }
+  }
+
+  .order-link{
+    @apply text-lg flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100;
+    i{
+      @apply  text-primary text-xl font-bold;
+    }
+  }
+}

@@ -128,11 +128,16 @@
                             </salla-button>
                         {% endif %}
                         <div
+                            id="dropdwonWrapper"
                             class="relative inline-block w-40">
                             <!-- Dropdown button -->
-                            <button id="dropdownButton" class="px-4 py-2 border w-full rounded-md flex items-center gap-2 text-lg">
-                                <i class="sicon-printer2 v-align"></i>
-                                <span>{{ trans('pages.orders.print') }}</span>
+                            <button id="dropdownButton" class="px-4 py-2 border w-full rounded-md flex items-center justify-between gap-2 text-lg">
+                                <div class="btn-content flex gap-1 items-center">
+                                    <i class="sicon-printer2 v-align"></i>
+                                    <span>{{ trans('pages.orders.print') }}</span>   
+                                </div>
+
+                                <i class="sicon-caret-down arrow-icon v-align"></i>
                             </button>
 
                             <!-- Dropdown menu -->
@@ -140,20 +145,23 @@
                                 <ul class="py-1">
                                     {% if can_print_invoice %}
                                         <li>
-                                            <a href="#" class="flex items-center gap-2 text-lg px-4 py-2 text-gray-700 hover:bg-gray-100" data-value="Option {{loop.index}}" onclick="window.open('{{ order.print_url()}}', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, width=900, height=700');">
+                                            <a href="#" class="order-link" data-value="Option {{loop.index}}" onclick="window.open('{{ order.print_url()}}', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, width=900, height=700');">
                                                 <i class="sicon-printer2 v-align"></i>
                                                 <span>{{ trans('pages.orders.print') }}</span>
                                             </a>
                                         </li>
                                     {% endif %}
                                     <!-- Active: "bg-gray-100 text-gray-900 outline-none", Not Active: "text-gray-700" -->
-                                    {% for item in [1,2,3] %}
+                                    {% set order_links = [
+                                        {title: 'محتوى رقمي ', url:'https://www.google.com/' , icon:'sicon-download'},
+                                        {title: 'رابط التتبع', url:'https://www.google.com/' , icon:'sicon-link'},
+                                    ] %}
 
+                                    {% for item in order_links %}
                                         <li>
-                                            <a href="#" class="order-link text-lg flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100" data-value="Option {{loop.index}}">
-                                                <i class="sicon-printer2 v-align"></i>
-                                                <span>Option
-                                                    {{loop.index}}</span>
+                                            <a href="{{item.url}}" target="_blank" class="order-link" data-value="Option {{loop.index}}">
+                                                <i class="{{item.icon}} v-align"></i>
+                                                <span>{{item.title}}</span>
                                             </a>
                                         </li>
                                     {% endfor %}
