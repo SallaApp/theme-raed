@@ -50,8 +50,9 @@ class App extends AppHelpers {
     // Toggle dropdown visibility when the button is clicked
     app.on('click',dropdownButton,function () {
       dropdownMenu.classList.toggle('hidden');
+      app.toggleClassIf('#dropdownMenu','hidden','show',()=> dropdownMenu.classList.contains('hidden'))
       setTimeout(() => {
-        dropdownWrapper.classList.toggle('open-menu')
+        app.toggleClassIf('#dropdwonWrapper','close-menu','open-menu',()=> dropdownWrapper.classList.contains('open-menu'))
       }, 100);
     })
 
@@ -71,6 +72,7 @@ class App extends AppHelpers {
     document.addEventListener('click', function (event) {
       if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
         dropdownMenu.classList.add('hidden');
+        dropdownWrapper.classList.remove('open-menu')
       }
     });
   }
