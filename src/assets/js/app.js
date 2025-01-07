@@ -45,22 +45,19 @@ class App extends AppHelpers {
     const dropdownMenu = app.element('#dropdownMenu');
     const dropdownButton = app.element('#dropdownButton');
     const buttonContent = app.element('#dropdownButton .btn-content')
-    // const menuItems = dropdownMenu.querySelectorAll('a');
 
     // Toggle dropdown visibility when the button is clicked
     app.on('click',dropdownButton,function () {
-      dropdownMenu.classList.toggle('hidden');
       app.toggleClassIf('#dropdownMenu','hidden','show',()=> dropdownMenu.classList.contains('hidden'))
       setTimeout(() => {
         app.toggleClassIf('#dropdwonWrapper','close-menu','open-menu',()=> dropdownWrapper.classList.contains('open-menu'))
       }, 100);
     })
 
-    // Change button text and close the dropdown when an item is clicked
+    // Change button text and close the dropdown and open the link in new page when an item is clicked
     app.all('.order-link', item => {
       item.addEventListener('click', function (event) {
-        event.preventDefault(); 
-        // window.location.href = item.href; 
+        event.preventDefault();  
         window.open(item.href, '_blank');
         buttonContent.innerHTML = item.innerHTML; 
         closemenu()
@@ -76,7 +73,7 @@ class App extends AppHelpers {
 
     function closemenu(){
       dropdownMenu.classList.add('hidden');
-        dropdownWrapper.classList.remove('open-menu')
+      dropdownWrapper.classList.remove('open-menu')
     }
   }
 
