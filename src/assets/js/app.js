@@ -63,18 +63,21 @@ class App extends AppHelpers {
         // window.location.href = item.href; 
         window.open(item.href, '_blank');
         buttonContent.innerHTML = item.innerHTML; 
-        dropdownMenu.classList.add('hidden'); 
-        dropdownWrapper.classList.remove('open-menu')
+        closemenu()
       });
     })
 
     // Close the dropdown if clicked outside of the menu or button
     document.addEventListener('click', function (event) {
       if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-        dropdownMenu.classList.add('hidden');
-        dropdownWrapper.classList.remove('open-menu')
+        closemenu()
       }
     });
+
+    function closemenu(){
+      dropdownMenu.classList.add('hidden');
+        dropdownWrapper.classList.remove('open-menu')
+    }
   }
 
   // fix Menu Direction at the third level >> The menu at the third level was popping off the page
