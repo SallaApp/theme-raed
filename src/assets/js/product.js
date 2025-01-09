@@ -13,6 +13,7 @@ class Product extends BasePage {
         });
 
         this.initProductOptionValidations();
+        this.grouping_slider_images();
 
         if(imageZoom){
             // call the function when the page is ready
@@ -21,6 +22,43 @@ class Product extends BasePage {
             window.addEventListener('resize', () => this.initImagesZooming());
         }
     }
+
+    grouping_slider_images(){
+      salla.event.on("product-options::change", async (event) => {
+        let option = event.event.target,
+            optionValue = option.value,
+            optionId = event.option.id,
+            type = event.option.type,
+            optionName = event.option.name,
+            optionText  = event.detail ? event.detail.name : '',
+            productId = option.id.match(/option_(\d+)-/)[1],
+            slider = document.getElementById(`details-slider-${productId}`);
+
+          let slides, originalSlides;
+          originalSlides = slides = await slider.getSlides()  ;
+
+          if(type == 'thumbnail') {
+            slides = originalSlides
+            this.filterSlides(slider, slides, optionText)
+          }
+      }) 
+    }
+
+    // Function to filter slides by data-caption
+    async filterSlides(slider, slides, value) {
+      slides.forEach(slide => {
+        const caption = slide.getAttribute('data-caption');
+        if (caption == value) {
+          slide.style.display = 'block'; // Show the slide
+        } else {
+          slide.style.display = 'none'; // Hide the slide
+        }
+      });
+
+      slider.update();
+    }
+
+
 
     initProductOptionValidations() {
       document.querySelector('.product-form')?.addEventListener('change', function(){
