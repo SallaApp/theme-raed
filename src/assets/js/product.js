@@ -23,40 +23,92 @@ class Product extends BasePage {
         }
     }
 
-    grouping_slider_images(){
-      salla.event.on("product-options::change", async (event) => {
-        let option = event.event.target,
-            optionValue = option.value,
-            optionId = event.option.id,
-            type = event.option.type,
-            optionName = event.option.name,
-            optionText  = event.detail ? event.detail.name : '',
-            productId = option.id.match(/option_(\d+)-/)[1],
-            slider = document.getElementById(`details-slider-${productId}`);
+    // grouping_slider_images(){
+    //   salla.event.on("product-options::change", async (event) => {
+    //     let option = event.event.target,
+    //         type = event.option.type,
+    //         optionText  = event.detail ? event.detail.name : '',
+    //         productId = option.id.match(/option_(\d+)-/)[1],
+    //         slider = document.getElementById(`details-slider-${productId}`),
+    //         slides = await slider.getSlides();
 
-          let slides, originalSlides;
-          originalSlides = slides = await slider.getSlides()  ;
+    //       if(type == 'thumbnail') {
+    //         slides.length && this.filterSlides('main', slider, slides, optionText)
 
-          if(type == 'thumbnail') {
-            slides = originalSlides
-            this.filterSlides(slider, slides, optionText)
-          }
-      }) 
-    }
+    //         setTimeout(async ()=> {
+    //           let thumbsSlider = await slider.thumbsSliderInstance(),
+    //               thumbsSlides = await slider.getThumbsSlides();
+              
+    //             thumbsSlides.length && this.filterSlides('thumbs', thumbsSlider, thumbsSlides, optionText);
+    //         }, 1000)
+    //       }
+    //   }) 
+    // }
 
-    // Function to filter slides by data-caption
-    async filterSlides(slider, slides, value) {
-      slides.forEach(slide => {
-        const caption = slide.getAttribute('data-caption');
-        if (caption == value) {
-          slide.style.display = 'block'; // Show the slide
-        } else {
-          slide.style.display = 'none'; // Hide the slide
+    // // Function to filter slides by data-caption
+    // async filterSlides(type, slider, slides, value) {
+    //   slides.forEach(slide => {
+    //     const caption = slide.getAttribute('data-caption');
+    //     if (caption == value) {
+    //       slide.style.display = 'block'; // Show the slide
+    //     } else {
+    //       slide.style.display = 'none'; // Hide the slide
+    //     }
+    //   });
+
+    //   type == 'main' ? slider?.update() : slider.thumbsSliderUpdate();
+    // }
+
+
+    grouping_slider_images() {
+      if (!this.sliderGroupedEventInitialized) {
+        this.sliderGroupedEventInitialized = true; // Prevent multiple listeners
+
+        let slider = document.querySelector(`.details-slider`);
+    
+        if (!slider) {
+          console.error("Slider not found");
+          return;
         }
+
+        salla.event.on("product-options::change", async (event) => {
+          try {
+            let type = event.option.type,
+                optionText = event.detail ? event.detail.name : '';
+
+            if (type === 'thumbnail') {
+              const slides = await slider.getSlides();
+              const thumbsSlider = await slider.thumbsSliderInstance();
+              const thumbsSlides = await slider.getThumbsSlides();
+              
+              if (slides.length) {
+                this.filterSlides('main', slider, slides, optionText);
+              }
+    
+              if (thumbsSlides.length) {
+                this.filterSlides('thumbs', thumbsSlider, thumbsSlides, optionText);
+              }
+            }
+          } catch (error) {
+            console.error("Error handling product options change:", error);
+          }
+        });
+      }
+    }
+    
+    // Function to filter slides by data-caption
+    async filterSlides(type, slider, slides, value) {
+      slides.forEach(slide => {
+        requestAnimationFrame(() => {
+          slide.style.display = slide.getAttribute('data-caption') === value ? 'block' : 'none';
+        });
       });
 
-      slider.update();
+      // slider.update();
+
+      setTimeout(()=> slider.update(),100);
     }
+    
 
 
 
