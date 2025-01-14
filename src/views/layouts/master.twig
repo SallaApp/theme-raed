@@ -73,31 +73,33 @@
     </script>
 
     {# {% hook 'head:start' %} #}
-    <script>
-        window.salla = window.Salla = window.salla || {};
-        Salla.onReady = Salla.onReady || function (callback) {
-            return new Promise(function (resolve, reject) {
-                if (['ready', 'completed'].includes(Salla.status)) {
-                    !!callback && callback();
-                    resolve();
-                } else {
-                    const handler = function () {
-                        !!callback && callback();
-                        resolve();
-                    };
-                    window.addEventListener('twilight::initiated', handler, { once: true });
-                }
-            });
-        };
-    </script>
-    <script async src="https://cdn.salla.network/js/twilight/tests/featureTD-228-create-loyalty-program-component/2e5a2a5b7141fe8b958b9fbadd2c988f4b0793e1/twilight.js"></script>
 
+    {#{% hook 'head:start' %}#}
+    <script data-cfasync="false">
+        window.salla = window.Salla = window.Salla || {};
+        Salla.onReady =
+            Salla.onReady ||
+            function (callback) {
+                return new Promise(function (resolve) {
+                    return Salla.status == "ready"
+                        ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+                        : window.addEventListener(
+                            "twilight::initiated",
+                            function (config) {
+                                resolve(callback ? callback(config.detail) : config.detail);
+                            },
+                            { once: true },
+                        );
+                });
+            };
+    </script>
+    <script async src="https://cdn.salla.network/js/twilight/tests/featureTD-228-create-loyalty-program-component-3/2ad24a031f3e4edcdf04521a9cc58df461bbadea/twilight.js"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
-    
+
     <style>
         :root {
             --font-main: '{{theme.font.name}}';
@@ -115,7 +117,7 @@
   {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
   {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
   ">
-  <div class="loader-init"></div>
+<div class="loader-init"></div>
 <noscript>
     To get full functionality of this site you need to enable JavaScript. Here is how
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
