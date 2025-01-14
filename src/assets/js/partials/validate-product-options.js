@@ -18,8 +18,8 @@ export function validateProductOptions() {
             productOptions.addEventListener('changed', (e) => {
                 setTimeout(() => {
                     if (!item.reportValidity()) return;
-                    if ((Number(itemId) === Number(e.detail?.productId) || cartId)) {
-                        appendLoadingOverlay(cartId ? itemId : e.detail?.productId, cartId);
+                    if ((Number(itemId) === Number(e.detail?.productId))) {
+                        appendLoadingOverlay(e.detail?.productId);
                     }
                 }, 100);
             });
