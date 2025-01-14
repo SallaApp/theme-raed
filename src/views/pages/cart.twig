@@ -9,7 +9,6 @@
 | cart.is_require_shipping                          | bool                | Does one of cart items require shipping?                       |
 | cart.has_shipping                                 | bool                | Does shipping company selected?                                |
 | cart.real_shipping_cost                           | float               | Shipping cost can become free by an offer, coupon              |
-| cart.real_discount                                | float               | real discount considering tax (this for show only)             |
 | cart.sub_total                                    | float               | The sum of items price without shipping or other costs         |
 | cart.discount                                     | float               | final discount                                                 |
 | cart.coupon                                       | ?string             |                                                                |
@@ -194,7 +193,7 @@
                         <h2 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h2>
 
                         <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500">{{ trans("pages.cart.items_total") }}</span>
+                            <span class="text-gray-500">{{ trans("pages.cart.items_total_without_tax") }}</span>
                             <b id="sub-total">{{ cart.sub_total|money }}</b>
                         </div>
 
@@ -204,10 +203,9 @@
                             <b id="cart-options-total">{{ cart.options_total|money }}</b>
                           </div>
                         {% endif %}
-												
 
                         <div id="shipping-cost"
-                             class="flex justify-between text-sm mb-5 {{ cart.has_shipping?'':'hidden' }}">
+                             class="flex justify-between text-sm mb-5 {{ (cart.has_shipping and cart.real_shipping_cost > 0) ? '' : 'hidden' }}">
                             <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
                             <b>{{ cart.real_shipping_cost|money }}</b>
                         </div>
@@ -237,23 +235,20 @@
                         {% endif %}
 
                         <!-- coupon discount -->
-                        <div id="total-discount" class="flex justify-between text-sm {{ cart.discount?'':'hidden' }}">
+                        <div id="total-discount" class="flex justify-between text-sm {{ cart.discount ? '' : 'hidden' }}">
                             <span class="text-gray-500 block  h-10">{{ trans('pages.cart.discount') }}</span>
-                            <b>- {{ cart.real_discount|money }}</b>
+                            <b>- {{ cart.discount|money }}</b>
+                        </div>
+
+                        <div class="flex justify-between text-sm mb-5">
+                            <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
+                            <b id="tax-amount">{{ cart.tax_amount|money }}</b>
                         </div>
 
                         <div class="flex justify-between text-lg mb-5">
                             <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>
                             <b data-cart-total>{{ cart.total|money }}</b>
                         </div>
-
-                        {% if store.settings.tax.taxable_prices_enabled %}
-                            <div class="flex justify-between text-sm mb-5">
-                                <small class="text-gray-500">
-                                    * {{ trans('pages.cart.prices_taxed') }}
-                                </small>
-                            </div>
-                        {% endif %}
 
                         <div class="cart-submit-wrap">
                             {% hook 'cart:submit.start' %}
