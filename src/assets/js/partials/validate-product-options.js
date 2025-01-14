@@ -39,7 +39,7 @@ export function validateProductOptions() {
 /**
  * Observes changes in quantity input for a specific cart item.
  */
-function observeQuantityChanges(quantityComponent, itemId) {
+function observeQuantityChanges(quantityComponent, itemId, item) {
     const observer = new MutationObserver(() => {
         const quantityInput = quantityComponent.querySelector('input[name="quantity"]');
         if (quantityInput) {
