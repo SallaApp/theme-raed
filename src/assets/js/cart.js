@@ -1,4 +1,5 @@
 import BasePage from './base-page';
+import {validateProductOptions} from './partials/validate-product-options';
 
 class Cart extends BasePage {
     onReady() {
@@ -21,6 +22,7 @@ class Cart extends BasePage {
 
         this.initiateCoupon();
         this.initSubmitCart();
+        validateProductOptions();
     }
 
     initSubmitCart() {
