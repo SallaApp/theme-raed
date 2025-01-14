@@ -71,8 +71,27 @@
         window.imageZoom = "{{theme.settings.get('imageZoom')}}"
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
-    
-    {% hook 'head:start' %}
+
+    {# {% hook 'head:start' %} #}
+    <script>
+        window.salla = window.Salla = window.salla || {};
+        Salla.onReady = Salla.onReady || function (callback) {
+            return new Promise(function (resolve, reject) {
+                if (['ready', 'completed'].includes(Salla.status)) {
+                    !!callback && callback();
+                    resolve();
+                } else {
+                    const handler = function () {
+                        !!callback && callback();
+                        resolve();
+                    };
+                    window.addEventListener('twilight::initiated', handler, { once: true });
+                }
+            });
+        };
+    </script>
+    <script async src="https://cdn.salla.network/js/twilight/tests/featureTD-228-create-loyalty-program-component/2e5a2a5b7141fe8b958b9fbadd2c988f4b0793e1/twilight.js"></script>
+
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
