@@ -13,11 +13,12 @@ class Cart extends BasePage {
             orderOptionsTotal: '#cart-options-total',
             totalDiscount: '#total-discount',
             shippingCost: '#shipping-cost',
-            physicalGifting: '#physical-gifting',
             freeShipping: '#free-shipping',
             freeShippingBar: '#free-shipping-bar',
             freeShippingMsg: '#free-shipping-msg',
-            freeShipApplied: '#free-shipping-applied'
+            freeShipApplied: '#free-shipping-applied',
+            cartGifting: '#cart-gifting',
+            sallaGifting:'#salla-gifting'
         });
 
         this.initiateCoupon();
@@ -74,7 +75,10 @@ class Cart extends BasePage {
             return window.location.reload();
         }
         // toggle physical gifting depned on giftable flag
-        app.toggleElementClassIf(app.physicalGifting, 'active', 'hidden', () => cartData.gift.enabled);
+        app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData.gift.enabled);
+        // Use toggleAttribute to handle the `physical-products` attribute
+        app.sallaGifting?.toggleAttribute('physical-products', cartData.gift.type === 'physical');
+        app.sallaGifting?.toggleAttribute('digital-products', cartData.gift.type === 'digital');
 
         // update the dom for cart options
         this.updateCartOptions(cartData?.options);
