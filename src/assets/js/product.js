@@ -98,15 +98,29 @@ class Product extends BasePage {
     
     // Function to filter slides by data-caption
     async filterSlides(type, slider, slides, value) {
+      // Filter slides based on the `data-caption` attribute
       slides.forEach(slide => {
         requestAnimationFrame(() => {
           slide.style.display = slide.getAttribute('data-caption') === value ? 'block' : 'none';
         });
       });
 
-      // slider.update();
+      // Update Swiper layout after slide visibility changes
+      requestAnimationFrame( () => {
+       slider.update();
+       slider.updateSize();
+       slider.updateSlides();
 
-      setTimeout(()=> slider.update(),100);
+       console.log("🚀 ~ Product ~ requestAnimationFrame ~ updateSize: >>>>>>>>>>>>>>>>>>>")
+      });
+
+      // Prevent height issues for hidden slides
+      setTimeout(() => {
+       slider.update();
+       slider.updateSize();
+       slider.updateSlides();
+        type == 'main' && slider.slideTo(0); // Reset to the first visible slide
+      }, 100);
     }
     
 
