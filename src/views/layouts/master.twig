@@ -73,27 +73,26 @@
     </script>
     
     {#{% hook 'head:start' %}#}
-    
-        <script data-cfasync="false">
-        window.salla = window.Salla = window.Salla || {};
-        Salla.onReady =
-            Salla.onReady ||
-            function (callback) {
-                return new Promise(function (resolve) {
-                    return Salla.status == "ready"
-                        ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
-                        : window.addEventListener(
-                                "twilight::initiated",
-                                function (config) {
-                                    resolve(callback ? callback(config.detail) : config.detail);
-                                },
-                                { once: true },
-                            );
-                });
-            };
-        </script>
+    <script data-cfasync="false">
+    window.salla = window.Salla = window.Salla || {};
+    Salla.onReady =
+        Salla.onReady ||
+        function (callback) {
+            return new Promise(function (resolve) {
+                return Salla.status == "ready"
+                    ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+                    : window.addEventListener(
+                            "twilight::initiated",
+                            function (config) {
+                                resolve(callback ? callback(config.detail) : config.detail);
+                            },
+                            { once: true },
+                        );
+            });
+        };
+    </script>
+    <script async src="https://cdn.salla.network/js/twilight/tests/featurePACD-846-emkan-integration2/dcc4203cf8896878c7004f3ce080cd9be52fb007/twilight.js"></script>
 
-        <script async src="https://cdn.salla.network/js/twilight/tests/featurePACD-846-emkan-integration2/7e1c436a4596499c139d6f1f2031cb06fd589f36/twilight.js"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
