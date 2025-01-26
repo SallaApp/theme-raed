@@ -13,6 +13,7 @@
 | cart.discount                                     | float               | final discount                                                 |
 | cart.coupon                                       | ?string             |                                                                |
 | cart.total                                        | float               |                                                                |
+| cart.tax_amount                                   | float               | Calculate Tax amount                                                               |
 | cart.free_shipping_bar                            | ?object             |                                                                |
 | cart.free_shipping_bar.minimum_amount             | float               | how much cart total should be to apply free shipping ex: 1000  |
 | cart.free_shipping_bar.has_free_shipping          | bool                | true when `cart.free_shipping_bar.percent==100`                |
@@ -205,7 +206,7 @@
                         {% endif %}
 
                         <div id="shipping-cost"
-                             class="flex justify-between text-sm mb-5 {{ (cart.has_shipping and cart.real_shipping_cost > 0) ? '' : 'hidden' }}">
+                             class="flex justify-between text-sm mb-5 {{ cart.has_shipping ? '' : 'hidden' }}">
                             <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
                             <b>{{ cart.real_shipping_cost|money }}</b>
                         </div>
@@ -235,9 +236,9 @@
                         {% endif %}
 
                         <!-- coupon discount -->
-                        <div id="total-discount" class="flex justify-between text-sm {{ cart.discount ? '' : 'hidden' }}">
+                        <div id="total-discount" class="flex justify-between text-sm {{ cart.total_discount ? '' : 'hidden' }}">
                             <span class="text-gray-500 block  h-10">{{ trans('pages.cart.discount') }}</span>
-                            <b>- {{ cart.discount|money }}</b>
+                            <b>- {{ cart.total_discount|money }}</b>
                         </div>
 
                         <div class="flex justify-between text-sm mb-5">
@@ -249,7 +250,7 @@
                             <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>
                             <b data-cart-total>{{ cart.total|money }}</b>
                         </div>
-                        
+
                         <div class="cart-submit-wrap">
                             {% hook 'cart:submit.start' %}
                             <salla-button id="cart-submit" loader-position="center" width="wide">
