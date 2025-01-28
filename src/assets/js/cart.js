@@ -85,11 +85,11 @@ class Cart extends BasePage {
         app.taxAmount.innerText = salla.money(cartData.tax_amount);
         if (app.orderOptionsTotal) app.orderOptionsTotal.innerText = salla.money(cartData.options_total);
         
-        app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.discount)
+        app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.total_discount)
             .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost)
             .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
 
-        app.totalDiscount.querySelector('b').innerText = '- ' + salla.money(cartData.discount);
+        app.totalDiscount.querySelector('b').innerText = '- ' + salla.money(cartData.total_discount);
         app.shippingCost.querySelector('b').innerText = salla.money(cartData.real_shipping_cost);
 
         if (!cartData.free_shipping_bar) {
