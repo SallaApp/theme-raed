@@ -122,7 +122,7 @@ isElementLoaded(selector){
         toast: true,
         position: salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
         showConfirmButton: false,
-        timer: 3500,
+        timer: 2000,
         didOpen: (toast) => {
           toast.addEventListener('mouseenter', Swal.stopTimer)
           toast.addEventListener('mouseleave', Swal.resumeTimer)

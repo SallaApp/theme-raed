@@ -17,7 +17,7 @@ export function validateProductOptions() {
         if (productOptions) {
             productOptions.addEventListener('changed', (e) => {
                 setTimeout(() => {
-                    if (!item.reportValidity()) return;
+                    if (!item.reportValidity() || e.detail?.event?.type == 'added') return;
                     if ((Number(itemId) === Number(e.detail?.productId))) {
                         appendLoadingOverlay(e.detail?.productId);
                     }
@@ -39,7 +39,7 @@ export function validateProductOptions() {
 /**
  * Observes changes in quantity input for a specific cart item.
  */
-function observeQuantityChanges(quantityComponent, itemId) {
+function observeQuantityChanges(quantityComponent, itemId, item) {
     const observer = new MutationObserver(() => {
         const quantityInput = quantityComponent.querySelector('input[name="quantity"]');
         if (quantityInput) {
