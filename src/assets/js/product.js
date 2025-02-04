@@ -88,6 +88,9 @@ class Product extends BasePage {
               if (thumbsSlides.length) {
                 this.filterSlides('thumbs', thumbsSlider, thumbsSlides, optionText);
               }
+
+              // Recalculate height for the main slider
+              this.ensureSwiperHeight(slider);
             }
           } catch (error) {
             console.error("Error handling product options change:", error);
@@ -99,30 +102,24 @@ class Product extends BasePage {
     // Function to filter slides by data-caption
     async filterSlides(type, slider, slides, value) {
       // Filter slides based on the `data-caption` attribute
-      slides.forEach(slide => {
-        requestAnimationFrame(() => {
-          slide.style.display = slide.getAttribute('data-caption') === value ? 'block' : 'none';
-        });
+      slides.forEach((slide) => {
+        // const shouldShow = slide.getAttribute('data-caption') === value;
+        // slide.style.display = shouldShow ? 'block' : 'none';
+        // slide.classList.toggle('swiper-slide-hidden', !shouldShow);
       });
 
       // Update Swiper layout after slide visibility changes
-      requestAnimationFrame( () => {
-       slider.update();
-       slider.updateSize();
-       slider.updateSlides();
 
-       console.log("🚀 ~ Product ~ requestAnimationFrame ~ updateSize: >>>>>>>>>>>>>>>>>>>")
-      });
-
-      // Prevent height issues for hidden slides
-      setTimeout(() => {
-       slider.update();
-       slider.updateSize();
-       slider.updateSlides();
-        type == 'main' && slider.slideTo(0); // Reset to the first visible slide
-      }, 100);
+      type == 'main' && slider.update();
     }
-    
+
+    // Function to ensure Swiper height is recalculated
+    ensureSwiperHeight(swiper) {
+      requestAnimationFrame(() => {
+        swiper.slideTo(0); // Reset to the current active slide
+      });
+    }
+        
 
 
 
