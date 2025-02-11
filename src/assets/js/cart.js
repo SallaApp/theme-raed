@@ -139,6 +139,10 @@ class Cart extends BasePage {
             offerElement.innerText = item.offer.names;
             regularPriceElement.innerText = salla.money(item.product_price);
         }
+
+        if (item.is_on_sale) {
+            regularPriceElement.innerText = salla.money(item.original_price);
+        }
     }
 
 
