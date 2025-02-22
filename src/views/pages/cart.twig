@@ -241,10 +241,12 @@
                             <b>- {{ cart.total_discount|money }}</b>
                         </div>
 
-                        <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
-                            <b id="tax-amount">{{ cart.tax_amount|money }}</b>
-                        </div>
+                        {% if cart.tax_amount %}
+                            <div class="flex justify-between text-sm mb-5">
+                                <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
+                                <b id="tax-amount">{{ cart.tax_amount|money }}</b>
+                            </div>
+                        {% endif %}
 
                         <div class="flex justify-between text-lg mb-5">
                             <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>

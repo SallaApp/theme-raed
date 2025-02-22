@@ -81,16 +81,16 @@ class Cart extends BasePage {
         // update each item data
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
-        app.subTotal.innerText = salla.money(cartData.sub_total);
-        app.taxAmount.innerText = salla.money(cartData.tax_amount);
-        if (app.orderOptionsTotal) app.orderOptionsTotal.innerText = salla.money(cartData.options_total);
+        app.subTotal.innerHTML = salla.money(cartData.sub_total);
+        app.taxAmount.innerHTML = salla.money(cartData.tax_amount);
+        if (app.orderOptionsTotal) app.orderOptionsTotal.innerHTML = salla.money(cartData.options_total);
         
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.total_discount)
             .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost)
             .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
 
-        app.totalDiscount.querySelector('b').innerText = '- ' + salla.money(cartData.total_discount);
-        app.shippingCost.querySelector('b').innerText = salla.money(cartData.real_shipping_cost);
+        app.totalDiscount.querySelector('b').innerHTML = '- ' + salla.money(cartData.total_discount);
+        app.shippingCost.querySelector('b').innerHTML = salla.money(cartData.real_shipping_cost);
 
         if (!cartData.free_shipping_bar) {
             return;
@@ -124,8 +124,8 @@ class Cart extends BasePage {
             hasSpecialPrice = item.offer || item.special_price > 0;
 
         let total = salla.money(item.total);
-        if (total !== totalElement.innerText) {
-            totalElement.innerText = total;
+        if (total !== totalElement.innerHTML) {
+            totalElement.innerHTML = total;
             app.anime(totalElement, { scale: [.88, 1] });
         }
 
@@ -134,10 +134,10 @@ class Cart extends BasePage {
             .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice);
 
-        priceElement.innerText = salla.money(item.price);
+        priceElement.innerHTML = salla.money(item.price);
         if (hasSpecialPrice) {
-            offerElement.innerText = item.offer.names;
-            regularPriceElement.innerText = salla.money(item.product_price);
+            offerElement.innerHTML = item.offer.names;
+            regularPriceElement.innerHTML = salla.money(item.product_price);
         }
     }
 
@@ -175,7 +175,7 @@ class Cart extends BasePage {
      * @param {CartResponse.update} res
      * @param {boolean} applied
      */
-    toggleCoupon(res, applied) {
+    toggleCoupon(_res, applied) {
         app.couponError.innerText = '';
         app.couponCodeInput.value = applied ? app.couponCodeInput.value : '';
         app.couponCodeInput.toggleAttribute('disabled', applied);
