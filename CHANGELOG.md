@@ -11,7 +11,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🏅 [1.190.0](https://github.com/SallaApp/theme-raed/compare/1.189.0...1.190.0)(23-02-2025)
 ### Feature
-- Support the new SAR symbol
+- Support the new SAR currency symbol
 
 # ⛵ [1.189.0](https://github.com/SallaApp/theme-raed/compare/1.187.0...1.189.0)(29-12-2024)
 ### Feature
