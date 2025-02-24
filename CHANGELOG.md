@@ -9,6 +9,10 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# ⛵ [1.190.0](https://github.com/SallaApp/theme-raed/compare/1.189.0...1.190.0)(23-02-2025)
+### Feature
+- Support the new SAR symbol
+
 # ⛵ [1.189.0](https://github.com/SallaApp/theme-raed/compare/1.187.0...1.189.0)(29-12-2024)
 ### Feature
 
