@@ -13,6 +13,7 @@ class Product extends BasePage {
         });
 
         this.initProductOptionValidations();
+        this.grouping_slider_images();
 
         if(imageZoom){
             // call the function when the page is ready
@@ -21,6 +22,106 @@ class Product extends BasePage {
             window.addEventListener('resize', () => this.initImagesZooming());
         }
     }
+
+    // grouping_slider_images(){
+    //   salla.event.on("product-options::change", async (event) => {
+    //     let option = event.event.target,
+    //         type = event.option.type,
+    //         optionText  = event.detail ? event.detail.name : '',
+    //         productId = option.id.match(/option_(\d+)-/)[1],
+    //         slider = document.getElementById(`details-slider-${productId}`),
+    //         slides = await slider.getSlides();
+
+    //       if(type == 'thumbnail') {
+    //         slides.length && this.filterSlides('main', slider, slides, optionText)
+
+    //         setTimeout(async ()=> {
+    //           let thumbsSlider = await slider.thumbsSliderInstance(),
+    //               thumbsSlides = await slider.getThumbsSlides();
+              
+    //             thumbsSlides.length && this.filterSlides('thumbs', thumbsSlider, thumbsSlides, optionText);
+    //         }, 1000)
+    //       }
+    //   }) 
+    // }
+
+    // // Function to filter slides by data-caption
+    // async filterSlides(type, slider, slides, value) {
+    //   slides.forEach(slide => {
+    //     const caption = slide.getAttribute('data-caption');
+    //     if (caption == value) {
+    //       slide.style.display = 'block'; // Show the slide
+    //     } else {
+    //       slide.style.display = 'none'; // Hide the slide
+    //     }
+    //   });
+
+    //   type == 'main' ? slider?.update() : slider.thumbsSliderUpdate();
+    // }
+
+
+    grouping_slider_images() {
+      if (!this.sliderGroupedEventInitialized) {
+        this.sliderGroupedEventInitialized = true; // Prevent multiple listeners
+
+        let slider = document.querySelector(`.details-slider`);
+    
+        if (!slider) {
+          console.error("Slider not found");
+          return;
+        }
+
+        salla.event.on("product-options::change", async (event) => {
+          try {
+            let type = event.option.type,
+                optionText = event.detail ? event.detail.name : '';
+
+            if (type === 'thumbnail') {
+              const slides = await slider.getSlides();
+              const thumbsSlider = await slider.thumbsSliderInstance();
+              const thumbsSlides = await slider.getThumbsSlides();
+              
+              if (slides.length) {
+                this.filterSlides('main', slider, slides, optionText);
+              }
+    
+              if (thumbsSlides.length) {
+                this.filterSlides('thumbs', thumbsSlider, thumbsSlides, optionText);
+              }
+
+              // Recalculate height for the main slider
+              this.ensureSwiperHeight(slider);
+            }
+          } catch (error) {
+            console.error("Error handling product options change:", error);
+          }
+        });
+      }
+    }
+    
+    // Function to filter slides by data-caption
+    async filterSlides(type, slider, slides, value) {
+      // Filter slides based on the `data-caption` attribute
+      slides.forEach((slide) => {
+        // const shouldShow = slide.getAttribute('data-caption') === value;
+        // slide.style.display = shouldShow ? 'block' : 'none';
+        // slide.classList.toggle('swiper-slide-hidden', !shouldShow);
+      });
+
+      // Update Swiper layout after slide visibility changes
+
+      type == 'main' && slider.update();
+    }
+
+    // Function to ensure Swiper height is recalculated
+    ensureSwiperHeight(swiper) {
+      requestAnimationFrame(() => {
+        swiper.slideTo(0); // Reset to the current active slide
+      });
+    }
+        
+
+
 
     initProductOptionValidations() {
       document.querySelector('.product-form')?.addEventListener('change', function(){
