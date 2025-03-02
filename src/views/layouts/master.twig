@@ -55,7 +55,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
 
     {% include 'pages.partials.loading-screen-assets' %}
@@ -72,7 +72,27 @@
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
     
-    {% hook 'head:start' %}
+{#{% hook 'head:start' %}#}
+<script data-cfasync="false">
+  window.salla = window.Salla = window.Salla || {};
+  Salla.onReady =
+  	Salla.onReady ||
+  	function (callback) {
+  		return new Promise(function (resolve) {
+  			return Salla.status == "ready"
+  				? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+  				: window.addEventListener(
+  						"twilight::initiated",
+  						function (config) {
+  							resolve(callback ? callback(config.detail) : config.detail);
+  						},
+  						{ once: true },
+  					);
+  		});
+  	};
+</script>
+<script async src="https://cdn.salla.network/js/twilight/tests/featureCHOD-2234-support-physical-gifting/f48ddd42666bda7c7a780d841ba5eb74c8132b6d/twilight.js"></script>
+   
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">

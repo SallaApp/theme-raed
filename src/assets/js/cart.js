@@ -18,7 +18,9 @@ class Cart extends BasePage {
             freeShipping: '#free-shipping',
             freeShippingBar: '#free-shipping-bar',
             freeShippingMsg: '#free-shipping-msg',
-            freeShipApplied: '#free-shipping-applied'
+            freeShipApplied: '#free-shipping-applied',
+            cartGifting: '#cart-gifting',
+            sallaGifting:'#salla-gifting'
         });
 
         this.initiateCoupon();
@@ -75,6 +77,11 @@ class Cart extends BasePage {
             document.querySelector('.cart-options')?.remove();
             return window.location.reload();
         }
+        // toggle physical gifting depned on giftable flag
+        app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData.gift.enabled);
+        // Use toggleAttribute to handle the `physical-products` attribute
+        app.sallaGifting?.toggleAttribute('physical-products', cartData.gift.type === 'physical');
+        app.sallaGifting?.toggleAttribute('digital-products', cartData.gift.type === 'digital');
 
         // update the dom for cart options
         this.updateCartOptions(cartData?.options);
@@ -104,6 +111,7 @@ class Cart extends BasePage {
             ? salla.lang.get('pages.cart.has_free_shipping')
             : salla.lang.get('pages.cart.free_shipping_alert', { amount: salla.money(cartData.free_shipping_bar.remaining) });
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
+
     }
 
     /**
