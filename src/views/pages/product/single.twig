@@ -242,12 +242,32 @@
                     {% endif %}
                 </div>
 
-                {% if product.tags|length and theme.settings.get('show_tags', true) %}
+                {% if product.tags|length %}
                     <div class="mb-3">
                         {% for tag in product.tags %}
+                            {% if tag.name starts with 's-sam-' %}
+                              {% set tag_id = tag.url|split('-')|last %}
+                              <salla-products-list 
+                                source="tags"
+                                source-value="[{{tag_id}}]" 
+                                product-card-component="similar-product-card"
+                                class="similar-products-list"
+                                >
+                              </salla-products-list>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if product.tags|length and theme.settings.get('show_tags', true) %}
+                    <div class="mb-3">
+                        {% for tag in product.tags %} 
+                          {% set starts_with = tag.name starts with 's-sam-' ? true : false %}
+                          {% if not starts_with %}
                             <a href="{{ tag.url }}"
-                               class="rtl:ml-2 ltr:mr-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
+                                class="rtl:ml-2 ltr:mr-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
                                 ,</a>
+                          {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -416,6 +436,7 @@
 
 {% block scripts %}
     <script defer src="{{ 'product.js' | asset }}"></script>
+    <script defer data-cfasync="false" src="{{ 'similar-product-card.js'|asset }}"></script>
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     {% endif %}
