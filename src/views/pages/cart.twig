@@ -202,7 +202,7 @@
                         <h2 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h2>
 
                         <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500">{{ trans("pages.cart.items_total_without_tax") }}</span>
+                            <span class="text-gray-500"> {{ trans(cart.tax_amount ? "pages.cart.items_total_without_tax" : "pages.cart.items_total") }} </span>
                             <b id="sub-total">{{ cart.sub_total|money }}</b>
                         </div>
 
@@ -249,10 +249,12 @@
                             <b>- {{ cart.total_discount|money }}</b>
                         </div>
 
-                        <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
-                            <b id="tax-amount">{{ cart.tax_amount|money }}</b>
-                        </div>
+                        {% if cart.tax_amount %}
+                            <div class="flex justify-between text-sm mb-5">
+                                <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
+                                <b id="tax-amount">{{ cart.tax_amount|money }}</b>
+                            </div>
+                        {% endif %}
 
                         <div class="flex justify-between text-lg mb-5">
                             <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>
