@@ -89,7 +89,8 @@ class Cart extends BasePage {
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
         app.subTotal.innerHTML = salla.money(cartData.sub_total);
-        app.taxAmount.innerHTML = salla.money(cartData.tax_amount);
+        if(app.taxAmount) 
+          app.taxAmount.innerHTML = salla.money(cartData.tax_amount);
         if (app.orderOptionsTotal) app.orderOptionsTotal.innerHTML = salla.money(cartData.options_total);
         
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.total_discount)
