@@ -138,7 +138,7 @@
                                    data-caption="{{ image.alt }}"
                                    data-infinite="false"
                                    data-type="{{ image.video_url?'youtube':'image' }}"
-                                   href="{{ image.video_url?image.video_url:image.url }}"
+                                   href="{{ (image.video_url is iterable ? image.video_url|first : image.video_url)|default(image.url) }}"
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide magnify-wrapper homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
@@ -193,10 +193,6 @@
                     </div>
                 {% endif %}
 
-                {% if product.is_taxable %}
-                    <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
-                {% endif %}
-
                 <h1 class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ product.name }}</h1>
 
                 {% if product.subtitle %}
@@ -210,6 +206,9 @@
                                         reviews="{{ product.rating.count }}"></salla-rating-stars>
                 {% endif %}
 
+                {% if product.is_taxable %}
+                    <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
+                {% endif %}
                 {# Price #}
                 <div class="flex whitespace-nowrap gap-4 items-center">
                   <div class="{{ product.is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
