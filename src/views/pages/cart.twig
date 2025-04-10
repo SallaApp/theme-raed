@@ -83,19 +83,31 @@
                                             <h1 class="text-gray-900 leading-6 text-lg">
                                                 <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
                                             </h1>
-                                            <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
+                                            <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer ? '' : 'hidden' }}">{{ item.product_price|money }}</span>
                                             <span class="item-price {{ item.offer?'text-red-800':'text-sm text-gray-500' }}">{{ item.price|money }}</span>
                                             {% if item.weight_label %}
                                             <p class="text-sm text-gray-500 "> {{ trans('pages.products.weight') }}
                                              <span>{{ item.weight_label }}</span>
                                             </p>
                                             {% endif %}
-                                            <i class="sicon-discount-calculator text-gray-500 offer-icon {{ item.offer?'':'hidden' }}"></i>
-                                            <span class="text-sm text-gray-500 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
+                                            <div class="!mt-3 ">
+                                                {% if item.detailed_offers is not empty %}
+                                                    {% for offer in item.detailed_offers %}
+                                                    <div class="mt-4 text-green-600 flex items-start gap-2.5 offer-name"> 
+                                                        <i class="{{offer.discount_icon}} font-bold -translate-y-0.5 text-lg"></i>
+                                                        <div>
+                                                            <p class="text-sm font-medium"> {{ trans('pages.cart.received_offer', {'offer': offer.offer_name}) }}</p>
+                                                            <p class="text-xs mt-1 text-gray-400">  {{ trans('pages.cart.discount_amount', {'amount': offer.discount_amount|money}) }}
+                                                        </p>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="flex-1 border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex justify-between items-center md:items-start">
+                                    <div class="border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex gap-8 justify-between items-center md:items-start">
                                         {% if item.type == 'donating' %}
                                             <span></span>
                                         {% elseif item.is_hidden_quantity %}
