@@ -290,6 +290,7 @@ isElementLoaded(selector){
         const toggleState = (isOpen) => {
           state.isOpen = !isOpen
           this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
+          this.toggleElementClassIf(trigger, 'is-closed', 'is-opened', () => isOpen);
         }
 
         trigger.addEventListener('click', () => {

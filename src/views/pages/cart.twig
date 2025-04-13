@@ -90,20 +90,14 @@
                                              <span>{{ item.weight_label }}</span>
                                             </p>
                                             {% endif %}
-                                            <div class="!mt-3 ">
-                                                {% if item.detailed_offers is not empty %}
-                                                    {% for offer in item.detailed_offers %}
-                                                    <div class="mt-4 text-green-600 flex items-start gap-2.5 offer-name"> 
-                                                        <i class="{{offer.discount_icon}} font-bold -translate-y-0.5 text-lg"></i>
-                                                        <div>
-                                                            <p class="text-sm font-medium"> {{ trans('pages.cart.received_offer', {'offer': offer.offer_name}) }}</p>
-                                                            <p class="text-xs mt-1 text-gray-400">  {{ trans('pages.cart.discount_amount', {'amount': offer.discount_amount|money}) }}
-                                                        </p>
-                                                        </div>
-                                                    </div>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
+
+                                           {# Offers #}
+                                           {% include 'pages.partials.cart.offers.twig' with {
+                                                'offers': item.detailed_offers,
+                                                'item_id': item.id
+                                            } %}
+                                            {# End offers #}
+
                                         </div>
                                     </div>
 

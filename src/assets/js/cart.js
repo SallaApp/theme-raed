@@ -136,7 +136,7 @@ class Cart extends BasePage {
             .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice);
 
         priceElement.innerHTML = salla.money(item.price);
-        if (hasSpecialPrice) {
+        if (hasSpecialPrice && offerElement) {
             offerElement.innerHTML = item.offer.names;
             regularPriceElement.innerHTML = salla.money(item.product_price);
         }
