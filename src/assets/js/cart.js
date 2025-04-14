@@ -167,7 +167,7 @@ class Cart extends BasePage {
                       data-show="${collapsedId}">
                 <i class="sicon-discount is-opened rtl:ml-1.5 ltr:mr-1.5"></i>
                 <span class="flex items-center">
-                  +${restOffers.length} عرض إضافي 
+                  +${restOffers.length} ${salla.lang.get('pages.checkout.show_more_offers')} 
                   <i class="transition-transform duration-300 group-[.is-opened]:-rotate-180 mx-0.5 sicon-keyboard_arrow_down"></i>
                 </span>
               </button>
