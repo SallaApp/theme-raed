@@ -72,7 +72,30 @@
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
     
-    {% hook 'head:start' %}
+<script data-cfasync="false">
+	window.header_is_sticky = "{{ theme.settings.get('header_is_sticky', 'Default Value') }}"
+window.imageZoom = "{{ theme.settings.get('imageZoom') }}"
+window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
+</script>
+
+<script data-cfasync="false">
+	window.salla = window.Salla = window.Salla || {};
+Salla.onReady = Salla.onReady || function (callback) {
+return new Promise(function (resolve) {
+return Salla.status == "ready" ? resolve(callback ? callback(salla.config.all()) : salla.config.all()) : window.addEventListener("twilight::initiated", function (config) {
+resolve(callback ? callback(config.detail) : config.detail);
+}, {
+once: true
+},);
+});
+};
+</script>
+
+<script type="module" src="https://cdn.salla.network/js/twilight/tests/featureSTORE-1977-salla-account-profile-theme-side-signed/e9ffa918e7da79da1a454da01f87815d558c7d8e/twilight.esm.js"></script>
+
+<script async nomodule src="https://cdn.salla.network/js/twilight/tests/featureSTORE-1977-salla-account-profile-theme-side-signed/e9ffa918e7da79da1a454da01f87815d558c7d8e/twilight.js" type="text/javascript"></script>
+
+
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
@@ -102,7 +125,7 @@
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
        target="_blank">To enable JavaScript on webpage</a>.
 </noscript>
-<div class="app-inner flex flex-col min-h-full">
+<div class="flex flex-col min-h-full app-inner">
     {% hook 'body:start' %}
     {% component 'header.header' %}
     {% block content %}{% endblock %}
