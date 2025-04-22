@@ -78,22 +78,7 @@ window.imageZoom = "{{ theme.settings.get('imageZoom') }}"
 window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
 </script>
 
-<script data-cfasync="false">
-	window.salla = window.Salla = window.Salla || {};
-Salla.onReady = Salla.onReady || function (callback) {
-return new Promise(function (resolve) {
-return Salla.status == "ready" ? resolve(callback ? callback(salla.config.all()) : salla.config.all()) : window.addEventListener("twilight::initiated", function (config) {
-resolve(callback ? callback(config.detail) : config.detail);
-}, {
-once: true
-},);
-});
-};
-</script>
-
-<script type="module" src="https://cdn.salla.network/js/twilight/tests/featureSTORE-1977-salla-account-profile-theme-side-signed/e9ffa918e7da79da1a454da01f87815d558c7d8e/twilight.esm.js"></script>
-
-<script async nomodule src="https://cdn.salla.network/js/twilight/tests/featureSTORE-1977-salla-account-profile-theme-side-signed/e9ffa918e7da79da1a454da01f87815d558c7d8e/twilight.js" type="text/javascript"></script>
+{% hook 'head:start' %}
 
 
     {% hook head %}
