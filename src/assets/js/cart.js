@@ -197,6 +197,9 @@ class Cart extends BasePage {
               <p class="text-sm font-medium">
                 ${salla.lang.get('pages.checkout.received_offer', {'offer': offer.offer_name})}
               </p>
+               <p class="text-xs text-gray-400 font-small">   
+                ${offer.offer_message}
+               </p>
               <p class="text-xs mt-1 text-gray-400">
                 ${salla.lang.get('pages.checkout.discount_amount', {'amount': salla.money(offer.discount_amount)})}
               </p>
