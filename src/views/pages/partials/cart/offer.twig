@@ -1,4 +1,26 @@
 {# partials/offer.twig #}
+{% set paidQty = item.quantity - offer.free_quantity %}
+{% if offer.free_quantity and paidQty > 0 %}
+    <div class="font-medium mb-3 space-y-1">
+        {# Paid items section #}
+        <div class="text-start">
+            {{ paidQty|number }} × {{ item.product_price|money }}
+        </div>
+
+        {# Free items section #}
+        <div class="text-start">
+            {{ offer.free_quantity|number }} × 
+            <span class="text-sm text-gray-500 line-through item-regular-price">
+                {{ item.product_price|money }}
+            </span>
+            <span class="mx-2 text-sm text-red-800">
+                {{ trans('common.elements.freeExclam') }}
+            </span>
+        </div>
+    </div>
+{% endif %}
+
+
 <div class="mb-4 text-green-600 flex items-start gap-2.5"> 
     <i class="{{ offer.discount_icon }} font-bold -translate-y-0.5 text-lg"></i>
     <div>

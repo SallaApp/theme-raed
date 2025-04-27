@@ -1,6 +1,6 @@
 import BasePage from './base-page';
 import {validateProductOptions} from './partials/validate-product-options';
-
+import { renderOffers } from './partials/cart-offers';
 class Cart extends BasePage {
     onReady() {
         // keep update the dom base in the events
@@ -129,10 +129,11 @@ class Cart extends BasePage {
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             offerElement = cartItem.querySelector('.offer-name'),
+            freeRibon = cartItem.querySelector('.free-ribon'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
             hasSpecialPrice = item.offer || item.special_price > 0;
-
-        let total = salla.money(item.total);
+        let item_total = item.detailed_offers?.length > 0 ? item.total_special_price : item.total;
+        let total = salla.money(item_total);
         if (total !== totalElement.innerHTML) {
             totalElement.innerHTML = total;
             app.anime(totalElement, { scale: [.88, 1] });
@@ -141,72 +142,16 @@ class Cart extends BasePage {
         app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
-            .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice);
+            .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice)
+            .toggleElementClassIf(freeRibon, 'active', 'hidden', () => item.price == 0);
 
         priceElement.innerHTML = salla.money(item.price);
         if (hasSpecialPrice) {
             // offerElement.innerHTML = item.offer.names;
-            this.renderOffers(item.detailed_offers, 3, item.id);
             regularPriceElement.innerHTML = salla.money(item.product_price);
-        }
+          }
+        renderOffers(item);
     }
-
-    renderOffers(offers, visibleCount = 3, itemId = '') {
-        const container = document.getElementById(`offers_list_${itemId}`);
-        if (!container || !offers.length) return;
-      
-        const collapsedId = `offers_${itemId}`;
-        const firstOffers = offers.slice(0, visibleCount);
-        const restOffers = offers.slice(visibleCount);
-      
-        let html = '';
-      
-        // First offers
-        firstOffers.forEach((offer) => {
-          html += this.renderOfferItem(offer);
-        });
-      
-        // Show more toggle
-        if (restOffers.length) {
-          html += `
-            <div class="mt-4">
-              <button class="group btn--collapse text-sm !bg-transparent !px-0 !justify-start hover:text-dark"
-                      type="button"
-                      data-show="${collapsedId}">
-                <i class="sicon-discount is-opened rtl:ml-1.5 ltr:mr-1.5"></i>
-                <span class="flex items-center">
-                  +${restOffers.length} ${salla.lang.get('pages.checkout.show_more_offers')} 
-                  <i class="transition-transform duration-300 group-[.is-opened]:-rotate-180 mx-0.5 sicon-keyboard_arrow_down"></i>
-                </span>
-              </button>
-            </div>
-            <div class="h-0 overflow-hidden opacity-0 is-closed" id="${collapsedId}">
-              ${restOffers.map(this.renderOfferItem).join('')}
-            </div>
-          `;
-        }
-      
-        container.innerHTML = html;
-        window.app.initiateCollapse();
-      }
-       renderOfferItem(offer) {
-        return `
-          <div class="mt-4 text-green-600 flex items-start gap-2.5">
-            <i class="${offer.discount_icon} font-bold -translate-y-0.5 text-lg"></i>
-            <div>
-              <p class="text-sm font-medium">
-                ${salla.lang.get('pages.checkout.received_offer', {'offer': offer.offer_name})}
-              </p>
-               <p class="text-xs text-gray-400 font-small">   
-                ${offer.offer_message}
-               </p>
-              <p class="text-xs mt-1 text-gray-400">
-                ${salla.lang.get('pages.checkout.discount_amount', {'amount': salla.money(offer.discount_amount)})}
-              </p>
-            </div>
-          </div> 
-        `;
-      }
     //=================== Coupon Method ========================//
     initiateCoupon() {
         if (!app.couponCodeInput) {
