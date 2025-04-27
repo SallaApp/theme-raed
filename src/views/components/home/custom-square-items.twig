@@ -1,0 +1,30 @@
+<section class="section">
+    <div class="container">
+
+        {% if title %}
+            <div class="section-header d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section--title"><span>{{ component.title }}</span></h2>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            {% for item in component.items %}
+                {% if item.image is defined %}
+                    <div class="col-sm-4 col-md-4">
+                        <div class="category-featured {{ item.text is empty ? 'category-featured--no-label' : '' }}">
+                            <a href="{{ item.url }}" 
+                            style="background-image: url('{{ item.image.url }}');
+                            background-size: {{bg-image-size}}
+                            "
+                               title="" {% if item.url == '#' %}class="no-feedback"{% endif %}>
+                                {% if item.text %}
+                                    <h3>{{ item.text }}</h3>
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

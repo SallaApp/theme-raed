@@ -966,6 +966,160 @@
                     "maxLength": 30
                 }
             ]
+        },
+        {
+            "key": "541cc356-90c7-0912-8a33-a0342cfde4ad",
+            "title": "قائمة عناصر مخصصة",
+            "icon": "sicon-chat-bubbles",
+            "path": "home.custom-square-items",
+            "image": "https://cdn.salla.sa/mQgZlG/JMJiEx1KVn7mzxo5FdtsVsAmpWPM8UJW0i0B93c0.png",
+            "fields":   [
+                {
+                    "id": "static-desc",
+                    "type": "static",
+                    "value": "<img src='https://cdn.salla.network/images/themes/legacy-blocks/squared-photos.png'>",
+                    "format": "description"
+                },
+                {
+                    "id": "slug",
+                    "type": "string",
+                    "value": "photos_slider",
+                    "format": "hidden",
+                    "required": true
+                },
+                {
+                    "id": "title",
+                    "hide": false,
+                    "icon": "sicon-format-text-alt",
+                    "type": "string",
+                    "label": "العنوان الرئيسي",
+                    "value": null,
+                    "format": "text",
+                    "required": false,
+                    "maxLength": 100,
+                    "minLength": 0,
+                    "description": "",
+                    "placeholder": "أدخل العنوان هنا...",
+                    "multilanguage": true
+                },
+                {
+                    "id": "items",
+                    "type": "collection",
+                    "value": [
+                        {
+                            "items.url": [],
+                            "items.image": ""
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "items.image",
+                            "icon": "sicon-image",
+                            "type": "string",
+                            "label": "صورة البنر",
+                            "value": null,
+                            "format": "image",
+                            "required": true,
+                            "description": "* المقاس المناسب للصورة هو 350×200 بكسل",
+                            "placeholder": ""
+                        },
+                        {
+                            "id": "text",
+                            "hide": false,
+                            "icon": "sicon-format-text-alt",
+                            "type": "string",
+                            "label": "النص على الصورة",
+                            "value": null,
+                            "format": "text",
+                            "required": false,
+                            "maxLength": 200,
+                            "minLength": 0,
+                            "description": "",
+                            "placeholder": "يمكنك إضافة عنوان أو وصف للصورة هنا..",
+                            "multilanguage": true
+                        },
+                        {
+                            "id": "items.url",
+                            "icon": "sicon-link",
+                            "type": "items",
+                            "label": "الرابط",
+                            "value": null,
+                            "format": "variable-list",
+                            "source": "offers_link",
+                            "sources": [
+                                {
+                                    "key": "products",
+                                    "label": "منتج",
+                                    "value": "products"
+                                },
+                                {
+                                    "key": "latest_products_link",
+                                    "label": "أحدث منتجات",
+                                    "value": "latest_products_link"
+                                },
+                                {
+                                    "key": "categories",
+                                    "label": "تصنيف",
+                                    "value": "categories"
+                                },
+                                {
+                                    "key": "brands",
+                                    "label": "ماركة تجارية",
+                                    "value": "brands"
+                                },
+                                {
+                                    "key": "pages",
+                                    "label": "صفحة تعريفية",
+                                    "value": "pages"
+                                },
+                                {
+                                    "key": "blog_articles",
+                                    "label": "مقالة",
+                                    "value": "blog_articles"
+                                },
+                                {
+                                    "key": "blog_categories",
+                                    "label": "تصنيف ضمن المدونة",
+                                    "value": "blog_categories"
+                                },
+                                {
+                                    "key": "offers_link",
+                                    "label": "التخفيضات",
+                                    "value": "offers_link"
+                                },
+                                {
+                                    "key": "brands_link",
+                                    "label": "الماركات التجارية",
+                                    "value": "brands_link"
+                                },
+                                {
+                                    "key": "blog_link",
+                                    "label": "المدونة",
+                                    "value": "blog_link"
+                                },
+                                {
+                                    "key": "book_now",
+                                    "label": "احجز الآن",
+                                    "value": "book_now"
+                                },
+                                {
+                                    "key": "custom",
+                                    "label": "رابط خارجي",
+                                    "value": "custom"
+                                }
+                            ],
+                            "required": false,
+                            "searchable": true,
+                            "description": ""
+                        }
+                    ],
+                    "format": "collection",
+                    "required": true,
+                    "maxLength": 6,
+                    "minLength": 1,
+                    "item_label": "صورة "
+                }
+            ]
         }
     ],
     "support_url": "https://salla.com/",
