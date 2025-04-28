@@ -131,7 +131,7 @@ class Cart extends BasePage {
             offerElement = cartItem.querySelector('.offer-name'),
             freeRibon = cartItem.querySelector('.free-ribon'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
-            hasSpecialPrice = item.offer || item.special_price > 0;
+            hasSpecialPrice = item.offer || item.special_price > 0,
             newOffersActive = item.detailed_offers?.length > 0 || item.special_price > 0;
         let item_total = item.detailed_offers?.length > 0 ? item.total_special_price : item.total;
         let total = salla.money(item_total);
@@ -148,8 +148,7 @@ class Cart extends BasePage {
 
         priceElement.innerHTML = salla.money(item.price);
         if (!hasSpecialPrice){return;}
-        debugger;
-        if(newOffersActive) {offerElement.innerHTML = item.offer.names;}
+        if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
         regularPriceElement.innerHTML = salla.money(item.product_price);
         renderOffers(item);
     }
