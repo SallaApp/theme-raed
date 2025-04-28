@@ -129,6 +129,7 @@ class Cart extends BasePage {
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             offerElement = cartItem.querySelector('.offer-name'),
+            oldOffers = cartItem.querySelector('.old-offers'),
             freeRibon = cartItem.querySelector('.free-ribon'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
             hasSpecialPrice = item.offer || item.special_price > 0,
@@ -140,7 +141,8 @@ class Cart extends BasePage {
             app.anime(totalElement, { scale: [.88, 1] });
         }
 
-        app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
+        app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => hasSpecialPrice && !newOffersActive)
+            .toggleElementClassIf( oldOffers, 'offer-applied', 'hidden', () => hasSpecialPrice && !newOffersActive)
             .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice)
