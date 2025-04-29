@@ -9,7 +9,7 @@ export function renderOffers(item) {
     const visibleCount = 3;
     const container = document.getElementById(`offers_list_${item.id}`);
     
-    if (!container || !offers?.length) {
+    if (!container || !offers.length) {
         container.innerHTML = '';
         return;
     }
