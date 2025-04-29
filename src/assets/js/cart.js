@@ -1,6 +1,5 @@
 import BasePage from './base-page';
 import {validateProductOptions} from './partials/validate-product-options';
-// import { renderOffers } from './partials/cart-offers';
 class Cart extends BasePage {
     onReady() {
         // keep update the dom base in the events
@@ -152,7 +151,6 @@ class Cart extends BasePage {
         if (!hasSpecialPrice){return;}
         if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
         regularPriceElement.innerHTML = salla.money(item.product_price);
-        // renderOffers(item);
     }
     //=================== Coupon Method ========================//
     initiateCoupon() {
