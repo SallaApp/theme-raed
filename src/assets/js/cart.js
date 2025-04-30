@@ -132,7 +132,7 @@ class Cart extends BasePage {
             freeRibon = cartItem.querySelector('.free-ribon'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
             hasSpecialPrice = item.offer || item.special_price > 0,
-            newOffersActive = item.detailed_offers?.length > 0 || item.special_price > 0;
+            newOffersActive = item.detailed_offers?.length > 0 ;
         let item_total = item.detailed_offers?.length > 0 ? item.total_special_price : item.total;
         let total = salla.money(item_total);
         if (total !== totalElement.innerHTML) {
