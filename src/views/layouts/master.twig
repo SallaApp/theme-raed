@@ -73,28 +73,8 @@
     </script>
     
     {% hook head %}
-    {#{% hook 'head:start' %}#}
-    <script data-cfasync="false">
-    window.salla = window.Salla = window.Salla || {};
-    Salla.onReady =
-        Salla.onReady ||
-        function (callback) {
-            return new Promise(function (resolve) {
-                return Salla.status == "ready"
-                    ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
-                    : window.addEventListener(
-                            "twilight::initiated",
-                            function (config) {
-                                resolve(callback ? callback(config.detail) : config.detail);
-                            },
-                            { once: true },
-                        );
-            });
-        };
-    </script>
-
-    <script async src="https://cdn.salla.network/js/twilight/tests/featureCHOD-0000-offers-in-cart-component/36d76d3b8a05880e38b72aa0c78ea913277ac6d8/twilight.js"></script>
-
+    {% hook 'head:start' %}
+   
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
