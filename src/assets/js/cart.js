@@ -129,7 +129,7 @@ class Cart extends BasePage {
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             offerElement = cartItem.querySelector('.offer-name'),
             oldOffers = cartItem.querySelector('.old-offers'),
-            freeRibon = cartItem.querySelector('.free-ribon'),
+            freeRibbon = cartItem.querySelector('.free-ribbon'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
             hasSpecialPrice = item.offer || item.special_price > 0,
             newOffersActive = item.detailed_offers?.length > 0 ;
@@ -145,7 +145,7 @@ class Cart extends BasePage {
             .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice)
-            .toggleElementClassIf(freeRibon, 'active', 'hidden', () => item.price == 0);
+            .toggleElementClassIf(freeRibbon, 'active', 'hidden', () => item.price == 0);
 
         priceElement.innerHTML = salla.money(item.price);
         if (!hasSpecialPrice){return;}

@@ -79,14 +79,12 @@
 													class="lazy flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
 											{% endif %}
 
-                                             <!-- free product ribbon -->
-                                            <div class="free-ribon absolute top-0 right-0 {{ item.price.getMoney().amount == 0 ? 'active' : 'hidden' }}">
-                                                <div class="relative">
-                                                    <div class="absolute top-[11px] right-[-38px] w-32 bg-red-600 text-white text-xs font-bold text-center py-1 rotate-45 shadow-md">
-                                                        {{ trans('pages.loyalty_program.free_product')}}
-                                                    </div>
-                                                </div>
+                                            <!-- free product ribbon -->
+                                            <div class="free-ribbon absolute top-[11px] right-[-38px] w-32 bg-red-600 text-white text-xs font-bold text-center py-1 rotate-45 shadow-md {{ item.price.getMoney().amount == 0 ? '' : 'hidden' }}">
+                                                {{ trans('pages.loyalty_program.free_product') }}
                                             </div>
+                                            <!-- end free product ribbon -->
+                                            
                                         </a>
                                         <div class="space-y-1">
                                             <h1 class="text-gray-900 leading-6 text-lg">
