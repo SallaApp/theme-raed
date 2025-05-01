@@ -72,9 +72,8 @@
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
     
-    {% hook head %}
     {% hook 'head:start' %}
-   
+    {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
@@ -90,7 +89,6 @@
         }
     </style>
     {# tracking services, custom css feature. #}
-    
     {% hook 'head:end' %}
 </head>
 <body id="app" class="overflow-x-hidden {% hook 'body:classes' %}
