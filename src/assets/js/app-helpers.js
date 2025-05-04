@@ -10,13 +10,18 @@ export default class AppHelpers {
     document.querySelectorAll(selector).forEach(element => this.toggleElementClassIf(element, classes1, classes2, callback));
     return this;
   }
-
-  toggleElementClassIf(element, classes1, classes2, callback) {
+  toggleElementClassIf(elements, classes1, classes2, callback) {
     classes1 = Array.isArray(classes1) ? classes1 : classes1.split(' ');
     classes2 = Array.isArray(classes2) ? classes2 : classes2.split(' ');
-    let isClasses1 = callback(element);
-    element?.classList.remove(...(isClasses1 ? classes2 : classes1));
-    element?.classList.add(...(isClasses1 ? classes1 : classes2));
+    const elementsArray = Array.isArray(elements) ? elements : [elements];
+  
+    elementsArray.forEach(element => {
+      if (!element) return;
+      const isClasses1 = callback(element);
+      element.classList.remove(...(isClasses1 ? classes2 : classes1));
+      element.classList.add(...(isClasses1 ? classes1 : classes2));
+    });
+  
     return this;
   }
 
