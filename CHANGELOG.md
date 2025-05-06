@@ -9,6 +9,11 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# ⛓️‍💥 [1.218.0](https://github.com/SallaApp/theme-raed/compare/1.208.0...1.218.0)(05-05-2025)
+### Enhancement
+- Support a new option to select bg-size in square-photos section.
+
+
 # 🎩 [1.208.0](https://github.com/SallaApp/theme-raed/compare/1.190.0...1.208.0)(12-03-2025)
   ### Bug Fixes
   - Tax amount issue in cart
