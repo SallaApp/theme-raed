@@ -67,7 +67,7 @@
                                 <!-- product -->
                                 <div class="md:flex rtl:space-x-reverse md:space-x-12 items-start justify-between mb-8 last:mb-0">
                                     <div class="flex flex-1 rtl:space-x-reverse space-x-4">
-                                        <a href="{{ item.url }}" class="shrink-0">
+                                        <a href="{{ item.url }}" class="relative overflow-hidden shrink-0">
                                             {% if loop.first %}
 												<img src="{{ item.product_image }}"
 													alt="{{ item.product_name }}"
@@ -78,24 +78,41 @@
 													alt="{{ item.product_name }}"
 													class="lazy flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
 											{% endif %}
+
+                                            <!-- free product ribbon -->
+                                            <div class="free-ribbon absolute top-[11px] right-[-38px] w-32 bg-red-600 text-white text-xs font-bold text-center py-1 rotate-45 shadow-md {{ item.price.getMoney().amount == 0 ? '' : 'hidden' }}">
+                                                {{ trans('pages.loyalty_program.free_product') }}
+                                            </div>
+                                            <!-- end free product ribbon -->
+                                            
                                         </a>
                                         <div class="space-y-1">
                                             <h1 class="text-gray-900 leading-6 text-lg">
                                                 <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
                                             </h1>
-                                            <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer?'':'hidden' }}">{{ item.product_price|money }}</span>
+                                            <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer ? '' : 'hidden' }}">{{ item.product_price|money }}</span>
                                             <span class="item-price {{ item.offer?'text-red-800':'text-sm text-gray-500' }}">{{ item.price|money }}</span>
                                             {% if item.weight_label %}
                                             <p class="text-sm text-gray-500 "> {{ trans('pages.products.weight') }}
                                              <span>{{ item.weight_label }}</span>
                                             </p>
                                             {% endif %}
-                                            <i class="sicon-discount-calculator text-gray-500 offer-icon {{ item.offer?'':'hidden' }}"></i>
-                                            <span class="text-sm text-gray-500 offer-name {{ item.offer?'':'hidden' }}">{{ item.offer.names }}</span>
+                                            <span class="old-offers flex items-center gap-1 mx-1.5  {{ item.detailed_offers ? 'hidden' : '' }}">
+                                                <i class="sicon-discount-calculator text-gray-500 offer-icon {{ item.offer?'':'hidden' }}"></i>
+                                                <span class="text-sm text-gray-500 offer-name {{ item.offer ?  '' : 'hidden' }}">{{ item.offer.names }}</span>
+                                            </span>
+                                            {# Cart Item Offers #}
+                                            <salla-cart-item-offers
+                                                quantity="{{ item.quantity }}"
+                                                item-id="{{ item.id }}"
+                                                product-price="{{ item.product_price }}"
+                                                offers="{{ item.detailed_offers|json_encode }}"></salla-cart-item-offers>
+                                            {# End Cart Item offers #}
+
                                         </div>
                                     </div>
 
-                                    <div class="flex-1 border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex justify-between items-center md:items-start">
+                                    <div class="border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex gap-8 justify-between items-center md:items-start">
                                         {% if item.type == 'donating' %}
                                             <span></span>
                                         {% elseif item.is_hidden_quantity %}
@@ -108,10 +125,10 @@
                                                 value="{{ item.quantity }}" name="quantity">
                                             </salla-quantity-input>
                                         {% endif %}
-
+                                        {% set item_total = item.detailed_offers|length > 0 ? item.total_special_price|money : item.total|money%}
                                         <p class="text-primary flex-none font-bold text-sm rtl:md:pl-12 ltr:md:pr-12">
                                             <span>{{ trans('pages.cart.total') }}:</span>
-                                            <span class="inline-block item-total">{{ item.is_available?item.total|money: trans('pages.cart.out_of_stock') }}</span>
+                                            <span class="inline-block item-total">{{ item.is_available?item_total: trans('pages.cart.out_of_stock') }}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -146,10 +163,7 @@
                   </div>
                 {% endif %}
                     
-                {% if cart.offer %}
-                  {# TODO: Replace it with salla-offer #}
-                  {% include 'components.product.offer' with { offer: cart.offer } %}
-                {% endif %}
+                <salla-offer></salla-offer>
                 
                 {% hook 'cart:items.end' %}
             </div>
@@ -189,6 +203,10 @@
                             ></salla-loyalty>
                         </div>
                     {% endif %}
+
+                    <div id="cart-gifting" class="shadow-default bg-white xs:p-2 rounded-md mb-5 relative  {{gift.enabled ? '' : 'hidden' }}">
+                        <salla-gifting id="salla-gifting" class="mt-5" widget-title="{{ trans("pages.cart.gift_widget_title") }}"  widget-subtitle="{{ gift.text }}" class="mt-5" {{gift.type}}-products  vertical></salla-gifting>
+                    </div>
 
                     <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
                         <h2 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h2>
