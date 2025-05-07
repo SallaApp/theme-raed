@@ -1,6 +1,5 @@
 import BasePage from './base-page';
 import {validateProductOptions} from './partials/validate-product-options';
-
 class Cart extends BasePage {
     onReady() {
         // keep update the dom base in the events
@@ -129,28 +128,28 @@ class Cart extends BasePage {
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             offerElement = cartItem.querySelector('.offer-name'),
+            oldOffers = cartItem.querySelector('.old-offers'),
+            freeRibbon = cartItem.querySelector('.free-ribbon'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
-            hasSpecialPrice = item.offer || item.special_price > 0;
-
-        let total = salla.money(item.total);
+            hasSpecialPrice = item.offer || item.special_price > 0,
+            newOffersActive = item.detailed_offers?.length > 0 ;
+        let item_total = item.detailed_offers?.length > 0 ? item.total_special_price : item.total;
+        let total = salla.money(item_total);
         if (total !== totalElement.innerHTML) {
             totalElement.innerHTML = total;
             app.anime(totalElement, { scale: [.88, 1] });
         }
 
-        app.toggleElementClassIf(offerElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
-            .toggleElementClassIf(offerIconElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
-            .toggleElementClassIf(regularPriceElement, 'offer-applied', 'hidden', () => hasSpecialPrice)
-            .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice);
+        app.toggleElementClassIf([offerElement, oldOffers], 'offer-applied', 'hidden', () => hasSpecialPrice && !newOffersActive)
+            .toggleElementClassIf([offerIconElement, regularPriceElement], 'offer-applied', 'hidden', () => hasSpecialPrice)
+            .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice)
+            .toggleElementClassIf(freeRibbon, 'active', 'hidden', () => item.price == 0);
 
         priceElement.innerHTML = salla.money(item.price);
-        if (hasSpecialPrice) {
-            offerElement.innerHTML = item.offer.names;
-            regularPriceElement.innerHTML = salla.money(item.product_price);
-        }
+        if (!hasSpecialPrice){return;}
+        if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
+        regularPriceElement.innerHTML = salla.money(item.product_price);
     }
-
-
     //=================== Coupon Method ========================//
     initiateCoupon() {
         if (!app.couponCodeInput) {
