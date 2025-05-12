@@ -122,7 +122,7 @@ isElementLoaded(selector){
         toast: true,
         position: salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
         showConfirmButton: false,
-        timer: 3500,
+        timer: 2000,
         didOpen: (toast) => {
           toast.addEventListener('mouseenter', Swal.stopTimer)
           toast.addEventListener('mouseleave', Swal.resumeTimer)
@@ -289,7 +289,7 @@ isElementLoaded(selector){
 
         const toggleState = (isOpen) => {
           state.isOpen = !isOpen
-          this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
+          this.toggleElementClassIf([content, trigger], 'is-closed', 'is-opened', () => isOpen);
         }
 
         trigger.addEventListener('click', () => {
@@ -321,7 +321,7 @@ isElementLoaded(selector){
    */
   initAddToCart() {
     salla.cart.event.onUpdated(summary => {
-      document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
+      document.querySelectorAll('[data-cart-total]').forEach(el => el.innerHTML = salla.money(summary.total));
       document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
     });
 

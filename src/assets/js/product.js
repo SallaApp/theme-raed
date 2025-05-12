@@ -122,9 +122,9 @@ class Product extends BasePage {
     } else {
       thumbsSlider.update();
 
-      setTimeout(() => { 
+      setTimeout(() => {
         console.log("🚀 ~ Product ~ filterSlides ~ firstVisibleIndex:", firstVisibleIndex)
-        thumbsSlider.slideTo(firstVisibleIndex) 
+        thumbsSlider.slideTo(firstVisibleIndex)
       }, 1000);
     }
   }
@@ -188,8 +188,8 @@ class Product extends BasePage {
 
       app.startingPriceTitle?.classList.add('hidden');
 
-      app.totalPrice.forEach((el) => { el.innerText = salla.money(data.price) });
-      app.beforePrice.forEach((el) => { el.innerText = salla.money(data.regular_price) });
+      app.totalPrice.forEach((el) => { el.innerHTML = salla.money(data.price) });
+      app.beforePrice.forEach((el) => { el.innerHTML = salla.money(data.regular_price) });
 
       app.toggleClassIf('.price_is_on_sale', 'showed', 'hidden', () => is_on_sale)
       app.toggleClassIf('.starting-or-normal-price', 'hidden', 'showed', () => is_on_sale)
