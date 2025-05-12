@@ -72,7 +72,28 @@
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
     
-    {% hook 'head:start' %}
+    {# {% hook 'head:start' %} #}
+    <script>
+      window.salla = window.Salla = window.salla || {};
+      Salla.onReady = Salla.onReady || function (callback) {
+        return new Promise(function (resolve, reject) {
+          if (['ready', 'completed'].includes(Salla.status)) {
+            !!callback && callback();
+            resolve();
+          } else {
+            const handler = function () {
+              !!callback && callback();
+              resolve();
+            };
+            window.addEventListener('twilight::initiated', handler, { once: true });
+          }
+        });
+      };
+    </script>
+    <script async
+    src="https://cdn.salla.network/js/twilight/tests/hotfixTD-3479-support-bundle-images-in-slider/56c99fba90e013afe879b29386ecc0e3176f7986/twilight.js"></script> 
+
+
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
