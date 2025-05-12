@@ -72,7 +72,26 @@
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
     </script>
     
-    {% hook 'head:start' %}
+    {#{% hook 'head:start' %}#}
+    <script data-cfasync="false">
+      window.salla = window.Salla = window.Salla || {};
+      Salla.onReady =
+        Salla.onReady ||
+        function (callback) {
+          return new Promise(function (resolve) {
+            return Salla.status == "ready"
+              ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
+              : window.addEventListener(
+                  "twilight::initiated",
+                  function (config) {
+                    resolve(callback ? callback(config.detail) : config.detail);
+                  },
+                  { once: true },
+                );
+          });
+        };
+    </script>
+    <script async src="https://cdn.salla.network/js/twilight/tests/bugfixCHOD-6132-specialprice-offer/40c314677e9c25632270c9b1dd2c5847da761e49/twilight.js"></script>
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
