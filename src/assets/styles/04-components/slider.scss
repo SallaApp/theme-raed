@@ -2,8 +2,14 @@ salla-slider{
   @apply block;
   
   &.details-slider{
+    @apply transition-opacity duration-300;
+    
     .swiper-wrapper{
       @apply h-full #{!important};
+    }
+
+    &:not(.hydrated){
+      @apply opacity-0
     }
 
     .s-slider-container{ 

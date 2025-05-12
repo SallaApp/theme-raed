@@ -122,42 +122,45 @@
                     {% endif %}
 
                     <div slot="items">
-                        {% for image in product.images %}
-                            {% if image.three_d_image_url %}
-                                <model-viewer style="min-height: 500px;" class="swiper-slide model-entry w-full h-full"
-                                    loading="eager" camera-controls
-                                    touch-action="pan-y" auto-rotate
-                                    poster="{{ image.url }}"
-                                    src="{{ image.three_d_image_url }}"
-                                    shadow-intensity="1" alt="{{ image.alt }}">
-                                </model-viewer>
-                            {% else %}
-                                <a data-fslightbox="product_{{ product.id }}"
-                                   data-img-id="{{ image.id }}"
-                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
-                                   data-caption="{{ image.alt }}"
-                                   data-infinite="false"
-                                   data-type="{{ image.video_url?'youtube':'image' }}"
-                                   href="{{ image.video_url?image.video_url:image.url }}"
-                                   aria-label="{{ product.name }}"
-                                   class="swiper-slide magnify-wrapper homeslider__slide {{ image.video_url?'video-entry':'' }}">
-                                    {% if loop.first %}
-                                        <img id="{{image.id}}" fetchpriority="high" loading="eager" src="{{ image.url }}"
-                                             alt="{{ image.alt }}"
-                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
-                                    {% else %}
-                                        <img id="{{image.id}}" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{ image.url }}"
-                                             alt="{{ image.alt }}"
-                                             class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
-                                    {% endif %}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
+                          {% for image in product.images %}
+                            {# {% for _ in [1, 2] %} #}
+                              {% if image.three_d_image_url %}
+                                  <model-viewer style="min-height: 500px;" class="swiper-slide model-entry w-full h-full"
+                                      loading="eager" camera-controls
+                                      touch-action="pan-y" auto-rotate
+                                      poster="{{ image.url }}"
+                                      src="{{ image.three_d_image_url }}"
+                                      shadow-intensity="1" alt="{{ image.alt }}">
+                                  </model-viewer>
+                              {% else %}
+                                  <a data-fslightbox="product_{{ product.id }}"
+                                    data-img-id="{{ image.id }}"
+                                    data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                    data-caption="{{ image.alt }}"
+                                    data-infinite="false"
+                                    data-type="{{ image.video_url?'youtube':'image' }}"
+                                    href="{{ image.video_url?image.video_url:image.url }}"
+                                    aria-label="{{ product.name }}"
+                                    class="swiper-slide magnify-wrapper homeslider__slide {{ image.video_url?'video-entry':'' }}">
+                                      {% if loop.first %}
+                                          <img id="{{image.id}}" fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                              alt="{{ image.alt }}"
+                                              class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                      {% else %}
+                                          <img id="{{image.id}}" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{ image.url }}"
+                                              alt="{{ image.alt }}"
+                                              class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                      {% endif %}
+                                  </a>
+                              {% endif %}
+                          {# {% endfor %} #}
+                      {% endfor %}
                     </div>
 
                     {% if has_many_images %}
                         <div slot="thumbs">
                             {% for image in product.images %}
+                              {# {% for _ in [1, 2] %} #}
                                 <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}" data-caption="{{ image.alt }}">
                                     {% if loop.index < 5 %}
                                         <img src="{{ image.url }}"
@@ -172,7 +175,8 @@
                                              alt="{{ image.alt }}"/>
                                     {% endif %}
                                 </div>
-                            {% endfor %}
+                            {# {% endfor %} #}
+                        {% endfor %}
                         </div>
                     {% endif %}
                 </salla-slider>
