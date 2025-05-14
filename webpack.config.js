@@ -1,67 +1,76 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ThemeWatcher = require('@salla.sa/twilight/watcher.js');
 const CopyPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); // eslint-disable-line spellcheck/spell-checker
 const path = require('path');
 
 const asset = file => path.resolve('src/assets', file || '');
 const public = file => path.resolve("public", file || '');
 
 module.exports = {
-    entry  : {
-        app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js'), asset('js/blog.js')],
-        home    : asset('js/home.js'),
-        'product-card' : asset('js/partials/product-card.js'),
-        'main-menu' : asset('js/partials/main-menu.js'),
+    entry: {
+        app: [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js'), asset('js/blog.js')],
+        home: asset('js/home.js'),
+        'product-card': asset('js/partials/product-card.js'),
+        'main-menu': asset('js/partials/main-menu.js'),
         'wishlist-card': asset('js/partials/wishlist-card.js'),
         checkout: [asset('js/cart.js'), asset('js/thankyou.js')],
-        pages   : [asset('js/loyalty.js'), asset('js/brands.js'),],
-        product : [asset('js/product.js'), asset('js/products.js')],
-        order   : asset('js/order.js'),
-        testimonials   : asset('js/testimonials.js')
+        pages: [asset('js/loyalty.js'), asset('js/brands.js')],
+        product: [asset('js/product.js'), asset('js/products.js')],
+        order: asset('js/order.js'),
+        testimonials: asset('js/testimonials.js')
     },
-    output : {
+    output: {
         path: public(),
         clean: true,
         chunkFilename: "[name].[contenthash].js"
     },
-    stats  : {modules: false, assetsSort: "size", assetsSpace: 50},
-    module : {
+    stats: { modules: false, assetsSort: "size", assetsSpace: 50 },
+    module: {
         rules: [
             {
-                test   : /\.js$/,
+                test: /\.js$/,
                 exclude: [
                     /(node_modules)/,
                     asset('js/twilight.js')
                 ],
-                use    : {
-                    loader : 'babel-loader',
+                use: {
+                    loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env'],
                         plugins: [
-                          ["@babel/plugin-transform-runtime",
-                           {
-                               "regenerator": true
-                           }
-                          ]
+                            ["@babel/plugin-transform-runtime", { regenerator: true }]
                         ],
                     }
                 }
             },
             {
                 test: /\.(s(a|c)ss)$/,
-                use : [
+                use: [
                     MiniCssExtractPlugin.loader,
-                    {loader: "css-loader", options: {url: false}},
+                    { loader: "css-loader", options: { url: false } },
                     "postcss-loader",
                     "sass-loader",
                 ]
             },
         ],
     },
+    optimization: {
+        minimizer: [
+            '...', // Keep default minimizers (like TerserPlugin for JS)
+            // eslint-disable-next-line spellcheck/spell-checker
+            new CssMinimizerPlugin({
+                minimizerOptions: {
+                    preset: ['default', { discardComments: { removeAll: true } }],
+                },
+            }),
+        ],
+    },
     plugins: [
         new ThemeWatcher(),
-        new MiniCssExtractPlugin(),
-        new CopyPlugin({patterns: [{from: asset('images'), to: public('images')}]}),
+        new MiniCssExtractPlugin({
+            filename: '[name].[contenthash].css'
+        }),
+        new CopyPlugin({ patterns: [{ from: asset('images'), to: public('images') }] }),
     ],
-}
-;
+};
