@@ -1,7 +1,7 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ThemeWatcher = require('@salla.sa/twilight/watcher.js');
 const CopyPlugin = require('copy-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); // eslint-disable-line spellcheck/spell-checker
 const path = require('path');
 
 const asset = file => path.resolve('src/assets', file || '');
@@ -58,6 +58,7 @@ module.exports = {
     optimization: {
         minimizer: [
             '...', // Keep default minimizers (like TerserPlugin for JS)
+            // eslint-disable-next-line spellcheck/spell-checker
             new CssMinimizerPlugin({
                 minimizerOptions: {
                     preset: ['default', { discardComments: { removeAll: true } }],
