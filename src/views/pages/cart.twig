@@ -90,7 +90,6 @@
                                             <h1 class="text-gray-900 leading-6 text-lg">
                                                 <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
                                             </h1>
-                                            
                                             {% set has_discount = item.offer or item.is_on_sale %}
                                             {% if has_discount %}
                                                 {% set original_price = item.offer ? item.product_price : item.original_price %}
@@ -99,7 +98,7 @@
                                             {% else %}
                                                 <span class="item-price text-sm text-gray-500">{{ item.price|money }}</span>
                                             {% endif %}
-
+                                            
                                             {% if item.weight_label %}
                                             <p class="text-sm text-gray-500 "> {{ trans('pages.products.weight') }}
                                              <span>{{ item.weight_label }}</span>
