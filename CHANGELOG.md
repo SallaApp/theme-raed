@@ -9,6 +9,25 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🪐 [1.214.0](https://github.com/SallaApp/theme-raed/compare/1.212.0...1.214.0)(21-04-2025)
+### Enhancements
+- Update preview images to enhance content display and user experience.
+
+# 🎩 [1.212.0](https://github.com/SallaApp/theme-raed/compare/1.210.0...1.212.0)(16-04-2025)
+### Bug Fixes
+- Show custom fields in a user profile
+
+# 🧶[1.210.0](https://github.com/SallaApp/theme-raed/compare/1.208.0...1.210.0)(15-04-2025)
+
+### Enhancements
+- Support custom testimonials component
+
+# ⛓️‍💥 [1.218.0](https://github.com/SallaApp/theme-raed/compare/1.208.0...1.218.0)(05-05-2025)
+### Enhancement
+- Support a new option to select bg-size in square-photos section.
+
+
+
 # 🎩 [1.208.0](https://github.com/SallaApp/theme-raed/compare/1.190.0...1.208.0)(12-03-2025)
   ### Bug Fixes
   - Tax amount issue in cart
@@ -30,10 +49,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🪐 [1.185.0](https://github.com/SallaApp/theme-raed/compare/1.184.0...1.185.0)(09-10-2024)
 ### Enhancement
-- Remove the `advertisement.twig` file, and render its content automatically
-#### Developers Actions:
-- Leverage New Feature<br>
-Remove the `advertisement.twig` file so the [`salla-advertisement`](https://docs.salla.dev/doc-478502/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component renders automatically, and ensure you test the styles.
+- Update Preview Images
 
 # 🌪️ [1.184.0](https://github.com/SallaApp/theme-raed/compare/1.183.0...1.184.0)(25-09-2024)
 ### Feature
