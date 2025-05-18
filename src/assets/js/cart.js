@@ -132,6 +132,7 @@ class Cart extends BasePage {
             freeRibbon = cartItem.querySelector('.free-ribbon'),
             offerIconElement = cartItem.querySelector('.offer-icon'),
             hasSpecialPrice = item.offer || item.special_price > 0,
+            hasSalePrice = item.is_on_sale || !hasSpecialPrice,
             newOffersActive = item.detailed_offers?.length > 0 ;
         let item_total = item.detailed_offers?.length > 0 ? item.total_special_price : item.total;
         let total = salla.money(item_total);
@@ -141,14 +142,15 @@ class Cart extends BasePage {
         }
 
         app.toggleElementClassIf([offerElement, oldOffers], 'offer-applied', 'hidden', () => hasSpecialPrice && !newOffersActive)
-            .toggleElementClassIf([offerIconElement, regularPriceElement], 'offer-applied', 'hidden', () => hasSpecialPrice)
+            .toggleElementClassIf([regularPriceElement], 'offer-applied', 'hidden', () => hasSalePrice || hasSpecialPrice)
+            .toggleElementClassIf([offerIconElement], 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice)
             .toggleElementClassIf(freeRibbon, 'active', 'hidden', () => item.price == 0);
 
         priceElement.innerHTML = salla.money(item.price);
 
         if (item.is_on_sale) {
-            regularPriceElement.innerText = salla.money(item.original_price);
+            regularPriceElement.innerHTML = salla.money(item.original_price);
         }
 
         if (!hasSpecialPrice){return;}
