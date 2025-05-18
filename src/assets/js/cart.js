@@ -146,13 +146,14 @@ class Cart extends BasePage {
             .toggleElementClassIf(freeRibbon, 'active', 'hidden', () => item.price == 0);
 
         priceElement.innerHTML = salla.money(item.price);
-        if (!hasSpecialPrice){return;}
-        if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
-        regularPriceElement.innerHTML = salla.money(item.product_price);
 
         if (item.is_on_sale) {
             regularPriceElement.innerText = salla.money(item.original_price);
         }
+
+        if (!hasSpecialPrice){return;}
+        if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
+        regularPriceElement.innerHTML = salla.money(item.product_price);
     }
     //=================== Coupon Method ========================//
     initiateCoupon() {
