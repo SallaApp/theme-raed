@@ -5,6 +5,13 @@ window.fslightbox = Fslightbox;
 import { zoom } from './partials/image-zoom';
 
 class Product extends BasePage {
+  constructor() {
+    super();
+    // Store original slides
+    this.originalMainSlides = [];
+    this.originalThumbSlides = [];
+  }
+
   onReady() {
     app.watchElements({
       totalPrice: '.total-price',
@@ -22,43 +29,6 @@ class Product extends BasePage {
       window.addEventListener('resize', () => this.initImagesZooming());
     }
   }
-
-  // grouping_slider_images(){
-  //   salla.event.on("product-options::change", async (event) => {
-  //     let option = event.event.target,
-  //         type = event.option.type,
-  //         optionText  = event.detail ? event.detail.name : '',
-  //         productId = option.id.match(/option_(\d+)-/)[1],
-  //         slider = document.getElementById(`details-slider-${productId}`),
-  //         slides = await slider.getSlides();
-
-  //       if(type == 'thumbnail') {
-  //         slides.length && this.filterSlides('main', slider, slides, optionText)
-
-  //         setTimeout(async ()=> {
-  //           let thumbsSlider = await slider.thumbsSliderInstance(),
-  //               thumbsSlides = await slider.getThumbsSlides();
-
-  //             thumbsSlides.length && this.filterSlides('thumbs', thumbsSlider, thumbsSlides, optionText);
-  //         }, 1000)
-  //       }
-  //   }) 
-  // }
-
-  // // Function to filter slides by data-caption
-  // async filterSlides(type, slider, slides, value) {
-  //   slides.forEach(slide => {
-  //     const caption = slide.getAttribute('data-caption');
-  //     if (caption == value) {
-  //       slide.style.display = 'block'; // Show the slide
-  //     } else {
-  //       slide.style.display = 'none'; // Hide the slide
-  //     }
-  //   });
-
-  //   type == 'main' ? slider?.update() : slider.thumbsSliderUpdate();
-  // }
-
 
   grouping_slider_images() {
     if (!this.sliderGroupedEventInitialized) {
@@ -81,6 +51,14 @@ class Product extends BasePage {
             const thumbsSlider = await slider.thumbsSliderInstance();
             const thumbsSlides = await slider.getThumbsSlides();
 
+            // Store original slides if not already stored
+            if (this.originalMainSlides.length === 0) {
+              this.originalMainSlides = Array.from(slides);
+            }
+            if (this.originalThumbSlides.length === 0) {
+              this.originalThumbSlides = Array.from(thumbsSlides);
+            }
+
             if (slides.length) {
               this.filterSlides('main', slider, thumbsSlider, slides, optionText);
             }
@@ -101,31 +79,39 @@ class Product extends BasePage {
 
   // Function to filter slides by data-caption
   async filterSlides(type, slider, thumbsSlider, slides, value) {
-    // Create a mapping of visible slides
-    const visibleSlides = Array.from(slides).filter(slide => slide.getAttribute('data-caption') === value);
-
+    // Get the parent container of the slider
+    const sliderContainer = document.querySelector('.details-slider .s-slider-container .s-slider-swiper-wrapper');
+    const thumbsContainer = document.querySelector('.s-slider-thumbs-container .s-slider-swiper-wrapper');
+    
+    // Use stored original slides
+    const originalSlides = type === 'main' ? this.originalMainSlides : this.originalThumbSlides;
+    
     // Filter slides based on the `data-caption` attribute
-    slides.forEach((slide) => {
-      const shouldShow = slide.getAttribute('data-caption') === value;
-      slide.style.display = shouldShow ? 'block' : 'none';
-      slide.classList.toggle('swiper-slide-hidden', !shouldShow);
+    const filteredSlides = originalSlides.filter(slide => slide.getAttribute('data-caption') === value);
+    
+    // Remove all slides from the container
+    Array.from(slides).forEach(slide => slide.remove());
+    
+    // Add only the filtered slides back
+    filteredSlides.forEach(slide => {
+      if (type === 'main') {
+        sliderContainer.appendChild(slide);
+      } else if (thumbsContainer) {
+        thumbsContainer.appendChild(slide);
+      }
     });
 
-    // Update Swiper layout after slide visibility changes
-    // Find first visible slide index
-    const firstVisibleIndex = Array.from(slides).findIndex(slide => slide.style.display !== 'none');
-
-
+    // Reinitialize the slider
     if (type === 'main') {
-      slider.update(); // caused issue in thumbs slider
-      // setTimeout(() => slider.slideTo(0));
-    } else {
-      thumbsSlider.update();
-
+      // Reinitialize the slider
       setTimeout(() => {
-        console.log("🚀 ~ Product ~ filterSlides ~ firstVisibleIndex:", firstVisibleIndex)
-        thumbsSlider.slideTo(firstVisibleIndex)
-      }, 1000);
+        slider.update();
+      }, 100);
+    } else if (thumbsContainer) {
+      // Reinitialize the thumbs slider
+      setTimeout(() => {
+        thumbsSlider.update();
+      }, 100);
     }
   }
 
@@ -135,9 +121,6 @@ class Product extends BasePage {
       swiper.slideTo(0); // Reset to the current active slide
     });
   }
-
-
-  // thumbsSlider.on('slideChange', (swiper) => {});
 
 
   initProductOptionValidations() {
