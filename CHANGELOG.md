@@ -9,6 +9,15 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# ✨[1.222.0](https://github.com/SallaApp/theme-raed/compare/1.220.0...1.222.0)(18-05-2025)
+### Enhancements
+- Enhanced slider note in options
+- Enhanced preview images for inside blocks.
+
+# ✨[1.220.0](https://github.com/SallaApp/theme-raed/compare/1.214.0...1.220.0)(13-05-2025)
+### Enhancements
+- Update default content for homepage elements.
+
 # 🪐 [1.214.0](https://github.com/SallaApp/theme-raed/compare/1.212.0...1.214.0)(21-04-2025)
 ### Enhancements
 - Update preview images to enhance content display and user experience.
