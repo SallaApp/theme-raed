@@ -77,10 +77,10 @@ class Cart extends BasePage {
             return window.location.reload();
         }
         // toggle physical gifting depned on giftable flag
-        app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData.gift.enabled);
+        app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData?.gift?.enabled);
         // Use toggleAttribute to handle the `physical-products` attribute
-        app.sallaGifting?.toggleAttribute('physical-products', cartData.gift.type === 'physical');
-        app.sallaGifting?.toggleAttribute('digital-products', cartData.gift.type === 'digital');
+        app.sallaGifting?.toggleAttribute('physical-products', cartData?.gift?.type === 'physical');
+        app.sallaGifting?.toggleAttribute('digital-products', cartData?.gift?.type === 'digital');
 
         // update the dom for cart options
         this.updateCartOptions(cartData?.options);
