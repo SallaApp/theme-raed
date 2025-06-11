@@ -18,7 +18,6 @@ class App extends AppHelpers {
       this.initiateStickyMenu();
     }
     this.initAddToCart();
-    this.initiateAdAlert();
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
@@ -199,35 +198,6 @@ isElementLoaded(selector){
     let height = this.element('#mainnav .inner').clientHeight,
       header = this.element('#mainnav');
     header.style.height = height + 'px';
-  }
-
-  /**
-   * Because salla caches the response, it's important to keep the alert disabled if the visitor closed it.
-   * by store the status of the ad in local storage `salla.storage.set(...)`
-   */
-  initiateAdAlert() {
-    let ad = this.element(".salla-advertisement");
-
-    if (!ad) {
-      return;
-    }
-
-    if (!salla.storage.get('statusAd-' + ad.dataset.id)) {
-      ad.classList.remove('hidden');
-    }
-
-    this.onClick('.ad-close', function (event) {
-      event.preventDefault();
-      salla.storage.set('statusAd-' + ad.dataset.id, 'dismissed');
-
-      anime({
-        targets: '.salla-advertisement',
-        opacity: [1, 0],
-        duration: 300,
-        height: [ad.clientHeight, 0],
-        easing: 'easeInOutQuad',
-      });
-    });
   }
 
   initiateDropdowns() {
