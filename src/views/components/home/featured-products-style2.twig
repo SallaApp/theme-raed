@@ -39,12 +39,14 @@
                     <salla-products-slider 
                       slider-id="section-{{ section.id }}-slider" 
                       source="{{ section.products.source }}"
+                      limit="{{ section.products.limit }}"
                       source-value="{{ section.products.source_value|json_encode }}"
                       >
                     </salla-products-slider>
                 {% else %}
                     <salla-products-list  
                       source="{{ section.products.source }}"
+                      limit="{{ section.products.limit }}"
                       source-value="{{ section.products.source_value|json_encode }}"
                       {{is_vertical ? '' : 'horizontal-cards'}}
                       >
