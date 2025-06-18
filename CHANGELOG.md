@@ -9,12 +9,16 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-# ✨[1.222.0](https://github.com/SallaApp/theme-raed/compare/1.220.0...1.222.0)(18-05-2025)
+# 🪁 [1.223.0](https://github.com/SallaApp/theme-raed/compare/1.222.0...1.223.0)(25-05-2025)
+### Bug Fixes
+- Add image alternative information for thumbnails in the product details' slider.
+
+# 🥊 [1.222.0](https://github.com/SallaApp/theme-raed/compare/1.220.0...1.222.0)(18-05-2025)
 ### Enhancements
-- Enhanced slider note in options
+- Enhanced slider note in options.
 - Enhanced preview images for inside blocks.
 
-# ✨[1.220.0](https://github.com/SallaApp/theme-raed/compare/1.214.0...1.220.0)(13-05-2025)
+# ✨ [1.220.0](https://github.com/SallaApp/theme-raed/compare/1.214.0...1.220.0)(13-05-2025)
 ### Enhancements
 - Update default content for homepage elements.
 
@@ -24,12 +28,12 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🎩 [1.212.0](https://github.com/SallaApp/theme-raed/compare/1.210.0...1.212.0)(16-04-2025)
 ### Bug Fixes
-- Show custom fields in a user profile
+- Show custom fields in a user profile.
 
 # 🧶[1.210.0](https://github.com/SallaApp/theme-raed/compare/1.208.0...1.210.0)(15-04-2025)
 
 ### Enhancements
-- Support custom testimonials component
+- Support custom testimonials component.
 
 # ⛓️‍💥 [1.218.0](https://github.com/SallaApp/theme-raed/compare/1.208.0...1.218.0)(05-05-2025)
 ### Enhancement
@@ -39,22 +43,22 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🎩 [1.208.0](https://github.com/SallaApp/theme-raed/compare/1.190.0...1.208.0)(12-03-2025)
   ### Bug Fixes
-  - Tax amount issue in cart
+  - Tax amount issue in cart.
 
 # 🏅 [1.190.0](https://github.com/SallaApp/theme-raed/compare/1.189.0...1.190.0)(23-02-2025)
 ### Feature
-- Support the new SAR currency symbol
+- Support the new SAR currency symbol.
 
 # ⛵ [1.189.0](https://github.com/SallaApp/theme-raed/compare/1.187.0...1.189.0)(29-12-2024)
 ### Feature
 
-- Support the `is_default` property for homepage components as well as default data for some components
-- Add preview images for each component in Theme Raed using the image key in the `twilight.json` file
+- Support the `is_default` property for homepage components as well as default data for some components.
+- Add preview images for each component in Theme Raed using the image key in the `twilight.json` file.
 
 # 🧶 [1.187.0](https://github.com/SallaApp/theme-raed/compare/1.185.0...1.187.0)(17-12-2024)
 ### Enhancement
 
-- Upgrade the `twilight-components` to fix the style of product's options
+- Upgrade the `twilight-components` to fix the style of product's options.
 
 # 🪐 [1.185.0](https://github.com/SallaApp/theme-raed/compare/1.184.0...1.185.0)(09-10-2024)
 ### Enhancement
@@ -69,123 +73,123 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 # 🌂 [1.183.0](https://github.com/SallaApp/theme-raed/compare/1.182.0...1.183.0)(25-09-2024)
 ### Feature
-- Support comments and like in the Merchant blog
+- Support comments and like in the Merchant blog.
 
 # 🎓 [1.182.0](https://github.com/SallaApp/theme-raed/compare/1.181.0...1.182.0)(24-09-2024)
 ### Bug Fixes
-- Display rating in the `product-card`
+- Display rating in the `product-card`.
 
 # 👔 [1.181.0](https://github.com/SallaApp/theme-raed/compare/1.180.0...1.181.0)(24-09-2024)
 ### Bug Fixes
-- Display rating in the `product-card`
+- Display rating in the `product-card`.
 
 # 💈 [1.180.0](https://github.com/SallaApp/theme-raed/compare/1.179.0...1.180.0)(31-08-2024)
 ### Enhancement
-- Enhancements in the Menus
+- Enhancements in the Menus.
 
 # 🪡 [1.179.0](https://github.com/SallaApp/theme-raed/compare/1.178.0...1.179.0)(30-08-2024)
 ### Bug Fixes
-- Avoid storing menu items in the browser
+- Avoid storing menu items in the browser.
 
 # 👣 [1.178.0](https://github.com/SallaApp/theme-raed/compare/1.177.0...1.178.0)(29-08-2024)
 ### Bug Fixes
-- Fix align of text in the My Account page
+- Fix align of text in the My Account page.
 
 
 # 🃏 [1.177.0](https://github.com/SallaApp/theme-raed/compare/1.176.0...1.177.0)(19-08-2024)
 ### Bug Fixes
--  Fix memory leak error in the `product-card`
+-  Fix memory leak error in the `product-card`.
 
 # 🔅 [1.176.0](https://github.com/SallaApp/theme-raed/compare/1.175.0...1.176.0)(12-08-2024)
 ### Bug Fixes
-- Fix the error message style when a user uploads an avatar with size more than 2MB
+- Fix the error message style when a user uploads an avatar with size more than **2MB**.
 
 # 🧮 [1.175.0](https://github.com/SallaApp/theme-raed/compare/1.174.0...1.175.0)(08-08-2024)
 ### Enhancement
-- Enhance the reviews system 
+- Enhance the reviews system.
 
 # 📊 [1.174.0](https://github.com/SallaApp/theme-raed/compare/1.173.0...1.174.0)(06-08-2024)
 ### Bug Fixes
-- Fix unavailable options
+- Fix unavailable options.
 
 # 🪞 [1.173.0](https://github.com/SallaApp/theme-raed/compare/1.172.0...1.173.0)(05-08-2024)
 ### Bug Fixes
-- Update Product Price with unavailable Option
+- Update Product Price with unavailable option.
 
 # 🔮 [1.172.0](https://github.com/SallaApp/theme-raed/compare/1.171.0...1.172.0)(01-08-2024)
 ### Bug Fixes
-- Upgrade to the `twilight-components`
+- Upgrade to the `twilight-components`.
 
 # 🖼️ [1.171.0](https://github.com/SallaApp/theme-raed/compare/1.170.0...1.171.0)(01-08-2024)
 ### Bug Fixes
-- Fix the product's image in the product's details page
+- Fix the product's image in the product's details page.
 
 # 🔦 [1.170.0](https://github.com/SallaApp/theme-raed/compare/1.169.0...1.170.0)(25-07-2024)
 ### Bug Fixes
-- Upgrade twilight-components package
+- Upgrade twilight-components package.
 
 
 # 🖲️ [1.169.0](https://github.com/SallaApp/theme-raed/compare/1.168.0...1.169.0)(23-07-2024)
 ### Enhancements 
-- Upgrade Twilight & Twilight components
+- Upgrade Twilight & Twilight components.
 
 #💈[1.168.0](https://github.com/SallaApp/theme-raed/compare/1.167.0...1.168.0)(17-07-2024)
 ### Enhancements 
-- Handle protected digital files
+- Handle protected digital files.
 
 # ⛓️‍💥 [1.167.0](https://github.com/SallaApp/theme-raed/compare/1.165.0...1.167.0)(10-07-2024)
 ### Features
-- Support Digital Product Option
+- Support digital product option.
 
 # 💈 [1.165.0](https://github.com/SallaApp/theme-raed/compare/1.164.0...1.165.0)(02-07-2024)
 ### Enhancements
-- Support order option book appointment field in the `salla-booking-field` JS Web Component
+- Support order option book appointment field in the `salla-booking-field` JS Web Component.
 
 # 🖼️ [1.164.0](https://github.com/SallaApp/theme-raed/compare/1.163.0...1.164.0)(29-06-2024)
 ### Bug Fixes
-- Update price based on product's options
+- Update price based on product's options.
   
 # 🛎️ [1.163.0](https://github.com/SallaApp/theme-raed/compare/1.162.0...1.163.0)(27-06-2024)
 ### Bug Fixes
-- Fix the product options validation
+- Fix the product options validation.
 
 # 🎁 [1.162.0](https://github.com/SallaApp/theme-raed/compare/1.161.0...1.162.0)(12-06-2024)
 ### Bug Fixes
-- Fix console errors due to hover action on the `menu-item` variable
+- Fix console errors due to hover action on the `menu-item` variable.
 
 # 🎈 [1.161.0](https://github.com/SallaApp/theme-raed/compare/1.160.0...1.161.0)(12-06-2024)
 ### Bug Fixes
-- Fix Style of the product's description
+- Fix Style of the product's description.
 
 # 📎 [1.160.0](https://github.com/SallaApp/theme-raed/compare/1.160.0...1.161.0)(20-06-2024)
 ### Enhancements
-- Enhancements for the Testimonials Page
+- Enhancements for the Testimonials Page.
 
 # 🧲 [1.158.0](https://github.com/SallaApp/theme-raed/compare/1.154.0...1.158.0)(29-05-2024)
 ### Bug Fixes
- - Eager Loading on the WishlistCard
+ - Eager Loading on the `WishlistCard`.
 
 # 🏷️ [1.154.0](https://github.com/SallaApp/theme-raed/compare/1.150.0...1.154.0)(23-05-2024)
 ### Enhancements
  - Support the [`salla-comments`](https://docs.salla.dev/doc-482455/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component in the product single page.
- - Cart options fixes and enhancements.
  - Use the [`salla-products-list`](https://docs.salla.dev/doc-422719/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component on the Wishlist page using custom components.
+ - Cart options fixes and enhancements.
  
 ### Features
- - Support new component, the [`salla-conditional-offer`](https://docs.salla.dev/doc-537931/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component
+ - Support new component, the [`salla-conditional-offer`](https://docs.salla.dev/doc-537931/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web component.
    
 # 📰 [1.149.0](https://github.com/SallaApp/theme-raed/compare/1.149.0...1.150.0)(21-05-2024)
 ### Enhancement
-- Custom Component enabled for the Product Card on the Wishlist page
+- Custom Component enabled for the Product Card on the Wishlist page.
 ### Bug Fixes
-- Typographical error found on the Wishlist page
+- Typographical error found on the Wishlist page.
 
 # 💎 [1.148.0](https://github.com/SallaApp/theme-raed/compare/1.148.0...1.150.0)(21-05-2024)
 ### Features
-- Support the [`salla-comments`](https://docs.salla.dev/doc-482455/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web Component
-- Support cart options total on both cart and order pages
+- Support the [`salla-comments`](https://docs.salla.dev/doc-482455/?nav=01HNFTE06J4QC24T0D5BPRYKMD) JS Web Component.
+- Support cart options total on both cart and order pages.
 ### Bug Fixes
-- Fix the cart options price issue on the order page
+- Fix the cart options price issue on the order page.
 
 # 🏹 [1.147.0](https://github.com/SallaApp/theme-raed/compare/1.147.0...1.150.0)(16-05-2024)
 ### Enhancements
