@@ -406,7 +406,9 @@
     </div>
 
     {# Comments Area #}
-    <salla-comments item-id="{{product.id}}" type="product"></salla-comments>
+    {% if store.settings.rating.show_on_product %}
+        <salla-comments item-id="{{product.id}}" type="product"></salla-comments>
+    {% endif %}
     
     {# Similar Products Area #}
     <div class="container">
