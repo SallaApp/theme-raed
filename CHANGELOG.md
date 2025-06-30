@@ -9,6 +9,18 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 📦 [1.227.0](https://github.com/SallaApp/theme-raed/compare/1.226.0...1.227.0)(23-06-2025)
+### Enhancements
+- Enhance default content for the `customize-testimonials` block
+
+# 🌅 [1.226.0](https://github.com/SallaApp/theme-raed/compare/1.224.0...1.226.0)(23-06-2025)
+### Bug Fixes
+- Support the product sale within price in cart
+
+# ⛲️ [1.224.0](https://github.com/SallaApp/theme-raed/compare/1.223.0...1.224.0)(17-06-2025)
+### Enhancements
+- Upgrade outdated packages
+
 # 🪁 [1.223.0](https://github.com/SallaApp/theme-raed/compare/1.222.0...1.223.0)(25-05-2025)
 ### Bug Fixes
 - Add image alternative information for thumbnails in the product details' slider.
