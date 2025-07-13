@@ -66,6 +66,8 @@ class Cart extends BasePage {
       })
     }
     
+    lastItemIds = [];
+
     /**
      * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
      */
@@ -76,13 +78,13 @@ class Cart extends BasePage {
             document.querySelector('.cart-options')?.remove();
             return window.location.reload();
         }
-        // Detect if items changed (by count or ids)
-        const mainContent = document.querySelector('.main-content');
-        const currentIds = Array.from(mainContent.querySelectorAll('form[id^="item-"]')).map(f => parseInt(f.id.replace('item-', '')));
+
         const newIds = (cartData.items || []).map(i => i.id);
-        const itemsChanged = currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i]);
+        const itemsChanged = JSON.stringify(this.lastItemIds) !== JSON.stringify(newIds);
+        this.lastItemIds = newIds;
+
         if (itemsChanged) {
-            return window.location.reload(); // Reload page if items changed
+            return window.location.reload();
         } else {
             // update each item data
             cartData.items?.forEach(item => this.updateItemInfo(item));
