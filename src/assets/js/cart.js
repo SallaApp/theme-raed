@@ -76,6 +76,17 @@ class Cart extends BasePage {
             document.querySelector('.cart-options')?.remove();
             return window.location.reload();
         }
+        // Detect if items changed (by count or ids)
+        const mainContent = document.querySelector('.main-content');
+        const currentIds = Array.from(mainContent.querySelectorAll('form[id^="item-"]')).map(f => parseInt(f.id.replace('item-', '')));
+        const newIds = (cartData.items || []).map(i => i.id);
+        const itemsChanged = currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i]);
+        if (itemsChanged) {
+            return window.location.reload(); // Reload page if items changed
+        } else {
+            // update each item data
+            cartData.items?.forEach(item => this.updateItemInfo(item));
+        }
         // toggle physical gifting depned on giftable flag
         app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData?.gift?.enabled);
         // Use toggleAttribute to handle the `physical-products` attribute
@@ -84,8 +95,6 @@ class Cart extends BasePage {
 
         // update the dom for cart options
         this.updateCartOptions(cartData?.options);
-        // update each item data
-        cartData.items?.forEach(item => this.updateItemInfo(item));
 
         app.subTotal.innerHTML = salla.money(cartData.sub_total);
         if(app.taxAmount) 
