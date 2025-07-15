@@ -66,16 +66,33 @@ class Cart extends BasePage {
       })
     }
     
-    /**
-     * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
-     */
-    updateCartPageInfo(cartData) {
-        //if item deleted & there is no more items, just reload the page
-        if (!cartData.count) {
-            // clear cart options from the dom before page reload
-            document.querySelector('.cart-options')?.remove();
-            return window.location.reload();
-        }
+    lastItemIds = [];
+    lastItemsCount = null;
+
+/**
+ * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
+ */
+updateCartPageInfo(cartData) {
+    //if item deleted & there is no more items, just reload the page
+    if (!cartData.count) {
+        document.querySelector('.cart-options')?.remove();
+        return window.location.reload();
+    }
+
+    // On first load, get items count from DOM
+    if (this.lastItemsCount === null) {
+        this.lastItemsCount = document.querySelectorAll('form[id^="item-"]').length;
+    }
+
+    const itemsChanged = this.lastItemsCount !== cartData.items.length;
+    this.lastItemsCount = cartData.items.length;
+    console.log('Items changed:', itemsChanged);
+    if (itemsChanged) {
+        return window.location.reload();
+    }
+
+    // update each item data
+    cartData.items?.forEach(item => this.updateItemInfo(item));
         // toggle physical gifting depned on giftable flag
         app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData?.gift?.enabled);
         // Use toggleAttribute to handle the `physical-products` attribute
@@ -84,8 +101,6 @@ class Cart extends BasePage {
 
         // update the dom for cart options
         this.updateCartOptions(cartData?.options);
-        // update each item data
-        cartData.items?.forEach(item => this.updateItemInfo(item));
 
         app.subTotal.innerHTML = salla.money(cartData.sub_total);
         if(app.taxAmount) 
