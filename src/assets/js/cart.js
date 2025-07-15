@@ -67,28 +67,32 @@ class Cart extends BasePage {
     }
     
     lastItemIds = [];
+    lastItemsCount = null;
 
-    /**
-     * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
-     */
-    updateCartPageInfo(cartData) {
-        //if item deleted & there is no more items, just reload the page
-        if (!cartData.count) {
-            // clear cart options from the dom before page reload
-            document.querySelector('.cart-options')?.remove();
-            return window.location.reload();
-        }
+/**
+ * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
+ */
+updateCartPageInfo(cartData) {
+    //if item deleted & there is no more items, just reload the page
+    if (!cartData.count) {
+        document.querySelector('.cart-options')?.remove();
+        return window.location.reload();
+    }
 
-        const newIds = (cartData.items || []).map(i => i.id);
-        const itemsChanged = JSON.stringify(this.lastItemIds) !== JSON.stringify(newIds);
-        this.lastItemIds = newIds;
+    // On first load, get items count from DOM
+    if (this.lastItemsCount === null) {
+        this.lastItemsCount = document.querySelectorAll('form[id^="item-"]').length;
+    }
 
-        if (itemsChanged) {
-            return window.location.reload();
-        } else {
-            // update each item data
-            cartData.items?.forEach(item => this.updateItemInfo(item));
-        }
+    const itemsChanged = this.lastItemsCount !== cartData.items.length;
+    this.lastItemsCount = cartData.items.length;
+    console.log('Items changed:', itemsChanged);
+    if (itemsChanged) {
+        return window.location.reload();
+    }
+
+    // update each item data
+    cartData.items?.forEach(item => this.updateItemInfo(item));
         // toggle physical gifting depned on giftable flag
         app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData?.gift?.enabled);
         // Use toggleAttribute to handle the `physical-products` attribute
