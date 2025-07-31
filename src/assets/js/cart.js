@@ -60,7 +60,7 @@ class Cart extends BasePage {
       const arrayTwoId = options.map((item) => (item.id));
 
       document.querySelectorAll('.cart-options form')?.forEach((form) => {
-        if (!arrayTwoId.includes(parseInt(form.id.value))) {
+        if (!arrayTwoId.includes(form.id.value)) {
           form.remove();
         }
       })
