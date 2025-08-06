@@ -81,11 +81,11 @@ updateCartPageInfo(cartData) {
 
     // On first load, get items count from DOM
     if (this.lastItemsCount === null) {
-        this.lastItemsCount = document.querySelectorAll('form[id^="item-"]').length;
+        this.lastItemsCount = cartData.total_quantity;
     }
 
-    const itemsChanged = this.lastItemsCount !== cartData.items.length;
-    this.lastItemsCount = cartData.items.length;
+    const itemsChanged = this.lastItemsCount !== cartData.total_quantity;
+    this.lastItemsCount = cartData.total_quantity;
     console.log('Items changed:', itemsChanged);
     if (itemsChanged) {
         return window.location.reload();
