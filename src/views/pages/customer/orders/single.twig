@@ -17,6 +17,7 @@
 | order.cancel_url                 | string                            |                                                                                          |
 | order.payment_url                | string                            |                                                                                          |
 | order.is_pending_payment         | bool                              |                                                                                          |
+| order.is_waiting_payment         | bool                              |                                                                                          |
 | order.pending_payment_ends_in    | int                               | How much many seconds untile pending payment ends, zero if it's already expired          |
 | order.shipping                   | ?object                           |                                                                                          |
 | order.shipping.id                | integer                           |                                                                                          |
@@ -569,8 +570,8 @@
             <div class="bg-white rounded-md p-5 divide-y divide-border-color space-y-4">
                 {% if order.can_reorder or order.is_pending_payment %}
                     <div class="{{order.is_pending_payment ? 'flex-center': 'center-between'}}">
-                        {% if order.is_pending_payment %}
-                            {% if order.pending_payment_ends_in == 0 %}
+                        {% if order.is_pending_payment  %}
+                            {% if order.pending_payment_ends_in == 0 or !order.is_waiting_payment %}
                                 <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
                             {% else %}
                                 <salla-button width="wide" href="{{ order.payment_url }}">
