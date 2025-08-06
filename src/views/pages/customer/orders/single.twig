@@ -571,7 +571,7 @@
                 {% if order.can_reorder or order.is_pending_payment %}
                     <div class="{{order.is_pending_payment ? 'flex-center': 'center-between'}}">
                         {% if order.is_pending_payment  %}
-                            {% if order.pending_payment_ends_in == 0 or !order.is_waiting_payment %}
+                            {% if order.pending_payment_ends_in == 0 or not order.is_waiting_payment %}
                                 <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
                             {% else %}
                                 <salla-button width="wide" href="{{ order.payment_url }}">
