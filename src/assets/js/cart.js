@@ -29,13 +29,13 @@ class Cart extends BasePage {
 
     initSubmitCart() {
         let submitBtn = document.querySelector('#cart-submit');
-        let cartForms = document.querySelectorAll('form[id^="item-"]');
         
         if (!submitBtn) {
             return;
         }
         
         app.onClick(submitBtn, event => {
+            let cartForms = document.querySelectorAll('form[id^="item-"]');
             let isValid = true;
             cartForms.forEach(form => {
                 isValid = isValid && form.reportValidity();
@@ -93,7 +93,7 @@ class Cart extends BasePage {
         if (app.orderOptionsTotal) app.orderOptionsTotal.innerHTML = salla.money(cartData.options_total);
         
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.total_discount)
-            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost)
+            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost && !cartData.free_shipping_bar?.has_free_shipping)
             .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
 
         app.totalDiscount.querySelector('b').innerHTML = '- ' + salla.money(cartData.total_discount);
