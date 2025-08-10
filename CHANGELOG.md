@@ -9,6 +9,12 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+#  🫆 [1.229.0](https://github.com/SallaApp/theme-raed/compare/1.228.0...1.229.0) (03-08-2025)
+
+### Bug Fixes
+
+- Avoid Casting a Cart Item to an integer
+
 #  ⚙️ [1.228.0](https://github.com/SallaApp/theme-raed/compare/1.227.0...1.228.0) (30-07-2025)
 
 ### Enhancements & Required Updates
