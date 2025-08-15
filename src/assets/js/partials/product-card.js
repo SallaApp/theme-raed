@@ -154,6 +154,15 @@ class ProductCard extends HTMLElement {
     this.showQuantity = this.hasAttribute('showQuantity');
   }
 
+  escapeHTML(str = '') {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  }
+
   render(){
     this.classList.add('s-product-card-entry'); 
     this.setAttribute('id', this.product.id);
@@ -170,14 +179,15 @@ class ProductCard extends HTMLElement {
     this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
           <a href="${this.product?.url}">
-            <img class="s-product-card-image-${salla.url.is_placeholder(this.product?.image?.url)
-              ? 'contain'
-              : this.fitImageHeight
+           <img 
+              class="s-product-card-image-${salla.url.is_placeholder(this.product?.image?.url)
+                ? 'contain'
+                : this.fitImageHeight
                 ? this.fitImageHeight
                 : 'cover'} lazy"
-              src=${this.placeholder}
-              alt=${this.product?.image?.alt}
-              data-src=${this.product?.image?.url || this.product?.thumbnail}
+              src="${this.placeholder}"
+              alt="${this.escapeHTML(this.product?.image?.alt || '')}"
+              data-src="${this.product?.image?.url || this.product?.thumbnail || ''}"
             />
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
           </a>
