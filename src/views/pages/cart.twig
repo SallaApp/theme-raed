@@ -57,7 +57,7 @@
         <h1 class="sr-only">{{ trans('blocks.header.cart') }}</h1>
         <salla-conditional-offer></salla-conditional-offer>
         <div class="pt-5 flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
-            <div class="main-content flex-1 w-full">
+            <div class="main-content w-full lg:w-[calc(100%-384px)]">
                 {% hook 'cart:items.start' %}
 
                 {% for item in cart.items %}
@@ -139,7 +139,7 @@
                                 {% include 'pages.partials.product.options' with {product:item} %}
                             <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
                                 <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
-                                        onclick="salla.cart.deleteItem({{ item.id }}).then(() => document.querySelector('#item-{{ item.id }}').remove())">
+                                        onclick="salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())">
                                     <i class="sicon-cancel"></i>
                                 </salla-button>
                             </span>
