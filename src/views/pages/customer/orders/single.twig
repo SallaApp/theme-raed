@@ -251,6 +251,16 @@
                                   <span class="w-40 inline-block font-normal">{{ trans('pages.orders.total') }}</span>
                                   <b>{{ item.total|money }}</b>
                                 </div>
+
+								{% if item.product.has_preorder_campaign and item.availability_date %}
+									<div class="flex gap-2 text-sm py-2.5 text-blue-600">
+										<i class="sicon-info"></i>
+										<span>
+											{{ trans('pages.products.expected_to_be_available_on') }}:
+											<b>{{ item.availability_date | date('Y-m-d') }}</b>
+										</span>
+									</div>
+								{% endif %}
                             </div>
 
                             {% if item.product.type == 'booking' and item.product_reservations is not empty %}
