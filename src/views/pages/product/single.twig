@@ -368,8 +368,10 @@
                                     <b>{{ product.preorder.availability_date | date('Y-m-d') }}</b>
                                 </span>
                             </div>
-                            <p>{{ trans('pages.products.pre_order_ends_in') }}:</p>
-                            <salla-count-down date="{{ product.preorder.availability_date }}" boxed="true" labeled="true" size="md"/>
+                            <div class="flex gap-2 items-center flex-col lg:flex-row">
+                                <p class="text-sm ">{{ trans('pages.products.pre_order_ends_in') }}:</p>
+                                <salla-count-down date="{{ product.preorder.availability_date }}" boxed="true" labeled="true" class="flex-1 inline-counter"/>
+                            </div>
                         </section>
                     {% endif %}
 
