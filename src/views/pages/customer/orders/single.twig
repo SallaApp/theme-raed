@@ -121,7 +121,6 @@
                         {% endif %}
 
                         {% if (can_print_invoice) %}
-                            print: {{order.print_url()}}
                             <salla-button fill="outline" size="small"
                                         onclick="window.open('{{ order.print_url()}}', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, width=900, height=700');">
                                 <i class="sicon-printer2 v-align"></i>
@@ -579,18 +578,16 @@
                                     <span>{{ trans('pages.orders.finish_payment') }}</span>
                                 </salla-button>
                             {% endif %}
-                        {% else %}
+                        {% elseif user.type == 'user' %}
                             <div class="text-sm">
                                 <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
                                 <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
                             </div>
-                            {# hide reorder btn if not  the user not loged in #}
-                            {% if user.type == 'user' %}
-                                <salla-button shape="link" onclick="document.querySelector('#reorder-modal').open()">
-                                    <i class="sicon sicon-rotate rtl:ml-2 ltr:mr-2"></i>
-                                    <span>{{ trans('pages.orders.reorder') }}</span>
-                                </salla-button>
-                            {% endif %}
+                            <salla-button shape="link" onclick="document.querySelector('#reorder-modal').open()">
+                                <i class="sicon sicon-rotate rtl:ml-2 ltr:mr-2"></i>
+                                <span>{{ trans('pages.orders.reorder') }}</span>
+                            </salla-button>
+                           
                         {% endif %}
                     </div>
                 {% endif %}
@@ -610,7 +607,7 @@
             </div>
 
             {# Reorder Modal #}
-            {% if order.can_reorder %}
+            {% if user.type == 'user' and order.can_reorder %}
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}"
                              icon="sicon-rotate" id="reorder-modal" icon-style="success"
                              modal-title="{{ trans('pages.orders.reorder') }}">
