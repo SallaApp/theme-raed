@@ -357,21 +357,9 @@
                             <div class="out-of-stock min-h-7 leading-7 hidden text-base text-red-600 !opacity-50 font-bold">{{ trans('pages.products.out_of_stock')}}</div>
                         </div>
                     </section>
-
-
                     {% if product.has_preorder_campaign and product.preorder.availability_date %}
-                        <section class="my-5 p-5">
-                            <div class="flex gap-2 text-sm py-2.5 text-blue-600">
-                                <i class="sicon-info"></i>
-                                <span>
-                                    {{ trans('pages.products.expected_to_be_available_on') }}:
-                                    <b>{{ product.preorder.availability_date | date('Y-m-d') }}</b>
-                                </span>
-                            </div>
-                            <div class="flex gap-2 items-center flex-col lg:flex-row">
-                                <p class="text-sm ">{{ trans('pages.products.pre_order_ends_in') }}:</p>
-                                <salla-count-down date="{{ product.preorder.availability_date }}" boxed="true" labeled="true" class="flex-1 inline-counter"/>
-                            </div>
+                        <section class="mt-5 p-5">
+                            <salla-count-down pre-order-date="{{ product.preorder.availability_date }}" boxed="true" labeled="true"></salla-count-down>
                         </section>
                     {% endif %}
 
