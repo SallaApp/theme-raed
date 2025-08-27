@@ -390,9 +390,7 @@
                         {% endif %}
                         {# Add to cart #}
                         <salla-add-product-button
-                                {% if not product.has_preorder_campaign %}
-                                    quick-buy
-                                {% endif %}
+                                {{product.can_quick_buy ? 'quick-buy' : ''}}
                                 {{theme.settings.get('sticky_add_to_cart') ? ' support-sticky-bar' : ''}}
                                 {{product.is_require_shipping ? 'required-shipping' : ''}}
                                 amount="{{ product.base_currency_price }}"
