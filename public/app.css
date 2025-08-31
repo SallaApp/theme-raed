@@ -18152,25 +18152,25 @@ input[type=radio].sr-only:checked~div.s-social-share-list{border-color:var(--col
 }
 
 .s-tiered-offer-progress-bg {
-    position: absolute;
     top: 0.5rem;
-    left: 1rem;
-    right: 1rem;
     height: 1rem;
+    width: 100%;
     border-radius: 9999px;
+    background-color: rgba(0, 0, 0, 1);
+    background-color: rgba(0, 0, 0, var(--tw-bg-opacity, 1));
     --tw-bg-opacity: 1;
-    background-color: rgba(229, 231, 235, 1);
-    background-color: rgba(229, 231, 235, var(--tw-bg-opacity, 1));
+    background-color: rgb(229 231 235 / 1);
 }
 
-input[type=radio].sr-only div.s-tiered-offer-progress-bg{transition:all .3s}
-
-input[type=radio].sr-only:checked~div.s-tiered-offer-progress-bg{border-color:var(--color-main)}
+@supports (color: rgb(0 0 0 / 0)) and (top: var(--f)) {
+.s-tiered-offer-progress-bg {
+        background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+    }
+}
 
 .s-tiered-offer-progress-fill {
     position: absolute;
     top: 0.5rem;
-    left: 1rem;
     height: 1rem;
     border-radius: 9999px;
     --tw-bg-opacity: 1;
@@ -18193,7 +18193,7 @@ input[type=radio].sr-only:checked~div.s-tiered-offer-progress-fill{border-color:
 .s-tiered-offer-milestones {
     position: relative;
     display: flex;
-    width: 80%;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
 }
@@ -18201,15 +18201,15 @@ input[type=radio].sr-only:checked~div.s-tiered-offer-progress-fill{border-color:
 .s-tiered-offer-single-milestone-justify-end {
     position: relative;
     display: flex;
-    width: 80%;
-    align-items: center;
+    width: 100%;
+    align-items: flex-end;
     justify-content: flex-end;
 }
 
 .s-tiered-offer-milestone {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .s-tiered-offer-milestone-icon {
