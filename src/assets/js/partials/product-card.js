@@ -100,6 +100,10 @@ class ProductCard extends HTMLElement {
   }
 
   getAddButtonLabel() {
+    if(this.product.has_preorder_campaign) {
+        return salla.lang.get('pages.products.pre_order_now');
+    }
+
     if (this.product.status === 'sale' && this.product.type === 'booking') {
       return salla.lang.get('pages.cart.book_now'); 
     }
