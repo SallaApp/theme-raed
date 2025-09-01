@@ -57,10 +57,6 @@ class ProductCard extends HTMLElement {
   } 
 
   getProductBadge() {
-    if(this.product.has_preorder_campaign) {
-        return `<div class="s-product-card-promotion-title">${salla.lang.get('pages.products.pre_order_title')}</div>`
-    }
-
     if (this.product.promotion_title) {
       return `<div class="s-product-card-promotion-title">${this.product.promotion_title}</div>`
     }
