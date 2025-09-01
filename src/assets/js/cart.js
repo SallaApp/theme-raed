@@ -73,6 +73,9 @@ class Cart extends BasePage {
  * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
  */
 updateCartPageInfo(cartData) {
+    if (cartData.should_refresh) {
+      return window.location.reload();
+    }
     //if item deleted & there is no more items, just reload the page
     if (!cartData.count) {
         document.querySelector('.cart-options')?.remove();
