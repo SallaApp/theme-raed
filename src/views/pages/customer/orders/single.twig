@@ -253,6 +253,16 @@
                                 </div>
                             </div>
 
+                            {% if item.availability_date %}
+                            <div class="flex gap-2 text-sm py-2.5 text-blue-500">
+                                <i class="sicon-info"></i>
+                                <span>
+                                    {{ trans('pages.products.expected_to_be') }}:
+                                    <b>{{ item.availability_date | date('Y-m-d') }}</b>
+                                </span>
+                            </div>
+                            {% endif %}
+
                             {% if item.product.type == 'booking' and item.product_reservations is not empty %}
                               {% if item.booking_location != null %}
                                   <ul class="font-medium text-xs text-gray-600">
