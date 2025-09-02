@@ -66,9 +66,6 @@ class Cart extends BasePage {
       })
     }
     
-    lastItemIds = [];
-    lastItemsCount = null;
-
 /**
  * @param {import("@salla.sa/twilight/types/api/cart").CartSummary} cartData
  */
@@ -79,18 +76,6 @@ updateCartPageInfo(cartData) {
     //if item deleted & there is no more items, just reload the page
     if (!cartData.count) {
         document.querySelector('.cart-options')?.remove();
-        return window.location.reload();
-    }
-
-    // On first load, get items count from DOM
-    if (this.lastItemsCount === null) {
-        this.lastItemsCount = cartData.total_quantity;
-    }
-
-    const itemsChanged = this.lastItemsCount !== cartData.total_quantity;
-    this.lastItemsCount = cartData.total_quantity;
-    console.log('Items changed:', itemsChanged);
-    if (itemsChanged) {
         return window.location.reload();
     }
 
