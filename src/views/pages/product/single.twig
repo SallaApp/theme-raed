@@ -357,6 +357,13 @@
                             <div class="out-of-stock min-h-7 leading-7 hidden text-base text-red-600 !opacity-50 font-bold">{{ trans('pages.products.out_of_stock')}}</div>
                         </div>
                     </section>
+                    {# Pre-order Campaign #}
+                    {% if product.has_preorder_campaign %}
+                        <section class="mt-5 p-5">
+                            <salla-count-down pre-order='{{ product.preorder|json_encode}}' boxed labeled></salla-count-down>
+                        </section>
+                    {% endif %}
+
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
                         {% if product.is_hidden_quantity or product.type == 'booking' %}
@@ -372,7 +379,7 @@
                         {% endif %}
                         {# Add to cart #}
                         <salla-add-product-button
-                                quick-buy
+                                {{product.can_quick_buy ? 'quick-buy' : ''}}
                                 {{theme.settings.get('sticky_add_to_cart') ? ' support-sticky-bar' : ''}}
                                 {{product.is_require_shipping ? 'required-shipping' : ''}}
                                 amount="{{ product.base_currency_price }}"
@@ -390,6 +397,7 @@
                                     subscribed-options="{{ product.notify_availability.subscribed_options|json_encode }}"
                                     {{ product.notify_availability.options ? 'notify-options-availability' : '' }}
                                 {% endif %}>
+
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
                     </section>
