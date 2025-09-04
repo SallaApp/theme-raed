@@ -306,8 +306,6 @@ class ProductCard extends HTMLElement {
         });
       })
 
-      document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
-
       if (this.product?.quantity && this.isSpecial) {
         this.initCircleBar();
       }
