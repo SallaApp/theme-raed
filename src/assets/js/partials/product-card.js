@@ -182,7 +182,7 @@ class ProductCard extends HTMLElement {
     this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(Number(this.product.id));
     this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
-          <a href="${this.product?.url}">
+          <a href="${this.product?.url}" aria-label="${this.escapeHTML(this.product?.image?.alt || this.product.name)}">
            <img 
               class="s-product-card-image-${salla.url.is_placeholder(this.product?.image?.url)
                 ? 'contain'
@@ -190,7 +190,7 @@ class ProductCard extends HTMLElement {
                 ? this.fitImageHeight
                 : 'cover'} lazy"
               src="${this.placeholder}"
-              alt="${this.escapeHTML(this.product?.image?.alt || '')}"
+              alt="${this.escapeHTML(this.product?.image?.alt || this.product.name)}"
               data-src="${this.product?.image?.url || this.product?.thumbnail || ''}"
             />
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
