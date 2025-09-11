@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ThemeWatcher = require('@salla.sa/twilight/watcher.js');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
@@ -58,6 +59,15 @@ module.exports = {
             },
         ],
     },
+
+  optimization: {
+    minimize: true,
+    minimizer: [
+      '...',                  // سيب Terser الافتراضي للـ JS
+      new CssMinimizerPlugin()
+    ],
+  },
+
     plugins: [
         new ThemeWatcher(),
         new MiniCssExtractPlugin(),
