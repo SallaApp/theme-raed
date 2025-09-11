@@ -24,6 +24,7 @@
             <ol class="list-reset flex items-center text-sm text-primary-reverse">
                 <li><a href="{{ link('/') }}" class="fix-align text-primary-reverse">{{ trans('common.titles.home') }}</a></li>
                 <li><i class="sicon-keyboard_arrow_left mx-2"></i></li>
+              
                 <li><span class="fix-align">{{ thank_you_title }}</span></li>
             </ol>
         </nav>
@@ -41,10 +42,17 @@
                         <i class="copy-icon sicon-swap-stroke pointer-events-none rtl:mr-1 ltr:ml-1"></i>
                     </salla-button>
                 </p>
-                <salla-button onclick="salla.order.show({order_id:'{{ order.id }}', url:'{{ order.url }}'})">
-                  <i class="sicon-newspaper rtl:ml-1 ltr:mr-1"></i>
-                  {{ trans('pages.thank_you.order_details') }}
-                </salla-button>
+                {% if is_guest_checkout %}
+                    <salla-button onclick="salla.order.show({order_id:'{{ guest_order_id }}', url:'{{ store_url }}/order/{{ guest_order_id }}'})">
+                        <i class="sicon-newspaper rtl:ml-1 ltr:mr-1"></i>
+                        {{ trans('pages.thank_you.order_details') }}
+                    </salla-button>
+                {% else %}
+                    <salla-button onclick="salla.order.show({order_id:'{{ order.id }}', url:'{{ order.url }}'})">
+                        <i class="sicon-newspaper rtl:ml-1 ltr:mr-1"></i>
+                        {{ trans('pages.thank_you.order_details') }}
+                    </salla-button>
+                {% endif %}
             </div>
 
             {% if order.instructions %}
