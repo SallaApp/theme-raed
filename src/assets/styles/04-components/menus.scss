@@ -6,7 +6,7 @@
 
 @media only screen and (min-width: 1024px) {
   .main-menu {
-    @apply hidden lg:flex flex-wrap items-center mx-6 pt-8 pb-0;
+    @apply hidden lg:flex items-center mx-6 pt-8 pb-0 flex-nowrap;
 
     .fixed-pinned & {
       padding-top: 0;
@@ -97,6 +97,23 @@
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
+      }
+    }
+
+    // More dropdown specific styles
+    #more-menu-dropdown {
+      @apply flex-shrink-0;
+
+      > a {
+        @apply whitespace-nowrap;
+      }
+
+      .sub-menu {
+        @apply right-0;
+
+        [dir="ltr"] & {
+          @apply left-auto;
+        }
       }
     }
   }
