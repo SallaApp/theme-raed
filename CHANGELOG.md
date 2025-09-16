@@ -8,8 +8,24 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+>
 
-#  🫆 [1.229.0](https://github.com/SallaApp/theme-raed/compare/1.228.0...1.229.0) (03-08-2025)
+# 🪁 [1.252.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
+
+## Bug Fixes
+Handle PreOrder Label As Promotion label
+
+# ✨ [1.250.0]( https://github.com/SallaApp/theme-raed/compare/1.249.0...1.250.0) (11-09-2025)
+## Enhancements
+
+- Set configs in webpack.config.js to minify css
+
+# ✨ [1.249.0]( https://github.com/SallaApp/theme-raed/compare/1.237.0...1.249.0) (11-09-2025)
+## Enhancements
+
+- Added Tiered offer component. This commit as a reference.
+
+#  🪁 [1.229.0](https://github.com/SallaApp/theme-raed/compare/1.228.0...1.229.0) (03-08-2025)
 
 ### Bug Fixes
 
