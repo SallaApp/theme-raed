@@ -5,7 +5,7 @@ class NavigationMenu extends HTMLElement {
             .then(() => {
                 this.menus = [];
                 this.displayAllText = salla.lang.get('blocks.home.display_all');
-                this.moreText = salla.lang.get('common.elements.more') || 'المزيد';
+                this.moreText = salla.lang.get('common.titles.more') || 'المزيد';
                 this.visibleMenus = [];
                 this.overflowMenus = [];
 
@@ -125,7 +125,7 @@ class NavigationMenu extends HTMLElement {
         if (this.overflowMenus.length === 0) return '';
 
         return `
-        <li class="!hidden lg:!block root-level lg:!inline-block has-children" id="more-menu-dropdown">
+        <li class="!hidden lg:!block root-level lg:!inline-block has-children relative" id="more-menu-dropdown">
             <a href="#" aria-label="${this.moreText}">
                 <span>${this.moreText}</span>
             </a>
@@ -177,7 +177,7 @@ class NavigationMenu extends HTMLElement {
         }
 
         // Show all menu items first
-        const menuItems = mainMenu.querySelectorAll('[data-menu-item]');
+        const menuItems = mainMenu.querySelectorAll('.root-level[data-menu-item]');
         menuItems.forEach(item => {
             item.style.display = '';
         });
@@ -202,12 +202,12 @@ class NavigationMenu extends HTMLElement {
         menuItems.forEach((item, index) => {
             const itemWidth = item.offsetWidth;
 
-            if (currentWidth + itemWidth <= availableWidth && index < this.menus.length) {
+            if (currentWidth + itemWidth <= availableWidth && index < this.menus.length && visibleCount < 8) {
                 currentWidth += itemWidth;
                 visibleCount++;
             } else {
                 // Hide overflow items
-                item.style.display = 'none';
+                item.style.setProperty('display', 'none', 'important');
                 if (index < this.menus.length) {
                     this.overflowMenus.push(this.menus[index]);
                 }
