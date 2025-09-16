@@ -194,7 +194,7 @@ class NavigationMenu extends HTMLElement {
             }
         });
 
-        const availableWidth = containerWidth - usedWidth - 100; // 100px buffer for More dropdown
+        const availableWidth = containerWidth - usedWidth - 300; // 300px buffer for More dropdown
         let currentWidth = 0;
         let visibleCount = 0;
 
@@ -202,7 +202,7 @@ class NavigationMenu extends HTMLElement {
         menuItems.forEach((item, index) => {
             const itemWidth = item.offsetWidth;
 
-            if (currentWidth + itemWidth <= availableWidth && index < this.menus.length && visibleCount < 8) {
+            if (currentWidth + itemWidth <= availableWidth && index < this.menus.length) {
                 currentWidth += itemWidth;
                 visibleCount++;
             } else {
