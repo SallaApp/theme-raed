@@ -146,14 +146,18 @@ class NavigationMenu extends HTMLElement {
         const mainMenu = this.querySelector('.main-menu');
         if (!mainMenu) return;
 
-        this.checkMenuOverflow();
-
-        // Re-check on window resize
-        const resizeHandler = this.debounce(() => {
+        // Check if more menu is enabled in theme settings
+        const isMoreMenuEnabled = theme.settings.get('enable_more_menu');
+        if (isMoreMenuEnabled) {
             this.checkMenuOverflow();
-        }, 250);
 
-        window.addEventListener('resize', resizeHandler);
+            // Re-check on window resize
+            const resizeHandler = this.debounce(() => {
+                this.checkMenuOverflow();
+            }, 250);
+
+            window.addEventListener('resize', resizeHandler);
+        }
     }
 
     /**
