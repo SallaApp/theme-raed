@@ -13,7 +13,8 @@ class Product extends BasePage {
         });
 
         this.initProductOptionValidations();
-
+        this.initSelectProductOptionPrice();
+        
         if(imageZoom){
             // call the function when the page is ready
             this.initImagesZooming();
@@ -26,6 +27,18 @@ class Product extends BasePage {
       document.querySelector('.product-form')?.addEventListener('change', function(){
         this.reportValidity() && salla.product.getPrice(new FormData(this));
       });
+    }
+
+    initSelectProductOptionPrice() {
+      const productForm = document.querySelector(".product-form");
+      if (productForm) {
+        const productOptions = productForm.querySelector("salla-product-options");
+        new MutationObserver((_, observer) => {
+          const isValid = [...productForm.querySelectorAll("[required]")].every(field => field.value?.trim()) && 
+                         productForm.querySelectorAll(":invalid").length === 0;
+          isValid && salla.product.getPrice(new FormData(productForm)) && observer.disconnect();
+        }).observe(productOptions || productForm, { attributes: true });
+      }
     }
 
     initImagesZooming() {
