@@ -334,13 +334,15 @@
 {# bundle subproducts  #}
                             {% if item.sub_products %}
                                 <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for product in item.sub_products %}
-                                            {% include 'pages.partials.orders.product-accordion' with { product: product } %}
-                                        {% endfor %}
-                                    </dl>
+                               
+                                {% for product in item.sub_products %}
+                                <div class="flex flex-col gap-4 py-4">
+                                    <div class="flow-root rounded-md px-4 border border-gray-200">
+                                        {% include 'pages.partials.orders.product-accordion' with { product: product } %}
+                                    </div>
                                 </div>
+                                {% endfor %}
+                        
                             {% endif %}
                             {% if item.note %}
                                 <p class="mt-3 text-sm text-gray-500">
