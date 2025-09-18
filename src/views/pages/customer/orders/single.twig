@@ -273,6 +273,7 @@
                               </div>
                           {% endif %}
 
+{# TODO make reusable options  #}
                             {% if item.options %}
                               <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
                               <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
@@ -330,18 +331,13 @@
                               </div>
                             {% endif %}
 
+{# bundle subproducts  #}
                             {% if item.sub_products %}
                                 <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
                                 <div class="flow-root rounded-md px-4 border border-gray-200">
                                     <dl class="text-sm text-dark divide-y divide-border-color">
                                         {% for product in item.sub_products %}
-                                            <div class="py-3.5 md:flex items-center justify-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    <a href="{{ product.url }}">
-                                                        {{ product.name }}
-                                                    </a>
-                                                </dt>
-                                            </div>
+                                            {% include 'pages.partials.orders.product-accordion' with { product: product } %}
                                         {% endfor %}
                                     </dl>
                                 </div>
