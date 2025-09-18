@@ -9,6 +9,66 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+#  🫆 [1.229.0](https://github.com/SallaApp/theme-raed/compare/1.228.0...1.229.0) (03-08-2025)
+
+### Bug Fixes
+
+- Avoid Casting a Cart Item to an integer
+
+#  ⚙️ [1.228.0](https://github.com/SallaApp/theme-raed/compare/1.227.0...1.228.0) (30-07-2025)
+
+### Enhancements & Required Updates
+
+- Standardized ID usage as strings in JavaScript calls across theme files to avoid parsing issues.
+
+#### Code changes:
+
+- File: `src/views/pages/cart.twig`
+
+- From:
+   - salla.cart.deleteItem({{ item.id }}).then(() => document.querySelector('#item-{{ item.id }}').remove())
+
+- To:
+   - salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())
+
+- File: `src/views/pages/customer/orders/single.twig`
+
+- From:
+   - salla.event.dispatch('rating::edit', {type: 'product', feedback_id: {{item.rating.id}} })
+   - salla.event.dispatch('rating::delete', {feedback_id: {{item.rating.id}} })
+   - salla.event.dispatch('rating::edit', {type: 'store', feedback_id: {{order.rating.store.id}} })
+   - salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.store.id}} })
+   - salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: {{order.rating.shipping.id}} })
+   - salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.shipping.id}} })
+
+
+- To:
+   - salla.event.dispatch('rating::edit', {type: 'product', feedback_id: '{{item.rating.id}}' })
+   - salla.event.dispatch('rating::delete', {feedback_id: '{{item.rating.id}}' })
+   - salla.event.dispatch('rating::edit', {type: 'store', feedback_id: '{{order.rating.store.id}}' })
+   - salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.store.id}}' })
+   - salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: '{{order.rating.shipping.id}}' })
+   - salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.shipping.id}}' })
+
+
+- File: `src/views/pages/product/single.twig`
+
+- From:
+   - salla.wishlist.toggle({{ product.id }})
+   - salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })
+
+- To:
+   - salla.wishlist.toggle('{{ product.id }}')
+   - salla.event.dispatch('scopes::open', {mode: 'availability', product_id: '{{ product.id }}' })
+
+- File: `src/views/pages/thank-you.twig`
+
+- From:
+   - <salla-button onclick="salla.order.show({order_id:{{ order.id }}, url:'{{ order.url }}'})">
+
+- To:
+   - <salla-button onclick="salla.order.show({order_id:'{{ order.id }}', url:'{{ order.url }}'})">
+
 # 📦 [1.227.0](https://github.com/SallaApp/theme-raed/compare/1.226.0...1.227.0)(23-06-2025)
 ### Enhancements
 - Enhance default content for the `customize-testimonials` block

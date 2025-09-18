@@ -411,7 +411,7 @@
                                                     color="dark" 
                                                     size="medium" 
                                                     {% if item.rating.can_update %} 
-                                                        onclick="salla.event.dispatch('rating::edit', {type: 'product', feedback_id: {{item.rating.id}} })"
+                                                        onclick="salla.event.dispatch('rating::edit', {type: 'product', feedback_id: '{{item.rating.id}}' })"
                                                     {% endif %} 
                                                     >
                                                     <i class="sicon-format-border-color text-xl"></i>
@@ -431,7 +431,7 @@
                                                     fill="outline" 
                                                     size="medium" 
                                                     {% if item.rating.can_update %}
-                                                        onclick="salla.event.dispatch('rating::delete', {feedback_id: {{item.rating.id}} })"
+                                                        onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{item.rating.id}}' })"
                                                     {% endif %} 
                                                     >
                                                     <i class="sicon-trash-2 text-xl"></i>
@@ -662,7 +662,7 @@
                                 color="dark" 
                                 size="medium" 
                                 {% if order.rating.store.can_update %}
-                                    onclick="salla.event.dispatch('rating::edit', {type: 'store', feedback_id: {{order.rating.store.id}} })"
+                                    onclick="salla.event.dispatch('rating::edit', {type: 'store', feedback_id: '{{order.rating.store.id}}' })"
                                 {% endif %} 
                                 >
                                 <i class="sicon-format-border-color text-xl"></i>
@@ -682,7 +682,7 @@
                                 fill="outline" 
                                 size="medium" 
                                 {% if order.rating.store.can_update %} 
-                                    onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.store.id}} })" 
+                                    onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.store.id}}' })" 
                                 {% endif %} 
                                 >
                                 <i class="sicon-trash-2 text-xl"></i>
@@ -717,7 +717,7 @@
                             color="dark" 
                             size="medium" 
                             {% if order.rating.shipping.can_update %} 
-                                onclick="salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: {{order.rating.shipping.id}} })" 
+                                onclick="salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: '{{order.rating.shipping.id}}' })" 
                             {% endif %}
                             >
                             <i class="sicon-format-border-color text-xl"></i>
@@ -737,7 +737,7 @@
                             fill="outline" 
                             size="medium" 
                             {% if order.rating.shipping.can_update %} 
-                                onclick="salla.event.dispatch('rating::delete', {feedback_id: {{order.rating.shipping.id}} })" 
+                                onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.shipping.id}}' })" 
                             {% endif %} 
                             > 
                             <i class="sicon-trash-2 text-xl"></i>
