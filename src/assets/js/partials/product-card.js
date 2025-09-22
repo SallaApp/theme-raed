@@ -57,6 +57,10 @@ class ProductCard extends HTMLElement {
   } 
 
   getProductBadge() {
+     if (this.product?.preorder?.label) {
+      return `<div class="s-product-card-promotion-title">${this.product.preorder.label}</div>`
+    }
+    
     if (this.product.promotion_title) {
       return `<div class="s-product-card-promotion-title">${this.product.promotion_title}</div>`
     }
