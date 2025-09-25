@@ -578,7 +578,7 @@
                                     <span>{{ trans('pages.orders.finish_payment') }}</span>
                                 </salla-button>
                             {% endif %}
-                        {% else %}
+                        {% elseif user.type == 'user' %}
                             <div class="text-sm">
                                 <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
                                 <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
@@ -606,7 +606,7 @@
             </div>
 
             {# Reorder Modal #}
-            {% if order.can_reorder %}
+            {% if user.type == 'user' and order.can_reorder %}
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}"
                              icon="sicon-rotate" id="reorder-modal" icon-style="success"
                              modal-title="{{ trans('pages.orders.reorder') }}">
