@@ -60,7 +60,7 @@
 
     {% include 'pages.partials.loading-screen-assets' %}
 
-    <script defer data-cfasync="false" src="{{ 'product-card.js'|asset }}"></script>
+    <script defer rel="prefetch" data-cfasync="false" src="{{ 'product-card.js'|asset }}" as="script"></script>
     <script defer src="{{ 'main-menu.js'|asset }}"></script>
 
     {% block head_scripts %}{% endblock %}
@@ -75,8 +75,8 @@
     {% hook 'head:start' %}
     {% hook head %}
     {% block styles %}{% endblock %}
-    <link rel="stylesheet" href="{{ 'app.css' | asset }}">
-    <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
+    <link rel="stylesheet" href="{{ 'app.css' | asset }}" as="style">
+    <link rel="stylesheet" href="{{ theme.font.path|cdn }}" as="font" type="font/woff2" crossorigin/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
     
     <style>
@@ -91,7 +91,7 @@
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
 </head>
-<body id="app" class="overflow-x-hidden {% hook 'body:classes' %}
+<body id="app" class="overflow-x-hidden bg-red-500 {% hook 'body:classes' %}
   {{ theme.settings.get('footer_is_dark') ? ' footer-is-dark' : ' footer-is-light' }}
   {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
   {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
