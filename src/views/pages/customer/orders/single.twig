@@ -273,19 +273,10 @@
                               </div>
                           {% endif %}
 
-                            {% include 'pages.partials.orders.item-options' with { options: item.options } %}
-
-                            {# bundle subproducts  #}
-                            {% if item.sub_products %}
-                                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
-                               
-                                {% for product in item.sub_products %}
-                                <div class="flex flex-col gap-4 py-4">
-                                        {% include 'pages.partials.orders.product-accordion' with { product: product } %}
-                                </div>
-                                {% endfor %}
-                        
-                            {% endif %}
+                            {# order details sub products and options #}
+							<salla-order-details order-details="{{ item | json_encode }}"></salla-order-details>
+							{# order details sub products and options #}
+                            
                             {% if item.note %}
                                 <p class="mt-3 text-sm text-gray-500">
                                     <span>{{ trans('common.elements.note') }} : </span>{{ item.note }}
