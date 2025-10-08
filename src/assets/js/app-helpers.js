@@ -33,7 +33,8 @@ export default class AppHelpers {
     if (typeof selector == 'object') {
       return selector;
     }
-    if (selector === '.total-price' || selector === '.before-price') {
+    const multiSelectors = ['.total-price', '.before-price', '.product-weight'];
+    if (multiSelectors.includes(selector)) {
       return document.querySelectorAll(selector);
     }
     return document.querySelector(selector);
