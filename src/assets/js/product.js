@@ -8,6 +8,7 @@ class Product extends BasePage {
     onReady() {
         app.watchElements({
             totalPrice: '.total-price',
+            productWeight: '.product-weight',
             beforePrice: '.before-price',
             startingPriceTitle: '.starting-price-title',
         });
@@ -70,13 +71,14 @@ class Product extends BasePage {
 
         app.startingPriceTitle?.classList.add('hidden');
 
+        app.productWeight.forEach((el) => {el.innerHTML = data.weight || ''});
         app.totalPrice.forEach((el) => {el.innerHTML = salla.money(data.price)});
         app.beforePrice.forEach((el) => {el.innerHTML = salla.money(data.regular_price)});
 
         app.toggleClassIf('.price_is_on_sale','showed','hidden', ()=> is_on_sale)
         app.toggleClassIf('.starting-or-normal-price','hidden','showed', ()=> is_on_sale)
 
-        app.anime('.total-price', { scale: [0.88, 1] });
+        app.anime('.total-price, .product-weight', { scale: [0.88, 1] });
       });
 
       app.onClick('#btn-show-more', e => app.all('#more-content', div => {
