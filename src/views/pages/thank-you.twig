@@ -101,15 +101,15 @@
                         <div class="text-sm unicode flex items-center">
                             <i class="sicon-phone"></i>
                             <a href="tel:{{ store.contacts.mobile }}" class="hover:text-primary transition"><b
-                                        class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
+                                       class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
                         </div>
                     {% endif %}
 
-                    {% if store.social.whatsapp %}
+                    {% if store.contacts.whatsapp %}
                         <div class="text-sm unicode flex items-center">
                             <i class="sicon-whatsapp"></i>
-                            <a href="{{ store.contacts.whatsapp }}" class="hover:text-primary transition"><b
-                                        class="unicode mx-1.5">{{ store.social.whatsapp }}</b></a>
+                            <a href="https://wa.me/{{ store.contacts.whatsapp|replace({' ': '', '+': '', '-': ''}) }}" class="hover:text-primary transition" target="_blank" rel="noopener"><b
+                                        class="unicode mx-1.5">{{ store.contacts.whatsapp }}</b></a>
                         </div>
                     {% endif %}
                 </div>
