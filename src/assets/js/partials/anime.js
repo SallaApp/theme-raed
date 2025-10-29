@@ -1,6 +1,6 @@
-import AnimeJS from 'animejs';
+import { animate, stagger } from 'animejs';
 
-window.anime = AnimeJS;
+window.anime = animate;
 
 class Anime {
     constructor(selector, options) {
@@ -117,7 +117,7 @@ class Anime {
      * @return {Anime}
      */
     stagger(number) {
-        this.delay = AnimeJS.stagger(number);
+        this.delay = stagger(number);
         return this;
     }
 
@@ -141,7 +141,7 @@ class Anime {
      * @return {{}}
      */
     play() {
-        return AnimeJS(this.options);
+        return animate(this.options);
     }
 }
 
