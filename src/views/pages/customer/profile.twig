@@ -6,6 +6,16 @@
 | page.slug                      | string   |                                                     |
 #}
 {% extends "layouts.customer" %}
+{% block inner_title %}
+	<div class="flex flex-row items-center justify-between w-full">
+		<h1 class="mb-2 text-lg font-bold text-center sm:rtl:text-right sm:ltr:text-left">{{ page.title }}</h1>
+		<a href="#" target="_blank" class="flex flex-row items-center gap-2 text-sm text-red-400 edit-profile">
+			{{ trans('common.elements.edit') }}
+			<i class="sicon-link"></i>
+		</a>
+	</div>
+{% endblock %}
+
 {% block inner_content %}
     {% hook 'customer:profile.form.start' %}
     <form class="form form--user-profile ajax" onsubmit="return salla.form.onSubmit('profile.update', event)">
@@ -118,3 +128,4 @@
 
     <salla-user-settings {{ user.is_notifiable?'is-notifiable':0 }} class="mt-10 block"></salla-user-settings>
 {% endblock %}
+
