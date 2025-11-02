@@ -10,24 +10,24 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 >
 
-# 🌅 [1.256.0]( https://github.com/SallaApp/theme-raed/compare/1.252.0...1.256.0) (05-10-2025)
+# 🗺️ [1.263.0]( https://github.com/SallaApp/theme-raed/compare/1.262.0...1.263.0) (23-10-2025)
 ## Enhancements
-- Change profile page to twig
+- Added support for multi-item bundle products
 
-# 🌅 [1.257.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.257.0) (07-10-2025)
-## Bug Fixes
-- Fix sticky label for mobile by adding flag for preorder
-
-# 🌅 [1.262.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.262.0) (21-10-2025)
+# 🎇 [1.262.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.262.0) (21-10-2025)
 ## Bug Fixes
 - Update WhatsApp link to use wa.me format
 
-# 🌅 [1.263.0]( https://github.com/SallaApp/theme-raed/compare/1.262.0...1.263.0) (23-10-2025)
+# ✂️ [1.257.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.257.0) (07-10-2025)
+## Bug Fixes
+- Fix sticky label for mobile by adding flag for preorder
+
+
+# ⛱️ [1.256.0]( https://github.com/SallaApp/theme-raed/compare/1.252.0...1.256.0) (05-10-2025)
 ## Enhancements
-- Add multiple bundle product
+- Changed a customer profile page from using a Salla web component to a native Twig template
 
-
-# 🌅 [1.253.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
+# 🖲️ [1.253.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
 ## Bug Fixes
 
 - Unify PreOrder and Promotion handling
