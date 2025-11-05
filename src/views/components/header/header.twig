@@ -20,8 +20,8 @@
           <div class="header-buttons">
               {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                   <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray basis-0">
-                      <span class="flag iti__flag iti__{{ user.language.country_code }} rounded-sm"></span>
-                      <span class="mx-1.5">|</span> <span>{{ currency.symbol }}</span>
+                      <span>{{ user.language.name }}</span>
+                      <span class="mx-1.5">|</span><span>{{ currency.symbol }}</span>
                   </button>
                   <salla-localization-modal></salla-localization-modal>
               {% endif %}
