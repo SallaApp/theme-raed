@@ -150,9 +150,13 @@ class Cart extends BasePage {
 
         priceElement.innerHTML = salla.money(item.price);
 
+        // Update original price when item is on sale
+        if (hasSalePrice) {
+            itemOriginalPrice.innerHTML = salla.money(item.original_price);
+        }
+
         if (!hasSpecialPrice){return;}
         if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
-        itemOriginalPrice.innerHTML = salla.money(item.original_price);
         regularPriceElement.innerHTML = salla.money(item.product_price);
     }
     //=================== Coupon Method ========================//
