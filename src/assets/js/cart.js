@@ -139,7 +139,7 @@ class Cart extends BasePage {
         let total = salla.money(item_total);
         if (total !== totalElement.innerHTML) {
             totalElement.innerHTML = total;
-            app.anime(totalElement, { scale: [.88, 1] });
+            // app.anime(totalElement, { scale: [.88, 1] });
         }
 
         app.toggleElementClassIf([offerElement, oldOffers], 'offer-applied', 'hidden', () => hasSpecialPrice && !newOffersActive)
