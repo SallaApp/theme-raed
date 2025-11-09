@@ -1,5 +1,4 @@
 import AnimeJS from 'animejs';
-import AnimeJS from 'animejs/lib/anime.es.js';
 
 window.anime = AnimeJS;
 
