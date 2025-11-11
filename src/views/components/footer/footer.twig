@@ -15,12 +15,15 @@
 					<salla-social class="block mb-6"></salla-social>
 				</div>
 
+		<div class="flex gap-4">
+		  {# trust badges #}
+		  <salla-trust-badges {% if theme.settings.get('footer_is_dark') %} dark {% endif %}></salla-trust-badges>
           {# vat #}
           {% if store.settings.tax.number %}
             <div class="flex rtl:space-x-reverse space-x-2 items-end">
               {% if store.settings.tax.certificate %}
                 <a class="load-img-onclick" data-modal-id="modal-value-tax" href="#/" alt="{{ store.settings.tax.number }}">
-                  <img width="100%" height="100%" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{'images/tax.png' | cdn(70,70)}}" class="lazy w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
+                  <img width="40" height="50" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{'images/tax.png' | cdn(70,70)}}" class="lazy w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
                 </a>
               {% endif %}
               <div>
@@ -40,6 +43,7 @@
               </salla-modal>
             {% endif %}
           {% endif %}
+        </div>
         </div>
 
 			<div>
