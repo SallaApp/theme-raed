@@ -11,23 +11,23 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 >
 
 # 🎇 [1.271.0]( https://github.com/SallaApp/theme-raed/compare/1.267.0...1.271.0) (11-11-2025)
-### Fixes
+### Bug Fixes
 -  Fix safari `on-paste` issue.
 
 # 🎇 [1.267.0]( https://github.com/SallaApp/theme-raed/compare/1.265.0...1.267.0) (06-11-2025)
 
-### Fixes
+### Bug Fixes
 -  Fix updating `itemOriginalPrice` if `hasSalePrice`.
 -  Fix price icon direction.
 
 # 🎇 [1.265.0]( https://github.com/SallaApp/theme-raed/compare/1.264.0...1.265.0) (30-10-2025)
 
-### Fixes
+### Bug Fixes
 -  Partial payment breakdown for the customer.
 
 # 🎇 [1.264.0]( https://github.com/SallaApp/theme-raed/compare/1.263.0...1.264.0) (27-10-2025)
 
-### Fixes
+### Bug Fixes
 -  Prevent Accumulating Overlays On Data Changes.
  
 # 🗺️ [1.263.0]( https://github.com/SallaApp/theme-raed/compare/1.262.0...1.263.0) (23-10-2025)
