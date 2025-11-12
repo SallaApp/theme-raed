@@ -11,55 +11,66 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 >
 
 # 🎇 [1.271.0]( https://github.com/SallaApp/theme-raed/compare/1.267.0...1.271.0) (11-11-2025)
-## Fixes
+### Fixes
 -  Fix safari `on-paste` issue.
 
 # 🎇 [1.267.0]( https://github.com/SallaApp/theme-raed/compare/1.265.0...1.267.0) (06-11-2025)
-## Fixes
+
+### Fixes
 -  Fix updating `itemOriginalPrice` if `hasSalePrice`.
 -  Fix price icon direction.
 
 # 🎇 [1.265.0]( https://github.com/SallaApp/theme-raed/compare/1.264.0...1.265.0) (30-10-2025)
-## Fixes
+
+### Fixes
 -  Partial payment breakdown for the customer.
 
 # 🎇 [1.264.0]( https://github.com/SallaApp/theme-raed/compare/1.263.0...1.264.0) (27-10-2025)
-## Fixes
+
+### Fixes
 -  Prevent Accumulating Overlays On Data Changes.
  
 # 🗺️ [1.263.0]( https://github.com/SallaApp/theme-raed/compare/1.262.0...1.263.0) (23-10-2025)
-## Enhancements
+
+### Enhancements
 - Added support for multi-item bundle products.
 
 # 🎇 [1.262.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.262.0) (21-10-2025)
-## Bug Fixes
+
+### Bug Fixes
 - Update WhatsApp link to use wa.me format
 
 # ✂️ [1.257.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.257.0) (07-10-2025)
-## Bug Fixes
+
+### Bug Fixes
 - Fix sticky label for mobile by adding flag for preorder
 
 # ⛱️ [1.256.0]( https://github.com/SallaApp/theme-raed/compare/1.252.0...1.256.0) (05-10-2025)
-## Enhancements
+
+### Enhancements
 - Changed a customer profile page from using a Salla web component to a native Twig template
 
 # 🖲️ [1.253.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
-## Bug Fixes
+
+### Bug Fixes
 
 - Unify PreOrder and Promotion handling
 - Display square banners info in mobile screen
 
 # 🥊 [1.252.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
-## Bug Fixes
+
+### Bug Fixes
 - Handle PreOrder Label As Promotion label
 
 # 🏁 [1.250.0]( https://github.com/SallaApp/theme-raed/compare/1.249.0...1.250.0) (11-09-2025)
-## Enhancements
+
+### Enhancements
 
 - Set configs in webpack.config.js to minify css
 
 # ✨ [1.249.0]( https://github.com/SallaApp/theme-raed/compare/1.237.0...1.249.0) (11-09-2025)
-## Enhancements
+
+### Enhancements
 
 - Added Tiered offer component. This commit as a reference.
 
