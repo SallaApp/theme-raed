@@ -148,6 +148,15 @@
             </tbody>
         </table>
 
+        {% if order.refund_message %}
+          <div class="min-w-full rounded-md overflow-hidden">
+            <div class="bg-white flex items-center gap-1 rounded-md px-3 py-5 md:px-5">
+               <i class="sicon-refund h-6 w-6"></i> 
+                <p class="font-medium text-base">{{order.refund_message|raw}}</p>
+            </div>
+          </div>
+        {% endif %}
+
         {% if store.settings.rating.allow_update and order.rating is not empty %}    
             <div class="flex items-start gap-2 bg-blue-50 border border-blue-200 text-blue-500 px-2 py-3 rounded-md text-sm">
                 <i class="sicon-info"></i>   
