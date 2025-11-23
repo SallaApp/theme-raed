@@ -322,6 +322,77 @@
                     </section>
                 {% endif %}
 
+                {# Digital Files Settings #}
+                {% if product.digital_files_settings %}
+                <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+                    <ul
+                        class="space-y-4">
+                        <li class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewbox="0 0 15 17" fill="none">
+                                    <path d="M5 0.00265002V0H14.1648C14.6261 0 15 0.379425 15 0.8265V15.8402C15 16.2967 14.6292 16.6667 14.1722 16.6667H0.827833C0.370633 16.6667 0 16.2918 0 15.8277V5L5 0.00265002ZM2.35765 5H5V2.35905L2.35765 5ZM6.66667 1.66667V5.83333C6.66667 6.29357 6.29358 6.66667 5.83333 6.66667H1.66667V15H13.3333V1.66667H6.66667Z" fill="#2B2D34"/>
+                                </svg>
+                                <div class="text-gray-600 text-sm">{{ trans('pages.products.number_of_files') }}</div>
+                            </div>
+                            <div class="text-gray-900">{{ product.digital_files_settings.digital_files_count  ?? "-" }}</div>
+                        </li>
+                        <li class="flex items-center justify-between">
+                            <div
+                                class="flex items-center gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 20 20" fill="none">
+                                    <path d="M12.5 3.33317H4.16667V16.6665H15.8333V6.6665H12.5V3.33317ZM2.5 2.493C2.5 2.03655 2.87291 1.6665 3.33208 1.6665H13.3333L17.4998 5.83317L17.5 17.4936C17.5 17.9573 17.1292 18.3332 16.6722 18.3332H3.32783C2.87063 18.3332 2.5 17.9538 2.5 17.5067V2.493ZM9.16667 9.1665H10.8333V14.1665H9.16667V9.1665ZM9.16667 5.83317H10.8333V7.49984H9.16667V5.83317Z" fill="#2B2D34"/>
+                                </svg>
+                                <div class="text-gray-600 text-sm">{{ trans('pages.products.file_formats') }}</div>
+                            </div>
+                            <div class="text-gray-900 text-sm">
+                                {% set file_formats = attribute(product.digital_files_settings, 'file_formats') %}
+                                {% if file_formats is not empty %}
+                                    {{ file_formats|join(', ') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </li>
+                        <li class="flex items-center justify-between">
+                            <div
+                                class="flex items-center gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 20 20" fill="none">
+                                    <path d="M7.49984 0.833496V2.50016H12.4998V0.833496H14.1665V2.50016H17.4998C17.9601 2.50016 18.3332 2.87326 18.3332 3.3335V16.6668C18.3332 17.1271 17.9601 17.5002 17.4998 17.5002H2.49984C2.0396 17.5002 1.6665 17.1271 1.6665 16.6668V3.3335C1.6665 2.87326 2.0396 2.50016 2.49984 2.50016H5.83317V0.833496H7.49984ZM16.6665 9.16683H3.33317V15.8335H16.6665V9.16683ZM5.83317 4.16683H3.33317V7.50016H16.6665V4.16683H14.1665V5.8335H12.4998V4.16683H7.49984V5.8335H5.83317V4.16683Z" fill="#2B2D34"/>
+                                </svg>
+
+                                <div class="text-gray-600 text-sm">{{ trans('pages.products.file_expiration_period') }}</div>
+                            </div>
+                            {# file expiration period  400 days #}
+                            <div class="text-gray-900 text-sm">
+                                {% if attribute(product.digital_files_settings, 'file_expiration_period') %}
+                                    {{ product.digital_files_settings.file_expiration_period|date("d/m/Y") }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% if product.digital_files_settings.has_free_access_to_new_files %}
+                            <li class="flex items-center justify-between">
+                                <div
+                                    class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 20 20" fill="none">
+                                        <path d="M9.99984 3.33317C12.2903 3.33317 14.3123 4.48839 15.5128 6.24984H13.3332V7.9165H18.3332V2.9165H16.6665V4.9993C15.1467 2.97622 12.7268 1.6665 9.99984 1.6665C5.39746 1.6665 1.6665 5.39746 1.6665 9.99984H3.33317C3.33317 6.31794 6.31794 3.33317 9.99984 3.33317ZM16.6665 9.99984C16.6665 13.6818 13.6818 16.6665 9.99984 16.6665C7.70937 16.6665 5.6874 15.5113 4.48686 13.7498H6.6665V12.0832H1.6665V17.0832H3.33317V15.0003C4.85301 17.0234 7.27287 18.3332 9.99984 18.3332C14.6022 18.3332 18.3332 14.6022 18.3332 9.99984H16.6665Z" fill="#2B2D34"/>
+                                    </svg>
+
+                                    <div class="text-gray-600 text-sm">{{ trans('pages.products.free_access_to_new_files') }}</div>
+                                </div>
+                                <div class="text-gray-900 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewbox="0 0 17 17" fill="none">
+                                        <path d="M8.33333 16.6667C3.73096 16.6667 0 12.9357 0 8.33333C0 3.73096 3.73096 0 8.33333 0C12.9357 0 16.6667 3.73096 16.6667 8.33333C16.6667 12.9357 12.9357 16.6667 8.33333 16.6667ZM8.33333 15C12.0153 15 15 12.0153 15 8.33333C15 4.65143 12.0153 1.66667 8.33333 1.66667C4.65143 1.66667 1.66667 4.65143 1.66667 8.33333C1.66667 12.0153 4.65143 15 8.33333 15ZM7.50217 11.6667L3.96666 8.13117L5.14517 6.95258L7.50217 9.30967L12.2163 4.5956L13.3948 5.77411L7.50217 11.6667Z" fill="#2B2D34"/>
+                                    </svg>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </section>
+                {% endif %}
+                {# End Digital Files Settings #}
+
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
                     <input type="hidden" name="id" value="{{ product.id }}">
