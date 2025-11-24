@@ -332,7 +332,7 @@
                                 <i class="sicon-page"></i>
                                 <div class="text-gray-600 text-sm">{{ trans('pages.products.number_of_files') }}</div>
                             </div>
-                            <div class="text-gray-900">{{ product.digital_files_settings.digital_files_count  ?? "-" }}</div>
+                            <div class="text-gray-900">{{ product.digital_files_settings.count  ?? "-" }}</div>
                         </li>
                         <li class="flex items-center justify-between">
                             <div
@@ -341,7 +341,7 @@
                                 <div class="text-gray-600 text-sm">{{ trans('pages.products.file_formats') }}</div>
                             </div>
                             <div class="text-gray-900 text-sm">
-                                {% set file_formats = attribute(product.digital_files_settings, 'file_formats') %}
+                                {% set file_formats = attribute(product.digital_files_settings, 'formats') %}
                                 {% if file_formats is not empty %}
                                     {{ file_formats|join(', ') }}
                                 {% else %}
@@ -357,14 +357,10 @@
                             </div>
                             {# file expiration period  400 days #}
                             <div class="text-gray-900 text-sm">
-                                {% if attribute(product.digital_files_settings, 'file_expiration_period') %}
-                                    {{ product.digital_files_settings.file_expiration_period|date("d/m/Y") }}
-                                {% else %}
-                                    -
-                                {% endif %}
+                             {{product.digital_files_settings.download_period ? product.digital_files_settings.download_period : '-' }}
                             </div>
                         </li>
-                        {% if product.digital_files_settings.has_free_access_to_new_files %}
+                        {% if product.digital_files_settings.access_new_files %}
                             <li class="flex items-center justify-between">
                                 <div
                                     class="flex items-center gap-3">
