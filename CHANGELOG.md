@@ -10,25 +10,35 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 >
 
+# 🪁 [1.257.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.257.0) (06-10-2025)
+## Fixes
+- Fix sticky label for mobile by add flag for preorder.
+
+
+# ✨ [1.256.0]( https://github.com/SallaApp/theme-raed/compare/1.252.0...1.256.0) (05-10-2025)
+## Enhancements
+- Profile page changed to twig.
+
+
 # 🌅 [1.253.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
 
-## Bug Fixes
+### Bug Fixes
 
 - Unify PreOrder and Promotion handling
 - Display square banners info in mobile screen
 
 # 🥊 [1.252.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
 
-## Bug Fixes
-Handle PreOrder Label As Promotion label
+### Bug Fixes
+- Handle PreOrder Label As Promotion label
 
 # 🏁 [1.250.0]( https://github.com/SallaApp/theme-raed/compare/1.249.0...1.250.0) (11-09-2025)
-## Enhancements
+### Enhancements
 
 - Set configs in webpack.config.js to minify css
 
 # ✨ [1.249.0]( https://github.com/SallaApp/theme-raed/compare/1.237.0...1.249.0) (11-09-2025)
-## Enhancements
+### Enhancements
 
 - Added Tiered offer component. This commit as a reference.
 
