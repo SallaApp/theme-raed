@@ -322,6 +322,61 @@
                     </section>
                 {% endif %}
 
+                {# Digital Files Settings #}
+                {% if product.digital_files_settings %}
+                <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+                    <ul
+                        class="space-y-4">
+                        <li class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i class="sicon-page"></i>
+                                <div class="text-gray-600 text-sm">{{ trans('pages.products.number_of_files') }}</div>
+                            </div>
+                            <div class="text-gray-900">{{ product.digital_files_settings.count  ?? "-" }}</div>
+                        </li>
+                        <li class="flex items-center justify-between">
+                            <div
+                                class="flex items-center gap-3">
+                                <i class="sicon-file-archive"></i>
+                                <div class="text-gray-600 text-sm">{{ trans('pages.products.file_formats') }}</div>
+                            </div>
+                            <div class="text-gray-900 text-sm">
+                                {% set file_formats = attribute(product.digital_files_settings, 'formats') %}
+                                {% if file_formats is not empty %}
+                                    {{ file_formats|join(', ') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </li>
+                        <li class="flex items-center justify-between">
+                            <div
+                                class="flex items-center gap-3">
+                                <i class="sicon-calendar"></i>
+                                <div class="text-gray-600 text-sm">{{ trans('pages.products.file_expiration_period') }}</div>
+                            </div>
+                            {# file expiration period  400 days #}
+                            <div class="text-gray-900 text-sm">
+                             {{product.digital_files_settings.download_period ? product.digital_files_settings.download_period : '-' }}
+                            </div>
+                        </li>
+                        {% if product.digital_files_settings.access_new_files %}
+                            <li class="flex items-center justify-between">
+                                <div
+                                    class="flex items-center gap-3">
+                                    <i class="sicon-rotate"></i>
+                                    <div class="text-gray-600 text-sm">{{ trans('pages.products.free_access_to_new_files') }}</div>
+                                </div>
+                                <div class="text-gray-900 text-sm">
+                                    <i class="sicon-check-circle text-lg"></i>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </section>
+                {% endif %}
+                {# End Digital Files Settings #}
+
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
                     <input type="hidden" name="id" value="{{ product.id }}">
