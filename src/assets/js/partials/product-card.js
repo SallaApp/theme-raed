@@ -240,7 +240,7 @@ class ProductCard extends HTMLElement {
           ${this.product?.donation && !this.minimal && !this.fullImage ?
           `<salla-progress-bar donation=${JSON.stringify(this.product?.donation)}></salla-progress-bar>
           <div class="s-product-card-donation-input">
-            ${this.product?.donation?.can_donate ?
+            ${this.product?.donation?.can_donate && this.productData?.donation?.custom_amount_enabled  ?
               `<label for="donation-amount-${this.product.id}">${this.donationAmount} <span>*</span></label>
               <input
                 type="text"
