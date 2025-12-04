@@ -1,0 +1,47 @@
+/**
+ * @slot widget - An action that can be used to activete or open the component by calling the `open` method.
+ */
+export declare class SallaSocialShare {
+    private shareMenu?;
+    opened: boolean;
+    allPlatforms: Array<string>;
+    platformIcons: Array<object>;
+    convertedPlatforms: Array<string>;
+    /**
+     * page url that will be shared custom | current page url
+     */
+    url: string;
+    /**
+     * page url name that will be shared custom | current page url
+     */
+    urlName: string;
+    /**
+     * selected platforms to share | all platforms
+     */
+    platforms: string;
+    componentWillLoad(): void;
+    /**
+     * Activate or open the share menu.
+     */
+    open(): Promise<void>;
+    /**
+     * Asynchronously initializes the "AddToAny" (a2a) social sharing tool on the current page.
+     * If the global object `window.a2a` is available, it initializes the tool with the 'page' mode.
+     * The 'page' mode is typically used to enable sharing of the current webpage.
+     *
+     * @remarks
+     * This function is designed to be used in scenarios where dynamic loading or refreshing of social sharing tools is needed.
+     * Ensure that the AddToAny script is properly included in the HTML document before calling this function.
+     *
+     * @example
+     * // Call the refresh function to initialize AddToAny on the page.
+     * await refresh();
+     *
+     * @throws {Error} Throws an error if the AddToAny script is not properly included or if there are issues during initialization.
+     *
+     * @async
+     * @returns {Promise<void>} A promise that resolves once the initialization is complete.
+     */
+    refresh(): Promise<void>;
+    render(): any;
+}

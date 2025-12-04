@@ -1,0 +1,117 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { d as defineCustomElement$3 } from './salla-button2.js';
+import { d as defineCustomElement$2 } from './salla-tooltip2.js';
+
+const sallaWalletCss = ".s-wallet-table{min-width:100%}.s-wallet-table-balance-container{display:flex !important;align-items:center !important;justify-content:flex-start !important;gap:1rem}.s-wallet-table-balance-icon{border-radius:50%;width:52px;height:52px;font-size:25px;padding:16px 13px;background:var(--color-primary-reverse);color:var(--color-primary)}.s-wallet-table-empty-state{display:flex;flex-direction:column;align-items:center}.s-wallet-table-empty-state i{font-size:80px;margin:4rem 0 2rem;color:var(--infinte-color)}.s-wallet-table-transaction-status{padding:6px 19px !important;border-radius:20px;width:max-content;display:flex;align-items:center}.s-wallet-table-transaction-status-default{background:#fff6eb;color:#a46f29}.s-wallet-table-transaction-status-cashback{background:#effbf6;color:#00af6c}.s-wallet-table-transaction-status-refund{background:#ecf3fe;color:#5196f3}.s-wallet-table-transaction-status-purchase{background:#feecec;color:#f55157}.s-wallet-table-transaction-status-icons-success{color:#00af6c}";
+
+const SallaWalletTable = /*@__PURE__*/ proxyCustomElement(class SallaWalletTable extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.isLoading = false;
+        this.nextPageUrl = '';
+        this.handleClick = () => {
+            this.loadMoreTransactions();
+        };
+    }
+    componentWillLoad() {
+        return salla.onReady().then(() => this.loadTransactions());
+    }
+    async loadTransactions() {
+        this.isLoading = true;
+        try {
+            let url = `/balance/wallet?per_page=10&page=1`;
+            let resp = await salla.api.request(url);
+            this.nextPageUrl = resp.data.transactions.next_page_url;
+            this.transactionsArray = resp.data.transactions;
+            this.balance = resp.data.balance;
+        }
+        catch (error) {
+            console.error('Error loading wallet transactions', error);
+        }
+        finally {
+            this.isLoading = false;
+        }
+    }
+    async loadMoreTransactions() {
+        this.isLoading = true;
+        try {
+            let url = this.nextPageUrl || '/balance/wallet?page=2&per_page=10';
+            let resp = await salla.api.request(url);
+            this.nextPageUrl = resp.data.transactions.next_page_url;
+            this.transactionsArray.push(...resp.data.transactions.data);
+            this.balance = resp.data.balance;
+        }
+        catch (error) {
+            console.error('Error loading wallet transactions', error);
+        }
+        finally {
+            this.isLoading = false;
+        }
+    }
+    render() {
+        if (this.transactionsArray.length > 0) {
+            return (h(Host, null, h("table", { class: "s-wallet-table" }, h("tbody", { class: "s-wallet-table-tbody" }, h("tr", { class: "s-table__tr" }, h("td", null, h("div", { class: "s-wallet-table-balance-container" }, h("i", { class: "s-wallet-table-balance-icon sicon-wallet" }), h("div", null, h("div", { innerHTML: salla.money(this.balance) }), h("div", { class: "font-normal text-gray-400" }, ' ', salla.lang.get('pages.wallet.balance')))))))), h("h2", { style: { 'margin-top': '32px' } }, salla.lang.get('pages.wallet.title')), h("table", { class: "s-wallet-table" }, h("thead", { class: "s-wallet-table-head" }, h("tr", { class: "s-wallet-table-head-tr" }, h("th", { scope: "col" }, salla.lang.get('pages.wallet.transaction_number')), h("th", { scope: "col", class: "s-wallet-table-head-tr-th" }, salla.lang.get('pages.wallet.amount')), h("th", { scope: "col", class: "s-wallet-table-head-tr-th" }, salla.lang.get('pages.wallet.date')), h("th", { scope: "col", class: "s-wallet-table-head-tr-th" }, salla.lang.get('pages.wallet.order_no')), h("th", { scope: "col", class: "s-wallet-table-head-tr-th" }, salla.lang.get('pages.wallet.expiry_date')), h("th", { scope: "col", class: "s-wallet-table-head-tr-th" }, salla.lang.get('pages.wallet.transaction_type'), ' '))), h("tbody", { class: "s-wallet-table-tbody" }, this.transactionsArray.map(transaction => (h("tr", { class: "s-wallet-table-tbody-tr s-wallet-table-tbody-tr-shadow animated" }, h("td", { class: "s-wallet-table-tbody-tr-td" }, h("div", { class: "s-wallet-table-tbody-tr-td-content" }, h("span", { class: "s-wallet-mobile-title" }, salla.lang.get('pages.wallet.transaction_number'), ":"), transaction.id && (h("span", { class: "hidden md:inline-block" }, "#", transaction.id)), h("div", { class: "flex items-center md:hidden" }, h("salla-button", { class: "relative", color: "dark", shape: "link", "data-content": transaction.order_id }, transaction.order_id && h("span", null, "#", transaction.order_id))))), h("td", { id: "main123", class: "s-wallet-table-tbody-tr-td" }, h("div", { id: "main124", class: "s-wallet-table-tbody-tr-td-content" }, h("span", { id: "main125", class: "s-wallet-mobile-title" }, salla.lang.get('pages.wallet.amount'), ":"), h("div", { innerHTML: salla.money(transaction.amount) }))), h("td", { class: "s-wallet-table-tbody-tr-td" }, h("div", { class: "s-wallet-table-tbody-tr-td-content" }, h("span", { class: "s-wallet-mobile-title" }, salla.lang.get('pages.wallet.date'), ":"), transaction.created_at &&
+                new Date(transaction.created_at * 1000).toLocaleDateString(salla.lang.locale, {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                }))), h("td", { id: "main133", class: "s-wallet-table-tbody-tr-td" }, h("div", { id: "main134", class: "s-wallet-table-tbody-tr-td-content" }, h("span", { id: "main135", class: "s-wallet-mobile-title" }, salla.lang.get('pages.wallet.order_no'), ":"), h("span", { class: "rtl:mr-auto ltr:ml-auto md:mx-0" }, transaction.order_id && h("span", null, "#", transaction.order_id)))), h("td", { id: "main143", class: "s-wallet-table-tbody-tr-td" }, h("div", { id: "main144", class: "s-wallet-table-tbody-tr-td-content" }, h("span", { id: "main145", class: "s-wallet-mobile-title" }, salla.lang.get('pages.wallet.expiry_date'), ":"), h("span", null, transaction.expired_at &&
+                new Date(transaction.expired_at * 1000).toLocaleDateString(salla.lang.locale, {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                })))), h("td", { class: "s-wallet-table-tbody-tr-td" }, h("div", { class: "s-wallet-table-tbody-tr-td-content" }, h("div", null, h("span", { class: "s-wallet-mobile-title" }, salla.lang.get('pages.wallet.transaction_type'), ":")), h("div", { class: {
+                    's-wallet-table-transaction-status-default': true,
+                    's-wallet-table-transaction-status-cashback': transaction.action_type === 'cashback',
+                    's-wallet-table-transaction-status-refund': transaction.action_type === 'refund',
+                    's-wallet-table-transaction-status-purchase': transaction.action_type === 'purchase_by_wallet',
+                } }, !!transaction.description && (h("i", { id: transaction.id.toString(), class: "sicon-information text-lg rtl:ml-4 ltr:mr-4 s-wallet-table-transaction-status-icon-success" })), !!transaction.description && (h("salla-tooltip", { text: transaction.description, targetId: transaction.id.toString() })), h("span", null, transaction.title))))))))), h("div", { class: "s-infinite-scroll-wrapper" }, !!this.nextPageUrl && (h("salla-button", { onClick: this.handleClick, loading: this.isLoading }, salla.lang.get('common.elements.load_more'))))));
+        }
+        else {
+            return (h(Host, null, h("h2", { style: { 'margin-top': '32px' } }, salla.lang.get('pages.wallet.title')), h("div", { class: "s-wallet-table-empty-state" }, h("i", { class: "sicon-full-wallet" }), h("div", { class: "text-center p-3 text-xl font-bold " }, salla.lang.get('pages.wallet.no_transactions')), h("div", { class: "text-center text-gray-400 text-sm font-normal " }, salla.lang.get('pages.wallet.zero_balance'), ' '))));
+        }
+    }
+    static get style() { return sallaWalletCss; }
+}, [0, "salla-wallet", {
+        "transactionsArray": [32],
+        "balance": [32],
+        "isLoading": [32],
+        "nextPageUrl": [32]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-wallet", "salla-button", "salla-tooltip"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-wallet":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaWalletTable);
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-tooltip":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaWallet = SallaWalletTable;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaWallet, defineCustomElement };

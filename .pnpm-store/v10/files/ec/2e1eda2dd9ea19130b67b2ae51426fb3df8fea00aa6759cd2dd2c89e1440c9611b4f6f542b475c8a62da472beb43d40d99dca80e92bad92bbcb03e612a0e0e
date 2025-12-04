@@ -1,0 +1,174 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { d as defineCustomElement$2 } from './salla-skeleton2.js';
+
+var DiscountType;
+(function (DiscountType) {
+    DiscountType["PERCENTAGE"] = "percentage";
+    DiscountType["FIXED"] = "fixed";
+    DiscountType["FREE_PRODUCT"] = "free_product";
+})(DiscountType || (DiscountType = {}));
+var OfferType;
+(function (OfferType) {
+    OfferType["PRODUCT_COUNT"] = "products_count";
+    OfferType["PRODUCT_PURCHASE"] = "order_amount";
+})(OfferType || (OfferType = {}));
+
+const sallaConditionalOfferCss = ":host{display:block}";
+
+const SallaConditionalOffer$1 = /*@__PURE__*/ proxyCustomElement(class SallaConditionalOffer extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.offer = null;
+        this.products = {};
+        this.isLoading = false;
+        this.canRender = true;
+    }
+    componentWillLoad() {
+        salla.onReady().then(() => {
+            if (!salla.config.get('store.features')?.includes('conditional-offer') || (salla.storage.get("cart") !== '' && !salla.storage.get("cart")?.summary?.count)) {
+                throw new Error('feature or cart object does not existed');
+            }
+        })
+            .then(() => salla.api.cart.offers())
+            .then(({ data }) => {
+            this.offer = data.find(offer => offer.type === "conditional");
+            if (!this.offer) {
+                this.canRender = false;
+                return;
+            }
+            this.isLoading = true;
+            this.offer.details.discounts.unshift(({ value: 0, min_spend: 0 }));
+            return this.updateInitialOfferValue();
+        }).then(() => {
+            if (!this.offer)
+                return;
+            return this.getProducts();
+        }).then(() => {
+            if (!this.offer)
+                return;
+            salla.event.on("cart::updated", (updatedCart) => this.updateOfferValues(updatedCart));
+        })
+            .catch(error => {
+            this.canRender = false;
+            salla.logger.warn('salla-conditional-offer:: ', error);
+        }).finally(() => {
+            this.isLoading = false;
+        });
+    }
+    getProducts() {
+        const freeProductIDs = this.offer.details.discounts.filter(({ type }) => type === DiscountType.FREE_PRODUCT).map(({ value }) => value);
+        if (freeProductIDs.length > 0) {
+            return salla.product.fetch({ source: 'selected', source_value: freeProductIDs }).then(({ data }) => {
+                data.forEach(({ id, url, image }) => {
+                    this.products[id] = { url, image };
+                });
+            });
+        }
+    }
+    updateInitialOfferValue() {
+        return salla.api.cart.details().then(({ data: { cart } }) => this.updateOfferValues(cart));
+    }
+    updateOfferValues({ items, sub_total }) {
+        const current_value = this.offer.details.based_on === OfferType.PRODUCT_COUNT ? items?.reduce((count, { quantity }) => count + quantity, 0) ?? 0 : sub_total;
+        //we need to assign the offer object a new reference to trigger re-rendering
+        this.offer = {
+            ...this.offer, details: {
+                ...this.offer?.details, current_value,
+            }
+        };
+        return this.offer;
+    }
+    getCheckpointContent(discount) {
+        if (discount.type === DiscountType.PERCENTAGE)
+            return `${discount.value}%`;
+        if (discount.type === DiscountType.FIXED)
+            return salla.money(discount.value);
+        if (discount.type !== DiscountType.FREE_PRODUCT) {
+            salla.logger.error(`salla-conditional-offer:: unexpected type (${discount.type})!`);
+            return "";
+        }
+        const productItem = this.products[discount.value];
+        if (!productItem) {
+            salla.logger.error(`salla-conditional-offer:: there is no product with id (${discount.value})!`);
+            return "";
+        }
+        return h("a", { class: "s-conditional-offer-product-link", href: productItem.url }, h("img", { class: "s-conditional-offer-checkpoint-image-content", loading: "lazy", decoding: "async", alt: productItem?.image?.alt || "", src: productItem?.image?.url }));
+    }
+    getOfferType(discount) {
+        const basedOn = this.offer.details?.based_on;
+        if (basedOn === OfferType.PRODUCT_COUNT)
+            return salla.lang.choice("blocks.header.products_count", discount.min_spend);
+        if (basedOn === OfferType.PRODUCT_PURCHASE)
+            return salla.money(discount.min_spend);
+        salla.logger.warn(`salla-conditional-offer:: Unexpected offer detail's based_on value: ${basedOn}`);
+        return `${discount.min_spend}`;
+    }
+    clamp(value, min, max) {
+        return Math.max(min, Math.min(value, max));
+    }
+    mapValueRanges(value, initialMinRange, initialMaxRange, newMinRange, newMaxRange) {
+        const newRange = ((value - initialMinRange) * (newMaxRange - newMinRange)) / (initialMaxRange - initialMinRange) + newMinRange;
+        if (newRange === Number.POSITIVE_INFINITY)
+            return 100;
+        if (newRange === Number.NEGATIVE_INFINITY)
+            return 0;
+        return this.clamp(newRange, 0, 100);
+    }
+    getCheckPointView(discount, index) {
+        const checkpointIndex = this.offer.details.discounts.findIndex(({ min_spend }) => min_spend === discount.min_spend);
+        const previousCheckpointValue = this.offer.details.discounts[checkpointIndex - 1]?.min_spend ?? 0;
+        const progressPercentage = this.mapValueRanges(this.offer.details.current_value, previousCheckpointValue, discount.min_spend, 0, 100);
+        const isActive = discount.min_spend <= this.offer.details.current_value;
+        return (h("div", { class: "s-conditional-offer-checkpoint-container" }, index > 0 ? [
+            h("div", { key: "progress-line", class: "s-conditional-offer-progress-line-container" }, h("div", { class: "s-conditional-offer-progress-line-inactive" }), h("div", { class: "s-conditional-offer-progress-line-active", style: { width: `${progressPercentage}%` } })),
+            h("div", { key: "checkpoint", class: `s-conditional-offer-checkpoint ${isActive ? "s-conditional-offer-active-checkpoint" : ""}` }, h("div", { class: `s-conditional-offer-item-avatar-content ${isActive ? "active" : ""}`, innerHTML: this.products && this.getCheckpointContent(discount) }), h("div", { class: `s-conditional-offer-checkpoint-label ${isActive ? "active" : ""}`, innerHTML: this.getOfferType(discount) }))
+        ] :
+            h("div", { key: "label", class: { "s-conditional-offer-checkpoint-label": true, "first-checkpoint": index === 0, active: isActive }, innerHTML: this.getOfferType(discount) })));
+    }
+    getLoadingSkeletonView() {
+        return h(Host, { class: "s-conditional-offer-container" }, h("div", { class: "s-conditional-offer-skeleton-inner-container" }, h("div", { class: "s-conditional-offer-skeleton-subtitle" }, h("salla-skeleton", { height: "16px", width: "30%" })), h("div", { class: "s-conditional-offer-skeleton-subtitle" }, h("salla-skeleton", { height: "16px", width: "35%" })), h("div", { class: "s-conditional-offer-skeleton-checkpoints-wrapper" }, Array(3).fill(null).map(() => ([h("salla-skeleton", { key: "checkpoint-line", height: "8px" }), h("div", { key: "checkpoint" }, h("salla-skeleton", { height: "60px", width: "60px", type: "circle" }))])))));
+    }
+    render() {
+        if (!this.canRender)
+            return null;
+        if (this.isLoading)
+            return this.getLoadingSkeletonView();
+        if (!this.offer)
+            return null;
+        return h(Host, { class: "s-conditional-offer-container" }, h("div", { class: "s-conditional-offer-title-wrapper" }, h("div", { class: "s-conditional-offer-title" }, this.offer.title), this.offer.description ? h("div", { class: "s-conditional-offer-subtitle" }, this.offer.description, " ", h("i", { class: "sicon-information" })) : null), h("div", { class: "s-conditional-offer-progress-container" }, this.offer.details.discounts.map((discount, index) => (h("div", { class: { "flex-1": index > 0 }, key: discount.min_spend }, this.getCheckPointView(discount, index))))));
+    }
+    static get style() { return sallaConditionalOfferCss; }
+}, [0, "salla-conditional-offer", {
+        "offer": [32],
+        "products": [32],
+        "isLoading": [32],
+        "canRender": [32]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-conditional-offer", "salla-skeleton"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-conditional-offer":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaConditionalOffer$1);
+            }
+            break;
+        case "salla-skeleton":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaConditionalOffer = SallaConditionalOffer$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaConditionalOffer, defineCustomElement };

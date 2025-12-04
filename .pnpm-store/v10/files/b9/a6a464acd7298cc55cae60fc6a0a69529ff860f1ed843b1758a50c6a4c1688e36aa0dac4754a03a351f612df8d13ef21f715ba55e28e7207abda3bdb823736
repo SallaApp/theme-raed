@@ -1,0 +1,374 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import Helper from "../../Helpers/Helper";
+//todo:: extends this component from salla-products-list or the opposite
+export class SallaProductsSlider {
+    constructor() {
+        /**
+         * Custom Card Component for the Salla Products Slider.
+         *
+         * This component allows you to customize the appearance of individual product cards within a Salla Products Slider.
+         *
+         * @example
+         * <salla-products-slider product-card-component="my-custom-card-style1" ...
+         * <salla-products-slider product-card-component="my-custom-card-style2" ...
+         */
+        this.productCardComponent = 'custom-salla-product-card';
+        this.apiUrl = '';
+    }
+    componentWillLoad() {
+        return salla.onReady()
+            .then(() => {
+            //TODO:: check why `this.includes` not working!!
+            this.includes = Helper.parseJson(this.includes || this.host.getAttribute('includes'));
+            if (!Array.isArray(this.includes)) {
+                this.includes = null;
+            }
+            Helper.setIncludes(this.includes);
+            this.sourceValueIsValid = !!(this.getSourceValue() || this.isSourceWithoutValue());
+            if (!this.sourceValueIsValid) {
+                salla.logger.warn(`source-value prop is required for source [${this.getSource()}]`);
+                return;
+            }
+            this.hasCustomComponent = !!customElements.get(this.productCardComponent);
+            if (this.source === 'json') {
+                this.productsData = this.getSourceValue();
+                this.isReady = true;
+                return;
+            }
+            if ((this.getSource() == 'related' && !salla.config.get('store.settings.product.related_products_enabled'))) {
+                this.isReady = false;
+                return;
+            }
+            return salla.product.api.fetch({ source: this.getSource(), source_value: this.getSourceValue(), limit: this.limit })
+                .then(response => Helper.injectExtraFieldsToResponse(response))
+                .then(response => {
+                this.productsData = response.data;
+                this.isReady = true;
+                response.source = this.getSource();
+                response.sourceValue = this.getSourceValue();
+                salla.event.emit('salla-products-slider::products.fetched', response.data);
+            });
+        });
+    }
+    componentDidRender() {
+        let processedCount = 0;
+        const intervalId = setInterval(() => {
+            this.host.querySelectorAll('[loading="lazy"]')?.forEach(img => img.removeAttribute('loading'));
+            processedCount++;
+            if (processedCount >= 10) {
+                clearInterval(intervalId);
+            }
+        }, 1000);
+    }
+    isSourceWithoutValue() {
+        return ['offers', 'latest', 'sales', 'top-rated'].includes(this.getSource());
+    }
+    getItemHTML(product) {
+        //as a request they don't want to let the user to open the product details
+        //todo:: find a better way to handle this request
+        this.getSource() === 'landing-page' && (product.url = '');
+        if (this.hasCustomComponent && this.productCardComponent.toLowerCase() == 'custom-salla-product-card') {
+            return h("div", { class: "s-products-slider-card" }, h("custom-salla-product-card", { product: product, source: this.getSource(), "source-value": this.getSourceValue() }));
+        }
+        if (this.hasCustomComponent) {
+            const customElem = document.createElement(this.productCardComponent);
+            customElem.setAttribute('product', JSON.stringify(product));
+            customElem.setAttribute('source', this.getSource());
+            customElem.setAttribute('source-value', this.getSourceValue());
+            return h("div", { class: "s-products-slider-card", innerHTML: customElem.outerHTML });
+        }
+        return h("div", { class: "s-products-slider-card" }, h("salla-product-card", { "show-quantity": this.getSource() == 'landing-page', "hide-add-btn": this.getSource() == 'landing-page', "shadow-on-hover": true, product: product }));
+    }
+    canRender() {
+        return this.sourceValueIsValid && this.isReady;
+    }
+    getSource() {
+        return Helper.getProductsSource(this.source);
+    }
+    getSourceValue() {
+        return Helper.getProductsSourceValue(this.source, this.sourceValue);
+    }
+    render() {
+        if (!this.canRender()) {
+            return;
+        }
+        return (h(Host, { class: "s-products-slider-wrapper" }, h("salla-slider", { class: "s-products-slider-slider", id: this.sliderId || `s-products-slider-${Math.random().toString(36).substr(2, 9)}`, "auto-play": this.autoplay, type: "carousel", "block-title": this.blockTitle, "block-subTitle": this.subTitle, "display-all-url": this.displayAllUrl, sliderConfig: this.sliderConfig ? this.sliderConfig : null }, h("div", { slot: "items" }, this.productsData?.map(product => this.getItemHTML(product))))));
+    }
+    static get is() { return "salla-products-slider"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-products-slider.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-products-slider.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "blockTitle": {
+                "type": "string",
+                "attribute": "block-title",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }, {
+                            "name": "default",
+                            "text": "''"
+                        }],
+                    "text": "Title of the block - works only if slider is true"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "subTitle": {
+                "type": "string",
+                "attribute": "sub-title",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }, {
+                            "name": "default",
+                            "text": "''"
+                        }],
+                    "text": "Sub title of the block - works only if slider is true"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "sliderId": {
+                "type": "string",
+                "attribute": "slider-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }, {
+                            "name": "default",
+                            "text": "''"
+                        }],
+                    "text": "Slider Id, if not provided will be generated automatically"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "displayAllUrl": {
+                "type": "string",
+                "attribute": "display-all-url",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }, {
+                            "name": "default",
+                            "text": "''"
+                        }],
+                    "text": "Display 'ALL' URL"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "autoplay": {
+                "type": "boolean",
+                "attribute": "autoplay",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "autoplay option for products slider"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "source": {
+                "type": "string",
+                "attribute": "source",
+                "mutable": true,
+                "complexType": {
+                    "original": "'categories' | 'latest' | 'related' | 'brands' | 'json' | 'tags' | 'selected' | 'offers' | 'landing-page' | 'wishlist' | 'top-rated'",
+                    "resolved": "\"brands\" | \"categories\" | \"json\" | \"landing-page\" | \"latest\" | \"offers\" | \"related\" | \"selected\" | \"tags\" | \"top-rated\" | \"wishlist\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }, {
+                            "name": "default",
+                            "text": "''"
+                        }],
+                    "text": "Source of the products, if api will get the products from the API, if json will get the products from the products prop"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "sourceValue": {
+                "type": "string",
+                "attribute": "source-value",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }],
+                    "text": "The source value, cloud be different values as following:\n- array of ids when `source` in ['categories', 'brands', 'tags', 'selected']\n- products payload when `source` = 'json'\n- product_id when `source` = 'related'"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "limit": {
+                "type": "number",
+                "attribute": "limit",
+                "mutable": true,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Limit for number of products in the list."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "sliderConfig": {
+                "type": "any",
+                "attribute": "slider-config",
+                "mutable": false,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "example",
+                            "text": "let productsSlider = document.querySelector('salla-products-slider');\n productsSlider.sliderConfig = {\n slidesPerView: 1,\n spaceBetween : 30,\n lazy: true,\n}"
+                        }],
+                    "text": "Slider Configs refer to https://swiperjs.com/swiper-api#parameters and pass the entire config object"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "productCardComponent": {
+                "type": "string",
+                "attribute": "product-card-component",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "example",
+                            "text": "<salla-products-slider product-card-component=\"my-custom-card-style1\" ...\n<salla-products-slider product-card-component=\"my-custom-card-style2\" ..."
+                        }],
+                    "text": "Custom Card Component for the Salla Products Slider.\n\nThis component allows you to customize the appearance of individual product cards within a Salla Products Slider."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'custom-salla-product-card'"
+            },
+            "includes": {
+                "type": "unknown",
+                "attribute": "includes",
+                "mutable": true,
+                "complexType": {
+                    "original": "string[]",
+                    "resolved": "string[]",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Specifies additional data to be included in the product fetch response.\nThe value can be an array of strings or a JSON string.\n\nExample:\n- As an array: includes=[\"options\"]\n- As a JSON string: includes='[\"options\"]'\n\nThe array or JSON string can include:\n- \"options\": Include product options in the response.\n- \"images\": Include product images in the response."
+                },
+                "getter": false,
+                "setter": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "productsData": {},
+            "isReady": {},
+            "sourceValueIsValid": {},
+            "hasCustomComponent": {},
+            "apiUrl": {},
+            "parsedSourceValue": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

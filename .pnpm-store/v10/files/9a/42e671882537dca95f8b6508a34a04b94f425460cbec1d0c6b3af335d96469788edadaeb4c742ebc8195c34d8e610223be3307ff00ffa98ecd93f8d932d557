@@ -1,0 +1,141 @@
+import { GiftResponse, GiftImage } from './gift-schema';
+/**
+ * @slot widget-btn-content - Used to customize widget button content.
+ */
+export declare class SallaGifting {
+    constructor();
+    private modal;
+    private uploader?;
+    private stepsWrapper?;
+    private textSelect?;
+    private customTextArea?;
+    private textArea?;
+    private calendarFormGroup?;
+    private step1Elems?;
+    private step2Elems?;
+    private defaultEvent;
+    sectionTitle: string;
+    sectionSubtitle: string;
+    sectionBtnText: string;
+    giftDetails: string;
+    selectImageForYourGift: string;
+    selectImageOrUpload: string;
+    selectGiftMessage: string;
+    giftCustomText: string;
+    textId: string;
+    incorrectGiftText: string;
+    nextStep: string;
+    senderNameLabel: string;
+    receiverNameFieldLabel: string;
+    receiverMobileFieldLabel: string;
+    receiverCountryFieldLabel: string;
+    ksa: string;
+    selectCountry: string;
+    selectCity: string;
+    selectCityInfo: string;
+    receiverCityFieldLabel: string;
+    receiverEmailFieldLabel: string;
+    emailPlaceholder: string;
+    sendLater: string;
+    selectSendDateAndTime: string;
+    canNotEditOrderAfterSelectDate: string;
+    sendGift: string;
+    donationRequired: string;
+    currentStep: number;
+    showCalendar: boolean;
+    showGiftText: boolean;
+    currentLang: string;
+    parentClass: string;
+    errors: object;
+    gift: GiftResponse;
+    selectedGiftTextOption: string;
+    selectedCountryId: number;
+    selectedCountryCode: string;
+    loadingCities: boolean;
+    parsedFormData?: Record<string, any>;
+    showTextArea: boolean;
+    selectedImage: string;
+    uploadedImage: string;
+    selectedText: string;
+    senderName: string;
+    errorMessage: string;
+    hasError: boolean;
+    quantity: number;
+    deliveryDate: string;
+    timeZone?: string;
+    receiverName: string;
+    receiverMobile: string;
+    receiverCountryCode: string;
+    receiverEmail: string;
+    hostId: string;
+    receiverCity: string;
+    /**
+     * The product id for which the gifting system is required.
+    */
+    productId: number;
+    /**
+     * Widget title
+     */
+    widgetTitle: string;
+    /**
+     * Widget subtitle
+     */
+    widgetSubtitle: string;
+    /**
+     * Is Physcial products
+     */
+    physicalProducts: boolean;
+    /**
+     * Is Vertical widget
+     */
+    vertical: boolean;
+    /**
+     * The form selector to be used to get the form data
+     */
+    formSelector: string;
+    componentDidLoad(): void;
+    private getFormDataFromForm;
+    private mergeObjectToFormData;
+    /**
+     * Show / Open the gifting modal window
+    */
+    open(): Promise<any>;
+    /**
+     *
+     * Hide / close the gifting modal window
+    */
+    close(): Promise<HTMLElement>;
+    /**
+     * Update the modal height based on the changes on the inner elements height for a specific step OR just a pass a new fixed height
+    */
+    private setWrapperHeight;
+    private toggleCalendar;
+    private toggleGiftText;
+    /**
+     *
+     * Go to the step 2
+     */
+    goToStep2(): Promise<void>;
+    /**
+     *
+     * Go to the step 1
+     */
+    goToStep1(e: any): void;
+    private getFilepondPlaceholder;
+    setPreview(image: GiftImage): void;
+    removePreview(): void;
+    private handleTextAreaChange;
+    private handleSenderName;
+    private handleReceiverName;
+    private handleReceiverCity;
+    private handleCountryChange;
+    private handleUploadImage;
+    private handleRemoveImage;
+    private handlePhoneInputChange;
+    private handleDateTimePicker;
+    private getCalendarClasses;
+    private submitForm;
+    private generateClass;
+    private handleGiftButtonClick;
+    render(): any[];
+}

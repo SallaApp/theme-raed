@@ -1,0 +1,313 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, } from "@stencil/core";
+import CameraIcon from "../../assets/svg/camera.svg";
+import { FormFieldTypes, } from "../salla-user-profile/interfaces";
+export class SallaCustomFields {
+    constructor() {
+        this.isEditable = true;
+        this.fieldErrors = {};
+        this.isSubmitting = false;
+    }
+    get dragAndDropText() {
+        return salla.lang.get("common.uploader.drag_and_drop");
+    }
+    get browseText() {
+        return salla.lang.get("common.uploader.browse");
+    }
+    get saveButtonText() {
+        return salla.lang.get("common.elements.save");
+    }
+    async setFields(fields) {
+        this.parsedFields = fields;
+    }
+    async getFieldValues() {
+        return this.parsedFields?.reduce((values, field) => {
+            values[`custom_fields[${field.id}]`] = field.value;
+            return values;
+        }, {}) || {};
+    }
+    async validateFields() {
+        if (!this.parsedFields)
+            return true;
+        const errors = this.parsedFields.reduce((acc, field) => {
+            if (field.required && (!field.value || field.value === "")) {
+                acc[field.id.toString()] = `${field.label} is required`;
+            }
+            return acc;
+        }, {});
+        this.fieldErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+    handleFieldChange(field, event) {
+        const value = event.target.value;
+        field.value = value;
+        this.clearFieldError(field.id);
+        const isValid = !(field.required && !value);
+        if (!isValid) {
+            this.setFieldError(field.id, `${field.label} is required`);
+        }
+        this.fieldChanged.emit({ fieldId: field.id, value, isValid });
+    }
+    handleFileUpload(field, event) {
+        const { error, file } = event.detail;
+        const isValid = !error;
+        this.clearFieldError(field.id);
+        if (isValid) {
+            field.value = file;
+        }
+        else {
+            this.setFieldError(field.id, "File upload failed");
+        }
+        this.fileUploaded.emit({ fieldId: field.id, file, isValid });
+    }
+    clearFieldError(fieldId) {
+        this.fieldErrors = { ...this.fieldErrors };
+        delete this.fieldErrors[fieldId];
+    }
+    setFieldError(fieldId, message) {
+        this.fieldErrors = { ...this.fieldErrors, [fieldId]: message };
+    }
+    renderTextField(field) {
+        return (h("input", { disabled: !this.isEditable, type: field.type, id: `custom-field-${field.id}`, value: field.value?.toString() || "", onChange: (e) => this.handleFieldChange(field, e), name: `${field.id}`, class: "form-input", required: field.required }));
+    }
+    renderFileField(field) {
+        return (h("salla-file-upload", { url: salla.url.api('upload'), id: `custom-field-${field.id}`, name: `${field.id}`, type: "registration", value: field.value, height: "120px", onAdded: (e) => this.handleFileUpload(field, e), required: field.required, disabled: !this.isEditable, onUploaded: e => { e.target.value = e.target.value?.url; }, allowRemove: true, onRemoved: (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                field.value = "";
+                e.target.value = "";
+            }, payloadName: "files[]", payloadParams: { type: 'registration' }, "instant-upload": true }, h("div", { class: "s-custom-fields-filepond-placeholder" }, h("span", { class: "s-custom-fields-filepond-placeholder-icon" }, h("i", { innerHTML: CameraIcon })), h("p", { class: "s-custom-fields-filepond-placeholder-text" }, this.dragAndDropText), h("span", { class: "filepond--label-action" }, this.browseText))));
+    }
+    renderField(field) {
+        return (h("div", { class: "s-custom-fields-field", key: field.id }, h("label", { class: "s-custom-fields-field-label", htmlFor: `custom-field-${field.id}` }, field.label, field.required && h("span", { class: "s-custom-fields-required" }, "*")), h("div", null, field.type === FormFieldTypes.Photo
+            ? this.renderFileField(field)
+            : this.renderTextField(field), this.fieldErrors[field.id] && (h("p", { class: "s-custom-fields-error" }, this.fieldErrors[field.id])))));
+    }
+    componentWillLoad() {
+        this.parsedFields = this.parseFields(this.fields);
+    }
+    parseFields(fields) {
+        if (!fields)
+            return [];
+        return typeof fields === "string"
+            ? JSON.parse(fields)
+            : Array.isArray(fields) ? fields : [];
+    }
+    async handleSubmit(e) {
+        e.preventDefault();
+        this.isSubmitting = true;
+        try {
+            const payload = {};
+            const form = e.target;
+            const elements = form.elements;
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                if (element.name && !element.name.startsWith("hidden") && element.value) {
+                    payload[element.name] = element.value;
+                }
+            }
+            await salla.api.profile.updateCustomFields({
+                id: salla.config.get("store.id"),
+                fields: payload,
+            });
+        }
+        finally {
+            this.isSubmitting = false;
+        }
+    }
+    render() {
+        if (!this.parsedFields?.length)
+            return null;
+        return (h("form", { class: "s-custom-fields-wrapper", onSubmit: this.handleSubmit }, this.parsedFields.map(field => this.renderField(field)), h("salla-button", { type: "submit", loading: this.isSubmitting, disabled: this.isSubmitting || !this.isEditable, "loader-position": "end", class: "s-custom-fields-submit-btn" }, this.saveButtonText)));
+    }
+    static get is() { return "salla-custom-fields"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-custom-fields.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-custom-fields.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "fields": {
+                "type": "string",
+                "attribute": "fields",
+                "mutable": false,
+                "complexType": {
+                    "original": "string | CustomField[]",
+                    "resolved": "CustomField[] | string",
+                    "references": {
+                        "CustomField": {
+                            "location": "import",
+                            "path": "../salla-user-profile/interfaces",
+                            "id": "src/components/salla-user-profile/interfaces.ts::CustomField"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "isEditable": {
+                "type": "boolean",
+                "attribute": "is-editable",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "fileUploadUrl": {
+                "type": "string",
+                "attribute": "file-upload-url",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "parsedFields": {},
+            "fieldErrors": {},
+            "isSubmitting": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "fieldChanged",
+                "name": "fieldChanged",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "complexType": {
+                    "original": "{\n    fieldId: string | number;\n    value: unknown;\n    isValid: boolean;\n  }",
+                    "resolved": "{ fieldId: string | number; value: unknown; isValid: boolean; }",
+                    "references": {}
+                }
+            }, {
+                "method": "fileUploaded",
+                "name": "fileUploaded",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "complexType": {
+                    "original": "{\n    fieldId: string | number;\n    file: File;\n    isValid: boolean;\n  }",
+                    "resolved": "{ fieldId: string | number; file: File; isValid: boolean; }",
+                    "references": {
+                        "File": {
+                            "location": "global",
+                            "id": "global::File"
+                        }
+                    }
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "setFields": {
+                "complexType": {
+                    "signature": "(fields: CustomField[]) => Promise<void>",
+                    "parameters": [{
+                            "name": "fields",
+                            "type": "CustomField[]",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "CustomField": {
+                            "location": "import",
+                            "path": "../salla-user-profile/interfaces",
+                            "id": "src/components/salla-user-profile/interfaces.ts::CustomField"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "",
+                    "tags": []
+                }
+            },
+            "getFieldValues": {
+                "complexType": {
+                    "signature": "() => Promise<{ [key: string]: unknown; }>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<{ [key: string]: unknown; }>"
+                },
+                "docs": {
+                    "text": "",
+                    "tags": []
+                }
+            },
+            "validateFields": {
+                "complexType": {
+                    "signature": "() => Promise<boolean>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<boolean>"
+                },
+                "docs": {
+                    "text": "",
+                    "tags": []
+                }
+            }
+        };
+    }
+}

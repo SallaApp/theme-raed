@@ -1,0 +1,1794 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+import ArrowRightIcon from "../../assets/svg/keyboard_arrow_right.svg";
+import ArrowLeftIcon from "../../assets/svg/keyboard_arrow_left.svg";
+/**
+ * @slot items - Slider items.
+ * @slot thumbs - Thumbs slider items.
+ */
+export class SallaSlider {
+    constructor() {
+        /**
+         * Show/hide slider block title
+         */
+        this.blockTitle = '';
+        /**
+         * Enable call a specific slide by index from thumbnails option in `salla-slider-options` component, works only if `data-img-id` and `data-slid-index` attributes are set on each slide
+         */
+        this.listenToThumbnailsOption = false;
+        /**
+         * Show/hide slider block sub title
+         */
+        this.blockSubtitle = '';
+        /**
+         * Show/hide display all button beside arrows
+         */
+        this.displayAllUrl = '';
+        /**
+         * Show/hide display all button beside arrows
+         */
+        this.arrowsCentered = false;
+        /**
+         * Vertical or Horizontal thumbs slider
+         */
+        this.verticalThumbs = false;
+        /**
+         * Disable thumbs slider and show it as a grid
+         */
+        this.gridThumbs = false;
+        /**
+         * Vertical or Horizontal main slider
+         */
+        this.vertical = false;
+        /**
+         * Auto Height slider
+         */
+        this.autoHeight = false;
+        /**
+         * Show/hide arrows
+         */
+        this.showControls = true;
+        /**
+         * Show/hide arrows
+         */
+        this.controlsOuter = false;
+        /**
+         * Show/hide thumbs slider arrows
+         */
+        this.showThumbsControls = true;
+        /**
+         * Enable autoplay  - working with `type="carousel" only`
+         */
+        this.autoPlay = false;
+        /**
+         * slidesPerView
+         */
+        this.slidesPerView = "auto";
+        /**
+         * Enable pagination
+         */
+        this.pagination = false;
+        /**
+         * Enable center mode  - working with `type="carousel" only`
+         */
+        this.centered = false;
+        /**
+         * Run slider in loop, Don't use it for slides with custom components inside it, because it may cause re-render issue
+         */
+        this.loop = false;
+        /**
+         * Set the type of the slider
+         * Default: ''
+         */
+        this.type = '';
+        // States
+        this.currentIndex = undefined;
+        this.isEnd = false;
+        this.isBeginning = true;
+        this.windowWidth = window.innerWidth;
+        this.hasThumbSlot = false;
+        this.pre_defined_config = {
+            carousel: {
+                speed: 300,
+                slidesPerView: 'auto',
+                spaceBetween: 0,
+            },
+            fullwidth: {
+                speed: 750,
+                parallax: true,
+            },
+            fullscreen: {
+                speed: 1000,
+                parallax: true,
+                direction: "vertical",
+                followFinger: false,
+                touchReleaseOnEdges: true,
+                lazy: true,
+                mousewheel: {}
+            },
+            testimonials: {
+                draggable: true,
+                slidesPerView: 1,
+                breakpoints: { 1024: { slidesPerView: 2 } }
+            },
+            blog: {
+                parallax: true,
+                speed: 800,
+                loop: true,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 30,
+                breakpoints: {
+                    320: { spaceBetween: 10 },
+                    768: { spaceBetween: 15 },
+                    980: { paceBetween: 30 },
+                }
+            },
+            thumbs: {
+                slidesPerView: 1,
+                spaceBetween: 30
+            }
+        };
+        this.direction = this.direction || document.documentElement.dir;
+    }
+    // Methods
+    /**
+     * Returns the Swiper instance to allow direct manipulation
+     * @returns The Swiper slider instance
+     */
+    async sliderInstance() {
+        return this.slider;
+    }
+    /**
+     * Run transition to the slide with index number equal to 'index' parameter for the duration equal to 'speed' parameter.
+     *
+     * @param {number} index - Index number of slide.
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slideTo(index, speed, runCallbacks) {
+        return this.slider.slideTo(index, speed, runCallbacks);
+    }
+    /**
+     * Run transition to the next slide.
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slideNext(speed, runCallbacks) {
+        this.slider?.slideNext(speed, runCallbacks);
+    }
+    /**
+     * Run transition to the previous slide.
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slidePrev(speed, runCallbacks) {
+        this.slider?.slidePrev(speed, runCallbacks);
+    }
+    /**
+     * Does the same as .slideTo but for the case when used with enabled loop. So this method will slide to slides with realIndex matching to passed index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slideToLoop(index, speed, runCallbacks) {
+        this.slider.slideToLoop(index, speed, runCallbacks);
+    }
+    /**
+     * Does the same as .slideNext but for the case when used with enabled loop. So this method will slide to next slide with realIndex matching to next index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slideNextLoop(speed, runCallbacks) {
+        this.slider.slideNextLoop(speed, runCallbacks);
+    }
+    /**
+     * Does the same as .slidePrev but for the case when used with enabled loop. So this method will slide to previous slide with realIndex matching to previous index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slidePrevLoop(speed, runCallbacks) {
+        this.slider.slidePrevLoop(speed, runCallbacks);
+    }
+    /**
+     * Reset slider position to currently active slide for the duration equal to 'speed' parameter.
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slideReset(speed, runCallbacks) {
+        this.slider.slideReset(speed, runCallbacks);
+    }
+    /**
+     * Reset slider position to closest slide/snap point for the duration equal to 'speed' parameter.
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async slideToClosest(speed, runCallbacks) {
+        this.slider.slideToClosest(speed, runCallbacks);
+    }
+    /**
+     *  You should call it after you add/remove slides manually, or after you hide/show it, or do any custom DOM modifications with Swiper This method also includes subcall of the following methods which you can use separately:
+     * **/
+    async update() {
+        this.slider.update();
+    }
+    /**
+     * Force slider to update its height (when autoHeight enabled) for the duration equal to 'speed' parameter
+     * @param {number} speed - Transition duration (in ms).
+     * **/
+    async updateAutoHeight(speed) {
+        this.slider.updateAutoHeight(speed);
+    }
+    /**
+     * recalculate number of slides and their offsets. Useful after you add/remove slides with JavaScript
+     * **/
+    async updateSlides() {
+        this.slider.updateSlides();
+    }
+    /**
+     * recalculate slider progress
+     * **/
+    async updateProgress() {
+        this.slider.updateProgress();
+    }
+    /**
+     * update active/prev/next classes on slides and bullets
+     * **/
+    async updateSlidesClasses() {
+        this.slider.updateSlidesClasses();
+    }
+    /**
+     * Get slider slides
+     * **/
+    async getSlides() {
+        return await this.slider?.slides;
+    }
+    /**
+     * Get slider slides
+     * **/
+    async updateSize() {
+        return await this.slider.updateSize();
+    }
+    /**
+     * Get thumbs slider update
+     * **/
+    async sliderInit() {
+        return await this.slider.init();
+    }
+    /**
+     * Get thumbs slider slides
+     * **/
+    async thumbsSliderInstance() {
+        return await this.thumbsSlider;
+    }
+    /**
+     * Get thumbs slider update
+     * **/
+    async thumbsSliderInit() {
+        return await this.thumbsSlider.init();
+    }
+    /**
+     * Get thumbs slider update
+     * **/
+    async thumbsSliderUpdate() {
+        return await this.thumbsSlider.update();
+    }
+    /**
+     * Get thumbs slider updateSlides
+     * **/
+    async thumbsSliderUpdateSlides() {
+        return await this.thumbsSlider.updateSlides();
+    }
+    /**
+   * Get thumbs slider updateSize
+   * **/
+    async getThumbsUpdateSize() {
+        return await this.thumbsSlider?.updateSize();
+    }
+    /**
+     * Does the same as .slideTo but for the case when used with enabled loop. So this method will slide to slides with realIndex matching to passed index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    async thumbsSlideTo(index, speed, runCallbacks) {
+        return this.thumbsSlider.slideTo(index, speed, runCallbacks);
+    }
+    /**
+   * Get thumbs slider slides
+   * **/
+    async getThumbsSlides() {
+        return await this.thumbsSlider?.slides;
+    }
+    componentWillLoad() {
+        salla.lang.onLoaded(() => {
+            this.displayAllTitle = salla.lang.get('blocks.home.display_all');
+        });
+        this.hasThumbSlot = !!this.host.querySelector('[slot="thumbs"]');
+        if (this.listenToThumbnailsOption) {
+            salla.event.on('product-options::change', data => {
+                if (data.option.type == 'thumbnail') {
+                    const slideIndex = this.sliderWrapper.querySelector(`[data-img-id="${data.detail.option_value}"]`)?.getAttribute('data-slid-index');
+                    slideIndex ? this.slideTo(parseInt(slideIndex), 300, false) : '';
+                }
+            });
+        }
+        return new Promise((resolve, reject) => {
+            // @ts-ignore
+            if (typeof Swiper !== 'undefined') {
+                return resolve(true);
+            }
+            if (document.getElementById('swiper-script')) {
+                let interval = setInterval(() => {
+                    // @ts-ignore
+                    if (typeof Swiper !== 'undefined') {
+                        clearInterval(interval);
+                        resolve(true);
+                    }
+                }, 5);
+            }
+            else {
+                // ? There is an issue with stencil bundling it breaks the swiper import, so we need to import it manually by swiperjs rerendered file
+                // ! IT'S NOT A GOOD SOLUTION, BUT IT WORKS, WE NEED TO FIND A BETTER SOLUTION
+                this.swiperScript = document.createElement('script');
+                this.swiperScript.onload = () => {
+                    resolve(true);
+                    salla.event.emit('swiper::loaded');
+                };
+                this.swiperScript.onerror = (error) => {
+                    salla.logger.warn('failed load swiper bundle', error);
+                    reject(true);
+                };
+                this.swiperScript.src = 'https://cdn.salla.network/js/swiper@8.js';
+                this.swiperScript.setAttribute('id', 'swiper-script');
+                document.body.appendChild(this.swiperScript);
+            }
+        });
+    }
+    getSwiperConfig() {
+        let autoplay = this.autoPlay;
+        if (autoplay && typeof autoplay !== 'object') {
+            autoplay = { delay: 10000 };
+        }
+        let pre_defined_config = {
+            loop: this.loop,
+            autoplay,
+            centeredSlides: this.centered,
+            slidesPerView: this.slidesPerView,
+            autoHeight: this.autoHeight,
+            lazy: true,
+            on: {
+                // todo:: find better way for this workaround to show lazyLoad for duplicated slides, because it clones the slide after it's already rendered,
+                // then it re appended it as is,in this case the image is loaded but class not added.
+                afterInit: (slider) => {
+                    this.afterInit.emit(slider);
+                    document.lazyLoadInstance?.update();
+                    this.loop && slider.slides.map(slide => {
+                        if (!slide.classList.contains('swiper-slide-duplicate')) {
+                            return;
+                        }
+                        slide.querySelectorAll('img.lazy:not(.loaded)').forEach(img => img.classList.add('loaded'));
+                    });
+                },
+            },
+            pagination: this.pagination ? {
+                el: this.host.id ? `#${this.host.id} .swiper-pagination` : '',
+                clickable: true,
+            } : false,
+            navigation: this.showControls ? {
+                nextEl: this.host.id ? `#${this.host.id} .s-slider-next` : '',
+                prevEl: this.host.id ? `#${this.host.id} .s-slider-prev` : ''
+            } : false,
+            breakpoints: {
+                768: {
+                    direction: this.vertical ? "vertical" : "horizontal",
+                },
+            },
+        };
+        let pre_defined_thumbs_config = {
+            freeMode: false,
+            watchSlidesProgress: true,
+            slidesPerView: 4,
+            spaceBetween: 10,
+            watchOverflow: true,
+            watchSlidesVisibility: true,
+            breakpoints: {
+                768: {
+                    direction: this.verticalThumbs ? "vertical" : "horizontal",
+                    spaceBetween: 16,
+                },
+            },
+            navigation: this.showThumbsControls ? {
+                nextEl: this.host.id ? `#${this.host.id} .s-slider-thumbs-next` : '',
+                prevEl: this.host.id ? `#${this.host.id} .s-slider-thumbs-prev` : ''
+            } : false,
+        };
+        this.pre_defined_config.fullscreen.mousewheel = {
+            releaseOnEdges: this.host.querySelectorAll('.swiper-slide').length > 1 ? false : true
+        },
+            pre_defined_config = {
+                ...pre_defined_config,
+                ...(this.pre_defined_config[this.type] || {})
+            };
+        if (this.type == 'thumbs' && this.thumbsSliderWrapper) {
+            for (const slide of this.thumbsSliderWrapper.children) {
+                //todo:: use `s-slider-slide`
+                slide.classList.add('swiper-slide');
+            }
+            if (this.hasThumbSlot && this.thumbsConfig) {
+                try {
+                    pre_defined_thumbs_config = {
+                        ...pre_defined_thumbs_config,
+                        ...(typeof this.thumbsConfig === 'string' ? JSON.parse(this.thumbsConfig) : this.thumbsConfig)
+                    };
+                }
+                catch (error) {
+                    salla.logger.warn('Failed to parse thumbs slider config:', error);
+                }
+            }
+            // @ts-ignore
+            this.thumbsSlider = new Swiper(this.thumbsSliderContainer, pre_defined_thumbs_config);
+            // @ts-ignore
+            pre_defined_config.thumbs = {
+                swiper: this.thumbsSlider,
+            };
+        }
+        pre_defined_config = {
+            ...pre_defined_config,
+        };
+        if (this.sliderConfig) {
+            try {
+                pre_defined_config = {
+                    ...pre_defined_config,
+                    ...(typeof this.sliderConfig === 'string' ? JSON.parse(this.sliderConfig) : this.sliderConfig)
+                };
+            }
+            catch (error) {
+                salla.logger.warn('Failed to parse slider config:', error);
+            }
+        }
+        return pre_defined_config;
+    }
+    getThumbsDirection() {
+        const { verticalThumbs, windowWidth, direction } = this;
+        if (verticalThumbs && windowWidth < 768 && direction === 'rtl') {
+            return 'rtl';
+        }
+        if (verticalThumbs && windowWidth > 768 && direction === 'rtl') {
+            return 'ltr';
+        }
+        return direction;
+    }
+    initSlider() {
+        for (const slide of this.sliderWrapper.children) {
+            slide.classList.add('swiper-slide');
+        }
+        // @ts-ignore
+        this.slider = new Swiper(this.sliderContainer, this.getSwiperConfig());
+        // Expose slider events
+        this.slider.on('slideChange', (slider) => {
+            //todo:: it doesn't change when loop is active, always will be false
+            this.isBeginning = slider.isBeginning;
+            this.isEnd = slider.isEnd;
+            this.slideChange.emit(slider);
+        });
+        this.slider.on('reachBeginning', (slider) => this.reachBeginning.emit(slider));
+        this.slider.on('reachEnd', (slider) => this.reachEnd.emit(slider));
+        this.slider.on('slideChangeTransitionEnd', (slider) => {
+            if (this.type == "fullscreen") {
+                const activeIndex = slider.activeIndex;
+                slider.params.mousewheel.releaseOnEdges = activeIndex === 0 || (activeIndex === slider.slides.length - 1);
+            }
+            this.slideChangeTransitionEnd.emit(slider);
+        });
+        this.slider.on('slideChangeTransitionStart', (slider) => this.slideChangeTransitionStart.emit(slider));
+        this.slider.on('slideNextTransitionEnd', (slider) => this.slideNextTransitionEnd.emit(slider));
+        this.slider.on('slideNextTransitionStart', (slider) => this.slideNextTransitionStart.emit(slider));
+        this.slider.on('slidePrevTransitionEnd', (slider) => this.slidePrevTransitionEnd.emit(slider));
+        this.slider.on('slidePrevTransitionStart', (slider) => this.slidePrevTransitionStart.emit(slider));
+        this.slider.on('sliderMove', (slider) => this.sliderMove.emit(slider));
+        this.slider.on('touchEnd', (slider) => this.touchSliderEnd.emit(slider));
+        this.slider.on('touchMove', (slider) => this.touchSliderMove.emit(slider));
+        this.slider.on('touchStart', (slider) => this.touchSliderStart.emit(slider));
+        this.slider.on('transitionEnd', (slider) => this.sliderTransitionEnd.emit(slider));
+        this.slider.on('transitionStart', (slider) => this.sliderTransitionStart.emit(slider));
+    }
+    render() {
+        let classes = this.type ? this.type + '-slider ' : '';
+        classes += this.controlsOuter ? ' s-slider-controls-outer ' : '';
+        classes += this.blockTitle == '' ? ' s-slider-has-notitle s-slider-v-centered ' : '';
+        classes += this.verticalThumbs ? ' s-slider-vertical ' : ' s-slider-horizontal ';
+        classes += this.arrowsCentered ? ' s-slider-v-centered ' : '';
+        classes += this.gridThumbs ? ' s-slider-with-grid-thumbs ' : '';
+        return (h(Host, { key: 'f252a63bd425f788d31328179372fa365385a85c', class: 's-slider-wrapper ' + classes }, this.blockTitle || this.showControls ?
+            h("div", { class: "s-slider-block__title" }, this.blockTitle ?
+                h("div", { class: "s-slider-block__title-right" }, h("h2", null, this.blockTitle), this.blockSubtitle ? h("p", { innerHTML: this.blockSubtitle }) : '')
+                : '', h("div", { class: "s-slider-block__title-left" }, this.displayAllUrl ?
+                h("a", { href: this.displayAllUrl, class: "s-slider-block__display-all" }, this.displayAllTitle)
+                : '', this.showControls ?
+                h("div", { class: "s-slider-block__title-nav", dir: "rtl" }, h("button", { "aria-label": "Previous Slide", class: "s-slider-prev s-slider-nav-arrow" }, h("span", { class: "s-slider-button-icon", innerHTML: this.direction == 'rtl' ? ArrowRightIcon : ArrowLeftIcon })), h("button", { "aria-label": "Next Slide", class: "s-slider-next s-slider-nav-arrow" }, h("span", { class: "s-slider-button-icon", innerHTML: this.direction == 'rtl' ? ArrowLeftIcon : ArrowRightIcon })))
+                : ''))
+            : '', h("div", { key: 'e84fedf7c982d9c15a2b43631123ae42ecf98ab8', class: "swiper s-slider-container", ref: el => this.sliderContainer = el, dir: this.vertical ? "ltr" : this.direction }, h("slot", { key: 'b91356832a6d5e19134073400f19046c3372b403' }), h("div", { key: '21d21f8ec73eb27016a199272e4193456e2e3823', class: "swiper-wrapper s-slider-swiper-wrapper", ref: el => this.sliderWrapper = el }, h("slot", { key: 'e18cdeba693a383a75523836c761f33bbc5e115e', name: 'items' })), this.pagination ? h("div", { class: "swiper-pagination" }) : ''), this.type == 'thumbs' && this.hasThumbSlot ? h("div", { class: "s-slider-thumbs" }, h("div", { class: "swiper s-slider-thumbs-container", dir: this.getThumbsDirection(), ref: el => this.thumbsSliderContainer = el }, h("div", { class: { "s-slider-swiper-wrapper swiper-wrapper": true, "s-slider-grid-thumbs": this.gridThumbs }, ref: el => this.thumbsSliderWrapper = el }, h("slot", { name: "thumbs" })), this.showThumbsControls ?
+            h("div", { class: "s-slider-thumbs-nav", dir: "rtl" }, h("button", { "aria-label": "Previous Slide", class: "s-slider-thumbs-prev s-slider-nav-arrow" }, h("span", { class: "s-slider-button-icon", innerHTML: this.direction == 'rtl' ? ArrowRightIcon : ArrowLeftIcon })), h("button", { "aria-label": "Next Slide", class: "s-slider-thumbs-next s-slider-nav-arrow" }, h("span", { class: "s-slider-button-icon", innerHTML: this.direction == 'rtl' ? ArrowLeftIcon : ArrowRightIcon })))
+            : null))
+            : null));
+    }
+    componentDidLoad() {
+        let itemsSlot = this.sliderWrapper.querySelector('div[slot="items"]');
+        !!itemsSlot ? itemsSlot.replaceWith(...itemsSlot.children) : null;
+        if (this.type == 'thumbs' && this.hasThumbSlot) {
+            let thumbsSlot = this.thumbsSliderWrapper.querySelector('div[slot="thumbs"]');
+            !!thumbsSlot ? thumbsSlot.replaceWith(...thumbsSlot.children) : null;
+        }
+        // if swiper is not loaded, lets relay on event
+        // @ts-ignore
+        if (typeof Swiper === 'undefined') {
+            salla.event.once('swiper::loaded', () => this.initSlider());
+        }
+        else { // if swiper is loaded lets init our slider
+            this.initSlider();
+        }
+    }
+    static get is() { return "salla-slider"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-slider.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-slider.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "blockTitle": {
+                "type": "string",
+                "attribute": "block-title",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show/hide slider block title"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "''"
+            },
+            "listenToThumbnailsOption": {
+                "type": "boolean",
+                "attribute": "listen-to-thumbnails-option",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable call a specific slide by index from thumbnails option in `salla-slider-options` component, works only if `data-img-id` and `data-slid-index` attributes are set on each slide"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "blockSubtitle": {
+                "type": "string",
+                "attribute": "block-subtitle",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show/hide slider block sub title"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "''"
+            },
+            "displayAllUrl": {
+                "type": "string",
+                "attribute": "display-all-url",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show/hide display all button beside arrows"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "''"
+            },
+            "arrowsCentered": {
+                "type": "boolean",
+                "attribute": "arrows-centered",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show/hide display all button beside arrows"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "verticalThumbs": {
+                "type": "boolean",
+                "attribute": "vertical-thumbs",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Vertical or Horizontal thumbs slider"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "gridThumbs": {
+                "type": "boolean",
+                "attribute": "grid-thumbs",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Disable thumbs slider and show it as a grid"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "vertical": {
+                "type": "boolean",
+                "attribute": "vertical",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Vertical or Horizontal main slider"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "autoHeight": {
+                "type": "boolean",
+                "attribute": "auto-height",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Auto Height slider"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "showControls": {
+                "type": "boolean",
+                "attribute": "show-controls",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show/hide arrows"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "true"
+            },
+            "controlsOuter": {
+                "type": "boolean",
+                "attribute": "controls-outer",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show/hide arrows"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "showThumbsControls": {
+                "type": "boolean",
+                "attribute": "show-thumbs-controls",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show/hide thumbs slider arrows"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "autoPlay": {
+                "type": "boolean",
+                "attribute": "auto-play",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable autoplay  - working with `type=\"carousel\" only`"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "slidesPerView": {
+                "type": "string",
+                "attribute": "slides-per-view",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "slidesPerView"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"auto\""
+            },
+            "pagination": {
+                "type": "boolean",
+                "attribute": "pagination",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable pagination"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "centered": {
+                "type": "boolean",
+                "attribute": "centered",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable center mode  - working with `type=\"carousel\" only`"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "loop": {
+                "type": "boolean",
+                "attribute": "loop",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Run slider in loop, Don't use it for slides with custom components inside it, because it may cause re-render issue"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "direction": {
+                "type": "string",
+                "attribute": "direction",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Slider direction. Default: document.documentElement.dir"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "type": {
+                "type": "string",
+                "attribute": "type",
+                "mutable": false,
+                "complexType": {
+                    "original": "'carousel' | 'fullscreen' | 'thumbs' | 'default' | 'hero' | 'testimonials' | 'blog' | 'fullwidth' | ''",
+                    "resolved": "\"\" | \"blog\" | \"carousel\" | \"default\" | \"fullscreen\" | \"fullwidth\" | \"hero\" | \"testimonials\" | \"thumbs\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set the type of the slider\nDefault: ''"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "''"
+            },
+            "sliderConfig": {
+                "type": "any",
+                "attribute": "slider-config",
+                "mutable": false,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "example",
+                            "text": "let slider = document.querySelector('salla-slider');\n slider.sliderConfig = {\n slidesPerView: 1,\n spaceBetween : 30,\n lazy: true,\n}"
+                        }],
+                    "text": "Slider Configs refer to https://swiperjs.com/swiper-api#parameters and pass the entire config object"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "thumbsConfig": {
+                "type": "any",
+                "attribute": "thumbs-config",
+                "mutable": false,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "example",
+                            "text": "let slider = document.querySelector('salla-slider');\n slider.thumbsConfig = {\n slidesPerView: 1,\n spaceBetween : 30,\n lazy: true,\n}"
+                        }],
+                    "text": "Thumbs Slider Configs refer to https://swiperjs.com/swiper-api#parameters and pass the entire config object"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            }
+        };
+    }
+    static get states() {
+        return {
+            "currentIndex": {},
+            "isEnd": {},
+            "isBeginning": {},
+            "swiperScript": {},
+            "displayAllTitle": {},
+            "windowWidth": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "afterInit",
+                "name": "afterInit",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will fired right after initialization."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "slideChange",
+                "name": "slideChange",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired when currently active slide is changed"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "reachBeginning",
+                "name": "reachBeginning",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired when Swiper reach its beginning (initial position)"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "reachEnd",
+                "name": "reachEnd",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired when Swiper reach last slide"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "slideChangeTransitionEnd",
+                "name": "slideChangeTransitionEnd",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired after animation to other slide (next or previous)."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "slideChangeTransitionStart",
+                "name": "slideChangeTransitionStart",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired in the beginning of animation to other slide (next or previous)."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "slideNextTransitionEnd",
+                "name": "slideNextTransitionEnd",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Same as \"slideChangeTransitionEnd\" but for \"forward\" direction only"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "slideNextTransitionStart",
+                "name": "slideNextTransitionStart",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Same as \"slideChangeTransitionStart\" but for \"forward\" direction only"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "slidePrevTransitionEnd",
+                "name": "slidePrevTransitionEnd",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Same as \"slideChangeTransitionEnd\" but for \"backward\" direction only"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "slidePrevTransitionStart",
+                "name": "slidePrevTransitionStart",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Same as \"slideChangeTransitionStart\" but for \"backward\" direction only"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "sliderMove",
+                "name": "sliderMove",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired when user touch and move finger over Swiper and move it.\nReceives touchmove event as an arguments."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "touchSliderEnd",
+                "name": "touchSliderEnd",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired when user release Swiper. Receives touchend event as an arguments."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "touchSliderMove",
+                "name": "touchSliderMove",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired when user touch and move finger over Swiper.\nReceives touchmove event as an arguments."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "touchSliderStart",
+                "name": "touchSliderStart",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired when user touch Swiper. Receives touchstart event as an arguments."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "sliderTransitionEnd",
+                "name": "sliderTransitionEnd",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired after transition."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "sliderTransitionStart",
+                "name": "sliderTransitionStart",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event will be fired in the beginning of transition."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "sliderInstance": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Returns the Swiper instance to allow direct manipulation",
+                    "tags": [{
+                            "name": "returns",
+                            "text": "The Swiper slider instance"
+                        }]
+                }
+            },
+            "slideTo": {
+                "complexType": {
+                    "signature": "(index: number, speed?: number, runCallbacks?: boolean) => Promise<any>",
+                    "parameters": [{
+                            "name": "index",
+                            "type": "number",
+                            "docs": "- Index number of slide."
+                        }, {
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Run transition to the slide with index number equal to 'index' parameter for the duration equal to 'speed' parameter.",
+                    "tags": [{
+                            "name": "param",
+                            "text": "index - Index number of slide."
+                        }, {
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "slideNext": {
+                "complexType": {
+                    "signature": "(speed?: number, runCallbacks?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Run transition to the next slide.",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "slidePrev": {
+                "complexType": {
+                    "signature": "(speed?: number, runCallbacks?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Run transition to the previous slide.",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "slideToLoop": {
+                "complexType": {
+                    "signature": "(index: number, speed?: number, runCallbacks?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "index",
+                            "type": "number",
+                            "docs": ""
+                        }, {
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Does the same as .slideTo but for the case when used with enabled loop. So this method will slide to slides with realIndex matching to passed index",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "slideNextLoop": {
+                "complexType": {
+                    "signature": "(speed?: number, runCallbacks?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Does the same as .slideNext but for the case when used with enabled loop. So this method will slide to next slide with realIndex matching to next index",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "slidePrevLoop": {
+                "complexType": {
+                    "signature": "(speed?: number, runCallbacks?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Does the same as .slidePrev but for the case when used with enabled loop. So this method will slide to previous slide with realIndex matching to previous index",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "slideReset": {
+                "complexType": {
+                    "signature": "(speed?: number, runCallbacks?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Reset slider position to currently active slide for the duration equal to 'speed' parameter.",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "slideToClosest": {
+                "complexType": {
+                    "signature": "(speed?: number, runCallbacks?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Reset slider position to closest slide/snap point for the duration equal to 'speed' parameter.",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "update": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "You should call it after you add/remove slides manually, or after you hide/show it, or do any custom DOM modifications with Swiper This method also includes subcall of the following methods which you can use separately:\n*",
+                    "tags": []
+                }
+            },
+            "updateAutoHeight": {
+                "complexType": {
+                    "signature": "(speed?: number) => Promise<void>",
+                    "parameters": [{
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms).\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Force slider to update its height (when autoHeight enabled) for the duration equal to 'speed' parameter",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms).\n*"
+                        }]
+                }
+            },
+            "updateSlides": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "recalculate number of slides and their offsets. Useful after you add/remove slides with JavaScript\n*",
+                    "tags": []
+                }
+            },
+            "updateProgress": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "recalculate slider progress\n*",
+                    "tags": []
+                }
+            },
+            "updateSlidesClasses": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "update active/prev/next classes on slides and bullets\n*",
+                    "tags": []
+                }
+            },
+            "getSlides": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get slider slides\n*",
+                    "tags": []
+                }
+            },
+            "updateSize": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get slider slides\n*",
+                    "tags": []
+                }
+            },
+            "sliderInit": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get thumbs slider update\n*",
+                    "tags": []
+                }
+            },
+            "thumbsSliderInstance": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get thumbs slider slides\n*",
+                    "tags": []
+                }
+            },
+            "thumbsSliderInit": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get thumbs slider update\n*",
+                    "tags": []
+                }
+            },
+            "thumbsSliderUpdate": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get thumbs slider update\n*",
+                    "tags": []
+                }
+            },
+            "thumbsSliderUpdateSlides": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get thumbs slider updateSlides\n*",
+                    "tags": []
+                }
+            },
+            "getThumbsUpdateSize": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get thumbs slider updateSize\n*",
+                    "tags": []
+                }
+            },
+            "thumbsSlideTo": {
+                "complexType": {
+                    "signature": "(index: number, speed?: number, runCallbacks?: boolean) => Promise<any>",
+                    "parameters": [{
+                            "name": "index",
+                            "type": "number",
+                            "docs": ""
+                        }, {
+                            "name": "speed",
+                            "type": "number",
+                            "docs": "- Transition duration (in ms)."
+                        }, {
+                            "name": "runCallbacks",
+                            "type": "boolean",
+                            "docs": "- Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Does the same as .slideTo but for the case when used with enabled loop. So this method will slide to slides with realIndex matching to passed index",
+                    "tags": [{
+                            "name": "param",
+                            "text": "speed - Transition duration (in ms)."
+                        }, {
+                            "name": "param",
+                            "text": "runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.\n*"
+                        }]
+                }
+            },
+            "getThumbsSlides": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Get thumbs slider slides\n*",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

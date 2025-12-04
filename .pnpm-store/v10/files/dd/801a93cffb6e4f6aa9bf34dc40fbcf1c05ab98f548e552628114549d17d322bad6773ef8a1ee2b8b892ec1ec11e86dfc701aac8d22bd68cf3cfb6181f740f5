@@ -1,0 +1,116 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+/**
+ * @slot app - Replaces app item, has replaceable props `{icon}`, `{name}`.
+ */
+export class SallaAppsIcons {
+    constructor() {
+        this.apps = salla.config.get('store.apps');
+        this.appSlot = this.host.querySelector('[slot="app"]')?.innerHTML || `<img alt={name} src={icon} />`;
+        salla.onReady(() => {
+            this.apps = salla.config.get('store.apps');
+        });
+        salla.lang.onLoaded(() => {
+            this.appsTitle = salla.lang.get('blocks.footer.download_apps');
+        });
+    }
+    getAppsArray() {
+        return Object.entries(this.apps)
+            .map(([name, value]) => ({ name, value }));
+    }
+    componentWillLoad() {
+        return new Promise(resolve => salla.onReady(resolve));
+    }
+    render() {
+        const appsArray = this.getAppsArray();
+        if (Array.isArray(appsArray) && !appsArray.length) {
+            return;
+        }
+        return (h(Host, { class: "s-apps-icons" }, !this.hideTitle && h("h3", null, this.appsTitle), h("div", { class: { "s-apps-icons-list": true, "vertical": this.vertical } }, appsArray.map((app, index) => (h("a", { key: index, href: app.value, rel: "noreferrer", target: "_blank", class: "s-apps-icons-item", id: "app-slot", innerHTML: this.appSlot
+                .replace(/\{icon\}/g, salla.url.cdn(`images/${app.name}.png`))
+                .replace(/\{name\}/g, app.name) }))))));
+    }
+    componentDidRender() {
+        this.host.querySelector('[slot="app"]')?.remove();
+    }
+    static get is() { return "salla-apps-icons"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-apps-icons.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-apps-icons.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "hideTitle": {
+                "type": "boolean",
+                "attribute": "hide-title",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Flag to show or hide title."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "appsTitle": {
+                "type": "string",
+                "attribute": "apps-title",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The title to display."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "vertical": {
+                "type": "boolean",
+                "attribute": "vertical",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Display flag to horizontal/vertical."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "apps": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

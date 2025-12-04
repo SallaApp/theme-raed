@@ -1,0 +1,196 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import { generateRandomId } from "./utils";
+/**
+ * @slot The default slot.
+ */
+export class SallaTabHeader {
+    constructor() {
+        this.id = generateRandomId();
+        /**
+       * The class applied to the currently active(selected) tab
+       */
+        this.activeClass = undefined;
+        /**
+         * Set the height of the tab bar
+         */
+        this.height = undefined;
+        /**
+         * Center tab items in the given flex.
+         */
+        this.centered = false;
+        this.isSelected = false;
+    }
+    /**
+     * Expose self for the parent.
+     */
+    async getChild() {
+        return {
+            selected: this.selected.bind(this),
+            unselect: this.unselect.bind(this),
+            name: this.name,
+            id: this.id
+        };
+    }
+    unselect() {
+        this.isSelected = false;
+    }
+    selected() {
+        this.isSelected = true;
+    }
+    onClick() {
+        this.getChild().then(child => {
+            this.tabSelected.emit(child);
+        });
+    }
+    render() {
+        const classes = {
+            's-tabs-header-item': true,
+            's-tabs-bg-normal': true,
+            's-tabs-active': this.isSelected,
+        };
+        return [
+            h("div", { key: '7e9e75c995226ca1b23a9a185c8be46206362b61', class: classes, onClick: this.onClick.bind(this) }, h("slot", { key: '6ed7bf434cf6b1af235e2251f6d3f385cbbbcf0b' })),
+        ];
+    }
+    static get is() { return "salla-tab-header"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-tab-header.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-tab-header.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "name": {
+                "type": "string",
+                "attribute": "name",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Header identifier name to sync with the content."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "activeClass": {
+                "type": "string",
+                "attribute": "active-class",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The class applied to the currently active(selected) tab"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "undefined"
+            },
+            "height": {
+                "type": "any",
+                "attribute": "height",
+                "mutable": false,
+                "complexType": {
+                    "original": "number | string",
+                    "resolved": "number | string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set the height of the tab bar"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "undefined"
+            },
+            "centered": {
+                "type": "boolean",
+                "attribute": "centered",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Center tab items in the given flex."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "isSelected": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "tabSelected",
+                "name": "tabSelected",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Emits event object when clicked or selected."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "getChild": {
+                "complexType": {
+                    "signature": "() => Promise<{ selected: any; unselect: any; name: string; id: string; }>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<{ selected: any; unselect: any; name: string; id: string; }>"
+                },
+                "docs": {
+                    "text": "Expose self for the parent.",
+                    "tags": []
+                }
+            }
+        };
+    }
+}

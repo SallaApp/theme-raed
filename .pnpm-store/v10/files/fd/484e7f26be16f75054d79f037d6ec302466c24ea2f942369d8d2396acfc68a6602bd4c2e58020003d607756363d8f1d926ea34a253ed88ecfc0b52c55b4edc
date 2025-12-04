@@ -1,0 +1,132 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+/**
+ * Example usage with new nested structure:
+ *
+ * <salla-multiple-bundle-product bundleSections='{
+ *   "id": "encoded_product_id",
+ *   "name": "Complete Office Setup Bundle",
+ *   "bundle": {
+ *     "discount_percentage": 15,
+ *     "sections": [
+ *       {
+ *         "id": "encoded_section_1",
+ *         "name": "Office Equipment",
+ *         "obligatory_products": 1,
+ *         "products": [
+ *           {
+ *             "id": "encoded_sub_product_1",
+ *             "name": "Office Desk",
+ *             "image": "https://cdn.salla.sa/products/desk.jpg",
+ *             "images": ["https://cdn.salla.sa/products/desk-1.jpg"],
+ *             "price": { "amount": 500, "currency": "SAR" },
+ *             "sale_price": 450,
+ *             "quantity": 50,
+ *             "options": [...]
+ *           }
+ *         ]
+ *       }
+ *     ]
+ *   }
+ * }'></salla-multiple-bundle-product>
+ */
+export class SallaMultipleBundleProduct {
+    constructor() {
+        this.parsedSections = [];
+    }
+    parseProducts(newValue) {
+        let sections = [];
+        if (typeof newValue === 'string') {
+            try {
+                const parsed = JSON.parse(newValue);
+                sections = this.extractSections(parsed);
+            }
+            catch (e) {
+                console.error('Invalid JSON passed to bundleSections prop:', newValue);
+                sections = [];
+            }
+        }
+        else if (newValue) {
+            sections = this.extractSections(newValue);
+        }
+        this.parsedSections = sections;
+    }
+    extractSections(data) {
+        // Handle new nested structure: data.bundle.sections
+        if (data.bundle && data.bundle.sections && Array.isArray(data.bundle.sections)) {
+            return data.bundle.sections;
+        }
+        // Handle old flat structure: data is directly an array of sections
+        if (Array.isArray(data)) {
+            return data;
+        }
+        // Handle case where data.sections exists at root level
+        if (data.sections && Array.isArray(data.sections)) {
+            return data.sections;
+        }
+        console.warn('No valid sections found in data:', data);
+        return [];
+    }
+    isCartPage() {
+        return salla.url.is_page('cart');
+    }
+    renderCartPage() {
+        return h("salla-multiple-bundle-product-cart", { sections: this.parsedSections });
+    }
+    renderDetailsPage() {
+        return h("salla-multiple-bundle-product-details", { sections: this.parsedSections });
+    }
+    componentWillLoad() {
+        this.parseProducts(this.bundleSections);
+    }
+    render() {
+        return (h(Host, { key: 'e9b525af3c011566cd15247b5f1eaf274036cd98', class: "s-multiple-bundle-product-wrapper" }, this.isCartPage() ? this.renderCartPage() : this.renderDetailsPage()));
+    }
+    static get is() { return "salla-multiple-bundle-product"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-multiple-bundle-product.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-multiple-bundle-product.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "bundleSections": {
+                "type": "string",
+                "attribute": "bundle-sections",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "parsedSections": {}
+        };
+    }
+    static get watchers() {
+        return [{
+                "propName": "bundleSections",
+                "methodName": "parseProducts"
+            }];
+    }
+}

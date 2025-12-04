@@ -1,0 +1,309 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+
+const sallaInstallmentCss = "salla-installment:empty{display:none}#tabbyPromoWrapper{background:white;border-radius:0.375rem;transition:box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);margin-bottom:20px;border:unset !important;font-weight:500}.salla-y #tabbyPromoWrapper{border:1px solid var(--color-grey-dark);border-radius:12px}#tabbyPromoWrapper:hover{box-shadow:0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0), 5px 10px 30px rgba(43, 45, 52, 0.0509803922)}#tabbyPromoWrapper #tabbyPromo *{font-family:var(--font-main)}#tabbyPromoWrapper #tabbyPromo>div>div{max-width:none;box-shadow:none;border:none}#tabbyPromoWrapper #tabbyPromo .tabby-promo-snippet{max-width:100%;min-height:100px;padding:18px 20px;border:none !important}#tabbyPromoWrapper #tabbyPromo .tabby-promo-snippet__text,#tabbyPromoWrapper #tabbyPromo .tabby-promo-snippet__link{font-size:var(--font-sm);color:var(--color-text) !important}#tabbyPromoWrapper #tabbyPromo .tabby-promo-snippet__link{font-weight:bold}.tabby-promo-wrapper #tabby-promo{font-family:var(--font-main) !important}.tabby-promo-wrapper #tabby-promo .tabby-promo__feature-title{font-size:var(--font-md)}.tabby-promo-wrapper #tabby-promo .tabby-promo__feature-desc{font-size:var(--font-sm);line-height:20px}.tamara-product-widget{margin-bottom:20px}.tamara-product-widget,.spotii-wrapper{min-height:100px;position:relative;color:var(--main-text-color);font-size:var(--font-sm);line-height:1.25;padding:20px 20px 20px 115px !important;background:white;border-radius:0.375rem;transition:box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);border:unset !important;font-family:inherit !important;font-weight:500}.salla-y .tamara-product-widget,.salla-y .spotii-wrapper{border-radius:12px;border:1px solid var(--color-grey-dark)}.tamara-product-widget:hover,.spotii-wrapper:hover{box-shadow:0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0), 5px 10px 30px rgba(43, 45, 52, 0.0509803922)}.tamara-product-widget .spotii-logo,.spotii-wrapper .spotii-logo{float:left;margin:0 0 0 -75px}.ltr .tamara-product-widget,.ltr .spotii-wrapper{text-align:left;padding:18px 100px 18px 20px !important}.ltr .tamara-product-widget .spotii-logo,.ltr .spotii-wrapper .spotii-logo{float:right;margin:0 -75px 0 0}.ltr .tamara-product-widget .spotii-product-widget,.ltr .spotii-wrapper .spotii-product-widget{text-align:left !important}.spotii-wrapper{margin-bottom:20px}.spotii-wrapper .spotii-promo{font-size:var(--font-md)}.spotii-wrapper .spotii-product-widget{font-size:var(--font-sm) !important;margin-top:10px}.tamara-product-widget .tamara-logo{position:absolute;left:20px !important;top:35px !important;margin:0 !important;height:24px !important}.ltr .tamara-product-widget .tamara-logo{right:20px !important;left:auto !important}.tamara-product-widget span{font-family:var(--font-main);font-size:var(--font-sm);color:var(--color-text)}.tamara-product-widget span:last-child{display:block;position:relative;margin-top:8px}.tamara-popup__wrap{overflow:auto !important}.s-installment-mispay-wrapper,.s-installment-madfu-wrapper,.s-installment-emkan-wrapper,.s-installment-rajehi-wrapper{font-size:14px;text-align:right;padding:20px;gap:42px;line-height:22px;color:rgb(0, 0, 0);min-width:100%;box-sizing:border-box;position:relative;background-color:white;border-radius:10px;margin:15px 0;display:flex;transition:box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1)}.s-installment-mispay-wrapper:hover,.s-installment-madfu-wrapper:hover,.s-installment-emkan-wrapper:hover,.s-installment-rajehi-wrapper:hover{box-shadow:0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0), 5px 10px 30px rgba(43, 45, 52, 0.0509803922)}.s-installment-mispay-content,.s-installment-madfu-content,.s-installment-emkan-content,.s-installment-rajehi-content{display:flex;flex-direction:row-reverse;width:100%;justify-content:space-between;align-items:center;gap:1rem}.s-installment-mispay-content-text,.s-installment-madfu-content-text,.s-installment-emkan-content-text,.s-installment-rajehi-content-text{color:var(--main-text-color);font-size:14px;font-weight:500;margin:0 16px 0 0;width:80%;left:14px;text-align:left}.s-installment-mispay-content img,.s-installment-madfu-content img,.s-installment-emkan-content img,.s-installment-rajehi-content img{height:28px;width:70px;display:inline-block;max-height:100%;vertical-align:middle;fill:none;stroke:unset;width:auto}.rtl .s-installment-mispay-content-text,.rtl .s-installment-madfu-content-text,.rtl .s-installment-emkan-content-text,.rtl .s-installment-rajehi-content-text{right:14px;text-align:right;margin:0 0 0 16px}.rtl .s-installment-mispay-content img,.rtl .s-installment-madfu-content img,.rtl .s-installment-emkan-content img,.rtl .s-installment-rajehi-content img{left:14px !important}.ltr .s-installment-mispay-content img,.ltr .s-installment-madfu-content img,.ltr .s-installment-emkan-content img,.ltr .s-installment-rajehi-content img{right:14px !important}.s-installment-rajehi-content img{width:70px !important;height:40px !important}.s-installment-emkan-content img{height:35px !important}";
+
+const SallaInstallment$1 = /*@__PURE__*/ proxyCustomElement(class SallaInstallment extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.tabbyBorderRemoved = false;
+        this.tabbyRemoveBorderTries = 0;
+        /**
+         * Language code
+         */
+        this.language = salla.config.get('user.language_code');
+        /**
+         * Currency code
+         */
+        this.currency = salla.config.get('user.currency_code');
+        /**
+         * Country code
+         */
+        this.country = salla.config.get('user.country_code');
+        this.installment_sheria_text = (key, replacement) => salla.lang.get(key, replacement);
+    }
+    async componentWillLoad() {
+        await salla.onReady();
+        await salla.lang.onLoaded();
+        this.currency = salla.config.get('user.currency_code') || 'SAR';
+        this.language = salla.config.get('user.language_code') || 'ar';
+        this.country = salla.config.get('user.country_code') || 'SA';
+        const installmentOptions = [
+            { key: 'pages.products.installments', installments: 3 },
+            { key: 'pages.products.installments_emkan', installments: 5 },
+        ];
+        installmentOptions.forEach(option => {
+            this.installment_sheria_text(option.key, {
+                payment: salla.money(parseFloat(this.price)),
+                amount: salla.money((parseFloat(this.price) / option.installments).toFixed(2)).replace(/\.00$/, ''),
+                installments: option.installments,
+            });
+        });
+        const installment = salla.config.get('store.settings.installments');
+        if (installment) {
+            this.tamaraIsActive = installment.tamara;
+            this.tabbyIsActive = installment.tabby;
+            this.spotiiIsActive = installment.spotii;
+            this.mispayActive = installment.mispay;
+            this.emkanIsActive = installment.emkan;
+            this.madfuActive = installment.madfu;
+            this.rajehiIsActive = installment.mokafaa_alrajhi;
+        }
+        salla.event.on('product::price.updated', ({ data }) => {
+            if (!data.price || data.price == this.price) {
+                return;
+            }
+            this.price = data.price;
+            this.renderInstallments(true);
+        });
+    }
+    componentDidLoad() {
+        this.renderInstallments();
+    }
+    render() {
+        const isSAR = this.currency === 'SAR';
+        if (!this.isValidPrice(this.price)) {
+            return '';
+        }
+        return (h(Host, null, this.tamaraIsActive &&
+            (this.tamaraIsActive?.publicKey ? (
+            // Tamara widget v2
+            h("div", { class: "mb-5" }, h("tamara-widget", { type: "tamara-summary", "inline-type": "2", amount: this.price }))) : (
+            // Tamara widget v1 fallback
+            h("div", { class: "tamara-product-widget", "data-price": this.price, "data-currency": this.currency, "data-lang": this.language, "data-payment-type": "installment" }))), this.tabbyIsActive ? (h("div", { id: "tabbyPromoWrapper" }, h("div", { id: "tabbyPromo" }))) : (''), this.spotiiIsActive ? (h("div", { class: "spotii-wrapper" }, h("div", { class: "spotii-promo" }))) : (''), this.shouldShowMispay() &&
+            (this.mispayActive.publicKey ? (h("div", { class: "mb-5" }, h("mispay-widget", { amount: this.price, lang: this.language }))) : (h("div", { class: "s-installment-mispay-wrapper" }, h("div", { class: "s-installment-mispay-content" }, h("img", { src: salla.url.cdn('images/payment/png/mispay.png'), alt: "mispay" }), h("span", { class: "s-installment-mispay-content-text", innerHTML: this.installment_sheria_text('pages.products.installments', {
+                    payment: salla.money(parseFloat(this.price)),
+                    amount: salla.money((parseFloat(this.price) / 4).toFixed(2)),
+                    installments: 4,
+                }) }))))), this.emkanIsActive && this.currency === "SAR" ? (h("div", { class: "s-installment-emkan-wrapper" }, h("div", { class: "s-installment-emkan-content" }, h("img", { src: salla.url.cdn('images/payment/png/emkan.png'), alt: "emkan" }), h("span", { class: "s-installment-emkan-content-text", innerHTML: this.installment_sheria_text('pages.products.installments_emkan', {
+                payment: salla.money(parseFloat(this.price)),
+                installments: 5,
+            }) })))) : (''), this.madfuActive && this.currency === "SAR" ? (h("div", { class: "s-installment-madfu-wrapper" }, h("div", { class: "s-installment-madfu-content" }, h("img", { src: salla.url.cdn('images/payment/png/madfu.png'), alt: "madfu" }), h("span", { class: "s-installment-madfu-content-text" }, salla.lang.get('pages.products.installments_madfu'))))) : (''), (isSAR && this.rajehiIsActive) ?
+            h("div", { class: "s-installment-rajehi-wrapper" }, h("div", { class: "s-installment-rajehi-content" }, h("img", { src: salla.url.cdn('images/payment/png/mokafaa_alrajhi_loyalty.png'), alt: "mokafaa_alrajhi_loyalty" }), h("span", { class: "s-installment-rajehi-content-text" }, salla.lang.get("pages.products.rajahi_earn_points", { points: Math.floor(+this.price * this.rajehiIsActive.pointsPerRiyal) }))))
+            : ''));
+    }
+    renderInstallments(isUpdating = false) {
+        if (!this.isValidPrice(this.price)) {
+            return;
+        }
+        // Tamara
+        if (this.tamaraIsActive) {
+            this.loadTamara({ isUpdating });
+        }
+        // tabby
+        if (this.tabbyIsActive) {
+            if (isUpdating) {
+                // remove #tabbyPromoWrapper and re append it
+                var oldTabbyWrapper = this.host.querySelector('#tabbyPromoWrapper');
+                if (oldTabbyWrapper) {
+                    oldTabbyWrapper.remove();
+                }
+                var tabbyPromoWrapper = document.createElement('div');
+                tabbyPromoWrapper.setAttribute('id', 'tabbyPromoWrapper');
+                var tabbyPromo = document.createElement('div');
+                tabbyPromo.setAttribute('id', 'tabbyPromo');
+                tabbyPromoWrapper.appendChild(tabbyPromo);
+                this.host.appendChild(tabbyPromoWrapper);
+                var oldTabbyScript = document.querySelector('script[src="https://checkout.tabby.ai/tabby-promo.js"]');
+                if (oldTabbyScript) {
+                    oldTabbyScript.remove();
+                }
+            }
+            var tabbyScript = document.createElement('script');
+            tabbyScript.setAttribute('src', 'https://checkout.tabby.ai/tabby-promo.js');
+            document.head.appendChild(tabbyScript);
+            tabbyScript.onload = () => {
+                const TabbyPromo = window.TabbyPromo;
+                new TabbyPromo({
+                    selector: '#tabbyPromo',
+                    currency: this.currency,
+                    price: this.price,
+                    lang: this.language,
+                    publicKey: salla.config.get('store.settings.installments.tabby.publicKey'),
+                    merchantCode: salla.config.get('store.settings.installments.tabby.merchantCode'),
+                });
+                document.querySelectorAll('.tabby-promo-snippet__logo').forEach(function (element) {
+                    element.setAttribute('aria-label', 'Tabby Logo');
+                });
+            };
+            // this is a workaround to remove the default border and add margin
+            this.removeTabbyBorder();
+        }
+        // Spotii
+        if (this.spotiiIsActive) {
+            if (isUpdating) {
+                var oldSpotiiWrapper = this.host.querySelector('.spotii-wrapper');
+                if (oldSpotiiWrapper) {
+                    oldSpotiiWrapper.remove();
+                }
+                var spotiiPromoWrapper = document.createElement('div');
+                spotiiPromoWrapper.classList.add('spotii-wrapper');
+                var spotiiPromo = document.createElement('div');
+                spotiiPromo.classList.add('spotii-promo');
+                spotiiPromoWrapper.appendChild(spotiiPromo);
+                this.host.appendChild(spotiiPromoWrapper);
+                var oldSpotiiScript = document.querySelector('script[src="' + salla.url.cdn('js/price-widget-ar-salla.js') + '"]');
+                if (oldSpotiiScript) {
+                    oldSpotiiScript.remove();
+                }
+            }
+            let amount = salla.money((Number(this.price) / 3).toFixed(2), false);
+            let isRTL = salla.config.get('theme.is_rtl', true);
+            window.spotiiConfig = {
+                targetXPath: ['.spotii-wrapper'],
+                renderToPath: ['.spotii-promo'],
+                numberOfPayment: 3,
+                currency: this.currency,
+                templateLine: '${textOne} ${number} ${textTwo} ' + amount + '${logo} ${info}',
+                //todo:: translate these
+                textOne: isRTL ? 'جزء الدفع على' : 'Split it into',
+                textTwo: isRTL ? 'أقساط متساوية بدون تكاليف اضافية بقيمة' : 'payments of',
+                textThree: 'مع',
+                price: this.price,
+                // forcedShow: false,
+                // merchantID: null,
+            };
+            var spotiiScript = document.createElement('script');
+            spotiiScript.setAttribute('src', salla.url.cdn('js/price-widget-ar-salla.js'));
+            document.head.appendChild(spotiiScript);
+            // spotiiScript.onload = () => {
+            //   // setTimeout()
+            // }
+        }
+        // Mispay
+        if (this.shouldShowMispay() && this.mispayActive.publicKey) {
+            this.loadExternalScript({
+                position: 'head',
+                src: `https://widget.mispay.co/v1/sdk.js?authorize=${this.mispayActive.publicKey}`,
+            });
+        }
+    }
+    isValidPrice(price) {
+        const pricePattern = /^\d+(\.\d{1,2})?$/;
+        const isValid = pricePattern.test(price);
+        const isGreaterThanZero = parseFloat(price) > 0;
+        return isValid && isGreaterThanZero;
+    }
+    loadExternalScript({ src, onLoad, position, }) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = onLoad;
+        document[position].appendChild(script);
+    }
+    loadTamara({ isUpdating }) {
+        const isV2Enabled = !!this.tamaraIsActive?.publicKey;
+        if (isUpdating) {
+            setTimeout(() => {
+                if (isV2Enabled) {
+                    return window.TamaraWidgetV2?.refresh();
+                }
+                // v1 fallback widget refresh
+                window.TamaraProductWidget?.render();
+            }, 300);
+        }
+        else {
+            if (isV2Enabled) {
+                const language_code = salla.config.get('user.language_code');
+                const lang = ['ar', 'en'].includes(language_code) ? language_code : 'ar';
+                // this used in case user change the currency to get the country code
+                const countryCodeByCurrency = this.currency?.slice(0, -1);
+                const country = ['SA', 'AE', 'KW', 'BH', 'OM', 'QA'].includes(countryCodeByCurrency)
+                    ? countryCodeByCurrency
+                    : null;
+                if (!country) {
+                    console.error('Tamara: Country code is not supported', countryCodeByCurrency);
+                }
+                else {
+                    window.tamaraWidgetConfig = {
+                        lang,
+                        country,
+                        publicKey: this.tamaraIsActive.publicKey,
+                        style: {
+                            fontSize: '14px',
+                        },
+                    };
+                    this.loadExternalScript({
+                        position: 'head',
+                        src: 'https://cdn.tamara.co/widget-v2/tamara-widget.js',
+                    });
+                }
+            }
+            else {
+                // v1 fallback widget
+                this.loadExternalScript({
+                    position: 'head',
+                    src: 'https://cdn.tamara.co/widget/product-widget.min.js',
+                    onLoad: () => {
+                        window.TamaraProductWidget.init({ lang: this.language });
+                        setTimeout(() => {
+                            window.TamaraProductWidget.render();
+                        }, 300);
+                    },
+                });
+            }
+        }
+    }
+    shouldShowMispay() {
+        return this.currency === 'SAR' && this.mispayActive;
+    }
+    /**
+     * this is workaround to remove the default border and add margin
+     * we will try to remove tabby border 5 times for 7.5 seconds
+     */
+    removeTabbyBorder() {
+        if (this.tabbyBorderRemoved || this.tabbyRemoveBorderTries > 5) {
+            return;
+        }
+        this.tabbyRemoveBorderTries++;
+        setTimeout(() => {
+            let promo = document.querySelector('#tabbyPromo>div>div');
+            promo = promo && promo.shadowRoot
+                ? promo.shadowRoot.querySelector('div[class^="styles__tabby-promo-snippet--"]')
+                : null;
+            if (promo) {
+                promo.style = 'border: none; margin: 15px 0!important;';
+                this.tabbyBorderRemoved = true;
+            }
+            else {
+                this.removeTabbyBorder();
+            }
+        }, this.tabbyRemoveBorderTries * 500);
+    }
+    get host() { return this; }
+    static get style() { return sallaInstallmentCss; }
+}, [0, "salla-installment", {
+        "price": [1],
+        "language": [1],
+        "currency": [1],
+        "country": [1],
+        "tabbyIsActive": [32],
+        "spotiiIsActive": [32],
+        "tamaraIsActive": [32],
+        "mispayActive": [32],
+        "emkanIsActive": [32],
+        "madfuActive": [32],
+        "rajehiIsActive": [32],
+        "installment_sheria_text": [32]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-installment"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-installment":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaInstallment$1);
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaInstallment = SallaInstallment$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaInstallment, defineCustomElement };

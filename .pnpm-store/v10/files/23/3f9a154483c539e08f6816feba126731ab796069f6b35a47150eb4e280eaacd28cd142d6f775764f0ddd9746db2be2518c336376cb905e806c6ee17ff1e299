@@ -1,0 +1,20 @@
+import { AppInstallAlertData } from './interfaces';
+export declare class SallaAppInstallAlert {
+    alertDelay: NodeJS.Timeout;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    data: AppInstallAlertData | null;
+    ctaLink: string;
+    open: boolean;
+    closing: boolean;
+    private host;
+    /**
+     * Check if the website opens from mobile or tablet devices only (android/ios).
+     *
+     * @param {number} screen the width of the biggest screen to be checked
+     * @returns {boolean} true if it is mobile or tablet else false
+     */
+    private isMobileOrTabletDevice;
+    closeAlert(): void;
+    render(): any;
+}

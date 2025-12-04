@@ -1,0 +1,48 @@
+/**
+ * @slot header - The top of the modal.
+ * @slot footer - Replaces the bottom button.
+ * @slot language - Replaces language label, has replaceable props `{name}`, `{code}`, `{country_code}`.
+ * @slot currency - Replaces currency label, has replaceable props `{name}`, `{code}`, `{country_code}`.
+ */
+export declare class SallaLocalizationModal {
+    constructor();
+    private modal;
+    private btn;
+    private readonly languageSlot;
+    private readonly currencySlot;
+    translationLoaded: boolean;
+    languages: Array<any>;
+    currencies: Array<any>;
+    hasError: boolean;
+    errorMessage: string;
+    /**
+     * Current language (existing or newly selected)
+     */
+    language: string;
+    /**
+     * Current currency (existing or newly selected)
+     */
+    currency: string;
+    host: HTMLElement;
+    /**
+     * open the component
+     */
+    open(): Promise<any>;
+    /**
+     * Hide the component
+     */
+    close(): Promise<HTMLElement>;
+    private getLanguages;
+    private getCurrencies;
+    private onChangeCurrency;
+    private onChangeLanguage;
+    /**
+     * Change currency and language to the selected ones.
+     */
+    submit(): Promise<void>;
+    render(): any;
+    /**
+     * to reduce dom levels we will move slot data into the parent dom
+     */
+    componentDidRender(): void;
+}

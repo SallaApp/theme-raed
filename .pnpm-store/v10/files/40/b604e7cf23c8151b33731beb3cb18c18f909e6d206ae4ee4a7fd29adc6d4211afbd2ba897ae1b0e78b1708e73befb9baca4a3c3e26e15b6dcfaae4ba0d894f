@@ -1,0 +1,37 @@
+export declare class SallaQuantityInput {
+    host: HTMLElement;
+    /**
+    * Cart Item Id
+    */
+    cartItemId: any;
+    private hostAttributes;
+    private hasIncrementSlot;
+    private hasDecrementSlot;
+    private textInput;
+    private didLoaded;
+    quantity: number;
+    fireChangeEvent: boolean;
+    /**
+     * Workaround to fire change event for the input.
+     */
+    watchPropHandler(): void;
+    componentWillLoad(): void;
+    componentDidLoad(): void;
+    private getInputAttributes;
+    /**
+     * decrease quantity by one.
+     * @return HTMLSallaQuantityInputElement
+     */
+    decrease(): Promise<HTMLElement>;
+    /**
+     * increase quantity by one.
+     * @return HTMLSallaQuantityInputElement
+     */
+    increase(): Promise<HTMLElement>;
+    /**
+     * set quantity by one.
+     * @return HTMLSallaQuantityInputElement
+     */
+    setValue(value: any, fireChangeEvent?: boolean): Promise<HTMLElement>;
+    render(): any;
+}

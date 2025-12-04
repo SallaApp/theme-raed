@@ -1,0 +1,102 @@
+{
+  "name": "@analytics/core",
+  "version": "0.12.17",
+  "description": "Lightweight analytics library for tracking events, page views, & identifying users. Works with any third party analytics provider via an extendable plugin system.",
+  "keywords": [
+    "analytics",
+    "analytics-project",
+    "metrics",
+    "telemetry",
+    "stats"
+  ],
+  "funding": [
+    {
+      "type": "GitHub Sponsors",
+      "url": "https://github.com/sponsors/davidwells"
+    }
+  ],
+  "author": "David Wells <hello@davidwells.io>",
+  "license": "MIT",
+  "amdName": "_analytics",
+  "source": "src/index.js",
+  "main": "dist/server/analytics-core.js",
+  "module": "dist/server/analytics-core.module.js",
+  "unpkg": "dist/server/analytics-core.umd.js",
+  "types": "dist/types.d.ts",
+  "browser": {
+    "./dist/server/analytics-core.js": "./dist/client/analytics-core.js",
+    "./dist/server/analytics-core.umd.js": "./dist/client/analytics-core.umd.js",
+    "./dist/server/analytics-core.module.js": "./dist/client/analytics-core.module.js"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "test": "ava -v",
+    "test:watch": "ava -v --watch",
+    "prebuild": "rimraf dist _temp-types",
+    "build": "npm run build-client && npm run build-server && npm run types",
+    "build-client": "cd client && npm run build",
+    "build-server": "cd server && npm run build",
+    "types": "../../node_modules/.bin/jsdoc -t ../../node_modules/tsd-jsdoc/dist -r ./src/ -d _temp-types && node scripts/types.js",
+    "publish": "git push origin && git push origin --tags",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavidWells/analytics"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.js.map",
+    "dist/**/*.d.ts",
+    "dist/**/package.json",
+    "client/**/*.js",
+    "client/**/*.js.map",
+    "client/**/*.d.ts",
+    "client/**/package.json",
+    "!client/node_modules",
+    "server/**/*.js",
+    "server/**/*.js.map",
+    "server/**/*.d.ts",
+    "server/**/package.json",
+    "!server/node_modules",
+    "README.md"
+  ],
+  "dependencies": {
+    "@analytics/global-storage-utils": "^0.1.7",
+    "@analytics/type-utils": "^0.6.2",
+    "analytics-utils": "^1.0.14"
+  },
+  "ava": {
+    "files": [
+      "**/**/*.test.js"
+    ],
+    "require": [
+      "esm",
+      "@babel/register",
+      "./tests/_setup.js"
+    ],
+    "verbose": true,
+    "failFast": true,
+    "sources": [
+      "**/*.{js,jsx}"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "7.17.0",
+    "@babel/plugin-proposal-class-properties": "7.16.7",
+    "@babel/plugin-transform-runtime": "7.17.0",
+    "@babel/preset-env": "7.16.11",
+    "@babel/register": "7.17.0",
+    "@babel/runtime": "7.17.0",
+    "ava": "^2.2.0",
+    "gen-esm-wrapper": "^1.1.3",
+    "microbundle": "^0.14.2",
+    "mkdirp": "^0.5.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.6.3",
+    "sinon": "7.2.3"
+  },
+  "gitHead": "52239ca9a05368258bf99b2d13ac4f82adb5267e"
+}

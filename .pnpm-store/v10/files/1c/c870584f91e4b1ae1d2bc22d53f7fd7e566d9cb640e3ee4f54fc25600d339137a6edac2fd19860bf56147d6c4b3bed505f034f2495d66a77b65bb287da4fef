@@ -1,0 +1,61 @@
+{
+  "name": "analytics-utils",
+  "version": "1.0.14",
+  "description": "Analytics utility functions used by 'analytics' module",
+  "author": "David Wells <hello@davidwells.io>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavidWells/analytics"
+  },
+  "keywords": [
+    "analytics",
+    "analytics-project",
+    "analytics-utilities"
+  ],
+  "files": [
+    "dist",
+    "lib",
+    "types",
+    "README.md"
+  ],
+  "amdName": "analyticUtil",
+  "source": "src/index.js",
+  "main": "dist/analytics-utils.js",
+  "module": "dist/analytics-utils.module.js",
+  "unpkg": "dist/analytics-utils.umd.js",
+  "sideEffects": false,
+  "scripts": {
+    "test": "uvu tests -r esm",
+    "start": "npm run sync && concurrently 'npm:watch:dev' 'npm:copy' 'npm:serve'",
+    "serve": "servor dist index.html 8081 --reload --browse",
+    "copy": "watchlist examples -- npm run sync",
+    "sync": "cp examples/index.html dist && cp examples/multiple-forms.html dist",
+    "watch": "microbundle watch",
+    "watch:dev": "microbundle build --external none -f iife,umd -o dist/browser --no-compress",
+    "build": "microbundle && npm run build:dev && npm run types",
+    "build:dev": "microbundle build --external none -f iife,umd -o dist/browser",
+    "types": "tsc",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish"
+  },
+  "types": "./types/index.d.ts",
+  "devDependencies": {
+    "concurrently": "^6.1.0",
+    "esm": "^3.2.25",
+    "microbundle": "^0.13.0",
+    "servor": "^4.0.2",
+    "typescript": "^4.2.3",
+    "uvu": "^0.5.1",
+    "watchlist": "^0.2.3"
+  },
+  "dependencies": {
+    "@analytics/type-utils": "^0.6.2",
+    "dlv": "^1.1.3"
+  },
+  "peerDependencies": {
+    "@types/dlv": "^1.0.0"
+  },
+  "gitHead": "52239ca9a05368258bf99b2d13ac4f82adb5267e"
+}

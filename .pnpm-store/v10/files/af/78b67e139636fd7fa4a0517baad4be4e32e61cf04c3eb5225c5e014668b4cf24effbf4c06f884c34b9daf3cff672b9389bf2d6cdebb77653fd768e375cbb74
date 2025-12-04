@@ -1,0 +1,355 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+// Icons
+import ArrowDown from "../../assets/svg/keyboard_arrow_down.svg";
+import BellRing from "../../assets/svg/bell-ring.svg";
+import OrderIcon from "../../assets/svg/box-bankers.svg";
+import PendingOrdersIcon from "../../assets/svg/cart.svg";
+import WishListIcon from "../../assets/svg/star.svg";
+import ProfileIcon from "../../assets/svg/user-circle.svg";
+import LogoutIcon from "../../assets/svg/send-out.svg";
+import Cancel from "../../assets/svg/cancel.svg";
+import Rate from "../../assets/svg/star2.svg";
+import UserCircle from "../../assets/svg/user-circle.svg";
+import WalletIcon from "../../assets/svg/wallet.svg";
+import loyaltyProgramIcon from "../../assets/svg/gift.svg";
+import SettingstIcon from "../../assets/svg/settings.svg";
+/**
+ * @slot trigger - Replaces trigger widget, has replaceable props `{avatar}`, `{hello}`, `{first_name}`, `{last_name}`, `{icon}`.
+ * @slot login-btn - Replaces the login button, it must be used with `salla.event.dispatch('login::open')` to open the login modal.
+ */
+export class SallaUserMenu {
+    constructor() {
+        this.accountLoading = false;
+        this.opened = false;
+        this.notifications = salla.lang.get('common.titles.notifications');
+        this.orders = salla.lang.get('common.titles.orders');
+        this.pending_orders = salla.lang.get('common.titles.pending_orders');
+        this.wishlist = salla.lang.get('common.titles.wishlist');
+        this.profile = salla.lang.get('common.titles.profile');
+        this.rating = salla.lang.get('common.titles.rating');
+        this.wallet = salla.lang.get('common.titles.wallet');
+        this.settings = salla.lang.get('common.titles.settings');
+        this.loyalty_program = salla.lang.get('pages.loyalty_program.loyalty_points');
+        this.logout = salla.lang.get('blocks.header.logout');
+        this.hello = salla.lang.get('pages.checkout.hello');
+        this.first_name = salla.storage.get('user.first_name') || '';
+        this.last_name = salla.storage.get('user.last_name') || '';
+        this.avatar = salla.storage.get('user.avatar') || salla.url.cdn('images/avatar.png', 40, 40);
+        this.badges = {
+            notifications: salla.helpers.number(salla.storage.get('user.notifications') || 0),
+            pending_orders: salla.helpers.number(salla.storage.get('user.pending_orders') || 0),
+        };
+        this.sallaAccountEnabled = false;
+        this.hasBadges = Number(salla.storage.get('user.pending_orders')) > 0 ||
+            Number(salla.storage.get('user.notifications')) > 0;
+        /**
+         * To display only the list without the dropdown functionality
+         */
+        this.inline = false;
+        /**
+         * To display the trigger as an avatar only
+         */
+        this.avatarOnly = false;
+        /**
+         * To display the dropdown header in mobile sheet
+         */
+        this.showHeader = false;
+        /**
+         * To Make the dropdown menu relative to parent element or not
+         */
+        this.relativeDropdown = false;
+        this.onClickOutside = () => {
+            this.opened = false;
+        };
+        this.OrderUpdate = 0;
+        this.items = {
+            notifications: BellRing,
+            orders: OrderIcon,
+            pending_orders: PendingOrdersIcon,
+            wishlist: WishListIcon,
+            wallet: WalletIcon,
+            loyalty_program: loyaltyProgramIcon,
+            profile: ProfileIcon
+        };
+        // salla.auth.event.onLoggedIn(() => {
+        //   this.is_loggedIn = true
+        // })
+        salla.lang.onLoaded(() => {
+            this.notifications = salla.lang.get('common.titles.notifications');
+            this.orders = salla.lang.get('common.titles.orders');
+            this.pending_orders = salla.lang.get('common.titles.pending_orders');
+            this.wishlist = salla.lang.get('common.titles.wishlist');
+            this.profile = salla.lang.get('common.titles.profile');
+            this.hello = salla.lang.get('pages.checkout.hello');
+            this.rating = salla.lang.get('common.titles.rating');
+            this.wallet = salla.lang.get('common.titles.wallet');
+            this.settings = salla.lang.get('common.titles.settings');
+            this.loyalty_program = salla.lang.get('pages.loyalty_program.loyalty_points');
+            this.logout = salla.lang.get('blocks.header.logout');
+        });
+        Salla.onReady(() => {
+            if (salla.config.isGuest()) {
+                return;
+            }
+            this.is_loggedIn = true;
+            /**
+             * Get Fresh Notifications In These Cases:
+             * - is notification page, if user already changed the status of his orders (to reset notification badge)
+             * - is pending orders page, if user already changed the status of his orders (to reset orders badge)
+             * - is profile page, in case user changed his name or avatar, we need to update it
+             * - half hour is passed from the last user data fetched
+             *
+             * //todo:: update the data in the storage in customer pages
+             * //todo:: cover two requests in customer pages
+             * //todo:: make sure to run this only after token is set
+             */
+            const shouldFetchProfile = !this.inline &&
+                (salla.url.is_page('customer.notifications') ||
+                    salla.url.is_page('customer.orders.index.pending') ||
+                    salla.url.is_page('customer.profile') ||
+                    (Date.now() - (salla.storage.get('user.fetched_at') || 0)) / 1000 / 60 > 30);
+            if (shouldFetchProfile) {
+                this.fetchFreshProfile();
+            }
+            else {
+                salla.event.on('profile::info.fetched', res => {
+                    this.updateProfileState(res);
+                });
+            }
+        });
+    }
+    async componentWillLoad() {
+        await salla.onReady();
+        await salla.lang.onLoaded();
+        this.sallaAccountEnabled = Salla.config.get('store.features')?.includes('salla-account');
+        this.items = this.sallaAccountEnabled ? { ...this.items, settings: SettingstIcon } : this.items;
+        //we need it only in theme-y
+        if (this.host.hasAttribute('with-rating')) {
+            this.items.rating = Rate;
+        }
+        //we need it to be the last item
+        this.items.logout = LogoutIcon;
+        this.profileUrl = `${Salla.config.get('account.url', 'https://accounts.salla.com')}/${salla.config.get('user.language_code')}/user?store=${Salla.config.get('store.id')}&info=${encodeURIComponent(Salla.storage.get('token'))}`;
+        const trigger = this.host.querySelector('[slot="trigger"]');
+        this.triggerSlot =
+            '<div class="s-user-menu-trigger"><div class="s-user-menu-avatar-wrap"><img class="s-user-menu-trigger-avatar" src="{avatar}" alt="{first_name}{last_name}" /></div><div class="s-user-menu-trigger-content"><span class="s-user-menu-trigger-hello">{hello}</span><p class="s-user-menu-trigger-name">{first_name} {last_name}</p></div> <i class="s-user-menu-trigger-icon">{icon}</i></div>';
+        if (!trigger) {
+            return;
+        }
+        this.triggerSlot = trigger.innerHTML;
+        trigger.innerHTML = this.replaceParams(trigger.innerHTML);
+    }
+    fetchFreshProfile() {
+        //don't request fetchFreshProfile unless token is injected into the api
+        if (!salla.api.token) {
+            salla.log('trying to fetchFreshProfile before injected the token!!');
+            return;
+        }
+        salla.profile.api.info().then(res => {
+            this.updateProfileState(res);
+        });
+    }
+    updateProfileState(res) {
+        this.badges = {
+            notifications: salla.helpers.number(res.data.notifications || 0),
+            pending_orders: salla.helpers.number(res.data.pending_orders || 0),
+        };
+        this.hasBadges = Number(res.data.pending_orders) > 0 || Number(res.data.notifications) > 0;
+        this.first_name = res.data.first_name;
+        this.last_name = res.data.last_name;
+        this.avatar = res.data.avatar || salla.url.cdn('images/avatar.png', 40, 40);
+    }
+    async open(e) {
+        this.opened = !this.opened;
+        e.stopPropagation();
+        if (this.opened) {
+            window.addEventListener('click', this.onClickOutside);
+        }
+    }
+    menuItemClicked(event, itemKey) {
+        if (itemKey !== 'logout') {
+            return;
+        }
+        event.preventDefault();
+        salla.auth.logout('sall-user-menu');
+    }
+    replaceParams(body) {
+        return body
+            .replace(/\{hello\}/g, this.hello)
+            .replace(/\{first_name\}/g, this.first_name)
+            .replace(/\{last_name\}/g, this.last_name)
+            .replace(/\{avatar\}/g, this.avatar)
+            .replace(/\{icon\}/g, ArrowDown);
+    }
+    getTheHeader() {
+        return (h("div", { class: {
+                's-user-menu-trigger-slot': true,
+                's-user-menu-red-dot': this.hasBadges,
+                's-user-menu-trigger-avatar-only': this.avatarOnly,
+            }, id: "trigger-slot", onClick: e => this.open(e), onKeyUp: e => this.open(e), innerHTML: this.replaceParams(this.triggerSlot) }));
+    }
+    getItemAnchorLinkAttrs(itemKey) {
+        if (itemKey === 'profile' && this.profileUrl && this.sallaAccountEnabled) {
+            return { href: this.profileUrl, target: '_blank', rel: 'noopener noreferrer' };
+        }
+        // Fix loyalty program URL mapping from master
+        const urlKey = itemKey === 'loyalty_program' ? 'loyalty' : itemKey;
+        return { href: Salla.url.get(urlKey) };
+    }
+    getMenuItem([itemKey, itemValue], i) {
+        //todo:: enhancement support slot here
+        if (itemKey === 'wallet' && !window.can_access_wallet)
+            return;
+        if (itemKey === 'loyalty_program' && !Salla.config.get('store.features').includes('loyalty-system'))
+            return;
+        return (h("li", { class: {
+                's-user-menu-dropdown-item': true,
+                's-user-menu-dropdown-item-logout': i + 1 === Object.entries(this.items).length,
+            } }, h("a", { ...this.getItemAnchorLinkAttrs(itemKey), class: "s-user-menu-dropdown-item-link", onClick: event => this.menuItemClicked(event, itemKey) }, h("i", { class: "s-user-menu-dropdown-item-prefix", innerHTML: itemValue }), h("span", { class: "s-user-menu-dropdown-item-title" }, this[itemKey]), !['٠', '0', undefined].includes(this.badges[itemKey]) ? (h("span", { class: "s-user-menu-dropdown-item-badge" }, this.badges[itemKey])) : (''))));
+    }
+    componentShouldUpdate() {
+        if (!this.opened) {
+            window.removeEventListener('click', this.onClickOutside);
+        }
+    }
+    render() {
+        if (!this.is_loggedIn) {
+            return (h(Host, null, h("slot", { name: "login-btn" }, h("button", { type: "button", class: "s-user-menu-login-btn", onClick: () => salla.event.dispatch('login::open'), innerHTML: UserCircle }))));
+        }
+        if (this.inline) {
+            return (h(Host, null, h("ul", { class: "s-user-menu-inline" }, Object.entries(this.items).map((item, i) => this.getMenuItem(item, i)))));
+        }
+        return (h(Host, null, h("div", { class: {
+                's-user-menu-wrapper': true,
+                's-user-menu-relative-dropdown': this.relativeDropdown,
+            } }, this.getTheHeader(), h("div", { class: { 's-user-menu-toggler': true, opened: this.opened } }, h("div", { class: "s-user-menu-dropdown", onClick: e => e.stopPropagation(), onKeyUp: e => e.stopPropagation() }, this.showHeader ? (h("div", { class: "s-user-menu-dropdown-header" }, h("img", { src: this.avatar, alt: `${this.first_name} ${this.last_name}` }), h("div", { class: "s-user-menu-dropdown-header-content" }, h("span", null, this.hello), h("p", null, this.first_name, " ", this.last_name)), h("button", { type: 'button', class: "s-user-menu-dropdown-header-close", innerHTML: Cancel, onClick: () => { this.opened = false; } }))) : (''), h("ul", { class: "s-user-menu-dropdown-list" }, Object.entries(this.items).map((item, i) => this.getMenuItem(item, i))))))));
+    }
+    componentDidLoad() {
+        document.lazyLoadInstance?.update(this.host.querySelectorAll('.lazy'));
+    }
+    static get is() { return "salla-user-menu"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-user-menu.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-user-menu.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "inline": {
+                "type": "boolean",
+                "attribute": "inline",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "To display only the list without the dropdown functionality"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "avatarOnly": {
+                "type": "boolean",
+                "attribute": "avatar-only",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "To display the trigger as an avatar only"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "showHeader": {
+                "type": "boolean",
+                "attribute": "show-header",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "To display the dropdown header in mobile sheet"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "relativeDropdown": {
+                "type": "boolean",
+                "attribute": "relative-dropdown",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "To Make the dropdown menu relative to parent element or not"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "accountLoading": {},
+            "opened": {},
+            "notifications": {},
+            "orders": {},
+            "pending_orders": {},
+            "wishlist": {},
+            "profile": {},
+            "rating": {},
+            "wallet": {},
+            "settings": {},
+            "loyalty_program": {},
+            "logout": {},
+            "hello": {},
+            "first_name": {},
+            "last_name": {},
+            "avatar": {},
+            "is_loggedIn": {},
+            "badges": {},
+            "sallaAccountEnabled": {},
+            "hasBadges": {},
+            "profileUrl": {},
+            "OrderUpdate": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

@@ -1,0 +1,305 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import arrowLeft from "../../assets/svg/arrow-left.svg";
+import arrowRight from "../../assets/svg/arrow-right.svg";
+export class SallaPriceRange {
+    constructor() {
+        this.min = 0;
+        this.max = 10000;
+        this.moreThanLabel = "أكثر من";
+        this.lessThanLabel = "أقل من";
+        this.toLabel = "الى";
+        this.fromLabel = "من";
+        this.typing = false;
+        this.isMin = false;
+        this.isRTL = salla.config.get('theme.is_rtl', true);
+        this.filterValues = [];
+    }
+    connectedCallback() {
+        if (this.filtersData && this.filtersData?.price) {
+            this.minPrice = this.filtersData.price.min;
+            this.maxPrice = this.filtersData.price.max;
+        }
+        salla.lang.onLoaded(() => {
+            this.moreThanLabel = salla.lang.getWithDefault('common.elements.more_than', this.moreThanLabel);
+            this.lessThanLabel = salla.lang.getWithDefault('common.elements.less_than', this.lessThanLabel);
+            this.toLabel = salla.lang.getWithDefault('common.elements.to', this.toLabel);
+            this.fromLabel = salla.lang.getWithDefault('common.elements.from', this.fromLabel);
+        });
+        //no need to show one option only
+        if (this.option.values.length == 1) {
+            return;
+        }
+        //here we may receive too many prices, we will group all inputs to
+        if (this.option.values.length <= 5) {
+            this.filterValues = this.option.values;
+            return;
+        }
+        const chunkSize = Math.ceil(this.option.values.length / 5);
+        for (let i = 0; i < this.option.values.length; i += chunkSize) {
+            this.filterValues.push(this.option.values
+                .slice(i, i + chunkSize)
+                .reduce((final, currentValue) => {
+                final.to = currentValue.to;
+                final.count += currentValue.count;
+                return final;
+            }));
+            // do whatever
+        }
+    }
+    /**
+     * reset the price range inputs
+     */
+    async reset() {
+        //@ts-ignore
+        this.minInput.value = null;
+        this.maxInput.value = null;
+        this.minPrice = null;
+        this.maxPrice = null;
+    }
+    getPriceLabel(filterValue) {
+        // @ts-ignore
+        if (isNaN(filterValue.from) || filterValue.from < 1) {
+            return `${this.lessThanLabel} ${salla.money(filterValue.to)}`;
+        }
+        // @ts-ignore
+        if (isNaN(filterValue.to) || filterValue.to < 1) {
+            return `${this.moreThanLabel} ${salla.money(filterValue.from)}`;
+        }
+        return `${salla.money(filterValue.from)} ${this.toLabel} ${salla.money(filterValue.to)}`;
+    }
+    minInputValidation(value) {
+        if (value && (value > this.max || (this.maxPrice && value > this.maxPrice))) {
+            // this.minPrice = this.maxPrice;
+            return;
+        }
+        if (value < this.min) {
+            this.minPrice = this.min;
+            return;
+        }
+        if (value) {
+            this.minPrice = value;
+        }
+    }
+    maxInputValidation(value) {
+        if (value && (value < this.min || (this.minPrice && value < this.minPrice))) {
+            // this.maxPrice = this.minPrice;
+            return;
+        }
+        if (value > this.max) {
+            this.maxPrice = this.max;
+            return;
+        }
+    }
+    async changedEventHandler(event) {
+        salla.helpers.inputDigitsOnly(this.minInput);
+        salla.helpers.inputDigitsOnly(this.maxInput);
+        const minInputValue = this.minPrice ? +this.minPrice * 1 : null;
+        const maxInputValue = this.maxPrice ? +this.maxPrice * 1 : null;
+        if (!this.maxPrice) {
+            this.maxPrice = '';
+        }
+        if (this.isMin) {
+            this.minInputValidation(minInputValue);
+        }
+        else {
+            if (!this.minPrice) {
+                this.minPrice = 0;
+            }
+            this.maxInputValidation(maxInputValue);
+        }
+        this.isReady && this.changed.emit({
+            event: event,
+            option: this.option,
+            value: { max: this.maxPrice, min: this.minPrice }
+        });
+    }
+    handleMinMaxPrice(event, value) {
+        //todo:: cover when from is star
+        this.minPrice = value.from;
+        this.maxPrice = value.to !== '*' ? value.to : "";
+        this.changedEventHandler(event);
+    }
+    isChecked(filterValue) {
+        if (!this.minPrice && !this.maxPrice) {
+            return false;
+        }
+        //1 filterValue.from zero or * and this.minPrice not set or zero
+        //2 filterValue.from == this.minPrice
+        //@ts-ignore
+        let isMinEqual = ((filterValue.from < 1 || filterValue.from == '*') && this.minPrice == 0) || filterValue.from == this.minPrice;
+        //1 filterValue.to == "*" or null
+        //2 filterValue.to == this.max
+        let isMaxEqual = filterValue.to == '*' || !filterValue.to || filterValue.to == this.maxPrice;
+        return isMinEqual && isMaxEqual;
+    }
+    handleMinPrice(event) {
+        this.isMin = true;
+        const value = event.target.value;
+        this.minPrice = value === '' ? 0 : value;
+    }
+    handleMaxPrice(event) {
+        this.isMin = false;
+        const value = event.target.value;
+        this.maxPrice = value === undefined ? '' : value;
+    }
+    render() {
+        return (h(Host, { key: '552a7f89180b1888c75f59f62eec181a2368121a' }, this.filterValues.map((filterValue, index) => {
+            return h("label", { class: "s-filters-label", htmlFor: `${this.option.key}-${index}`, key: index }, h("input", { id: `${this.option.key}-${index}`, name: "price", type: "radio", checked: this.isChecked(filterValue), class: "s-filters-radio", onChange: e => this.handleMinMaxPrice(e, filterValue) }), h("span", { innerHTML: this.getPriceLabel(filterValue) }));
+        }), h("div", { key: '312f58873bb27b320bfb007b4166069dd4878c5e', class: "flex justify-center items-center" }, h("div", { key: 'f224028f07314f9b072879981df3854047cad91a', class: "relative max-w-xl w-full" }, h("div", { key: '4bd29b84e2c93ff56ce17d239c7630f161b9de06', class: "s-price-range-inputs" }, h("div", { key: '17e1c8f73ed6c1d22e4bd7d23ebdb16d4b69ad68', class: "s-price-range-relative" }, h("div", { key: 'fd73e14ee31d8fbcc149e0af6089a6b902eb824c', class: "s-price-range-currency" }, " ", salla.config.currency().symbol), h("input", { key: '2f5fc23ef544b3c4c6a7135246a069bfc9b2abac', type: "number", maxlength: "5", ref: el => this.minInput = el, onBlur: (e) => this.handleMinPrice(e), value: this.minPrice, placeholder: this.fromLabel, class: "s-price-range-number-input" })), h("div", { key: 'd671109259f5ce6c206e9a3c7cf74ad53aa69966', class: "s-price-range-gray-text" }, " -"), h("div", { key: 'cea2f1d4a0d56adced021a8ca5d17ced39bbf18d', class: "s-price-range-relative" }, h("div", { key: 'c7fe13448b4d73a10f57729ac3f07928d37bd2ec', class: "s-price-range-currency" }, " ", salla.config.currency().symbol), h("input", { key: '5c2791c4618717f48e31d46012774a42347b9eaf', type: "number", maxlength: "5", ref: el => this.maxInput = el, onBlur: (e) => this.handleMaxPrice(e), value: this.maxPrice, placeholder: this.toLabel, class: "s-price-range-number-input", "aria-describedby": "price-currency" })), h("salla-button", { key: '4decec6d9296d73f5263df95fde23d739e04538f', color: 'gray', shape: 'icon', size: 'small', fill: 'outline', onClick: (event) => this.changedEventHandler(event) }, h("span", { key: '2149837cfc2b0723bcf9b1593badc23c8a6e4a14', innerHTML: this.isRTL ? arrowLeft : arrowRight })))))));
+    }
+    componentDidLoad() {
+        this.isReady = true;
+    }
+    static get is() { return "salla-price-range"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-price-range.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-price-range.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "minPrice": {
+                "type": "any",
+                "attribute": "min-price",
+                "mutable": true,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Minimum price threshold value"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "maxPrice": {
+                "type": "any",
+                "attribute": "max-price",
+                "mutable": true,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Maximum price threshold value"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "option": {
+                "type": "unknown",
+                "attribute": "option",
+                "mutable": false,
+                "complexType": {
+                    "original": "Filter",
+                    "resolved": "Filter",
+                    "references": {
+                        "Filter": {
+                            "location": "import",
+                            "path": "../salla-filters/interfaces",
+                            "id": "src/components/salla-filters/interfaces.ts::Filter"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Product price range filter option object instance"
+                },
+                "getter": false,
+                "setter": false
+            },
+            "filtersData": {
+                "type": "any",
+                "attribute": "filters-data",
+                "mutable": false,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Currently selected price filter data"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            }
+        };
+    }
+    static get states() {
+        return {
+            "min": {},
+            "max": {},
+            "priceOptions": {},
+            "moreThanLabel": {},
+            "lessThanLabel": {},
+            "toLabel": {},
+            "fromLabel": {},
+            "typing": {},
+            "isMin": {},
+            "isRTL": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "changed",
+                "name": "changed",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Custome event emitted when there is a change in price input."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "reset": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "reset the price range inputs",
+                    "tags": []
+                }
+            }
+        };
+    }
+}

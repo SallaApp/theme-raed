@@ -1,0 +1,58 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h } from '@stencil/core/internal/client';
+
+const sallaTabContentCss = "";
+
+const SallaTabContent = /*@__PURE__*/ proxyCustomElement(class SallaTabContent extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.isSelected = false;
+    }
+    /**
+     * Expose self for the parent.
+     */
+    async getChild() {
+        return {
+            selected: this.selected.bind(this),
+            unselect: this.unselect.bind(this),
+            name: this.name
+        };
+    }
+    unselect() {
+        this.isSelected = false;
+    }
+    selected() {
+        this.isSelected = true;
+    }
+    render() {
+        const classes = {
+            's-tabs-content': true,
+            's-tabs-content-selected': this.isSelected
+        };
+        return (h("div", { key: '9e1a20d0877a9c3ca6b376fe22bfb52e93c8f873', class: classes }, h("slot", { key: 'f5b0593c4c9b8d808901ca79e3c6fd28c2a64f36' })));
+    }
+    static get style() { return sallaTabContentCss; }
+}, [4, "salla-tab-content", {
+        "name": [1],
+        "isSelected": [32],
+        "getChild": [64]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-tab-content"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-tab-content":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaTabContent);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaTabContent as S, defineCustomElement as d };

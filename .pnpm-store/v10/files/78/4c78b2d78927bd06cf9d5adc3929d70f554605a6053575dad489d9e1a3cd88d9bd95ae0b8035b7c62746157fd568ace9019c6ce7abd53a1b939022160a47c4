@@ -1,0 +1,65 @@
+import { Filter } from "../salla-filters/interfaces";
+export declare class SallaFiltersWidget {
+    host: HTMLElement;
+    /**
+     * Show more or less filter options.
+     */
+    withLoadMore: boolean;
+    /**
+     * Selected filter options value.
+     */
+    filtersData: object;
+    /**
+     * Filter option along with possible values.
+     */
+    option: Filter;
+    priceRange: HTMLSallaPriceRangeElement;
+    private widgetValues;
+    private widgetContent;
+    private initHeight;
+    isOpen: boolean;
+    isShowMore: boolean;
+    showMoreLabel: string;
+    showLessLabel: string;
+    page: any;
+    /**
+     * Custom event emitted up on filter option selection changes.
+     */
+    changed: any;
+    connectedCallback(): void;
+    componentDidLoad(): void;
+    /**
+   * Asynchronously sets the height of a widget element to its current height, allowing for smooth transitions.
+   * This function is often used in scenarios where the widget's content changes dynamically, and animating
+   * the height adjustment is desired for a smoother user experience.
+   *
+   * @param {number} [delay=250] - Optional. The delay (in milliseconds) before updating the widget height.
+   *                               Defaults to 250 milliseconds.
+   *
+   * @returns {Promise<void>} - A Promise that resolves once the widget height is set after the specified delay.
+   *
+   * @example
+   * // Set widget height with the default delay (250 milliseconds)
+   * await setWidgetHeight();
+   *
+   * // Set widget height with a custom delay (e.g., 500 milliseconds)
+   * await setWidgetHeight(500);
+   */
+    setWidgetHeight(delay?: number): Promise<void>;
+    /**
+     * Reset selected filter options.
+     */
+    reset(): Promise<void>;
+    /**
+     * Action to show more or less filter options.
+     */
+    showMore(): Promise<void>;
+    /**
+     * Action to toggle widget open or closed (expand/ collapse).
+     */
+    toggleWidget(): Promise<void>;
+    renderFilterOption(option: Filter): "" | any[];
+    private isSelectedOption;
+    private getOptionLabel;
+    render(): any;
+}

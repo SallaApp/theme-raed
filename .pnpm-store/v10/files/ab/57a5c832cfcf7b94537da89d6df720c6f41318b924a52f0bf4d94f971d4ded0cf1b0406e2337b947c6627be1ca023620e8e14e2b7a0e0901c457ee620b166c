@@ -1,0 +1,170 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import ShoppingBag from "../../assets/svg/shopping-bag.svg";
+import Helper from "../../Helpers/Helper";
+import { MasonryLayout } from "../../Helpers/masonry-layout";
+export class SallaReviewsPage {
+    constructor() {
+        this.reviews = [];
+        this.isLoading = false;
+        this.pagination = null;
+        this.sort = "latest";
+    }
+    getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            sort: params.get('sort') || null,
+            page: Number.parseInt(params.get('page')) || 1
+        };
+    }
+    updateUrlParams(params) {
+        const url = new URL(window.location.href);
+        for (const [key, value] of Object.entries(params)) {
+            if (value) {
+                url.searchParams.set(key, value.toString());
+            }
+            else {
+                url.searchParams.delete(key);
+            }
+        }
+        ;
+        window.history.replaceState({}, '', url.toString());
+    }
+    fetchReviews(sort, page) {
+        const urlParams = this.getUrlParams();
+        return salla.api.request('reviews', {
+            params: {
+                type: 'products',
+                format: 'lite',
+                per_page: 8,
+                page: page || urlParams.page || 1,
+                sort: sort || urlParams.sort || null
+            }
+        });
+    }
+    async initializeMasonry() {
+        const grid = this.el.querySelector('.s-reviews-page-grid');
+        if (!grid)
+            return;
+        try {
+            new MasonryLayout(grid);
+            salla.logger.info('Masonry initialized successfully');
+        }
+        catch (error) {
+            salla.logger.error('Masonry initialization failed:', error);
+        }
+    }
+    animateReviewCards() {
+        const items = this.wrapper.querySelectorAll('salla-review-card:not(.animated)');
+        Helper.animateItems(items);
+    }
+    initiateInfiniteScroll() {
+        if (!this.wrapper) {
+            salla.logger.error('Wrapper is undefined. Cannot initiate infinite scroll.');
+            return;
+        }
+        this.infiniteScroll = salla.infiniteScroll.initiate(this.wrapper, this.wrapper, {
+            path: () => this.pagination?.links?.next || null,
+            history: false,
+            scrollThreshold: false,
+        }, true);
+        this.infiniteScroll?.on('request', () => {
+            this.isLoading = true;
+        });
+        this.infiniteScroll?.on('load', response => {
+            this.pagination = response.pagination;
+            this.reviews = [...this.reviews, ...response.data];
+            this.isLoading = false;
+            // Update URL with the current page
+            this.updateUrlParams({ page: response.pagination.current_page });
+        });
+        this.infiniteScroll?.on('error', (e) => {
+            salla.logger.error('Error loading more reviews:', e);
+            this.isLoading = false;
+        });
+    }
+    componentDidRender() {
+        setTimeout(() => {
+            requestAnimationFrame(this.animateReviewCards.bind(this));
+        }, 176);
+    }
+    async componentWillLoad() {
+        try {
+            await salla.onReady();
+            // Initialize language variables
+            this.langTitlesReviews = salla.lang.get("common.titles.reviews");
+            this.langSorting = salla.lang.get('pages.categories.sorting');
+            this.placeholderText = salla.lang.choice("pages.rating.reviews", 0);
+            this.langLoadMore = salla.lang.get('common.elements.load_more');
+            this.langSortByTopRating = salla.lang.get('pages.testimonials.sort_by_rating_desc');
+            this.langSortByMostRecent = salla.lang.get('pages.testimonials.sort_by_date_desc');
+            this.langSortByLeastRated = salla.lang.get('pages.testimonials.sort_by_rating_asc');
+            this.langSortByLeastRecent = salla.lang.get('pages.testimonials.sort_by_date_asc');
+            const urlParams = this.getUrlParams();
+            const response = await this.fetchReviews(urlParams.sort);
+            this.sort = urlParams.sort;
+            this.reviews = response.data;
+            this.pagination = response.pagination;
+            this.langRatingReviews = salla.lang.choice("pages.rating.reviews", this.pagination?.total);
+        }
+        catch (error) {
+            salla.logger.error('Error loading reviews:', error);
+        }
+    }
+    async handleSorting(e) {
+        const value = e.target.value;
+        this.sort = value;
+        this.updateUrlParams({ sort: value, page: 1 }); // Reset to page 1 when changing sort
+        const response = await this.fetchReviews(value, 1);
+        this.reviews = response.data;
+        this.pagination = response.pagination;
+    }
+    async componentDidLoad() {
+        await this.initializeMasonry();
+        this.initiateInfiniteScroll();
+        this.sort = this.getUrlParams().sort || "latest";
+        this.updateUrlParams({ sort: this.sort, page: 1 });
+    }
+    disconnectedCallback() {
+        if (this.infiniteScroll) {
+            this.infiniteScroll.destroy();
+        }
+    }
+    renderSortingOptions() {
+        const options = [
+            { value: 'latest', label: this.langSortByMostRecent },
+            { value: 'oldest', label: this.langSortByLeastRecent },
+            { value: 'top_rating', label: this.langSortByTopRating },
+            { value: 'bottom_rating', label: this.langSortByLeastRated },
+        ];
+        return options.map(option => (h("option", { key: option.value, value: option.value, selected: option.value === this.sort }, option.label)));
+    }
+    render() {
+        return (h("host", { key: '6d478caef9753d4aaf9ab1a5376961b748ec2088' }, h("div", { key: 'f84c127d660cba0890ba110b4d203e50fc1f2d8d', class: "s-reviews-page-header-wrapper" }, h("h2", { key: '6c48e1343deaba4531987aefcc5888fc1e0d77ac', class: "s-reviews-page-title" }, this.langTitlesReviews, h("span", { key: 'fa9b923d592752b108da63efdf3167b118be65d0', class: "s-reviews-page-count" }, "(", this.langRatingReviews, ")")), h("div", { key: '52d0dd32e981721eb2529ed5d65769b078ad7538', class: "s-reviews-page-filter-wrapper" }, h("label", { key: '0f7fe49f3ac27db63d8992efa2c3c04b3b19367d', class: "s-reviews-page-filter-label", htmlFor: "testimonials-filter" }, this.langSorting), h("select", { key: '497563e494b7141c5a64dddc8cf4a202efba3776', onChange: (e) => this.handleSorting(e), disabled: !this.reviews.length, class: "s-reviews-page-filter" }, this.renderSortingOptions()))), this.reviews.length ? h("main", { class: "s-reviews-page-grid", ref: el => {
+                this.wrapper = el;
+            } }, this.reviews.map(review => (h("salla-review-card", { key: review.id, review: review }))))
+            : h("div", { class: "s-products-list-placeholder" }, h("span", { innerHTML: ShoppingBag }), h("p", null, this.placeholderText)), this.pagination?.links?.next && this.reviews.length ? (h("div", { class: "s-reviews-page-load-more-container" }, h("salla-button", { class: "s-reviews-page-load-more-btn", loading: this.isLoading, onClick: () => this.infiniteScroll?.loadNextPage(), onKeyUp: () => this.infiniteScroll?.loadNextPage() }, this.langLoadMore))) : null));
+    }
+    static get is() { return "salla-reviews-page"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-reviews-page.css"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-reviews-page.css"]
+        };
+    }
+    static get states() {
+        return {
+            "reviews": {},
+            "isLoading": {},
+            "pagination": {},
+            "sort": {}
+        };
+    }
+    static get elementRef() { return "el"; }
+}

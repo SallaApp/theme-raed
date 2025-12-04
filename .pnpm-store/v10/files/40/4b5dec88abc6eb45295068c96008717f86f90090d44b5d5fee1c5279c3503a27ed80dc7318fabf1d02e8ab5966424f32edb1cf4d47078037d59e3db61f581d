@@ -1,0 +1,201 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h } from '@stencil/core/internal/client';
+import { I as IconVerified } from './check.js';
+
+var IconStar2 = ` <svg width="18" height="17" view-box="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.00045 13.6951L3.71036 16.6563L4.89186 10.71L0.440918 6.59397L6.4612 5.88017L9.00045 0.375122L11.5396 5.88017L17.5599 6.59397L13.109 10.71L14.2905 16.6563L9.00045 13.6951Z" fill="currentcolor" />
+</svg>`;
+
+var IconStar2Muted = ` <svg width="18" height="17" view-box="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.00045 13.6951L3.71036 16.6563L4.89186 10.71L0.440918 6.59397L6.4612 5.88017L9.00045 0.375122L11.5396 5.88017L17.5599 6.59397L13.109 10.71L14.2905 16.6563L9.00045 13.6951Z" fill="#DDDDDD" />
+</svg>`;
+
+var IconFire2 = `  <svg width="12" height="17" view-box="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 16.2501C9.10658 16.2501 11.625 13.7317 11.625 10.6251C11.625 9.976 11.4523 9.35252 11.25 8.77232C9.99998 10.0075 9.05002 10.6251 8.4 10.6251C11.3966 5.37512 9.75 3.12512 5.25 0.125122C5.625 3.87475 3.15302 5.58043 2.14634 6.52757C1.0559 7.5535 0.375 9.00977 0.375 10.6251C0.375 13.7317 2.89339 16.2501 6 16.2501ZM6.53205 2.92636C8.96333 4.98908 8.97495 6.59185 7.09725 9.88157C6.5265 10.8815 7.2486 12.1251 8.4 12.1251C8.9163 12.1251 9.43807 11.9745 9.98917 11.6789C9.52342 13.4466 7.91393 14.7501 6 14.7501C3.72182 14.7501 1.875 12.9033 1.875 10.6251C1.875 9.47072 2.34959 8.39582 3.17419 7.62002C3.2687 7.53115 3.74812 7.1062 3.76858 7.08782C4.08646 6.8017 4.34835 6.54985 4.60718 6.2727C5.52998 5.28461 6.19283 4.18735 6.53205 2.92636Z" fill="currentcolor" />
+    </svg>`;
+
+const sallaReviewCardCss = ":host{display:block}";
+
+const SallaReviewCard = /*@__PURE__*/ proxyCustomElement(class SallaReviewCard extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.currentSlide = 0;
+        this.showPurchaseCount = false;
+        this.startPoint = { x: 0, y: 0 };
+        this.isSwiping = false;
+        this.isRTL = "rtl";
+        this.handlePointerDown = (e) => {
+            // Only handle primary pointer (first touch/mouse)
+            if (!e.isPrimary)
+                return;
+            this.sliderElement?.setPointerCapture(e.pointerId);
+            this.startSwipe(e.clientX, e.clientY);
+            e.preventDefault();
+        };
+        this.handlePointerMove = (e) => {
+            if (!this.isSwiping || !e.isPrimary)
+                return;
+            e.preventDefault();
+        };
+        this.handlePointerUp = (e) => {
+            if (!this.isSwiping || !e.isPrimary)
+                return;
+            this.sliderElement?.releasePointerCapture(e.pointerId);
+            this.endSwipe(e.clientX, e.clientY);
+        };
+        this.handlePointerCancel = (e) => {
+            if (!this.isSwiping || !e.isPrimary)
+                return;
+            this.sliderElement?.releasePointerCapture(e.pointerId);
+            this.isSwiping = false;
+        };
+        this.goToSlide = (index) => {
+            this.currentSlide = Math.max(0, Math.min(index, this.images.length - 1));
+        };
+    }
+    async componentDidLoad() {
+        await salla.onReady();
+        this.showPurchaseCount = !!salla.config.get('store.settings.product.total_sold_enabled', false);
+        this.isRTL = salla.config.get('theme.is_rtl', true);
+        this.purchasedCount = salla.lang.getWithDefault('blocks.home.reviews.purchased_count', this.isRTL ? ` تم شراءه ${this.review.product?.sold_quantity} مرة`
+            : `Purchased ${this.review.product.sold_quantity} times`, { count: this.review.product?.sold_quantity });
+        this.initializeSlider();
+    }
+    disconnectedCallback() {
+        this.removeEventListeners();
+    }
+    get images() {
+        const { review } = this;
+        return review?.images?.length > 1
+            ? review.images.map((image, idx) => ({ url: image, alt: '', id: idx }))
+            : review?.product?.images || [];
+    }
+    get hasMultipleImages() {
+        return this.images.length > 1;
+    }
+    get slideTransform() {
+        const direction = this.isRTL ? 1 : -1;
+        return `translateX(${this.currentSlide * 100 * direction}%)`;
+    }
+    initializeSlider() {
+        if (!this.hasMultipleImages)
+            return;
+        this.sliderElement = this.el.querySelector(".s-review-card-slider-container");
+        if (!this.sliderElement)
+            return;
+        // Enable pointer events and set touch-action
+        this.sliderElement.style.touchAction = 'pan-y pinch-zoom';
+        this.addEventListeners();
+    }
+    addEventListeners() {
+        if (!this.sliderElement)
+            return;
+        this.sliderElement.addEventListener("pointerdown", this.handlePointerDown, { passive: false });
+        this.sliderElement.addEventListener("pointermove", this.handlePointerMove, { passive: false });
+        this.sliderElement.addEventListener("pointerup", this.handlePointerUp, { passive: true });
+        this.sliderElement.addEventListener("pointercancel", this.handlePointerCancel, { passive: true });
+    }
+    removeEventListeners() {
+        if (!this.sliderElement)
+            return;
+        this.sliderElement.removeEventListener("pointerdown", this.handlePointerDown);
+        this.sliderElement.removeEventListener("pointermove", this.handlePointerMove);
+        this.sliderElement.removeEventListener("pointerup", this.handlePointerUp);
+        this.sliderElement.removeEventListener("pointercancel", this.handlePointerCancel);
+    }
+    startSwipe(x, y) {
+        this.startPoint = { x, y };
+        this.isSwiping = true;
+    }
+    componentDidRender() {
+        this.removeEventListeners();
+        this.addEventListeners();
+    }
+    endSwipe(x, y) {
+        this.isSwiping = false;
+        const dx = x - this.startPoint.x;
+        const dy = y - this.startPoint.y;
+        this.processSwipe(dx, dy);
+    }
+    processSwipe(dx, dy) {
+        const MIN_SWIPE_DISTANCE = 10;
+        if (Math.abs(dx) < MIN_SWIPE_DISTANCE || Math.abs(dy) > Math.abs(dx))
+            return;
+        const isLeftSwipe = dx < 0;
+        const shouldGoNext = this.isRTL ? !isLeftSwipe : isLeftSwipe;
+        if (shouldGoNext) {
+            this.goToNextSlide();
+        }
+        else {
+            this.goToPrevSlide();
+        }
+    }
+    goToNextSlide() {
+        if (this.currentSlide < this.images.length - 1) {
+            this.currentSlide++;
+        }
+    }
+    goToPrevSlide() {
+        if (this.currentSlide > 0) {
+            this.currentSlide--;
+        }
+    }
+    renderStars() {
+        return Array(5)
+            .fill(null)
+            .map((_, index) => h("span", { key: index, innerHTML: this.review.stars >= index + 1 ? IconStar2 : IconStar2Muted }));
+    }
+    renderDots() {
+        return this.images.map(({ url }, index) => (h("button", { key: url || index, type: "button", class: `s-review-card-slider-dot ${this.currentSlide === index ? "active" : ""}`, onClick: () => this.goToSlide(index), "aria-label": `Go to slide ${index + 1}`, onPointerDown: () => this.goToSlide(index) })));
+    }
+    renderSlider() {
+        if (!this.hasMultipleImages)
+            return null;
+        return (h("div", { class: "s-review-card-slider-container" }, h("div", { class: "s-review-card-slides", style: { transform: this.slideTransform } }, this.images.map((image) => (h("div", { key: image?.id, class: "s-review-card-slider-slide" }, h("img", { src: image.url, alt: image.alt || "Product image", width: 275, height: 275, loading: "lazy", draggable: false }))))), h("div", { class: "s-review-card-slider-dots" }, this.renderDots())));
+    }
+    renderSingleImage() {
+        const image = this.review?.product?.image;
+        if (!image || this.hasMultipleImages)
+            return null;
+        return (h("img", { src: image.url, alt: image.alt || "Product image", class: "s-review-card-image", width: 275, height: 275, loading: "lazy", decoding: "async", draggable: false }));
+    }
+    renderHeader() {
+        return (h("div", { class: "s-review-card-header" }, h("div", { class: "s-review-card-reviewer-name" }, h("p", null, this.review?.name), this.review?.has_order && h("span", { class: "s-review-card-verified-icon", innerHTML: IconVerified })), h("div", { class: "s-review-card-stars" }, this.renderStars())));
+    }
+    renderProductInfo() {
+        const product = this.review?.product;
+        if (!product)
+            return null;
+        return (h("a", { href: this.review?.product?.url, class: "s-review-card-product-container" }, h("img", { alt: product.image?.alt || "Product", src: product.image?.url, class: "s-review-card-product-image", width: 60, height: 60, loading: "lazy", decoding: "async", draggable: false }), h("div", { class: "s-review-card-product-details" }, h("p", { class: "s-review-card-product-details-name" }, product.name), this.showPurchaseCount ? h("p", { class: "s-review-card-product-details-purchase-count" }, h("span", { innerHTML: IconFire2 }), this.purchasedCount) : null)));
+    }
+    render() {
+        return h("div", { key: '8c2e3500d7844c43e455e707c460a842995eda13', class: "s-review-card-container" }, this.renderSlider(), this.renderSingleImage(), renderDivider(), h("div", { key: '1b5cb3b515118ab578d2f64202e33ff2a67b3e89', class: "s-review-card-content" }, this.renderHeader(), h("p", { key: '784abce956a5ee45aa0d90b5bd5427c2658bcf2c', class: "s-review-card-review-content", innerHTML: this.review?.content }), renderDivider(), this.renderProductInfo()));
+    }
+    get el() { return this; }
+    static get style() { return sallaReviewCardCss; }
+}, [0, "salla-review-card", {
+        "review": [16],
+        "currentSlide": [32],
+        "purchasedCount": [32],
+        "showPurchaseCount": [32]
+    }]);
+const renderDivider = (className) => (h("div", { class: `s-review-card-divider ${""}` }));
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-review-card"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-review-card":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaReviewCard);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaReviewCard as S, defineCustomElement as d };

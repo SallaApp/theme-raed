@@ -1,0 +1,48 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { r as registerInstance, h, F as Fragment, H as Host } from './index-DPwa4NOx.js';
+
+const sallaOrderDetailsCss = "";
+
+const SallaOrderDetails = class {
+    constructor(hostRef) {
+        registerInstance(this, hostRef);
+    }
+    parseOrderDetailsData(newValue) {
+        this.parsedOrderDetailsData = newValue;
+        if (typeof this.orderDetails === 'string') {
+            this.parsedOrderDetailsData = JSON.parse(newValue);
+        }
+        else {
+            this.parsedOrderDetailsData = newValue;
+        }
+    }
+    componentWillLoad() {
+        this.parseOrderDetailsData(this.orderDetails);
+        console.log('Parent componentWillLoad - parsedOrderDetailsData:', this.parsedOrderDetailsData);
+    }
+    renderOrderDetailsContent() {
+        // Check if we have parsed data
+        if (!this.parsedOrderDetailsData) {
+            console.warn('No parsedOrderDetailsData available');
+            return null;
+        }
+        return [
+            /* Product Options */
+            this.parsedOrderDetailsData.options && this.parsedOrderDetailsData.options.length > 0 && (h("salla-order-details-options", { options: this.parsedOrderDetailsData.options })),
+            /* Bundle Subproducts */
+            this.parsedOrderDetailsData.sub_products &&
+                this.parsedOrderDetailsData.sub_products.length > 0 && (h(Fragment, null, h("h2", { class: "s-order-details-bundle-title" }, salla.lang.get('pages.orders.sub_products')), h("div", { class: "s-order-details-bundle-content" }, this.parsedOrderDetailsData.sub_products.map(product => (h("salla-order-details-multiple-bundle-product", { key: product?.id, productDetails: product })))))),
+        ];
+    }
+    render() {
+        return h(Host, { key: 'ca263aa861d52fdf36b6a842f6e58d07f27a6d1f', class: "s-order-details-wrapper" }, this.renderOrderDetailsContent());
+    }
+    static get watchers() { return {
+        "orderDetails": ["parseOrderDetailsData"]
+    }; }
+};
+SallaOrderDetails.style = sallaOrderDetailsCss;
+
+export { SallaOrderDetails as salla_order_details };

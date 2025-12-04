@@ -1,0 +1,310 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import Heart from "../../assets/svg/heart.svg";
+import Star from "../../assets/svg/star2.svg";
+/**
+ * @slot add-to-cart-label - Add to cart label.
+ */
+export class SallaProductCard {
+    constructor() {
+        // Store configs
+        salla.onReady(() => {
+            this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
+            salla.wishlist.event.onAdded((_res, id) => this.toggleFavoriteIcon(true, id));
+            salla.wishlist.event.onRemoved((_res, id) => this.toggleFavoriteIcon(false, id));
+            this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
+        });
+        // Language
+        salla.lang.onLoaded(() => {
+            this.remained = salla.lang.get('pages.products.remained');
+            this.donationAmount = salla.lang.get('pages.products.donation_amount');
+            this.startingPrice = salla.lang.get('pages.products.starting_price');
+            this.addToCart = salla.lang.get('pages.cart.add_to_cart');
+            this.outOfStock = salla.lang.get('pages.products.out_of_stock');
+        });
+        // Parse product data
+        if (!this.product) {
+            return;
+        }
+        try {
+            this.productData = typeof this.product == 'object' ? this.product : JSON.parse(this.product);
+        }
+        catch (e) {
+            salla.log('Bad json passed via product prop');
+        }
+    }
+    // Private Methods
+    initCircleBar() {
+        let qty = this.productData.quantity, total = this.productData.quantity > 100 ? this.productData.quantity * 2 : 100, roundPercent = (qty / total) * 100, bar = this.pie.querySelector('.s-product-card-content-pie-svg-bar'), strokeDashOffsetValue = 100 - roundPercent;
+        bar.style.strokeDashoffset = strokeDashOffsetValue;
+    }
+    toggleFavoriteIcon(isAdded = true, id = null) {
+        if (id && id !== this.productData.id) {
+            return;
+        }
+        this.wishlistBtn?.classList.toggle('s-product-card-wishlist-added', isAdded);
+    }
+    formatDate(date) {
+        let d = new Date(date);
+        return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    }
+    getProductBadge() {
+        if (this.productData.promotion_title) {
+            return h("div", { class: "s-product-card-promotion-title" }, this.productData.promotion_title);
+        }
+        if (this.showQuantity && this.productData?.quantity) {
+            return h("div", { class: "s-product-card-quantity" }, this.remained, " ", salla.helpers.number(this.productData?.quantity));
+        }
+        if (this.showQuantity && this.productData?.is_out_of_stock) {
+            return h("div", { class: "s-product-card-out-badge" }, this.outOfStock);
+        }
+        return '';
+    }
+    getPriceFormat(price) {
+        if (!price || price == 0) {
+            return salla.config.get('store.settings.product.show_price_as_dash') ? '-' : '';
+        }
+        return salla.money(price);
+    }
+    getProductPrice() {
+        if (this.productData.is_on_sale) {
+            return h("div", { class: "s-product-card-sale-price" }, h("h4", { innerHTML: this.getPriceFormat(this.productData.sale_price) }), h("span", { innerHTML: this.getPriceFormat(this.productData?.regular_price) }));
+        }
+        if (this.productData.starting_price) {
+            return h("div", { class: "s-product-card-starting-price" }, h("p", null, this.startingPrice), h("h4", { innerHTML: this.getPriceFormat(this.productData?.starting_price) }));
+        }
+        return h("h4", { class: "s-product-card-price", innerHTML: this.getPriceFormat(this.productData?.price) });
+    }
+    render() {
+        const classes = {
+            's-product-card-entry': true,
+            's-product-card-vertical': !this.horizontal && !this.fullImage && !this.minimal,
+            's-product-card-horizontal': this.horizontal && !this.fullImage && !this.minimal,
+            's-product-card-fit-height': this.fitImageHeight && !this.isSpecial && !this.fullImage && !this.minimal,
+            's-product-card-special': this.isSpecial,
+            's-product-card-full-image': this.fullImage,
+            's-product-card-minimal': this.minimal,
+            's-product-card-donation': this.productData?.donation,
+            's-product-card-shadow': this.shadowOnHover,
+            's-product-card-out-of-stock': this.productData?.is_out_of_stock,
+        };
+        const hrefProp = this.productData?.url ? { href: this.productData.url, title: `Learn more about ${this.productData?.name}` } : {};
+        return (h(Host, { key: '55d26993163d8a0f02afb90bcd2e4775c0917377', id: `product-${this.productData?.id}`, class: classes }, h("div", { key: 'e43d1bc58fa8108fd9472ca4887fab659a3eeccc', class: !this.fullImage ? 's-product-card-image' : 's-product-card-image-full' }, h("a", { key: '73d9499d8d61f834aa95278f061c9c891c1d590a', ...hrefProp }, h("img", { key: 'be4520c090a16a81078615d6a62affd507da6dd0', class: `s-product-card-image-${salla.url.is_placeholder(this.productData?.image?.url)
+                ? 'contain'
+                : this.fitImageHeight
+                    ? this.fitImageHeight
+                    : 'cover'} lazy`, src: this.placeholder, alt: this.productData?.image?.alt || this.productData?.name, "data-src": this.productData?.image?.url || this.productData?.thumbnail }), !this.fullImage && !this.minimal ? this.getProductBadge() : ''), this.fullImage && h("a", { key: '577b58ab0434c3b473ce2de3f28dc3e8b1c03f99', ...hrefProp, class: "s-product-card-overlay" }), !this.horizontal && !this.fullImage ?
+            h("salla-button", { shape: "icon", fill: "none", color: "light", "aria-label": "Add or remove to wishlist", ref: el => this.wishlistBtn = el, class: "s-product-card-wishlist-btn animated", onClick: () => salla.wishlist.toggle(this.productData.id) }, h("span", { innerHTML: Heart })) : ''), h("div", { key: '1593d8c5336cc43e2aa1ba8d5ca7931b67fd9d46', class: "s-product-card-content" }, this.isSpecial && this.productData?.quantity ?
+            h("div", { class: "s-product-card-content-pie", ref: pie => this.pie = pie }, h("span", null, h("b", null, salla.helpers.number(this.productData?.quantity)), this.remained), h("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-2 -1 36 34", class: "s-product-card-content-pie-svg" }, h("circle", { cx: "16", cy: "16", r: "15.9155", class: "s-product-card-content-pie-svg-base" }), h("circle", { cx: "16", cy: "16", r: "15.9155", class: "s-product-card-content-pie-svg-bar" })))
+            : '', h("div", { key: 'a0605f788b05342c259e3f2ad87c8cf48f6d88ee', class: { 's-product-card-content-main': true, 's-product-card-content-extra-padding': this.isSpecial } }, h("h3", { key: 'fce73d249c7a0a82bd395d291716c5b96e6b4a5a', class: "s-product-card-content-title" }, h("a", { key: '8610e37c9d8cb8cbb74578ae1fa9da3d59852d48', ...hrefProp }, this.productData?.name)), this.productData?.subtitle && !this.minimal ?
+            h("p", { class: "s-product-card-content-subtitle" }, this.productData?.subtitle)
+            : ''), this.productData?.donation && !this.minimal && !this.fullImage ?
+            [h("salla-progress-bar", { donation: this.productData?.donation }), h("div", { class: "s-product-card-donation-input" }, this.productData?.donation?.can_donate ?
+                    [h("label", { htmlFor: "donation-amount" }, this.donationAmount, " ", h("span", null, "*")), h("input", { type: "text", onInput: e => {
+                                salla.helpers.inputDigitsOnly(e.target);
+                                this.addBtn.donatingAmount = e.target.value;
+                            }, id: "donation-amount", name: "donating_amount", class: "s-form-control", placeholder: this.donationAmount })]
+                    : '')]
+            : '', h("div", { key: '1d1f7f7eaa467b059f6776d1e6f15d981edd0106', class: { 's-product-card-content-sub': true, 's-product-card-content-extra-padding': this.isSpecial } }, this.getProductPrice(), this.productData?.rating?.stars && !this.minimal ?
+            h("div", { class: "s-product-card-rating" }, h("span", { innerHTML: Star }), h("span", null, this.productData.rating.stars))
+            : ''), this.isSpecial && this.productData.discount_ends
+            ? h("salla-count-down", { date: this.formatDate(this.productData.discount_ends), "end-of-day": true, boxed: true, labeled: true })
+            : '', !this.hideAddBtn ?
+            h("div", { class: "s-product-card-content-footer" }, h("salla-add-product-button", { fill: "outline", width: "wide", ref: el => this.addBtn = el, "product-id": this.productData.id, "product-status": this.productData.status, "product-type": this.productData.type }, h("slot", { name: "add-to-cart-label" }, this.productData.add_to_cart_label)), this.horizontal || this.fullImage ?
+                h("salla-button", { shape: "icon", fill: "none", color: "light", ref: el => this.wishlistBtn = el, "aria-label": "Add or remove to wishlist", class: "s-product-card-wishlist-btn animated", onClick: () => salla.wishlist.toggle(this.productData.id), "data-id": "{{ product.id }}" }, h("span", { class: "text-xl", innerHTML: Heart }))
+                : '')
+            : '')));
+    }
+    componentDidLoad() {
+        document.lazyLoadInstance?.update(this.host.querySelectorAll('.lazy'));
+        if (this.productData?.quantity && this.isSpecial) {
+            this.initCircleBar();
+        }
+        if (!salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(this.productData?.id)) {
+            this.toggleFavoriteIcon();
+        }
+    }
+    static get is() { return "salla-product-card"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-product-card.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-product-card.css"]
+        };
+    }
+    static get assetsDirs() { return ["assets"]; }
+    static get properties() {
+        return {
+            "product": {
+                "type": "string",
+                "attribute": "product",
+                "mutable": false,
+                "complexType": {
+                    "original": "string | object",
+                    "resolved": "object | string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Product information."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "horizontal": {
+                "type": "boolean",
+                "attribute": "horizontal",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Horizontal card."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "shadowOnHover": {
+                "type": "boolean",
+                "attribute": "shadow-on-hover",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Support shadow on hover."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "hideAddBtn": {
+                "type": "boolean",
+                "attribute": "hide-add-btn",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Hide add to cart button."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "fullImage": {
+                "type": "boolean",
+                "attribute": "full-image",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Full image card."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "minimal": {
+                "type": "boolean",
+                "attribute": "minimal",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Minimal card."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "isSpecial": {
+                "type": "boolean",
+                "attribute": "is-special",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Special card."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "showQuantity": {
+                "type": "boolean",
+                "attribute": "show-quantity",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show quantity."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "productData": {},
+            "fitImageHeight": {},
+            "remained": {},
+            "outOfStock": {},
+            "donationAmount": {},
+            "startingPrice": {},
+            "addToCart": {},
+            "placeholder": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

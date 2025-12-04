@@ -1,0 +1,77 @@
+export declare class SallaButton {
+    private text;
+    private hostAttributes;
+    host: HTMLElement;
+    /**
+     * Button Type
+     */
+    shape: 'link' | 'icon' | 'btn';
+    /**
+     * Button Color
+     */
+    color: 'primary' | 'success' | 'warning' | 'danger' | 'light' | 'gray' | 'dark';
+    /**
+     * Button Fill
+     */
+    fill: 'solid' | 'outline' | 'none';
+    /**
+     * Button Size
+     */
+    size: 'small' | 'large' | 'medium';
+    /**
+     * Button Width
+     */
+    width: 'wide' | 'normal';
+    /**
+     * Is the button currently loading
+     */
+    loading: boolean;
+    /**
+     * Is the button currently disabled
+     */
+    disabled: boolean;
+    /**
+     * If there is need to change loader position, pass the position
+     */
+    loaderPosition: 'start' | 'end' | 'center' | 'after';
+    /**
+     * Button with href as normal link
+     */
+    href: string;
+    /**
+     * Determines the type of the rendered button.
+     * By default, the type is set to "button," making it a general-purpose button.
+     * Setting `type` to "submit" makes the button behave as a submit button within a form, triggering form submission.
+     * Possible values for `type` include "button," "submit," "reset," and "menu.".
+     *
+     * Possible values and their usage are as follows:
+     * "button" (default, used for general button functionality),
+     * "reset" (resets form fields to their default values), and
+     * "menu" (represents a button that, when activated, displays a context menu).
+     */
+    type: string;
+    /**
+     * Run loading animation
+     */
+    load(): Promise<HTMLElement>;
+    /**
+     * Stop loading animation
+     */
+    stop(): Promise<HTMLElement>;
+    /**
+     * Changing the body of the button
+     * @param html
+     */
+    setText(html: string): Promise<HTMLElement>;
+    /**
+     * Add `disabled` attribute
+     */
+    disable(): Promise<HTMLElement>;
+    /**
+     * Remove `disabled` attribute
+     */
+    enable(): Promise<HTMLElement>;
+    private getBtnAttributes;
+    button(): any;
+    render(): any;
+}

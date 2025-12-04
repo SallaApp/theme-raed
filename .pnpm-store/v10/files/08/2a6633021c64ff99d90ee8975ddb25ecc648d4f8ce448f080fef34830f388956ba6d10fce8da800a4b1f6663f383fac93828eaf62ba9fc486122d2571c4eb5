@@ -1,0 +1,215 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import IconVerified from "../../assets/svg/check.svg";
+import IconStar2 from "../../assets/svg/star-02.svg";
+import IconStar2Muted from "../../assets/svg/star-02-muted.svg";
+import IconFire2 from "../../assets/svg/fire-02.svg";
+export class SallaReviewCard {
+    constructor() {
+        this.currentSlide = 0;
+        this.showPurchaseCount = false;
+        this.startPoint = { x: 0, y: 0 };
+        this.isSwiping = false;
+        this.isRTL = "rtl";
+        this.handlePointerDown = (e) => {
+            // Only handle primary pointer (first touch/mouse)
+            if (!e.isPrimary)
+                return;
+            this.sliderElement?.setPointerCapture(e.pointerId);
+            this.startSwipe(e.clientX, e.clientY);
+            e.preventDefault();
+        };
+        this.handlePointerMove = (e) => {
+            if (!this.isSwiping || !e.isPrimary)
+                return;
+            e.preventDefault();
+        };
+        this.handlePointerUp = (e) => {
+            if (!this.isSwiping || !e.isPrimary)
+                return;
+            this.sliderElement?.releasePointerCapture(e.pointerId);
+            this.endSwipe(e.clientX, e.clientY);
+        };
+        this.handlePointerCancel = (e) => {
+            if (!this.isSwiping || !e.isPrimary)
+                return;
+            this.sliderElement?.releasePointerCapture(e.pointerId);
+            this.isSwiping = false;
+        };
+        this.goToSlide = (index) => {
+            this.currentSlide = Math.max(0, Math.min(index, this.images.length - 1));
+        };
+    }
+    async componentDidLoad() {
+        await salla.onReady();
+        this.showPurchaseCount = !!salla.config.get('store.settings.product.total_sold_enabled', false);
+        this.isRTL = salla.config.get('theme.is_rtl', true);
+        this.purchasedCount = salla.lang.getWithDefault('blocks.home.reviews.purchased_count', this.isRTL ? ` تم شراءه ${this.review.product?.sold_quantity} مرة`
+            : `Purchased ${this.review.product.sold_quantity} times`, { count: this.review.product?.sold_quantity });
+        this.initializeSlider();
+    }
+    disconnectedCallback() {
+        this.removeEventListeners();
+    }
+    get images() {
+        const { review } = this;
+        return review?.images?.length > 1
+            ? review.images.map((image, idx) => ({ url: image, alt: '', id: idx }))
+            : review?.product?.images || [];
+    }
+    get hasMultipleImages() {
+        return this.images.length > 1;
+    }
+    get slideTransform() {
+        const direction = this.isRTL ? 1 : -1;
+        return `translateX(${this.currentSlide * 100 * direction}%)`;
+    }
+    initializeSlider() {
+        if (!this.hasMultipleImages)
+            return;
+        this.sliderElement = this.el.querySelector(".s-review-card-slider-container");
+        if (!this.sliderElement)
+            return;
+        // Enable pointer events and set touch-action
+        this.sliderElement.style.touchAction = 'pan-y pinch-zoom';
+        this.addEventListeners();
+    }
+    addEventListeners() {
+        if (!this.sliderElement)
+            return;
+        this.sliderElement.addEventListener("pointerdown", this.handlePointerDown, { passive: false });
+        this.sliderElement.addEventListener("pointermove", this.handlePointerMove, { passive: false });
+        this.sliderElement.addEventListener("pointerup", this.handlePointerUp, { passive: true });
+        this.sliderElement.addEventListener("pointercancel", this.handlePointerCancel, { passive: true });
+    }
+    removeEventListeners() {
+        if (!this.sliderElement)
+            return;
+        this.sliderElement.removeEventListener("pointerdown", this.handlePointerDown);
+        this.sliderElement.removeEventListener("pointermove", this.handlePointerMove);
+        this.sliderElement.removeEventListener("pointerup", this.handlePointerUp);
+        this.sliderElement.removeEventListener("pointercancel", this.handlePointerCancel);
+    }
+    startSwipe(x, y) {
+        this.startPoint = { x, y };
+        this.isSwiping = true;
+    }
+    componentDidRender() {
+        this.removeEventListeners();
+        this.addEventListeners();
+    }
+    endSwipe(x, y) {
+        this.isSwiping = false;
+        const dx = x - this.startPoint.x;
+        const dy = y - this.startPoint.y;
+        this.processSwipe(dx, dy);
+    }
+    processSwipe(dx, dy) {
+        const MIN_SWIPE_DISTANCE = 10;
+        if (Math.abs(dx) < MIN_SWIPE_DISTANCE || Math.abs(dy) > Math.abs(dx))
+            return;
+        const isLeftSwipe = dx < 0;
+        const shouldGoNext = this.isRTL ? !isLeftSwipe : isLeftSwipe;
+        if (shouldGoNext) {
+            this.goToNextSlide();
+        }
+        else {
+            this.goToPrevSlide();
+        }
+    }
+    goToNextSlide() {
+        if (this.currentSlide < this.images.length - 1) {
+            this.currentSlide++;
+        }
+    }
+    goToPrevSlide() {
+        if (this.currentSlide > 0) {
+            this.currentSlide--;
+        }
+    }
+    renderStars() {
+        return Array(5)
+            .fill(null)
+            .map((_, index) => h("span", { key: index, innerHTML: this.review.stars >= index + 1 ? IconStar2 : IconStar2Muted }));
+    }
+    renderDots() {
+        return this.images.map(({ url }, index) => (h("button", { key: url || index, type: "button", class: `s-review-card-slider-dot ${this.currentSlide === index ? "active" : ""}`, onClick: () => this.goToSlide(index), "aria-label": `Go to slide ${index + 1}`, onPointerDown: () => this.goToSlide(index) })));
+    }
+    renderSlider() {
+        if (!this.hasMultipleImages)
+            return null;
+        return (h("div", { class: "s-review-card-slider-container" }, h("div", { class: "s-review-card-slides", style: { transform: this.slideTransform } }, this.images.map((image) => (h("div", { key: image?.id, class: "s-review-card-slider-slide" }, h("img", { src: image.url, alt: image.alt || "Product image", width: 275, height: 275, loading: "lazy", draggable: false }))))), h("div", { class: "s-review-card-slider-dots" }, this.renderDots())));
+    }
+    renderSingleImage() {
+        const image = this.review?.product?.image;
+        if (!image || this.hasMultipleImages)
+            return null;
+        return (h("img", { src: image.url, alt: image.alt || "Product image", class: "s-review-card-image", width: 275, height: 275, loading: "lazy", decoding: "async", draggable: false }));
+    }
+    renderHeader() {
+        return (h("div", { class: "s-review-card-header" }, h("div", { class: "s-review-card-reviewer-name" }, h("p", null, this.review?.name), this.review?.has_order && h("span", { class: "s-review-card-verified-icon", innerHTML: IconVerified })), h("div", { class: "s-review-card-stars" }, this.renderStars())));
+    }
+    renderProductInfo() {
+        const product = this.review?.product;
+        if (!product)
+            return null;
+        return (h("a", { href: this.review?.product?.url, class: "s-review-card-product-container" }, h("img", { alt: product.image?.alt || "Product", src: product.image?.url, class: "s-review-card-product-image", width: 60, height: 60, loading: "lazy", decoding: "async", draggable: false }), h("div", { class: "s-review-card-product-details" }, h("p", { class: "s-review-card-product-details-name" }, product.name), this.showPurchaseCount ? h("p", { class: "s-review-card-product-details-purchase-count" }, h("span", { innerHTML: IconFire2 }), this.purchasedCount) : null)));
+    }
+    render() {
+        return h("div", { key: '8c2e3500d7844c43e455e707c460a842995eda13', class: "s-review-card-container" }, this.renderSlider(), this.renderSingleImage(), renderDivider(), h("div", { key: '1b5cb3b515118ab578d2f64202e33ff2a67b3e89', class: "s-review-card-content" }, this.renderHeader(), h("p", { key: '784abce956a5ee45aa0d90b5bd5427c2658bcf2c', class: "s-review-card-review-content", innerHTML: this.review?.content }), renderDivider(), this.renderProductInfo()));
+    }
+    static get is() { return "salla-review-card"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-review-card.css"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-review-card.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "review": {
+                "type": "unknown",
+                "attribute": "review",
+                "mutable": false,
+                "complexType": {
+                    "original": "Partial<Review>",
+                    "resolved": "{ id?: number; replies?: Record<string, unknown>[]; content?: string; type?: string; avatar?: string; name?: string; stars?: number; is_pending?: boolean; has_order?: boolean; likes_count?: number; customer_id?: number; city?: string; date?: number; images?: string[]; text?: string; can_update?: boolean; product?: Product; shipping?: unknown; created_at?: CreatedAt; }",
+                    "references": {
+                        "Partial": {
+                            "location": "global",
+                            "id": "global::Partial"
+                        },
+                        "Review": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-review-card/interfaces.ts::Review"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "currentSlide": {},
+            "purchasedCount": {},
+            "showPurchaseCount": {}
+        };
+    }
+    static get elementRef() { return "el"; }
+}
+const renderDivider = (className) => (h("div", { class: `s-review-card-divider ${className || ""}` }));

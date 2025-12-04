@@ -1,0 +1,2 @@
+import{hasSupport as o,wrap as l,get as t,set as a,remove as e}from"@analytics/global-storage-utils";const r="localStorage",g=o.bind(null,"localStorage"),c=l("localStorage","getItem",t),m=l("localStorage","setItem",a),s=l("localStorage","removeItem",e);export{r as LOCAL_STORAGE,c as getItem,g as hasLocalStorage,s as removeItem,m as setItem};
+//# sourceMappingURL=analytics-util-localstorage.modern.js.map

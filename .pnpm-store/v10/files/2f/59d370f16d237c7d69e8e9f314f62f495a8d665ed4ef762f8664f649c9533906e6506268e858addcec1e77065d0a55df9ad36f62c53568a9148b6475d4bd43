@@ -1,0 +1,111 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+export class SallaCommentForm {
+    constructor() {
+        this.placeholder = salla.lang.get('blocks.comments.placeholder');
+        this.submitText = salla.lang.get('blocks.comments.submit');
+        salla.lang.onLoaded(() => {
+            this.placeholder = salla.lang.get('blocks.comments.placeholder');
+            this.submitText = salla.lang.get('blocks.comments.submit');
+        });
+        salla.onReady(() => {
+            this.canComment = salla.config.get('user.can_comment');
+            this.itemId = salla.config.get('page.id');
+            this.type = salla.url.is_page('page-single') ? 'page' : salla.url.is_page('blog.single') ? 'blog' : 'product';
+        });
+    }
+    submit() {
+        if (!this.commentForm.reportValidity()) {
+            salla.log('CommentForm:: validation error!');
+            return;
+        }
+        this.submitBtn.load()
+            .then(() => salla.comment.add({ id: this.itemId, comment: this.commentField.value, type: this.type }))
+            .finally(() => this.submitBtn.stop);
+    }
+    render() {
+        return (h(Host, { key: 'fbea28507c188a338ee066b5198bcf93de2fbda2' }, !!this.canComment ? h("form", { ref: frm => this.commentForm = frm }, h("div", { class: "s-comment-form-wrapper" }, this.showAvatar ?
+            h("img", { class: "s-comment-form-avatar", src: salla.config.get('user.avatar'), alt: "user avatar" }) : '', h("div", { class: "s-comment-form-content" }, h("textarea", { cols: 30, rows: 5, minlength: "4", maxlength: "500", ref: field => this.commentField = field, placeholder: this.placeholder, class: "s-comment-form-input", required: true }), h("br", null), h("div", { class: "s-comment-form-action" }, h("salla-button", { ref: btn => this.submitBtn = btn, "loader-position": 'center', onClick: () => this.submit() }, this.submitText))))) : ''));
+    }
+    static get is() { return "salla-comment-form"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-comment-form.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-comment-form.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "type": {
+                "type": "string",
+                "attribute": "type",
+                "mutable": true,
+                "complexType": {
+                    "original": "'product' | 'page' | 'blog'",
+                    "resolved": "\"blog\" | \"page\" | \"product\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Type of entity the comment is being submitted for. Defaults to `salla.url.is_page('page-single') ? 'page' : 'product'`"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "showAvatar": {
+                "type": "boolean",
+                "attribute": "show-avatar",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "To show the avatar or not in the comment form"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "itemId": {
+                "type": "any",
+                "attribute": "item-id",
+                "mutable": true,
+                "complexType": {
+                    "original": "string | number",
+                    "resolved": "number | string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "The ID of the item(as defined in the type), where the comment is for. defaults to `salla.config.get('page.id')`"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            }
+        };
+    }
+    static get states() {
+        return {
+            "placeholder": {},
+            "submitText": {},
+            "canComment": {}
+        };
+    }
+}

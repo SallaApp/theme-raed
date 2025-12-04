@@ -1,0 +1,88 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
+
+function generateRandomId() {
+    return Math.random().toString(36).slice(2, 10);
+}
+
+const sallaTabHeaderCss = "";
+
+const SallaTabHeader = /*@__PURE__*/ proxyCustomElement(class SallaTabHeader extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.tabSelected = createEvent(this, "tabSelected", 7);
+        this.id = generateRandomId();
+        /**
+       * The class applied to the currently active(selected) tab
+       */
+        this.activeClass = undefined;
+        /**
+         * Set the height of the tab bar
+         */
+        this.height = undefined;
+        /**
+         * Center tab items in the given flex.
+         */
+        this.centered = false;
+        this.isSelected = false;
+    }
+    /**
+     * Expose self for the parent.
+     */
+    async getChild() {
+        return {
+            selected: this.selected.bind(this),
+            unselect: this.unselect.bind(this),
+            name: this.name,
+            id: this.id
+        };
+    }
+    unselect() {
+        this.isSelected = false;
+    }
+    selected() {
+        this.isSelected = true;
+    }
+    onClick() {
+        this.getChild().then(child => {
+            this.tabSelected.emit(child);
+        });
+    }
+    render() {
+        const classes = {
+            's-tabs-header-item': true,
+            's-tabs-bg-normal': true,
+            's-tabs-active': this.isSelected,
+        };
+        return [
+            h("div", { key: '7e9e75c995226ca1b23a9a185c8be46206362b61', class: classes, onClick: this.onClick.bind(this) }, h("slot", { key: '6ed7bf434cf6b1af235e2251f6d3f385cbbbcf0b' })),
+        ];
+    }
+    static get style() { return sallaTabHeaderCss; }
+}, [4, "salla-tab-header", {
+        "name": [1],
+        "activeClass": [1, "active-class"],
+        "height": [8],
+        "centered": [4],
+        "isSelected": [32],
+        "getChild": [64]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-tab-header"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-tab-header":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaTabHeader);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaTabHeader as S, defineCustomElement as d };

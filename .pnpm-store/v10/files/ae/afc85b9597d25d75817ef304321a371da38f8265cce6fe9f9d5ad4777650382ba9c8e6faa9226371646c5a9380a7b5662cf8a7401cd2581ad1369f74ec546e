@@ -1,0 +1,161 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+
+const sallaButtonCss = "";
+
+const SallaButton = /*@__PURE__*/ proxyCustomElement(class SallaButton extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.hostAttributes = {};
+        /**
+         * Button Type
+         */
+        this.shape = 'btn';
+        /**
+         * Button Color
+         */
+        this.color = 'primary';
+        /**
+         * Button Fill
+         */
+        this.fill = 'solid';
+        /**
+         * Button Size
+         */
+        this.size = 'medium';
+        /**
+         * Button Width
+         */
+        this.width = 'normal';
+        /**
+         * Is the button currently loading
+         */
+        this.loading = false;
+        /**
+         * Is the button currently disabled
+         */
+        this.disabled = false;
+        /**
+         * If there is need to change loader position, pass the position
+         */
+        this.loaderPosition = 'after';
+        /**
+         * Determines the type of the rendered button.
+         * By default, the type is set to "button," making it a general-purpose button.
+         * Setting `type` to "submit" makes the button behave as a submit button within a form, triggering form submission.
+         * Possible values for `type` include "button," "submit," "reset," and "menu.".
+         *
+         * Possible values and their usage are as follows:
+         * "button" (default, used for general button functionality),
+         * "reset" (resets form fields to their default values), and
+         * "menu" (represents a button that, when activated, displays a context menu).
+         */
+        this.type = "button";
+    }
+    /**
+     * Run loading animation
+     */
+    async load() {
+        if (this.loaderPosition == 'center')
+            this.text.classList.add('s-button-hide');
+        this.host.setAttribute('loading', '');
+        return this.host;
+    }
+    /**
+     * Stop loading animation
+     */
+    async stop() {
+        this.host.removeAttribute('loading');
+        this.host.querySelector('button').removeAttribute('loading');
+        if (this.loaderPosition == 'center')
+            this.text.classList.remove('s-button-hide');
+        return this.host;
+    }
+    /**
+     * Changing the body of the button
+     * @param html
+     */
+    async setText(html) {
+        this.text.innerHTML = html;
+        return this.host;
+    }
+    /**
+     * Add `disabled` attribute
+     */
+    async disable() {
+        this.host.setAttribute('disabled', '');
+        return this.host;
+    }
+    /**
+     * Remove `disabled` attribute
+     */
+    async enable() {
+        this.host.removeAttribute('disabled');
+        return this.host;
+    }
+    getBtnAttributes() {
+        for (let i = 0; i < this.host.attributes.length; i++) {
+            if (!['color', 'fill', 'size', 'width', 'id'].includes(this.host.attributes[i].name)) {
+                this.hostAttributes[this.host.attributes[i].name] = this.host.attributes[i].value;
+            }
+        }
+        this.hostAttributes.type = this.hostAttributes.type || this.type;
+        this.hostAttributes.class +=
+            ' s-button-element s-button-' + this.shape
+                + ' s-button-' + (this.fill == "none" ? 'fill-none' : this.fill)
+                + (this.size != "medium" ? ' s-button-' + this.size : '')
+                + (this.width != "normal" ? ' s-button-' + this.width : '')
+                + (this.shape == "link" ? ' s-button-' + this.color + '-link' : '')
+                + (this.shape != "link" && this.fill != 'outline' ? ' s-button-' + this.color : '')
+                + (this.fill == 'outline' ? ' s-button-' + this.color + '-outline' : '')
+                + (this.disabled ? ' s-button-disabled ' : '')
+                + (this.shape == 'icon' ? ' s-button-loader-center' : ' s-button-loader-' + this.loaderPosition);
+        return this.hostAttributes;
+    }
+    button() {
+        return (h("button", { ...this.getBtnAttributes(), disabled: this.disabled }, h("span", { class: "s-button-text", ref: el => this.text = el }, h("slot", null)), this.loading ? h("span", { class: "s-button-loader" }) : ''));
+    }
+    render() {
+        //TODO:: find a better fix, this is a patch for issue that duplicates the buttons twice @see the screenshot inside this folder
+        return this.host.closest('.swiper-slide')?.classList.contains('swiper-slide-duplicate')
+            ? ''
+            : (h(Host, { class: "s-button-wrap" }, this.href ? h("a", { href: this.href }, this.button()) : this.button()));
+    }
+    get host() { return this; }
+    static get style() { return sallaButtonCss; }
+}, [4, "salla-button", {
+        "shape": [513],
+        "color": [513],
+        "fill": [513],
+        "size": [513],
+        "width": [513],
+        "loading": [516],
+        "disabled": [516],
+        "loaderPosition": [1, "loader-position"],
+        "href": [1],
+        "type": [513],
+        "load": [64],
+        "stop": [64],
+        "setText": [64],
+        "disable": [64],
+        "enable": [64]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-button"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaButton);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaButton as S, defineCustomElement as d };

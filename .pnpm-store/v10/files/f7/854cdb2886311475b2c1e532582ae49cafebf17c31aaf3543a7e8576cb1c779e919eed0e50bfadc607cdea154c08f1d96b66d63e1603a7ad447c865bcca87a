@@ -1,0 +1,161 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+/**
+ * @salla/ui-components
+ * The `salla-accordion` component represents an accordion element.
+ * Use this component to encapsulate content within a collapsible section.
+ */
+export class SallaAccordion {
+    constructor() {
+        /** Should the accordion be collapsible or not. Default is true. */
+        this.collapsible = true;
+        this.bordered = false;
+        this.size = "md";
+        /** Detect if accordion collapsed or not. */
+        this.collapsed = true;
+        /** Represents the direction of the layout. */
+        this.dir = document.dir || 'rtl';
+    }
+    directionChangedHandler(event) {
+        this.dir = event.detail.dir;
+    }
+    handleCollapse(event) {
+        this.collapsed = event.detail.payload.collapsed;
+    }
+    setcollapsibleProp() {
+        const head = this.host.querySelector('salla-accordion-head');
+        if (this.collapsible && head) {
+            head.setAttribute('collapsible', 'true');
+            head.setAttribute('collapsed', this.collapsed.toString());
+        }
+    }
+    componentDidRender() {
+        this.setcollapsibleProp();
+        const body = this.host.querySelector('salla-accordion-body');
+        if (this.collapsible) {
+            this.host.setAttribute('data-collapsed', this.collapsed.toString());
+            body?.setAttribute('data-collapsed', this.collapsed.toString());
+        }
+    }
+    render() {
+        return (h(Host, { key: 'ed8e4c0f24fa4462654e94fa46706e892c141351', class: `s-accordion-wrapper ${this.dir} ${this.bordered ? 's-accordion-wrapper-bordered' : ''} ${this.size ? `size-${this.size}` : ''}`, "data-collapsed": this.collapsed.toString() }, h("slot", { key: '1dbda01c073f3018a55ebcf5d8613a82a5dc6b27' })));
+    }
+    static get is() { return "salla-accordion"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-accordion.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-accordion.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "collapsible": {
+                "type": "boolean",
+                "attribute": "collapsible",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Should the accordion be collapsible or not. Default is true."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "bordered": {
+                "type": "boolean",
+                "attribute": "bordered",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "size": {
+                "type": "string",
+                "attribute": "size",
+                "mutable": false,
+                "complexType": {
+                    "original": "\"sm\" | \"md\" | \"lg\"",
+                    "resolved": "\"lg\" | \"md\" | \"sm\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"md\""
+            },
+            "collapsed": {
+                "type": "boolean",
+                "attribute": "collapsed",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Detect if accordion collapsed or not."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "true"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "dir": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+    static get listeners() {
+        return [{
+                "name": "salla::language.change",
+                "method": "directionChangedHandler",
+                "target": "document",
+                "capture": false,
+                "passive": false
+            }, {
+                "name": "accordionToggle",
+                "method": "handleCollapse",
+                "target": undefined,
+                "capture": false,
+                "passive": false
+            }];
+    }
+}

@@ -1,0 +1,61 @@
+import { ProductDetail } from "@salla.sa/twilight/types/api/product";
+import { Review } from "../../src/components/salla-reviews/interfaces";
+import { Product as SallaProduct } from "@salla.sa/twilight/types/common";
+import { ListItem } from 'schema-dts';
+import { Product } from '@salla.sa/twilight/types/common';
+declare class Helper {
+    private debounce_;
+    private includes;
+    setIncludes(includes: string[]): this;
+    toggleElementClassIf(element: any, classes1: any, classes2: any, callback: any): this;
+    toggleClassIf(selector: any, classes1: any, classes2: any, callback: any): this;
+    isValidEmail(email: any): boolean;
+    filterEmojies(text: any): any;
+    debounce(fn: any, ...data: any[]): any;
+    getProductsSource(source: any): any;
+    getPageTitleForSource(source: any): any;
+    getProductsSourceValue(source: any, sourceValue: any): any;
+    extractFiltersFromUrl(searchParams: any): {};
+    injectExtraFieldsToResponse(response: {
+        data: Product[];
+    }): Promise<{
+        data: Product[];
+    }>;
+    /**
+     * This to make sure we will not request the options endpoint unless we have to.
+     */
+    fetchImagesAndOptions(productIds: any): any;
+    injectOptionsAndImages(productList: Product[], newData: Product[]): Product[];
+    productsIncludes(): any;
+    parseJson(includes: string | string[]): null | string[];
+    getProductSchemaMarkupScript(product: any): HTMLScriptElement;
+    createProductSchema(product: SallaProduct | ProductDetail, position: number): ListItem;
+    generateProductSchema(productList: Array<SallaProduct | ProductDetail>): void;
+    /**
+    * Format date in the form of `Monday 13 November 2023`
+    */
+    formatDateFromString(dateString: string, numberCb: Function, lang?: string): string;
+    /**
+   * Copy text into clipboard.
+   * @param event
+   */
+    copyToClipboard(event: any): void;
+    animateItems(items: NodeListOf<Element>): void;
+    createReviewObject(reviewData: Review): {
+        "@type": string;
+        author: {
+            "@type": string;
+            name: string;
+        };
+        reviewBody: string;
+        reviewRating: {
+            "@type": string;
+            bestRating: string;
+            ratingValue: number;
+            worstRating: string;
+        };
+    };
+    generateReviewSchema(reviews: Array<Review>): void;
+}
+declare const _default: Helper;
+export default _default;

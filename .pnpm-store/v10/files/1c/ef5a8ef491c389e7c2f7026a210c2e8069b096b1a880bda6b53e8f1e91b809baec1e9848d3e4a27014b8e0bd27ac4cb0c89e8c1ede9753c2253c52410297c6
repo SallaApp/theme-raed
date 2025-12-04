@@ -1,0 +1,209 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { B as BellRing } from './bell-ring.js';
+import { H as Helper } from './Helper.js';
+import { d as defineCustomElement$4 } from './salla-button2.js';
+import { d as defineCustomElement$3 } from './salla-loading2.js';
+import { d as defineCustomElement$2 } from './salla-modal2.js';
+import { d as defineCustomElement$1 } from './salla-tel-input2.js';
+
+const sallaProductAvailabilityCss = "";
+
+const SallaProductAvailability = /*@__PURE__*/ proxyCustomElement(class SallaProductAvailability extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.isUser = salla.config.isUser();
+        this.translationLoaded = false;
+        /**
+         * Listen to product options availability.
+         */
+        this.notifyOptionsAvailability = false;
+        /**
+         * is current user already subscribed
+         */
+        this.isSubscribed = false;
+        this.handleSubmitOptions = async () => {
+            let payload = { id: this.productId };
+            if (!this.notifyOptionsAvailability) {
+                return payload;
+            }
+            let optionsElement = document.querySelector(`salla-product-options[product-id="${this.productId}"]`);
+            let options = Object.values(await optionsElement?.getSelectedOptionsData() || {});
+            //if all options not selected, show message && throw exception
+            if (options.length && !await optionsElement?.reportValidity()) {
+                let errorMessage = salla.lang.get('common.messages.required_fields');
+                salla.error(errorMessage);
+                throw errorMessage;
+            }
+            payload.options = [];
+            options.forEach(option => {
+                //inject numbers only, without zeros
+                if (option && !isNaN(option)) {
+                    payload.options.push(Number(option));
+                }
+            });
+            return payload;
+        };
+        // helpers
+        this.typing = (e) => {
+            const error = e.target.nextElementSibling;
+            e.target.classList.remove('s-has-error');
+            error?.classList.contains('s-product-availability-error-msg') && (error.innerText = '');
+            e.keyCode === 13 && this.submit();
+        };
+        salla.lang.onLoaded(() => {
+            this.translationLoaded = true;
+            this.title_ = this.host.title || salla.lang.get('pages.products.notify_availability_title');
+            this.modal?.setTitle(this.title_);
+        });
+        if (!this.productId) {
+            this.productId = salla.config.get('page.id');
+        }
+        if (this.isUser)
+            return;
+        this.channelsWatcher(this.channels);
+        this.title_ = this.host.title || salla.lang.get('pages.products.notify_availability_title');
+        this.host.removeAttribute('title');
+        //todo:: fix this to cover options too
+        this.isVisitorSubscribed = !this.notifyOptionsAvailability ? salla.storage.get(`product-${this.productId}-subscribed`) : '';
+    }
+    channelsWatcher(newValue) {
+        this.channels_ = !!newValue ? newValue.split(',') : [];
+    }
+    openModel() {
+        this.handleSubmitOptions().then(isSuccess => isSuccess ? this.modal.open() : null);
+    }
+    async submit() {
+        let payload = await this.handleSubmitOptions();
+        if (this.isUser) {
+            return salla.api.product.availabilitySubscribe(payload)
+                .then(() => this.isSubscribed = true);
+        }
+        if (this.channels_.includes('sms')) {
+            let { phone, countryCode } = await this.mobileInput.getValues();
+            payload['country_code'] = countryCode;
+            payload['phone'] = phone;
+        }
+        if (this.channels_.includes('email')) {
+            this.email.value !== '' && (payload['email'] = this.email.value);
+        }
+        await this.validateform();
+        return this.btn.load()
+            .then(() => this.btn.disable())
+            .then(() => salla.api.product.availabilitySubscribe(payload))
+            .then(() => {
+            if (!this.notifyOptionsAvailability) {
+                salla.storage.set(`product-${this.productId}-subscribed`, true);
+                this.isSubscribed = true;
+                return;
+            }
+            if (payload.options.length) {
+                let options = salla.storage.get(`product-${this.productId}-subscribed-options`) || [];
+                let selectedOptionsString = payload.options.join(',');
+                if (!options.includes(selectedOptionsString)) {
+                    options.push(selectedOptionsString);
+                    salla.storage.set(`product-${this.productId}-subscribed-options`, options);
+                    this.isSubscribed = true;
+                }
+                else {
+                    salla.log('already subscribed to this options');
+                }
+            }
+        })
+            .then(() => this.btn.stop())
+            .then(() => this.modal.close())
+            .catch(() => this.btn.stop() && this.btn.enable());
+    }
+    async validateform() {
+        try {
+            if (this.channels_.includes('email')) {
+                const isEmailValid = Helper.isValidEmail(this.email.value);
+                if (isEmailValid)
+                    return;
+                !isEmailValid && this.validateField(this.email, salla.lang.get('common.elements.email_is_valid'));
+            }
+            if (this.channels_.includes('sms')) {
+                const isPhoneValid = await this.mobileInput.isValid();
+                if (isPhoneValid)
+                    return;
+            }
+        }
+        catch (error) {
+            throw ('Please insert required fields');
+        }
+    }
+    validateField(field, errorMsg) {
+        field.classList.add('s-has-error');
+        field.nextElementSibling['innerText'] = '* ' + errorMsg;
+    }
+    render() {
+        return (h(Host, { key: '94979dc80347804a72904cb54f917070e0476489', class: "s-product-availability-wrap" }, this.isSubscribed || this.isVisitorSubscribed
+            ? h("div", { class: "s-product-availability-subscribed" }, h("span", { innerHTML: BellRing, class: "s-product-availability-subs-icon" }), salla.lang.get('pages.products.notify_availability_success'))
+            :
+                h("salla-button", { width: "wide", onClick: () => this.isUser ? this.submit() : this.openModel() }, salla.lang.get('pages.products.notify_availability')), this.isUser || this.isSubscribed || this.isVisitorSubscribed ? '' : this.renderModal()));
+    }
+    renderModal() {
+        return (h("salla-modal", { ref: modal => this.modal = modal, "modal-title": this.title_, subTitle: salla.lang.get('pages.products.notify_availability_subtitle'), width: "sm" }, h("span", { slot: 'icon', class: "s-product-availability-header-icon", innerHTML: BellRing }), h("div", { class: "s-product-availability-body" }, this.channels_.includes('email') ? [
+            h("label", { class: "s-product-availability-label" }, salla.lang.get('common.elements.email')),
+            h("input", { class: "s-product-availability-input", onKeyDown: e => this.typing(e), placeholder: salla.lang.get('common.elements.email_placeholder') || 'your@email.com', ref: el => this.email = el, type: "email" }),
+            h("span", { class: "s-product-availability-error-msg" })
+        ] : '', this.channels_.includes('sms') ? [
+            h("label", { class: "s-product-availability-label" }, salla.lang.get('common.elements.mobile')),
+            h("salla-tel-input", { ref: el => this.mobileInput = el, onKeyDown: e => this.typing(e) })
+        ] : ''), h("div", { slot: "footer", class: "s-product-availability-footer" }, h("salla-button", { class: "modal-cancel-btn", width: "wide", color: "light", fill: "outline", onClick: () => this.modal.close() }, salla.lang.get('common.elements.cancel')), h("salla-button", { class: "submit-btn", "loader-position": 'center', width: "wide", ref: btn => this.btn = btn, onClick: () => this.submit() }, salla.lang.get('common.elements.submit')))));
+    }
+    get host() { return this; }
+    static get watchers() { return {
+        "channels": ["channelsWatcher"]
+    }; }
+    static get style() { return sallaProductAvailabilityCss; }
+}, [0, "salla-product-availability", {
+        "channels": [1],
+        "notifyOptionsAvailability": [4, "notify-options-availability"],
+        "productId": [2, "product-id"],
+        "isSubscribed": [1028, "is-subscribed"],
+        "translationLoaded": [32],
+        "title_": [32],
+        "isVisitorSubscribed": [32]
+    }, undefined, {
+        "channels": ["channelsWatcher"]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-product-availability", "salla-button", "salla-loading", "salla-modal", "salla-tel-input"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-product-availability":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaProductAvailability);
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$4();
+            }
+            break;
+        case "salla-loading":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+        case "salla-tel-input":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$1();
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaProductAvailability as S, defineCustomElement as d };

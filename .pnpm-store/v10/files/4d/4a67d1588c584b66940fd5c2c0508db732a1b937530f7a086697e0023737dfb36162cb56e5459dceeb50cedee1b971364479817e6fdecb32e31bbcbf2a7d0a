@@ -1,0 +1,137 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+'use strict';
+
+var index = require('./index-CXC9Tj5-.js');
+var Helper = require('./Helper-B5NunIdR.js');
+var interfaces = require('./interfaces-DZDQwN6-.js');
+require('./anime.es-BqW8JHZi.js');
+
+const sallaFiltersWidgetCss = ":host{display:block}";
+
+const SallaFiltersWidget = class {
+    constructor(hostRef) {
+        index.registerInstance(this, hostRef);
+        this.changed = index.createEvent(this, "changed");
+        this.initHeight = 195;
+        this.isOpen = true;
+        this.isShowMore = false;
+        this.showMoreLabel = "عرض المزيد";
+        this.showLessLabel = "عرض أقل";
+        this.page = salla.config.get('page');
+    }
+    connectedCallback() {
+        //lets be smart and don't show 5 and more link for 8 options
+        this.withLoadMore = this.option.key != 'price' && Array.isArray(this.option.values) && this.option.values.length > 8;
+        salla.onReady(() => {
+            this.page = salla.config.get('page');
+        });
+        salla.lang.onLoaded(() => {
+            this.showMoreLabel = salla.lang.getWithDefault('common.titles.more', this.showMoreLabel);
+            this.showLessLabel = salla.lang.getWithDefault('common.elements.show_less', this.showLessLabel);
+        });
+    }
+    componentDidLoad() {
+        this.widgetValues.scrollHeight < this.initHeight && (this.withLoadMore = false);
+        (this.withLoadMore && this.widgetValues) && (this.widgetValues.style.maxHeight = `${this.initHeight}px`);
+        this.widgetContent.style.height = `${this.widgetContent.scrollHeight}px`;
+    }
+    /**
+   * Asynchronously sets the height of a widget element to its current height, allowing for smooth transitions.
+   * This function is often used in scenarios where the widget's content changes dynamically, and animating
+   * the height adjustment is desired for a smoother user experience.
+   *
+   * @param {number} [delay=250] - Optional. The delay (in milliseconds) before updating the widget height.
+   *                               Defaults to 250 milliseconds.
+   *
+   * @returns {Promise<void>} - A Promise that resolves once the widget height is set after the specified delay.
+   *
+   * @example
+   * // Set widget height with the default delay (250 milliseconds)
+   * await setWidgetHeight();
+   *
+   * // Set widget height with a custom delay (e.g., 500 milliseconds)
+   * await setWidgetHeight(500);
+   */
+    async setWidgetHeight(delay = 250) {
+        this.widgetContent.removeAttribute('style');
+        setTimeout(() => {
+            let currentWidgetHeight = this.widgetContent.scrollHeight;
+            this.widgetContent.style.height = currentWidgetHeight + 'px';
+        }, delay);
+    }
+    /**
+     * Reset selected filter options.
+     */
+    async reset() {
+        if (this.option.type === interfaces.FilterOptionTypes.RANGE) {
+            this.priceRange.reset();
+        }
+        Array.from(this.host.querySelectorAll('input')).forEach(input => input.checked = false);
+    }
+    /**
+     * Action to show more or less filter options.
+     */
+    async showMore() {
+        this.isShowMore = !this.isShowMore;
+        this.widgetContent.style.height = 'auto';
+        this.widgetValues.style.maxHeight = this.isShowMore ? `${this.widgetValues.scrollHeight}px` : `${this.initHeight}px`;
+        setTimeout(() => {
+            this.widgetContent.style.height = `${this.widgetContent.scrollHeight}px`;
+        }, 400); // get height after time of collapse animtion (duration-300)
+    }
+    /**
+     * Action to toggle widget open or closed (expand/ collapse).
+     */
+    async toggleWidget() {
+        this.isOpen = !this.isOpen;
+        Helper.Helper.toggleElementClassIf(this.widgetContent, 's-filters-widget-opened', 's-filters-widget-closed', () => this.isOpen);
+    }
+    renderFilterOption(option) {
+        if (![interfaces.FilterOptionTypes.VALUES, interfaces.FilterOptionTypes.MINIMUM, interfaces.FilterOptionTypes.VARIANTS].includes(option.type)) {
+            return '';
+        }
+        //@ts-ignore
+        return option.values.map((filterOption, index$1) => {
+            let value = typeof filterOption == 'number' ? filterOption : (filterOption.key || filterOption.value);
+            return index.h("label", { class: "s-filters-label", htmlFor: `${option.key}-option-${value}`, key: `${option.key}-option-${value}` }, index.h("input", { id: `${option.key}-option-${value}`, name: option.key, type: "radio", checked: this.isSelectedOption(option, value), class: `s-filters-radio`, onChange: event => this.changed.emit({ event, option, value }) }), this.getOptionLabel(option, filterOption));
+        });
+    }
+    isSelectedOption(option, value) {
+        if (option.type === interfaces.FilterOptionTypes.MINIMUM) {
+            return this.filtersData[option.key] == value;
+        }
+        if (option.type === interfaces.FilterOptionTypes.VARIANTS) {
+            return this.filtersData[option.type] && this.filtersData[option.type][Object.keys(this.filtersData[option.type])[0]] == value;
+        }
+        if (option.type === interfaces.FilterOptionTypes.RANGE) {
+            return this.filtersData[option.key] && this.filtersData[option.key].min == value.min && this.filtersData[option.key].max == value.max;
+        }
+        if (option.type === interfaces.FilterOptionTypes.VALUES) {
+            return this.filtersData[option.key] && Number(this.filtersData[option.key]) == Number(value);
+        }
+        return false;
+    }
+    getOptionLabel(option, filterOption) {
+        if (option.key == 'rating') {
+            //in amazon has stars & up, should we add it, to avoid those people who will come to say I selected 4 why I see 5 sars products
+            return index.h("salla-rating-stars", { size: "small", value: filterOption });
+        }
+        let label = filterOption.value || 'null';
+        //label+=filterOption.count ? ` (${salla.helpers.number(filterOption.count)})` : '';
+        return index.h("span", { class: "s-filters-option-name" }, label);
+    }
+    render() {
+        return (index.h(index.Host, { key: 'e22c4c9c5f69bd901a55c3b9c202e6cca14c1134', class: "s-filters-widget-container" }, index.h("h3", { key: '758d6ddbff83b5416d1ef06ef790535587403613', class: "s-filters-widget-title", onClick: () => this.toggleWidget() }, index.h("span", { key: '77e0b8b00a6bed4d396142bd13ba83964e3a72d8' }, this.option.label), index.h("span", { key: '481bbf3735b6a9fe629ec99004556bca0bbf7dd9', class: `s-filters-widget-plusminus ${this.isOpen ? 's-filters-widget-plusminus-active' : ''}` })), index.h("div", { key: 'a46631d62460351d6822a09ad864c51753aa7369', class: "s-filters-widget-content", ref: (el) => this.widgetContent = el }, index.h("div", { key: 'fb5095c46cef0014859bc3d8acaf8a2661afa916', class: "s-filters-widget-values", ref: (el) => this.widgetValues = el }, index.h("slot", { key: 'b4ac615c765b88a027675e095d5da28ad7cd8845' }), this.option.type !== interfaces.FilterOptionTypes.RANGE
+            ? this.renderFilterOption(this.option)
+            : index.h("salla-price-range", { onChanged: (event) => {
+                    this.changed.emit(event.detail);
+                }, ref: price => this.priceRange = price, filtersData: this.filtersData, option: this.option })), this.withLoadMore &&
+            index.h("a", { key: '9b3a08a990949130531810792dccb24192b57e46', class: "s-filters-widget-more", onClick: () => this.showMore() }, !this.isShowMore ? this.showMoreLabel : this.showLessLabel))));
+    }
+    get host() { return index.getElement(this); }
+};
+SallaFiltersWidget.style = sallaFiltersWidgetCss;
+
+exports.salla_filters_widget = SallaFiltersWidget;

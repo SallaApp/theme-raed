@@ -1,0 +1,69 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+
+const sallaAccordionCss = "";
+
+const SallaAccordion = /*@__PURE__*/ proxyCustomElement(class SallaAccordion extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        /** Should the accordion be collapsible or not. Default is true. */
+        this.collapsible = true;
+        this.bordered = false;
+        this.size = "md";
+        /** Detect if accordion collapsed or not. */
+        this.collapsed = true;
+        /** Represents the direction of the layout. */
+        this.dir = document.dir || 'rtl';
+    }
+    directionChangedHandler(event) {
+        this.dir = event.detail.dir;
+    }
+    handleCollapse(event) {
+        this.collapsed = event.detail.payload.collapsed;
+    }
+    setcollapsibleProp() {
+        const head = this.host.querySelector('salla-accordion-head');
+        if (this.collapsible && head) {
+            head.setAttribute('collapsible', 'true');
+            head.setAttribute('collapsed', this.collapsed.toString());
+        }
+    }
+    componentDidRender() {
+        this.setcollapsibleProp();
+        const body = this.host.querySelector('salla-accordion-body');
+        if (this.collapsible) {
+            this.host.setAttribute('data-collapsed', this.collapsed.toString());
+            body?.setAttribute('data-collapsed', this.collapsed.toString());
+        }
+    }
+    render() {
+        return (h(Host, { key: 'ed8e4c0f24fa4462654e94fa46706e892c141351', class: `s-accordion-wrapper ${this.dir} ${this.bordered ? 's-accordion-wrapper-bordered' : ''} ${this.size ? `size-${this.size}` : ''}`, "data-collapsed": this.collapsed.toString() }, h("slot", { key: '1dbda01c073f3018a55ebcf5d8613a82a5dc6b27' })));
+    }
+    get host() { return this; }
+    static get style() { return sallaAccordionCss; }
+}, [4, "salla-accordion", {
+        "collapsible": [4],
+        "bordered": [4],
+        "size": [1],
+        "collapsed": [1540],
+        "dir": [32]
+    }, [[4, "salla::language.change", "directionChangedHandler"], [0, "accordionToggle", "handleCollapse"]]]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-accordion"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-accordion":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaAccordion);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaAccordion as S, defineCustomElement as d };

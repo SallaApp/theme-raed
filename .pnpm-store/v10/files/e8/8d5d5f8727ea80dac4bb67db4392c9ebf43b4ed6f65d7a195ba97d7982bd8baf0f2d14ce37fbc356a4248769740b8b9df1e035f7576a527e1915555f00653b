@@ -1,0 +1,57 @@
+import { HTMLStencilElement } from '../../stencil-public-runtime';
+import SearchProductsResponse from "./search-response";
+/**
+ * @slot product - Replaces products card in the results, has replaceable props `{name}`, `{price}`, `{regular_price}`, `{image}`.
+ */
+export declare class SallaSearch {
+    constructor();
+    private readonly productSlot;
+    private modal;
+    private container;
+    private searchInput;
+    private noResults;
+    private inputValue;
+    host: HTMLStencilElement;
+    translationLoaded: boolean;
+    results: SearchProductsResponse | undefined;
+    loading: boolean;
+    typing: boolean;
+    debounce: ReturnType<typeof setTimeout>;
+    search_term: string;
+    /**
+     * Set the component display without modal window. Defaults to `false`
+     */
+    inline: boolean;
+    /**
+     * Adds a border radius to the input. Half of the height.
+     */
+    oval: boolean;
+    /**
+     * Sets the height of the input
+     */
+    height: number;
+    /**
+     * Maximum number of words allowed in the input
+     */
+    maxWords: number;
+    /**
+     * Show submit action buttons at the end.
+     */
+    showAction: boolean;
+    open(): Promise<void>;
+    onModalClose(): void;
+    handleKeyDown(ev: KeyboardEvent): void;
+    private getDefaultProductSlot;
+    private debounceSearch;
+    private limitWordsAndSearch;
+    private getQueryParam;
+    private handleActionClick;
+    handleSearch(val: string): void;
+    search(val: any): void;
+    private afterSearching;
+    render(): any;
+    /**
+     * Run it one time after load
+     */
+    componentDidLoad(): void;
+}

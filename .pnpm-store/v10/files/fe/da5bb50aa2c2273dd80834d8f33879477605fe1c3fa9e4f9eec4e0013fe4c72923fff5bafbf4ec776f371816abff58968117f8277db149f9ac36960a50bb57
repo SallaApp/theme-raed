@@ -1,0 +1,77 @@
+import { EventEmitter } from '../../stencil-public-runtime';
+export declare class SallaAddProductButton {
+    constructor();
+    private hostAttributes;
+    private btn?;
+    private passedLabel;
+    /**
+     * Channels.
+     */
+    channels: string;
+    /**
+     * Subscribed Options ex: "[[139487,2394739],[1212,1544]]"
+     */
+    subscribedOptions: string;
+    /**
+     * Has Pre Order
+     */
+    hasPreOrder: boolean;
+    /**
+     * Support Quick Pay Button
+     */
+    quickBuy: boolean;
+    /**
+     * Product Quantity
+     */
+    quantity: number;
+    /**
+     * Donating amount.
+     */
+    donatingAmount: number;
+    /**
+     * Listen to product options availability.
+     */
+    notifyOptionsAvailability: boolean;
+    /**
+     * Product id
+     */
+    productId: any;
+    /**
+     * Support themes that have a sticky bar
+     */
+    supportStickyBar: boolean;
+    /**
+     *  Product Status.Defaults to `sale`
+     */
+    productStatus: 'sale' | 'out' | 'out-and-notify';
+    /**
+     * Product type. Defaults to `product`
+     */
+    productType: 'product' | 'service' | 'codes' | 'digital' | 'food' | 'donating' | 'group_products' | 'booking' | 'financial_support';
+    /**
+     * Custome DOM event emitter when product gets added to cart successfully.
+     */
+    success: EventEmitter;
+    hasOutOfStockOption: boolean;
+    hasSubscribedOptions: boolean;
+    selectedOptions: Array<any>;
+    showQuickBuy: boolean;
+    isApplePayActive: boolean;
+    buyNowText: string;
+    /**
+     * Custome DOM event emitter when product addition to cart fails.
+     */
+    failed: EventEmitter;
+    host: HTMLElement;
+    private getLabel;
+    private addProductToCart;
+    private _proceedAddToCart;
+    private addBookingProduct;
+    private getBtnAttributes;
+    private getQuickBuyBtnAttributes;
+    private miniCheckoutWidget;
+    componentWillLoad(): any;
+    render(): any;
+    componentDidLoad(): Promise<void>;
+    componentDidRender(): void;
+}

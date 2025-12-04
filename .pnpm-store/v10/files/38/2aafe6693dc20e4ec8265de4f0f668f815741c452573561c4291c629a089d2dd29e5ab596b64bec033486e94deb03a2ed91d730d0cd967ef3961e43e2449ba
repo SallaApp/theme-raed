@@ -1,0 +1,453 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+export class SallaButton {
+    constructor() {
+        this.hostAttributes = {};
+        /**
+         * Button Type
+         */
+        this.shape = 'btn';
+        /**
+         * Button Color
+         */
+        this.color = 'primary';
+        /**
+         * Button Fill
+         */
+        this.fill = 'solid';
+        /**
+         * Button Size
+         */
+        this.size = 'medium';
+        /**
+         * Button Width
+         */
+        this.width = 'normal';
+        /**
+         * Is the button currently loading
+         */
+        this.loading = false;
+        /**
+         * Is the button currently disabled
+         */
+        this.disabled = false;
+        /**
+         * If there is need to change loader position, pass the position
+         */
+        this.loaderPosition = 'after';
+        /**
+         * Determines the type of the rendered button.
+         * By default, the type is set to "button," making it a general-purpose button.
+         * Setting `type` to "submit" makes the button behave as a submit button within a form, triggering form submission.
+         * Possible values for `type` include "button," "submit," "reset," and "menu.".
+         *
+         * Possible values and their usage are as follows:
+         * "button" (default, used for general button functionality),
+         * "reset" (resets form fields to their default values), and
+         * "menu" (represents a button that, when activated, displays a context menu).
+         */
+        this.type = "button";
+    }
+    /**
+     * Run loading animation
+     */
+    async load() {
+        if (this.loaderPosition == 'center')
+            this.text.classList.add('s-button-hide');
+        this.host.setAttribute('loading', '');
+        return this.host;
+    }
+    /**
+     * Stop loading animation
+     */
+    async stop() {
+        this.host.removeAttribute('loading');
+        this.host.querySelector('button').removeAttribute('loading');
+        if (this.loaderPosition == 'center')
+            this.text.classList.remove('s-button-hide');
+        return this.host;
+    }
+    /**
+     * Changing the body of the button
+     * @param html
+     */
+    async setText(html) {
+        this.text.innerHTML = html;
+        return this.host;
+    }
+    /**
+     * Add `disabled` attribute
+     */
+    async disable() {
+        this.host.setAttribute('disabled', '');
+        return this.host;
+    }
+    /**
+     * Remove `disabled` attribute
+     */
+    async enable() {
+        this.host.removeAttribute('disabled');
+        return this.host;
+    }
+    getBtnAttributes() {
+        for (let i = 0; i < this.host.attributes.length; i++) {
+            if (!['color', 'fill', 'size', 'width', 'id'].includes(this.host.attributes[i].name)) {
+                this.hostAttributes[this.host.attributes[i].name] = this.host.attributes[i].value;
+            }
+        }
+        this.hostAttributes.type = this.hostAttributes.type || this.type;
+        this.hostAttributes.class +=
+            ' s-button-element s-button-' + this.shape
+                + ' s-button-' + (this.fill == "none" ? 'fill-none' : this.fill)
+                + (this.size != "medium" ? ' s-button-' + this.size : '')
+                + (this.width != "normal" ? ' s-button-' + this.width : '')
+                + (this.shape == "link" ? ' s-button-' + this.color + '-link' : '')
+                + (this.shape != "link" && this.fill != 'outline' ? ' s-button-' + this.color : '')
+                + (this.fill == 'outline' ? ' s-button-' + this.color + '-outline' : '')
+                + (this.disabled ? ' s-button-disabled ' : '')
+                + (this.shape == 'icon' ? ' s-button-loader-center' : ' s-button-loader-' + this.loaderPosition);
+        return this.hostAttributes;
+    }
+    button() {
+        return (h("button", { ...this.getBtnAttributes(), disabled: this.disabled }, h("span", { class: "s-button-text", ref: el => this.text = el }, h("slot", null)), this.loading ? h("span", { class: "s-button-loader" }) : ''));
+    }
+    render() {
+        //TODO:: find a better fix, this is a patch for issue that duplicates the buttons twice @see the screenshot inside this folder
+        return this.host.closest('.swiper-slide')?.classList.contains('swiper-slide-duplicate')
+            ? ''
+            : (h(Host, { class: "s-button-wrap" }, this.href ? h("a", { href: this.href }, this.button()) : this.button()));
+    }
+    static get is() { return "salla-button"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-button.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-button.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "shape": {
+                "type": "string",
+                "attribute": "shape",
+                "mutable": false,
+                "complexType": {
+                    "original": "'link' | 'icon' | 'btn'",
+                    "resolved": "\"btn\" | \"icon\" | \"link\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Button Type"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'btn'"
+            },
+            "color": {
+                "type": "string",
+                "attribute": "color",
+                "mutable": false,
+                "complexType": {
+                    "original": "'primary' | 'success' | 'warning' | 'danger' | 'light' | 'gray' | 'dark'",
+                    "resolved": "\"danger\" | \"dark\" | \"gray\" | \"light\" | \"primary\" | \"success\" | \"warning\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Button Color"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'primary'"
+            },
+            "fill": {
+                "type": "string",
+                "attribute": "fill",
+                "mutable": false,
+                "complexType": {
+                    "original": "'solid' | 'outline' | 'none'",
+                    "resolved": "\"none\" | \"outline\" | \"solid\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Button Fill"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'solid'"
+            },
+            "size": {
+                "type": "string",
+                "attribute": "size",
+                "mutable": false,
+                "complexType": {
+                    "original": "'small' | 'large' | 'medium'",
+                    "resolved": "\"large\" | \"medium\" | \"small\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Button Size"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'medium'"
+            },
+            "width": {
+                "type": "string",
+                "attribute": "width",
+                "mutable": false,
+                "complexType": {
+                    "original": "'wide' | 'normal'",
+                    "resolved": "\"normal\" | \"wide\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Button Width"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'normal'"
+            },
+            "loading": {
+                "type": "boolean",
+                "attribute": "loading",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Is the button currently loading"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "disabled": {
+                "type": "boolean",
+                "attribute": "disabled",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Is the button currently disabled"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "loaderPosition": {
+                "type": "string",
+                "attribute": "loader-position",
+                "mutable": false,
+                "complexType": {
+                    "original": "'start' | 'end' | 'center' | 'after'",
+                    "resolved": "\"after\" | \"center\" | \"end\" | \"start\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "If there is need to change loader position, pass the position"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'after'"
+            },
+            "href": {
+                "type": "string",
+                "attribute": "href",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Button with href as normal link"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "type": {
+                "type": "string",
+                "attribute": "type",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Determines the type of the rendered button.\nBy default, the type is set to \"button,\" making it a general-purpose button.\nSetting `type` to \"submit\" makes the button behave as a submit button within a form, triggering form submission.\nPossible values for `type` include \"button,\" \"submit,\" \"reset,\" and \"menu.\".\n\nPossible values and their usage are as follows:\n\"button\" (default, used for general button functionality), \n\"reset\" (resets form fields to their default values), and \n\"menu\" (represents a button that, when activated, displays a context menu)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "\"button\""
+            }
+        };
+    }
+    static get methods() {
+        return {
+            "load": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Run loading animation",
+                    "tags": []
+                }
+            },
+            "stop": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Stop loading animation",
+                    "tags": []
+                }
+            },
+            "setText": {
+                "complexType": {
+                    "signature": "(html: string) => Promise<HTMLElement>",
+                    "parameters": [{
+                            "name": "html",
+                            "type": "string",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Changing the body of the button",
+                    "tags": [{
+                            "name": "param",
+                            "text": "html"
+                        }]
+                }
+            },
+            "disable": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Add `disabled` attribute",
+                    "tags": []
+                }
+            },
+            "enable": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Remove `disabled` attribute",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

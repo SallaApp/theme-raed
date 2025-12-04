@@ -1,0 +1,92 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h, Fragment } from "@stencil/core";
+/**
+ * @salla/ui-components
+ * The `salla-order-details` component renders a collapsible summary for an order product with optional options list.
+ * It uses the salla-accordion component to provide collapsible functionality.
+ */
+export class SallaOrderDetails {
+    parseOrderDetailsData(newValue) {
+        this.parsedOrderDetailsData = newValue;
+        if (typeof this.orderDetails === 'string') {
+            this.parsedOrderDetailsData = JSON.parse(newValue);
+        }
+        else {
+            this.parsedOrderDetailsData = newValue;
+        }
+    }
+    componentWillLoad() {
+        this.parseOrderDetailsData(this.orderDetails);
+        console.log('Parent componentWillLoad - parsedOrderDetailsData:', this.parsedOrderDetailsData);
+    }
+    renderOrderDetailsContent() {
+        // Check if we have parsed data
+        if (!this.parsedOrderDetailsData) {
+            console.warn('No parsedOrderDetailsData available');
+            return null;
+        }
+        return [
+            /* Product Options */
+            this.parsedOrderDetailsData.options && this.parsedOrderDetailsData.options.length > 0 && (h("salla-order-details-options", { options: this.parsedOrderDetailsData.options })),
+            /* Bundle Subproducts */
+            this.parsedOrderDetailsData.sub_products &&
+                this.parsedOrderDetailsData.sub_products.length > 0 && (h(Fragment, null, h("h2", { class: "s-order-details-bundle-title" }, salla.lang.get('pages.orders.sub_products')), h("div", { class: "s-order-details-bundle-content" }, this.parsedOrderDetailsData.sub_products.map(product => (h("salla-order-details-multiple-bundle-product", { key: product?.id, productDetails: product })))))),
+        ];
+    }
+    render() {
+        return h(Host, { key: 'ca263aa861d52fdf36b6a842f6e58d07f27a6d1f', class: "s-order-details-wrapper" }, this.renderOrderDetailsContent());
+    }
+    static get is() { return "salla-order-details"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-order-details.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-order-details.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "orderDetails": {
+                "type": "string",
+                "attribute": "order-details",
+                "mutable": false,
+                "complexType": {
+                    "original": "string | OrderProduct",
+                    "resolved": "OrderProduct | string",
+                    "references": {
+                        "OrderProduct": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-order-details/interfaces.ts::OrderProduct"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "parsedOrderDetailsData": {}
+        };
+    }
+    static get watchers() {
+        return [{
+                "propName": "orderDetails",
+                "methodName": "parseOrderDetailsData"
+            }];
+    }
+}

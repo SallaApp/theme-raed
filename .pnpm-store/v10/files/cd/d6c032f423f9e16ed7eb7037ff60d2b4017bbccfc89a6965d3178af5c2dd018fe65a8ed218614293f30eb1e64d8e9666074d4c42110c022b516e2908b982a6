@@ -1,0 +1,194 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h } from '@stencil/core/internal/client';
+import { d as defineCustomElement$6 } from './salla-button2.js';
+import { d as defineCustomElement$5 } from './salla-loading2.js';
+import { d as defineCustomElement$4 } from './salla-modal2.js';
+import { d as defineCustomElement$3 } from './salla-placeholder2.js';
+import { d as defineCustomElement$2 } from './salla-skeleton2.js';
+
+const SallaLocalizationModal$1 = /*@__PURE__*/ proxyCustomElement(class SallaLocalizationModal extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.translationLoaded = false;
+        this.languages = [];
+        this.currencies = [];
+        this.hasError = false;
+        /**
+         * Current language (existing or newly selected)
+         */
+        this.language = salla.config.get('user.language_code');
+        /**
+         * Current currency (existing or newly selected)
+         */
+        this.currency = salla.config.get('user.currency_code');
+        salla.event.on('localization::open', () => this.open());
+        salla.lang.onLoaded(() => {
+            this.translationLoaded = true;
+        });
+        /**
+         * letting developer to insert his own slot like:
+         * <salla-localization>
+         *   <div slot="language">...{name}....</div>
+         *   <div slot="currency">...{name}....</div>
+         * </salla-localization>
+         * Because scoped templates not supported in stencil );
+         * we made a workaround to pass language & currency attributes, then replace names in rendering
+         */
+        this.languageSlot = this.host.querySelector('[slot="language"]')?.innerHTML || '<label class="s-localization-modal-label" for="lang-{code}"><span>{name}</span></label>';
+        this.currencySlot = this.host.querySelector('[slot="currency"]')?.innerHTML || '<label class="s-localization-modal-label" for="currency-{code}"><span>{name}</span><small class="s-localization-modal-currency">{code}</small></label>';
+    }
+    /**
+     * open the component
+     */
+    async open() {
+        this.modal.open();
+        return await salla.api.withoutNotifier(() => this.getLanguages())
+            .then(() => this.getCurrencies())
+            .then(() => {
+            if (this.languages.length < 2 && this.currencies.length < 2) {
+                this.modal.close();
+            }
+        })
+            .catch(e => {
+            console.log(e);
+            this.hasError = true;
+            this.errorMessage = e.response?.data?.error?.message || e.response?.data;
+        })
+            .finally(() => this.modal.stopLoading());
+    }
+    /**
+     * Hide the component
+     */
+    async close() {
+        return this.modal.close();
+    }
+    async getLanguages() {
+        this.language = this.language || salla.config.get('user.language_code');
+        return this.languages.length > 1 ? null : await salla.config.languages().then(data => this.languages = data);
+    }
+    async getCurrencies() {
+        this.currency = this.currency || salla.config.get('user.currency_code');
+        return this.currencies.length > 1 ? null : await salla.config.currencies().then(data => this.currencies = Object.values(data || {}));
+    }
+    onChangeCurrency(event) {
+        this.currency = event.target.value;
+    }
+    onChangeLanguage(event) {
+        this.language = event.target.value;
+    }
+    /**
+     * Change currency and language to the selected ones.
+     */
+    async submit() {
+        let url;
+        this.btn.load()
+            .then(() => {
+            if (!this.currency) {
+                salla.log('There is no currency!');
+                return;
+            }
+            if (this.currency === salla.config.get('user.currency_code', 'SAR')) {
+                return;
+            }
+            url = window.location.href;
+            return salla.currency.api.change(this.currency);
+        })
+            .then(() => {
+            if (this.language !== salla.config.get('user.language_code', 'ar')) {
+                url = salla.helpers.addParamToUrl('lang', this.language);
+            }
+        })
+            .then(() => this.btn.stop())
+            .then(() => this.close())
+            .then(() => {
+            if (url) {
+                window.location.href = url.replace(`/${salla.config.get('user.language_code')}/`, `/${this.language}/`);
+            }
+        });
+    }
+    render() {
+        return (h("salla-modal", { key: 'becc5db6a4715b1ba69440492785847a254e23c9', isLoading: true, class: "s-hidden", ref: modal => this.modal = modal, width: "xs" }, h("div", { key: '116cda532167f767b73728422d580cfa9e269304', slot: 'loading' }, h("div", { key: 'a53bd0db8a838cc8b989a5566da7c6386de516ec', class: "s-localization-modal-skeleton" }, h("salla-skeleton", { key: '63d7c34e3ae8fa5c402f0f3cd9925bdd144d672e', width: '25%', height: '15px' }), h("div", { key: '86d07e0c84a66db39d3748ebc888cdc914a40600', class: "s-localization-modal-skeleton-content" }, [...Array(4)].map(() => h("div", { class: "s-localization-modal-skeleton-item" }, h("div", { class: "s-localization-modal-skeleton-item-flex" }, h("salla-skeleton", { type: 'circle', height: '16px', width: '16px' }), h("salla-skeleton", { height: '10px', width: '100px' })), h("salla-skeleton", { height: '15px', width: '20px' })))), h("salla-skeleton", { key: 'b810e2ddedf6b55276a61a346810b22d6a9518ac', width: '25%', height: '15px' }), h("div", { key: 'c7a66c2a609b8262b9eb0518d416939d80f4fed6', class: "s-localization-modal-skeleton-content" }, [...Array(4)].map(() => h("div", { class: "s-localization-modal-skeleton-item" }, h("div", { class: "s-localization-modal-skeleton-item-flex" }, h("salla-skeleton", { type: 'circle', height: '16px', width: '16px' }), h("salla-skeleton", { height: '10px', width: '100px' })), h("salla-skeleton", { height: '15px', width: '20px' })))), h("salla-skeleton", { key: '9d1e030584e3465bc4fae2176f854891b18bb0a1', height: '40px', width: '100%' }))), !!this.hasError ?
+            h("salla-placeholder", { alignment: "center" }, h("span", { slot: "description" }, this.errorMessage)) :
+            h("div", { class: "s-localization-modal-inner" }, this.languages.length > 1 ?
+                h("div", { class: "s-localization-modal-section" }, h("label", { class: "s-localization-modal-title" }, salla.lang.get('common.titles.language')), h("div", { class: "s-localization-modal-section-inner" }, this.languages.length < 6 ?
+                    this.languages.map(lang => h("div", { class: "s-localization-modal-item" }, h("input", { class: "s-localization-modal-input", type: "radio", checked: this.language == lang.iso_code, onChange: () => this.language = lang.iso_code, name: "language", id: 'lang-' + lang.code.toLowerCase(), value: lang.code }), h("div", { class: "s-localization-modal-label-slot", id: "language-slot", innerHTML: this.languageSlot
+                            .replace(/\{name\}/g, lang.name)
+                            .replace(/\{code\}/g, lang.code)
+                            .replace(/\{country_code\}/g, lang.country_code) }))) :
+                    h("select", { class: "s-localization-modal-select", name: "language", onChange: e => this.onChangeLanguage(e) }, this.languages.map(lang => h("option", { value: lang.code, selected: this.language == lang.code }, lang.name)))))
+                : '', this.currencies.length > 1 ?
+                h("div", { class: "s-localization-modal-section" }, h("label", { class: "s-localization-modal-title" }, salla.lang.get('common.titles.currency')), h("div", { class: "s-localization-modal-section-inner" }, this.currencies.length < 6 ?
+                    this.currencies.map(currency => h("div", { class: "s-localization-modal-item" }, h("input", { class: "s-localization-modal-input", type: "radio", name: "currency", checked: this.currency == currency.code, onChange: () => this.currency = currency.code, id: 'currency-' + currency.code, value: currency.code }), h("div", { class: "s-localization-modal-label-slot", id: "currency-slot", innerHTML: this.currencySlot
+                            .replace(/\{name\}/g, currency.name)
+                            .replace(/\{code\}/g, currency.code)
+                            .replace(/\{country_code\}/g, currency.country_code) }))) :
+                    h("select", { class: "s-localization-modal-select", name: "currency", onChange: e => this.onChangeCurrency(e) }, this.currencies.map(currency => h("option", { value: currency.code, selected: this.currency == currency.code }, currency.name)))))
+                : '', h("salla-button", { width: "wide", ref: btn => this.btn = btn, onClick: () => this.submit() }, salla.lang.get('common.elements.ok')))));
+    }
+    /**
+     * to reduce dom levels we will move slot data into the parent dom
+     */
+    componentDidRender() {
+        this.host.querySelectorAll('#currency-slot').forEach(el => el.replaceWith(el.firstChild));
+        this.host.querySelectorAll('#language-slot').forEach(el => el.replaceWith(el.firstChild));
+    }
+    get host() { return this; }
+}, [0, "salla-localization-modal", {
+        "language": [1537],
+        "currency": [1537],
+        "translationLoaded": [32],
+        "languages": [32],
+        "currencies": [32],
+        "hasError": [32],
+        "errorMessage": [32],
+        "open": [64],
+        "close": [64],
+        "submit": [64]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-localization-modal", "salla-button", "salla-loading", "salla-modal", "salla-placeholder", "salla-skeleton"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-localization-modal":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaLocalizationModal$1);
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$6();
+            }
+            break;
+        case "salla-loading":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$5();
+            }
+            break;
+        case "salla-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$4();
+            }
+            break;
+        case "salla-placeholder":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-skeleton":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaLocalizationModal = SallaLocalizationModal$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaLocalizationModal, defineCustomElement };

@@ -1,0 +1,415 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { a as anime } from './anime.es-CgtvEd63.js';
+
+//TODO::reduce it to 10
+salla.event.setMaxListeners(100);
+class Helper {
+    setIncludes(includes) {
+        this.includes = includes;
+        return this;
+    }
+    toggleElementClassIf(element, classes1, classes2, callback) {
+        classes1 = Array.isArray(classes1) ? classes1 : classes1.split(' ');
+        classes2 = Array.isArray(classes2) ? classes2 : classes2.split(' ');
+        let isClasses1 = callback(element);
+        element?.classList.remove(...(isClasses1 ? classes2 : classes1));
+        element?.classList.add(...(isClasses1 ? classes1 : classes2));
+        return this;
+    }
+    toggleClassIf(selector, classes1, classes2, callback) {
+        document.querySelectorAll(selector).forEach(element => this.toggleElementClassIf(element, classes1, classes2, callback));
+        return this;
+    }
+    isValidEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+    filterEmojies(text) {
+        var characterFilter = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
+        return text.replace(characterFilter, "");
+    }
+    debounce(fn, ...data) {
+        if (!this.debounce_) {
+            this.debounce_ = salla.helpers.debounce((callback, ...innerData) => callback(...innerData), 500);
+        }
+        //@ts-ignore
+        return this.debounce_(fn, ...data);
+    }
+    getProductsSource(source) {
+        return {
+            'brands.single': 'brands',
+            'product.index': 'categories',
+            'product.index.latest': 'latest',
+            'product.index.offers': 'offers',
+            'product.index.search': 'search',
+            'customer.wishlist': 'wishlist',
+            'landing-page': 'landing-page',
+            'product.index.tag': 'tags',
+            'product.index.sales': 'sales',
+            'components.most_sales_products': 'sales', //temporary, delete it after two days from now
+        }[source || salla.config.get('page.slug')] || source || 'latest';
+    }
+    getPageTitleForSource(source) {
+        source = {
+            'brands': 'common.titles.brands',
+            // 'categories':'',
+            'latest': 'blocks.home.latest_products',
+            'offers': 'common.titles.discounts',
+            'reorder': 'common.titles.products',
+            // 'search':'',
+            // 'landing-page':'',
+            // 'tags':'',
+            'sales': 'common.titles.most_sales',
+        }[source];
+        return source ? salla.lang.get(source) : '';
+    }
+    getProductsSourceValue(source, sourceValue) {
+        const parsedSource = this.getProductsSource(source);
+        // Validate if the source value is a valid JSON string
+        let parsedSourceValue = null;
+        if (sourceValue) {
+            try {
+                parsedSourceValue = typeof sourceValue === 'string' ? JSON.parse(sourceValue) : sourceValue;
+            }
+            catch (error) {
+                console.error('Failed to parse JSON string in sourceValue:', error);
+            }
+        }
+        // Handle different source types
+        if (!['search', 'json', 'offers', 'latest', 'sales', 'related'].includes(parsedSource)) {
+            if (Array.isArray(parsedSourceValue) && parsedSourceValue.length) {
+                return parsedSourceValue;
+            }
+            if (Array.isArray(parsedSourceValue) && !parsedSourceValue.length) {
+                return '';
+            }
+            if (typeof parsedSourceValue === 'number') {
+                return [parsedSourceValue];
+            }
+            if (!sourceValue && ['categories', 'tags', 'brands'].includes(source)) {
+                return [salla.config.get('page.id')];
+            }
+        }
+        // Return sourceValue if it exists and is a valid JSON object/array
+        if (parsedSourceValue || sourceValue) {
+            return parsedSourceValue || sourceValue;
+        }
+        if (parsedSource === 'search') {
+            return new URLSearchParams(window.location.search).get('q') || '';
+        }
+        // Return page id as default value
+        return salla.config.get('page.id');
+    }
+    extractFiltersFromUrl(searchParams) {
+        let filters = {};
+        searchParams.forEach((value, key) => {
+            // Handle filters[xxx] format
+            const matchesNested = key.match(/^filters\[(.*?)\](\[(.*?)\])?$/u);
+            if (matchesNested) {
+                const filterName = matchesNested[1];
+                const nestedKey = matchesNested[3];
+                if (nestedKey) {
+                    // Handle nested object
+                    filters[filterName] = filters[filterName] || {};
+                    filters[filterName][nestedKey] = value;
+                }
+                else {
+                    // Handle regular key
+                    filters[filterName] = value;
+                }
+            }
+            else {
+                // Handle simple key-value pairs
+                const matchesSimple = key.match(/^(.*?)$/u);
+                if (matchesSimple) {
+                    filters[matchesSimple[1]] = value;
+                }
+            }
+        });
+        return filters;
+    }
+    async injectExtraFieldsToResponse(response) {
+        if (!response || !this.includes)
+            return response;
+        const productIds = response.data.map(product => product.id);
+        try {
+            const { data: product } = await this.fetchImagesAndOptions(productIds);
+            this.injectOptionsAndImages(response.data, product);
+            if (!this.includes.includes('metadata')) {
+                return response;
+            }
+            const metadataResponse = await salla.api.metadata.fetchValues('product', productIds);
+            response.data.forEach(product => {
+                //@ts-ignore
+                product['metadata'] = metadataResponse.data.find(meta => parseInt(meta.entity_id) === parseInt(product.id));
+            });
+            return response;
+        }
+        catch (error) {
+            console.error('Error in injectExtraFieldsToResponse:', error);
+            throw error;
+        }
+    }
+    /**
+     * This to make sure we will not request the options endpoint unless we have to.
+     */
+    fetchImagesAndOptions(productIds) {
+        return this.productsIncludes().length
+            ? salla.api.product.fetchOptions(productIds, { with: this.productsIncludes() })
+            : Promise.resolve({ data: [] }); //fake the endpoint, to reduce unwanted query if developer wants metadata only
+    }
+    injectOptionsAndImages(productList, newData) {
+        return newData.length
+            ? productList.map(product => {
+                this.includes
+                    .filter(field => field !== 'metadata')
+                    .forEach(field => {
+                    //@ts-ignore
+                    const foundProduct = newData.find((prod) => parseInt(prod.id) === parseInt(product.id));
+                    product[field] = foundProduct ? foundProduct[field] : null; // Assign null or a default value if not found
+                });
+                return product;
+            })
+            : null;
+    }
+    productsIncludes() {
+        return this.includes?.filter(field => field != 'metadata');
+    }
+    parseJson(includes) {
+        if (typeof includes !== 'string') {
+            return includes;
+        }
+        try {
+            return JSON.parse(includes);
+        }
+        catch (e) {
+            salla.logger.error('Failed to parse includes as JSON:', e);
+        }
+        return null;
+    }
+    getProductSchemaMarkupScript(product) {
+        const scriptElement = document.createElement('script');
+        scriptElement.type = 'application/ld+json';
+        // TODO: This json object MIGHT need mode data or properties.
+        const jsonData = {
+            "@context": "http://schema.org",
+            "@type": "Product",
+            "name": product?.name,
+            "image": product?.image?.url || product?.thumbnail,
+            "description": product?.description,
+            "brand": {
+                "@type": "Brand",
+                "logo": product?.brand?.logo
+            },
+            "offers": {
+                "@type": "Offer",
+                "price": product?.price
+            }
+        };
+        scriptElement.text = JSON.stringify(jsonData);
+        return scriptElement;
+    }
+    createProductSchema(product, position) {
+        let ProductSchema = {
+            "productID": `${product.id}`,
+            "@type": 'Product',
+            "name": product.name,
+            "url": product.url,
+            "image": product.image.url || product.image,
+            "description": product.description || product.subtitle || product.name,
+            // Add SKU only if valid
+            ...(product.sku && product.sku.length > 0 && {
+                "sku": product.sku
+            }),
+            "offers": {
+                "@type": "Offer",
+                "url": product.url,
+                "priceCurrency": product.currency,
+                "price": product.price,
+                "itemCondition": "NewCondition",
+                "availability": product.is_available ? "InStock" : "OutOfStock",
+                //if there is no product.discount_ends, will set it to be valid until the end of this week
+                "priceValidUntil": product.discount_ends || (new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]),
+                "priceSpecification": {
+                    "@type": "PriceSpecification",
+                    "price": product.regular_price,
+                    "priceCurrency": product.currency,
+                    "valueAddedTaxIncluded": product.is_taxable,
+                },
+                "seller": {
+                    "@type": "Organization",
+                    "name": salla.config.get('store.name'),
+                },
+                "shippingDetails": {
+                    "@type": "OfferShippingDetails",
+                    "shippingRate": {
+                        "@type": "MonetaryAmount",
+                        "value": "0",
+                        "currency": product.currency || "SAR"
+                    },
+                    "deliveryTime": {
+                        "@type": "ShippingDeliveryTime",
+                        "businessDays": {
+                            "@type": "OpeningHoursSpecification",
+                            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                        },
+                        "cutoffTime": "14:00"
+                    }
+                },
+                "hasMerchantReturnPolicy": {
+                    "@type": "MerchantReturnPolicy",
+                    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                    "merchantReturnDays": 30,
+                    "returnMethod": "https://schema.org/ReturnByMail",
+                    "returnFees": "https://schema.org/FreeReturn"
+                }
+            }
+        };
+        //@ts-ignore
+        if (product.rating?.stars) {
+            ProductSchema.aggregateRating = {
+                "@type": "AggregateRating",
+                //@ts-ignore
+                "ratingValue": product.rating.stars,
+                "reviewCount": product.rating.count,
+            };
+        }
+        return {
+            "@type": "ListItem",
+            "position": position,
+            "item": ProductSchema,
+        };
+    }
+    generateProductSchema(productList) {
+        const schemaId = 'salla-product-schema-script';
+        if (document.getElementById(schemaId)) {
+            salla.logger.warn(`already added schema-script with id (${schemaId})!`);
+            return;
+        }
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = schemaId;
+        const schema = {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": salla.config.get('page.title'),
+            "itemListElement": productList.map((product, indxe) => this.createProductSchema(product, indxe + 1)),
+        };
+        script.textContent = JSON.stringify(schema);
+        document.head.appendChild(script);
+    }
+    /**
+    * Format date in the form of `Monday 13 November 2023`
+    */
+    formatDateFromString(dateString, numberCb, lang = 'en') {
+        const errors = {
+            en: "Invalid Date",
+            ar: "تاريخ غير صالح"
+        };
+        // Check if dateString exists and is not empty
+        if (!dateString || typeof dateString !== 'string' || dateString.trim() === '') {
+            return errors[lang];
+        }
+        // Handle different date formats
+        let dateObject;
+        // Check if it's a timestamp (number as string)
+        if (/^\d+$/.test(dateString)) {
+            const timestamp = parseInt(dateString);
+            // Check if it's already in milliseconds or seconds
+            dateObject = new Date(timestamp > 1000000000000 ? timestamp : timestamp * 1000);
+        }
+        else {
+            // Try to parse as ISO string or other formats
+            dateObject = new Date(dateString);
+        }
+        if (isNaN(dateObject.getTime())) {
+            return errors[lang];
+        }
+        const daysOfWeek = {
+            en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            ar: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
+        };
+        const months = {
+            en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            ar: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+        };
+        const dayOfWeek = daysOfWeek[lang][dateObject.getDay()];
+        const dayOfMonth = numberCb(dateObject.getDate(), lang === 'en');
+        const month = months[lang][dateObject.getMonth()];
+        const year = numberCb(dateObject.getFullYear(), lang === 'en');
+        return `${dayOfWeek} ${dayOfMonth} ${month} ${year}`;
+    }
+    /**
+   * Copy text into clipboard.
+   * @param event
+   */
+    copyToClipboard(event) {
+        // Get the text content from the clicked div
+        var textToCopy = event.target.innerText;
+        // Use the Clipboard API to copy text to the clipboard
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+            console.log('Text copied to clipboard: ' + textToCopy);
+        })
+            .catch(err => {
+            console.error('Unable to copy text to clipboard', err);
+        });
+    }
+    animateItems(items) {
+        if (!items)
+            return;
+        anime({
+            targets: items,
+            opacity: [0, 1],
+            duration: 1200,
+            translateY: [20, 0],
+            delay: function (_el, i) {
+                return i * 100;
+            },
+            easing: 'easeOutExpo',
+            complete: function (_anim) {
+                items.forEach((item) => {
+                    item.classList.add('animated');
+                });
+            }
+        });
+    }
+    createReviewObject(reviewData) {
+        return {
+            "@type": "Review",
+            "author": { "@type": "Person", "name": reviewData.name },
+            //   "datePublished": reviewData.date * 1000,
+            "reviewBody": reviewData.content,
+            "reviewRating": {
+                "@type": "Rating",
+                "bestRating": "5",
+                "ratingValue": reviewData.stars,
+                "worstRating": "1"
+            }
+        };
+    }
+    generateReviewSchema(reviews) {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        const schema = {
+            "@context": "http://schema.org/",
+            "@type": "Store",
+            "name": salla.config.get('store.name'),
+            "url": salla.config.get('store.url'),
+            "address": "الرياض",
+            "review": reviews.map((review) => this.createReviewObject(review)),
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": reviews.reduce((acc, review) => acc + review.stars, 0) / reviews.length,
+                "reviewCount": reviews.length
+            }
+        };
+        script.textContent = JSON.stringify(schema);
+        document.head.appendChild(script);
+    }
+}
+var Helper$1 = new Helper;
+
+export { Helper$1 as H };

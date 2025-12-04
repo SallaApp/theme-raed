@@ -1,0 +1,95 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import GiftIcon from "../../assets/svg/gift.svg";
+const formatDate = (timestamp) => {
+    if (!timestamp)
+        return '';
+    return new Date(Number(timestamp)).toLocaleDateString(salla.lang.locale, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+    });
+};
+const translateKey = (key) => {
+    if (!key)
+        return '';
+    try {
+        const k = key.toLowerCase();
+        const translation = salla.lang.get(`pages.loyalty_program.${k}`);
+        return translation === `pages.loyalty_program.${k}` ? key : translation;
+    }
+    catch {
+        return key;
+    }
+};
+export class SallaWalletTable {
+    constructor() {
+        this.loyaltyPointsArray = [];
+        this.isLoadingLoyalty = false;
+        this.nextPageUrlLoyalty = '';
+        this.handleClick = () => {
+            this.loadMoreLoyaltyPoints();
+        };
+    }
+    componentWillLoad() {
+        return salla.onReady().then(() => {
+            this.loadLoyaltyPoints();
+        });
+    }
+    async loadLoyaltyPoints() {
+        this.isLoadingLoyalty = true;
+        try {
+            let url = `/balance/points?page=1`;
+            let resp = await salla.api.request(url);
+            this.loyaltyPointsArray = resp.data;
+            this.nextPageUrlLoyalty = resp.cursor.next;
+        }
+        catch (error) {
+            console.error('Error loading loyalty points transactions', error);
+        }
+        finally {
+            this.isLoadingLoyalty = false;
+        }
+    }
+    async loadMoreLoyaltyPoints() {
+        if (!this.nextPageUrlLoyalty)
+            return;
+        this.isLoadingLoyalty = true;
+        try {
+            let resp = await salla.api.request(this.nextPageUrlLoyalty);
+            this.loyaltyPointsArray = [...this.loyaltyPointsArray, ...resp.data];
+            this.nextPageUrlLoyalty = resp.cursor?.next || '';
+        }
+        catch (error) {
+            console.error('Error loading more loyalty points', error);
+        }
+        finally {
+            this.isLoadingLoyalty = false;
+        }
+    }
+    render() {
+        return (h(Host, { key: '24ab88177569df0ae3c8e9003f8817935413f6f9' }, h("div", { key: '1617bdd654819bc8c24a3afd1d4af5cc3a148352' }, this.isLoadingLoyalty ? (h("salla-loading", null)) : (h("div", null, this.loyaltyPointsArray.length > 0 ? (h("div", null, h("table", { class: "s-loyalty-program-table" }, h("thead", { class: "s-loyalty-program-table-head" }, h("tr", { class: "s-loyalty-program-table-head-tr" }, h("th", { scope: "col", class: "s-loyalty-program-table-head-tr-th" }, salla.lang.get('pages.wallet.points')), h("th", { scope: "col", class: "s-loyalty-program-table-head-tr-th" }, salla.lang.get('pages.wallet.date')), h("th", { scope: "col", class: "s-loyalty-program-table-head-tr-th" }, salla.lang.get('pages.wallet.expiry_date')), h("th", { scope: "col", class: "s-loyalty-program-table-head-tr-th" }, salla.lang.get('common.elements.note')), h("th", { scope: "col", class: "s-loyalty-program-table-head-tr-th" }, salla.lang.get('common.elements.status')))), h("tbody", { class: "s-loyalty-program-table-tbody" }, this.loyaltyPointsArray.map(point => (h("tr", { class: "s-loyalty-program-table-tbody-tr" }, h("td", { class: "s-loyalty-program-table-tbody-tr-td" }, point?.type === 'plus' ? '+' : '', point?.points || '', " ", salla.lang.get('pages.loyalty_program.point')), h("td", { class: "s-loyalty-program-table-tbody-tr-td" }, formatDate(point?.created_at ? Number(point.created_at) * 1000 : undefined)), h("td", { class: "s-loyalty-program-table-tbody-tr-td" }, formatDate(point?.points_expire_date)), h("td", { class: "s-loyalty-program-table-tbody-tr-td" }, translateKey(point?.key)), h("td", { class: "s-loyalty-program-table-tbody-tr-td" }, translateKey(point?.status_key))))))), h("div", { class: "s-infinite-scroll-wrapper" }, !!this.nextPageUrlLoyalty && (h("salla-button", { onClick: this.handleClick, loading: this.isLoadingLoyalty }, salla.lang.get('common.elements.load_more')))))) : (h("div", null, h("div", { class: "s-loyalty-program-table-empty-state" }, h("span", { innerHTML: GiftIcon }), h("div", { class: "s-loyalty-program-table-placeholder-title" }, salla.lang.get('pages.loyalty_program.no_loyality_points_title')), h("div", { class: "s-loyalty-program-table-placeholder-sub-title" }, salla.lang.get('pages.loyalty_program.no_loyality_points_sub_title'))))))))));
+    }
+    static get is() { return "salla-loyalty-program"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-loyalty-program.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-loyalty-program.css"]
+        };
+    }
+    static get states() {
+        return {
+            "loyaltyPointsArray": {},
+            "isLoadingLoyalty": {},
+            "nextPageUrlLoyalty": {}
+        };
+    }
+}

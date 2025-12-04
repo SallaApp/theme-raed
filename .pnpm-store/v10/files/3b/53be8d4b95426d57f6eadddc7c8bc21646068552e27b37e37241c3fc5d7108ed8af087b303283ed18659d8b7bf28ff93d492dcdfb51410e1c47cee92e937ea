@@ -1,0 +1,53 @@
+export declare enum CommentType {
+    PAGE = "page",
+    PRODUCT = "product",
+    BLOG = "blog"
+}
+export interface Comment {
+    id?: number;
+    avatar?: string;
+    name?: string;
+    has_order?: boolean;
+    date?: string;
+    rating?: number;
+    stars?: number;
+    likes_count?: number;
+    content?: string;
+    is_pending?: boolean;
+    replies?: Comment[];
+    customer?: Customer;
+    type?: string;
+    created_at?: CreatedAt;
+    images: string[];
+}
+export interface CreatedAt {
+    date?: Date;
+    timezone_type?: number;
+    timezone?: string;
+}
+export interface UserComments {
+    id?: number;
+    type?: string;
+    next_page?: string;
+    comments?: Comment[];
+}
+export interface Pagination {
+    count?: number;
+    total?: number;
+    perPage?: number;
+    currentPage?: number;
+    totalPages?: number;
+    links?: Links;
+}
+export interface Customer {
+    id?: number;
+    name?: string;
+    mobile?: string;
+    email?: string;
+    avatar?: string;
+    country?: string;
+    city?: string;
+}
+export interface Links {
+    next?: string;
+}

@@ -1,0 +1,528 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Fragment, h } from "@stencil/core";
+export class SallaLoginModal {
+    constructor() {
+        /**
+         * Does the merchant/current location for visitor allow to login using mobile, By default outside KSA is `false`
+         */
+        this.isMobileAllowed = true;
+        /**
+         * Does the merchant require registration with email & mobile
+         */
+        this.isEmailRequired = false;
+        /**
+         * Once the api verify success, it will be login the customer in web pages
+         */
+        this.supportWebAuth = true;
+        /**
+         * Reload after a successful login
+         */
+        this.withoutReload = false;
+        /**
+         * The source of opening login modal
+         */
+        this.source = '';
+        this.htmlElement = document.documentElement;
+        this.messages = [];
+        this.isClosable = true;
+        this.iframeLoaded = false;
+        this.scrolling = 'no';
+        this.direction = document.dir;
+        this.canRenderIframe = false;
+        salla.event.on('login::open', (data) => {
+            if (!this.isEmailAllowed && !this.isMobileAllowed) {
+                salla.logger.warn('Please enable atleast one login type to use this component.');
+                return;
+            }
+            this.source = data?.source ?? false;
+            this.withoutReload = data?.withoutReload ?? this.withoutReload;
+            this.open(data);
+            this.openModal();
+        });
+        salla.event.on('modal::close', (data) => {
+            if (this.iframe)
+                this.sendMessageToIframe({
+                    source: 'login',
+                    type: 'modal_closed',
+                    data,
+                });
+        });
+        salla.onReady(() => {
+            this.api = salla.config.get('store.api');
+            this.storeId = salla.config.get('store.id');
+        });
+    }
+    componentDidLoad() {
+        window.addEventListener('message', (event) => {
+            if (event.data.source != "login") {
+                return;
+            }
+            if (!this.inline && !this.canRenderIframe) {
+                return;
+            }
+            salla.log(`salla-account:: recived an event`, event.data);
+            let action = event.data?.type?.replace('iframe::', '');
+            let value = event.data.message;
+            //if we need skip some events
+            // if (action === 'dispatchEvent' && [].includes(value.event)) {
+            //     return;
+            // }
+            // if (action == "dispatchEvent") {
+            //   return this.host.dispatchEvent(new CustomEvent(value.name, {
+            //     cancelable: true,
+            //     bubbles: true,
+            //     detail: value.payload
+            //   }));
+            // }
+            if (action == 'ready') {
+                if (value.isPasskeyPage) {
+                    this.createPassKey.postMessage({ source: "login", type: "init_passkey_page", data: {
+                            token: salla.storage.get('token'),
+                            store_id: salla.config.get('store.id'),
+                            locale: salla.config.get('user.language_code'),
+                            redirect: salla.config.get('store.url')
+                        } }, salla.config.get('login.url'));
+                    return;
+                }
+                this.handleIframeReadyAction();
+                return;
+            }
+            if (action == 'height') {
+                return (this.iframe.height = value?.height + 'px');
+            }
+            //share the iframe storage, so login too
+            if (action == "storage") {
+                return this.handleIframeStorageAction(value);
+            }
+            // if (action == "success") {
+            //   this.isClosable = true;
+            //   confetti.startConfetti(1200, 50, 150);
+            // }
+            if (action == "scrolling") {
+                this.scrolling = value;
+                this.isClosable = false;
+                return;
+            }
+            if (action == "direction") {
+                return document.dir = this.direction = value ? "rtl" : "ltr";
+            }
+            if (action == 'notify') {
+                return salla.notify[value.type](value.message);
+            }
+            // temporary condition until we handle both cases separately
+            if (action == 'authenticated' || action == 'authenticated_web_auth') {
+                !value?.withoutClose && this.close();
+                return salla.auth.api.handlAfterAuthenticatedResponse(value, this.supportWebAuth)
+                    .then(() => !(value?.withoutReload || this.withoutReload) && setTimeout(() => window.location.reload(), 1000));
+            }
+            if (action == 'dispatchEvent' && value.event == 'auth::verified') {
+                salla.log('Ignored dispatchEvent `auth::verified` from iframe');
+                //we don't need to fire this event because it have listeners for it, and already it's fired/firing from `salla.auth.api.handlAfterAuthenticatedResponse` already we are handling it
+                return;
+            }
+            if (action == 'dispatchEvent') {
+                return salla.event.emit(value.event, ...value.payload);
+            }
+            if (action == 'reload') {
+                if (value?.withClose)
+                    this.modal.close();
+                return window.location.reload();
+            }
+            if (action === 'open_page') {
+                return window.location.href = value.url;
+            }
+            if (action === 'open_passkey_page') {
+                this.createPassKey = window.open(`${salla.config.get('login.url')}/create-passkey`);
+                return;
+            }
+            if (action === 'guest-checkout') {
+                return this.handleGuestCheckout();
+            }
+            if (action == "close") {
+                this.close();
+            }
+        });
+        this.observeDarkModeChanges();
+        setTimeout(() => Salla.event.emit('salla-login::ready'), 1);
+    }
+    /**
+     * Open login component
+     */
+    async open(_event = null) {
+        /**
+         * This is a workaround until we remove all the user objet from twig files
+         * When the user is already login, let's reload the page
+         */
+        if (!salla.config.isGuest()) {
+            if (!this.withoutReload) {
+                return location.reload();
+            }
+            // Fire an event if withoutReload is true
+            return;
+        }
+        return this.modal.open();
+    }
+    close() {
+        Salla.event.emit('salla-login::closing');
+        this.modal.close();
+        this.iframeLoaded = false;
+        this.canRenderIframe = false;
+        this.host.dispatchEvent(new CustomEvent('salla-login:closed', {
+            cancelable: true,
+            bubbles: true,
+            detail: null
+        }));
+        Salla.event.emit('salla-login::closed');
+    }
+    handleIframeReadyAction() {
+        this.sendInitMessage();
+        this.sendMessageToIframe({
+            source: 'login',
+            type: 'width',
+            data: document.body.clientWidth,
+        });
+    }
+    observeDarkModeChanges() {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    this.sendMessageToIframe({
+                        source: 'login',
+                        type: 'darkMode',
+                        data: { isDark: this.htmlElement.classList.contains('dark') ? true : false },
+                    });
+                }
+            });
+        });
+        // observing the HTML element for attribute changes
+        observer.observe(this.htmlElement, { attributes: true });
+    }
+    async handleIframeStorageAction(value) {
+        let token, cartUserId = salla.storage.get('cart.user_id');
+        let withCartReset = false;
+        Object.entries(value).filter(item => !Salla.storage.get(item[0]))
+            .forEach(([key, value]) => {
+            salla.log('Shared storage from accounts domain', key, value);
+            let cleanedValue = (typeof value === 'string') ? value?.replace(/^"|"$/g, '') : value;
+            salla.storage.set(key, cleanedValue);
+            if (key === 'token') {
+                token = cleanedValue;
+            }
+            if (key === 'user' && cartUserId && (cleanedValue.id !== cartUserId)) {
+                withCartReset = true;
+            }
+        });
+        if (token) {
+            this.modal.close();
+            Salla.auth.event.tokenFetched(token);
+            try {
+                await Salla.api.cart.assign();
+            }
+            catch (err) {
+                Salla.log('Error on assign after handle iframe', err);
+            }
+            withCartReset && Salla.cart.reset();
+            !Salla.auth.api.isSessionless() && await Salla.auth.api.request('auth/jwt');
+            setTimeout(() => window.location.reload(), 100);
+            return;
+        }
+        withCartReset && Salla.cart.reset();
+    }
+    sendMessageToIframe(message) {
+        if (!this.iframe)
+            return;
+        return this.iframe.contentWindow.postMessage(message, '*');
+    }
+    sendInitMessage() {
+        let headers = this.headers;
+        try {
+            headers = typeof headers === 'string' ? JSON.parse(headers) : headers;
+        }
+        catch (error) {
+            console.error('Failed to parse headers!', this.headers, error);
+            headers = undefined;
+        }
+        const storageObject = {
+            user: salla.storage.get('user'),
+            s_translations: salla.storage.get('s_translations'),
+            token: salla.storage.get('token'),
+        };
+        storageObject.user || (delete storageObject.user);
+        storageObject.s_translations || (delete storageObject.s_translations);
+        storageObject.token || (delete storageObject.token);
+        this.sendMessageToIframe({
+            source: "login",
+            type: "init",
+            data: {
+                id: this.storeId,
+                lang: salla.lang.locale,
+                isDark: this.htmlElement.classList.contains('dark') ? true : false,
+                apiUrl: this.api?.replace(/\/+$/, ''),
+                supportWebAuth: this.supportWebAuth,
+                withoutReload: this.withoutReload,
+                inline: this.inline,
+                settings: salla.config.all(),
+                headers: headers,
+                storage: storageObject,
+            }
+        });
+    }
+    async handleGuestCheckout() {
+        this.modal.close();
+        if (salla.config.isGuest()) {
+            await salla.api.cart.syncGuestCart();
+            return salla.cart.submit(true);
+        }
+    }
+    openModal() {
+        if (!this.canRenderIframe) {
+            this.canRenderIframe = true;
+        }
+        this.modal.open();
+    }
+    render() {
+        if (this.inline) {
+            return this.getLoginDom();
+        }
+        return (h("salla-modal", { class: "s-login-modal", ref: modal => this.modal = modal, width: "xs" }, this.getLoginDom()));
+    }
+    getLoginDom() {
+        if (!this.canRenderIframe) {
+            return;
+        }
+        return h(Fragment, null, h("iframe", { src: `${salla.config.get('login.url', 'https://accounts.salla.com')}?src=${this.source}`, title: "Salla Login", class: "hide-scroll", loading: 'lazy', ref: iframe => { this.iframe = iframe; }, allow: "publickey-credentials-get; publickey-credentials-create", scrolling: this.scrolling, frameborder: "0", width: "100%" }));
+    }
+    static get is() { return "salla-login-modal"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-login-modal.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-login-modal.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "isEmailAllowed": {
+                "type": "boolean",
+                "attribute": "is-email-allowed",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Does the merchant allow to login using email"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "isMobileAllowed": {
+                "type": "boolean",
+                "attribute": "is-mobile-allowed",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Does the merchant/current location for visitor allow to login using mobile, By default outside KSA is `false`"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "isEmailRequired": {
+                "type": "boolean",
+                "attribute": "is-email-required",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Does the merchant require registration with email & mobile"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "supportWebAuth": {
+                "type": "boolean",
+                "attribute": "support-web-auth",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Once the api verify success, it will be login the customer in web pages"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "true"
+            },
+            "inline": {
+                "type": "boolean",
+                "attribute": "inline",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Display the login inline"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "storeId": {
+                "type": "any",
+                "attribute": "store-id",
+                "mutable": true,
+                "complexType": {
+                    "original": "string | number",
+                    "resolved": "number | string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The store ID for authentication"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "api": {
+                "type": "string",
+                "attribute": "api",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The API endpoint for authentication"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "headers": {
+                "type": "string",
+                "attribute": "headers",
+                "mutable": true,
+                "complexType": {
+                    "original": "{ [key: string]: string } | string",
+                    "resolved": "string | { [key: string]: string; }",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Custom headers to be sent with API requests"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "withoutReload": {
+                "type": "boolean",
+                "attribute": "without-reload",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Reload after a successful login"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "source": {},
+            "messages": {},
+            "isClosable": {},
+            "iframeLoaded": {},
+            "scrolling": {},
+            "direction": {},
+            "canRenderIframe": {}
+        };
+    }
+    static get methods() {
+        return {
+            "open": {
+                "complexType": {
+                    "signature": "(_event?: any) => Promise<void | HTMLElement>",
+                    "parameters": [{
+                            "name": "_event",
+                            "type": "any",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<void | HTMLElement>"
+                },
+                "docs": {
+                    "text": "Open login component",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

@@ -1,0 +1,39 @@
+import { type EventEmitter } from "../../stencil-public-runtime";
+import { type CustomField } from "../salla-user-profile/interfaces";
+export declare class SallaCustomFields {
+    fields: string | CustomField[];
+    isEditable: boolean;
+    fileUploadUrl: string;
+    private parsedFields;
+    private fieldErrors;
+    private isSubmitting;
+    fieldChanged: EventEmitter<{
+        fieldId: string | number;
+        value: unknown;
+        isValid: boolean;
+    }>;
+    fileUploaded: EventEmitter<{
+        fieldId: string | number;
+        file: File;
+        isValid: boolean;
+    }>;
+    private get dragAndDropText();
+    private get browseText();
+    private get saveButtonText();
+    setFields(fields: CustomField[]): Promise<void>;
+    getFieldValues(): Promise<{
+        [key: string]: unknown;
+    }>;
+    validateFields(): Promise<boolean>;
+    private handleFieldChange;
+    private handleFileUpload;
+    private clearFieldError;
+    private setFieldError;
+    private renderTextField;
+    private renderFileField;
+    private renderField;
+    componentWillLoad(): void;
+    private parseFields;
+    private handleSubmit;
+    render(): any;
+}

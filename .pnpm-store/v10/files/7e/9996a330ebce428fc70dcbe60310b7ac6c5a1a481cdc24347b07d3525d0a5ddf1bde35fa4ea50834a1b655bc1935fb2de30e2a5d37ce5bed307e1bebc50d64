@@ -1,0 +1,223 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import KeyBoardArrowLeftIcon from "../../assets/svg/keyboard_arrow_left.svg";
+import KeyBoardArrowRightIcon from "../../assets/svg/keyboard_arrow_right.svg";
+/**
+ * @name SallaBreadcrumb
+ * @description A StencilJS component for rendering breadcrumb navigation.
+ * @tag salla-breadcrumb
+ *
+ * @slot item - Replaces breadcrumb item, has replaceable props `{url}`, `{title}`.
+ * @slot icon - Replaces breadcrumb arrow icon.
+ */
+export class SallaBreadcrumb {
+    constructor() {
+        this.sessionStorageKey = "breadcrumb_snapshot";
+        this.itemSlot = this.host.querySelector('[slot="item"]')?.outerHTML || `<li class="s-breadcrumb-item"><a href={url}>{title}</a></li>`;
+        this.iconSlot = this.host.querySelector('[slot="icon"]')?.outerHTML;
+    }
+    componentWillLoad() {
+        return (new Promise(resolve => salla.onReady(() => salla.lang.onLoaded(resolve))))
+            .then(() => {
+            if (salla.url.is_page('index')) {
+                throw new Error('salla-breadcrumb:: breadcrumb not supported on home page');
+            }
+        })
+            .then(() => {
+            if (!salla.config.get('theme.settings.is_breadcrumbs_enabled', true)) {
+                throw new Error('salla-breadcrumb:: merchant disabled the feature');
+            }
+        })
+            .then(() => {
+            const page = salla.config.get("page");
+            if (!page || !page.slug) {
+                salla.logger.error('salla-breadcrumbs:: page object not existed on salla.config.get("page")!');
+                this.breadcrumbs = [];
+                return;
+            }
+            let sessionBreadcrumbs = this.getSessionBreadcrumbs();
+            if (page.slug === "product.single" && sessionBreadcrumbs && sessionBreadcrumbs.length > 0) {
+                sessionBreadcrumbs.push({
+                    title: page.title,
+                    url: page.url
+                });
+                this.breadcrumbs = this.setBreadcrumbsFromArray(sessionBreadcrumbs);
+                this.storeBreadcrumbSnapshot();
+            }
+            else if (sessionBreadcrumbs && sessionBreadcrumbs.length > 0) {
+                if (this.isNewPage(page, sessionBreadcrumbs)) {
+                    this.breadcrumbs = this.generateBreadcrumbs(page);
+                    this.storeBreadcrumbSnapshot();
+                }
+                else {
+                    this.breadcrumbs = this.setBreadcrumbsFromArray(sessionBreadcrumbs);
+                }
+            }
+            else {
+                this.breadcrumbs = this.generateBreadcrumbs(page);
+                this.storeBreadcrumbSnapshot();
+            }
+            if (this.breadcrumbs?.length) {
+                this.breadcrumbs[this.breadcrumbs.length - 1].is_last = true;
+            }
+            return this.breadcrumbs;
+        })
+            .catch((error) => {
+            salla.logger.error('salla-breadcrumb:: unexpected error!', error);
+            this.breadcrumbs = [];
+        });
+    }
+    getSessionBreadcrumbs() {
+        if (new URLSearchParams(window.location.search).get('from') === 'search-bar') {
+            return [];
+        }
+        return JSON.parse(sessionStorage.getItem(this.sessionStorageKey) || '[]');
+    }
+    /**
+   * Helper function to determine if we're navigating to a new page that requires updating the session storage.
+   */
+    isNewPage(page, sessionBreadcrumbs) {
+        // Check if the last breadcrumb in sessionStorage matches the current page's URL.
+        const lastBreadcrumb = sessionBreadcrumbs[sessionBreadcrumbs.length - 1];
+        return lastBreadcrumb?.url !== page.url; // If the URLs don't match, it's a new page.
+    }
+    setBreadcrumbsFromArray(breadcrumbArray) {
+        return breadcrumbArray.map((item, index) => ({
+            ...item,
+            is_last: index === breadcrumbArray.length - 1,
+        }));
+    }
+    /**
+     * Sanitizes the breadcrumb title by splitting it on the `|` character and returning
+     * the part based on `preferedIndex`. If no separator is found, returns the trimmed title.
+     *
+     * @param {string} title - The title to sanitize.
+     * @param {number} [preferedIndex=1] - Index of the part to return (0 for first, 1 for second).
+     * @returns {string} - The sanitized title.
+     */
+    sanitizeBreadcrumbTitle(title, preferedIndex = 1) {
+        if (!title.includes('|')) {
+            return title.trim();
+        }
+        return title.split('|').map(part => part.trim())[preferedIndex];
+    }
+    generateBreadcrumbs(page) {
+        let breadcrumbs = [];
+        //TODO:: check what is the need from this?
+        if (page.slug === 'product.single') {
+            const previousPage = this.getSessionBreadcrumbs();
+            if (previousPage.length > 0 && previousPage[1]?.url === page.parent?.url) {
+                return this.setBreadcrumbsFromArray([...previousPage, page]);
+            }
+        }
+        // Start with the current page
+        let currentPage = page;
+        // Traverse up to the parent pages
+        while (currentPage) {
+            if (currentPage.title) {
+                breadcrumbs.unshift({
+                    title: currentPage.title,
+                    url: currentPage.url,
+                });
+            }
+            currentPage = currentPage.parent;
+        }
+        // Additional logic based on page slug or title
+        if (page.slug.includes("customer") && page.slug !== 'customer.profile') {
+            breadcrumbs.unshift({ title: salla.lang.get('common.titles.profile'), url: salla.url.get('profile') });
+        }
+        if (page.slug.includes('blog')) {
+            breadcrumbs.unshift({ title: salla.lang.get('blocks.footer.blog'), url: salla.url.get('blog') });
+        }
+        if (page.slug === 'brands.single') {
+            breadcrumbs.unshift({ title: salla.lang.get('common.titles.brands'), url: salla.url.get('brands') });
+        }
+        if (!page.title && page.slug === 'loyalty') {
+            breadcrumbs.unshift({ title: salla.lang.get('common.titles.loyalty_program'), url: salla.url.get('loyalty') });
+        }
+        // Add home breadcrumb
+        breadcrumbs.unshift({ title: salla.lang.get('common.titles.home'), url: salla.url.get('') });
+        return breadcrumbs;
+    }
+    storeBreadcrumbSnapshot() {
+        try {
+            const page = salla.config.get("page");
+            // Skip storing breadcrumbs for product.single page
+            if (page?.slug === 'product.single') {
+                return;
+            }
+            const items = [...this.breadcrumbs];
+            // Find the last item and update its URL
+            const lastItemIndex = items.length - 1;
+            if (lastItemIndex >= 0) {
+                items[lastItemIndex].url = window.location.href;
+            }
+            const breadcrumbSnapshot = JSON.stringify(items);
+            sessionStorage.setItem(this.sessionStorageKey, breadcrumbSnapshot);
+        }
+        catch (error) {
+            salla.logger.error('salla-breadcrumb:: Failed to store breadcrumb snapshot in sessionStorage.', error);
+        }
+    }
+    render() {
+        if (this.breadcrumbs.length <= 1) {
+            salla.log('salla-breadcrumb:: There is no breadcrumbs!');
+            return null;
+        }
+        return (h("ol", { class: {
+                "s-breadcrumb-wrapper": true,
+                "s-breadcrumb-dark": salla.url.is_page('loyalty'),
+                "s-breadcrumb-primary-reverse": salla.config.get('page.slug').includes('customer')
+            } }, this.breadcrumbs.map(item => {
+            const isProductSingle = salla.config.get('page.slug') === "product.single";
+            const title = (isProductSingle && item.is_last) ? item.title : this.sanitizeBreadcrumbTitle(item.title);
+            const itemHTML = this.itemSlot.replace(/\{url\}/g, item.url).replace(/\{title\}/g, title);
+            return [
+                h("div", { class: "s-breadcrumb-slot", innerHTML: itemHTML }),
+                this.getArrowDomForItem(item)
+            ];
+        })));
+    }
+    getArrowDomForItem(item) {
+        if (item.is_last) {
+            return '';
+        }
+        let iconDom = this.iconSlot || (salla.config.get('theme.is_rtl', true) ? KeyBoardArrowLeftIcon : KeyBoardArrowRightIcon);
+        return h("li", { class: "s-breadcrumb-arrow" }, h("div", { class: { "s-breadcrumb-icon-slot": true, "s-breadcrumb-default-icon": !this.iconSlot }, innerHTML: iconDom }));
+    }
+    /**
+     * Lifecycle method called after the component is rendered.
+     * - Reduces the number of elements in the DOM.
+     * - Removes unnecessary slots parent elements.
+     * - Replaces the last anchor tag in the breadcrumb with its content.
+     */
+    componentDidRender() {
+        // Reduces the number of elements in the DOM
+        this.host.querySelectorAll('.s-breadcrumb-slot').forEach(el => el.replaceWith(el.firstChild));
+        this.host.querySelectorAll('.s-breadcrumb-icon-slot.s-breadcrumb-default-icon').forEach(el => el.replaceWith(el.querySelector('svg')));
+        // Removes the slots parent elements if exists
+        this.host.querySelector('[slot="item"]')?.remove();
+        this.host.querySelector('[slot="icon"]')?.remove();
+        let lastEl = this.host.querySelectorAll('.s-breadcrumb-item')[this.breadcrumbs.length - 1]?.querySelector('a');
+        lastEl && lastEl.replaceWith(lastEl.firstChild);
+    }
+    static get is() { return "salla-breadcrumb"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-breadcrumb.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-breadcrumb.css"]
+        };
+    }
+    static get states() {
+        return {
+            "breadcrumbs": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

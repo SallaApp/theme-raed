@@ -1,0 +1,108 @@
+import { EventEmitter } from '../../stencil-public-runtime';
+import { Color, Options } from './interfaces';
+export declare class SallaColorPicker {
+    private picker;
+    private colorInput;
+    widgetColor: string;
+    host: HTMLElement;
+    private canvas;
+    /**
+     * File input name for the native formData
+     */
+    name: string;
+    /**
+     * Set if the color picker input is required or not
+     */
+    required: boolean;
+    /**
+     * Initial color for the picker.
+     */
+    color: string;
+    /**
+     * How to display the selected color in the text field
+     * (the text field still supports input in any format).
+     */
+    format: 'hex' | 'hsl' | 'rgb';
+    /**
+     * Whether to have a "Cancel" button which closes the popup.
+     */
+    showCancelButton: boolean;
+    /**
+     * Whether to show a text field for color value editing.
+     */
+    showTextField: boolean;
+    /**
+     * Whether to enable adjusting the alpha channel.
+     */
+    enableAlpha: boolean;
+    /** EVENTS */
+    /**
+     * Event whenever the color changes.
+     */
+    colorChanged: EventEmitter<Color>;
+    /**
+     * Event emitted when the input is invalid.
+     */
+    invalidInput: EventEmitter<any>;
+    colorChangeHandler(color: Color): void;
+    /**
+     * Event emitter when the user clicks "Ok".
+     */
+    submitted: EventEmitter<Color>;
+    submittedHandler(color: Color): void;
+    /**
+     * Event emitter when the popup opens.
+     */
+    popupOpened: EventEmitter<Color>;
+    popupOpenedHandler(color: Color): void;
+    /**
+     * Event emitter when the popup closes.
+     */
+    popupClosed: EventEmitter<Color>;
+    popupClosedHandler(color: Color): void;
+    /** Methods */
+    /**
+     * Set the picker options.
+     *
+     * (Usually a new .parent and .color).
+     * @param {Object} options
+     */
+    setPickerOption(options: Options): Promise<void>;
+    /**
+     * Move the popup to a different parent, optionally opening it at the same time.
+     *
+     * (Usually a new .parent and .color).
+     * @param {Options} option
+     *
+     * Whether to open the popup immediately.
+     * @param {boolean} openImmediately
+     */
+    movePopUp(options: Options, openImmediately: boolean): Promise<void>;
+    /**
+     * Set/initialize the picker's color.
+     *
+     * Color name, RGBA/HSLA/HEX string, or RGBA array.
+     * @param {string} color
+     *
+     * If true, won't trigger onChange.
+     * @param {boolean} triggerEvent
+     */
+    setColorValue(color: string, triggerEvent: boolean): Promise<void>;
+    /**
+     * Show/open the picker.
+     */
+    openPicker(): Promise<void>;
+    /**
+     * Close/Hide the picker.
+     */
+    closePicker(): Promise<void>;
+    /**
+     * Release all resources used by this picker instance.
+     */
+    destroyPicker(): Promise<void>;
+    componentWillLoad(): void;
+    private setPopInPosition;
+    private initColorPicker;
+    render(): any;
+    componentDidLoad(): void;
+}

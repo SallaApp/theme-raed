@@ -1,0 +1,938 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { a as axios } from './axios.js';
+
+var Http = {
+    request(method, url, data, successCb = null, errorCb = null) {
+        return axios
+            .request({url, data, method: method.toLowerCase(), responseType: 'json'})
+            .then(successCb)
+            .catch(errorCb);
+    },
+
+    get(url, successCb = null, errorCb = null, data) {
+        // return this.request('get', url, data, successCb, errorCb);
+        return axios
+            .get(url, {params: data})
+            .then(successCb)
+            .catch(errorCb);
+    },
+
+    post(url, data, successCb = null, errorCb = null) {
+        return this.request('post', url, data, successCb, errorCb);
+    },
+
+    put(url, data, successCb = null, errorCb = null) {
+        return this.request('put', url, data, successCb, errorCb);
+    },
+
+    delete(url, data, successCb = null, errorCb = null) {
+        return this.request('delete', url, data, successCb, errorCb);
+    },
+
+    requestWithSupportAjax(url, payload, method = 'post') {
+        return new Promise((resolve, reject) => {
+            if (!window?.isLegacyTheme) {
+                return this.request(method, url, payload, ({data}) => {
+                    return resolve(data);
+                }, ({response}) => {
+                    return reject(response);
+                })
+            }
+
+            /**
+             * @deprecated to support legacy themes
+             */
+            $.ajax({
+                url: url,
+                method: method.toUpperCase(),
+                data: payload,
+                async: false,
+                success: function ({data}) {
+                    return resolve(data);
+                },
+                error: function ({response}) {
+                    return reject(response);
+                }
+            });
+        })
+    }
+};
+
+var DetectOS = {
+    options: [],
+    header: [navigator.platform, navigator.userAgent, navigator.appVersion, navigator.vendor, window.opera],
+    dataos: [
+        {name: 'Windows Phone', value: 'Windows Phone', version: 'OS'},
+        {name: 'Windows', value: 'Win', version: 'NT'},
+        {name: 'iPhone', value: 'iPhone', version: 'OS'},
+        {name: 'iPad', value: 'iPad', version: 'OS'},
+        {name: 'Kindle', value: 'Silk', version: 'Silk'},
+        {name: 'Android', value: 'Android', version: 'Android'},
+        {name: 'PlayBook', value: 'PlayBook', version: 'OS'},
+        {name: 'BlackBerry', value: 'BlackBerry', version: '/'},
+        {name: 'Macintosh', value: 'Mac', version: 'OS X'},
+        {name: 'Linux', value: 'Linux', version: 'rv'},
+        {name: 'Palm', value: 'Palm', version: 'PalmOS'}
+    ],
+    databrowser: [
+        {name: 'Chrome', value: 'Chrome', version: 'Chrome'},
+        {name: 'Firefox', value: 'Firefox', version: 'Firefox'},
+        {name: 'Safari', value: 'Safari', version: 'Version'},
+        {name: 'Internet Explorer', value: 'MSIE', version: 'MSIE'},
+        {name: 'Opera', value: 'Opera', version: 'Opera'},
+        {name: 'BlackBerry', value: 'CLDC', version: 'CLDC'},
+        {name: 'Mozilla', value: 'Mozilla', version: 'Mozilla'}
+    ],
+    init: function () {
+        var agent = this.header.join(' '),
+            os = this.matchItem(agent, this.dataos),
+            browser = this.matchItem(agent, this.databrowser);
+
+        return {os: os, browser: browser};
+    },
+    matchItem: function (string, data) {
+        var i = 0,
+            j = 0,
+            regex,
+            regexv,
+            match,
+            matches,
+            version;
+
+        for (i = 0; i < data.length; i += 1) {
+            regex = new RegExp(data[i].value, 'i');
+            match = regex.test(string);
+            if (match) {
+                regexv = new RegExp(data[i].version + '[- /:;]([\\d._]+)', 'i');
+                matches = string.match(regexv);
+                version = '';
+                if (matches) {
+                    if (matches[1]) {
+                        matches = matches[1];
+                    }
+                }
+                if (matches) {
+                    matches = matches.split(/[._]+/);
+                    for (j = 0; j < matches.length; j += 1) {
+                        if (j === 0) {
+                            version += matches[j] + '.';
+                        } else {
+                            version += matches[j];
+                        }
+                    }
+                } else {
+                    version = '0';
+                }
+                return {
+                    name: data[i].name,
+                    version: parseFloat(version)
+                };
+            }
+        }
+        return {name: 'unknown', version: 0};
+    }
+};
+
+/**
+ * @typedef {Object} ApplePayPaymentContact
+ * @property {string} phoneNumber
+ * @property {string} emailAddress
+ * @property {string} givenName
+ * @property {string} familyName
+ * @property {string} [phoneticGivenName]
+ * @property {string} [phoneticFamilyName]
+ * @property {string[]} addressLines
+ * @property {string} [subLocality]
+ * @property {string} locality
+ * @property {string} postalCode
+ * @property {string} [subAdministrativeArea]
+ * @property {string} administrativeArea
+ * @property {string} country
+ * @property {string} countryCode
+ */
+
+
+/**
+ *
+ * @param {SallaApplePay} SallaApplePay
+ * @param {boolean} isAuthorized
+ * @param {ApplePayPaymentContact} shippingContact
+ *
+ */
+function mutateShipmentAddress(SallaApplePay, shippingContact, isAuthorized = false) {
+  console.log('mutateShipmentAddress called', shippingContact, isAuthorized);
+
+  if (!SallaApplePay.detail.requiredShippingContactFields) {
+    return;
+  }
+
+  return Http.post(
+    SallaApplePay.detail.shippingContactSelected.url.replace('{id}', SallaApplePay.id),
+    {
+      'country': shippingContact.country,
+      'city': shippingContact.locality,
+      'local': shippingContact.subLocality,
+      'description': shippingContact.subAdministrativeArea,
+      'street': shippingContact.addressLines?.join(", ") || shippingContact.administrativeArea,
+      'country_code': shippingContact.countryCode,
+      'postal_code': shippingContact.postalCode,
+      'is_authorized': isAuthorized
+    },
+    async ({ data }) => {
+      if (isAuthorized) { return }
+      if (typeof SallaApplePay.detail.shippingContactSelected.onSuccess === 'function') {
+        SallaApplePay.detail.shippingContactSelected.onSuccess(data);
+      }
+
+      SallaApplePay.address_id = data.data.address_id;
+      SallaApplePay.shipping_methods = data.data.shipping_methods;
+
+      if (!SallaApplePay.shipping_methods || (SallaApplePay.shipping_methods && !SallaApplePay.shipping_methods.length)) {
+        salla.logger.warn('🍏 Pay: We dont found any supported methods', data);
+
+        return SallaApplePay.session.completeShippingContactSelection({
+          status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+          errors: [
+            new window.ApplePayError('addressUnserviceable')
+          ]
+        });
+      }
+
+      try {
+        await SallaApplePay.selectApplePayShippingMethod(SallaApplePay.shipping_methods[0]['ship_id'], SallaApplePay.shipping_methods[0]['private_ship_id']);
+      } catch (error) {
+        salla.logger.warn('Failed set the shipping details to api', error);
+
+        return SallaApplePay.session.completeShippingContactSelection({
+          status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+          errors: [
+            new window.ApplePayError('addressUnserviceable')
+          ]
+        });
+      }
+
+      try {
+        await SallaApplePay.recalculateTotal();
+      } catch (error) {
+        salla.logger.warn('🍏 Pay: Failed recalculate total', error);
+
+        return SallaApplePay.session.completeShippingContactSelection({
+          status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+          errors: [
+            new window.ApplePayError('addressUnserviceable')
+          ]
+        });
+      }
+
+      SallaApplePay.session.completeShippingContactSelection({
+        newTotal: SallaApplePay.prepareTotal(),
+        newLineItems: SallaApplePay.prepareLineItems(),
+        newShippingMethods: SallaApplePay.mappingShippingMethods(SallaApplePay.shipping_methods)
+      });
+
+    },
+    ({ response }) => {
+      salla.logger.warn('🍏 Pay: Failed add address via api', response);
+
+      if (typeof SallaApplePay.detail.shippingContactSelected.onFailed === 'function') {
+        SallaApplePay.detail.shippingContactSelected.onFailed(response);
+      }
+
+      // parse 422 errors
+      let fields = response?.data?.error?.fields;
+
+      let errors = [];
+
+      if (fields?.country_code) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'countryCode', fields?.country_code[0]));
+      }
+
+      if (fields?.city) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'locality', fields?.city[0]));
+      }
+
+      if (fields?.country) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'country', fields?.country[0]));
+      }
+
+      if (errors.length === 0 && response?.data?.error?.message) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'locality', response?.data?.error?.message));
+      }
+
+      SallaApplePay.session.completeShippingContactSelection({
+        newTotal: SallaApplePay.prepareTotal(),
+        newLineItems: SallaApplePay.prepareLineItems(),
+        status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+        errors: errors
+      });
+    }
+  );
+}
+
+window.Salla = window.Salla || {};
+window.Salla.Payments = window.Salla.Payments || {};
+
+/**
+ * Full Example
+ *
+ * Salla.event.createAndDispatch('payments::apple-pay.start-transaction', {
+ *                  amount: 1000,
+ *                  validateMerchant: {
+ *                      url: '{{ route('cp.marketplace.cart.pay', ['cart' => $cart]) }}',
+ *                      // onFailed: (response) => {
+ *                      //     laravel.ajax.errorHandler(response);
+ *                      //     this.onCancel({}, response.data.error.message);
+ *                      // },
+ *                      // onSuccess: (response) => {
+ *                      //     laravel.ajax.successHandler(response);
+ *                      // }
+ *                  },
+ *                  authorized: {
+ *                      url: '{{ route('cp.marketplace.cart.confirm', ['cart' => $cart]) }}',
+ *                      // onFailed: (response) => {
+ *                      //     laravel.ajax.errorHandler(response);
+ *                      //     this.onCancel({}, response.data.error.message);
+ *                      // },
+ *                      // onSuccess: (response) => {
+ *                      //     // nothing
+ *                      // }
+ *                  },
+ *                  // onError: function (message) {
+ *                  //     laravel.alert(message);
+ *                  // }
+ *              });
+ */
+window.SallaApplePay = {
+    session: null,
+    detail: null,
+    address_id: null,
+    shipping_methods: [],
+    total: undefined,
+    request: undefined,
+    id: undefined,
+    countryCode: null,
+    init: function () {
+        document.removeEventListener('payments::apple-pay.start-transaction', SallaApplePay.startSession);
+        Salla.event.addEventListener('payments::apple-pay.start-transaction', SallaApplePay.startSession);
+    },
+
+    initDefault: function () {
+        if (!SallaApplePay.detail.onError) {
+            SallaApplePay.detail.onError = function (message) {
+                salla.notify.error(message);
+            };
+        }
+
+        if (!SallaApplePay.detail.authorized.onFailed) {
+            SallaApplePay.detail.authorized.onFailed = (response) => {
+                salla.logger.log(JSON.stringify(response));
+                salla.api.handleErrorResponse(response);
+                SallaApplePay.onCancel({}, response.data.error.message);
+            };
+        }
+
+        if (!SallaApplePay.detail.validateMerchant.onFailed) {
+            SallaApplePay.detail.validateMerchant.onFailed = (response) => {
+                salla.logger.log(JSON.stringify(response));
+                salla.api.handleErrorResponse(response);
+                SallaApplePay.onCancel({}, response.data.error.message);
+            };
+        }
+
+        if (!SallaApplePay.detail.authorized.onSuccess) {
+            SallaApplePay.detail.authorized.onSuccess = (response) => {
+                salla.logger.log(JSON.stringify(response));
+                salla.api.handleAfterResponseActions(response);
+            };
+        }
+    },
+
+    prepareLineItems: function () {
+        if (!SallaApplePay.detail?.items?.length) {
+            SallaApplePay.detail.items = [
+                {
+                    label: salla.lang.get('pages.cart.items_total'),
+                    amount: SallaApplePay.detail.amount
+                }
+            ];
+        }
+
+        return SallaApplePay.detail.items;
+    },
+
+    prepareTotal: function () {
+        return {
+            // apple ask to use business name
+            label: window.location.hostname || 'Salla',
+            //label: salla.lang.get('pages.cart.final_total'),
+            amount: SallaApplePay.detail.amount
+        }
+    },
+
+    startSession: async function (event) {
+
+        SallaApplePay.detail = event.detail || event;
+
+        salla.log('🍏 Pay: payments::apple-pay.start-transaction', SallaApplePay.detail);
+
+        SallaApplePay.initDefault();
+
+        let version = SallaApplePay.getApplePaySessionVersion();
+        let supportedNetworks = SallaApplePay.detail.supportedNetworks || ['masterCard', 'visa'];
+
+        if (version === 5) {
+            supportedNetworks.push('mada');
+        }
+
+        SallaApplePay.request = {
+            countryCode: SallaApplePay.detail.countryCode || 'SA',
+            supportsCouponCode: true,
+            couponCode: '',
+            currencyCode: SallaApplePay.detail.currency || 'SAR',
+            requiredShippingContactFields: SallaApplePay.detail.requiredShippingContactFields ? SallaApplePay.detail.requiredShippingContactFields : [],
+            merchantCapabilities: ['supports3DS'],
+            supportedNetworks: supportedNetworks,
+            supportedCountries: SallaApplePay.detail.supportedCountries || ['SA'],
+            total: SallaApplePay.prepareTotal(),
+            shippingContact: SallaApplePay.detail.shippingContact ? SallaApplePay.detail.shippingContact : {},
+            shippingMethods: SallaApplePay.detail.shippingMethods && SallaApplePay.detail.shippingMethods.length ? SallaApplePay.mappingShippingMethods(event.detail.shippingMethods) : [],
+            lineItems: SallaApplePay.prepareLineItems()
+        };
+
+        salla.log('🍏 Pay: init ', SallaApplePay.request);
+
+        // https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest
+        SallaApplePay.session = new ApplePaySession(version, SallaApplePay.request);
+
+        SallaApplePay.session.onshippingcontactselected = SallaApplePay.onShippingContactSelected;
+        SallaApplePay.session.onshippingmethodselected = SallaApplePay.onShippingMethodSelected;
+        SallaApplePay.session.onvalidatemerchant = SallaApplePay.onValidateMerchant;
+        SallaApplePay.session.onpaymentauthorized = SallaApplePay.onPaymentAuthorized;
+        SallaApplePay.session.oncancel = SallaApplePay.onCancel;
+        SallaApplePay.session.oncouponcodechanged = SallaApplePay.oncouponcodechanged;
+        SallaApplePay.session.onpaymentmethodselected = SallaApplePay.onpaymentmethodselected;
+
+        SallaApplePay.session.begin();
+    },
+    async onpaymentmethodselected(event) {
+        await SallaApplePay.recalculateTotal();
+        const updatedPaymentDetails = {
+            newTotal: SallaApplePay.prepareTotal(),
+            newLineItems: SallaApplePay.prepareLineItems(),
+        };
+
+        SallaApplePay.session.completePaymentMethodSelection(updatedPaymentDetails);
+    },
+
+    oncouponcodechanged(event) {
+        Salla.event.dispatch('payments::apple-pay.coupon.change', event);
+
+        return Http.post(SallaApplePay.detail.oncouponcodechanged.url.replace('{id}', SallaApplePay.id), {
+            'coupon': event.couponCode,
+            'payment_method': 'apple_pay',
+        }, async ({ data }) => {
+            if (typeof SallaApplePay.detail.oncouponcodechanged.onSuccess === 'function') {
+                SallaApplePay.detail.oncouponcodechanged.onSuccess(data);
+            }
+
+            salla.log('🍏 Pay: Coupon applied success');
+
+            await SallaApplePay.recalculateTotal();
+
+            SallaApplePay.session.completeCouponCodeChange({
+                newTotal: SallaApplePay.prepareTotal(),
+                newLineItems: SallaApplePay.prepareLineItems()
+            });
+        }, async (error) => {
+            let response = error?.response;
+
+            Salla.event.dispatch('payments::apple-pay.coupon.failed', response);
+
+            // SallaApplePay.abortSession();
+            if (typeof SallaApplePay.detail.oncouponcodechanged.onFailed === 'function') {
+                SallaApplePay.detail.oncouponcodechanged.onFailed(response);
+            }
+
+            await SallaApplePay.recalculateTotal();
+
+            SallaApplePay.session.completeCouponCodeChange({
+                newTotal: SallaApplePay.prepareTotal(),
+                newLineItems: SallaApplePay.prepareLineItems(),
+                errors: [new window.ApplePayError('couponCodeInvalid')]
+            });
+        });
+    },
+
+    onCancel: (event = {}, message = null) => {
+        SallaApplePay.detail.onError(message || salla.lang.get('pages.checkout.payment_failed'));
+        Salla.event.createAndDispatch('payments::apple-pay.canceled', event);
+    },
+
+    /**
+     * Confirm payment after authorization.
+     *
+     * @param event
+     */
+    onPaymentAuthorized: async (event) => {
+        salla.logger.log('🍏 Pay: onPaymentAuthorized', event.payment);
+
+        // Update the payment address
+        await mutateShipmentAddress(SallaApplePay, event.payment.shippingContact, true);
+
+        Salla.event.dispatch('payments::apple-pay.authorized.init', event);
+        Http.post(SallaApplePay.detail.authorized.url.replace('{id}', SallaApplePay.id), {
+            payment_method: 'apple_pay',
+            applepay_token: JSON.stringify(event.payment)
+        }, ({ data }) => {
+            Salla.event.dispatch('payments::apple-pay.authorized.success', data);
+
+            SallaApplePay.session.completePayment(ApplePaySession.STATUS_SUCCESS);
+
+            if (typeof SallaApplePay.detail.authorized.onSuccess === 'function') {
+                SallaApplePay.detail.authorized.onSuccess(data);
+            }
+        }, (error) => {
+
+            let response = error?.response;
+
+            Salla.event.dispatch('payments::apple-pay.authorized.failed', response);
+
+            SallaApplePay.session.completePayment({
+                status: ApplePaySession.STATUS_FAILURE,
+                errors: [new ApplePayError("unknown", undefined, response?.data?.error?.message || response?.data?.error?.code || 'Failed to parse authorized response')]
+            });
+
+            if (typeof SallaApplePay.detail.authorized.onFailed === 'function') {
+                SallaApplePay.detail.authorized.onFailed(response);
+            }
+        });
+    },
+
+    /**
+     * Validate Submit.
+     *
+     * @param event
+     */
+    onValidateMerchant: async (event) => {
+        try {
+            // Dispatch event to initialize Apple Pay merchant validation
+            Salla.event.dispatch('payments::apple-pay.validate-merchant.init', event);
+
+            // Post request to validate merchant
+            const { data } = await Http.post(SallaApplePay.detail.validateMerchant.url.replace('{id}', SallaApplePay.id), {
+                validation_url: event.validationURL
+            });
+
+            // Dispatch event on successful merchant validation
+            Salla.event.dispatch('payments::apple-pay.validate-merchant.success', data);
+
+            // Define a function to handle the completion of merchant validation
+            const completeMerchantValidation = (responseData) => {
+                SallaApplePay.session.completeMerchantValidation(responseData);
+            };
+
+            // Check if onSuccess function is defined in SallaApplePay.detail.validateMerchant
+            if (typeof SallaApplePay.detail.validateMerchant.onSuccess === 'function') {
+                // Call onSuccess function and handle response
+                const response = await SallaApplePay.detail.validateMerchant.onSuccess(data);
+                if (response?.redirect) {
+                    // Handle redirect if present
+                    window.location = response.redirect;
+                    return SallaApplePay.abortValidateMerchant(response);
+                }
+            }
+            completeMerchantValidation(data.data);
+        } catch (error) {
+            // Handle errors
+            console.error(error);
+            SallaApplePay.abortValidateMerchant(error?.response);
+        }
+    },
+
+    abortValidateMerchant: (response = null) => {
+
+        SallaApplePay.abortSession();
+        Salla.event.dispatch('payments::apple-pay.validate-merchant.failed', response);
+
+        if (typeof SallaApplePay.detail.validateMerchant.onFailed === 'function') {
+            SallaApplePay.detail.validateMerchant.onFailed(response);
+        }
+    },
+
+    /**
+     * Select Shipping Contact
+     *
+     * @param event
+     */
+    onShippingContactSelected: async (event) => {
+        salla.logger.log('🍏 Pay: onShippingContactSelected', event.shippingContact);
+
+        // create address for shipping calculation
+        mutateShipmentAddress(SallaApplePay, event.shippingContact);
+    },
+
+    /**
+     * Select Shipping Method
+     *
+     * @param event
+     *
+     */
+    onShippingMethodSelected: async (event) => {
+        salla.logger.log(event);
+
+        let shipping_ids = event.shippingMethod.identifier.split(',');
+
+        try {
+            await SallaApplePay.selectApplePayShippingMethod(shipping_ids[0], typeof shipping_ids[1] === 'undefined' ? null : shipping_ids[1]);
+
+            await SallaApplePay.recalculateTotal();
+
+            SallaApplePay.session.completeShippingMethodSelection({
+                newTotal: SallaApplePay.prepareTotal(),
+                newLineItems: SallaApplePay.prepareLineItems(),
+            });
+        } catch (error) {
+            salla.logger.warn('🍏 Pay: Failed set the shipping details to api', error);
+
+            // todo :: find a better handling for error without abort session
+            SallaApplePay.abortSession();
+        }
+    },
+
+
+    abortSession: () => {
+        if (SallaApplePay.session) {
+            SallaApplePay.session.abort();
+        }
+    },
+
+    getApplePaySessionVersion: () => {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        if (userAgent === 'sallapp') {
+            return 5;
+        }
+
+        // can't handle custom user agent like sallapp
+        let detection = DetectOS.init();
+        let v = parseFloat(detection.os.version);
+
+        if (detection.os.name === 'Macintosh') {
+            if (v < 10.142) {
+                return 1;
+            }
+        } else {
+            if (v < 12.11) {
+                return 1;
+            }
+        }
+
+        return 5;
+    },
+
+    recalculateTotal: () => {
+        salla.logger.log('Recalculate Total');
+
+        return Http.requestWithSupportAjax(SallaApplePay.detail.recalculateTotal.url.replace('{id}', SallaApplePay.id), {}, 'get').then((data) => {
+            let cart = data.data.initial_data?.cart || data.data.cart;
+            // todo :: enhance response from backend
+            SallaApplePay.detail.amount = cart.total;
+            SallaApplePay.detail.items = (cart.totals || cart.items).map((item) => {
+                return {
+                    label: item.title,
+                    amount: (item.amount === 'مجاني' || item.amount === 'Free') ? 0 : item.amount.toString().replace('+', ''),
+                };
+            });
+
+            // lets remove last element (final total)
+            SallaApplePay.detail.items.pop();
+
+            return data;
+        }).catch((error) => {
+            salla.logger.warn('🍏 Pay: recalculate total failed', error);
+
+            // general error
+            return error?.response?.data?.message;
+        });
+    },
+
+
+    selectApplePayShippingMethod: (company_id, private_company_id) => {
+        salla.logger.log('🍏 Pay: select shipping method ', 'company_id : ' + company_id, 'private_company_id: ' + private_company_id);
+        const payload = {
+            address_id: SallaApplePay.address_id,
+            company_id: company_id,
+            private_company_id: private_company_id,
+            payment_method: 'apple_pay'
+        };
+        const selectedShippingMethod = SallaApplePay.shipping_methods?.find((item)=> item.company === company_id || item.ship_id === company_id);
+        if (selectedShippingMethod?.route_id){
+            payload.shipping_route_id = selectedShippingMethod.route_id;
+            payload.type = selectedShippingMethod.type;
+        }
+        return Http.requestWithSupportAjax(SallaApplePay.detail.shippingMethodSelected.url.replace('{id}', SallaApplePay.id), payload, 'post').then(() => {
+            if (typeof SallaApplePay.detail.shippingMethodSelected.onSuccess === 'function') {
+                SallaApplePay.detail.shippingMethodSelected.onSuccess(data);
+            }
+
+            // we don't have any data in this request, lets resolve the promise
+            return true;
+        }).catch((error) => {
+            salla.logger.warn('🍏 Pay: Set shipping method failed', error);
+
+            if (typeof SallaApplePay.detail.shippingMethodSelected.onFailed === 'function') {
+                SallaApplePay.detail.shippingMethodSelected.onFailed(error);
+            }
+
+            // parse 422 errors
+            let response = error?.response?.data?.error;
+
+            // address id is not valid
+            if (response?.data?.fields?.address_id) {
+                return response?.data?.fields?.address_id[0];
+            }
+
+            // general error
+            return response?.data?.message;
+        });
+    },
+    mappingShippingMethods: methods => methods.map(method => ({
+        'label': method.shipping_title,
+        'amount': method.enable_free_shipping ? 0 : method.ship_cost,
+        'detail': '',
+        'identifier': method.ship_id.toString() + (method.private_ship_id ? ',' + method.private_ship_id.toString() : '')
+    }))
+};
+
+//applePay doesn't allow iframes
+// if (window.ApplePaySession && window.self === window.top && ApplePaySession.canMakePayments()) {
+if (window.ApplePaySession?.canMakePayments()) {
+    SallaApplePay.init();
+} else {
+    // You can hide the Apple Pay button easy with add data-show-if-apple-pay-supported to element like <div data-show-if-apple-pay-supported>
+    document.querySelectorAll('data-show-if-apple-pay-supported').forEach(element => element.style.display = 'none');
+}
+
+const sallaQuickBuyCss = ".s-quick-buy-button .s-button-text{display:flex}apple-pay-button{--apple-pay-button-width:100%;--apple-pay-button-height:40px;--apple-pay-button-border-radius:.75rem;--apple-pay-button-box-sizing:content-box}";
+
+const SallaQuickBuy = /*@__PURE__*/ proxyCustomElement(class SallaQuickBuy extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        /**
+         * Button type.
+         *
+         * @type {string}
+         * @default buy
+         **/
+        this.type = 'buy';
+        /**
+         * Product options, if is empty will get the data from the document.querySelector('salla-product-options[product-id="X"]')
+         *
+         * @type {object}
+         * @default {}
+         */
+        this.options = {};
+        this.quickBuy = salla.lang.get('pages.products.buy_now');
+        salla.lang.onLoaded(() => {
+            this.quickBuy = salla.lang.get('pages.products.buy_now');
+        });
+    }
+    async quickBuyHandler() {
+        if (salla.config.isGuest()) {
+            // todo (low) :: find a way to re-fire the method after success
+            let afterLoginEvent = "salla-quick-buy::user.logged-in";
+            salla.event.on(afterLoginEvent, () => this.settlePayment());
+            salla.api.auth.setAfterLoginEvent(afterLoginEvent);
+            return salla.auth.event.dispatch('login::open', { withoutReload: true });
+        }
+        await this.settlePayment();
+    }
+    async settlePayment() {
+        let optionsElement = document.querySelector(`salla-product-options[product-id="${this.productId}"]`);
+        //make sure all the required options are selected
+        if (optionsElement && !await optionsElement.reportValidity()) {
+            return salla.error(salla.lang.get('common.messages.required_fields'));
+        }
+        //use this way to get quantity too
+        let data = this.host.getElementSallaData();
+        // if the store doesn't have Apple Pay , just create a cart and then redirect to check out page
+        if (!this.isApplePayActive) {
+            // return salla.product.buyNow(this.productId, data);
+            return salla.api.request('checkout/quick-purchase/' + this.productId, data, 'post')
+                .then(resp => {
+                if (resp.data.redirect) {
+                    window.location.href = resp.data.redirect;
+                }
+                return resp;
+            });
+        }
+        data.is_applepay = true;
+        if ('append' in data) {
+            data.append('is_applepay', true);
+        }
+        // noinspection TypeScriptValidateJSTypes
+        salla.event.dispatch('payments::apple-pay.start-transaction', {
+            amount: this.amount, // 1000
+            currency: this.currency || 'SAR', // SAR
+            requiredShippingContactFields: this.isRequireShipping ? ['postalAddress'] : undefined,
+            shippingMethods: this.isRequireShipping ? [] : undefined,
+            supportedNetworks: salla.config.get('store.settings.buy_now.networks'),
+            supportedCountries: salla.config.get('store.settings.buy_now.countries'),
+            countryCode: salla.config.get('store.store_country') || 'SA',
+            validateMerchant: {
+                url: salla.url.get('checkout/applepay/validate'),
+                onSuccess: (response) => {
+                    if (this.applePayOnly && !this.productId) { // the cart is not passes
+                        if (!this.cartId) {
+                            salla.logger.warn('🍏 Pay: trying to create applePay transaction without cartId/ProductId !');
+                            return Promise.resolve(response);
+                        }
+                        window.SallaApplePay.id = this.cartId;
+                        salla.log('🍏 Pay: create checkout success: with id #' + this.cartId);
+                        return Promise.resolve(response);
+                    }
+                    return salla.api.request('checkout/quick-purchase/' + this.productId, typeof data == 'object' ? data : undefined, 'post', {}).then(response => {
+                        // if is redirect url returned for any reason, lets redirect the user to check out
+                        if (response?.data?.redirect) {
+                            salla.log('🍏 Pay: create checkout success: redirect exits, go to checkout page');
+                            window.location.href = response.data.redirect.url;
+                            return response;
+                        }
+                        // the cart is not ready to complete apply pay session
+                        if (!response?.data?.id) {
+                            salla.logger.warn('🍏 Pay: create checkout success: No id, or redirect');
+                            return response;
+                        }
+                        window.SallaApplePay.id = response.data.id;
+                        salla.log('🍏 Pay: create checkout success: with id #' + window.SallaApplePay.id);
+                    });
+                }
+            },
+            authorized: {
+                // submit checkout route
+                url: salla.url.get('checkout/{id}/payments/submit'),
+                onFailed: (response) => {
+                    window.SallaApplePay.onCancel({}, response?.data?.error?.message || response?.data?.error?.code || salla.lang.get('pages.checkout.payment_failed'));
+                },
+                onSuccess: (response) => {
+                    window.location.href = response.redirect.url;
+                    salla.log('🍏 Pay: authorized Success:: redirect to thank you page, order placed');
+                }
+            },
+            shippingMethodSelected: this.isRequireShipping ? {
+                url: salla.url.get('checkout/{id}/shipping/details'),
+            } : undefined,
+            shippingContactSelected: this.isRequireShipping ? {
+                url: salla.url.get('checkout/{id}/address/add'),
+            } : undefined,
+            oncouponcodechanged: {
+                url: salla.url.get('checkout/{id}/coupons')
+            },
+            recalculateTotal: {
+                url: salla.url.get('checkout/{id}/payments/recalculate?payment_method=apple_pay')
+            },
+            onError: function (message) {
+                salla.log(message);
+                salla.notify.error(message);
+            }
+        });
+    }
+    componentWillLoad() {
+        console.log('🍏 Pay: Quick Buy Component Loaded');
+        return new Promise((resolve, reject) => {
+            salla.onReady(async () => {
+                if (!this.currency) {
+                    this.currency = salla.config.get('user.currency_code');
+                }
+                if (!this.productId && salla.config.get('page.id')) {
+                    this.productId = salla.config.get('page.id');
+                }
+                if (!this.applePayOnly && !this.productId) {
+                    salla.logger.warn('🍏 Pay: Failed load the quick buy, the product id is missing');
+                    return reject();
+                }
+                /**
+                 * We should check the product if it's required shipping
+                 * in order for apple pay sdk to show the required Shipping Contact Fields
+                 * components..
+                 */
+                if ((!this.amount || !this.isRequireShipping) && this.productId) {
+                    await salla.product.getDetails(this.productId, []).then((response) => {
+                        this.amount = response.data.price;
+                        this.isRequireShipping = response?.data?.is_require_shipping || false;
+                    }).catch((error) => {
+                        salla.logger.warn('🍏 Pay: Failed load the quick buy, get the product details failed: ', error);
+                        return reject();
+                    });
+                }
+                if (this.type == 'donate') {
+                    salla.event.on('product-options::donation-changed', (data) => {
+                        if (String(data.id) !== String(this.productId)) {
+                            return;
+                        }
+                        this.amount = data.price;
+                    });
+                }
+                else if (salla.url.is_page('product.single')) {
+                    salla.product.event?.onPriceUpdated(response => {
+                        this.amount = response.data.price;
+                    });
+                }
+                this.isApplePayActive = salla.helpers.hasApplePay()
+                    && salla.config.get('store.settings.payments')?.includes('apple_pay')
+                    && salla.config.get('store.settings.is_salla_gateway', false);
+                let applePaySdk = document.getElementById('apple-pay-sdk');
+                if (applePaySdk || !this.isApplePayActive) {
+                    salla.logger.warn('🍏 Pay: Skipped load apple pay because ' + (applePaySdk ? 'already loaded' : 'is not available in the browser'));
+                    resolve(true);
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js';
+                script.setAttribute('id', 'apple-pay-sdk');
+                script.async = true;
+                document.body.appendChild(script);
+                resolve(true);
+            });
+        });
+    }
+    render() {
+        return h(Host, { key: 'e6440de17b7c8185dbd0636d0c009a04014ae215' }, this.quickBuyButton());
+    }
+    quickBuyButton() {
+        return h("apple-pay-button", { locale: salla.config.get('user.language_code'), onClick: () => this.quickBuyHandler(), "data-quick-purchase": "applepay", class: "s-quick-buy-apple-pay", "data-is-applepay": "1", buttonstyle: "black", type: this.type });
+    }
+    get host() { return this; }
+    static get style() { return sallaQuickBuyCss; }
+}, [0, "salla-quick-buy", {
+        "type": [1025],
+        "productId": [1025, "product-id"],
+        "cartId": [1025, "cart-id"],
+        "amount": [1538],
+        "currency": [1025],
+        "options": [16],
+        "isRequireShipping": [1028, "is-require-shipping"],
+        "applePayOnly": [1028, "apple-pay-only"],
+        "isApplePayActive": [32],
+        "quickBuy": [32]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-quick-buy"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-quick-buy":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaQuickBuy);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaQuickBuy as S, defineCustomElement as d };

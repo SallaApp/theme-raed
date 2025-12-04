@@ -1,0 +1,53 @@
+{
+  "name": "filepond-plugin-image-preview",
+  "version": "4.6.12",
+  "description": "Image Preview Plugin for FilePond",
+  "license": "MIT",
+  "author": {
+    "name": "PQINA",
+    "url": "https://pqina.nl/"
+  },
+  "homepage": "https://pqina.nl/filepond/",
+  "repository": "pqina/filepond-plugin-image-preview",
+  "main": "dist/filepond-plugin-image-preview.js",
+  "browser": "dist/filepond-plugin-image-preview.js",
+  "module": "dist/filepond-plugin-image-preview.esm.js",
+  "browserslist": [
+    "last 1 version and not Explorer 10",
+    "Explorer 11",
+    "iOS >= 9",
+    "Android >= 4.4"
+  ],
+  "files": [
+    "dist",
+    "types/*.d.ts"
+  ],
+  "types": "types/index.d.ts",
+  "scripts": {
+    "start": "npx rollup -c -w | npm run styles",
+    "build": "npm run scripts | npm run styles",
+    "scripts": "npx rollup -c",
+    "styles": "npm run styles:pretty && npm run styles:nano",
+    "styles:pretty": "npx postcss src/css/styles.css --no-map --use precss  --use autoprefixer | npx prettier --single-quote --parser css | node banner-cli.js FilePondPluginImagePreview > dist/filepond-plugin-image-preview.css",
+    "styles:nano": "npx postcss src/css/styles.css --no-map --use precss --use autoprefixer --use cssnano | node banner-cli.js FilePondPluginImagePreview > dist/filepond-plugin-image-preview.min.css"
+  },
+  "peerDependencies": {
+    "filepond": ">=4.x <5.x"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "autoprefixer": "^9.5.0",
+    "cssnano": "^4.1.10",
+    "postcss-cli": "^6.1.2",
+    "precss": "^4.0.0",
+    "prettier": "^1.16.4",
+    "rollup": "^1.7.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.1",
+    "rollup-plugin-license": "^0.8.1",
+    "rollup-plugin-node-resolve": "^4.0.1",
+    "rollup-plugin-prettier": "^0.6.0",
+    "rollup-plugin-terser": "^4.0.4"
+  }
+}

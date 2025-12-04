@@ -1,0 +1,481 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import Cart from "../../assets/svg/cart.svg";
+// import SallaIcon from '../../assets/svg/salla.svg';
+import WalletIcon from "../../assets/svg/full-wallet.svg";
+export class SallaAddProductButton {
+    constructor() {
+        this.hostAttributes = {};
+        /**
+         * Has Pre Order
+         */
+        this.hasPreOrder = false;
+        /**
+         *  Product Status.Defaults to `sale`
+         */
+        this.productStatus = 'sale';
+        /**
+         * Product type. Defaults to `product`
+         */
+        this.productType = 'product';
+        this.selectedOptions = [];
+        this.buyNowText = salla.lang.get('pages.products.buy_now');
+        salla.lang.onLoaded(() => {
+            this.buyNowText = salla.lang.get('pages.products.buy_now');
+        });
+    }
+    getLabel() {
+        if (this.productStatus === 'sale' && this.supportStickyBar && window.innerWidth <= 768 && this.showQuickBuy && this.isApplePayActive) {
+            return Cart;
+        }
+        if (this.hasPreOrder) {
+            return salla.lang.get('pages.products.pre_order_now');
+        }
+        if (this.productStatus === 'sale' && this.productType === 'booking') {
+            return salla.lang.get('pages.cart.book_now');
+        }
+        if (this.productStatus === 'sale') {
+            return salla.lang.get('pages.cart.add_to_cart');
+        }
+        if (this.productType !== 'donating') {
+            return salla.lang.get('pages.products.out_of_stock');
+        }
+        // donating
+        return salla.lang.get('pages.products.donation_exceed');
+    }
+    addProductToCart(event) {
+        if (this.productType === 'booking') {
+            event.preventDefault();
+            return this.addBookingProduct();
+        }
+        // we want to ignore the click action when the type of button is submit a form
+        if (this.hostAttributes.type === 'submit') {
+            return false;
+        }
+        event.preventDefault();
+        this.btn?.disable();
+        // Validate product options explicitly on Add to Cart click
+        const optionsEl = document.querySelector(`salla-product-options[product-id="${this.productId}"]`);
+        if (optionsEl && typeof optionsEl.validateAndScroll === 'function') {
+            return optionsEl.validateAndScroll()
+                .then(async (isValid) => {
+                // Call validate hook
+                const ctx = { isValid, component: this };
+                await salla.hooks.call('salla-add-product-button', 'validate', ctx);
+                if (!ctx.isValid) {
+                    this.btn?.enable();
+                    return;
+                }
+                return this._proceedAddToCart();
+            })
+                .catch(() => {
+                this.btn?.enable();
+            });
+        }
+        // Fallback if options component not found
+        return this._proceedAddToCart();
+    }
+    async _proceedAddToCart() {
+        /**
+         * by default the quick add is just an alias for add item function
+         * but its work only when the id is the only value is passed via the object
+         * so we will filter the object entities to remove null and zero values in case we don't want the normal add item action
+         */
+        const data = Object.entries({
+            id: this.productId,
+            donation_amount: this.donatingAmount,
+            quantity: this.quantity,
+            endpoint: 'quickAdd'
+        }).reduce((a, [k, v]) => (v ? (a[k] = v, a) : a), {});
+        // Use the potentially modified data
+        return salla.cart.addItem(data)
+            .then(async (response) => {
+            this.selectedOptions = [];
+            this.btn?.enable();
+            this.success.emit(response);
+            return response;
+        })
+            .catch(error => { this.failed.emit(error); this.btn?.enable(); });
+    }
+    addBookingProduct() {
+        if (salla.config.isGuest()) {
+            salla.auth.api.setAfterLoginEvent('booking::add', this.productId);
+            salla.event.dispatch('login::open');
+            return;
+        }
+        return salla.booking.add(this.productId)
+            .then(resp => this.success.emit(resp))
+            .catch(error => this.failed.emit(error));
+    }
+    getBtnAttributes() {
+        for (let i = 0; i < this.host.attributes.length; i++) {
+            if (!['id', 'class'].includes(this.host.attributes[i].name)) {
+                this.hostAttributes[this.host.attributes[i].name] = this.host.attributes[i].value;
+            }
+        }
+        return this.hostAttributes;
+    }
+    getQuickBuyBtnAttributes() {
+        return {
+            ...this.getBtnAttributes(),
+            type: this.supportStickyBar && window.innerWidth <= 768 ? 'plain' : this.productType == 'donating' ? 'donate' : 'buy'
+        };
+    }
+    miniCheckoutWidget() {
+        let storeId = salla.config.get('store.id');
+        if (!storeId) {
+            return;
+        }
+        return h("salla-mini-checkout-widget", { language: salla.lang.locale, "store-id": storeId, config: { user: salla.config.get('user'), failure_url: window.location.href }, products: [this.productId], api: salla.config.get('store.api'), outline: true, "form-selector": "form.product-form", class: "s-add-product-button-mini-checkout" }, h("div", { slot: "widget-label", class: "s-add-product-button-mini-checkout-content" }, h("span", { innerHTML: WalletIcon }), this.buyNowText));
+    }
+    componentWillLoad() {
+        return salla.onReady()
+            .then(() => {
+            // this to fix not added hydrated class to html element after components loaded
+            document.documentElement.classList.add('hydrated');
+            this.showQuickBuy = this.quickBuy
+                && salla.config.get('store.settings.buy_now')
+                && this.productStatus == 'sale'
+                && this.productType !== 'booking';
+            this.isApplePayActive = window.ApplePaySession?.canMakePayments()
+                && salla.config.get('store.settings.payments')?.includes('apple_pay')
+                && salla.config.get('store.settings.is_salla_gateway', false);
+            this.passedLabel = this.host.innerHTML.replace('<!---->', '').trim();
+            if (!!this.passedLabel && window.innerWidth >= 768) {
+                return this.btn?.setText(this.passedLabel);
+            }
+            if (this.host.getAttribute('type') === 'submit' && this.supportStickyBar) {
+                window.addEventListener('resize', () => this.btn?.setText((window.innerWidth >= 768 && !!this.passedLabel) ? this.passedLabel : this.getLabel()));
+            }
+        });
+    }
+    render() {
+        //TODO:: find a better fix, this is a patch for issue that duplicates the buttons more than twice @see the screenshot inside this folder
+        if (this.host.closest('.swiper-slide')?.classList.contains('swiper-slide-duplicate')) {
+            return '';
+        }
+        if (this.hasSubscribedOptions) {
+            return h(Host, null, h("salla-product-availability", { ...this.getBtnAttributes(), "is-subscribed": true }, h("span", { class: "s-hidden" }, h("slot", null))));
+        }
+        if ((this.productStatus === 'out-and-notify' && this.channels) || this.hasOutOfStockOption) {
+            return h(Host, null, h("salla-product-availability", { ...this.getBtnAttributes() }, h("span", { class: "s-hidden" }, h("slot", null))));
+        }
+        return h(Host, { class: {
+                's-add-product-button-with-quick-buy': this.showQuickBuy,
+                's-add-product-button-with-sticky-bar': this.supportStickyBar,
+                's-add-product-button-with-apple-pay': this.showQuickBuy && this.isApplePayActive
+            } }, h("div", { class: {
+                's-add-product-button-main': this.showQuickBuy,
+                'w-full': !document.getElementById('fast-checkout-js') || ['financial_support', 'donating'].includes(this.productType) // This is a temporary fix until all themes fully support the fast checkout -- To be removed later
+            } }, h("salla-button", { color: this.productStatus === 'sale' ? 'primary' : 'light', type: "button", fill: this.productStatus === 'sale' ? 'solid' : 'outline', ref: el => this.btn = el, onClick: event => this.addProductToCart(event), disabled: this.productStatus !== 'sale', ...this.getBtnAttributes(), "loader-position": "center" }, h("slot", null)), this.showQuickBuy && !!document.getElementById('fast-checkout-js') && !['financial_support', 'donating'].includes(this.productType) ? this.miniCheckoutWidget() : ''), this.showQuickBuy && this.isApplePayActive ? h("salla-quick-buy", { ...this.getQuickBuyBtnAttributes() }) : '');
+    }
+    async componentDidLoad() {
+        // Register this component for hooks system, already on it logic to run componentDidLoad trigger
+        await Salla.hooks.registerComponent('salla-add-product-button', this);
+        if (!this.notifyOptionsAvailability) {
+            return;
+        }
+        salla.event.on('product-options::change', async (data) => {
+            if (!['thumbnail', 'color', 'single-option'].includes(data.option.type)) {
+                return;
+            }
+            this.hasSubscribedOptions = false;
+            this.selectedOptions = await document.querySelector(`salla-product-options[product-id="${this.productId}"]`)?.getSelectedOptions();
+            this.hasOutOfStockOption = await document.querySelector(`salla-product-options[product-id="${this.productId}"]`)?.hasOutOfStockOption();
+            let subscribedDetails = salla.storage.get(`product-${this.productId}-subscribed-options`);
+            if (!subscribedDetails && !this.subscribedOptions || !this.hasOutOfStockOption) {
+                return;
+            }
+            if (salla.config.isGuest()) {
+                const parsedSubscribedDetails = subscribedDetails ? subscribedDetails.map(ids => ids.split(',').map(id => parseInt(id))) : [];
+                this.hasSubscribedOptions = parsedSubscribedDetails.length > 0 && parsedSubscribedDetails.some(ids => ids.every(id => this.selectedOptions.some(option => option.id === id)));
+            }
+            else {
+                this.hasSubscribedOptions = this.subscribedOptions && this.subscribedOptions !== 'null' && this.subscribedOptions !== '[]' ? JSON.parse(this.subscribedOptions).some(ids => ids.every(id => this.selectedOptions.some(option => option.id === id))) : false;
+            }
+        });
+    }
+    componentDidRender() {
+        //if label not passed, get label
+        if (!!this.passedLabel && (!this.supportStickyBar || window.innerWidth >= 768)) {
+            // if passed label, set it
+            this.btn?.setText(this.passedLabel);
+            return;
+        }
+        this.btn?.setText(this.getLabel());
+        salla.lang.onLoaded(() => this.btn?.setText(this.getLabel()));
+    }
+    static get is() { return "salla-add-product-button"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-add-product-button.css"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-add-product-button.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "channels": {
+                "type": "string",
+                "attribute": "channels",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Channels."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "subscribedOptions": {
+                "type": "string",
+                "attribute": "subscribed-options",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Subscribed Options ex: \"[[139487,2394739],[1212,1544]]\""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "hasPreOrder": {
+                "type": "boolean",
+                "attribute": "has-pre-order",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Has Pre Order"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "quickBuy": {
+                "type": "boolean",
+                "attribute": "quick-buy",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Support Quick Pay Button"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "quantity": {
+                "type": "number",
+                "attribute": "quantity",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Product Quantity"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "donatingAmount": {
+                "type": "number",
+                "attribute": "donating-amount",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Donating amount."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "notifyOptionsAvailability": {
+                "type": "boolean",
+                "attribute": "notify-options-availability",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Listen to product options availability."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "productId": {
+                "type": "any",
+                "attribute": "product-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Product id"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "supportStickyBar": {
+                "type": "boolean",
+                "attribute": "support-sticky-bar",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Support themes that have a sticky bar"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "productStatus": {
+                "type": "string",
+                "attribute": "product-status",
+                "mutable": false,
+                "complexType": {
+                    "original": "'sale' | 'out' | 'out-and-notify'",
+                    "resolved": "\"out\" | \"out-and-notify\" | \"sale\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Product Status.Defaults to `sale`"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'sale'"
+            },
+            "productType": {
+                "type": "string",
+                "attribute": "product-type",
+                "mutable": false,
+                "complexType": {
+                    "original": "'product' | 'service' | 'codes' | 'digital' | 'food' | 'donating' | 'group_products' | 'booking' | 'financial_support'",
+                    "resolved": "\"booking\" | \"codes\" | \"digital\" | \"donating\" | \"financial_support\" | \"food\" | \"group_products\" | \"product\" | \"service\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Product type. Defaults to `product`"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'product'"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "hasOutOfStockOption": {},
+            "hasSubscribedOptions": {},
+            "selectedOptions": {},
+            "showQuickBuy": {},
+            "isApplePayActive": {},
+            "buyNowText": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "success",
+                "name": "success",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Custome DOM event emitter when product gets added to cart successfully."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "failed",
+                "name": "failed",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Custome DOM event emitter when product addition to cart fails."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+    static get elementRef() { return "host"; }
+}

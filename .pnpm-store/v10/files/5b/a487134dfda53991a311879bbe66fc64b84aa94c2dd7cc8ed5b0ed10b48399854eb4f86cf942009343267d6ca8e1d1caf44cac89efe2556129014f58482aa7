@@ -1,0 +1,61 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import instagram from "../../assets/svg/instagram.svg";
+import twitter from "../../assets/svg/twitter.svg";
+import facebook from "../../assets/svg/facebook.svg";
+import youtube from "../../assets/svg/youtube.svg";
+import snapchat from "../../assets/svg/snapchat.svg";
+import tiktok from "../../assets/svg/tiktok.svg";
+/**
+ * @slot social-item - Replaces social item, has replaceable keys `{icon}`, `{type} and {link}`.
+ */
+export class SallaSocial {
+    constructor() {
+        this.links = salla.config.get('store.social');
+        this.iconsList = { instagram, twitter, facebook, youtube, snapchat, tiktok };
+        this.socialSlot = this.host.querySelector('[slot="social-item"]')?.innerHTML ||
+            `<a href={link} rel="noopener" target="_blank" title={type} aria-label={type}><span class="s-social-icon">{icon}</span></a>`;
+        salla.lang.onLoaded(() => {
+            this.links = salla.config.get('store.social');
+        });
+    }
+    getLinksArray() {
+        return this.links ? Object.entries(this.links)
+            .filter(([key, value]) => !!value && key !== 'whatsapp')
+            .map(([type, value]) => ({ type, value })) : [];
+    }
+    componentWillLoad() {
+        return new Promise(resolve => salla.onReady(resolve));
+    }
+    render() {
+        const linksArray = this.getLinksArray();
+        return (h(Host, { key: '8fb321cff071698640111ac5fccfb1fc8e130298' }, h("ul", { key: 'f00ef1d6ff429614000aba2af50514ea6f27a2f1', class: "s-social-list" }, linksArray.map((link) => (h("li", { class: "s-social-link" }, h("div", { id: "social-slot", innerHTML: this.socialSlot
+                .replace(/\{icon\}/g, this.iconsList[link.type])
+                .replace(/\{type\}/g, link.type)
+                .replace(/\{link\}/g, link.value.toString()) })))))));
+    }
+    componentDidRender() {
+        this.host.querySelectorAll('#social-slot').forEach(el => el.replaceWith(el.firstChild));
+        this.host.querySelector('[slot="social-item"]')?.remove();
+    }
+    static get is() { return "salla-social"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-social.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-social.css"]
+        };
+    }
+    static get states() {
+        return {
+            "links": {},
+            "iconsList": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

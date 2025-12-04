@@ -1,0 +1,42 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+
+const sallaLoyaltyPrizeItemCss = "salla-loyalty-prize-item:hover{box-shadow:0 5px 15px 1px rgba(0, 0, 0, 0.04) !important}";
+
+const SallaLoyaltyPrizeItem$1 = /*@__PURE__*/ proxyCustomElement(class SallaLoyaltyPrizeItem extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.prizeItemSelected = createEvent(this, "prizeItemSelected", 7);
+    }
+    onPrizeItemClick() {
+        this.prizeItemSelected.emit(this.item);
+    }
+    render() {
+        return (h(Host, { key: '1a3463c51bf3e3e250f62b65d3a81815ec465923' }, h("div", { key: '03bf4d3e35b10d17a325ca4ef280cb384f3a76f4', onClick: this.onPrizeItemClick.bind(this) }, h("img", { key: 'a4d319b2daec5cdfec1c85910edea10bc1d1ab6c', class: "s-loyalty-prize-item-image", src: this.item.image, alt: this.item.name }), h("div", { key: '52059fafc318c1f5a6b0289669083476650f8761', class: "s-loyalty-prize-item-title" }, this.item.name), h("div", { key: 'a3e14e2d1bd86dc3e7dbd2e6c5115e119af965e5', class: "s-loyalty-prize-item-subtitle" }, this.item.description), h("div", { key: '55df95c028748c0387dc75dc4ad35c7285c907af', class: "s-loyalty-prize-item-points" }, this.item.cost_points, " Points"))));
+    }
+    static get style() { return sallaLoyaltyPrizeItemCss; }
+}, [0, "salla-loyalty-prize-item", {
+        "item": [16]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-loyalty-prize-item"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-loyalty-prize-item":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaLoyaltyPrizeItem$1);
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaLoyaltyPrizeItem = SallaLoyaltyPrizeItem$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaLoyaltyPrizeItem, defineCustomElement };

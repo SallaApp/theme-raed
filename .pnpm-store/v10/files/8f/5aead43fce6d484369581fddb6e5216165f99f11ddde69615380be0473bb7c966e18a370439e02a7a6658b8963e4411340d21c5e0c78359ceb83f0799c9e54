@@ -1,0 +1,798 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { a as anime } from './anime.es.js';
+import { S as ShoppingBag } from './shopping-bag.js';
+import { H as Helper } from './Helper.js';
+
+const sallaProductsListCss = "";
+
+const SallaProductsList = /*@__PURE__*/ proxyCustomElement(class SallaProductsList extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.productsFetched = createEvent(this, "productsFetched", 7);
+        /**
+         * Autoload next page when scroll
+         */
+        this.autoload = false;
+        /**
+         * Custom Card Component for the Salla Products List.
+         *
+         * This component allows you to customize the appearance of individual product cards within a Salla Products List.
+         *
+         * @example
+         * <salla-products-list product-card-component="my-custom-card-style1" ...
+         * <salla-products-list product-card-component="my-custom-card-style2" ...
+         */
+        this.productCardComponent = 'custom-salla-product-card';
+        // State
+        this.page = 1;
+        this.placeholderText = salla.lang.get('pages.categories.no_products');
+        this.endOfText = salla.lang.get('common.elements.end_of_content');
+        this.failedLoadMore = salla.lang.get('common.elements.failed_to_load_more');
+        this.currentPage = salla.config.get('page');
+        this.filtersSnapshot = [];
+        this.lastViewedProductKey = "lastViewedProductId";
+        this.filtersKey = "filters";
+        this.infiniteScrollStateKey = "infiniteScrollState";
+        this.prevCategoryIdKey = "prevCategoryId";
+        this.isProcessing = false; // Tracks if we are processing data
+        this.scrollTimeout = null;
+        this.specialPagesWithoutIds = {
+            'product.index.latest': 'latest',
+            'product.index.offers': 'offers',
+            'product.index.search': 'search',
+            'product.index.sales': 'sales'
+        };
+        //TODO:: check why `this.includes` not working!!
+        this.includes = Helper.parseJson(this.includes || this.host.getAttribute('includes'));
+        if (!Array.isArray(this.includes)) {
+            this.includes = null;
+        }
+        Helper.setIncludes(this.includes);
+        salla.lang.onLoaded(() => {
+            this.placeholderText = salla.lang.get('pages.categories.no_products');
+            this.endOfText = salla.lang.get('common.elements.end_of_content');
+            this.failedLoadMore = salla.lang.get('common.elements.failed_to_load_more');
+            this.currentPage = salla.config.get('page');
+        });
+    }
+    connectedCallback() {
+        //Override browser scroll restoration default behaviour
+        if ("scrollRestoration" in history)
+            history.scrollRestoration = "manual";
+        // required for scroll restoration case when the component loads before DOM content is completed (slow internet bandwidth /low device specs)
+        window.addEventListener('DOMContentLoaded', this.scrollToLastViewedProduct.bind(this));
+        salla.event.on('salla-filters::changed', filters => this.setFilters(filters));
+    }
+    disconnectedCallback() {
+        window.removeEventListener('DOMContentLoaded', this.scrollToLastViewedProduct);
+    }
+    /**
+     * Set parsed filters data from URI
+     * @param filters
+     */
+    async setFilters(filters) {
+        if (!filters || JSON.stringify(filters) === JSON.stringify(this.parsedFilters)) {
+            return;
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Create a deep copy of the filters object to avoid mutating the original object
+        this.parsedFilters = JSON.parse(JSON.stringify(filters));
+        this.filtersSnapshot = this.parsedFilters;
+        if (this.currentPage?.slug == "product.index" && this.parsedFilters && this.parsedFilters.category_id) {
+            this.currentCategoryIdFilter = [this.parsedFilters.category_id];
+        }
+        return this.reload();
+    }
+    /**
+     * Reload the list of products (entire content of the component).
+     */
+    async reload() {
+        !this.autoload && this.loadMoreWrapper && (this.loadMoreWrapper.style.display = 'none');
+        this.hasInfiniteScroll && salla.infiniteScroll.destroy(this.infiniteScroll);
+        this.buildNextPageUrl();
+        // TODO: this is problematic in testing, for the time being it's been resolved like this
+        this.wrapper.innerHTML = '';
+        if (this.hasInfiniteScroll) {
+            this.init();
+        }
+        else {
+            this.getInitialData();
+        }
+        // Special case for the placeholder loader
+        if (this.showPlaceholder) {
+            this.showPlaceholder = false;
+            this.placeholderLoader = document.createElement('div');
+            this.placeholderLoader.classList.add('s-products-list-loading-wrapper');
+            this.placeholderLoader.style.display = 'inherit';
+            this.placeholderLoader.innerHTML = `<span class="s-button-loader s-button-loader-center s-infinite-scroll-btn-loader"></span>`;
+            this.host.insertAdjacentElement('afterend', this.placeholderLoader);
+        }
+    }
+    isFilterable() {
+        return salla.config.get('store.settings.product.filters') && this.filtersResults;
+    }
+    isSourceWithoutValue() {
+        return ['offers', 'latest', 'sales', 'wishlist', 'top-rated', 'reorder'].includes(this.getSource());
+    }
+    animateItems() {
+        anime({
+            targets: 'salla-products-list salla-product-card',
+            opacity: [0, 1],
+            duration: 1200,
+            translateY: [20, 0],
+            delay: function (_el, i) {
+                return i * 100;
+            },
+        });
+    }
+    initBaseNextPageUrl(source) {
+        this.nextPage = salla.url.api(`products?source=${source}`);
+        if (this.includes?.length) {
+            this.nextPage += `&includes[]=${this.includes.join('&includes[]=')}`;
+        }
+        if (this.limit) {
+            this.nextPage += `&per_page=${this.limit > 32 ? 32 : this.limit}`;
+        }
+        if (this.sortBy) {
+            this.nextPage += `&sort=${this.sortBy}`;
+        }
+        if (salla.config.get('theme.mode') === 'preview') {
+            this.nextPage += `&use_username_url=1`;
+        }
+        this.nextPage += '&filterable=1';
+        for (const [key, value] of Object.entries(this.parsedFilters || {})) {
+            if (["string", "number"].includes(typeof value)) {
+                // @ts-ignore
+                this.nextPage += `&filters[${encodeURIComponent(key)}]=${encodeURIComponent(value)}`;
+            }
+            else if (Array.isArray(value)) {
+                value.forEach(item => this.nextPage += `&filters[${encodeURIComponent(key)}][]=${encodeURIComponent(item)}`);
+            }
+            else if (typeof value === 'object') {
+                for (const [k, v] of Object.entries(value)) {
+                    this.nextPage += `&filters[${encodeURIComponent(key)}][${encodeURIComponent(k)}]=${encodeURIComponent(v)}`;
+                }
+            }
+        }
+    }
+    buildNextPageUrl() {
+        let source = this.getSource();
+        if (source === 'json') {
+            return;
+        }
+        const snapshot = sessionStorage.getItem(this.infiniteScrollStateKey);
+        if (snapshot) {
+            const { nextPage } = JSON.parse(snapshot);
+            if (!nextPage) {
+                return;
+            }
+        }
+        this.initBaseNextPageUrl(source);
+        if (this.isSourceWithoutValue()) {
+            return;
+        }
+        if (['search', 'related', 'landing-page'].includes(source)) {
+            this.nextPage += `&source_value=${this.getSourceValue()}`;
+            return;
+        }
+        try {
+            this.nextPage += `&source_value[]=${this.getSourceValue().join('&source_value[]=')}`;
+        }
+        catch (e) {
+            salla.logger.warn(`source-value prop should be array of ids ex source-value="[1,2,3]" for the source [${source}]`);
+            this.sourceValueIsValid = false;
+        }
+    }
+    loading(isLoading = true, isBtn = false) {
+        if (!isLoading) {
+            if (!this.autoload) {
+                this.btnLoader && (this.btnLoader.style.display = 'none');
+            }
+            this.loader && (this.loader.style.display = 'none');
+        }
+        else {
+            let currentLoader = isBtn && !this.autoload ? this.btnLoader : this.loader;
+            currentLoader && (currentLoader.style.display = 'inherit');
+        }
+    }
+    getItemHTML(product) {
+        //as a request they don't want to let the user to open the product details
+        //todo:: find a better way to handle this request
+        this.getSource() === 'landing-page' && (product.url = '');
+        const customComponentTag = this.hasCustomComponent ? this.productCardComponent : 'salla-product-card';
+        const productCard = document.createElement(customComponentTag);
+        productCard.product = product;
+        this.applyLandingPageStyles(productCard);
+        this.applyHorizontalCardStyles(productCard);
+        // Attach click event listener to save the current products snapshot
+        productCard.addEventListener('click', (event) => {
+            if (!this.hasInfiniteScroll) {
+                return;
+            }
+            const target = event.target;
+            // Check if the clicked element is an anchor or inside an anchor
+            const anchor = target.closest('a');
+            if (anchor) {
+                this.takeStateSnapshot();
+                sessionStorage.setItem(this.lastViewedProductKey, product.id);
+            }
+        });
+        return productCard;
+    }
+    applyLandingPageStyles(productCard) {
+        if (this.getSource() === 'landing-page' && !this.hasCustomComponent) {
+            productCard.toggleAttribute('hide-add-btn', true);
+            productCard.classList.add('s-product-card-fit-height');
+        }
+    }
+    applyHorizontalCardStyles(productCard) {
+        if (!this.horizontalCards) {
+            return;
+        }
+        productCard.setAttribute('horizontal', true);
+        if (!this.hasCustomComponent) {
+            productCard.setAttribute('shadow-on-hover', true);
+        }
+    }
+    waitForResizing(element) {
+        let timeout = null;
+        return new Promise((resolve) => {
+            const resizeObserver = new ResizeObserver(() => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    resizeObserver.disconnect();
+                    resolve(null);
+                }, 160); // Adjust delay as needed for your layout
+            });
+            resizeObserver.observe(element); // Watch the body or a specific container
+        });
+    }
+    waitForLayoutStable(element) {
+        let timeout = null;
+        return new Promise((resolve) => {
+            const observer = new MutationObserver(() => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    observer.disconnect();
+                    resolve(null);
+                }, 160); // Adjust delay as needed for your layout
+            });
+            // Observe changes to the entire body, including child nodes and attributes.
+            observer.observe(element, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+            });
+        });
+    }
+    async waitForStableLayout(element) {
+        // Wait for DOM mutations and layout shifts to stabilize
+        return await Promise.allSettled([
+            this.waitForResizing(element),
+            this.waitForLayoutStable(element)
+        ]);
+    }
+    scrollToLastViewedProduct() {
+        const lastViewedProductId = sessionStorage.getItem(this.lastViewedProductKey);
+        if (!lastViewedProductId || salla.url.is_page('product.single'))
+            return;
+        this.isElementLoaded(`[id*="${lastViewedProductId}"]`)
+            .then(() => {
+            const productCard = this.wrapper?.querySelector(`[id*="${lastViewedProductId}"]`);
+            if (!productCard)
+                return;
+            const scrollToPosition = () => {
+                const scrollToProductCard = () => {
+                    // calculations is located here for last second changes in the ui (ie. sticky header height)
+                    productCard.scrollIntoView({ block: 'start', behavior: 'instant' });
+                    const headerSelector = matchMedia('(max-width: 1024px)').matches ? "header .inner" : "ul.main-menu";
+                    const headerHeight = window?.header_is_sticky ? (document.querySelector(headerSelector)?.getBoundingClientRect()?.height ?? 56) : 0;
+                    const cardsListRowGap = parseInt(getComputedStyle(this.wrapper).rowGap) ?? 16;
+                    const productCardOffset = headerHeight + cardsListRowGap;
+                    scrollBy({ top: productCardOffset * -1, behavior: 'instant' });
+                };
+                //start scrolling to the product card position
+                requestAnimationFrame(scrollToProductCard);
+                const productImages = productCard.querySelectorAll('img.lazy');
+                productImages.forEach((image) => {
+                    const productImage = image;
+                    const handleImageEvent = () => {
+                        requestAnimationFrame(scrollToProductCard);
+                        productImage.onload = productImage.onerror = null;
+                    };
+                    productImage.onload = handleImageEvent;
+                    productImage.onerror = handleImageEvent;
+                });
+                // remove snapshot of  product cards items in session storage after scroll restoration completiion
+                this.removeScrollRestorationSession();
+                return void 0;
+            };
+            this.waitForStableLayout(this.host).then(() => requestAnimationFrame(scrollToPosition));
+        });
+    }
+    isElementLoaded(selector) {
+        return new Promise((resolve => {
+            const interval = setInterval(() => {
+                if (document.querySelector(selector)) {
+                    clearInterval(interval);
+                    return resolve(document.querySelector(selector));
+                }
+            }, 50);
+        }));
+    }
+    ;
+    takeStateSnapshot() {
+        const currentPageData = [];
+        // Classic for-loop for performance
+        for (let i = 0; i < this.wrapper.children.length; i++) {
+            const child = this.wrapper.children?.[i];
+            currentPageData.push(child.product);
+        }
+        const scrollState = {
+            pageIndex: Math.max((this.infiniteScroll?.pageIndex ?? 1) - 1, 1),
+            nextPage: this.nextPage,
+            currentPageData
+        };
+        if (this.isFilterable()) {
+            const existingFilters = sessionStorage.getItem(this.filtersKey);
+            sessionStorage.setItem(this.filtersKey, existingFilters || JSON.stringify(this.filtersSnapshot));
+        }
+        sessionStorage.setItem(this.infiniteScrollStateKey, JSON.stringify(scrollState));
+        // Determine and store the correct prevCategoryId
+        let prevCategoryId = salla.config.get('page.id'); // Number or null
+        const currentPage = Object.keys(this.specialPagesWithoutIds).find(page => salla.url.is_page(page));
+        if (currentPage) {
+            prevCategoryId = this.specialPagesWithoutIds[currentPage];
+        }
+        else if (prevCategoryId !== null) {
+            prevCategoryId = String(prevCategoryId); // Ensure it's stored as a string
+        }
+        sessionStorage.setItem(this.prevCategoryIdKey, prevCategoryId);
+    }
+    removeScrollRestorationSession() {
+        if (!this.isFilterable()) {
+            sessionStorage.removeItem(this.filtersKey);
+        }
+        sessionStorage.removeItem(this.infiniteScrollStateKey);
+        sessionStorage.removeItem(this.lastViewedProductKey);
+        sessionStorage.removeItem(this.prevCategoryIdKey);
+    }
+    loadStoredScrollState() {
+        const storedState = sessionStorage.getItem(this.infiniteScrollStateKey);
+        const filetrsState = sessionStorage.getItem(this.filtersKey);
+        /*
+         * Remove the scroll restoration session under the following conditions:
+         * 1. The user has navigated to a different category page:
+         *    - If the previously stored category ID is different from the current one.
+         *    - This includes "latest", "offers", "sales" and "search" pages.
+         *
+         * 2. The user is on the homepage, but infinite scroll is disabled.
+         *
+         * 3. The user is on a product page.
+         */
+        const prevCategory = sessionStorage.getItem(this.prevCategoryIdKey); // Get previously stored category
+        const currentPageSlug = this.specialPagesWithoutIds[salla.config.get('page.slug')] || null;
+        const currentPageId = salla.config.get('page.id'); // Number or null
+        const isHomepage = salla.url.is_page('index');
+        const isProductPage = salla.url.is_page('product.single');
+        const isDifferentCategory = currentPageSlug
+            ? prevCategory !== currentPageSlug // Compare slugs for special pages
+            : prevCategory !== String(currentPageId); // Compare IDs otherwise
+        if ((prevCategory && isDifferentCategory && !isHomepage && !isProductPage)
+            ||
+                (isHomepage && !this.hasInfiniteScroll)) {
+            this.removeScrollRestorationSession();
+            this.switchToNormalBehavior = true;
+            return false;
+        }
+        // Keep the snapshot in product page that contains salla-products-list but without scroll restoration
+        if (isProductPage) {
+            this.switchToNormalBehavior = true;
+            return false;
+        }
+        if (storedState) {
+            try {
+                const { pageIndex, nextPage, currentPageData } = JSON.parse(storedState);
+                if (filetrsState !== 'undefined') {
+                    const filters = JSON.parse(filetrsState);
+                    salla.event.emit('filters::fetched', { filters });
+                }
+                this.page = pageIndex;
+                this.nextPage = nextPage;
+                // more performant on larger set of data
+                for (let i = 0; i < currentPageData.length; i++) {
+                    this.wrapper.append(this.getItemHTML(currentPageData?.[i]));
+                }
+                return true;
+            }
+            catch (error) {
+                console.error('Failed to load stored scroll state:', error);
+                this.removeScrollRestorationSession();
+            }
+        }
+        return false;
+    }
+    getSource() {
+        return Helper.getProductsSource(this.source);
+    }
+    getSourceValue() {
+        return this.currentCategoryIdFilter ? this.currentCategoryIdFilter : Helper.getProductsSourceValue(this.source, this.sourceValue);
+    }
+    appendDataLayer(data) {
+        if (typeof dataLayer !== 'object' || !Array.isArray(dataLayer)) {
+            //todo:: check if we should define it here
+            return;
+        }
+        dataLayer.push({
+            "event": "impressions",
+            "ecommerce": {
+                "currencyCode": salla.config.currency().code,
+                // "event_id":"", // todo
+                "impressions": data.map((product, index) => {
+                    return {
+                        "id": product.id,
+                        "name": product.name,
+                        "price": product.price,
+                        "brand": product.brand?.name || '',
+                        "quantity": product.quantity,
+                        // "variant": "",
+                        "categories": [
+                            {
+                                "name": product.category?.name || salla.config.get('page.title'),
+                                "id": salla.config.get('page.id')
+                            }
+                        ],
+                        "category": product.category?.name || salla.config.get('page.title'),
+                        'position': index + 1
+                    };
+                })
+            }
+        });
+    }
+    initiateInfiniteScroll() {
+        if (!this.hasInfiniteScroll) {
+            return;
+        }
+        const shouldApplyManualLoad = this.autoload && this.includes && this.includes.length > 0;
+        this.infiniteScroll = salla.infiniteScroll.initiate(this.wrapper, this.wrapper, {
+            path: () => this.nextPage,
+            history: false,
+            nextPage: this.nextPage,
+            scrollThreshold: shouldApplyManualLoad ? false : this.autoload ? 100 : false,
+            loadOnScroll: shouldApplyManualLoad ? false : this.autoload
+        }, true);
+        this.infiniteScroll.pageIndex = this.page;
+        this.infiniteScroll?.on('request', () => {
+            this.loading(true, this.autoload ? false : true);
+        });
+        // Manual scroll listener
+        shouldApplyManualLoad && window.addEventListener('scroll', this.handleScroll.bind(this));
+        this.infiniteScroll?.on('load', async (response) => {
+            if (this.isProcessing)
+                return;
+            this.isProcessing = true;
+            try {
+                if (!response.data?.length && this.infiniteScroll.pageIndex === 2) {
+                    this.showPlaceholder = true;
+                    salla.infiniteScroll.destroy(this.infiniteScroll);
+                    this.loading(false);
+                    this.placeholderLoader && this.placeholderLoader.remove();
+                    return;
+                }
+                if (this.includes) {
+                    await this.injectAndProcessData(response);
+                }
+                const items = this.handleResponse(response);
+                this.infiniteScroll.appendItems(items);
+                if (this.infiniteScroll.pageIndex === 2) {
+                    if (!this.autoload && this.nextPage) {
+                        this.loadMoreWrapper.style.display = 'block';
+                    }
+                    this.animateItems();
+                }
+            }
+            catch (error) {
+                console.error('Error during load:', error);
+            }
+            finally {
+                this.isProcessing = false;
+            }
+        });
+        this.infiniteScroll?.on('error', () => {
+            console.log('Error occurred during request');
+            this.status.querySelector('.s-infinite-scroll-error').classList.remove('s-hidden');
+            this.placeholderLoader && this.placeholderLoader.remove();
+            this.loading(false);
+            this.isProcessing = false;
+        });
+        salla.onReady(() => {
+            const snapshot = sessionStorage.getItem(this.infiniteScrollStateKey);
+            if (!snapshot) {
+                this.manualLoadNextPage();
+            }
+        });
+    }
+    handleScroll() {
+        if (this.isProcessing)
+            return;
+        if (this.scrollTimeout)
+            return;
+        this.scrollTimeout = setTimeout(() => {
+            this.scrollTimeout = null;
+            const wrapperRect = this.wrapper.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            const distanceToBottom = wrapperRect.bottom - windowHeight;
+            // Trigger only when the wrapper bottom is within 200px of the viewport bottom
+            if (distanceToBottom <= 200 && !this.isProcessing && this.nextPage) {
+                // Reached near the bottom of the wrapper, loading next page...
+                this.manualLoadNextPage();
+            }
+        }, 200);
+    }
+    manualLoadNextPage() {
+        if (this.nextPage) {
+            this.infiniteScroll.loadNextPage();
+        }
+    }
+    async injectAndProcessData(response) {
+        try {
+            await Helper.injectExtraFieldsToResponse(response);
+        }
+        catch (error) {
+            console.error('Error injecting data:', error);
+        }
+    }
+    getInitialData() {
+        this.loading();
+        return salla.product.api.fetch({ source: this.getSource(), source_value: this.getSourceValue(), limit: this.limit }).then(async (response) => {
+            if (!response.data.length) {
+                this.showPlaceholder = true;
+                this.placeholderLoader && this.placeholderLoader.remove();
+                this.loading(false);
+                return;
+            }
+            await Helper.injectExtraFieldsToResponse(response);
+            //this.firstPageResponse will be null only in the first page, after that it will be assinged,
+            //for the first page we need to inject the dom after the load, see @method componentDidLoad
+            if (!this.firstPageResponse) {
+                this.firstPageResponse = response;
+                this.nextPage = response.cursor ? response.cursor.next : this.nextPage;
+                return;
+            }
+            this.handleResponse(response).forEach(card => this.wrapper.append(card));
+        });
+    }
+    async loadMore() {
+        this.infiniteScroll?.loadNextPage();
+    }
+    componentWillLoad() {
+        return salla.onReady()
+            .then(() => {
+            this.hasCustomComponent = !!customElements.get(this.productCardComponent);
+            this.sourceValueIsValid = !!(this.getSourceValue() || this.isSourceWithoutValue());
+            this.hasInfiniteScroll = !['json', 'selected', 'related', 'landing-page'].includes(this.getSource()) && !this.limit;
+            let searchParams = new URLSearchParams(window.location.search);
+            try {
+                this.sortBy = this.sortBy || searchParams.get('sort') || searchParams.get('by');
+                this.parsedFilters = Helper.extractFiltersFromUrl(searchParams);
+                if (this.parsedFilters && this.parsedFilters.category_id) {
+                    this.currentCategoryIdFilter = [this.parsedFilters.category_id];
+                }
+            }
+            catch (e) {
+                salla.logger.warn('failed to get filters from url', e.message);
+            }
+            this.buildNextPageUrl();
+            this.isReady = true;
+            const snapshot = sessionStorage.getItem(this.infiniteScrollStateKey);
+            if (!!snapshot) {
+                return;
+            }
+            if (!this.sourceValueIsValid) {
+                salla.logger.warn(`source-value prop is required for source [${this.getSource()}]`);
+                return;
+            }
+            if (this.hasInfiniteScroll) {
+                return;
+            }
+            // Handle json source
+            if (this.getSource() === 'json') {
+                if (!this.getSourceValue().length) {
+                    this.showPlaceholder = true;
+                    return;
+                }
+                //todo:: avoid using timeout, just assigne the data to the this.firstPageResponse and it should work fine, because it will be rendered in componentDidLoad
+                setTimeout(() => {
+                    let productsList = this.getSourceValue();
+                    productsList.map(product => this.wrapper.append(this.getItemHTML(product)));
+                });
+                return;
+            }
+            // Handle selected source
+            if (this.getSource() === 'selected' && !this.getSourceValue().length) {
+                this.showPlaceholder = true;
+                return;
+            }
+            return this.getInitialData();
+        });
+    }
+    async componentDidLoad() {
+        this.hasInfiniteScroll && this.init();
+        await Salla.hooks.registerComponent('salla-products-list', this);
+        if (this.loadStoredScrollState()) {
+            if (this.autoload) {
+                !this.nextPage && this.loading(false);
+            }
+            else if (!this.nextPage) {
+                this.loadMoreWrapper && (this.loadMoreWrapper.style.display = 'none');
+                this.status.querySelector('.s-infinite-scroll-last').classList.remove('s-hidden');
+            }
+            else {
+                this.loadMoreWrapper && (this.loadMoreWrapper.style.display = 'block');
+            }
+            this.scrollToLastViewedProduct();
+        }
+        else if (!this.firstPageResponse && this.switchToNormalBehavior) {
+            this.getInitialData()
+                .then(() => {
+                if (this.firstPageResponse) {
+                    this.handleResponse(this.firstPageResponse, false).forEach(card => {
+                        this.wrapper.append(card);
+                    });
+                    setTimeout(() => {
+                        if (!this.autoload && this.nextPage && this.infiniteScroll.pageIndex == 1) {
+                            const loadMoreWrapper = this.host.querySelector('.s-infinite-scroll-wrapper');
+                            loadMoreWrapper && (loadMoreWrapper.style.display = 'block');
+                        }
+                    });
+                }
+                else {
+                    console.error("No response received after getInitialData.");
+                }
+            })
+                .catch(error => {
+                console.error("Error during initial data fetch:", error);
+            });
+        }
+        else {
+            this.firstPageResponse && this.handleResponse(this.firstPageResponse, false).forEach(card => this.wrapper.append(card));
+        }
+    }
+    canRender() {
+        return this.sourceValueIsValid && this.isReady;
+    }
+    render() {
+        if (!this.canRender()) {
+            return '';
+        }
+        if (this.showPlaceholder) {
+            return h("div", { class: "s-products-list-placeholder" }, h("span", { innerHTML: ShoppingBag }), h("p", null, this.placeholderText));
+        }
+        return (h(Host, { class: "s-products-list" }, h("div", { class: {
+                "s-products-list-wrapper": true,
+                's-products-list-horizontal-cards': this.horizontalCards && !this.filtersResults,
+                's-products-list-vertical-cards': !this.horizontalCards && !this.rowCards && !this.filtersResults,
+                's-products-list-row-cards': this.rowCards,
+                's-products-list-filters-results': this.filtersResults,
+            }, ref: wrapper => this.wrapper = wrapper }), h("div", { class: "s-infinite-scroll-status", ref: status => this.status = status }, h("p", { class: "s-infinite-scroll-last infinite-scroll-last s-hidden" }, this.endOfText), h("p", { class: "s-infinite-scroll-error infinite-scroll-error s-hidden" }, this.failedLoadMore)), this.autoload && h("div", { class: "s-products-list-loading-wrapper", style: { "display": "none" }, ref: loader => this.loader = loader }, h("span", { class: "s-button-loader s-button-loader-center s-infinite-scroll-btn-loader" })), this.hasInfiniteScroll && this.nextPage && !this.autoload ? (h("div", { class: "s-infinite-scroll-wrapper", style: { "display": "none" }, ref: loadMoreWrapper => this.loadMoreWrapper = loadMoreWrapper }, h("button", { onClick: () => this.loadMore(), class: "s-infinite-scroll-btn s-button-btn s-button-primary" }, h("span", { class: "s-button-text s-infinite-scroll-btn-text" }, this.loadMoreText ? this.loadMoreText : salla.lang.get('common.elements.load_more')), h("span", { class: "s-button-loader s-button-loader-center s-infinite-scroll-btn-loader", ref: btnLoader => this.btnLoader = btnLoader, style: { "display": "none" } })))) : ""));
+    }
+    init() {
+        this.initiateInfiniteScroll();
+        this.loading();
+    }
+    handleResponse(response, shouldBuildNextPage = true) {
+        //todo:: check why it reach here undfined one time🤔
+        if (!response) {
+            return [];
+        }
+        let source = this.getSource();
+        let title = '';
+        //help the developer to know the current page title
+        if (response.cursor?.current === 1) {
+            title = Helper.getPageTitleForSource(source);
+            try {
+                if (this.getSource() === 'search') {
+                    title = salla.lang.get('common.elements.search_about', { 'word': this.getSourceValue() });
+                }
+                else if (!title) {
+                    let catId = this.parsedFilters.category_id || this.getSourceValue()[0];
+                    // get the first filter that its key is category_id, then get the value when filter.value.*.key==catId
+                    title = response.filters?.find(filter => filter.key === 'category_id')?.values?.find(cat => cat.key === catId)?.value ?? '';
+                    this.filtersSnapshot = response.filters;
+                }
+                title += (title ? ' - ' : '') + salla.lang.choice('blocks.header.products_count', response.data?.length);
+                if (response.data.length === 15) {
+                    title = title.replace(response.data.length, salla.lang.get('common.elements.more_than') + ' ' + response.data.length);
+                }
+                response.title = title;
+            }
+            catch (e) {
+                salla.logger.error('Error::falid to handle response', e);
+            }
+            //inject the SEO schema
+            //handleResponse works only on the infinite-scroll and infinite scroll works only on the categories pages and main latest-page ..etc, so no need to add condition
+            Helper.generateProductSchema(response.data);
+        }
+        this.appendDataLayer(response.data);
+        response.nextPage = this.nextPage;
+        response.source = this.getSource();
+        response.sourceValue = this.getSourceValue();
+        salla.event.emit('salla-products-list::products.fetched', response);
+        this.productsFetched.emit(response);
+        //💡 when source is related, cursor will not be existed
+        if (response.filters && this.isFilterable()) {
+            this.filtersResults = true;
+            this.filtersSnapshot = JSON.parse(JSON.stringify(response.filters));
+            salla.event.emit('filters::fetched', { filters: response.filters });
+        }
+        else if (this.isFilterable()) {
+            salla.event.emit('filters::hidden');
+        }
+        //because: this.nextPage is state we don't need to touch it after the build, to avoid the re-rendering
+        if (shouldBuildNextPage) {
+            this.nextPage = response.cursor ? response.cursor.next : this.nextPage;
+        }
+        this.loading(false);
+        this.placeholderLoader && this.placeholderLoader.remove();
+        if (this.hasInfiniteScroll && !this.nextPage) {
+            this.infiniteScroll.option({ scrollThreshold: false, loadOnScroll: false });
+            this.status.querySelector('.s-infinite-scroll-last').classList.remove('s-hidden');
+        }
+        const productCardsView = [];
+        for (let i = 0; i < response.data.length; i++) {
+            productCardsView.push(this.getItemHTML(response.data?.[i]));
+        }
+        return productCardsView;
+    }
+    get host() { return this; }
+    static get style() { return sallaProductsListCss; }
+}, [0, "salla-products-list", {
+        "source": [1537],
+        "sourceValue": [1032, "source-value"],
+        "limit": [1026],
+        "sortBy": [1025, "sort-by"],
+        "filtersResults": [1540, "filters-results"],
+        "horizontalCards": [516, "horizontal-cards"],
+        "rowCards": [516, "row-cards"],
+        "autoload": [1028],
+        "loadMoreText": [1, "load-more-text"],
+        "productCardComponent": [1, "product-card-component"],
+        "includes": [1040],
+        "page": [32],
+        "nextPage": [32],
+        "hasInfiniteScroll": [32],
+        "hasCustomComponent": [32],
+        "sourceValueIsValid": [32],
+        "placeholderText": [32],
+        "endOfText": [32],
+        "failedLoadMore": [32],
+        "currentPage": [32],
+        "currentCategoryIdFilter": [32],
+        "isReady": [32],
+        "showPlaceholder": [32],
+        "switchToNormalBehavior": [32],
+        "parsedFilters": [32],
+        "filtersSnapshot": [32],
+        "setFilters": [64],
+        "reload": [64]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-products-list"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-products-list":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaProductsList);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaProductsList as S, defineCustomElement as d };

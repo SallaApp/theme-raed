@@ -1,0 +1,267 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import SpecialDiscountIcon from "../../assets/svg/special-discount.svg";
+import Tag from "../../assets/svg/tag.svg";
+import Cart2 from "../../assets/svg/cart2.svg";
+/**
+ * @slot header - The top of the popup, has replaceable props `{name}`, `{message}`.
+ * @slot product - Replaces product card, has replaceable props `{name}`, `{url}`, `{image}`, `{price}`.
+ * @slot category - Replaces Category badge, has replaceable props `{name}`, `{url}`.
+ */
+export class SallaOfferModal {
+    constructor() {
+        this.offer = null;
+        this.hasError = false;
+        this.translationLoaded = false;
+        this.addToCartLabel = salla.lang.get("pages.cart.add_to_cart");
+        salla.event.on('offer-modal::open', product_id => this.open(product_id));
+        salla.lang.onLoaded(() => {
+            this.addToCartLabel = salla.lang.get("pages.cart.add_to_cart");
+            this.translationLoaded = true;
+        });
+        this.categorySlot = this.host.querySelector('[slot="category"]')?.innerHTML || `<span class="s-offer-modal-badge-icon">{tagIcon}</span><span class="s-offer-modal-badge-text">{name}</span>`;
+        // this.productSlot = this.host.querySelector('[slot="product"]')?.innerHTML || this.defaultProductSlot();
+        salla.event.on('offer-modal::open', product_id => this.open(product_id));
+        salla.product.event.onOfferExisted(offer => {
+            if (salla.storage.get('remember-offer-' + offer.id)) {
+                salla.log('User selected to don\'t show this offer again.');
+                return;
+            }
+            this.open(offer.product_id);
+        });
+    }
+    /**
+ * Emits a promotion viewed event for analytics tracking
+ * @param offer - The offer being viewed in the modal
+ */
+    emitPromotionViewed(offer) {
+        if (!offer)
+            return;
+        salla.event.emit('promotion::viewed', [{
+                id: offer.id?.toString(),
+                creative: offer.message,
+                name: offer.name,
+                position: `${this.offer_type}_offer_modal`
+            }]);
+    }
+    /**
+     * Emits a promotion clicked event for analytics tracking
+     * @param offer - The offer being clicked in the modal
+     */
+    emitPromotionClicked(offer) {
+        if (!offer)
+            return;
+        salla.event.emit('promotion::clicked', [{
+                id: offer.id?.toString(),
+                creative: offer.message,
+                name: offer.name,
+                position: `${this.offer_type}_offer_modal`
+            }]);
+    }
+    /**
+     * Show the available offers for the product
+     * @param product_id
+     */
+    async open(product_id) {
+        this.productID = product_id;
+        //TODO:: make sure there is only one offer
+        this.hasError = false;
+        this.modal.open();
+        return await salla.api.withoutNotifier(() => salla.product.offers(product_id))
+            .then(response => this.showOffer(response.data[0]))
+            .catch(e => {
+            this.hasError = true;
+            this.errorMessage = e.response?.data?.error?.message || e.response?.data;
+        })
+            .finally(() => setTimeout(() => this.modal.stopLoading(), 1000));
+    }
+    /**
+     * Show offer details
+     * @param {Offer} offer
+     */
+    async showOffer(offer) {
+        this.offer = offer;
+        this.offer_name = offer.name;
+        this.offer_message = offer.message;
+        if (this.offer.get.discounts_table) {
+            this.offer_type = 'discounts-table';
+        }
+        else if (this.offer.get.products?.length) {
+            this.offer_type = 'products';
+        }
+        else if (this.offer.get.categories?.length) {
+            this.offer_type = 'categories';
+        }
+        this.modal.setTitle(this.offer_name);
+        this.emitPromotionViewed(this.offer);
+    }
+    rememberMe(event) {
+        salla.storage.set('remember-offer-' + this.offer.id, event.target.checked);
+    }
+    addToCart(qty) {
+        //todo:: add enhancement, to cover the previous quantity, because if the discount to add two, user already added one before.
+        this.emitPromotionClicked(this.offer);
+        salla.api.withoutNotifier(() => salla.cart.quickAdd(this.productID, qty, this.offer_type)).then(() => this.modal.close());
+    }
+    getOfferContent() {
+        if (this.offer.get.discounts_table) {
+            return h("div", { class: "s-offer-modal-discount-table" }, h("table", null, h("tbody", null, this.offer.get.discounts_table?.map(discount => h("tr", null, h("td", null, discount.text), h("td", { class: "s-offer-modal-discount-table-cell" }, h("salla-button", { fill: "outline", shape: "btn", color: "primary", size: "medium", width: "normal", onClick: () => this.addToCart(discount.quantity) }, this.addToCartLabel)))))));
+        }
+        else if (this.offer.get.products?.length) {
+            const productsCount = this.offer.get.products?.length || 0;
+            const sliderConfig = {
+                slidesPerView: 'auto',
+                spaceBetween: 16,
+                breakpoints: {
+                    768: {
+                        slidesPerView: Math.min(2, productsCount),
+                        spaceBetween: 16
+                    },
+                    1024: {
+                        slidesPerView: Math.min(3, productsCount),
+                        spaceBetween: 16
+                    }
+                }
+            };
+            return (h("salla-products-slider", { key: (this.offer.get.products?.map(product => product.id) || []).join(","), source: "selected", "source-value": `[${(this.offer.get.products?.map(product => product.id) || []).join(",")}]`, "slider-config": JSON.stringify(sliderConfig) }));
+            //   return <salla-slider
+            //     type="carousel"
+            //     class={{"s-offer-modal-slider-centered": this.offer.get.products?.length <= 2, "s-offer-modal-slider": true}}
+            //     id="offer-modal-slider"
+            //     controls-outer
+            //     show-controls={this.offer.get.products?.length <= 2 ? 'false' : 'true'}>
+            //     <div slot='items'>
+            //       {
+            //         this.offer.get.products?.map(product =>
+            //           <div class={{
+            //             "s-offer-modal-product": true,
+            //             "s-offer-modal-slider-item": true,
+            //             "s-offer-modal-not-available": !product.is_available
+            //           }} id={'product_' + product.id} innerHTML={this.productSlot
+            //             .replace(/\{name\}/g, product.name)
+            //             .replace(/\{url\}/g, product.url)
+            //             .replace(/\{image\}/g, product.thumbnail)
+            //             .replace(/\{price\}/g, product.has_special_price
+            //               ? '<span class="s-offer-modal-product-sale-price">' + salla.money(product.price) + '</span><span class="s-offer-modal-product-old-price">' + salla.money(product.regular_price) + '</span>'
+            //               : salla.money(product.price))}>
+            //             <div class="s-offer-modal-btn-wrap">
+            //               <salla-button width="wide" fill='outline' data-id={product.id} disabled={!product.is_available}
+            //                 loader-position="center" onClick={this.addItem}>
+            //                 {product.is_available ? salla.lang.get('pages.cart.add_to_cart') : salla.lang.get('pages.products.out_of_stock')}
+            //               </salla-button>
+            //             </div>
+            //           </div>)
+            //       }
+            //    </div>
+            //   </salla-slider>
+        }
+        else if (this.offer.get.categories?.length) {
+            return h("salla-slider", { type: "carousel", class: { "s-offer-modal-slider-centered": this.offer.get.categories?.length <= 2, "s-offer-modal-slider": true }, id: "offer-modal-slider", "controls-outer": true, "show-controls": this.offer.get.categories?.length <= 2 ? 'false' : 'true' }, h("div", { slot: 'items' }, this.offer.get.categories.map(category => h("a", { href: category.urls.customer, class: "s-offer-modal-badge s-offer-modal-slider-item s-offer-modal-cat-item", innerHTML: this.categorySlot
+                    .replace(/\{tagIcon\}/g, Tag)
+                    .replace(/\{name\}/g, category.name)
+                    .replace(/\{url\}/g, category.urls.customer) }))));
+        }
+    }
+    //todo:: pass event then use sallaButton from it
+    //   private addItem() {
+    //     // this here, is sallaButton
+    //     this['load']();
+    //     return salla.cart.api
+    //       .quickAdd(this['dataset'].id)
+    //       .finally(() => this['stop']());
+    //   }
+    //   private defaultProductSlot() {
+    //     return '<a href={url} class="s-offer-modal-product-image-wrap"><img class="s-offer-modal-product-image" src="{image}" /></a>' +
+    //       '<div class="s-offer-modal-product-info">' +
+    //       '   <a href={url} class="s-offer-modal-product-name">{name}</a>' +
+    //       '   <div class="s-offer-modal-product-price">{price}</div>' +
+    //       '</div>';
+    //   }
+    render() {
+        return h("salla-modal", { key: 'b02cd6b8c4a1c04751c2de3a306141e3968763a0', "has-skeleton": true, "sub-title": this.offer_message, ref: modal => this.modal = modal, isLoading: true, class: `s-offer-modal-type-${this.offer_type ? this.offer_type : ''}` }, h("div", { key: 'c9b9e414107e0c07f67df5b58ffb805d27b97f47', slot: 'loading' }, h("div", { key: 'f13f2d328f4e3e640c6f0e25bcd243b63674dede', class: "s-offer-modal-skeleton" }, h("div", { key: '161a274876c65985d9fa60cee6d034c8b40e5bc6', class: "s-offer-modal-skeleton-header" }, h("salla-skeleton", { key: '2f856e9c905b2cf79e91b48929598e9ac2a87447', type: 'circle', height: '80px', width: '80px' }), h("salla-skeleton", { key: 'a736af3fddd6dd8b747e7cc2d644d9b60821fcc1', height: '15px', width: '50%' }), h("salla-skeleton", { key: 'f86ed33bdc4dd86dd2ecdef7eff2a9a9153ee84b', height: '10px', width: '30%' })), h("div", { key: '3a901c4c34503323d3401a63fb2ea321eb272240', class: "s-offer-modal-skeleton-items" }, [...Array(3)].map(() => h("div", { class: "s-offer-modal-skeleton-item" }, h("salla-skeleton", { height: '9rem' }), h("div", { class: "s-offer-modal-skeleton-item-title" }, h("salla-skeleton", { height: '15px', width: '100%' })), h("div", { class: "s-offer-modal-skeleton-item-subtitle" }, h("salla-skeleton", { height: '9px', width: '50%' }), h("div", { innerHTML: Cart2 }))))), h("div", { key: 'db979f351fbddf7508064633f90b44e6df84b86c', class: "s-offer-modal-skeleton-footer" }, h("salla-skeleton", { key: 'c88fa86157d68be127fe67546bdb498cdf07fe6c', height: '15px', width: '50%' }), h("salla-skeleton", { key: 'c30f40898e2c28e7de57fbb205be287740fe1aa2', height: '15px', width: '30%' })))), !this.hasError && this.offer !== null
+            ? [h("span", { slot: 'icon', class: "s-offer-modal-header-icon", innerHTML: SpecialDiscountIcon }), this.getOfferContent(), h("div", { class: "s-offer-modal-footer", slot: "footer" }, this.offer.formatted_date ?
+                    h("p", { class: "s-offer-modal-expiry" }, salla.lang.get('pages.products.offer_expires_in'), " ", this.offer.formatted_date)
+                    : '', h("label", { class: "s-offer-modal-remember-label" }, h("input", { type: "checkbox", onChange: e => this.rememberMe(e), class: "s-offer-modal-remember-input" }), "\u00A0 ", salla.lang.get('common.elements.remember_my_choice'))),
+            ] :
+            h("salla-placeholder", { class: "s-loyalty-placeholder", alignment: "center" }, !!this.errorMessage ? h("span", { slot: "description" }, this.errorMessage) : ''));
+    }
+    static get is() { return "salla-offer-modal"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-offer-modal.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-offer-modal.css"]
+        };
+    }
+    static get states() {
+        return {
+            "offer": {},
+            "offer_name": {},
+            "offer_message": {},
+            "hasError": {},
+            "errorMessage": {},
+            "productID": {},
+            "offer_type": {},
+            "translationLoaded": {},
+            "addToCartLabel": {}
+        };
+    }
+    static get methods() {
+        return {
+            "open": {
+                "complexType": {
+                    "signature": "(product_id: number) => Promise<any>",
+                    "parameters": [{
+                            "name": "product_id",
+                            "type": "number",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Show the available offers for the product",
+                    "tags": [{
+                            "name": "param",
+                            "text": "product_id"
+                        }]
+                }
+            },
+            "showOffer": {
+                "complexType": {
+                    "signature": "(offer: any) => Promise<void>",
+                    "parameters": [{
+                            "name": "offer",
+                            "type": "any",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Show offer details",
+                    "tags": [{
+                            "name": "param",
+                            "text": "offer"
+                        }]
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

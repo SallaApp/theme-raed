@@ -1,0 +1,50 @@
+import { ModeType, ProductAvailability, Scope } from './interfaces';
+/**
+ * @slot footer - The bottom section of the component, used for form action. Utilizes the `handleSubmit` method to submit the form.
+ */
+export declare class SallaScopees {
+    constructor();
+    private changeBtn;
+    private modal;
+    private loadedScopes;
+    translationLoaded: boolean;
+    mode: ModeType.AVAILABILITY | ModeType.DEFAULT;
+    current_scope: any;
+    scopes: Scope[] | ProductAvailability[];
+    originalScopesList: Scope[] | ProductAvailability[];
+    selected_scope: any;
+    isOpenedBefore: string;
+    hasError: boolean;
+    loading: boolean;
+    /**
+     * Optionally open the modal or enforce the pop-up to the viewer
+     */
+    selection: 'optional' | 'mandatory';
+    /**
+     * Dictates when to show the search field
+     */
+    searchDisplayLimit: number;
+    /**
+     * Closes the scope modal.
+     */
+    close(): Promise<HTMLElement>;
+    /**
+     * Opens the scope modal.
+     */
+    open(mode?: any, product_id?: number): Promise<any>;
+    /**
+     * Submit form to change exsiting scope.
+     */
+    handleSubmit(): Promise<any>;
+    private setScopeValues;
+    private handleSearchFieldTyping;
+    private handleScopeSelection;
+    private getFormTitle;
+    private placeholderContent;
+    private defaultContent;
+    private availabilityContent;
+    private footerContent;
+    componentWillLoad(): any;
+    render(): any;
+    componentDidLoad(): void;
+}

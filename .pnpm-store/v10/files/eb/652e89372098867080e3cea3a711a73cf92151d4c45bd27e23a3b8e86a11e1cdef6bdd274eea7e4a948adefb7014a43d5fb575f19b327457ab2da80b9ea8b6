@@ -1,0 +1,250 @@
+import { type EventEmitter } from '../../stencil-public-runtime';
+import { type Option, type Detail } from './interfaces';
+export declare class SallaProductOptions {
+    constructor();
+    /**
+     * Sets the options data for the product
+     * @param optionsData - Array of product options
+     */
+    setOptionsData(optionsData: Option[]): Promise<void>;
+    host: HTMLElement;
+    private fileTypes;
+    optionsData: Option[];
+    outOfStockText: string;
+    donationAmount: string;
+    selectDonationAmount: string;
+    selectAmount: string;
+    isCustomDonation: boolean;
+    selectedOptions: any[];
+    canDisabled: boolean;
+    selectedSkus?: Array<string | number>;
+    selectedOutSkus?: Array<string | number>;
+    disableCardValue: boolean;
+    availableDigitalCardValues: Detail[];
+    userInitiatedValidation: boolean;
+    private outSkus;
+    private donationInput?;
+    private optionConfig;
+    /**
+   * Avoid selection of previous default or selected card value option
+   * when switching between digital card country options for the 1st time
+   */
+    private ignoreDefaultCardValue;
+    /**
+     * The id of the product to which the options are going to be fetched for.
+     */
+    productId: number | string;
+    /**
+     * Product detail information.
+     */
+    options: string;
+    /**
+     * Hide the out of stock label.
+     * Will be used in the case of live validation such as cart page and inline checkout
+     */
+    hideOutLabel: string;
+    /**
+     * A unique key used to generate distinct identifiers.
+     *
+     * This key is appended to a default value to ensure uniqueness
+     * across instances or components where differentiation is required.
+     */
+    uniqueKey: string;
+    /**
+     * Bundle context information for bundle products.
+     * When provided, the component will use bundle naming convention for form inputs.
+     * Expected format: { sectionId: string|number, sectionIndex: number, productId: string|number }
+     * Can be passed as a string (JSON) or object
+     */
+    bundleContext?: string | object;
+    /**
+     * Configuration for customizing the display layout of product options.
+     * The `config` prop accepts a JSON string that specifies the layout type for rendering options.
+     * It allows customization of how single-option and multiple-option selections are displayed.
+     *
+     * Example Usage:
+     * ```html
+     * <salla-product-options
+     *   options="{{ product.options }}"
+     *   product-id="{{ product.id }}"
+     *   unique-key="abc123"
+     *   config='{
+     *     "single-option": { "type": "button" },
+     *     "multiple-option": { "type": "button" }
+     *   }'>
+     * </salla-product-options>
+     * ```
+     *
+     * Example Config JSON:
+     * ```json
+     * {
+     *   "single-option": { "type": "button" },
+     *   "multiple-option": { "type": "default" }
+     * }
+     * ```
+     *
+     * - `single-option`:
+     *   - Defines the display style for single-option selections.
+     *   - `type`: Supported values:
+     *     - `"button"`: Displays options in a button-style grid layout.
+     *     - `"default"`: Displays options as a dropdown (default).
+     *
+     * - `multiple-option`:
+     *   - Defines the display style for multiple-option selections.
+     *   - `type`: Supported values:
+     *     - `"button"`: Displays options in a button-style grid layout.
+     *     - `"default"`: Displays options as a list of checkboxes (default).
+     */
+    config: string;
+    /**
+     * Get the id's of the selected options.
+     * */
+    getSelectedOptionsData(): Promise<{}>;
+    /**
+     * Report options form validity.
+     * */
+    reportValidity(): Promise<boolean>;
+    /**
+     * Return true if there is any out of stock options are selected and vise versa.
+     * */
+    hasOutOfStockOption(): Promise<boolean>;
+    /**
+     * Get selected options.
+     * */
+    getSelectedOptions(): Promise<any[]>;
+    /**
+     * Get a specific option by its id.
+     * */
+    getOption(option_id: any): Promise<Option>;
+    /**
+     * An event that emitted when any option is changed.
+     */
+    changed: EventEmitter;
+    private invalidHandler;
+    private scrollToElement;
+    private changedHandler;
+    private handleDonationOptions;
+    private hideLabel;
+    private getExpireDonationMessage;
+    /**
+     * loop throw all selected details, then get common sku, if it's only one, means we selected all of them;
+     */
+    private setSelectedSkus;
+    private handleRequiredMultipleOptions;
+    private getLatLng;
+    private getDisplayForType;
+    protected getOptionShownWhen(option: Option): {
+        "data-show-when": string;
+    } | {
+        "data-show-when"?: undefined;
+    };
+    private getAvailableDigitalCardSKUs;
+    private handleCountryOptionChange;
+    private getSelectedDigitalCardOptions;
+    componentWillLoad(): Promise<any>;
+    /**
+     * This is a workaround for a bug in iOS 26 Safari, when pasting English text to RTL inputs, it adds extra text!!
+     * To avoid any break changes, we will make it only work on these conditions:
+     *  - content_copyright is on
+     *  - Apple Pay is enabled (means it's iOS/safari)
+     *  - Input is an input or textarea
+     *  - Salla form control
+     *  - Options array
+     */
+    private handlePaste;
+    private hideDigitalCardsOptions;
+    render(): any;
+    private generateUniqueKey;
+    /**
+     * Generate the correct input name based on bundle context
+     * @param optionId - The option ID
+     * @returns The formatted input name
+     */
+    private generateInputName;
+    private fillSelectedOptions;
+    componentDidLoad(): void;
+    /**
+     * Enable user-initiated validation mode so invalid fields will scroll into view
+     */
+    enableUserInitiatedValidation(): Promise<void>;
+    /**
+     * Validate options and trigger scrolling to the first invalid option if any
+     */
+    validateAndScroll(): Promise<boolean>;
+    private donationOption;
+    private fileUploader;
+    private imageOption;
+    private fileOption;
+    private numberOption;
+    private splitterOption;
+    private textOption;
+    private textareaOption;
+    private mapOption;
+    private colorPickerOption;
+    /**
+     * ============= Date Time options =============
+     */
+    private timeOption;
+    private dateOption;
+    private datetimeOption;
+    /**
+     * ============= Advanced options =============
+     */
+    protected getOptionDetailName(detail: Detail, outOfStock?: boolean, optionType?: string): any;
+    protected isOptionDetailOut(detail: Detail): boolean;
+    /**
+     * Renders a single input element (radio or checkbox) for an option detail.
+     * @param type - The type of input element ('radio' or 'checkbox').
+     * @param detail - The detail object representing an option detail.
+     * @param option - The parent option object containing the details.
+     * @param isRequired - Indicates if the input is required based on the option's rules.
+     * @param name - The name attribute for the input element.
+     * @returns HTMLElement - A labeled input element.
+     */
+    private renderInput;
+    /**
+     * Renders a collection of input elements for all details of an option.
+     * @param type - The type of input elements ('radio' or 'checkbox').
+     * @param option - The parent option object containing the details.
+     * @param isRequired - Indicates if the inputs are required based on the option's rules.
+     * @returns HTMLElement[] - An array of labeled input elements.
+     */
+    private renderOptionDetails;
+    /**
+     * Renders a dropdown (select) element for a single-option selection.
+     * @param option - The parent option object.
+     * @returns HTMLElement - A select dropdown element with all option details.
+     */
+    private renderSelect;
+    /**
+     * Renders a grid-based layout for option inputs (radio or checkbox).
+     * @param type - The type of input elements ('radio' or 'checkbox').
+     * @param option - The parent option object containing the details.
+     * @param isRequired - Indicates if the inputs are required based on the option's rules.
+     * @returns HTMLElement - A grid-based container with input elements.
+     */
+    private renderButtonStyle;
+    /**
+     * Renders a single-option selection, either as a grid or dropdown, based on configuration.
+     * @param option - The parent option object.
+     * @returns HTMLElement - The rendered single-option element.
+     */
+    private singleOption;
+    /**
+     * Renders a multiple-option selection, either as a grid or list, based on configuration.
+     * @param option - The parent option object.
+     * @returns HTMLElement - The rendered multiple-option element.
+     */
+    private multipleOptions;
+    /**
+     * Renders a radio option selection (used for bundle products).
+     * This is essentially the same as single option but with explicit radio handling.
+     * @param option - The parent option object.
+     * @returns HTMLElement - The rendered radio option element.
+     */
+    private radioOption;
+    private colorOption;
+    private thumbnailOption;
+    private digitalCardValuesOption;
+    private countryOption;
+}

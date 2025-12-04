@@ -1,0 +1,161 @@
+import { EventEmitter } from '../../stencil-public-runtime';
+export declare class SallaProductsList {
+    /**
+     * TODO:: order the logic like this:
+     * Properties: List all @Prop decorated properties.
+     * Element References: Include @Element decorated properties to reference host elements.
+     * State Properties: Place @State decorated properties.
+     * Internal/Private Properties: Declare any internal or private properties.
+     * Event Emitters: Define @Event decorated properties for event emitters.
+     * Constructor: If you have a constructor, it should come next.
+     * Initial Lifecycle Methods, example `connectedCallback`
+     * Public Methods: Place public methods next, including those decorated with @Method.
+     * Private Methods: List private methods (custom logic)
+     * Component Lifecycle Methods with the same order, last one is `disconnectedCallback()`: see https://stenciljs.com/docs/component-lifecycle
+     */
+    /**
+     * The source of the products list
+     * @type {string}
+     * */
+    source: 'categories' | 'latest' | 'related' | 'brands' | 'json' | 'search' | 'tags' | 'selected' | 'offers' | 'landing-page' | 'sales' | 'wishlist' | 'top-rated' | 'reorder';
+    /**
+     * The source value, cloud be different values as following:
+     * - array of ids when `source` in ['categories', 'brands', 'tags', 'selected']
+     * - keyword when `source` = 'search'
+     * - products payload when `source` = 'json'
+     * - product_id when `source` = 'related'
+     *
+     * @type {string}
+     * */
+    sourceValue: any;
+    /**
+     * Limit for number of products in the list.
+     */
+    limit: number;
+    /**
+     * Sorting the list of products
+     */
+    sortBy?: string | 'ourSuggest' | 'bestSell' | 'topRated' | 'priceFromTopToLow' | 'priceFromLowToTop';
+    /**
+     * should listen to filters events `salla-filters::changed` and re-render
+     */
+    filtersResults: boolean;
+    /**
+     * Horizontal cards
+     */
+    horizontalCards: boolean;
+    /**
+    * Row cards
+    */
+    rowCards: boolean;
+    /**
+     * Autoload next page when scroll
+     */
+    autoload: boolean;
+    /**
+   * Load more text
+   */
+    loadMoreText: string;
+    /**
+     * Custom Card Component for the Salla Products List.
+     *
+     * This component allows you to customize the appearance of individual product cards within a Salla Products List.
+     *
+     * @example
+     * <salla-products-list product-card-component="my-custom-card-style1" ...
+     * <salla-products-list product-card-component="my-custom-card-style2" ...
+     */
+    productCardComponent: string;
+    /**
+     * Specifies additional data to be included in the product fetch response.
+     * The value can be an array of strings or a JSON string.
+     *
+     * Example:
+     * - As an array: includes=["options"]
+     * - As a JSON string: includes='["options", "metadata", 'images']'
+     *
+     * The array or JSON string can include:
+     * - "options": Include product options in the response.
+     * - "images": Include product images in the response.
+     */
+    includes: string[];
+    host: HTMLElement;
+    page: number;
+    nextPage: string;
+    hasInfiniteScroll: boolean;
+    hasCustomComponent: boolean;
+    sourceValueIsValid: boolean;
+    placeholderText: string;
+    endOfText: string;
+    failedLoadMore: string;
+    currentPage: any;
+    currentCategoryIdFilter: any;
+    isReady: boolean;
+    showPlaceholder: boolean;
+    switchToNormalBehavior: boolean;
+    parsedFilters: any;
+    filtersSnapshot: any[];
+    private status;
+    private btnLoader;
+    private loader;
+    private placeholderLoader;
+    private loadMoreWrapper;
+    private wrapper;
+    private infiniteScroll;
+    private firstPageResponse;
+    private lastViewedProductKey;
+    private filtersKey;
+    private infiniteScrollStateKey;
+    private prevCategoryIdKey;
+    private isProcessing;
+    private scrollTimeout;
+    private specialPagesWithoutIds;
+    /**
+     * Custom event fired when the the products fetched.
+     */
+    productsFetched: EventEmitter;
+    constructor();
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    /**
+     * Set parsed filters data from URI
+     * @param filters
+     */
+    setFilters(filters: any): Promise<void>;
+    /**
+     * Reload the list of products (entire content of the component).
+     */
+    reload(): Promise<void>;
+    private isFilterable;
+    private isSourceWithoutValue;
+    private animateItems;
+    private initBaseNextPageUrl;
+    private buildNextPageUrl;
+    private loading;
+    private getItemHTML;
+    private applyLandingPageStyles;
+    private applyHorizontalCardStyles;
+    private waitForResizing;
+    private waitForLayoutStable;
+    private waitForStableLayout;
+    private scrollToLastViewedProduct;
+    private isElementLoaded;
+    private takeStateSnapshot;
+    private removeScrollRestorationSession;
+    private loadStoredScrollState;
+    private getSource;
+    private getSourceValue;
+    private appendDataLayer;
+    private initiateInfiniteScroll;
+    private handleScroll;
+    private manualLoadNextPage;
+    private injectAndProcessData;
+    private getInitialData;
+    loadMore(): Promise<void>;
+    componentWillLoad(): any;
+    componentDidLoad(): Promise<void>;
+    private canRender;
+    render(): any;
+    private init;
+    private handleResponse;
+}

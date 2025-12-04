@@ -1,0 +1,60 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { r as registerInstance, h, H as Host, a as getElement } from './index-DPwa4NOx.js';
+
+const sallaAppInstallAlertCss = ":host{display:block}";
+
+const SallaAppInstallAlert = class {
+    constructor(hostRef) {
+        registerInstance(this, hostRef);
+        this.alertDelay = null;
+        this.data = salla.config.get('store.app_install_prompt');
+        this.open = false;
+        this.closing = false;
+    }
+    connectedCallback() {
+        salla.onReady(() => {
+            this.data = salla.config.get('store.app_install_prompt');
+            if (!this.isMobileOrTabletDevice())
+                return;
+            if (!this.data)
+                return salla.logger.error('Failed to retrieve salla-app-install-alert config');
+            this.ctaLink = salla.url.get('app');
+            this.alertDelay = setTimeout(() => (this.open = true), 3000);
+        });
+    }
+    disconnectedCallback() {
+        clearTimeout(this.alertDelay);
+    }
+    /**
+     * Check if the website opens from mobile or tablet devices only (android/ios).
+     *
+     * @param {number} screen the width of the biggest screen to be checked
+     * @returns {boolean} true if it is mobile or tablet else false
+     */
+    isMobileOrTabletDevice(screen = 1024) {
+        const screenWidth = window.innerWidth <= screen;
+        const userAgentCheck = /Macintosh|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const hasTouch = 'ontouchstart' in window ||
+            'ontouchend' in document ||
+            navigator.maxTouchPoints > 0;
+        return userAgentCheck && screenWidth && hasTouch;
+    }
+    closeAlert() {
+        salla.storage.set('app_install_prompt_disabled', true);
+        // handle closing animation first, then close the banner
+        this.closing = true;
+        this.host.addEventListener('animationend', () => {
+            this.closing = false;
+            this.open = false;
+        }, { once: true });
+    }
+    render() {
+        return this.data ? (h(Host, { class: `s-app-install-alert-wrapper ${this.open ? 'open' : ''} ${this.closing ? 'closing' : ''}`, position: this.data.position }, h("div", null, h("img", { src: this.data.icon, width: "58", height: "58", alt: `${salla.config.get('store.name')}` })), h("div", { class: "s-app-install-alert-content" }, h("h2", { class: "s-app-install-alert-title" }, this.data.title), h("p", { class: "s-app-install-alert-sub-title" }, this.data.sub_title, " ", " ", h("a", { href: this.ctaLink, target: "_blank", "aria-label": "download app", class: "s-app-install-alert-cta" }, salla.lang.getWithDefault('blocks.footer.download_app_now', 'حمله الآن')))), h("button", { class: "s-app-install-alert-cancel-button", "aria-label": "close alert", onClick: () => this.closeAlert() }, h("i", { class: "sicon-cancel" })))) : null;
+    }
+    get host() { return getElement(this); }
+};
+SallaAppInstallAlert.style = sallaAppInstallAlertCss;
+
+export { SallaAppInstallAlert as salla_app_install_alert };

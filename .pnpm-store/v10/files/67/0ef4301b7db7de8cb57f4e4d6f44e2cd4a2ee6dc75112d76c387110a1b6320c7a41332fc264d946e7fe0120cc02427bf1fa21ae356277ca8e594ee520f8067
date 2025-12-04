@@ -1,0 +1,32 @@
+import { EventEmitter } from '../../../stencil-public-runtime';
+import { BundleSection, BundleProduct, SelectedOption } from '../interfaces';
+export declare class SallaMultipleBundleProductSlider {
+    section: BundleSection;
+    sectionIndex: number;
+    selectedProducts: {
+        [sectionId: string]: Set<string | number>;
+    };
+    host: HTMLElement;
+    productSelected: EventEmitter<{
+        product: BundleProduct;
+        sectionId: string | number;
+    }>;
+    productOptionsSelected: EventEmitter<{
+        product: BundleProduct;
+        sectionId: string | number;
+    }>;
+    private savedOptionsByInstance;
+    private getProductInstanceKey;
+    private dispatchClearOptionsEvent;
+    handleOptionsSaved(event: CustomEvent<{
+        productId: number;
+        selectedOptions: SelectedOption[];
+        sectionId?: string | number | null;
+        productIndex?: number | null;
+    }>): void;
+    private clearSavedOptionsState;
+    private generateEventName;
+    private handleProductClick;
+    private handleOptionsClick;
+    render(): any;
+}

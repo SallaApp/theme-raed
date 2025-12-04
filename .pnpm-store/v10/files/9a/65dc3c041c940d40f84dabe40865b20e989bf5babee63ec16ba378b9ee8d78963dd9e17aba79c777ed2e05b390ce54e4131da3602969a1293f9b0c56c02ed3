@@ -1,0 +1,151 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import AnimeJS from "animejs";
+/**
+ * @name SallaAdvertisement
+ * @description A StencilJS component for handling and displaying advertisements in different pages of salla applications.
+ * @tag salla-advertisement
+ */
+/**
+ * @slot adv - Replaces the entire advertisement, has replaceable props `{icon}`, `{url}`, `{target}`, `{description}`, `{bg_color}`, `{text_color}`.
+ * */
+export class SallaAdvertisement {
+    /**
+    * Constructor for initializing the component.
+    */
+    constructor() {
+        this.currentSlug = salla.config.get("page.slug");
+        salla.onReady(() => {
+            this.currentSlug = salla.config.get("page.slug");
+        });
+        this.advSlot = this.host.querySelector('[slot="adv"]')?.innerHTML || `<div class="s-advertisement-content"><h2 class="s-advertisement-content-main">{iconElem}{urlElem}</h2>{closeElem}</div>
+    `;
+    }
+    /**
+     * Checks whether an advertisement is marked as not visible/dismissed.
+     * @param advert - The advertisement to check.
+     * @returns True if the advertisement is not visible, false otherwise.
+     */
+    isNotVisible(advert) {
+        const isPreview = salla.config.isDebug() || salla.helpers.isPreview();
+        // ? Show advertisement in preview mode
+        if (isPreview)
+            return false;
+        return !!salla.storage.get(`statusAd-${advert.id}`);
+    }
+    /**
+     * Sets a flag to control the visibility of an advertisement and triggers an animation when hiding it.
+     * @param advert - The advertisement to update.
+     * @param flag - The flag indicating whether to display or hide the advertisement.
+     */
+    setCanDisplayFlag(advert, flag) {
+        if (!flag) {
+            // Set the statusAd flag to 'dismissed'
+            salla.storage.set(`statusAd-${advert.id}`, 'dismissed');
+            // Trigger an animation to hide the advertisement
+            AnimeJS({
+                targets: this.host,
+                opacity: [1, 0],
+                duration: 300,
+                height: [this.host.clientHeight, 0],
+                easing: 'easeInOutQuad',
+            });
+        }
+    }
+    /**
+     * Renders the advertisements based on the fetched data and visibility status.
+     * @returns JSX for rendering advertisements.
+     */
+    render() {
+        if ((Array.isArray(this.advertisements) && !this.advertisements.length) || !this.advertisements) {
+            return;
+        }
+        return this.advertisements.map((advertisement) => {
+            return h("div", { class: { "s-hidden": this.isNotVisible(advertisement), 's-advertisement': true }, "data-id": advertisement.id, style: { "background-color": advertisement.colors.bg, "color": advertisement.colors.text } }, h("div", { id: "adv-slot", innerHTML: this.advSlot
+                    // Replace the props with the advertisement data
+                    // !Note: The props with the 'Elem' suffix are for internal use only.
+                    .replace("{iconElem}", `<i class="s-advertisement-content-icon ${advertisement.icon}"></i>`)
+                    .replace("{urlElem}", advertisement.url ? `<a href="${advertisement.url}" target="${advertisement.target}">${advertisement.description}</a>` : advertisement.description)
+                    .replace("{closeElem}", `<button class="s-advertisement-action" aria-label="close-alert"><i class="sicon-cancel"></i></button>`)
+                    .replace('{icon}', advertisement.icon)
+                    .replace('{url}', advertisement.url)
+                    .replace('{target}', advertisement.target)
+                    .replace('{description}', advertisement.description)
+                    .replace('{bg_color}', advertisement.colors.bg)
+                    .replace('{text_color}', advertisement.colors.text) }));
+        });
+    }
+    /**
+    * Lifecycle method that fetches advertisements before the component is loaded.
+    */
+    componentWillLoad() {
+        const getData = async () => {
+            const isPreview = salla.config.isDebug() || salla.helpers.isPreview();
+            // Wait for salla to be ready
+            await new Promise(resolve => salla.onReady(resolve));
+            // Fetch advertisements based on the current page
+            const pageSlug = !isPreview ? this.currentSlug : null;
+            const response = await salla.api.advertisement.fetch(pageSlug);
+            if (Array.isArray(response.data)) {
+                const advertisements = response.data;
+                // Show all active advertisements in preview mode
+                if (isPreview) {
+                    this.advertisements = advertisements;
+                }
+                else {
+                    this.advertisements = advertisements.filter(ad => !salla.storage.get(`statusAd-${ad.id}`));
+                }
+            }
+            else {
+                this.advertisements = [];
+            }
+            return this.advertisements;
+        };
+        return getData();
+    }
+    componentDidRender() {
+        if ((Array.isArray(this.advertisements) && !this.advertisements.length) || !this.advertisements) {
+            return;
+        }
+        // Add event listener for the close button
+        setTimeout(() => {
+            let closeBtn = this.host.querySelector('.s-advertisement-action');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => this.setCanDisplayFlag(this.advertisements[0], false));
+            }
+        });
+        // Reduce Dom size by removing the slot element
+        this.host.querySelectorAll('#adv-slot').forEach(el => el?.replaceWith(el?.firstChild));
+        this.host.querySelector('[slot="adv"]')?.remove();
+        // Trigger an animation to show the advertisement
+        AnimeJS({
+            targets: this.host,
+            opacity: [0, 1],
+            duration: 300,
+            height: [0, this.host.clientHeight],
+            easing: 'easeInOutQuad',
+        });
+    }
+    static get is() { return "salla-advertisement"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-advertisement.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-advertisement.css"]
+        };
+    }
+    static get states() {
+        return {
+            "position": {},
+            "advertisements": {},
+            "advertIcon": {},
+            "currentSlug": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

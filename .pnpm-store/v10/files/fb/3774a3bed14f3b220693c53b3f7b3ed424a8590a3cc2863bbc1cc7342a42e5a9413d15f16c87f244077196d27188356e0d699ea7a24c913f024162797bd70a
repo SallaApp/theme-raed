@@ -1,0 +1,58 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { C as Cancel } from './cancel.js';
+
+const sallaMaintenanceAlertCss = ".s-maintenance-alert-wrapper{display:flex;min-height:40px;width:100%;flex-direction:row;align-items:center;justify-content:center;--tw-bg-opacity:1;background-color:rgba(26, 38, 61, var(--tw-bg-opacity));padding:0.25rem 0.5rem;--tw-text-opacity:1;color:rgba(255, 255, 255, var(--tw-text-opacity))}.s-maintenance-alert-wrapper a{transition:0.35s cubic-bezier(0.2, 1, 0.3, 1)}.s-maintenance-alert-wrapper *{color:inherit}@media (min-width: 640px){.s-maintenance-alert-wrapper{padding-left:2rem;padding-right:2rem}}.s-maintenance-alert-content{margin-top:1rem;margin-bottom:1rem;display:flex;width:100%;align-items:center;justify-content:space-between}@media (min-width: 640px){.s-maintenance-alert-content{padding-left:2rem;padding-right:2rem}}.s-maintenance-alert-container{display:flex;align-items:center}.s-maintenance-alert-icon{margin-right:1.25rem;display:none}@media (min-width: 640px){.s-maintenance-alert-icon{display:block}}.s-maintenance-alert-text h2{margin-bottom:0.5rem;font-size:0.875rem;font-weight:700;line-height:1.4}@media (min-width: 640px){.s-maintenance-alert-text h2{font-size:1.5rem;line-height:2rem}}.s-maintenance-alert-text p{margin:0px;text-align:right;font-size:10px;line-height:1.2}@media (min-width: 640px){.s-maintenance-alert-text p{text-align:center;font-size:0.75rem;line-height:1}}.s-maintenance-alert-btn{position:relative;margin-left:4px;margin-right:4px;display:inline-block;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;user-select:none;white-space:nowrap;border-radius:0.125rem;border-width:1px;--tw-border-opacity:1;border-color:rgba(93, 213, 196, var(--tw-border-opacity));--tw-bg-opacity:1;background-color:rgba(93, 213, 196, var(--tw-bg-opacity));padding:0.5rem;text-align:center;vertical-align:middle;font-size:0.875rem;font-weight:400;line-height:1.4;--tw-text-opacity:1;color:rgba(255, 255, 255, var(--tw-text-opacity))}.s-maintenance-alert-btn:hover{--tw-bg-opacity:1;background-color:rgba(53, 203, 181, var(--tw-bg-opacity))}.s-maintenance-alert-btn *{pointer-events:none}[dir=rtl] .s-maintenance-alert-btn{margin-left:1.25rem;margin-right:0}@media (min-width: 640px){.s-maintenance-alert-btn{padding:0.5rem 1rem}}";
+
+const SallaMaintenanceAlert$1 = /*@__PURE__*/ proxyCustomElement(class SallaMaintenanceAlert extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+    }
+    componentWillLoad() {
+        this.title = salla.config.get('maintenance_details.title');
+        this.message = salla.config.get('maintenance_details.message');
+        this.buttonTitle = window.innerWidth <= 768 ? salla.config.get('maintenance_details.button_title') : salla.config.get('maintenance_details.button_full_title');
+    }
+    closeAlert() {
+        salla.storage.set('hide_salla-maintenance-alert_at', Date.now());
+        this.host.style.display = 'none';
+    }
+    render() {
+        return (h(Host, { key: 'ec1f4c39f02624943122e444dce1a19bbea34a07', class: "s-maintenance-alert-wrapper" }, h("button", { key: 'db2892331f6addedc5b916e9c4c666023d6765b0', class: "s-maintenance-alert-close", innerHTML: Cancel, onClick: () => this.closeAlert() }), h("div", { key: '2cc604e98eccd343eb0fbe07d6a030aeca28d142', class: "s-maintenance-alert-content" }, h("div", { key: '563c647d3e73b40f8db1c51dc6b74f4333c8964e', class: "s-maintenance-alert-container" }, h("div", { key: '662cb7f23d6fba70fa6f2025188e73fd7fad965d', class: "s-maintenance-alert-icon" }, h("img", { key: 'd5ce8780910ebefa6e16a720170d799974813816', src: salla.url.cdn('images/alert.png'), alt: "Alert" })), h("div", { key: '35f7d4d0a3af396e0ec2bd2f7362f4f1aa620523', class: "s-maintenance-alert-text" }, h("h2", { key: '14edaba08f2a7f48c673c5d9e714b7e6507543a2' }, this.title), h("p", { key: '5fd4831d78deebfc7c7b999c9a71225ab038ec14' }, this.message))), h("div", { key: 'f76912d23fe45cd1bd83a89faf646b3038402476' }, h("a", { key: '39f2609417b1ff80ea6376a0346fa1a227828c99', class: "s-maintenance-alert-btn", href: salla.config.get('maintenance_details.button_url') }, this.buttonTitle)))));
+    }
+    componentDidLoad() {
+        //auto-hide the alert if close button is clicked before one hour
+        let hidden_at = salla.storage.get('hide_salla-maintenance-alert_at');
+        if (hidden_at && ((Date.now() - hidden_at) / 1000 / 60) < 60) {
+            this.closeAlert();
+        }
+    }
+    get host() { return this; }
+    static get style() { return sallaMaintenanceAlertCss; }
+}, [0, "salla-maintenance-alert", {
+        "title": [32],
+        "message": [32],
+        "buttonTitle": [32]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-maintenance-alert"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-maintenance-alert":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaMaintenanceAlert$1);
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaMaintenanceAlert = SallaMaintenanceAlert$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaMaintenanceAlert, defineCustomElement };

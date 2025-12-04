@@ -1,0 +1,1081 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+import { DisplayType } from "./interfaces";
+import CheckCircleIcon from "../../assets/svg/check.svg";
+import CameraIcon from "../../assets/svg/camera.svg";
+import FileIcon from "../../assets/svg/file-upload.svg";
+export class SallaProductOptions {
+    constructor() {
+        this.fileTypes = {
+            pdf: 'application/pdf',
+            png: 'image/png',
+            jpg: 'image/jpeg',
+            word: 'application/doc,application/ms-doc,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            exl: 'application/excel,application/vnd.ms-excel,application/x-excel,application/x-msexcel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            txt: 'text/plain',
+        };
+        this.outOfStockText = "";
+        this.donationAmount = salla.lang.get('pages.products.donation_amount');
+        this.selectDonationAmount = salla.lang.getWithDefault('pages.products.select_donation_amount', 'تحديد مبلغ التبرع');
+        this.selectAmount = salla.lang.getWithDefault('pages.products.select_amount', 'اختر المبلغ');
+        this.isCustomDonation = false;
+        this.selectedOptions = [];
+        this.disableCardValue = true;
+        this.availableDigitalCardValues = [];
+        this.userInitiatedValidation = false;
+        this.outSkus = [];
+        /**
+       * Avoid selection of previous default or selected card value option
+       * when switching between digital card country options for the 1st time
+       */
+        this.ignoreDefaultCardValue = false;
+        /**
+         * The id of the product to which the options are going to be fetched for.
+         */
+        this.productId = salla.config.get('page.id');
+        this.handleDonationOptions = (event, detail, type) => {
+            if (detail === 'custom' && type === 'input') {
+                salla.helpers.inputDigitsOnly(event.target);
+                salla.event.emit('product-options::donation-changed', {
+                    id: this.productId,
+                    price: event.target.value
+                });
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+            this.isCustomDonation = event.target.value === 'custom';
+            if (this.donationInput) {
+                if (event.target.value === 'custom') {
+                    this.donationInput.value = '';
+                    this.donationInput.focus();
+                }
+                else {
+                    this.donationInput.value = event.target.value;
+                }
+                if (detail === 'custom') {
+                    return;
+                }
+                salla.event.emit('product-options::donation-changed', {
+                    id: this.productId,
+                    price: event.target.value
+                });
+            }
+        };
+        this.hideLabel = (option) => {
+            if (option.type === DisplayType.DONATION && (option.donation && !option.donation.can_donate)) {
+                return true;
+            }
+            return false;
+        };
+        this.getExpireDonationMessage = (option) => {
+            if (!option.donation) {
+                return;
+            }
+            const completed = option.donation.target_amount <= option.donation.collected_amount;
+            return h("div", { class: { "s-product-options-donation-message": true, "s-product-options-donation-completed": completed, "s-product-options-donation-expired": !completed } }, h("p", null, option.donation.target_message), h("span", { innerHTML: completed ? salla.money(option.donation.target_amount) : '' }));
+        };
+        this.canDisabled = !salla.config.get('store.settings.product.notify_options_availability') || salla.url.is_page('cart');
+        salla.lang.onLoaded(() => {
+            this.outOfStockText = salla.lang.get("pages.products.out_of_stock");
+            this.donationAmount = salla.lang.get('pages.products.donation_amount');
+            this.selectDonationAmount = salla.lang.getWithDefault('pages.products.select_donation_amount', 'تحديد مبلغ التبرع');
+            this.selectAmount = salla.lang.getWithDefault('pages.products.select_amount', 'اختر المبلغ');
+        });
+        if (this.options) {
+            try {
+                this.setOptionsData(Array.isArray(this.options) ? this.options : JSON.parse(this.options));
+                return;
+            }
+            catch (e) {
+                salla.log('Bad json passed via options prop');
+            }
+        }
+        if (!Array.isArray(this.optionsData)) {
+            salla.log('Options is not an array[] ---> ', this.optionsData);
+            this.setOptionsData([]);
+        }
+        if (this.productId && !salla.url.is_page('cart')) {
+            salla.api.product.getDetails(this.productId, ['options']).then(resp => this.setOptionsData(resp.data.options));
+        }
+    }
+    /**
+     * Sets the options data for the product
+     * @param optionsData - Array of product options
+     */
+    async setOptionsData(optionsData) {
+        this.optionsData = optionsData;
+        const that = this;
+        this.optionsData[0]?.details?.forEach(function (detail) {
+            Object.entries(detail.skus_availability || {})
+                .filter(sku => !sku[1])
+                .map(sku => that.outSkus.push(Number(sku[0])));
+        });
+    }
+    /**
+     * Get the id's of the selected options.
+     * */
+    async getSelectedOptionsData() {
+        const selectedOptions = {};
+        const formData = this.host.getElementSallaData();
+        // Check if bundleContext is defined as a prop on the component before accessing it
+        const contextData = (typeof this.bundleContext !== 'undefined') ? this.bundleContext : null;
+        formData.forEach((value, key) => {
+            if (contextData) {
+                // Handle bundle naming convention: bundle[sectionId][index][options][optionId]
+                if (key.startsWith('bundle[') && key.includes('[options][')) {
+                    const optionId = key.split('[options][')[1].replace(']', '');
+                    selectedOptions[optionId] = value;
+                }
+            }
+            else {
+                // Handle standard naming convention: options[optionId]
+                if (key.startsWith('options[')) {
+                    selectedOptions[key.replace('options[', '').replace(']', '')] = value;
+                }
+            }
+        });
+        return selectedOptions;
+    }
+    /**
+     * Report options form validity.
+     * */
+    async reportValidity() {
+        const requiredElements = this.host.querySelectorAll('[required]');
+        let pass = true;
+        for (let i = 0; i < requiredElements.length; i++) {
+            //if there is only one invalid option, return false
+            if ('reportValidity' in requiredElements[i] && !requiredElements[i].reportValidity()) {
+                pass = false;
+            }
+        }
+        return pass;
+    }
+    /**
+     * Return true if there is any out of stock options are selected and vise versa.
+     * */
+    async hasOutOfStockOption() {
+        return this.selectedOptions.some(option => option.is_out) || (this.selectedSkus?.length && this.selectedSkus?.every(sku => this.outSkus.includes(sku)));
+    }
+    /**
+     * Get selected options.
+     * */
+    async getSelectedOptions() {
+        return this.selectedOptions;
+    }
+    /**
+     * Get a specific option by its id.
+     * */
+    async getOption(option_id) {
+        return this.optionsData.find(option => option.id === option_id);
+    }
+    // @ts-ignore
+    invalidHandler(event, option) {
+        const closestProductOption = event.target.closest('.s-product-options-option');
+        if (!closestProductOption.classList.contains('s-product-options-option-error')) {
+            closestProductOption.classList.add('s-product-options-option-error');
+        }
+        if (this.userInitiatedValidation && !salla.url.is_page('cart')) {
+            const firstInvalidElement = this.host.querySelector('.s-product-options-option-error');
+            if (firstInvalidElement === closestProductOption) {
+                this.scrollToElement(closestProductOption);
+            }
+        }
+    }
+    scrollToElement(element) {
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+    changedHandler(event, option, fireChangeEvent = true) {
+        const data = {
+            event: event,
+            option: option,
+            detail: null,
+            productId: this.productId
+        };
+        if (option.details) {
+            const detail = option.details.find((detail) => {
+                return Number(detail.id) === Number(event.target.value);
+            });
+            data.detail = detail;
+        }
+        if (option.type === 'country') {
+            this.handleCountryOptionChange(event, data.detail);
+        }
+        const optionElement = event.target.closest('.s-product-options-option');
+        if (event.target.value ||
+            ((option.type === DisplayType.FILE || option.type === DisplayType.IMAGE) && event.type === 'added') ||
+            (option.type === DisplayType.MAP && event.type === 'selected' && (event.target.lat && event.target.lng))) {
+            setTimeout(() => {
+                optionElement.classList.remove('s-product-options-option-error');
+            }, 200);
+        }
+        if (option.type === DisplayType.DONATION) {
+            salla.event.emit('product-options::donation-changed', {
+                id: this.productId,
+                price: event.target.value
+            });
+        }
+        this.setSelectedSkus();
+        this.handleRequiredMultipleOptions(option);
+        const index = this.selectedOptions.findIndex(opt => opt.option_id === data.option.id);
+        if (data.option.type === DisplayType.MULTIPLE_OPTIONS) {
+            // Handle multiple selections
+            const detailIndex = this.selectedOptions.findIndex(opt => opt.option_id === data.option.id && opt?.id === data.detail?.id);
+            if (detailIndex > -1) {
+                // If the option is already selected, remove it (unselect)
+                this.selectedOptions.splice(detailIndex, 1);
+            }
+            else {
+                // If the option is not selected, add it to the selectedOptions array
+                this.selectedOptions.push({ ...data.detail, option_id: data.option.id });
+            }
+        }
+        else {
+            // Handle single selection
+            if (!data.detail || Object.keys(data.detail).length === 0) {
+                // If there is no value for the single-select, remove it from the selectedOptions array
+                if (index > -1) {
+                    this.selectedOptions.splice(index, 1);
+                }
+            }
+            else {
+                // If a value exists, update or add the selection
+                if (index > -1) {
+                    // Replace the existing selection with the new one
+                    this.selectedOptions[index] = { ...data.detail, option_id: data.option.id };
+                }
+                else {
+                    // If no selection exists for this input, add the new selection
+                    this.selectedOptions.push({ ...data.detail, option_id: data.option.id });
+                }
+            }
+        }
+        // Update optionsData directly
+        this.optionsData = this.optionsData.map(opt => {
+            if (opt.id === data.option.id) {
+                return {
+                    ...opt,
+                    details: opt.details.map(detail => ({
+                        ...detail,
+                        is_selected: data.option.type === DisplayType.MULTIPLE_OPTIONS
+                            ? this.selectedOptions.some(selected => selected.id === detail.id)
+                            : Number(detail.id) === Number(data.detail?.id),
+                        value: data.detail?.value
+                    }))
+                };
+            }
+            return opt;
+        });
+        // Emit the event only if fireChangeEvent is true
+        if (fireChangeEvent) {
+            this.changed.emit(data);
+            salla.event.emit('product-options::change', data);
+        }
+    }
+    /**
+     * loop throw all selected details, then get common sku, if it's only one, means we selected all of them;
+     */
+    setSelectedSkus() {
+        this.selectedSkus = this.selectedOptions.map(detail => Object.keys(detail.skus_availability || {}))
+            .reduce((p, c) => p.filter(e => c.includes(e)), []) // Initialize accumulator as an empty array
+            .map(sku => Number(sku));
+    }
+    handleRequiredMultipleOptions(option) {
+        if (option.type !== DisplayType.MULTIPLE_OPTIONS || !option.required) {
+            return;
+        }
+        const optionContainer = this.host.querySelector(`[data-option-id="${option.id}"]`);
+        const hasChecked = optionContainer.querySelectorAll('input:checked').length;
+        optionContainer.querySelectorAll('input').forEach(input => input.toggleAttribute('required', !hasChecked));
+    }
+    getLatLng(value, type) {
+        return value
+            ? value.split(',')[type === 'lat' ? 0 : 1]
+            : '';
+    }
+    getDisplayForType(option) {
+        if (this[`${option.type}Option`]) {
+            return this[`${option.type}Option`](option);
+        }
+        if (option.type === DisplayType.COLOR_PICKER) {
+            return this.colorPickerOption(option);
+        }
+        if (option.type === DisplayType.MULTIPLE_OPTIONS) {
+            return this.multipleOptions(option);
+        }
+        if (option.type === DisplayType.SINGLE_OPTION) {
+            return this.singleOption(option);
+        }
+        // Handle radio type as single option for bundle products
+        if (option.type === DisplayType.RADIO) {
+            return this.radioOption(option);
+        }
+        if (option.type === DisplayType.DIGITAL_CARD_VALUE) {
+            return this.digitalCardValuesOption(option);
+        }
+        if (option.type === DisplayType.COUNTRY) {
+            return this.countryOption(option);
+        }
+        if (option.type === DisplayType.BOOKING && salla.url.is_page("cart")) {
+            return h("salla-booking-field", { onInvalidInput: (e) => this.invalidHandler(e, option), option: option, productId: option.value });
+        }
+        salla.log(`Couldn't find options type(${option.type})😢`);
+        return '';
+    }
+    getOptionShownWhen(option) {
+        return option.visibility_condition
+            ? { "data-show-when": `options[${option.visibility_condition.option}] ${option.visibility_condition.operator} ${option.visibility_condition.value}` }
+            : {};
+    }
+    getAvailableDigitalCardSKUs(detail) {
+        const digitalCardOption = this.optionsData.find(({ type }) => type === 'digital-code-value');
+        if (!digitalCardOption)
+            throw new Error('product-options:: No digital card options found');
+        const outofStockSKUs = Object.keys(detail.skus_availability).filter(key => detail.skus_availability[key] === false);
+        this.availableDigitalCardValues = digitalCardOption.details.filter((op) => {
+            return !Object.keys(op.skus_availability).filter(SKU_key => outofStockSKUs.includes(SKU_key)).length;
+        });
+    }
+    handleCountryOptionChange(event, detail) {
+        event.stopImmediatePropagation();
+        this.ignoreDefaultCardValue = true;
+        const currentCardValue = this.host.querySelector("input[data-code-value]:checked");
+        if (currentCardValue)
+            currentCardValue.checked = false;
+        const digitalCardOption = this.optionsData.find(({ type }) => type === 'digital-code-value');
+        if (!digitalCardOption)
+            throw new Error('product-options:: No digital card options found');
+        this.getAvailableDigitalCardSKUs(detail);
+    }
+    getSelectedDigitalCardOptions(option) {
+        const selectedOption = option.details.find(detail => detail.is_selected);
+        const defaultOption = option.details.find(detail => !!detail.is_default) || option.details[0]; /*option.details[0] only applys for counrty options*/
+        if (!['digital-code-value', 'country'].includes(option.type))
+            return;
+        return selectedOption || defaultOption;
+    }
+    //we need the cart Id for productOption Image
+    async componentWillLoad() {
+        if (salla.url.is_page("cart")) {
+            this.disableCardValue = false;
+            this.fillSelectedOptions();
+        }
+        if (this.config) {
+            try {
+                this.optionConfig = typeof this.config === 'string' ? JSON.parse(this.config) : this.config;
+            }
+            catch (error) {
+                console.error('Failed to parse JSON in config prop:', error);
+            }
+        }
+        const shouldSelectDefaultOption = this.optionsData.filter(({ type }) => ["country", "digital-card-value"].includes(type)).length > 0 && salla.url.is_page('cart');
+        if (shouldSelectDefaultOption) {
+            const countryOption = this.optionsData.find(option => option.type === 'country');
+            const defaultSelection = countryOption && this.getSelectedDigitalCardOptions(countryOption);
+            if (defaultSelection) {
+                this.getAvailableDigitalCardSKUs(defaultSelection);
+            }
+        }
+        this.outOfStockText = salla.lang.get('pages.products.out_of_stock');
+        await salla.onReady();
+        document.addEventListener("paste", this.handlePaste.bind(this));
+        const needsCartId = (!salla.storage.get('cart.id') && this.optionsData.some(option => ['file', 'image'].includes(option.type)));
+        return needsCartId ? salla.api.cart.getCurrentCartId(false, "salla-product-options") : null;
+    }
+    /**
+     * This is a workaround for a bug in iOS 26 Safari, when pasting English text to RTL inputs, it adds extra text!!
+     * To avoid any break changes, we will make it only work on these conditions:
+     *  - content_copyright is on
+     *  - Apple Pay is enabled (means it's iOS/safari)
+     *  - Input is an input or textarea
+     *  - Salla form control
+     *  - Options array
+     */
+    handlePaste(event) {
+        const target = event.target;
+        if (!Salla.helpers.isAppleDevice()
+            || !(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)
+            || !target.classList.contains('s-form-control')) {
+            return;
+        }
+        // Prevent default paste (to avoid Safari inserting extra content)
+        event.preventDefault();
+        // Read only the clipboard data
+        const text = event.clipboardData?.getData("text") || "";
+        // Insert it manually at cursor if you want
+        const start = target.selectionStart;
+        const end = target.selectionEnd;
+        const newValue = target.value.slice(0, start) + text + target.value.slice(end);
+        target.value = newValue;
+        // Reset cursor position
+        target.setSelectionRange(start + text.length, start + text.length);
+        try {
+            target.dispatchEvent(new window.Event('change', { bubbles: true }));
+        }
+        catch (error) {
+            Salla.log('Error on change');
+        }
+    }
+    hideDigitalCardsOptions(option) {
+        return (this.disableCardValue && option.type === DisplayType.DIGITAL_CARD_VALUE && !salla.url.is_page("cart"));
+    }
+    render() {
+        if (this.optionsData?.length === 0) {
+            return;
+        }
+        return (h(Host, { class: "s-product-options-wrapper" }, h("salla-conditional-fields", null, this.optionsData.map((option) => h("div", { key: option.id, class: `s-product-options-option-container${option.visibility_condition || this.hideDigitalCardsOptions(option) ? ' hidden' : ''}`, "data-option-id": option.id, ...this.getOptionShownWhen(option) }, option.name === 'splitter' ?
+            this.splitterOption()
+            : h("div", { class: { "s-product-options-option": true, "s-product-options-option-booking": option.type === DisplayType.BOOKING && salla.url.is_page("cart") }, "data-option-type": option.type, "data-option-required": `${option.required}` }, h("label", { htmlFor: this.generateInputName(option.id), class: `s-product-options-option-label ${this.hideLabel(option) ? 's-product-options-option-label-hidden' : ''}` }, h("b", null, option.name, option.required && h("span", null, " * "), " "), h("small", null, option.placeholder)), h("div", { class: `s-product-options-option-content ${this.hideLabel(option) || (option.type === DisplayType.BOOKING && salla.url.is_page("cart")) ? 's-product-options-option-content-full-width' : ''}` }, this.getDisplayForType(option))))))));
+    }
+    generateUniqueKey(defaultValue) {
+        const contextData = this.bundleContext;
+        let baseKey = this.uniqueKey ? `${defaultValue}-${this.uniqueKey}` : defaultValue;
+        if (contextData) {
+            try {
+                // Handle both string and object types
+                const context = typeof contextData === 'string'
+                    ? JSON.parse(contextData)
+                    : contextData;
+                const { sectionId, productId } = context;
+                baseKey = `${baseKey}-bundle-${sectionId}-${productId}`;
+            }
+            catch (e) {
+                // If parsing fails, just use the base key
+            }
+        }
+        return baseKey;
+    }
+    /**
+     * Generate the correct input name based on bundle context
+     * @param optionId - The option ID
+     * @returns The formatted input name
+     */
+    generateInputName(optionId) {
+        const contextData = this.bundleContext;
+        if (contextData) {
+            try {
+                // Handle both string and object types
+                const context = typeof contextData === 'string'
+                    ? JSON.parse(contextData)
+                    : contextData;
+                const { sectionId, productId } = context;
+                return `bundle[${sectionId}][${productId}][options][${optionId}]`;
+            }
+            catch (e) {
+                return `options[${optionId}]`;
+            }
+        }
+        return `options[${optionId}]`;
+    }
+    fillSelectedOptions() {
+        this.selectedOptions = this.optionsData.reduce((acc, opt) => {
+            const selectedDetails = opt.details.filter(detail => detail.is_selected);
+            const mappedDetails = selectedDetails.map(detail => ({
+                ...detail,
+                option_id: opt.id
+            }));
+            return acc.concat(mappedDetails);
+        }, []);
+    }
+    componentDidLoad() {
+        if (this.optionsData?.length === 0 && !this.optionsData.some(option => option.type === DisplayType.DONATION)) {
+            return;
+        }
+        const selectedDonationOption = this.optionsData.find(option => option.type === DisplayType.DONATION)?.details.find(detail => detail.is_selected);
+        if (!selectedDonationOption) {
+            return;
+        }
+        setTimeout(() => {
+            salla.event.emit('product-options::donation-changed', {
+                id: this.productId,
+                price: selectedDonationOption.additional_price
+            });
+        }, 1000);
+    }
+    /**
+     * Enable user-initiated validation mode so invalid fields will scroll into view
+     */
+    async enableUserInitiatedValidation() {
+        this.userInitiatedValidation = true;
+    }
+    /**
+     * Validate options and trigger scrolling to the first invalid option if any
+     */
+    async validateAndScroll() {
+        await this.enableUserInitiatedValidation();
+        return this.reportValidity();
+    }
+    //@ts-ignore
+    donationOption(option, product) {
+        return h("div", { class: "s-product-options-donation-wrapper" }, option.donation?.can_donate ? [
+            option.donation ?
+                h("div", { key: option.id, class: "s-product-options-donation-progress" }, h("salla-progress-bar", { donation: option.donation }))
+                : '',
+            option.details.length ?
+                [h("h4", { key: option.id }, this.selectAmount), h("div", { key: option.id, class: "s-product-options-donation-options" }, option.details.map((detail, i) => h("div", { key: option.id, class: "s-product-options-donation-options-item" }, h("input", { id: this.generateUniqueKey(`donation-option-${i}`), type: "radio", name: "donating_option", checked: detail.is_selected, value: detail.additional_price, onChange: e => this.handleDonationOptions(e, detail, 'option') }), h("label", { htmlFor: this.generateUniqueKey(`donation-option-${i}`) }, h("span", { innerHTML: salla.money(detail.name) })))), option.donation?.custom_amount_enabled ?
+                        h("div", { class: "s-product-options-donation-options-item" }, h("input", { id: this.generateUniqueKey("donation-option-custom"), type: "radio", name: "donating_option", value: "custom", onChange: e => this.handleDonationOptions(e, 'custom', 'option') }), h("label", { htmlFor: this.generateUniqueKey("donation-option-custom") }, h("span", null, " ", this.selectDonationAmount, " ")))
+                        : '')] : '',
+            h("div", { key: option.id, class: { "s-product-options-donation-input-group": true, "shown": !option.details.length || (option.details.length && this.isCustomDonation) } }, h("input", { type: "text", id: "donating-amount", name: "donation_amount", class: "s-form-control", ref: el => { this.donationInput = el; }, value: option.details.length
+                    && option.details.some(detail => detail.is_selected)
+                    ? option.details.find(detail => detail.is_selected).additional_price
+                    : option.value,
+                // required
+                placeholder: option.placeholder, onInput: e => this.handleDonationOptions(e, 'custom', 'input'), onBlur: e => this.changedHandler(e, option), onInvalid: (e) => this.invalidHandler(e, option) }), h("span", { class: "s-product-options-donation-amount-currency" }, salla.config.currency(salla.config.get('user.currency_code')).symbol))
+        ] :
+            this.getExpireDonationMessage(option));
+    }
+    fileUploader(option, additions = null) {
+        return h("salla-file-upload", { ...(additions || {}), "payload-name": "file", value: option.value, "instant-upload": true, name: this.generateInputName(option.id), required: !option.visibility_condition && option.required, height: "120px", onAdded: (e) => this.changedHandler(e, option), url: salla.cart.api.getUploadImageEndpoint(), "form-data": { cart_item_id: this.productId, product_id: this.productId }, onInvalidInput: (e) => this.invalidHandler(e, option), class: { "s-product-options-image-input": true, required: option.required } }, h("div", { class: "s-product-options-filepond-placeholder" }, h("span", { class: "s-product-options-filepond-placeholder-icon", innerHTML: additions.accept?.split(',').every(type => type.includes('image'))
+                ? CameraIcon
+                : FileIcon }), h("p", { class: "s-product-options-filepond-placeholder-text" }, salla.lang.get('common.uploader.drag_and_drop')), h("span", { class: "filepond--label-action" }, salla.lang.get('common.uploader.browse'))));
+    }
+    //@ts-ignore
+    imageOption(option) {
+        return this.fileUploader(option, { accept: 'image/png,image/jpeg,image/jpg,image/gif' });
+    }
+    //@ts-ignore
+    fileOption(option) {
+        const types = option.details.map(detail => this.fileTypes[detail.name]).filter(Boolean);
+        return types?.length
+            ? this.fileUploader(option, { accept: types.join(',') })
+            : 'File types not selected.';
+    }
+    // TODO: (ONLY FOR TESTING!) find a better way to make it testable, e.g. wrap it with a unique class like textOption
+    //@ts-ignore
+    numberOption(option) {
+        return h("input", { type: "text", value: option.value, class: "s-form-control", required: !option.visibility_condition && option.required, name: this.generateInputName(option.id), placeholder: option.placeholder, onBlur: e => this.changedHandler(e, option), onInvalid: (e) => this.invalidHandler(e, option), onInput: e => salla.helpers.inputDigitsOnly(e.target) });
+    }
+    //@ts-ignore
+    splitterOption() {
+        return h("div", { class: "s-product-options-splitter" });
+    }
+    //@ts-ignore
+    textOption(option) {
+        return h("div", { class: "s-product-options-text" }, h("input", { type: "text", value: option.value, maxLength: option?.length, class: 's-form-control', required: !option.visibility_condition && option.required, name: this.generateInputName(option.id), placeholder: option.placeholder, onInvalid: (e) => this.invalidHandler(e, option), onChange: e => this.changedHandler(e, option) }));
+    }
+    //@ts-ignore
+    textareaOption(option) {
+        //todo::remove mt-1 class, and if it's okay to remove the tag itself will be great
+        return h("div", { class: "s-product-options-textarea" }, h("div", { class: "mt-1" }, h("textarea", { rows: 4, value: option.value, maxLength: option?.length, class: "s-form-control", required: !option.visibility_condition && option.required, id: this.generateUniqueKey(option.id.toString()), name: this.generateInputName(option.id), placeholder: option.placeholder, onInvalid: (e) => this.invalidHandler(e, option), onChange: (e) => this.changedHandler(e, option) })));
+    }
+    //@ts-ignore
+    mapOption(option) {
+        return h("salla-map", { zoom: 15, lat: this.getLatLng(option.value, 'lat'), lng: this.getLatLng(option.value, 'lng'), name: this.generateInputName(option.id), searchable: true, required: option.required, onInvalidInput: (e) => this.invalidHandler(e, option), onSelected: e => this.changedHandler(e, option) });
+    }
+    colorPickerOption(option) {
+        return h("salla-color-picker", { onSubmitted: e => this.changedHandler(e, option), name: this.generateInputName(option.id), required: !option.visibility_condition && option.required, onInvalidInput: (e) => this.invalidHandler(e, option), color: option.value });
+    }
+    /**
+     * ============= Date Time options =============
+     */
+    //@ts-ignore
+    timeOption(option) {
+        return h("salla-datetime-picker", { noCalendar: true, enableTime: true, dateFormat: "h:i K", value: option.value, placeholder: option.name, required: !option.visibility_condition && option.required, name: this.generateInputName(option.id), class: "s-product-options-time-element", onInvalidInput: (e) => this.invalidHandler(e, option), onPicked: e => this.changedHandler(e, option) });
+    }
+    //@ts-ignore
+    dateOption(option) {
+        //todo:: consider date-range @see https://github.com/SallaApp/theme-raed/blob/master/src/assets/js/partials/product-options.js#L8-L23
+        return h("div", { class: "s-product-options-date-element" }, h("salla-datetime-picker", { value: option.value, placeholder: option.name, required: !option.visibility_condition && option.required, minDate: new Date(), name: this.generateInputName(option.id), onInvalidInput: (e) => this.invalidHandler(e, option), onPicked: e => this.changedHandler(e, option) }));
+    }
+    //@ts-ignore
+    datetimeOption(option) {
+        //todo:: consider date-range @see https://github.com/SallaApp/theme-raed/blob/master/src/assets/js/partials/product-options.js#L8-L23
+        return h("div", { class: "s-product-options-datetime-element" }, h("salla-datetime-picker", { enableTime: true, value: option.value, dateFormat: "Y-m-d G:i:K", placeholder: option.name, required: !option.visibility_condition && option.required, name: this.generateInputName(option.id), maxDate: option.to_date_time, minDate: option.from_date_time, onInvalidInput: (e) => this.invalidHandler(e, option), onPicked: e => this.changedHandler(e, option) }));
+    }
+    /**
+     * ============= Advanced options =============
+     */
+    getOptionDetailName(detail, outOfStock = true, optionType) {
+        let detailName;
+        if (optionType && optionType === DisplayType.COLOR) {
+            detailName = detail.name
+                + ((outOfStock && this.isOptionDetailOut(detail) && !salla.url.is_page("cart")) && !this.hideOutLabel ? ` <br/> <p> ${this.outOfStockText} </p>` : '')
+                + (detail.additional_price ? ` <p> (${salla.money(detail.additional_price, false)}) </p>` : '');
+        }
+        if (!detailName) {
+            detailName = detail.name
+                + ((outOfStock && this.isOptionDetailOut(detail) && !salla.url.is_page("cart")) && !this.hideOutLabel ? ` - ${this.outOfStockText}` : '')
+                + (detail.additional_price ? ` (${salla.money(detail.additional_price, false)})` : '');
+        }
+        //Some merchants adding price to the names of the options,
+        //and because we are using this inside select option, we need to replace the html currency symbol with the store currency symbol
+        return detailName.replace('<i class=sicon-sar></i>', salla.config.currency()?.symbol || 'ر.س');
+    }
+    isOptionDetailOut(detail) {
+        if (detail.is_out || !detail.skus_availability || !this.selectedSkus?.length) {
+            return detail.is_out;
+        }
+        const isDetailSelected = this.selectedOptions.filter(option => option.id === detail.id).length;
+        //if the current options is the only selected option, so we are sure that it's not out, because there is no other options selected yet
+        if (isDetailSelected && this.selectedOptions.length === 1) {
+            return false;
+        }
+        //if current details has sku in the possible outSkus it's out for sure
+        if (isDetailSelected) {
+            //here we will get the possible outSkus for current selected options
+            const outSelectableSkus = this.selectedSkus.filter(sku => this.outSkus.includes(sku));
+            return Object.keys(detail.skus_availability).some(sku => outSelectableSkus.includes(Number(sku)));
+        }
+        return this.selectedOptions.some(option => option.is_out && option.option_id !== detail.option_id);
+    }
+    /**
+     * Renders a single input element (radio or checkbox) for an option detail.
+     * @param type - The type of input element ('radio' or 'checkbox').
+     * @param detail - The detail object representing an option detail.
+     * @param option - The parent option object containing the details.
+     * @param isRequired - Indicates if the input is required based on the option's rules.
+     * @param name - The name attribute for the input element.
+     * @returns HTMLElement - A labeled input element.
+     */
+    renderInput(type, detail, option, isRequired, name, buttonStyle) {
+        const id = this.generateUniqueKey(`${type}-${option.id}-${detail.id}`);
+        const isDisabled = this.isOptionDetailOut(detail);
+        return (h("label", { class: {
+                "s-product-options-disabled": isDisabled,
+            } }, h("input", { id: id, type: type, name: name, value: detail.id, disabled: isDisabled, required: isRequired, checked: detail.is_selected, onInvalid: (e) => this.invalidHandler(e, option), onChange: (e) => this.changedHandler(e, option) }), h("div", { class: { "s-product-options-grid-mode-span": buttonStyle, "s-product-options-disabled": isDisabled } }, this.getOptionDetailName(detail))));
+    }
+    /**
+     * Renders a collection of input elements for all details of an option.
+     * @param type - The type of input elements ('radio' or 'checkbox').
+     * @param option - The parent option object containing the details.
+     * @param isRequired - Indicates if the inputs are required based on the option's rules.
+     * @returns HTMLElement[] - An array of labeled input elements.
+     */
+    renderOptionDetails(type, option, isRequired, buttonStyle = false) {
+        const baseName = this.generateInputName(option.id);
+        const name = type === 'radio' ? baseName : `${baseName}[]`;
+        return option?.details.map((detail) => this.renderInput(type, detail, option, isRequired, name, buttonStyle));
+    }
+    /**
+     * Renders a dropdown (select) element for a single-option selection.
+     * @param option - The parent option object.
+     * @returns HTMLElement - A select dropdown element with all option details.
+     */
+    renderSelect(option) {
+        return (h("div", null, h("select", { name: this.generateInputName(option.id), required: !option.visibility_condition && option.required, class: "s-form-control", onInvalid: (e) => this.invalidHandler(e, option), onChange: (e) => this.changedHandler(e, option) }, h("option", { value: "" }, option.placeholder), option?.details.map((detail) => (h("option", { key: detail.id, value: detail.id, disabled: this.canDisabled && this.isOptionDetailOut(detail), selected: detail.is_selected }, this.getOptionDetailName(detail)))))));
+    }
+    /**
+     * Renders a grid-based layout for option inputs (radio or checkbox).
+     * @param type - The type of input elements ('radio' or 'checkbox').
+     * @param option - The parent option object containing the details.
+     * @param isRequired - Indicates if the inputs are required based on the option's rules.
+     * @returns HTMLElement - A grid-based container with input elements.
+     */
+    renderButtonStyle(type, option, isRequired) {
+        return (h("div", { class: "s-product-options-grid-mode" }, this.renderOptionDetails(type, option, isRequired, true)));
+    }
+    /**
+     * Renders a single-option selection, either as a grid or dropdown, based on configuration.
+     * @param option - The parent option object.
+     * @returns HTMLElement - The rendered single-option element.
+     */
+    singleOption(option) {
+        const buttonStyle = this.optionConfig?.['single-option']?.type === 'button';
+        const isRequired = !option.visibility_condition && option.required;
+        return buttonStyle
+            ? this.renderButtonStyle('radio', option, isRequired)
+            : this.renderSelect(option);
+    }
+    /**
+     * Renders a multiple-option selection, either as a grid or list, based on configuration.
+     * @param option - The parent option object.
+     * @returns HTMLElement - The rendered multiple-option element.
+     */
+    multipleOptions(option) {
+        const buttonStyle = this.optionConfig?.['multiple-option']?.type === 'button';
+        const isRequired = option.required &&
+            !option.details.some((detail) => detail.is_selected) &&
+            !option.visibility_condition;
+        return buttonStyle
+            ? this.renderButtonStyle('checkbox', option, isRequired)
+            : (h("div", { class: {
+                    's-product-options-multiple-options-wrapper': true,
+                    required: option.required,
+                } }, this.renderOptionDetails('checkbox', option, isRequired)));
+    }
+    /**
+     * Renders a radio option selection (used for bundle products).
+     * This is essentially the same as single option but with explicit radio handling.
+     * @param option - The parent option object.
+     * @returns HTMLElement - The rendered radio option element.
+     */
+    radioOption(option) {
+        // Radio options behave the same as single options
+        return this.singleOption(option);
+    }
+    //@ts-ignore
+    colorOption(option) {
+        return (h("fieldset", { class: "s-product-options-colors-wrapper" }, option?.details.map((detail) => (h("div", { class: "s-product-options-colors-item", key: detail.id }, h("input", { type: "radio", value: detail.id, required: !option.visibility_condition && option.required, checked: detail.is_selected, name: this.generateInputName(option.id), disabled: this.canDisabled && this.isOptionDetailOut(detail), id: this.generateUniqueKey(`color-${this.productId}-${option.id}-${detail.id}`), onInvalid: (e) => this.invalidHandler(e, option), onChange: (e) => this.changedHandler(e, option) }), h("label", { htmlFor: this.generateUniqueKey(`color-${this.productId}-${option.id}-${detail.id}`) }, h("span", { style: { backgroundColor: detail.color } }), h("div", { innerHTML: this.getOptionDetailName(detail, true, option.type) })))))));
+    }
+    //@ts-ignore
+    thumbnailOption(option) {
+        return h("div", { class: "s-product-options-thumbnails-wrapper" }, option.details.map((detail) => {
+            return h("div", { key: detail.id }, h("input", { type: "radio", value: detail.id, "data-itemid": detail.id, required: !option.visibility_condition && option.required, checked: detail.is_selected, name: this.generateInputName(option.id), "data-img-id": detail.option_value, disabled: this.canDisabled && this.isOptionDetailOut(detail), id: this.generateUniqueKey(`option_${this.productId}-${option.id}_${detail.id}`), onInvalid: (e) => this.invalidHandler(e, option), onChange: (e) => this.changedHandler(e, option) }), h("label", { htmlFor: this.generateUniqueKey(`option_${this.productId}-${option.id}_${detail.id}`), "data-img-id": detail.option_value, class: "go-to-slide" }, h("img", { "data-src": detail.image, src: detail.image, title: detail.name, alt: detail.name }), h("span", { innerHTML: CheckCircleIcon, class: "s-product-options-thumbnails-icon" }), this.isOptionDetailOut(detail) ?
+                [
+                    h("small", { key: detail.id, class: "s-product-options-thumbnails-stock-badge" }, this.outOfStockText),
+                    this.canDisabled ? h("div", { key: detail.id, class: "s-product-options-thumbnails-badge-overlay" }) : '',
+                ]
+                : ''), h("p", null, this.getOptionDetailName(detail, false), " "));
+        }));
+    }
+    // Digital card options
+    digitalCardValuesOption(option) {
+        return h("div", { class: "s-product-options-digital-card-wrapper" }, this.availableDigitalCardValues.length > 0 ? this.availableDigitalCardValues.map((detail) => {
+            const id = String(detail.id);
+            return h("label", { htmlFor: this.generateUniqueKey(id.toString()), key: id, class: "s-product-options-digital-card-option" }, h("input", { type: "radio", "data-code-value": true, class: "s-form-control s-product-options-digital-card-input", value: detail.id, name: this.generateInputName(option.id), id: this.generateUniqueKey(id.toString()), required: !option.visibility_condition && option.required, onInvalid: (e) => this.invalidHandler(e, option), ...(!this.ignoreDefaultCardValue ? { defaultChecked: this.getSelectedDigitalCardOptions(option)?.id === detail.id } : {}) }), h("span", null, detail.name, " ", salla.config?.currency()?.symbol));
+        })
+            : h("div", { class: "s-product-options-digital-card-out-of-stock" }));
+    }
+    countryOption(option) {
+        return h("div", { class: "s-product-options-digital-card-wrapper" }, option.details.map((detail) => {
+            return h("label", { htmlFor: this.generateUniqueKey(detail.id.toString()), key: detail.id, class: { "s-product-options-digital-card-option": true, "s-product-options-digital-card-option-stock-out": detail.is_out } }, h("input", { id: this.generateUniqueKey(detail.id.toString()), type: "radio", class: "s-form-control s-product-options-digital-card-input", value: detail.id, name: this.generateInputName(option.id), disabled: detail.is_out, required: !option.visibility_condition && option.required, onInvalid: (e) => this.invalidHandler(e, option), onChange: e => this.changedHandler(e, option), onClick: () => { this.disableCardValue = false; }, ...(salla.url.is_page("cart") ? { defaultChecked: this.getSelectedDigitalCardOptions(option)?.id === detail.id } : {}) }), h("img", { loading: 'lazy', alt: detail.code, height: 24, width: 24, class: "s-product-options-country-flag", src: `https://cdn.assets.salla.network/prod/admin/cp/assets/flags/1x1/${String(detail.code).toLocaleLowerCase()}.svg` }), h("span", null, detail.name));
+        }));
+    }
+    static get is() { return "salla-product-options"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-product-options.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-product-options.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "productId": {
+                "type": "any",
+                "attribute": "product-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "number | string",
+                    "resolved": "number | string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The id of the product to which the options are going to be fetched for."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "salla.config.get('page.id')"
+            },
+            "options": {
+                "type": "string",
+                "attribute": "options",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Product detail information."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "hideOutLabel": {
+                "type": "string",
+                "attribute": "hide-out-label",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Hide the out of stock label.\nWill be used in the case of live validation such as cart page and inline checkout"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "uniqueKey": {
+                "type": "string",
+                "attribute": "unique-key",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "A unique key used to generate distinct identifiers.\n\nThis key is appended to a default value to ensure uniqueness\nacross instances or components where differentiation is required."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "bundleContext": {
+                "type": "string",
+                "attribute": "bundle-context",
+                "mutable": false,
+                "complexType": {
+                    "original": "string | object",
+                    "resolved": "object | string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Bundle context information for bundle products.\nWhen provided, the component will use bundle naming convention for form inputs.\nExpected format: { sectionId: string|number, sectionIndex: number, productId: string|number }\nCan be passed as a string (JSON) or object"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "config": {
+                "type": "string",
+                "attribute": "config",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Configuration for customizing the display layout of product options.\nThe `config` prop accepts a JSON string that specifies the layout type for rendering options.\nIt allows customization of how single-option and multiple-option selections are displayed.\n\nExample Usage:\n```html\n<salla-product-options \n  options=\"{{ product.options }}\" \n  product-id=\"{{ product.id }}\" \n  unique-key=\"abc123\"\n  config='{\n    \"single-option\": { \"type\": \"button\" },\n    \"multiple-option\": { \"type\": \"button\" }\n  }'>\n</salla-product-options>\n```\n\nExample Config JSON:\n```json\n{\n  \"single-option\": { \"type\": \"button\" },\n  \"multiple-option\": { \"type\": \"default\" }\n}\n```\n\n- `single-option`:\n  - Defines the display style for single-option selections.\n  - `type`: Supported values:\n    - `\"button\"`: Displays options in a button-style grid layout.\n    - `\"default\"`: Displays options as a dropdown (default).\n\n- `multiple-option`:\n  - Defines the display style for multiple-option selections.\n  - `type`: Supported values:\n    - `\"button\"`: Displays options in a button-style grid layout.\n    - `\"default\"`: Displays options as a list of checkboxes (default)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "optionsData": {},
+            "outOfStockText": {},
+            "donationAmount": {},
+            "selectDonationAmount": {},
+            "selectAmount": {},
+            "isCustomDonation": {},
+            "selectedOptions": {},
+            "canDisabled": {},
+            "selectedSkus": {},
+            "selectedOutSkus": {},
+            "disableCardValue": {},
+            "availableDigitalCardValues": {},
+            "userInitiatedValidation": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "changed",
+                "name": "changed",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "An event that emitted when any option is changed."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "setOptionsData": {
+                "complexType": {
+                    "signature": "(optionsData: Option[]) => Promise<void>",
+                    "parameters": [{
+                            "name": "optionsData",
+                            "type": "Option[]",
+                            "docs": "- Array of product options"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "Option": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-product-options/interfaces.ts::Option"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Sets the options data for the product",
+                    "tags": [{
+                            "name": "param",
+                            "text": "optionsData - Array of product options"
+                        }]
+                }
+            },
+            "getSelectedOptionsData": {
+                "complexType": {
+                    "signature": "() => Promise<{}>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        },
+                        "FormData": {
+                            "location": "global",
+                            "id": "global::FormData"
+                        }
+                    },
+                    "return": "Promise<{}>"
+                },
+                "docs": {
+                    "text": "Get the id's of the selected options.",
+                    "tags": []
+                }
+            },
+            "reportValidity": {
+                "complexType": {
+                    "signature": "() => Promise<boolean>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "Array": {
+                            "location": "global",
+                            "id": "global::Array"
+                        },
+                        "HTMLInputElement": {
+                            "location": "global",
+                            "id": "global::HTMLInputElement"
+                        }
+                    },
+                    "return": "Promise<boolean>"
+                },
+                "docs": {
+                    "text": "Report options form validity.",
+                    "tags": []
+                }
+            },
+            "hasOutOfStockOption": {
+                "complexType": {
+                    "signature": "() => Promise<boolean>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<boolean>"
+                },
+                "docs": {
+                    "text": "Return true if there is any out of stock options are selected and vise versa.",
+                    "tags": []
+                }
+            },
+            "getSelectedOptions": {
+                "complexType": {
+                    "signature": "() => Promise<any[]>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any[]>"
+                },
+                "docs": {
+                    "text": "Get selected options.",
+                    "tags": []
+                }
+            },
+            "getOption": {
+                "complexType": {
+                    "signature": "(option_id: any) => Promise<Option>",
+                    "parameters": [{
+                            "name": "option_id",
+                            "type": "any",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "Option": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-product-options/interfaces.ts::Option"
+                        }
+                    },
+                    "return": "Promise<Option>"
+                },
+                "docs": {
+                    "text": "Get a specific option by its id.",
+                    "tags": []
+                }
+            },
+            "enableUserInitiatedValidation": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Enable user-initiated validation mode so invalid fields will scroll into view",
+                    "tags": []
+                }
+            },
+            "validateAndScroll": {
+                "complexType": {
+                    "signature": "() => Promise<boolean>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<boolean>"
+                },
+                "docs": {
+                    "text": "Validate options and trigger scrolling to the first invalid option if any",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

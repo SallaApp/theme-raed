@@ -1,0 +1,137 @@
+import http from "./http";
+
+/**
+ * @typedef {Object} ApplePayPaymentContact
+ * @property {string} phoneNumber
+ * @property {string} emailAddress
+ * @property {string} givenName
+ * @property {string} familyName
+ * @property {string} [phoneticGivenName]
+ * @property {string} [phoneticFamilyName]
+ * @property {string[]} addressLines
+ * @property {string} [subLocality]
+ * @property {string} locality
+ * @property {string} postalCode
+ * @property {string} [subAdministrativeArea]
+ * @property {string} administrativeArea
+ * @property {string} country
+ * @property {string} countryCode
+ */
+
+
+/**
+ *
+ * @param {SallaApplePay} SallaApplePay
+ * @param {boolean} isAuthorized
+ * @param {ApplePayPaymentContact} shippingContact
+ *
+ */
+export function mutateShipmentAddress(SallaApplePay, shippingContact, isAuthorized = false) {
+  console.log('mutateShipmentAddress called', shippingContact, isAuthorized);
+
+  if (!SallaApplePay.detail.requiredShippingContactFields) {
+    return;
+  }
+
+  return http.post(
+    SallaApplePay.detail.shippingContactSelected.url.replace('{id}', SallaApplePay.id),
+    {
+      'country': shippingContact.country,
+      'city': shippingContact.locality,
+      'local': shippingContact.subLocality,
+      'description': shippingContact.subAdministrativeArea,
+      'street': shippingContact.addressLines?.join(", ") || shippingContact.administrativeArea,
+      'country_code': shippingContact.countryCode,
+      'postal_code': shippingContact.postalCode,
+      'is_authorized': isAuthorized
+    },
+    async ({ data }) => {
+      if (isAuthorized) { return }
+      if (typeof SallaApplePay.detail.shippingContactSelected.onSuccess === 'function') {
+        SallaApplePay.detail.shippingContactSelected.onSuccess(data);
+      }
+
+      SallaApplePay.address_id = data.data.address_id;
+      SallaApplePay.shipping_methods = data.data.shipping_methods;
+
+      if (!SallaApplePay.shipping_methods || (SallaApplePay.shipping_methods && !SallaApplePay.shipping_methods.length)) {
+        salla.logger.warn('🍏 Pay: We dont found any supported methods', data);
+
+        return SallaApplePay.session.completeShippingContactSelection({
+          status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+          errors: [
+            new window.ApplePayError('addressUnserviceable')
+          ]
+        });
+      }
+
+      try {
+        await SallaApplePay.selectApplePayShippingMethod(SallaApplePay.shipping_methods[0]['ship_id'], SallaApplePay.shipping_methods[0]['private_ship_id']);
+      } catch (error) {
+        salla.logger.warn('Failed set the shipping details to api', error);
+
+        return SallaApplePay.session.completeShippingContactSelection({
+          status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+          errors: [
+            new window.ApplePayError('addressUnserviceable')
+          ]
+        });
+      }
+
+      try {
+        await SallaApplePay.recalculateTotal();
+      } catch (error) {
+        salla.logger.warn('🍏 Pay: Failed recalculate total', error);
+
+        return SallaApplePay.session.completeShippingContactSelection({
+          status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+          errors: [
+            new window.ApplePayError('addressUnserviceable')
+          ]
+        });
+      }
+
+      SallaApplePay.session.completeShippingContactSelection({
+        newTotal: SallaApplePay.prepareTotal(),
+        newLineItems: SallaApplePay.prepareLineItems(),
+        newShippingMethods: SallaApplePay.mappingShippingMethods(SallaApplePay.shipping_methods)
+      });
+
+    },
+    ({ response }) => {
+      salla.logger.warn('🍏 Pay: Failed add address via api', response);
+
+      if (typeof SallaApplePay.detail.shippingContactSelected.onFailed === 'function') {
+        SallaApplePay.detail.shippingContactSelected.onFailed(response);
+      }
+
+      // parse 422 errors
+      let fields = response?.data?.error?.fields;
+
+      let errors = [];
+
+      if (fields?.country_code) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'countryCode', fields?.country_code[0]))
+      }
+
+      if (fields?.city) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'locality', fields?.city[0]))
+      }
+
+      if (fields?.country) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'country', fields?.country[0]))
+      }
+
+      if (errors.length === 0 && response?.data?.error?.message) {
+        errors.push(new window.ApplePayError('shippingContactInvalid', 'locality', response?.data?.error?.message))
+      }
+
+      SallaApplePay.session.completeShippingContactSelection({
+        newTotal: SallaApplePay.prepareTotal(),
+        newLineItems: SallaApplePay.prepareLineItems(),
+        status: SallaApplePay.session.STATUS_INVALID_SHIPPING_POSTAL_ADDRESS,
+        errors: errors
+      });
+    }
+  );
+}

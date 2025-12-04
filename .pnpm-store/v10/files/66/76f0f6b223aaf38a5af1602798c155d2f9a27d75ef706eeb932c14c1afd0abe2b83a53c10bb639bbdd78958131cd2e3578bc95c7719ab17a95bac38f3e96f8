@@ -1,0 +1,56 @@
+{
+  "name": "@analytics/session-storage-utils",
+  "version": "0.0.7",
+  "description": "Tiny SessionStorage utility library",
+  "author": "David Wells",
+  "license": "MIT",
+  "homepage": "https://github.com/DavidWells/analytics/tree/master/packages/analytics-util-session-storage#readme",
+  "repository": "https://github.com/DavidWells/analytics/tree/master/packages/analytics-util-session-storage",
+  "keywords": [
+    "analytics",
+    "analytics-project",
+    "analytics-util",
+    "session-storage",
+    "sessionstorage",
+    "storage"
+  ],
+  "netlifySiteId": "e9d80041-cd0b-4a5b-8177-d740f509f1c7",
+  "amdName": "utilSessionStorage",
+  "source": "src/index.js",
+  "main": "dist/analytics-util-session-storage.js",
+  "module": "dist/analytics-util-session-storage.module.js",
+  "unpkg": "dist/analytics-util-session-storage.umd.js",
+  "sideEffects": false,
+  "scripts": {
+    "start": "npm run sync && concurrently 'npm:watch' 'npm:copy' 'npm:serve'",
+    "serve": "servor dist index.html 8081 --reload --browse",
+    "copy": "watchlist example -- npm run sync",
+    "sync": "cp example/index.html dist",
+    "watch": "npm run build:browser -- --watch --no-compress",
+    "build": "concurrently 'npm:build:*' && npm run sync",
+    "build:package": "microbundle",
+    "build:browser": "microbundle build --external none -f iife,umd -o dist/browser",
+    "build:no-deps": "microbundle build -f iife,umd -o dist/browser-no-deps",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "deploy": "npm run build && netlify deploy --prod --dir dist --site $npm_package_netlifySiteId"
+  },
+  "files": [
+    "lib",
+    "dist",
+    "package.json",
+    "package-lock.json",
+    "README.md"
+  ],
+  "devDependencies": {
+    "concurrently": "^6.1.0",
+    "microbundle": "^0.13.0",
+    "servor": "^4.0.2",
+    "watchlist": "^0.2.3"
+  },
+  "dependencies": {
+    "@analytics/global-storage-utils": "^0.1.7"
+  },
+  "gitHead": "904e8bc88a9de0d9e55ecbe1e87ac2ee2a454e32"
+}

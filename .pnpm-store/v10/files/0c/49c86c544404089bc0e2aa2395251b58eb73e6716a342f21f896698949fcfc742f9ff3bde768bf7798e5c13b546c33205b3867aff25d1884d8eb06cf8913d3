@@ -1,0 +1,20 @@
+import { BundleSection } from '../interfaces';
+export declare class SallaMultipleBundleProductDetails {
+    sections: BundleSection[];
+    selectedProducts: {
+        [sectionId: string]: Set<string | number>;
+    };
+    private productSelectedHandler;
+    host: HTMLElement;
+    private clearProductFormData;
+    private clearProductModalOptions;
+    onSelectProduct: (sectionId: string | number, product: any) => void;
+    ensureProductSelected: (sectionId: string | number, product: any) => void;
+    onSelectProductOptions: (product: any, sectionId: any) => void;
+    private handleBundleSliderProductSelected;
+    private handleBundleSliderProductOptionsSelected;
+    private renderAccordionHeader;
+    componentDidLoad(): void;
+    disconnectedCallback(): void;
+    render(): any;
+}

@@ -1,0 +1,72 @@
+export declare class SallaCountDown {
+    constructor();
+    /**
+     * The date to count down to
+     * Format: MMM DD, YYYY HH:mm:ss (e.g. Jan 2, 2023 16:37:52)
+     * */
+    date: string;
+    /**
+     * The pre-order date
+     * Format: { availability_date: string, end_date: string }
+     * availability_date: The date to count down to Format: MMM DD, YYYY HH:mm:ss (e.g. Jan 2, 2023 16:37:52)
+     * end_date: The date to count down to Format: MMM DD, YYYY HH:mm:ss (e.g. Jan 2, 2023 16:37:52)
+     * */
+    preOrder?: PreOrder | string;
+    /**
+     * If true, the count down numbers will be appear in a boxes
+     * */
+    boxed: boolean;
+    /**
+     * The size of the count down
+     * */
+    size: 'sm' | 'md' | 'lg';
+    /**
+     * The color of the count down
+     * */
+    color: 'primary' | 'light' | 'dark';
+    /**
+     * Show labels for each count down number
+     * */
+    labeled: boolean;
+    /**
+     * The text to show when the count down ends
+     * */
+    endText: string;
+    /**
+     * The digits lang to show in the count down
+     * */
+    digits: 'en' | 'auto';
+    /**
+     * If true, the count down will end at the end of the day
+     * */
+    endOfDay: boolean;
+    daysLabel: string;
+    hoursLabel: string;
+    minutesLabel: string;
+    secondsLabel: string;
+    endLabel: string;
+    invalidDate: string;
+    offerEnded: boolean;
+    countInterval: any;
+    days: string;
+    hours: string;
+    minutes: string;
+    seconds: string;
+    /**
+     * End the count down
+     * */
+    endCountDown(): Promise<void>;
+    private normalizedPreOrder?;
+    componentWillLoad(): void;
+    private isValidDate;
+    private number;
+    private startCountDown;
+    private renderCountDown;
+    private renderInvalidDate;
+    private renderOfferEnded;
+    private renderPreOrderToBeAvailableOn;
+    private renderPreOrderCountDown;
+    private renderPreOrder;
+    private renderContent;
+    render(): any;
+}

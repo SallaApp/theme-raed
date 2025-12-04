@@ -1,0 +1,369 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { d as defineCustomElement$2 } from './salla-skeleton2.js';
+
+var DiscountType;
+(function (DiscountType) {
+    DiscountType["PERCENTAGE"] = "percentage";
+    DiscountType["FIXED"] = "fixed";
+})(DiscountType || (DiscountType = {}));
+
+var StarIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" color="#000000" fill="none">
+    <path d="M13.7276 3.44418L15.4874 6.99288C15.7274 7.48687 16.3673 7.9607 16.9073 8.05143L20.0969 8.58575C22.1367 8.92853 22.6167 10.4206 21.1468 11.8925L18.6671 14.3927C18.2471 14.8161 18.0172 15.6327 18.1471 16.2175L18.8571 19.3125C19.417 21.7623 18.1271 22.71 15.9774 21.4296L12.9877 19.6452C12.4478 19.3226 11.5579 19.3226 11.0079 19.6452L8.01827 21.4296C5.8785 22.71 4.57865 21.7522 5.13859 19.3125L5.84851 16.2175C5.97849 15.6327 5.74852 14.8161 5.32856 14.3927L2.84884 11.8925C1.389 10.4206 1.85895 8.92853 3.89872 8.58575L7.08837 8.05143C7.61831 7.9607 8.25824 7.48687 8.49821 6.99288L10.258 3.44418C11.2179 1.51861 12.7777 1.51861 13.7276 3.44418Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>`;
+
+var StarsIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+    <path d="M3 12C7.5 12 12 7.5 12 3C12 7.5 16.5 12 21 12C16.5 12 12 16.5 12 21C12 16.5 7.5 12 3 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+    <path d="M2 19.5C2.83333 19.5 4.5 17.8333 4.5 17C4.5 17.8333 6.16667 19.5 7 19.5C6.16667 19.5 4.5 21.1667 4.5 22C4.5 21.1667 2.83333 19.5 2 19.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+    <path d="M16 5C17 5 19 3 19 2C19 3 21 5 22 5C21 5 19 7 19 8C19 7 17 5 16 5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+</svg>`;
+
+var GoldIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" color="#000000" fill="none">
+    <path d="M14.2644 18.3717C14.5806 17.407 14.7387 16.9247 15.0616 16.593C15.215 16.4354 15.3932 16.3048 15.5887 16.2066C16.0003 16 16.5003 16 17.5002 16C18.5001 16 19.0001 16 19.4116 16.2066C19.6072 16.3048 19.7853 16.4354 19.9388 16.593C20.2617 16.9247 20.4198 17.407 20.736 18.3717L21.0624 19.3675C21.4561 20.5688 21.653 21.1694 21.3587 21.5847C21.0643 22 20.4418 22 19.1966 22H15.8038C14.5586 22 13.936 22 13.6417 21.5847C13.3473 21.1694 13.5442 20.5688 13.938 19.3675L14.2644 18.3717Z" stroke="currentColor" stroke-width="1.5"></path>
+    <path d="M8.76421 10.3717C9.08041 9.40705 9.23851 8.92471 9.56143 8.59298C9.71485 8.43537 9.89299 8.3048 10.0885 8.20663C10.5001 8 11.0001 8 12 8C12.9999 8 13.4999 8 13.9115 8.20663C14.107 8.3048 14.2851 8.43537 14.4386 8.59298C14.7615 8.92471 14.9196 9.40705 15.2358 10.3717L15.5622 11.3675C15.956 12.5688 16.1528 13.1694 15.8585 13.5847C15.5642 14 14.9416 14 13.6964 14H10.3036C9.05842 14 8.43585 14 8.1415 13.5847C7.84716 13.1694 8.04404 12.5688 8.43779 11.3675L8.76421 10.3717Z" stroke="currentColor" stroke-width="1.5"></path>
+    <path d="M3.26439 18.3717C3.58059 17.407 3.73869 16.9247 4.06162 16.593C4.21504 16.4354 4.39317 16.3048 4.58872 16.2066C5.00031 16 5.50027 16 6.50018 16C7.5001 16 8.00006 16 8.41165 16.2066C8.6072 16.3048 8.78533 16.4354 8.93875 16.593C9.26167 16.9247 9.41977 17.407 9.73597 18.3717L10.0624 19.3675C10.4561 20.5688 10.653 21.1694 10.3587 21.5847C10.0643 22 9.44176 22 8.19661 22H4.80375C3.5586 22 2.93603 22 2.64169 21.5847C2.34735 21.1694 2.54422 20.5688 2.93797 19.3675L3.26439 18.3717Z" stroke="currentColor" stroke-width="1.5"></path>
+    <path d="M12 2V4M7.5 3.5L9 5M16.5 3.5L15 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+</svg>`;
+
+var DiamondIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+    <path d="M5.78223 4.18192C6.43007 3.68319 6.754 3.43383 7.12788 3.27323C7.29741 3.20041 7.47367 3.14158 7.65459 3.09741C8.0536 3 8.4767 3 9.32289 3H14.6771C15.5233 3 15.9464 3 16.3454 3.09741C16.5263 3.14158 16.7026 3.20041 16.8721 3.27323C17.246 3.43383 17.5699 3.68319 18.2178 4.18192C20.3644 5.83448 21.4378 6.66077 21.8057 7.73078C21.9694 8.20673 22.0305 8.70728 21.9858 9.20461C21.8852 10.3227 21.0379 11.346 19.3433 13.3925L15.3498 18.2153C13.8126 20.0718 13.044 21 12 21C10.956 21 10.1874 20.0718 8.65018 18.2153L4.65671 13.3925C2.96208 11.346 2.11476 10.3227 2.0142 9.20461C1.96947 8.70728 2.03064 8.20673 2.1943 7.73078C2.56224 6.66077 3.63557 5.83448 5.78223 4.18192Z" stroke="currentColor" stroke-width="1.5"></path>
+    <path d="M10 8.5H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>`;
+
+const TIERED_OFFER_CONFIG = {
+    staticIcons: [StarIcon, StarsIcon, GoldIcon, DiamondIcon],
+    staticColors: ['#993018', '#444444', '#D18F36', '#315F9C']
+};
+
+class TierUtils {
+    /**
+     * Find tier by index
+     */
+    static findTierByIndex(tiers, index) {
+        return tiers.find(tier => tier.index === index) || null;
+    }
+    /**
+     * Find tier by tier name
+     */
+    static findTierByName(tiers, tierName) {
+        return tiers.find(tier => tier.tier_name === tierName) || null;
+    }
+    /**
+     * Get tier name by index
+     */
+    static getTierNameByIndex(tiers, index) {
+        return this.findTierByIndex(tiers, index)?.tier_name;
+    }
+    /**
+     * Find current tier index based on current value
+     */
+    static findCurrentTierIndex(currentValue, tiers) {
+        if (!tiers)
+            return 0;
+        for (let i = tiers.length - 1; i >= 0; i--) {
+            if (currentValue >= tiers[i].threshold) {
+                return tiers[i].index;
+            }
+        }
+        return 0;
+    }
+}
+
+const sallaTieredOfferCss = ".s-tiered-offer-milestone-icon svg{color:currentColor}.s-tiered-offer-milestone-icon svg path{stroke:currentColor;fill:none}.s-tiered-offer-milestone-icon.s-tiered-offer-milestone-active svg path,.s-tiered-offer-milestone-icon.s-tiered-offer-milestone-completed svg path{fill:currentColor;stroke:none}.s-tiered-offer-milestone-icon.s-tiered-offer-milestone-active svg[fill=none] path,.s-tiered-offer-milestone-icon.s-tiered-offer-milestone-completed svg[fill=none] path{fill:none;stroke:currentColor}[dir=rtl] .s-tiered-offer-progress-wrapper .s-tiered-offer-progress-bg{transform:scaleX(-1)}[dir=rtl] .s-tiered-offer-progress-wrapper .s-tiered-offer-progress-fill{transform:scaleX(-1);left:auto}[dir=rtl] .flip-x{transform:scaleX(-1)}";
+
+const SallaTieredOffer$1 = /*@__PURE__*/ proxyCustomElement(class SallaTieredOffer extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.currentTierIndex = 0;
+        this.canRender = false;
+        this.isLoading = false;
+        this.handleTabClick = (tierName) => {
+            this.activeTabTier = tierName;
+        };
+        salla.lang.onLoaded(() => {
+            this.loyaltyProgramText = salla.lang.get('blocks.tiered_offer.program_title');
+            this.currentTierText = salla.lang.get('blocks.tiered_offer.current_tier');
+            this.discountText = salla.lang.get('blocks.tiered_offer.discount');
+            this.benefitText = salla.lang.get('blocks.tiered_offer.tier_description');
+        });
+    }
+    async componentWillLoad() {
+        try {
+            await salla.onReady();
+            if (!this.checkFeatureEnabled()) {
+                return;
+            }
+            if (!this.checkCartExists()) {
+                return;
+            }
+            this.isLoading = true;
+            const offerData = await this.fetchTieredOfferData();
+            if (!offerData) {
+                return;
+            }
+            this.initializeComponent(offerData);
+        }
+        catch (error) {
+            this.canRender = false;
+            salla.logger.warn('salla-tiered-offer:: ', error);
+        }
+        finally {
+            this.isLoading = false;
+        }
+    }
+    checkFeatureEnabled() {
+        return salla.config.get('store.features')?.includes('tiered-offer');
+    }
+    checkCartExists() {
+        return !!salla.storage.get("cart")?.summary?.count;
+    }
+    validateCouponCompatibility(offerData, cartCoupon) {
+        // If coupon is applied but offer doesn't support coupons, widget should be hidden
+        return !(cartCoupon && !offerData.details?.applied_with_coupon);
+    }
+    async fetchTieredOfferData() {
+        try {
+            const { data } = await salla.api.cart.offers();
+            const tieredOffer = data.find(offer => offer.type === "tiered_offer");
+            if (!tieredOffer) {
+                return null;
+            }
+            // Hide widget if coupon is applied and offer doesn't support coupons
+            if (!this.validateCouponCompatibility(tieredOffer, salla.storage.get("cart")?.coupon)) {
+                this.canRender = false;
+                return null;
+            }
+            return tieredOffer;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    initializeComponent(apiOfferData) {
+        this.apiOfferData = apiOfferData;
+        // Map tiered details data to component format
+        this.tieredOfferData = this.mapApiDataToTiers(this.apiOfferData);
+        this.loyaltyProgramText = this.apiOfferData.title || this.loyaltyProgramText;
+        // Find current tier index based on current_value from API
+        const currentValue = this.apiOfferData.details?.current_value || 0;
+        const currentTierIndex = this.findCurrentTierIndex(currentValue);
+        // Only render if user has reached at least the first tier
+        if (currentTierIndex === 0) {
+            this.canRender = false;
+            return;
+        }
+        this.currentTierIndex = currentTierIndex;
+        this.currentTier = TierUtils.getTierNameByIndex(this.tieredOfferData.tiers, currentTierIndex);
+        this.activeTabTier = this.currentTier;
+        this.canRender = true;
+    }
+    componentDidLoad() {
+        salla.event.on("cart::updated", async (updatedCart) => {
+            const offerData = await this.fetchTieredOfferData();
+            if (offerData) {
+                this.updateOfferValues(updatedCart, offerData);
+            }
+        });
+    }
+    mapApiDataToTiers(apiData) {
+        // Sort discounts by min_spend to create proper tier order
+        const sortedDiscounts = [...apiData.details.discounts].sort((a, b) => a.min_spend - b.min_spend);
+        const tiers = sortedDiscounts.map((discount, index) => ({
+            name: discount.name,
+            tier_name: discount.name,
+            discount: discount.type === DiscountType.PERCENTAGE ? `${salla.helpers.number(discount.value)}%` : salla.money(discount.value),
+            icon: TIERED_OFFER_CONFIG.staticIcons[index] || TIERED_OFFER_CONFIG.staticIcons[0],
+            threshold: discount.min_spend,
+            text_color: TIERED_OFFER_CONFIG.staticColors[index],
+            index: index + 1
+        }));
+        return {
+            current_tier: TierUtils.getTierNameByIndex(tiers, this.findCurrentTierIndex(apiData.details.current_value, tiers)),
+            tiers
+        };
+    }
+    findCurrentTierIndex(currentValue, tiers = this.tieredOfferData?.tiers) {
+        return TierUtils.findCurrentTierIndex(currentValue, tiers || []);
+    }
+    updateOfferValues(updatedCart, freshOfferData) {
+        if (!freshOfferData || !this.tieredOfferData) {
+            return;
+        }
+        // Check coupon compatibility
+        if (!this.validateCouponCompatibility(freshOfferData, updatedCart.coupon)) {
+            this.canRender = false;
+            return;
+        }
+        // If no coupon conflict, show widget
+        this.canRender = true;
+        // Check if this offer should update with cart changes
+        if (freshOfferData.details?.with_current_cart === false) {
+            return;
+        }
+        // Update current_value in API offer data
+        //  const currentValue = updatedCart.sub_total;
+        //  console.log('currentValue #####3', currentValue);
+        //  this.apiOfferData = {
+        //    ...this.apiOfferData,
+        //    details: {
+        //      ...this.apiOfferData.details,
+        //      current_value: currentValue
+        //    }
+        //  };
+        // Use current_value from fresh API data instead of cart sub_total
+        const currentValue = freshOfferData.details?.current_value || 0;
+        this.apiOfferData = freshOfferData;
+        // Update current tier based on new value
+        const newTierIndex = this.findCurrentTierIndex(currentValue);
+        // Check if user qualifies for any tier
+        if (newTierIndex === 0) {
+            this.canRender = false;
+            return;
+        }
+        // user qualifies show widget
+        this.canRender = true;
+        this.currentTierIndex = newTierIndex;
+        this.currentTier = TierUtils.getTierNameByIndex(this.tieredOfferData.tiers, newTierIndex);
+        // Update active tab if needed
+        if (this.activeTabTier !== this.currentTier) {
+            this.activeTabTier = this.currentTier;
+        }
+    }
+    getLoadingSkeletonView() {
+        return h(Host, null, h("div", { class: "s-tiered-offer-container" }, h("div", { class: "s-tiered-offer-skeleton-wrapper" }, h("div", { class: "s-tiered-offer-skeleton-title" }, h("salla-skeleton", { height: "16px", width: "40%" })), h("div", { class: "s-tiered-offer-skeleton-subtitle" }, h("salla-skeleton", { height: "20px", width: "60%" })), h("div", { class: "s-tiered-offer-skeleton-progress" }, h("salla-skeleton", { height: "16px", width: "100%" })), h("div", { class: "s-tiered-offer-skeleton-tabs" }, h("salla-skeleton", { height: "50px", width: "100%" })))));
+    }
+    getCurrentTierData() {
+        return TierUtils.findTierByIndex(this.tieredOfferData.tiers, this.currentTierIndex) || this.tieredOfferData.tiers[0];
+    }
+    getProgressWidth() {
+        const currentValue = this.apiOfferData.details?.current_value || 0;
+        const totalTiers = this.tieredOfferData.tiers.length;
+        // Use existing method to find current tier index (which already handles the logic)
+        const currentTierIndex = this.findCurrentTierIndex(currentValue);
+        // Convert to 0-based index for progress calculation
+        const completedTiers = currentTierIndex;
+        return (completedTiers / totalTiers) * 100;
+    }
+    calculateMilestonePosition(index, totalTiers) {
+        if (totalTiers === 1) {
+            return 'calc(100% - 18px)';
+        }
+        const milestonePercent = ((index + 1) / totalTiers) * 100;
+        const offsetPercent = 8 / totalTiers;
+        return `${Math.max(2, Math.min(95, milestonePercent - offsetPercent))}%`;
+    }
+    getMilestoneStyles(tier, index, totalTiers) {
+        const isRtl = document.documentElement.dir === 'rtl';
+        const adjustedPercent = this.calculateMilestonePosition(index, totalTiers);
+        const alignItems = tier.name.length > 6 ? 'flex-end' : 'center';
+        return {
+            [isRtl ? 'right' : 'left']: adjustedPercent,
+            alignItems,
+            position: 'absolute',
+            transform: isRtl ? 'translateX(50%)' : 'translateX(-50%)'
+        };
+    }
+    getMilestoneIconStyles(tier, isCurrent, isReached) {
+        if (isCurrent) {
+            return { color: tier.text_color };
+        }
+        if (isReached) {
+            return { color: 'var(--color-primary)' };
+        }
+        return {};
+    }
+    renderProgressBarBackground(progressWidth) {
+        return [
+            h("div", { class: "s-tiered-offer-progress-bg" }),
+            h("div", { class: "s-tiered-offer-progress-fill", style: { width: `${progressWidth}%` } })
+        ];
+    }
+    renderMilestoneIcon(tier, isCurrent, isReached) {
+        const iconClasses = [
+            's-tiered-offer-milestone-icon',
+            isCurrent ? 's-tiered-offer-milestone-active' : '',
+            isReached ? 's-tiered-offer-milestone-completed' : ''
+        ].filter(Boolean).join(' ');
+        return (h("div", { class: iconClasses, style: this.getMilestoneIconStyles(tier, isCurrent, isReached) }, h("span", { innerHTML: tier.icon })));
+    }
+    renderMilestoneName(tier, isCurrent) {
+        return (h("div", { class: "s-tiered-offer-milestone-name" }, isCurrent && (h("span", { style: { color: tier.text_color } }, tier.name))));
+    }
+    renderMilestones(currentValue, totalTiers) {
+        const containerClass = totalTiers === 1
+            ? 's-tiered-offer-single-milestone-justify-end'
+            : 's-tiered-offer-milestones';
+        return (h("div", { class: "s-tiered-offer-milestones-wrapper" }, h("div", { class: containerClass }, this.tieredOfferData.tiers.map((tier, index) => {
+            const isReached = currentValue >= tier.threshold;
+            const isCurrent = tier.tier_name === this.currentTier;
+            return (h("div", { class: "s-tiered-offer-milestone", style: this.getMilestoneStyles(tier, index, totalTiers) }, this.renderMilestoneIcon(tier, isCurrent, isReached), this.renderMilestoneName(tier, isCurrent)));
+        }))));
+    }
+    renderProgressBar() {
+        const progressWidth = this.getProgressWidth();
+        const totalTiers = this.tieredOfferData.tiers.length;
+        const currentValue = this.apiOfferData.details?.current_value || 0;
+        return (h("div", { class: "s-tiered-offer-progress-container" }, h("div", { class: "s-tiered-offer-progress-wrapper" }, this.renderProgressBarBackground(progressWidth), this.renderMilestones(currentValue, totalTiers))));
+    }
+    renderTabs() {
+        return (h("div", { class: "s-tiered-offer-tabs-container" }, h("div", { class: "s-tiered-offer-tab-headers" }, this.tieredOfferData.tiers.map(tier => {
+            const isActive = tier.tier_name === this.activeTabTier;
+            return (h("button", { class: `s-tiered-offer-tab-header ${isActive ? 's-tiered-offer-tab-active' : ''}`, onClick: () => this.handleTabClick(tier.tier_name) }, h("span", null, tier.name)));
+        })), h("div", { class: "s-tiered-offer-tab-content-wrapper" }, (() => {
+            const activeTier = TierUtils.findTierByName(this.tieredOfferData.tiers, this.activeTabTier);
+            if (!activeTier)
+                return null;
+            return (h("div", { class: "s-tiered-offer-tab-content" }, h("div", { class: "s-tiered-offer-tab-content-inner" }, h("div", { class: "s-tiered-offer-discount-section" }, h("p", { class: "s-tiered-offer-discount-title" }, this.discountText, " ", h("span", { innerHTML: activeTier.discount })), h("p", { class: "s-tiered-offer-benefit-description" }, this.benefitText, " ", activeTier.name)))));
+        })())));
+    }
+    render() {
+        if (this.isLoading) {
+            return this.getLoadingSkeletonView();
+        }
+        if (!this.canRender || !this.tieredOfferData) {
+            return null;
+        }
+        const currentTierData = this.getCurrentTierData();
+        return (h(Host, null, h("div", { class: "s-tiered-offer-container" }, h("div", { class: "s-tiered-offer-header" }, h("div", { class: "s-tiered-offer-header-content" }, h("p", { class: "s-tiered-offer-program-title" }, this.loyaltyProgramText), h("div", { class: "s-tiered-offer-current-tier-name-wrapper" }, h("h2", { class: "s-tiered-offer-current-tier" }, this.currentTierText, " ", h("span", { class: "s-tiered-offer-tier-name" }, currentTierData.name)), h("span", { innerHTML: currentTierData.icon })))), this.renderProgressBar(), this.renderTabs())));
+    }
+    static get style() { return sallaTieredOfferCss; }
+}, [0, "salla-tiered-offer", {
+        "tieredOfferData": [32],
+        "apiOfferData": [32],
+        "currentTierIndex": [32],
+        "currentTier": [32],
+        "activeTabTier": [32],
+        "canRender": [32],
+        "isLoading": [32],
+        "loyaltyProgramText": [32],
+        "currentTierText": [32],
+        "discountText": [32],
+        "benefitText": [32]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-tiered-offer", "salla-skeleton"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-tiered-offer":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaTieredOffer$1);
+            }
+            break;
+        case "salla-skeleton":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaTieredOffer = SallaTieredOffer$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaTieredOffer, defineCustomElement };

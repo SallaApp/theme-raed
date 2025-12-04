@@ -1,0 +1,42 @@
+import { BundleSection } from './interfaces';
+/**
+ * Example usage with new nested structure:
+ *
+ * <salla-multiple-bundle-product bundleSections='{
+ *   "id": "encoded_product_id",
+ *   "name": "Complete Office Setup Bundle",
+ *   "bundle": {
+ *     "discount_percentage": 15,
+ *     "sections": [
+ *       {
+ *         "id": "encoded_section_1",
+ *         "name": "Office Equipment",
+ *         "obligatory_products": 1,
+ *         "products": [
+ *           {
+ *             "id": "encoded_sub_product_1",
+ *             "name": "Office Desk",
+ *             "image": "https://cdn.salla.sa/products/desk.jpg",
+ *             "images": ["https://cdn.salla.sa/products/desk-1.jpg"],
+ *             "price": { "amount": 500, "currency": "SAR" },
+ *             "sale_price": 450,
+ *             "quantity": 50,
+ *             "options": [...]
+ *           }
+ *         ]
+ *       }
+ *     ]
+ *   }
+ * }'></salla-multiple-bundle-product>
+ */
+export declare class SallaMultipleBundleProduct {
+    bundleSections: string;
+    parsedSections: BundleSection[];
+    parseProducts(newValue: string | any[] | any): void;
+    private extractSections;
+    private isCartPage;
+    private renderCartPage;
+    private renderDetailsPage;
+    componentWillLoad(): void;
+    render(): any;
+}

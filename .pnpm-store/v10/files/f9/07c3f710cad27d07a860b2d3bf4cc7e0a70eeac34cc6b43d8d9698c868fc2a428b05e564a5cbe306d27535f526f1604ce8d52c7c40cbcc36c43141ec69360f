@@ -1,0 +1,378 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+export class SallaCountDown {
+    constructor() {
+        /**
+         * The size of the count down
+         * */
+        this.size = 'md';
+        /**
+         * The color of the count down
+         * */
+        this.color = 'dark';
+        /**
+         * The digits lang to show in the count down
+         * */
+        this.digits = 'auto';
+        this.daysLabel = salla.lang.getWithDefault('pages.checkout.day', 'يوم');
+        this.hoursLabel = salla.lang.getWithDefault('pages.checkout.hour', 'ساعة');
+        this.minutesLabel = salla.lang.getWithDefault('pages.checkout.minute', 'دقيقة');
+        this.secondsLabel = salla.lang.getWithDefault('pages.checkout.second', 'ثانية');
+        this.endLabel = salla.lang.getWithDefault('pages.checkout.offer_ended', 'انتهت مدة العرض');
+        this.invalidDate = salla.lang.getWithDefault('blocks.buy_as_gift.incorrect_date', 'الرجاء إدخال الموعد بشكل صحيح');
+        this.offerEnded = false;
+        this.days = this.number(0);
+        this.hours = this.number(0);
+        this.minutes = this.number(0);
+        this.seconds = this.number(0);
+        salla.lang.onLoaded(() => {
+            this.daysLabel = salla.lang.getWithDefault('pages.checkout.day', 'يوم');
+            this.hoursLabel = salla.lang.getWithDefault('pages.checkout.hour', 'ساعة');
+            this.minutesLabel = salla.lang.getWithDefault('pages.checkout.minute', 'دقيقة');
+            this.invalidDate = salla.lang.getWithDefault('blocks.buy_as_gift.incorrect_date', 'الرجاء إدخال الموعد بشكل صحيح');
+            this.secondsLabel = salla.lang.getWithDefault('pages.checkout.second', 'ثانية');
+            this.endLabel = salla.lang.getWithDefault('pages.checkout.offer_ended', 'انتهت مدة العرض');
+        });
+        if (this.date && this.isValidDate(this.date)) {
+            this.startCountDown();
+        }
+    }
+    /**
+     * End the count down
+     * */
+    async endCountDown() {
+        clearInterval(this.countInterval);
+        this.offerEnded = true;
+        this.days = this.number(0);
+        this.hours = this.number(0);
+        this.minutes = this.number(0);
+        this.seconds = this.number(0);
+    }
+    componentWillLoad() {
+        if (typeof this.preOrder === 'string') {
+            try {
+                this.normalizedPreOrder = JSON.parse(this.preOrder);
+            }
+            catch {
+                this.normalizedPreOrder = undefined;
+            }
+        }
+        else {
+            this.normalizedPreOrder = this.preOrder;
+        }
+        if (this.normalizedPreOrder?.end_date) {
+            this.date = this.normalizedPreOrder.end_date;
+            if (this.date && this.isValidDate(this.date)) {
+                this.startCountDown();
+            }
+        }
+    }
+    isValidDate(date) {
+        let dateHasDashes = date.includes('-'), dateParts = date.split(' '), testedDate;
+        if (dateHasDashes) {
+            testedDate = dateParts[0].replace(/-/g, '/');
+        }
+        else {
+            testedDate = dateParts[0];
+        }
+        return !isNaN(Date.parse(testedDate));
+    }
+    number(digit) {
+        return salla.helpers.number(digit, this.digits === 'en');
+    }
+    startCountDown() {
+        let countDownDate = new Date(this.date.replace(/-/g, '/'));
+        if (this.endOfDay || this.date.split(' ').length === 1) {
+            countDownDate.setHours(23, 59, 59, 999);
+        }
+        let countDownTime = countDownDate.getTime();
+        this.countInterval = setInterval(() => {
+            let now = new Date().getTime();
+            let distance = countDownTime - now;
+            this.days = this.number(Math.floor(distance / (1000 * 60 * 60 * 24)));
+            this.hours = this.number(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            this.minutes = this.number(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+            this.seconds = this.number(Math.floor((distance % (1000 * 60)) / 1000));
+            if (distance < 0) {
+                this.endCountDown();
+            }
+        }, 1000);
+    }
+    renderCountDown() {
+        return (h("ul", { class: `s-count-down-list ${this.boxed ? 's-count-down-boxed' : ''} ${this.offerEnded ? 's-count-down-ended' : ''} s-count-down-${this.size} s-count-down-${this.color}` }, h("li", { class: "s-count-down-item" }, h("div", { class: "s-count-down-item-value" }, this.seconds), this.labeled && h("div", { class: "s-count-down-item-label" }, this.secondsLabel)), h("li", { class: "s-count-down-item" }, h("div", { class: "s-count-down-item-value" }, this.minutes), this.labeled && h("div", { class: "s-count-down-item-label" }, this.minutesLabel)), h("li", { class: "s-count-down-item" }, h("div", { class: "s-count-down-item-value" }, this.hours), this.labeled && h("div", { class: "s-count-down-item-label" }, this.hoursLabel)), h("li", { class: "s-count-down-item" }, h("div", { class: "s-count-down-item-value" }, this.days), this.labeled && h("div", { class: "s-count-down-item-label" }, this.daysLabel))));
+    }
+    renderInvalidDate() {
+        return h("div", { class: "s-count-down-text-center" }, this.invalidDate);
+    }
+    renderOfferEnded() {
+        return h("div", { class: "s-count-down-end-text" }, !!this.endText ? this.endText : this.endLabel);
+    }
+    renderPreOrderToBeAvailableOn() {
+        if (!this.normalizedPreOrder?.availability_date ||
+            !this.isValidDate(this.normalizedPreOrder?.availability_date))
+            return null;
+        return (h("div", { class: "s-count-down-info-message" }, h("i", { class: "sicon-info" }), h("span", null, salla.lang.getWithDefault('pages.products.expected_to_be', 'متوقَّع توفُّره بتاريخ:')), h("span", null, new Date(this.normalizedPreOrder?.availability_date).toLocaleDateString(salla.lang.locale, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        }))));
+    }
+    renderPreOrderCountDown() {
+        if (!this.normalizedPreOrder?.activate_countdown)
+            return null;
+        return (h("div", { class: "s-count-down-pre-order-container" }, h("p", { class: "text-sm " }, salla.lang.getWithDefault('pages.products.pre_order_ends_in', 'ينتهي الطلب المسبق خلال:')), this.renderCountDown()));
+    }
+    renderPreOrder() {
+        return (h("div", null, typeof this.normalizedPreOrder === 'object' &&
+            this.normalizedPreOrder?.availability_date &&
+            this.renderPreOrderToBeAvailableOn(), this.renderPreOrderCountDown()));
+    }
+    renderContent() {
+        if (!this.date)
+            return null;
+        if (!this.isValidDate(this.date)) {
+            return this.renderInvalidDate();
+        }
+        if (this.preOrder) {
+            return this.renderPreOrder();
+        }
+        return this.renderCountDown();
+    }
+    render() {
+        return (h(Host, { key: '96bba6312e710673e1f249cabecfc8756fac5c0e', class: `s-count-down-wrapper ${this.preOrder && this.isValidDate(this.date) ? 's-count-down-pre-order' : ''}` }, this.renderContent(), this.offerEnded && this.renderOfferEnded()));
+    }
+    static get is() { return "salla-count-down"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-count-down.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-count-down.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "date": {
+                "type": "string",
+                "attribute": "date",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The date to count down to\nFormat: MMM DD, YYYY HH:mm:ss (e.g. Jan 2, 2023 16:37:52)"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "preOrder": {
+                "type": "string",
+                "attribute": "pre-order",
+                "mutable": false,
+                "complexType": {
+                    "original": "PreOrder | string",
+                    "resolved": "PreOrder | string",
+                    "references": {
+                        "PreOrder": {
+                            "location": "global",
+                            "id": "global::PreOrder"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "The pre-order date\nFormat: { availability_date: string, end_date: string }\navailability_date: The date to count down to Format: MMM DD, YYYY HH:mm:ss (e.g. Jan 2, 2023 16:37:52)\nend_date: The date to count down to Format: MMM DD, YYYY HH:mm:ss (e.g. Jan 2, 2023 16:37:52)"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "boxed": {
+                "type": "boolean",
+                "attribute": "boxed",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "If true, the count down numbers will be appear in a boxes"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "size": {
+                "type": "string",
+                "attribute": "size",
+                "mutable": false,
+                "complexType": {
+                    "original": "'sm' | 'md' | 'lg'",
+                    "resolved": "\"lg\" | \"md\" | \"sm\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The size of the count down"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'md'"
+            },
+            "color": {
+                "type": "string",
+                "attribute": "color",
+                "mutable": false,
+                "complexType": {
+                    "original": "'primary' | 'light' | 'dark'",
+                    "resolved": "\"dark\" | \"light\" | \"primary\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The color of the count down"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'dark'"
+            },
+            "labeled": {
+                "type": "boolean",
+                "attribute": "labeled",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show labels for each count down number"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "endText": {
+                "type": "string",
+                "attribute": "end-text",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The text to show when the count down ends"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "digits": {
+                "type": "string",
+                "attribute": "digits",
+                "mutable": false,
+                "complexType": {
+                    "original": "'en' | 'auto'",
+                    "resolved": "\"auto\" | \"en\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The digits lang to show in the count down"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'auto'"
+            },
+            "endOfDay": {
+                "type": "boolean",
+                "attribute": "end-of-day",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "If true, the count down will end at the end of the day"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "daysLabel": {},
+            "hoursLabel": {},
+            "minutesLabel": {},
+            "secondsLabel": {},
+            "endLabel": {},
+            "invalidDate": {},
+            "offerEnded": {},
+            "countInterval": {},
+            "days": {},
+            "hours": {},
+            "minutes": {},
+            "seconds": {}
+        };
+    }
+    static get methods() {
+        return {
+            "endCountDown": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "End the count down",
+                    "tags": []
+                }
+            }
+        };
+    }
+}

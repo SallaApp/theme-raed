@@ -1,0 +1,55 @@
+import { EventEmitter } from '../../../stencil-public-runtime';
+import { BundleProduct, SelectedOption } from '../interfaces';
+export declare class SallaMultipleBundleProductOptionsModal {
+    product: BundleProduct | null;
+    sectionId: string | number | null;
+    sectionIndex: number | null;
+    productIndex: number | null;
+    selectedOptions: {
+        [key: string]: SelectedOption[];
+    };
+    optionsResetTokens: {
+        [key: string]: number;
+    };
+    isLoading: boolean;
+    hasUnsavedChanges: boolean;
+    validationErrors: string[];
+    private modal;
+    private optionChangeListener;
+    private checkboxChangeListener;
+    private modalOpenListener;
+    private clearOptionsListener;
+    optionsSaved: EventEmitter<{
+        productId: number;
+        selectedOptions: SelectedOption[];
+        sectionId?: string | number | null;
+        productIndex?: number | null;
+    }>;
+    productSelected: EventEmitter<{
+        productId: number;
+        sectionId: string | number;
+        product?: BundleProduct;
+        fromModal?: boolean;
+    }>;
+    host: HTMLElement;
+    /**
+     * Generate a unique cache key for selected options using section ID, product index, and product ID
+     */
+    private generateCacheKey;
+    handleProductChange(newValue: BundleProduct | null): void;
+    open(): Promise<void>;
+    close(): Promise<void>;
+    refreshOptionsState(): Promise<void>;
+    componentDidLoad(): void;
+    disconnectedCallback(): void;
+    private cleanupProductDeselection;
+    private generateFormInputName;
+    private initializeSelectedOptions;
+    private clearProductOptions;
+    private bumpOptionsResetToken;
+    private handleOptionChange;
+    private validateOptions;
+    onSave(e: Event): Promise<void>;
+    private getOptionsWithSelectedState;
+    render(): any;
+}

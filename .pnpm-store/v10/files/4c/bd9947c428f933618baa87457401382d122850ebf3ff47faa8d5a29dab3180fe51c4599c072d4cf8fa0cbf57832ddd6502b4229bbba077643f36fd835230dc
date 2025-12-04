@@ -1,0 +1,61 @@
+/**
+ * @slot trigger - Replaces trigger widget, has replaceable props `{avatar}`, `{hello}`, `{first_name}`, `{last_name}`, `{icon}`.
+ * @slot login-btn - Replaces the login button, it must be used with `salla.event.dispatch('login::open')` to open the login modal.
+ */
+export declare class SallaUserMenu {
+    constructor();
+    host: HTMLElement;
+    private triggerSlot;
+    accountLoading: boolean;
+    opened: boolean;
+    notifications: string;
+    orders: string;
+    pending_orders: string;
+    wishlist: string;
+    profile: string;
+    rating: string;
+    wallet: string;
+    settings: string;
+    loyalty_program: string;
+    logout: string;
+    hello: string;
+    first_name: string;
+    last_name: string;
+    avatar: string;
+    is_loggedIn: boolean;
+    badges: any;
+    sallaAccountEnabled: boolean;
+    hasBadges: boolean;
+    /**
+     * To display only the list without the dropdown functionality
+     */
+    inline: boolean;
+    /**
+     * To display the trigger as an avatar only
+     */
+    avatarOnly: boolean;
+    /**
+     * To display the dropdown header in mobile sheet
+     */
+    showHeader: boolean;
+    /**
+     * To Make the dropdown menu relative to parent element or not
+     */
+    relativeDropdown: boolean;
+    private onClickOutside;
+    profileUrl: string;
+    OrderUpdate: number;
+    private items;
+    componentWillLoad(): Promise<void>;
+    private fetchFreshProfile;
+    private updateProfileState;
+    open(e: any): Promise<void>;
+    private menuItemClicked;
+    private replaceParams;
+    private getTheHeader;
+    private getItemAnchorLinkAttrs;
+    private getMenuItem;
+    componentShouldUpdate(): void;
+    render(): any;
+    componentDidLoad(): void;
+}
