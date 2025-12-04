@@ -8,6 +8,13 @@
 {% extends "layouts.master" %}
 {% block content %}
     {% component home %}
+    
+    {# Injecting Neoma Custom Sections #}
+    {% include 'components.home.neoma-story' %}
+    
+    {# Newsletter Section #}
+    {% include 'components.home.neoma-newsletter' %}
+
 {% endblock %}
 {% block scripts %}
     <script defer src="{{ 'home.js' | asset }}"></script>

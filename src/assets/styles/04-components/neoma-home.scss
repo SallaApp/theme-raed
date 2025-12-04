@@ -1,0 +1,104 @@
+// Home Page Customization for Neoma
+
+// Hero Section styling overrides (assuming standard salla-slider or creating a custom hero class)
+.s-block--hero-slider {
+    margin-bottom: 4rem;
+    
+    .swiper-slide {
+        // Ensure images are aspirational and full
+        .overlay-bg {
+             &::after {
+                 content: '';
+                 position: absolute;
+                 inset: 0;
+                 background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3)); // Soft overlay
+             }
+        }
+    }
+    
+    h2 {
+        font-family: 'Helvetica Neue', sans-serif;
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .description {
+        font-family: 'Cursive', sans-serif; // Using the "Neoma" script font for the tagline
+        font-size: 1.5rem;
+        font-style: italic;
+    }
+}
+
+// "Our Story" Section
+.neoma-our-story {
+    padding: 6rem 0;
+    text-align: center;
+    background-color: #F5F2EC; // Secondary beige
+    position: relative;
+    overflow: hidden;
+
+    &__content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 10;
+    }
+
+    h2 {
+        color: #1A4B8C;
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    p {
+        font-size: 1.125rem;
+        line-height: 1.8;
+        color: #4A4A4A;
+    }
+    
+    // Decorative icon
+    &::before {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(#F9E8D9 2px, transparent 2px); // Simple pattern representation
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        opacity: 0.5;
+    }
+}
+
+// "Why Neoma" - Values Section
+.neoma-values {
+    padding: 4rem 0;
+    background-color: #FDFBF7;
+
+    .value-card {
+        text-align: center;
+        padding: 2rem;
+        
+        &__icon {
+            font-size: 3rem;
+            color: #1A4B8C; // Or a pastel accent
+            margin-bottom: 1.5rem;
+            // Ideally replaced with SVG line-art icons
+        }
+        
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        p {
+            font-size: 0.95rem;
+            color: #666;
+        }
+    }
+}
+
