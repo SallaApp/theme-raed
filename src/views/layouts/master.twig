@@ -120,6 +120,9 @@
 {% if user.type=='guest' %}
     <salla-login-modal></salla-login-modal>
 {% endif %}
+{% if store.scope %}
+    <salla-scopes selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
+{% endif %}
 {% block scripts %}{% endblock %}
 </body>
 </html>
