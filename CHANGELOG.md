@@ -18,7 +18,7 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 -  Display donation-amount based on option custom_amount_enabled.
 
 # 🎇 [1.276.0]( https://github.com/SallaApp/theme-raed/compare/1.271.0...1.276.0) (20-11-2025)
-### Enahancements
+### Enhancements
 -  Build theme assets.
 
 # 🎇 [1.271.0]( https://github.com/SallaApp/theme-raed/compare/1.267.0...1.271.0) (11-11-2025)
