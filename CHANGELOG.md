@@ -9,15 +9,15 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-# 🎇 [1.279.0]( https://github.com/SallaApp/theme-raed/compare/1.278.0...1.279.0) (07-12-2025)
+# ✨  [1.279.0]( https://github.com/SallaApp/theme-raed/compare/1.278.0...1.279.0) (07-12-2025)
 ### Enhancements
 -  Scopes moved out from header.
 
-# 🎇 [1.278.0]( https://github.com/SallaApp/theme-raed/compare/1.276.0...1.278.0) (01-12-2025)
+# ✨  [1.278.0]( https://github.com/SallaApp/theme-raed/compare/1.276.0...1.278.0) (01-12-2025)
 ### Enhancements
 -  Display donation-amount based on option custom_amount_enabled.
 
-# 🎇 [1.276.0]( https://github.com/SallaApp/theme-raed/compare/1.271.0...1.276.0) (20-11-2025)
+# ✨  [1.276.0]( https://github.com/SallaApp/theme-raed/compare/1.271.0...1.276.0) (20-11-2025)
 ### Enhancements
 -  Build theme assets.
 
@@ -25,13 +25,13 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 ### Bug Fixes
 -  Fix safari `on-paste` issue.
 
-# 🎇 [1.267.0]( https://github.com/SallaApp/theme-raed/compare/1.265.0...1.267.0) (06-11-2025)
+# 🪁 [1.267.0]( https://github.com/SallaApp/theme-raed/compare/1.265.0...1.267.0) (06-11-2025)
 
 ### Bug Fixes
 -  Fix updating `itemOriginalPrice` if `hasSalePrice`.
 -  Fix price icon direction.
 
-# 🎇 [1.265.0]( https://github.com/SallaApp/theme-raed/compare/1.264.0...1.265.0) (30-10-2025)
+# 🪁 [1.265.0]( https://github.com/SallaApp/theme-raed/compare/1.264.0...1.265.0) (30-10-2025)
 
 ### Bug Fixes
 -  Partial payment breakdown for the customer.
