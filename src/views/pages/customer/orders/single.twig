@@ -148,6 +148,15 @@
             </tbody>
         </table>
 
+        {% if order.refund_message %}
+          <div class="min-w-full rounded-md overflow-hidden">
+            <div class="bg-white flex items-center gap-1 rounded-md px-3 py-5 md:px-5">
+               <i class="sicon-refund h-6 w-6"></i> 
+                <p class="font-medium text-base">{{order.refund_message|raw}}</p>
+            </div>
+          </div>
+        {% endif %}
+
         {% if store.settings.rating.allow_update and order.rating is not empty %}    
             <div class="flex items-start gap-2 bg-blue-50 border border-blue-200 text-blue-500 px-2 py-3 rounded-md text-sm">
                 <i class="sicon-info"></i>   
@@ -283,79 +292,10 @@
                               </div>
                           {% endif %}
 
-                            {% if item.options %}
-                              <h2 class="mt-5 mb-3.5 text-sm font-bold">{{ trans('pages.cart.item_options') }}</h2>
-                              <div class="flow-root rounded-md px-4 border border-gray-200 mb-2">
-                                  <dl class="text-sm text-dark divide-y divide-border-color">
-                                      {% for option in item.options %}
-                                          <div class="py-2.5 center-between">
-                                              <dt class="mb-2 md:mb-0">
-                                                  {{ option.name }}:
-                                              </dt>
-                                              <dd class="font-medium {{ option.is_image ? 'text-gray-900' : 'text-xs' }}">
-                                                  {% if option.is_image %}
-                                                      <div class="flex rtl:space-x-reverse space-x-2.5">
-                                                          <a href="{{ option.value }}" target="_blank">
-                                                              <img class="h-6 w-6 object-cover rounded-md"
-                                                                    src="{{ option.value ?: 'images/placeholder.png' | asset }}"
-                                                                    alt="{{ option.name }}"/>
-                                                          </a>
-                                                      </div>
-                                                  {% elseif option.color %}
-                                                    <span title="{{option.value}}" class="inline-block h-6 w-6 rtl:mr-2 ltr:ml-2 rounded-full shadow" style="background-color: {{ option.color }}" ></span>
-                                                  {% elseif option.is_file %}
-                                                    <a href="{{ option.value }}" target="_blank" class="text-sm text-primary underline">{{ trans('pages.products.attachments') }}</a>
-                                                  {% elseif option.is_color_picker %}
-                                                    <div class="flex w-fit border border-gray-100 rounded">
-                                                        <div class="flex-center ltr:border-r rtl:border-l border-gray-100 ltr:pr-1 rtl:pl-1">
-                                                            <span class="text-xs px-1">{{option.value}}</span>
-                                                            <span class="inline-block h-4 rtl:mr-1 ltr:ml-1 rounded p-1 border border-gray-100 shadow" style="background-color: {{option.value}};width: 1rem"></span>
-                                                        </div>
-                                                        <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{option.value}}" class="pt-1 px-1">
-                                                            <i class="sicon-swap-stroke pointer-events-none text-sm text-gray-500"></i>
-                                                        </salla-button>
-                                                    </div>
-                                                  {% elseif option.is_map %}
-                                                    <salla-map
-                                                        id="location_map"
-                                                        class="map_{{option.id}}"
-                                                        zoom="15"
-                                                        readonly
-                                                        lat="{{option.latitude}}"
-                                                        lng="{{option.longitude}}"
-                                                        >
-                                                          <div slot="button">
-                                                            <button type="button" class="text-sm text-primary" onclick="document.querySelector('salla-map.map_{{option.id}}').open()">
-                                                              {{ trans('pages.products.show_location') }}
-                                                            </button>
-                                                          </div>
-                                                    </salla-map>
-                                                  {% else %}
-                                                    {{ option.value }}
-                                                  {% endif %}
-                                              </dd>
-                                          </div>
-                                      {% endfor %}
-                                  </dl>
-                              </div>
-                            {% endif %}
-
-                            {% if item.sub_products %}
-                                <h2 class="mb-3.5 text-sm font-bold">{{ trans('pages.orders.sub_products') }}</h2>
-                                <div class="flow-root rounded-md px-4 border border-gray-200">
-                                    <dl class="text-sm text-dark divide-y divide-border-color">
-                                        {% for product in item.sub_products %}
-                                            <div class="py-3.5 md:flex items-center justify-between">
-                                                <dt class="mb-2 md:mb-0">
-                                                    <a href="{{ product.url }}">
-                                                        {{ product.name }}
-                                                    </a>
-                                                </dt>
-                                            </div>
-                                        {% endfor %}
-                                    </dl>
-                                </div>
-                            {% endif %}
+                            {# order details sub products and options #}
+							<salla-order-details order-details="{{ item | json_encode }}"></salla-order-details>
+							{# order details sub products and options #}
+                            
                             {% if item.note %}
                                 <p class="mt-3 text-sm text-gray-500">
                                     <span>{{ trans('common.elements.note') }} : </span>{{ item.note }}
@@ -497,83 +437,8 @@
             {% endif %} 
         </div>
 
-        <div class="bg-white rounded-md px-6">
-            <h2 id="summary-heading" class="sr-only">Order summary</h2>
-            <div class="flow-root">
-                <dl class="text-sm text-gray-500 divide-y divide-border-color">
-                    <div class="py-5 center-between">
-                        <dt class="text-gray-600">
-                            {{ trans('pages.cart.items_total') }}
-                        </dt>
-                        <dd class="font-medium">
-                            {{ order.sub_total|money }}
-                        </dd>
-                    </div>
-
-                    {% if order.options|length %}
-                      <div class="py-5 center-between">
-                        <dt class="text-gray-600">
-                          {{ trans('pages.cart.order_options_total') }}
-                        </dt>
-                        <dd class="font-medium">
-                          {{ order.options_total|money }}
-                        </dd>
-                      </div>
-                    {% endif %}
-
-                    {% for discount in order.discounts %}
-                        <div class="py-5 center-between">
-                            <dt class="discount">
-                                {{ discount.name }}
-                            </dt>
-                            <dd class="font-medium">
-                                {{ discount.discount }}
-                            </dd>
-                        </div>
-                    {% endfor %}
-                    {# Cash On Delivery #}
-                    {% if order.cod_cost %}
-                        <div class="py-5 center-between">
-                            <dt class="">
-                                {{ trans('pages.orders.cod_cost') }}
-                            </dt>
-                            <dd class="font-medium">
-                                {{ order.cod_cost|money }}
-                            </dd>
-                        </div>
-                    {% endif %}
-                    {% if order.shipping_cost %}
-                        <div class="py-5 center-between">
-                            <dt class="shipping">
-                                {{ trans('pages.orders.shipping_cost') }}
-                            </dt>
-                            <dd class="font-medium">
-                                {{ order.shipping_cost|money }}
-                            </dd>
-                        </div>
-                    {% endif %}
-                    {% if order.tax %}
-                        <div class="py-5 center-between">
-                            <dt class="">
-                                {{ trans('pages.cart.tax') }} ({{ order.tax.percent }}%)
-                            </dt>
-                            <dd class="font-medium text-gray-900">
-                                {{ order.tax.amount|money }}
-                            </dd>
-                        </div>
-                    {% endif %}
-                    <div class="bg-border-color rounded-md py-5 -mx-6 px-6 center-between">
-                        <dt class="text-base font-medium">
-                            {{ trans('pages.orders.final_total') }}
-                        </dt>
-                        <dd class="text-base font-medium ">
-                            <b>{{ order.total|money }}</b>
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-
+        <salla-order-totals-card order="{{ order }}"> </salla-order-totals-card>
+     
         {# Reorder & Cancel #}
         {% if order.can_reorder or order.can_cancel or order.is_pending_payment %}
             <div class="bg-white rounded-md p-5 divide-y divide-border-color space-y-4">
@@ -588,7 +453,7 @@
                                     <span>{{ trans('pages.orders.finish_payment') }}</span>
                                 </salla-button>
                             {% endif %}
-                        {% else %}
+                        {% elseif user.type == 'user' %}
                             <div class="text-sm">
                                 <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
                                 <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
@@ -616,7 +481,7 @@
             </div>
 
             {# Reorder Modal #}
-            {% if order.can_reorder %}
+            {% if user.type == 'user' and order.can_reorder %}
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.reorder_confirmation')|raw }}"
                              icon="sicon-rotate" id="reorder-modal" icon-style="success"
                              modal-title="{{ trans('pages.orders.reorder') }}">

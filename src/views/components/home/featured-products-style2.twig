@@ -21,6 +21,7 @@
 <section class="s-block s-block-tabs s-block--tabs-produtcs s-block--full-bg {{ is_slider ? 'as-slider':'as-grid' }} bg-gray-100 py-8 sm:py-16" id="{{ component_id }}">
   <div class="container">
 
+      {% if items|length > 1 %}
       <div class="tabs hide-scroll">
           {% for section in items %}
               <salla-button 
@@ -32,6 +33,7 @@
               </salla-button>
           {% endfor %}
       </div>
+      {% endif %}
 
       <div class="tabs-wrapper">
         {% for section in items %}
