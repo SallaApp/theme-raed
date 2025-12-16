@@ -1,0 +1,1689 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+export class SallaFileUpload {
+    /**
+     * Lazy load FilePond and all plugins
+     * This reduces initial bundle size by ~200-250KB
+     */
+    async loadFilePond() {
+        if (this.filePondLoaded)
+            return;
+        try {
+            const [FilePondModule, FilePondPluginFileValidateSize, FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginImageEdit, FilePondPluginFileValidateType, FilePondPluginFilePoster] = await Promise.all([
+                import('filepond'),
+                import('filepond-plugin-file-validate-size'),
+                import('filepond-plugin-image-exif-orientation'),
+                import('filepond-plugin-image-preview'),
+                import('filepond-plugin-image-edit'),
+                import('filepond-plugin-file-validate-type'),
+                import('filepond-plugin-file-poster')
+            ]);
+            this.FilePond = FilePondModule;
+            // Register plugins
+            this.FilePond.registerPlugin(FilePondPluginImagePreview.default, FilePondPluginImageExifOrientation.default, FilePondPluginFileValidateSize.default, FilePondPluginImageEdit.default, FilePondPluginFileValidateType.default, FilePondPluginFilePoster.default);
+            this.filePondLoaded = true;
+        }
+        catch (error) {
+            console.error('Failed to load FilePond:', error);
+            salla.notify?.error?.('Failed to load file uploader. Please refresh the page.');
+            throw error;
+        }
+    }
+    constructor() {
+        this.filePondLoaded = false;
+        this.max_images_count = (count) => salla.lang.get('common.uploader.max_images_count', { count });
+        this.max_count_hint = (count) => salla.lang.get('common.uploader.max_count_hint', { count });
+        this.uploadedFiles = [];
+        this.isListScrollerListenerAdded = false;
+        this.showMaxCountHint = false;
+        /**
+         * Set the component to be profile image uploader with a preview and a circular shape
+         */
+        this.profileImage = false;
+        /**
+         * Allow to pass extra params to be sent with the upload request
+         */
+        this.payloadParams = {};
+        /**
+         * Accepted file types
+         */
+        this.accept = "image/png, image/jpeg, image/jpg, image/gif";
+        /**
+         * The submit request method.
+         */
+        this.method = 'POST';
+        /**
+         * json formData to be injected in the submit request
+         */
+        this.formData = "{}";
+        /**
+         * Enable or disable drag n' drop
+         */
+        this.allowDrop = true;
+        /**
+         * Enable or disable file browser
+         */
+        this.allowBrowse = true;
+        /**
+         * Allow drop to replace a file, only works when allowMultiple is false
+         */
+        this.allowReplace = true;
+        /**
+         * Enable or disable the revert processing button
+         */
+        this.allowRevert = true;
+        /**
+         * When set to false the remove button is hidden and disabled
+         */
+        this.allowRemove = true;
+        /**
+         * Enable or disable preview mode
+         */
+        this.allowImagePreview = true;
+        /**
+         * Fixed image preview height, overrides min and max preview height
+         */
+        this.imagePreviewHeight = null;
+        /**
+         * Fixed image poster height, overrides min and max preview height
+         */
+        this.filePosterHeight = null;
+        /**
+         * The maximum number of files that the pond can handle
+         */
+        this.maxFilesCount = 1;
+        /**
+         * The maxmimum number of files that can be uploaded in parallel
+         */
+        this.maxParallelUploads = 3;
+        /**
+         * Set to 'after' to add files to end of list (when dropped at the top of the list or added using browse or paste),
+         * set to 'before' to add files at start of list.
+         * Set to a compare function to automatically sort items when added
+         */
+        this.itemInsertLocation = 'after';
+        /**
+         * The interval to use before showing each item being added to the list
+         */
+        this.itemInsertInterval = 75;
+        /**
+         * Require drop on the FilePond element itself to catch the file.
+         */
+        this.dropOnElement = true;
+        /**
+         * Ignored file names when handling dropped directories. Dropping directories is not supported on all browsers.
+         */
+        this.ignoredFiles = ['.ds_store', 'thumbs.db', 'desktop.ini'];
+        /**
+         * The size of a chunk in bytes
+         */
+        this.chunkSize = 5000000;
+        /**
+         * Amount of times, and delayes, between retried uploading of a chunk
+         */
+        this.chunkRetryDelays = [500, 1000, 3000];
+        /// Labels Props
+        /**
+         * The decimal separator used to render numbers. By default this is determined automatically.
+         */
+        this.labelDecimalSeparator = undefined;
+        /**
+         * The thousdands separator used to render numbers. By default this is determined automatically.
+         */
+        this.labelThousandsSeparator = undefined;
+        /// SVG Icons
+        /**
+         * The icon used for remove actions
+         */
+        this.iconRemove = '<svg>...</svg>';
+        /**
+         * The icon used for process actions
+         */
+        this.iconProcess = '<svg>...</svg>';
+        /**
+         * The icon used for retry actions
+         */
+        this.iconRetry = '<svg>...</svg>';
+        /**
+         * The icon used for undo actions
+         */
+        this.iconUndo = '<svg>...</svg>';
+        this.openFileBrowser = () => {
+            this.filepond.browse();
+        };
+        //if cartItemIdIsPassed, we need to set the url
+        if (!this.url && this.cartItemId) {
+            this.url = salla.cart.getUploadImageEndpoint();
+            this.instantUpload = true;
+        }
+        if (!this.url && this.profileImage) {
+            this.url = salla.url.api('profile/update');
+            this.instantUpload = true;
+            this.host.hasAttribute('name') || (this.name = 'avatar');
+        }
+        if (!this.name) {
+            this.name = 'file';
+        }
+        salla.lang.onLoaded(() => {
+            this.host.querySelectorAll('.filepond--drop-label>label').forEach(label => label.innerHTML = this.getLabel());
+            if (this.filepond) {
+                this.filepond.labelFileTypeNotAllowed = salla.lang.get('common.uploader.invalid_type');
+                this.filepond.labelMaxFileSizeExceeded = salla.lang.get('common.uploader.too_large');
+                this.filepond.labelFileSizeNotAvailable = salla.lang.get('common.uploader.size_not_available');
+                this.filepond.labelFileLoading = salla.lang.get('common.elements.loading');
+                this.filepond.labelFileLoadError = salla.lang.get('common.uploader.failed_to_load');
+                this.filepond.labelFileProcessingAborted = salla.lang.get('common.uploader.upload_cancelled');
+                this.filepond.labelTapToCancel = salla.lang.get("common.elements.cancel");
+                this.filepond.labelTapToRetry = salla.lang.get("common.elements.retry");
+                this.filepond.labelButtonRemoveItem = salla.lang.get("common.elements.remove");
+                this.filepond.labelButtonUndoItemProcessing = salla.lang.get("common.elements.undo");
+                this.filepond.labelButtonProcessItem = salla.lang.get("common.uploader.upload");
+                this.filepond.labelFileProcessingComplete = salla.lang.get('common.uploader.file_processing_complete'),
+                    this.filepond.labelTapToUndo = salla.lang.get('common.uploader.tap_to_undo'),
+                    this.filepond.labelFileProcessing = salla.lang.get('common.uploader.file_processing'),
+                    this.filepond.labelFileProcessingError = salla.lang.get('common.uploader.file_processing_error');
+            }
+            const setNestedAsync = (lang, key, value) => {
+                return new Promise((resolve) => {
+                    salla.helpers.setNested(salla.lang.messages[lang], key, value);
+                    resolve(true);
+                });
+            };
+            const setTranslations = async () => {
+                await setNestedAsync('ar.trans', 'common.uploader.max_images_count', '.أضف :count صور كحد أقصى');
+                await setNestedAsync('en.trans', 'common.uploader.max_images_count', 'Add up to :count images maximum.');
+                await setNestedAsync('ar.trans', 'common.uploader.max_count_hint', 'يمكنك رفع حتى :count صور');
+                await setNestedAsync('en.trans', 'common.uploader.max_count_hint', 'You can upload up to :count images.');
+            };
+            this.max_count_hint = (count) => salla.lang.get('common.uploader.max_count_hint', { count });
+            this.max_images_count = (count) => salla.lang.get('common.uploader.max_images_count', { count });
+            setTranslations();
+        });
+    }
+    addedHandler(error, file) {
+        this.added.emit({ error: error, file: file });
+        //if the file passed on initiate will not have type
+        this.host.querySelector('.filepond--root').classList.remove('s-file-upload-has-error');
+        if (error || !file.file.type) {
+            this.host.querySelector('.filepond--root').classList.add('s-file-upload-has-error');
+            return;
+        }
+        let container = new DataTransfer;
+        let fileInput = this.getFormDataFileInput();
+        // @ts-ignore
+        container.items.add(file.file);
+        fileInput.type = 'file';
+        fileInput.files = container.files;
+        fileInput.dispatchEvent(new window.Event('change', { bubbles: true }));
+    }
+    uploadedHandler() {
+        let fileInput = this.getFormDataFileInput();
+        fileInput.type = 'hidden';
+        fileInput.value = this.value;
+        this.hiddenInput.value = this.value;
+        fileInput.dispatchEvent(new window.Event('change', { bubbles: true }));
+        return this.uploaded.emit(this.value);
+    }
+    removedHandler(deletedFile) {
+        let fileInput = this.getFormDataFileInput();
+        fileInput.type = 'hidden';
+        fileInput.value = '';
+        this.host.closest('.s-product-options-option')?.removeAttribute('data-has-value');
+        if (salla.url.is_page("cart") && deletedFile.getMetadata('id')) {
+            salla.cart.api.deleteImage(deletedFile.getMetadata('id'));
+        }
+        if (this.height) {
+            setTimeout(() => this.host.querySelector('.filepond--root').style.height = this.height, 1000);
+        }
+        this.hiddenInput.value = '';
+        fileInput.dispatchEvent(new window.Event('change', { bubbles: true }));
+        let toDelete = this.allowMultiple ? deletedFile.getMetadata('id') : deletedFile;
+        return this.removed.emit(toDelete);
+    }
+    /**
+     *  Method to set option for filepond
+     * */
+    async setOption(key, value) {
+        this.filepond[key] = value;
+    }
+    getLabel() {
+        if (this.labelIdle) {
+            //some times we are passing label before translations is loaded, so here we will make sure that all translations are translated
+            return this.labelIdle
+                .replace('common.uploader.drag_and_drop', salla.lang.get('common.uploader.drag_and_drop'))
+                .replace('common.uploader.browse', salla.lang.get('common.uploader.browse'));
+        }
+        return `${salla.lang.get('common.uploader.drag_and_drop')}<span class="filepond--label-action"> ${salla.lang.get('common.uploader.browse')} </span>`;
+    }
+    /**
+     *
+     * This method will fire head request to get the file size, it's head request,so it will be too fast.
+     */
+    getFileSize(url) {
+        let http = new XMLHttpRequest();
+        http.open('HEAD', url, false); // false = Synchronous
+        http.send(null); // it will stop here until this http request is complete
+        return http.status === 200 ? http.getResponseHeader('content-length') : '';
+    }
+    getFormDataFileInput() {
+        return this.host.querySelector('.filepond--data input');
+    }
+    getFiles() {
+        if (!this.value && !this.files) {
+            return [];
+        }
+        try {
+            let files = this.files
+                ? typeof this.files === 'string' ? JSON.parse(this.files) : this.files
+                : this.value.split(',').map(file => ({ url: file }));
+            if (files.length) {
+                this.host.closest('.s-product-options-option')?.setAttribute('data-has-value', 'true');
+            }
+            return files.map(file => ({
+                source: file.id ? `${file.id}` : file.url,
+                options: {
+                    type: 'local',
+                    file: {
+                        name: file.url.substring(file.url.lastIndexOf('/') + 1),
+                        size: this.getFileSize(file.url)
+                    },
+                    metadata: { poster: file.url, name: file.url, id: file.id },
+                },
+            }));
+        }
+        catch (e) {
+            salla.log('failed To get files from: ' + (this.files || this.value));
+        }
+        return [];
+    }
+    async componentWillLoad() {
+        // Load FilePond before component renders (reduces initial bundle by ~200-250KB)
+        await this.loadFilePond();
+        if (!this.labelIdle) {
+            this.labelIdle = this.host.innerHTML;
+            this.host.innerHTML = '';
+        }
+    }
+    render() {
+        return (h(Host, { key: '45383bff9bc408ef0328e888751827e6fc70038d', class: {
+                "s-file-upload": true,
+                "s-file-upload-profile-image": this.profileImage,
+                "s-file-upload-multiple": this.allowMultiple,
+            } }, h("input", { key: '323e469923868db4e322d67c1dd8a7efc245fe5f', type: "file", name: this.name, value: this.value, ref: ele => this.fileUploader = ele, required: this.required, class: "s-file-upload-wrapper s-file-upload-input", accept: this.accept }), this.allowMultiple && this.showMaxCountHint ? h("div", { class: "s-file-upload-hint s-hidden" }, this.max_count_hint(this.maxFilesCount)) : '', h("input", { key: '42458ac28b13ba4e6c6dc80a30054e0e567a9366', class: "s-hidden", name: 'hidden-' + this.name, required: this.required, value: this.value, ref: input => this.hiddenInput = input })));
+    }
+    componentDidLoad() {
+        let files = this.getFiles();
+        this.filepond = this.FilePond.create(this.fileUploader, {
+            name: this.payloadName || this.name,
+            //@ts-ignore
+            files: files,
+            required: this.required,
+            disabled: this.disabled,
+            allowDrop: this.allowDrop,
+            allowBrowse: this.allowBrowse,
+            allowPaste: this.allowPaste,
+            allowMultiple: this.allowMultiple, //||files.length,
+            allowReplace: this.allowReplace,
+            allowRevert: this.allowRevert,
+            allowProcess: this.allowProcess,
+            allowReorder: this.allowReorder,
+            storeAsFile: this.storeAsFile,
+            forceRevert: this.forceRevert,
+            maxFiles: this.maxFilesCount,
+            imagePreviewHeight: this.imagePreviewHeight,
+            filePosterHeight: this.filePosterHeight,
+            allowImagePreview: this.allowImagePreview,
+            maxParallelUploads: this.maxParallelUploads,
+            checkValidity: this.checkValidity,
+            itemInsertLocation: this.itemInsertLocation,
+            itemInsertInterval: this.itemInsertInterval,
+            credits: this.credits,
+            dropOnPage: this.dropOnPage,
+            dropOnElement: this.dropOnElement,
+            dropValidation: this.dropValidation,
+            ignoredFiles: this.ignoredFiles,
+            onaddfile: (error, file) => this.addedHandler(error, file),
+            onwarning: (error, _file, _status) => {
+                if (error.body === "Max files") {
+                    salla.notify.error(this.max_images_count(this.maxFilesCount));
+                }
+            },
+            onprocessfile: (error, file) => {
+                if (this.allowMultiple && !error) {
+                    // Find the uploaded file data using the serverId returned from onload
+                    const serverId = file.serverId;
+                    const uploadedFile = this.uploadedFiles.find(f => f.id === serverId);
+                    if (uploadedFile) {
+                        // Set metadata on the file
+                        file.setMetadata('id', uploadedFile.id, true);
+                        file.setMetadata('url', uploadedFile.url, true);
+                        this.value = {
+                            id: uploadedFile.id,
+                            url: uploadedFile.url
+                        };
+                        this.uploadedHandler();
+                    }
+                }
+            },
+            onupdatefiles: (fileItems) => {
+                const dropLabel = this.host.querySelector('.filepond--drop-label');
+                const listScroller = this.host.querySelector('.filepond--list-scroller');
+                if (this.allowMultiple) {
+                    if (fileItems.length > 0) {
+                        dropLabel.classList.add('s-hidden');
+                        if (!this.isListScrollerListenerAdded && fileItems.length < this.maxFilesCount) {
+                            this.showMaxCountHint = true;
+                            listScroller.addEventListener('click', this.openFileBrowser);
+                            this.isListScrollerListenerAdded = true;
+                        }
+                    }
+                    else {
+                        dropLabel.classList.remove('s-hidden');
+                        if (this.isListScrollerListenerAdded) {
+                            listScroller.removeEventListener('click', this.openFileBrowser);
+                            this.isListScrollerListenerAdded = false;
+                        }
+                    }
+                    // Check if fileItems length equals maxFilesCount and remove event listener
+                    if (fileItems.length === this.maxFilesCount && this.isListScrollerListenerAdded) {
+                        listScroller.removeEventListener('click', this.openFileBrowser);
+                        this.isListScrollerListenerAdded = false;
+                        this.showMaxCountHint = false;
+                    }
+                }
+            },
+            server: {
+                url: this.url,
+                method: this.method,
+                revert: null,
+                // @ts-ignore
+                process: {
+                    onload: (response) => {
+                        let responseData = JSON.parse(response).data;
+                        if ((this.instantUpload || this.allowMultiple) && Array.isArray(responseData) && responseData.length > 0) {
+                            const fileId = `${this.host.id}-${Math.floor(100 + Math.random() * 900)}`;
+                            const fileUrl = responseData[0];
+                            // Store the upload result to be picked up by onprocessfile
+                            this.uploadedFiles.push({
+                                id: fileId,
+                                url: fileUrl
+                            });
+                            // Return the serverId that FilePond will use to identify this file
+                            // We'll use the fileId as the serverId
+                            return fileId;
+                        }
+                        else {
+                            this.value = responseData.filePath || responseData.url;
+                            this.uploadedHandler();
+                            return this.value;
+                        }
+                    },
+                    headers: salla.api.getHeaders(),
+                    onerror: response => {
+                        try {
+                            let field = JSON.parse(response).error.fields;
+                            field = field[this.payloadName || this.name];
+                            return (field && field[0]) || salla.lang.get('common.errors.error_occurred');
+                        }
+                        catch (e) {
+                            salla.log('FileUpload:: Error', e);
+                            return salla.lang.get('common.errors.error_occurred');
+                        }
+                    },
+                    ondata: formData => {
+                        if (this.allowMultiple) {
+                            const newFormData = new FormData();
+                            // ? This line suppose to send all files in one request but its not working properly
+                            // const filesArray = this.filepond.getFiles().map(file => file.file);
+                            formData.forEach((value) => {
+                                newFormData.append(`files[]`, value);
+                            });
+                            newFormData.append("type", this.type);
+                            return newFormData;
+                        }
+                        if (this.payloadName && this.payloadName != this.name && !this.allowMultiple) {
+                            formData.append(this.payloadName, this.filepond.getFile(0).file);
+                            formData.delete(this.name);
+                        }
+                        if (this.payloadParams) {
+                            for (const [k, v] of Object.entries(this.payloadParams)) {
+                                formData.append(k, v);
+                            }
+                        }
+                        if (this.cartItemId) {
+                            formData.append('cart_item_id', this.cartItemId);
+                        }
+                        try {
+                            Object.entries(JSON.parse(this.formData)).forEach((value) => value[1] && formData.append(value[0], value[1]));
+                        }
+                        catch (e) {
+                            salla.log('Error to inject formData', e);
+                        }
+                        return formData;
+                    }
+                },
+            },
+            instantUpload: this.instantUpload,
+            chunkUploads: this.chunkUploads,
+            chunkForce: this.chunkForce,
+            chunkSize: this.chunkSize,
+            chunkRetryDelays: this.chunkRetryDelays,
+            labelDecimalSeparator: this.labelDecimalSeparator,
+            labelThousandsSeparator: this.labelThousandsSeparator,
+            labelIdle: this.getLabel(),
+            acceptedFileTypes: this.accept.replace(/\s+/g, '').split(','),
+            labelFileTypeNotAllowed: salla.lang.get('common.uploader.invalid_type'),
+            labelFileProcessingComplete: salla.lang.get('common.uploader.file_processing_complete'),
+            labelTapToUndo: salla.lang.get('common.uploader.tap_to_undo'),
+            labelFileProcessing: salla.lang.get('common.uploader.file_processing'),
+            labelFileProcessingError: salla.lang.get('common.uploader.file_processing_error'),
+            fileValidateTypeLabelExpectedTypes: '{allButLastType}, {lastType}',
+            labelMaxFileSizeExceeded: salla.lang.get('common.uploader.too_large'),
+            labelMaxFileSize: '{filesize}',
+            maxFileSize: `${salla.config.get('store.settings.upload_size')}KB` || this.maxFileSize,
+            beforeRemoveFile: (deletedFile) => new Promise((resolve) => {
+                this.removedHandler(deletedFile);
+                resolve(true);
+            }),
+        });
+        ``;
+        this.hiddenInput.addEventListener('invalid', e => {
+            this.invalidInput.emit(e);
+        });
+        this.hiddenInput.addEventListener('change', () => {
+            this.hiddenInput.setCustomValidity('');
+            this.hiddenInput.reportValidity();
+        });
+    }
+    static get is() { return "salla-file-upload"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-file-upload.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-file-upload.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "value": {
+                "type": "any",
+                "attribute": "value",
+                "mutable": true,
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The uploaded image link or URL"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "files": {
+                "type": "string",
+                "attribute": "files",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The uploaded files as json `[{url:\"...\", id:123}]` for delete possibility"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "height": {
+                "type": "string",
+                "attribute": "height",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The original height of the uploader, will be used to reset the height after the image is removed."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "cartItemId": {
+                "type": "string",
+                "attribute": "cart-item-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "to prepare the upload url automatically pass this prop, ex to upload attach file in cart Item."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "profileImage": {
+                "type": "boolean",
+                "attribute": "profile-image",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set the component to be profile image uploader with a preview and a circular shape"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "false"
+            },
+            "name": {
+                "type": "string",
+                "attribute": "name",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "File input name for the native formData"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "payloadName": {
+                "type": "string",
+                "attribute": "payload-name",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "File input name in the request payload"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "payloadParams": {
+                "type": "unknown",
+                "attribute": "payload-params",
+                "mutable": false,
+                "complexType": {
+                    "original": "Record<string, unknown>",
+                    "resolved": "{ [x: string]: unknown; }",
+                    "references": {
+                        "Record": {
+                            "location": "global",
+                            "id": "global::Record"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Allow to pass extra params to be sent with the upload request"
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "{}"
+            },
+            "type": {
+                "type": "string",
+                "attribute": "type",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Type to be sent to backend"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "accept": {
+                "type": "string",
+                "attribute": "accept",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Accepted file types"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "\"image/png, image/jpeg, image/jpg, image/gif\""
+            },
+            "fileId": {
+                "type": "number",
+                "attribute": "file-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "If current file has id, pass it here, to be passed back in the `removed` event"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "url": {
+                "type": "string",
+                "attribute": "url",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The url to submit the image into."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "method": {
+                "type": "string",
+                "attribute": "method",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The submit request method."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'POST'"
+            },
+            "formData": {
+                "type": "string",
+                "attribute": "form-data",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "json formData to be injected in the submit request"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"{}\""
+            },
+            "required": {
+                "type": "boolean",
+                "attribute": "required",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Sets the required attribute to the output field"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "maxFileSize": {
+                "type": "string",
+                "attribute": "max-file-size",
+                "mutable": false,
+                "complexType": {
+                    "original": "`${number}MB` | `${number}KB}`",
+                    "resolved": "`${number}KB}` | `${number}MB`",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The maximum size of a file, for instance 2MB or 750KB"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "disabled": {
+                "type": "boolean",
+                "attribute": "disabled",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Sets the disabled attribute to the output field"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "allowDrop": {
+                "type": "boolean",
+                "attribute": "allow-drop",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable or disable drag n' drop"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "allowBrowse": {
+                "type": "boolean",
+                "attribute": "allow-browse",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable or disable file browser"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "allowPaste": {
+                "type": "boolean",
+                "attribute": "allow-paste",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable or disable pasting of files. Pasting files is not supported on all browesrs."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "allowMultiple": {
+                "type": "boolean",
+                "attribute": "allow-multiple",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable or disable adding multiple files"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "allowReplace": {
+                "type": "boolean",
+                "attribute": "allow-replace",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Allow drop to replace a file, only works when allowMultiple is false"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "allowRevert": {
+                "type": "boolean",
+                "attribute": "allow-revert",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable or disable the revert processing button"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "allowRemove": {
+                "type": "boolean",
+                "attribute": "allow-remove",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "When set to false the remove button is hidden and disabled"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "allowProcess": {
+                "type": "boolean",
+                "attribute": "allow-process",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable or disable the process button"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "allowReorder": {
+                "type": "boolean",
+                "attribute": "allow-reorder",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Allow users to reorder files with drag and drop interaction.\nNote that this only works in single column mode.\nIt also only works on browsers that support pointer events."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "allowImagePreview": {
+                "type": "boolean",
+                "attribute": "allow-image-preview",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable or disable preview mode"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "imagePreviewHeight": {
+                "type": "number",
+                "attribute": "image-preview-height",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Fixed image preview height, overrides min and max preview height"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "null"
+            },
+            "filePosterHeight": {
+                "type": "number",
+                "attribute": "file-poster-height",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Fixed image poster height, overrides min and max preview height"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "null"
+            },
+            "storeAsFile": {
+                "type": "boolean",
+                "attribute": "store-as-file",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Tells FilePond to store files in hidden file input elements so they can be posted along with normal form post.\nThis only works if the browser supports the DataTransfer constructor (https://caniuse.com/mdn-api_datatransfer_datatransfer),\nthis is the case on Firefox, Chrome, Chromium powered browsers and Safari version 14.1 and higher."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "forceRevert": {
+                "type": "boolean",
+                "attribute": "force-revert",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set to true to require the file to be successfully reverted before continuing."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "maxFilesCount": {
+                "type": "number",
+                "attribute": "max-files-count",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The maximum number of files that the pond can handle"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "1"
+            },
+            "maxParallelUploads": {
+                "type": "number",
+                "attribute": "max-parallel-uploads",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The maxmimum number of files that can be uploaded in parallel"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "3"
+            },
+            "checkValidity": {
+                "type": "boolean",
+                "attribute": "check-validity",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set to true to enable custom validity messages.\nFilePond will throw an error when a parent form is submitted and it contains invalid files."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "itemInsertLocation": {
+                "type": "string",
+                "attribute": "item-insert-location",
+                "mutable": false,
+                "complexType": {
+                    "original": "'before' | 'after' | ((a: FilePondFile, b: FilePondFile) => number)",
+                    "resolved": "\"after\" | \"before\" | ((a: FilePondFile, b: FilePondFile) => number)",
+                    "references": {
+                        "FilePondFile": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-file-upload/interfaces.ts::FilePondFile"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set to 'after' to add files to end of list (when dropped at the top of the list or added using browse or paste),\nset to 'before' to add files at start of list.\nSet to a compare function to automatically sort items when added"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'after'"
+            },
+            "itemInsertInterval": {
+                "type": "number",
+                "attribute": "item-insert-interval",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The interval to use before showing each item being added to the list"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "75"
+            },
+            "credits": {
+                "type": "boolean",
+                "attribute": "credits",
+                "mutable": false,
+                "complexType": {
+                    "original": "false",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show credits at the bottom of the upload element.\nStructure is like [{label,url}]"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "dropOnPage": {
+                "type": "boolean",
+                "attribute": "drop-on-page",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "FilePond will catch all files dropped on the webpage"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "dropOnElement": {
+                "type": "boolean",
+                "attribute": "drop-on-element",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Require drop on the FilePond element itself to catch the file."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "dropValidation": {
+                "type": "boolean",
+                "attribute": "drop-validation",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "When enabled, files are validated before they are dropped. A file is not added when it's invalid."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "ignoredFiles": {
+                "type": "unknown",
+                "attribute": "ignored-files",
+                "mutable": false,
+                "complexType": {
+                    "original": "Array<any>",
+                    "resolved": "any[]",
+                    "references": {
+                        "Array": {
+                            "location": "global",
+                            "id": "global::Array"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Ignored file names when handling dropped directories. Dropping directories is not supported on all browsers."
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "['.ds_store', 'thumbs.db', 'desktop.ini']"
+            },
+            "instantUpload": {
+                "type": "boolean",
+                "attribute": "instant-upload",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Immediately upload new files to the server"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "chunkUploads": {
+                "type": "boolean",
+                "attribute": "chunk-uploads",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enable chunked uploads, when enabled will automatically cut up files in chunkSize chunks before upload."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "chunkForce": {
+                "type": "boolean",
+                "attribute": "chunk-force",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Force chunks even for files smaller than the set chunkSize"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "chunkSize": {
+                "type": "number",
+                "attribute": "chunk-size",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The size of a chunk in bytes"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "5000000"
+            },
+            "chunkRetryDelays": {
+                "type": "unknown",
+                "attribute": "chunk-retry-delays",
+                "mutable": false,
+                "complexType": {
+                    "original": "Array<number>",
+                    "resolved": "number[]",
+                    "references": {
+                        "Array": {
+                            "location": "global",
+                            "id": "global::Array"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Amount of times, and delayes, between retried uploading of a chunk"
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "[500, 1000, 3000]"
+            },
+            "labelDecimalSeparator": {
+                "type": "string",
+                "attribute": "label-decimal-separator",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The decimal separator used to render numbers. By default this is determined automatically."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "undefined"
+            },
+            "labelThousandsSeparator": {
+                "type": "string",
+                "attribute": "label-thousands-separator",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The thousdands separator used to render numbers. By default this is determined automatically."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "undefined"
+            },
+            "labelIdle": {
+                "type": "string",
+                "attribute": "label-idle",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "default",
+                            "text": "`${salla.lang.get('common.uploader.drag_and_drop')}<span class=\"filepond--label-action\"> ${salla.lang.get('common.uploader.browse')} </span>`"
+                        }],
+                    "text": "Default label shown to indicate this is a drop area.\nFilePond will automatically bind browse file events to the element with CSS class .filepond--label-action"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "iconRemove": {
+                "type": "string",
+                "attribute": "icon-remove",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The icon used for remove actions"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'<svg>...</svg>'"
+            },
+            "iconProcess": {
+                "type": "string",
+                "attribute": "icon-process",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The icon used for process actions"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'<svg>...</svg>'"
+            },
+            "iconRetry": {
+                "type": "string",
+                "attribute": "icon-retry",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The icon used for retry actions"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'<svg>...</svg>'"
+            },
+            "iconUndo": {
+                "type": "string",
+                "attribute": "icon-undo",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The icon used for undo actions"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'<svg>...</svg>'"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "max_images_count": {},
+            "max_count_hint": {},
+            "uploadedFiles": {},
+            "isListScrollerListenerAdded": {},
+            "showMaxCountHint": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "added",
+                "name": "added",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the file has been added"
+                },
+                "complexType": {
+                    "original": "{ error: FilePondErrorDescription | null, file: FilePondFile }",
+                    "resolved": "{ error: FilePondErrorDescription; file: FilePondFile; }",
+                    "references": {
+                        "FilePondErrorDescription": {
+                            "location": "import",
+                            "path": "filepond/types/index",
+                            "id": "../../node_modules/.pnpm/filepond@4.32.8/node_modules/filepond/types/index.d.ts::FilePondErrorDescription"
+                        },
+                        "FilePondFile": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-file-upload/interfaces.ts::FilePondFile"
+                        }
+                    }
+                }
+            }, {
+                "method": "invalidInput",
+                "name": "invalidInput",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the input is invalid"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "uploaded",
+                "name": "uploaded",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the file has been uploaded and link to the file has been recieved from the server. Returns string value."
+                },
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                }
+            }, {
+                "method": "removed",
+                "name": "removed",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the file is about to be removed. Returns boolean value."
+                },
+                "complexType": {
+                    "original": "FilePondFile",
+                    "resolved": "FilePondFile",
+                    "references": {
+                        "FilePondFile": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-file-upload/interfaces.ts::FilePondFile"
+                        }
+                    }
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "setOption": {
+                "complexType": {
+                    "signature": "(key: string, value: string | number) => Promise<void>",
+                    "parameters": [{
+                            "name": "key",
+                            "type": "string",
+                            "docs": ""
+                        }, {
+                            "name": "value",
+                            "type": "string | number",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Method to set option for filepond",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

@@ -1,0 +1,169 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import CartIcon from "../../assets/svg/cart.svg";
+import anime from "animejs";
+export class SallaCartSummary {
+    constructor() {
+        this.cartSummaryCount = salla.storage.get('cart.summary.count') || 0;
+        this.cartSummaryTotal = salla.storage.get('cart.summary.total') || 0;
+        this.cartLabel = salla.config.get('user.language_code') === 'ar' ? 'السلة' : 'Cart';
+        salla.cart.event.onUpdated((response) => {
+            this.cartSummaryCount = response.count || 0;
+            this.cartSummaryTotal = response.total || 0;
+        });
+    }
+    /**
+     * Animate product Image to cart summary
+     * @param image the image element to animate
+     */
+    async animateToCart(image) {
+        document.querySelectorAll('.s-cart-thumb').forEach(el => el.remove());
+        if (!image?.src) {
+            salla.log('Failed to get the img element');
+            return;
+        }
+        let cartBtn = this.host.querySelector('#s-cart-icon'), btnOffset = cartBtn.getBoundingClientRect(), btnTop = btnOffset.top + window.scrollY, btnLeft = btnOffset.left + window.scrollX;
+        // get thumb position ---
+        let position = image.getBoundingClientRect(), width = image.offsetWidth + 'px', height = image.offsetHeight + 'px', top = position.top, left = position.left;
+        // create thumb img element ---
+        let img = document.createElement("img");
+        img.src = image.getAttribute('src');
+        img.className = "s-cart-thumb";
+        img.setAttribute("style", "object-fit:cover; width:" + width + '; height:' + height + '; top:' + top + 'px; left:' + left + 'px;z-index:99999999; ');
+        document.body.append(img);
+        let cartThumb = document.querySelector('.s-cart-thumb');
+        cartBtn.classList.remove('animated', 'rubberBand');
+        // start timeline ---
+        let cartThumbAnime = new anime.timeline();
+        cartThumbAnime.add({
+            targets: cartThumb,
+            width: [150, 30],
+            height: [150, 30],
+            top: [top, window.scrollY > 0 ? btnTop - window.scrollY - 40 : btnTop - 40],
+            left: [left, btnLeft],
+            borderRadius: ['20%', '50%'],
+            easing: 'easeOutExpo',
+            duration: 1200,
+        }, '+=200')
+            .add({
+            targets: cartThumb,
+            width: [30, 0],
+            height: [30, 0],
+            opacity: [1, 0],
+            easing: 'easeOutExpo',
+            top: [window.scrollY > 0 ? btnTop - window.scrollY - 40 : btnTop - 40, window.scrollY > 0 ? btnTop - window.scrollY + 10 : btnTop + 10],
+            left: [btnLeft, btnLeft + 10],
+        }, '-=500')
+            .add({
+            complete: function () {
+                cartBtn.classList.add('animated', 'rubberBand');
+                cartThumb.remove();
+            },
+        }, '-=1700');
+    }
+    /**
+     * Some times it renderes with main domain, something like `https://salla.sa/cart`, because salla is not loaded,
+     * here, we are sure it will not be rendred unless salla is ready
+     */
+    componentWillLoad() {
+        return new Promise(resolve => salla.onReady(resolve));
+    }
+    /**
+     * Compute cart href with scope parameter if available
+     */
+    getCartLink() {
+        let cartUrl = salla.url.get('cart');
+        const scope = salla.config.get('store.scope', salla.storage.get('scope'));
+        if (scope && scope.id) {
+            try {
+                const url = new URL(cartUrl);
+                url.searchParams.set('scope', scope.id);
+                return url.toString();
+            }
+            catch (e) {
+                const delimiter = cartUrl.includes('?') ? '&' : '?';
+                return `${cartUrl}${delimiter}scope=${encodeURIComponent(scope.id)}`;
+            }
+        }
+        return cartUrl;
+    }
+    render() {
+        return (h(Host, { key: 'f22c9fc5b6ad2c7b7f026a7b9ad2510a3c27c281' }, h("a", { key: 'b329fa512839a8dd6d8a1b175e254308c22a9fb0', class: "s-cart-summary-wrapper", href: this.getCartLink() }, h("div", { key: 'fbe89bcca0f38393a23016cf45358d38a53e5f8f', id: "s-cart-icon" }, h("slot", { key: 'f2668edcc903f0a8fd112c6449d8cda9113e2ffa', name: "icon" }, h("i", { key: 'f4a2c742903302b2676c4628961a90a7bcfe43eb', class: "s-cart-summary-icon", innerHTML: CartIcon }))), h("span", { key: '49678efeaae684b2da2c238382b014390516db8d', class: "s-cart-summary-count" }, salla.helpers.number(this.cartSummaryCount)), h("p", { key: '9a399f82fc90e6c974022b65ea75c3f556f67221', class: "s-cart-summary-content" }, this.showCartLabel && h("span", { key: '879348fe4998f2eb3f26e4bebe486877bc733bff', class: "s-cart-summary-label" }, this.cartLabel), h("b", { key: '237d3ee6ebed4203752b6f5c4e2cb962c03cc087', class: "s-cart-summary-total", innerHTML: salla.money(this.cartSummaryTotal) })))));
+    }
+    static get is() { return "salla-cart-summary"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-cart-summary.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-cart-summary.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "showCartLabel": {
+                "type": "boolean",
+                "attribute": "show-cart-label",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show cart label"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "cartSummaryCount": {},
+            "cartSummaryTotal": {},
+            "cartLabel": {}
+        };
+    }
+    static get methods() {
+        return {
+            "animateToCart": {
+                "complexType": {
+                    "signature": "(image: any) => Promise<void>",
+                    "parameters": [{
+                            "name": "image",
+                            "type": "any",
+                            "docs": "the image element to animate"
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLImageElement": {
+                            "location": "global",
+                            "id": "global::HTMLImageElement"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Animate product Image to cart summary",
+                    "tags": [{
+                            "name": "param",
+                            "text": "image the image element to animate"
+                        }]
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

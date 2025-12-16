@@ -1,0 +1,1372 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+export class SallaDatetimePicker {
+    constructor() {
+        /**
+         * Two way data binding to retrieve the selected date[time] value
+         */
+        this.value = null;
+        /**
+         * Placeholder text to show on the input element
+         */
+        this.placeholder = salla.lang.get('blocks.buy_as_gift.select_send_date_and_time');
+        /**
+         * Allows the user to enter a date directly into the input field. By default, direct entry is disabled.
+         */
+        this.allowInput = true;
+        /**
+         * Allows the preloading of an invalid date. When disabled, the field will be cleared if the provided date is invalid
+         */
+        this.allowInvalidPreload = false;
+        /**
+         * Exactly the same as date format, but for the altInput field.
+         */
+        this.altFormat = "F j, Y";
+        /**
+         * Show the user a readable date (as per altFormat), but return something totally different to the server.
+         */
+        this.altInput = false;
+        /**
+         * Instead of body, appends the calendar to the specified node instead.
+         */
+        this.appendTo = undefined;
+        /**
+         * Defines how the date will be formatted in the aria-label for calendar days,
+         * using the same tokens as dateFormat. If you change this, you should choose a
+         * value that will make sense if a screen reader reads it out loud.
+         */
+        this.ariaDateFormat = "F j, Y";
+        /**
+         * Whether the default time should be auto-filled when the input is empty and gains or loses focus.
+         */
+        this.autoFillDefaultTime = true;
+        /**
+         * Whether clicking on the input should open the picker.
+         * Set it to false if you only want to open the calendar programmatically with [open()]
+         */
+        this.clickOpens = true;
+        /**
+         * Whether calendar should close after date selection or not
+         */
+        this.closeOnSelect = true;
+        /**
+         * A string of characters which are used to define how the date will be displayed in the input box.
+         * The supported characters are defined in the table below.
+         */
+        this.dateFormat = "Y-m-d";
+        /**
+         * Initial value of the hour element, when no date is selected
+         */
+        this.defaultHour = 12;
+        /**
+         * Initial value of the minute element, when no date is selected
+         */
+        this.defaultMinute = 0;
+        /**
+         * Initial value of the seconds element, when no date is selected
+         */
+        this.defaultSeconds = 0;
+        /**
+         * Disables certain dates, preventing them from being selected.
+         * See https://chmln.github.io/flatpickr/examples/#disabling-specific-dates
+         */
+        this.disable = [];
+        /**
+         * Set this to true to always use the non-native picker on mobile devices.
+         * By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used.
+         */
+        this.disableMobile = false;
+        /**
+         * Disables all dates except these specified. See https://chmln.github.io/flatpickr/examples/#disabling-all-dates-except-select-few
+         */
+        this.enable = [(_) => true];
+        /**
+         * Enables seconds selection in the time picker.
+         */
+        this.enableSeconds = false;
+        /**
+         * Enables the time picker
+         */
+        this.enableTime = false;
+        /**
+         * Adjusts the step for the hour input (incl. scrolling)
+         */
+        this.hourIncrement = 1;
+        /**
+         * Displays the calendar inline
+         */
+        this.inline = false;
+        /**
+         * The locale, either as a string (e.g. "ar", "en") or as an object.
+         * See https://chmln.github.io/flatpickr/localization/
+         */
+        this.locale = "en";
+        /**
+         * The maximum date that a user can pick to (inclusive).
+         */
+        this.maxDate = null;
+        /**
+         * The minimum date that a user can start picking from (inclusive).
+         */
+        this.maxTime = null;
+        /**
+         * The minimum date that a user can start picking from (inclusive).
+         */
+        this.minDate = null;
+        /**
+         * The minimum time that a user can start picking from (inclusive).
+         */
+        this.minTime = null;
+        /**
+         * Adjusts the step for the minute input (incl. scrolling) Defaults to 5
+         */
+        this.minuteIncrement = 5;
+        /**
+         * Date selection mode, defaults to "single"
+         */
+        this.mode = "single";
+        /**
+         * How the month should be displayed in the header of the calendar.
+         * If showMonths has a value greater than 1, the month is always shown as static.
+         */
+        this.monthSelectorType = "dropdown";
+        /**
+         * HTML for the arrow icon, used to switch months.
+         */
+        this.nextArrow = '<span class="sicon-keyboard_arrow_right"></span>';
+        /**
+         * Hides the day selection in calendar. Use it along with enableTime to create a time picker.
+         */
+        this.noCalendar = false;
+        /**
+         * How the calendar should be positioned with regards to the input. Defaults to "auto"
+         */
+        this.position = "auto";
+        /**
+         * HTML for the left arrow icon, used to switch months.
+         */
+        this.prevArrow = '<span class="sicon-keyboard_arrow_left"></span>';
+        /**
+         * Whether to display the current month name in shorthand mode, e.g. "Sep" instead "September"
+         */
+        this.shorthandCurrentMonth = false;
+        /**
+         * Position the calendar inside the wrapper and next to the input element*.
+         */
+        this.static = false;
+        /**
+         * The number of months to be shown at the same time when displaying the calendar.
+         */
+        this.showMonths = 1;
+        /**
+         * Displays time picker in 24 hour mode without AM/PM selection when enabled.
+         */
+        this.time_24hr = false;
+        /**
+         * Enables display of week numbers in calendar.
+         */
+        this.weekNumbers = false;
+        /**
+         * See https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
+         */
+        this.wrap = false;
+        /**
+         * Whether the input is disabled
+         */
+        this.disabled = false;
+    }
+    /**
+     * Lazy load flatpickr library
+     * This reduces initial bundle size by ~35-40KB
+     */
+    async loadFlatpickr() {
+        if (this.flatpickr)
+            return;
+        try {
+            const flatpickrModule = await import('flatpickr');
+            this.flatpickr = flatpickrModule.default;
+            // Load locale if not English
+            if (this.locale && this.locale !== 'en') {
+                try {
+                    await import(`flatpickr/dist/l10n/${this.locale}.js`);
+                }
+                catch (e) {
+                    console.warn(`Flatpickr locale ${this.locale} not found, using default`);
+                }
+            }
+        }
+        catch (error) {
+            console.error('Failed to load Flatpickr:', error);
+            salla.notify?.error?.('Failed to load date picker. Please refresh the page.');
+            throw error;
+        }
+    }
+    render() {
+        return h("div", { key: 'f619b5fa5fdb68b3cc8562be43496dabb1d78f37', class: "s-datetime-picker" }, h("input", { key: 'dc9b5d0680cd31109a2b82fcf435b8b68d5fbb8d', type: "datetime", name: this.name, value: this.value, required: this.required, disabled: this.disabled, placeholder: this.placeholder, class: "s-datetime-picker-input", ref: (el) => this.dateInput = el }));
+    }
+    async componentDidLoad() {
+        // Load flatpickr before initializing
+        await this.loadFlatpickr();
+        let options = {
+            allowInput: this.allowInput,
+            allowInvalidPreload: this.allowInvalidPreload,
+            altFormat: this.altFormat,
+            altInput: this.altInput,
+            altInputClass: this.altInputClass,
+            appendTo: this.appendTo,
+            ariaDateFormat: this.ariaDateFormat,
+            autoFillDefaultTime: this.autoFillDefaultTime,
+            clickOpens: this.clickOpens,
+            closeOnSelect: this.closeOnSelect,
+            conjunction: this.conjunction,
+            dateFormat: this.dateFormat,
+            defaultDate: !!this.value ? Date.parse(this.value) : this.defaultDate,
+            defaultHour: this.defaultHour,
+            defaultMinute: this.defaultMinute,
+            defaultSeconds: this.defaultSeconds,
+            disable: this.disable,
+            disableMobile: this.disableMobile,
+            enable: this.enable,
+            enableSeconds: this.enableSeconds,
+            enableTime: this.enableTime,
+            formatDate: this.formatDate,
+            hourIncrement: this.hourIncrement,
+            inline: this.inline,
+            locale: this.locale,
+            maxDate: this.maxDate,
+            maxTime: this.maxTime,
+            minDate: this.minDate,
+            minTime: this.minTime,
+            minuteIncrement: this.minuteIncrement,
+            mode: this.mode,
+            monthSelectorType: this.monthSelectorType,
+            nextArrow: this.nextArrow,
+            noCalendar: this.noCalendar,
+            parseDate: this.dateParser,
+            position: this.position,
+            positionElement: this.positionElement,
+            prevArrow: this.prevArrow,
+            shorthandCurrentMonth: this.shorthandCurrentMonth,
+            static: this.static,
+            showMonths: this.showMonths,
+            time_24hr: this.time_24hr,
+            weekNumbers: this.weekNumbers,
+            wrap: this.wrap,
+            // @ts-ignore
+            onChange: (selectedDates, dateStr) => this.picked.emit(this.value = dateStr)
+            // onOpen: this.handleOnOpen(selectedDates, dateStr, instance)
+            // onClose: this.handleOnClose(selectedDates, dateStr, instance)
+        };
+        this.flatpickr(this.dateInput, options);
+        this.dateInput.addEventListener('invalid', e => {
+            this.invalidInput.emit(e);
+        });
+        this.dateInput.addEventListener('input', () => {
+            this.dateInput.setCustomValidity('');
+            this.dateInput.reportValidity();
+        });
+    }
+    static get is() { return "salla-datetime-picker"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-datetime-picker.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-datetime-picker.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "value": {
+                "type": "string",
+                "attribute": "value",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Two way data binding to retrieve the selected date[time] value"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "null"
+            },
+            "required": {
+                "type": "boolean",
+                "attribute": "required",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether this input i required or not"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "name": {
+                "type": "string",
+                "attribute": "name",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "the name for the input"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "placeholder": {
+                "type": "string",
+                "attribute": "placeholder",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Placeholder text to show on the input element"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "salla.lang.get('blocks.buy_as_gift.select_send_date_and_time')"
+            },
+            "allowInput": {
+                "type": "boolean",
+                "attribute": "allow-input",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Allows the user to enter a date directly into the input field. By default, direct entry is disabled."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "allowInvalidPreload": {
+                "type": "boolean",
+                "attribute": "allow-invalid-preload",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Allows the preloading of an invalid date. When disabled, the field will be cleared if the provided date is invalid"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "altFormat": {
+                "type": "string",
+                "attribute": "alt-format",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Exactly the same as date format, but for the altInput field."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"F j, Y\""
+            },
+            "altInput": {
+                "type": "boolean",
+                "attribute": "alt-input",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Show the user a readable date (as per altFormat), but return something totally different to the server."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "altInputClass": {
+                "type": "string",
+                "attribute": "alt-input-class",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "This class will be added to the input element created by the altInput option.\nNote that altInput already inherits classes from the original input."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "appendTo": {
+                "type": "unknown",
+                "attribute": "append-to",
+                "mutable": false,
+                "complexType": {
+                    "original": "HTMLElement",
+                    "resolved": "HTMLElement",
+                    "references": {
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Instead of body, appends the calendar to the specified node instead."
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "undefined"
+            },
+            "ariaDateFormat": {
+                "type": "string",
+                "attribute": "aria-date-format",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Defines how the date will be formatted in the aria-label for calendar days,\nusing the same tokens as dateFormat. If you change this, you should choose a\nvalue that will make sense if a screen reader reads it out loud."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"F j, Y\""
+            },
+            "autoFillDefaultTime": {
+                "type": "boolean",
+                "attribute": "auto-fill-default-time",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether the default time should be auto-filled when the input is empty and gains or loses focus."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "clickOpens": {
+                "type": "boolean",
+                "attribute": "click-opens",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether clicking on the input should open the picker.\nSet it to false if you only want to open the calendar programmatically with [open()]"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "closeOnSelect": {
+                "type": "boolean",
+                "attribute": "close-on-select",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether calendar should close after date selection or not"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "conjunction": {
+                "type": "string",
+                "attribute": "conjunction",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "When in \"multiple\" mode, conjunction is used to separate dates in the entry field."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "dateFormat": {
+                "type": "string",
+                "attribute": "date-format",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "A string of characters which are used to define how the date will be displayed in the input box.\nThe supported characters are defined in the table below."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"Y-m-d\""
+            },
+            "defaultDate": {
+                "type": "any",
+                "attribute": "default-date",
+                "mutable": false,
+                "complexType": {
+                    "original": "DateOption | DateOption[]",
+                    "resolved": "Date | DateOption[] | number | string",
+                    "references": {
+                        "DateOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Sets the initial selected date(s). If you're using mode: \"multiple\" or a range calendar supply an\nArray of Date objects or an Array of date strings which follow your dateFormat. Otherwise, you can supply\na single Date object or a date string."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "defaultHour": {
+                "type": "number",
+                "attribute": "default-hour",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Initial value of the hour element, when no date is selected"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "12"
+            },
+            "defaultMinute": {
+                "type": "number",
+                "attribute": "default-minute",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Initial value of the minute element, when no date is selected"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "0"
+            },
+            "defaultSeconds": {
+                "type": "number",
+                "attribute": "default-seconds",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Initial value of the seconds element, when no date is selected"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "0"
+            },
+            "disable": {
+                "type": "unknown",
+                "attribute": "disable",
+                "mutable": false,
+                "complexType": {
+                    "original": "DateLimit<DateOption>[]",
+                    "resolved": "DateLimit<DateOption>[]",
+                    "references": {
+                        "DateLimit": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateLimit"
+                        },
+                        "DateOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Disables certain dates, preventing them from being selected.\nSee https://chmln.github.io/flatpickr/examples/#disabling-specific-dates"
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "[]"
+            },
+            "disableMobile": {
+                "type": "boolean",
+                "attribute": "disable-mobile",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set this to true to always use the non-native picker on mobile devices.\nBy default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "enable": {
+                "type": "unknown",
+                "attribute": "enable",
+                "mutable": false,
+                "complexType": {
+                    "original": "DateLimit<DateOption>[]",
+                    "resolved": "DateLimit<DateOption>[]",
+                    "references": {
+                        "DateLimit": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateLimit"
+                        },
+                        "DateOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Disables all dates except these specified. See https://chmln.github.io/flatpickr/examples/#disabling-all-dates-except-select-few"
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "[(_) => true]"
+            },
+            "enableSeconds": {
+                "type": "boolean",
+                "attribute": "enable-seconds",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enables seconds selection in the time picker."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "enableTime": {
+                "type": "boolean",
+                "attribute": "enable-time",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enables the time picker"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "formatDate": {
+                "type": "unknown",
+                "attribute": "format-date",
+                "mutable": false,
+                "complexType": {
+                    "original": "(date: Date, format: string, locale: Object) => string",
+                    "resolved": "(date: Date, format: string, locale: Object) => string",
+                    "references": {
+                        "Date": {
+                            "location": "global",
+                            "id": "global::Date"
+                        },
+                        "Object": {
+                            "location": "global",
+                            "id": "global::Object"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Allows using a custom date formatting function instead of the built-in handling for date formats using dateFormat, altFormat, etc."
+                },
+                "getter": false,
+                "setter": false
+            },
+            "hourIncrement": {
+                "type": "number",
+                "attribute": "hour-increment",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Adjusts the step for the hour input (incl. scrolling)"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "1"
+            },
+            "inline": {
+                "type": "boolean",
+                "attribute": "inline",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Displays the calendar inline"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "locale": {
+                "type": "string",
+                "attribute": "locale",
+                "mutable": false,
+                "complexType": {
+                    "original": "LocaleKey",
+                    "resolved": "\"at\" | \"hr\" | \"th\" | \"tr\" | \"id\" | \"is\" | \"default\" | \"no\" | \"cy\" | \"es\" | \"ar\" | \"az\" | \"be\" | \"bg\" | \"bn\" | \"bs\" | \"ca\" | \"cat\" | \"ckb\" | \"cs\" | \"da\" | \"de\" | \"en\" | \"eo\" | \"et\" | \"fa\" | \"fi\" | \"fo\" | \"fr\" | \"gr\" | \"he\" | \"hi\" | \"hu\" | \"hy\" | \"it\" | \"ja\" | \"ka\" | \"ko\" | \"km\" | \"kz\" | \"lt\" | \"lv\" | \"mk\" | \"mn\" | \"ms\" | \"my\" | \"nl\" | \"nn\" | \"pa\" | \"pl\" | \"pt\" | \"ro\" | \"ru\" | \"si\" | \"sk\" | \"sl\" | \"sq\" | \"sr\" | \"sv\" | \"uk\" | \"vn\" | \"zh\" | \"uz\" | \"uz_latn\" | \"zh_tw\"",
+                    "references": {
+                        "LocaleKey": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::LocaleKey"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The locale, either as a string (e.g. \"ar\", \"en\") or as an object.\nSee https://chmln.github.io/flatpickr/localization/"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"en\""
+            },
+            "maxDate": {
+                "type": "any",
+                "attribute": "max-date",
+                "mutable": false,
+                "complexType": {
+                    "original": "DateOption",
+                    "resolved": "Date | number | string",
+                    "references": {
+                        "DateOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The maximum date that a user can pick to (inclusive)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "null"
+            },
+            "maxTime": {
+                "type": "any",
+                "attribute": "max-time",
+                "mutable": false,
+                "complexType": {
+                    "original": "DateOption",
+                    "resolved": "Date | number | string",
+                    "references": {
+                        "DateOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The minimum date that a user can start picking from (inclusive)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "null"
+            },
+            "minDate": {
+                "type": "any",
+                "attribute": "min-date",
+                "mutable": false,
+                "complexType": {
+                    "original": "DateOption",
+                    "resolved": "Date | number | string",
+                    "references": {
+                        "DateOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The minimum date that a user can start picking from (inclusive)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "null"
+            },
+            "minTime": {
+                "type": "any",
+                "attribute": "min-time",
+                "mutable": false,
+                "complexType": {
+                    "original": "DateOption",
+                    "resolved": "Date | number | string",
+                    "references": {
+                        "DateOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-datetime-picker/interfaces.ts::DateOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The minimum time that a user can start picking from (inclusive)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "null"
+            },
+            "minuteIncrement": {
+                "type": "number",
+                "attribute": "minute-increment",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Adjusts the step for the minute input (incl. scrolling) Defaults to 5"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "5"
+            },
+            "mode": {
+                "type": "string",
+                "attribute": "mode",
+                "mutable": false,
+                "complexType": {
+                    "original": "\"single\" | \"multiple\" | \"range\" | \"time\"",
+                    "resolved": "\"multiple\" | \"range\" | \"single\" | \"time\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Date selection mode, defaults to \"single\""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"single\""
+            },
+            "monthSelectorType": {
+                "type": "string",
+                "attribute": "month-selector-type",
+                "mutable": false,
+                "complexType": {
+                    "original": "\"dropdown\" | \"static\"",
+                    "resolved": "\"dropdown\" | \"static\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "How the month should be displayed in the header of the calendar.\nIf showMonths has a value greater than 1, the month is always shown as static."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"dropdown\""
+            },
+            "nextArrow": {
+                "type": "string",
+                "attribute": "next-arrow",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "HTML for the arrow icon, used to switch months."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'<span class=\"sicon-keyboard_arrow_right\"></span>'"
+            },
+            "noCalendar": {
+                "type": "boolean",
+                "attribute": "no-calendar",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Hides the day selection in calendar. Use it along with enableTime to create a time picker."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "dateParser": {
+                "type": "unknown",
+                "attribute": "date-parser",
+                "mutable": false,
+                "complexType": {
+                    "original": "(date: string, format: string) => Date",
+                    "resolved": "(date: string, format: string) => Date",
+                    "references": {
+                        "Date": {
+                            "location": "global",
+                            "id": "global::Date"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "A custom datestring parser"
+                },
+                "getter": false,
+                "setter": false
+            },
+            "position": {
+                "type": "string",
+                "attribute": "position",
+                "mutable": false,
+                "complexType": {
+                    "original": "\"auto\" | \"above\" | \"below\" | \"auto left\" | \"auto center\" | \"auto right\" | \"above left\" | \"above center\" | \"above right\" | \"below left\" | \"below center\" | \"below right\" | ((self: any, customElement: HTMLElement | undefined) => void)",
+                    "resolved": "\"above center\" | \"above left\" | \"above right\" | \"above\" | \"auto center\" | \"auto left\" | \"auto right\" | \"auto\" | \"below center\" | \"below left\" | \"below right\" | \"below\" | ((self: any, customElement: HTMLElement) => void)",
+                    "references": {
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "How the calendar should be positioned with regards to the input. Defaults to \"auto\""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "\"auto\""
+            },
+            "positionElement": {
+                "type": "unknown",
+                "attribute": "position-element",
+                "mutable": false,
+                "complexType": {
+                    "original": "HTMLElement",
+                    "resolved": "HTMLElement",
+                    "references": {
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The element off of which the calendar will be positioned. Defaults to the date input"
+                },
+                "getter": false,
+                "setter": false
+            },
+            "prevArrow": {
+                "type": "string",
+                "attribute": "prev-arrow",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "HTML for the left arrow icon, used to switch months."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'<span class=\"sicon-keyboard_arrow_left\"></span>'"
+            },
+            "shorthandCurrentMonth": {
+                "type": "boolean",
+                "attribute": "shorthand-current-month",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether to display the current month name in shorthand mode, e.g. \"Sep\" instead \"September\""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "static": {
+                "type": "boolean",
+                "attribute": "static",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Position the calendar inside the wrapper and next to the input element*."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "showMonths": {
+                "type": "number",
+                "attribute": "show-months",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The number of months to be shown at the same time when displaying the calendar."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "1"
+            },
+            "time_24hr": {
+                "type": "boolean",
+                "attribute": "time_-2-4hr",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Displays time picker in 24 hour mode without AM/PM selection when enabled."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "weekNumbers": {
+                "type": "boolean",
+                "attribute": "week-numbers",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Enables display of week numbers in calendar."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "wrap": {
+                "type": "boolean",
+                "attribute": "wrap",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "See https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "disabled": {
+                "type": "boolean",
+                "attribute": "disabled",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether the input is disabled"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            }
+        };
+    }
+    static get events() {
+        return [{
+                "method": "picked",
+                "name": "picked",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the date input gets changed by the user when selecting file(s)."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "invalidInput",
+                "name": "invalidInput",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the input is invalid."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+}

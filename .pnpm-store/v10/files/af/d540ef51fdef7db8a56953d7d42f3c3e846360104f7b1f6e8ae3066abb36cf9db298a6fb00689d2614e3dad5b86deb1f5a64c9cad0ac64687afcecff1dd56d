@@ -1,0 +1,70 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+'use strict';
+
+var index = require('./index-CXC9Tj5-.js');
+
+const sallaOrderDetailsMultipleBundleProductCss = "";
+
+const SallaproductDetailsMultipleBundleProduct = class {
+    constructor(hostRef) {
+        index.registerInstance(this, hostRef);
+        /** Placeholder image URL when product image is not available */
+        this.placeholderImage = salla.url.cdn('images/s-empty.png');
+    }
+    getProductImage() {
+        if (!this.productDetails?.image) {
+            return this.placeholderImage;
+        }
+        // Handle both string and object types for image
+        if (typeof this.productDetails.image === 'string') {
+            return this.productDetails.image;
+        }
+        return (this.productDetails.image.url || this.placeholderImage || salla.url.cdn('images/s-empty.png'));
+    }
+    getProductImageAlt() {
+        if (!this.productDetails?.image || typeof this.productDetails.image === 'string') {
+            return this.productDetails?.name || '';
+        }
+        return this.productDetails.image.alt || this.productDetails?.name || '';
+    }
+    getAccordionId() {
+        return `accordion-${this.productDetails?.id || 'default'}`;
+    }
+    getAccordionKey() {
+        return this.productDetails?.id || 'default';
+    }
+    shouldBeCollapsible() {
+        if (this.collapsible !== undefined) {
+            return this.collapsible;
+        }
+        return this.productDetails?.options?.length > 0;
+    }
+    renderProductPrice() {
+        if (!this.productDetails) {
+            return null;
+        }
+        const { is_on_sale, sale_price, regular_price, price } = this.productDetails;
+        if (is_on_sale && sale_price) {
+            return (index.h("div", null, index.h("span", { class: "s-order-details-product-price s-order-details-product-price-sale" }, index.h("span", { innerHTML: salla.money(sale_price) })), regular_price && (index.h("span", { class: "s-order-details-product-regular-price" }, index.h("span", { innerHTML: salla.money(regular_price) })))));
+        }
+        return (index.h("span", { class: "s-order-details-product-price" }, index.h("span", { innerHTML: salla.money(price) })));
+    }
+    renderOptions() {
+        if (!this.productDetails?.options?.length) {
+            return null;
+        }
+        return (index.h("salla-accordion-body", null, index.h("div", { class: "s-order-details-options" }, index.h("salla-order-details-options", { options: this.productDetails.options }))));
+    }
+    render() {
+        if (!this.productDetails) {
+            return null;
+        }
+        const collapsibleState = this.shouldBeCollapsible();
+        return (index.h(index.Host, { class: "s-order-details-bundle-wrapper" }, index.h("salla-accordion", { key: this.getAccordionKey(), collapsed: false, bordered: true, collapsible: collapsibleState, id: this.getAccordionId(), size: "sm" }, index.h("salla-accordion-head", null, index.h("div", { class: "s-order-details-product" }, index.h("div", { class: "s-order-details-product-content" }, index.h("div", { class: "s-order-details-product-info" }, index.h("div", { class: "s-order-details-product-image" }, index.h("img", { src: this.getProductImage(), alt: this.getProductImageAlt() })), index.h("div", { class: "s-order-details-product-details" }, index.h("a", { href: this.productDetails?.url || '#', class: "s-order-details-product-name" }, this.productDetails?.name || ''), this.renderProductPrice(), this.productDetails?.quantity && (index.h("span", { class: "s-order-details-product-quantity" }, "\u00D7", this.productDetails.quantity))))))), this.renderOptions())));
+    }
+};
+SallaproductDetailsMultipleBundleProduct.style = sallaOrderDetailsMultipleBundleProductCss;
+
+exports.salla_order_details_multiple_bundle_product = SallaproductDetailsMultipleBundleProduct;

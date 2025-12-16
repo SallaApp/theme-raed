@@ -1,0 +1,33 @@
+import type { Review } from '../salla-review-card/interfaces';
+import type { Pagination } from '../../interfaces/common';
+export declare class SallaReviewsPage {
+    el: HTMLElement;
+    reviews: Partial<Review>[];
+    isLoading: boolean;
+    pagination: Pagination;
+    sort: "top_rating" | "bottom_rating" | "latest" | "oldest";
+    private langTitlesReviews;
+    private langRatingReviews;
+    private langSorting;
+    private langSortByTopRating;
+    private langSortByMostRecent;
+    private langSortByLeastRecent;
+    private langSortByLeastRated;
+    private langLoadMore;
+    private placeholderText;
+    private infiniteScroll;
+    private wrapper;
+    private getUrlParams;
+    private updateUrlParams;
+    private fetchReviews;
+    private initializeMasonry;
+    private animateReviewCards;
+    private initiateInfiniteScroll;
+    componentDidRender(): void;
+    componentWillLoad(): Promise<void>;
+    private handleSorting;
+    componentDidLoad(): Promise<void>;
+    disconnectedCallback(): void;
+    private renderSortingOptions;
+    render(): any;
+}

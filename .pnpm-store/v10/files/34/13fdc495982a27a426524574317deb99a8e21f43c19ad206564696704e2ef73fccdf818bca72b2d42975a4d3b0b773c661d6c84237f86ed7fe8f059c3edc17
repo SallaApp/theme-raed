@@ -1,0 +1,601 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import Location from "../../assets/svg/location.svg";
+import Edit from "../../assets/svg/edit.svg";
+import CurrentLocation from "../../assets/svg/location-target.svg";
+import LocationMarker from "../../assets/svg/location-marker.svg";
+import styles from "./map-styles";
+// import google maps
+import { Loader } from "google-maps";
+export class SallaMap {
+    constructor() {
+        this.defaultLat = 21.419421; //Mecca 🕋
+        this.defaultLng = 39.82553; //Mecca 🕋
+        // state variables
+        this.modalActivityTitle = salla.lang.get('pages.checkout.select_your_address_from_map');
+        this.confirmButtonTitle = salla.lang.get('pages.checkout.confirm_address');
+        this.locateButtonTitle = salla.lang.get('pages.cart.detect_location');
+        this.locateButtonEdit = salla.lang.get('common.elements.edit');
+        this.searchPlaceholder = salla.lang.get('pages.checkout.search_for_address');
+        this.searchInputValue = null;
+        this.formattedAddress = '';
+        this.geolocationError = false;
+        /**
+         * File input name for the native formData
+         */
+        this.name = 'location';
+        /**
+         * Set if the location input is required or not
+         */
+        this.required = false;
+        /**
+         * Disable or enable actions
+         */
+        this.readonly = false;
+        /**
+         * Sets the search bar visibility.
+         */
+        this.searchable = false;
+        /**
+         * Sets start map zoom.
+         */
+        this.zoom = 10;
+        /**
+         * Sets map style.
+         */
+        this.theme = 'light';
+        salla.lang.onLoaded(() => {
+            this.modalActivityTitle = salla.lang.get('pages.checkout.select_your_address_from_map');
+            this.confirmButtonTitle = salla.lang.get('pages.checkout.confirm_address');
+            this.locateButtonTitle = salla.lang.get('pages.cart.detect_location');
+            this.locateButtonEdit = salla.lang.get('common.elements.edit');
+            this.searchPlaceholder = salla.lang.get('pages.checkout.search_for_address');
+        });
+        salla.onReady(() => {
+            this.apiKey = salla.config.get('store.settings.keys.maps', 'AIzaSyBFgFISAizDP3YVWj0y5rF8JKKNQ2vohdc');
+        });
+    }
+    formatAddress(address) {
+        return address.length > 25 ? address.substring(0, 25) + '...' : address;
+    }
+    getLatLng() {
+        return this.selectedLat && this.selectedLng ? `${this.selectedLat}, ${this.selectedLng}` : null;
+    }
+    getPositionAddress(location, submit = false) {
+        // get address and set it to search input
+        const Geocoder = new google.maps.Geocoder();
+        Geocoder.geocode({
+            location,
+        }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                if (this.searchable) {
+                    this.searchInputValue = results[0].formatted_address;
+                    this.searchInput.value = results[0].formatted_address;
+                }
+                if (submit) {
+                    this.formattedAddress = results[0].formatted_address;
+                }
+            }
+        });
+    }
+    initGoogleMaps(options, mapDOM) {
+        const loader = new Loader(this.apiKey, options);
+        loader.load().then(google => {
+            this.map = new google.maps.Map(mapDOM, {
+                center: (this.lat || this.lng) ? {
+                    lat: this.lat,
+                    lng: this.lng,
+                } : {
+                    lat: this.defaultLat,
+                    lng: this.defaultLng,
+                },
+                zoom: this.zoom,
+                zoomControl: true,
+                mapTypeControl: false,
+                scaleControl: false,
+                streetViewControl: false,
+                rotateControl: false,
+                fullscreenControl: false,
+                disableDefaultUI: false,
+            });
+            this.map.setOptions({
+                styles: this.theme === 'light' ? styles.light : styles.dark,
+            });
+            this.marker = new google.maps.Marker({
+                position: this.map.getCenter(),
+                map: this.map,
+                icon: {
+                    url: 'data:image/svg+xml;utf8,' + encodeURIComponent(LocationMarker),
+                    scaledSize: new google.maps.Size(30, 30),
+                },
+            });
+            if (this.searchable) {
+                const searchBox = new google.maps.places.SearchBox(this.searchInput);
+                google.maps.event.addListener(searchBox, 'places_changed', () => {
+                    const places = searchBox.getPlaces();
+                    // goto first place
+                    if (places.length > 0 && this.map) {
+                        this.map.setCenter(places[0].geometry.location);
+                        this.lat = places[0].geometry.location.lat();
+                        this.lng = places[0].geometry.location.lng();
+                        // set marker
+                        this.marker.setPosition(places[0].geometry.location);
+                        this.searchInputValue = places[0].formatted_address;
+                        this.formattedAddress = places[0].formatted_address;
+                    }
+                });
+            }
+            // add listener to map
+            google.maps.event.addListener(this.map, 'click', e => {
+                if (this.readonly)
+                    return;
+                this.marker.setPosition(e.latLng);
+                this.lat = e.latLng.lat();
+                this.lng = e.latLng.lng();
+                this.getPositionAddress(e.latLng);
+                this.mapClicked.emit({
+                    lat: e.latLng.lat(),
+                    lng: e.latLng.lng(),
+                    address: this.formattedAddress ? this.formattedAddress : null,
+                });
+            });
+            if (!this.lat && !this.lng) {
+                this.getCurrentLocation();
+                if (this.geolocationError) {
+                    this.map.setCenter({
+                        lat: this.lat,
+                        lng: this.lng,
+                    });
+                    this.marker.setPosition({
+                        lat: this.lat,
+                        lng: this.lng,
+                    });
+                }
+            }
+        });
+    }
+    getCurrentLocation() {
+        if (navigator.geolocation && this.map) {
+            navigator.geolocation.getCurrentPosition(position => {
+                // set map to this location
+                const mapOptions = {
+                    center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                    zoom: 15,
+                };
+                this.map.setOptions(mapOptions);
+                // set marker
+                this.marker.setPosition(mapOptions.center);
+                this.getPositionAddress(mapOptions.center);
+                this.lat = position.coords.latitude;
+                this.lng = position.coords.longitude;
+                this.currentLocationChanged.emit({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    address: this.formattedAddress ? this.formattedAddress : null,
+                });
+            }, this.handleLocationError.bind(this));
+        }
+        else {
+            salla.log('Geolocation is not supported by this browser.');
+            this.geolocationError = true;
+        }
+    }
+    handleLocationError(error) {
+        this.geolocationError = true;
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                salla.log('User denied the request for Geolocation.');
+                break;
+            case error.POSITION_UNAVAILABLE:
+                salla.log('Location information is unavailable.');
+                break;
+            case error.TIMEOUT:
+                salla.log('The request to get user location timed out.');
+                break;
+            case error.UNKNOWN_ERROR:
+                salla.log('An unknown error occurred.');
+                break;
+        }
+    }
+    componentDidLoad() {
+        // if lat and lng provided then get the formatted address
+        if (this.lat && this.lng) {
+            // get address
+            fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.lat},${this.lng}&key=${this.apiKey}&language=${salla.config.get('user.language_code') ||
+                document.documentElement.lang ||
+                'ar'}`)
+                .then(res => res.json())
+                .then(res => {
+                if (res.status === 'OK') {
+                    this.formattedAddress = res.results[0].formatted_address;
+                    this.searchInputValue = res.results[0].formatted_address;
+                    this.searchInput.value = res.results[0].formatted_address;
+                    this.selectedLng = this.lng;
+                    this.selectedLat = this.lat;
+                }
+            });
+        }
+        this.mapInput.addEventListener('invalid', e => {
+            this.invalidInput.emit(e);
+        });
+        this.mapInput.addEventListener('input', () => {
+            this.mapInput.setCustomValidity('');
+            this.mapInput.reportValidity();
+        });
+    }
+    /**
+     * Open location component
+     */
+    async open() {
+        // only init google maps on modal open :) to save resources
+        if (!this.map)
+            this.initGoogleMaps({
+                libraries: this.searchable ? ['places', 'search'] : [],
+                language: salla.config.get('user.language_code') ||
+                    document.documentElement.lang ||
+                    'ar',
+            }, this.mapElement);
+        return await this.locationModal.open();
+    }
+    // rendering functions
+    getLocationModal() {
+        return (h("div", null, h("div", { class: "s-map-modal-title" }, !!this.modalTitle ? this.modalTitle : this.modalActivityTitle), h("div", { class: "s-map-modal-body" }, h("div", { class: "s-map-element", ref: el => (this.mapElement = el) }), this.readonly ? "" :
+            [
+                this.searchable && (h("div", { class: "s-map-search-wrapper" }, h("input", { class: "s-map-search-input", ref: el => (this.searchInput = el), placeholder: this.searchPlaceholder }))),
+                h("salla-button", { class: "s-map-my-location-button", onClick: () => {
+                        this.getCurrentLocation();
+                    }, shape: "icon", color: "primary" }, h("span", { innerHTML: CurrentLocation })),
+                h("salla-button", { class: "s-map-submit-button", color: "primary", width: "wide", onClick: () => {
+                        let points = {
+                            lat: this.lat,
+                            lng: this.lng,
+                            address: this.formattedAddress ? this.formattedAddress : null,
+                        };
+                        salla.event.emit('salla-map::selected', points);
+                        this.selected.emit(points);
+                        this.selectedLat = points.lat;
+                        this.selectedLng = points.lng;
+                        this.getPositionAddress(new google.maps.LatLng(points.lat, points.lng), true);
+                        if (!this.selectedLat || !this.selectedLng) {
+                            this.mapInput.value = null;
+                        }
+                        else {
+                            this.mapInput.value = `${this.selectedLat}, ${this.selectedLng}`;
+                        }
+                        this.mapInput.dispatchEvent(new window.Event('change', { bubbles: true }));
+                        this.locationModal.close();
+                    } }, this.confirmButtonTitle)
+            ])));
+    }
+    // render
+    render() {
+        return (h(Host, { key: '4493051dec9a6e1dfd97037f913832badb001588', class: "s-map-wrapper" }, h("salla-modal", { key: '5e492140d308e80f3a0572906e26a2750affd7ea', class: "s-map-modal-wrapper", noPadding: true, ref: modal => {
+                this.locationModal = modal;
+            } }, this.getLocationModal()), h("slot", { key: 'c631ddacaa4d957d35f224137769669645841ef4', name: "button" }, h("salla-button", { key: '2e6f39c033be6327460362a80b9b6be8a99cce75', onClick: () => {
+                this.open();
+            }, color: "primary", class: "s-map-location-button" }, h("span", { key: '88371c09fa3aece12575e6759470279267d828be', class: "s-map-location-icon", innerHTML: this.formattedAddress ? Edit : Location }), this.formattedAddress ? (h("div", null, this.locateButtonEdit, " | ", this.formatAddress(this.formattedAddress))) : (this.locateButtonTitle))), h("input", { key: 'bae03eb7d7f756f3b92b5eee56c7dc0f366aee74', class: "s-hidden", name: this.name, required: this.required, value: this.getLatLng(), ref: color => this.mapInput = color })));
+    }
+    static get is() { return "salla-map"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-map.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-map.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "name": {
+                "type": "string",
+                "attribute": "name",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "File input name for the native formData"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'location'"
+            },
+            "required": {
+                "type": "boolean",
+                "attribute": "required",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set if the location input is required or not"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "readonly": {
+                "type": "boolean",
+                "attribute": "readonly",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Disable or enable actions"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "searchable": {
+                "type": "boolean",
+                "attribute": "searchable",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Sets the search bar visibility."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "lat": {
+                "type": "number",
+                "attribute": "lat",
+                "mutable": true,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Latitude coordinate, defaults to current user location"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "lng": {
+                "type": "number",
+                "attribute": "lng",
+                "mutable": true,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Longitude coordinate, defaults to current user location"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "apiKey": {
+                "type": "string",
+                "attribute": "api-key",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Sets google api key value, default Merchant key"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "modalTitle": {
+                "type": "string",
+                "attribute": "modal-title",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Modal Title"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "zoom": {
+                "type": "number",
+                "attribute": "zoom",
+                "mutable": true,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Sets start map zoom."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "10"
+            },
+            "theme": {
+                "type": "string",
+                "attribute": "theme",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Sets map style."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'light'"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "modalActivityTitle": {},
+            "confirmButtonTitle": {},
+            "locateButtonTitle": {},
+            "locateButtonEdit": {},
+            "searchPlaceholder": {},
+            "searchInputValue": {},
+            "formattedAddress": {},
+            "geolocationError": {},
+            "searchInput": {},
+            "mapInput": {},
+            "mapElement": {},
+            "selectedLat": {},
+            "selectedLng": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "selected",
+                "name": "selected",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Custom DOM event emitter when location is selected"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "mapClicked",
+                "name": "mapClicked",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Custom DOM event emitter when map is clicked"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "currentLocationChanged",
+                "name": "currentLocationChanged",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Custom DOM event emitter when current location is selected"
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "invalidInput",
+                "name": "invalidInput",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the input is invalid."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "open": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        },
+                        "HTMLSallaModalElement": {
+                            "location": "global",
+                            "id": "global::HTMLSallaModalElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Open location component",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

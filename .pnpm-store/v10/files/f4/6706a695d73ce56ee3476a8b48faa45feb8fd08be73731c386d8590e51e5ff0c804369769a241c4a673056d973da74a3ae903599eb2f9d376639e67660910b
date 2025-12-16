@@ -1,0 +1,206 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { H as Helper } from './Helper.js';
+import { d as defineCustomElement$b } from './salla-add-product-button2.js';
+import { d as defineCustomElement$a } from './salla-button2.js';
+import { d as defineCustomElement$9 } from './salla-count-down2.js';
+import { d as defineCustomElement$8 } from './salla-loading2.js';
+import { d as defineCustomElement$7 } from './salla-modal2.js';
+import { d as defineCustomElement$6 } from './salla-product-availability2.js';
+import { d as defineCustomElement$5 } from './salla-product-card2.js';
+import { d as defineCustomElement$4 } from './salla-progress-bar2.js';
+import { d as defineCustomElement$3 } from './salla-quick-buy2.js';
+import { d as defineCustomElement$2 } from './salla-slider2.js';
+import { d as defineCustomElement$1 } from './salla-tel-input2.js';
+
+const sallaProductsSliderCss = "";
+
+const SallaProductsSlider = /*@__PURE__*/ proxyCustomElement(class SallaProductsSlider extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        /**
+         * Custom Card Component for the Salla Products Slider.
+         *
+         * This component allows you to customize the appearance of individual product cards within a Salla Products Slider.
+         *
+         * @example
+         * <salla-products-slider product-card-component="my-custom-card-style1" ...
+         * <salla-products-slider product-card-component="my-custom-card-style2" ...
+         */
+        this.productCardComponent = 'custom-salla-product-card';
+        this.apiUrl = '';
+    }
+    componentWillLoad() {
+        return salla.onReady()
+            .then(() => {
+            //TODO:: check why `this.includes` not working!!
+            this.includes = Helper.parseJson(this.includes || this.host.getAttribute('includes'));
+            if (!Array.isArray(this.includes)) {
+                this.includes = null;
+            }
+            Helper.setIncludes(this.includes);
+            this.sourceValueIsValid = !!(this.getSourceValue() || this.isSourceWithoutValue());
+            if (!this.sourceValueIsValid) {
+                salla.logger.warn(`source-value prop is required for source [${this.getSource()}]`);
+                return;
+            }
+            this.hasCustomComponent = !!customElements.get(this.productCardComponent);
+            if (this.source === 'json') {
+                this.productsData = this.getSourceValue();
+                this.isReady = true;
+                return;
+            }
+            if ((this.getSource() == 'related' && !salla.config.get('store.settings.product.related_products_enabled'))) {
+                this.isReady = false;
+                return;
+            }
+            return salla.product.api.fetch({ source: this.getSource(), source_value: this.getSourceValue(), limit: this.limit })
+                .then(response => Helper.injectExtraFieldsToResponse(response))
+                .then(response => {
+                this.productsData = response.data;
+                this.isReady = true;
+                response.source = this.getSource();
+                response.sourceValue = this.getSourceValue();
+                salla.event.emit('salla-products-slider::products.fetched', response.data);
+            });
+        });
+    }
+    componentDidRender() {
+        let processedCount = 0;
+        const intervalId = setInterval(() => {
+            this.host.querySelectorAll('[loading="lazy"]')?.forEach(img => img.removeAttribute('loading'));
+            processedCount++;
+            if (processedCount >= 10) {
+                clearInterval(intervalId);
+            }
+        }, 1000);
+    }
+    isSourceWithoutValue() {
+        return ['offers', 'latest', 'sales', 'top-rated'].includes(this.getSource());
+    }
+    getItemHTML(product) {
+        //as a request they don't want to let the user to open the product details
+        //todo:: find a better way to handle this request
+        this.getSource() === 'landing-page' && (product.url = '');
+        if (this.hasCustomComponent && this.productCardComponent.toLowerCase() == 'custom-salla-product-card') {
+            return h("div", { class: "s-products-slider-card" }, h("custom-salla-product-card", { product: product, source: this.getSource(), "source-value": this.getSourceValue() }));
+        }
+        if (this.hasCustomComponent) {
+            const customElem = document.createElement(this.productCardComponent);
+            customElem.setAttribute('product', JSON.stringify(product));
+            customElem.setAttribute('source', this.getSource());
+            customElem.setAttribute('source-value', this.getSourceValue());
+            return h("div", { class: "s-products-slider-card", innerHTML: customElem.outerHTML });
+        }
+        return h("div", { class: "s-products-slider-card" }, h("salla-product-card", { "show-quantity": this.getSource() == 'landing-page', "hide-add-btn": this.getSource() == 'landing-page', "shadow-on-hover": true, product: product }));
+    }
+    canRender() {
+        return this.sourceValueIsValid && this.isReady;
+    }
+    getSource() {
+        return Helper.getProductsSource(this.source);
+    }
+    getSourceValue() {
+        return Helper.getProductsSourceValue(this.source, this.sourceValue);
+    }
+    render() {
+        if (!this.canRender()) {
+            return;
+        }
+        return (h(Host, { class: "s-products-slider-wrapper" }, h("salla-slider", { class: "s-products-slider-slider", id: this.sliderId || `s-products-slider-${Math.random().toString(36).substr(2, 9)}`, "auto-play": this.autoplay, type: "carousel", "block-title": this.blockTitle, "block-subTitle": this.subTitle, "display-all-url": this.displayAllUrl, sliderConfig: this.sliderConfig ? this.sliderConfig : null }, h("div", { slot: "items" }, this.productsData?.map(product => this.getItemHTML(product))))));
+    }
+    get host() { return this; }
+    static get style() { return sallaProductsSliderCss; }
+}, [0, "salla-products-slider", {
+        "blockTitle": [1, "block-title"],
+        "subTitle": [1, "sub-title"],
+        "sliderId": [1, "slider-id"],
+        "displayAllUrl": [1, "display-all-url"],
+        "autoplay": [1028],
+        "source": [1537],
+        "sourceValue": [1, "source-value"],
+        "limit": [1026],
+        "sliderConfig": [520, "slider-config"],
+        "productCardComponent": [1, "product-card-component"],
+        "includes": [1040],
+        "productsData": [32],
+        "isReady": [32],
+        "sourceValueIsValid": [32],
+        "hasCustomComponent": [32],
+        "apiUrl": [32],
+        "parsedSourceValue": [32]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-products-slider", "salla-add-product-button", "salla-button", "salla-count-down", "salla-loading", "salla-modal", "salla-product-availability", "salla-product-card", "salla-progress-bar", "salla-quick-buy", "salla-slider", "salla-tel-input"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-products-slider":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaProductsSlider);
+            }
+            break;
+        case "salla-add-product-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$b();
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$a();
+            }
+            break;
+        case "salla-count-down":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$9();
+            }
+            break;
+        case "salla-loading":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$8();
+            }
+            break;
+        case "salla-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$7();
+            }
+            break;
+        case "salla-product-availability":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$6();
+            }
+            break;
+        case "salla-product-card":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$5();
+            }
+            break;
+        case "salla-progress-bar":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$4();
+            }
+            break;
+        case "salla-quick-buy":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-slider":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+        case "salla-tel-input":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$1();
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaProductsSlider as S, defineCustomElement as d };

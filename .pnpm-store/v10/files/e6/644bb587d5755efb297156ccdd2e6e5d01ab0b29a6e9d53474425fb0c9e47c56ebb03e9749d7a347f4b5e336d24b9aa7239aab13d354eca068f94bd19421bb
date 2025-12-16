@@ -1,0 +1,2 @@
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports,require("@analytics/global-storage-utils")):"function"==typeof define&&define.amd?define(["exports","@analytics/global-storage-utils"],t):t((e||self).utilLocalStorage={},e.globalStorageUtils)}(this,function(e,t){var o="localStorage",a=t.hasSupport.bind(null,o),l=t.wrap(o,"getItem",t.get),i=t.wrap(o,"setItem",t.set),r=t.wrap(o,"removeItem",t.remove);e.LOCAL_STORAGE=o,e.getItem=l,e.hasLocalStorage=a,e.removeItem=r,e.setItem=i});
+//# sourceMappingURL=analytics-util-localstorage.umd.js.map

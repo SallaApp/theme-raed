@@ -1,0 +1,572 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+import Picker from "vanilla-picker";
+import ArrowDown from "../../assets/svg/keyboard_arrow_down.svg";
+export class SallaColorPicker {
+    constructor() {
+        /**
+         * File input name for the native formData
+         */
+        this.name = 'color';
+        /**
+         * Set if the color picker input is required or not
+         */
+        this.required = false;
+        /**
+         * How to display the selected color in the text field
+         * (the text field still supports input in any format).
+         */
+        this.format = 'hex';
+        /**
+         * Whether to have a "Cancel" button which closes the popup.
+         */
+        this.showCancelButton = false;
+        /**
+         * Whether to show a text field for color value editing.
+         */
+        this.showTextField = true;
+        /**
+         * Whether to enable adjusting the alpha channel.
+         */
+        this.enableAlpha = false;
+    }
+    colorChangeHandler(color) {
+        this.colorInput.value = color.hex;
+        this.colorChanged.emit(color);
+    }
+    submittedHandler(color) {
+        this.setColorValue(color.rgbaString, true);
+        this.canvas.style.backgroundColor = color.rgbString;
+        this.colorInput.value = color.hex;
+        this.colorInput.dispatchEvent(new window.Event('change', { bubbles: true }));
+        this.submitted.emit(color);
+    }
+    popupOpenedHandler(color) {
+        this.setPopInPosition();
+        this.popupOpened.emit(color);
+    }
+    popupClosedHandler(color) {
+        this.popupClosed.emit(color);
+    }
+    /** Methods */
+    /**
+     * Set the picker options.
+     *
+     * (Usually a new .parent and .color).
+     * @param {Object} options
+     */
+    async setPickerOption(options) {
+        this.picker.setOptions(options);
+    }
+    /**
+     * Move the popup to a different parent, optionally opening it at the same time.
+     *
+     * (Usually a new .parent and .color).
+     * @param {Options} option
+     *
+     * Whether to open the popup immediately.
+     * @param {boolean} openImmediately
+     */
+    async movePopUp(options, openImmediately) {
+        this.picker.movePopup(options, openImmediately);
+    }
+    /**
+     * Set/initialize the picker's color.
+     *
+     * Color name, RGBA/HSLA/HEX string, or RGBA array.
+     * @param {string} color
+     *
+     * If true, won't trigger onChange.
+     * @param {boolean} triggerEvent
+     */
+    async setColorValue(color, triggerEvent) {
+        this.picker.setColor(color, triggerEvent);
+    }
+    /**
+     * Show/open the picker.
+     */
+    async openPicker() {
+        this.picker.show();
+    }
+    /**
+     * Close/Hide the picker.
+     */
+    async closePicker() {
+        this.picker.hide();
+    }
+    /**
+     * Release all resources used by this picker instance.
+     */
+    async destroyPicker() {
+        this.picker.destroy();
+    }
+    componentWillLoad() {
+        salla.onReady(() => {
+            this.color = this.color ? this.color : salla.config.get('theme.color.primary', '#5dd5c4');
+        });
+    }
+    setPopInPosition() {
+        const popup = this.host.querySelector('.picker_wrapper');
+        const widgetPosition = this.host.querySelector('.s-color-picker-widget').getBoundingClientRect();
+        const widgetToWindowEq = window.innerWidth / 2 - widgetPosition.width / 2;
+        const widgetInLeft = widgetToWindowEq > widgetPosition.x;
+        const widgetInRight = widgetToWindowEq < widgetPosition.x;
+        const widgetInCenter = widgetToWindowEq === widgetPosition.x;
+        const isMobile = window.innerWidth < 768;
+        if (isMobile && widgetInLeft) {
+            popup.style.left = '0';
+        }
+        if (isMobile && (widgetInRight)) {
+            popup.style.left = 'auto';
+        }
+        if (!isMobile || (isMobile && ((!widgetInRight && !widgetInLeft) || widgetInCenter))) {
+            popup.style.left = `-95px`;
+        }
+    }
+    initColorPicker() {
+        this.picker = new Picker({
+            parent: this.host,
+            color: this.color,
+            popup: 'bottom',
+            // template: string,
+            // layout: string,
+            alpha: this.enableAlpha,
+            editor: this.showTextField,
+            editorFormat: this.format,
+            cancelButton: this.showCancelButton,
+            onChange: (color) => this.colorChangeHandler(color),
+            onDone: (color) => this.submittedHandler(color),
+            onOpen: (color) => this.popupOpenedHandler(color),
+            onClose: (color) => this.popupClosedHandler(color),
+        });
+    }
+    render() {
+        return (h(Host, { key: '8ed135a77f4664ae0820fe116c115ecde8600630', class: "s-color-picker-main" }, h("slot", { key: '9c03d6effac021a15f380b58e912556c8506df77', name: "widget" }, h("div", { key: '079346b844adf30b07ce387fd0a0ea553d6f6c3a', class: "s-color-picker-widget" }, h("div", { key: 'b585d7bb86c1e66ecf624f985482594e250f5337', class: "s-color-picker-widget-canvas", ref: dv => this.canvas = dv }), h("span", { key: '9a3029a2d447d5bcd7eeb17f4772b0c70ff6e1a5', innerHTML: ArrowDown }))), h("input", { key: '9ceac07e6277a096b1a7070d3d9ba2def7aa0839', class: "s-hidden", name: this.name, required: this.required, value: this.color, ref: color => this.colorInput = color })));
+    }
+    componentDidLoad() {
+        this.canvas.style.backgroundColor = this.color;
+        this.initColorPicker();
+        this.colorInput.addEventListener('invalid', e => {
+            this.invalidInput.emit(e);
+        });
+        this.colorInput.addEventListener('input', () => {
+            this.colorInput.setCustomValidity('');
+            this.colorInput.reportValidity();
+        });
+    }
+    static get is() { return "salla-color-picker"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-color-picker.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-color-picker.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "name": {
+                "type": "string",
+                "attribute": "name",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "File input name for the native formData"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'color'"
+            },
+            "required": {
+                "type": "boolean",
+                "attribute": "required",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set if the color picker input is required or not"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "color": {
+                "type": "string",
+                "attribute": "color",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Initial color for the picker."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "format": {
+                "type": "string",
+                "attribute": "format",
+                "mutable": false,
+                "complexType": {
+                    "original": "'hex' | 'hsl' | 'rgb'",
+                    "resolved": "\"hex\" | \"hsl\" | \"rgb\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "How to display the selected color in the text field\n(the text field still supports input in any format)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'hex'"
+            },
+            "showCancelButton": {
+                "type": "boolean",
+                "attribute": "show-cancel-button",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether to have a \"Cancel\" button which closes the popup."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            },
+            "showTextField": {
+                "type": "boolean",
+                "attribute": "show-text-field",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether to show a text field for color value editing."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "enableAlpha": {
+                "type": "boolean",
+                "attribute": "enable-alpha",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether to enable adjusting the alpha channel."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "false"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "widgetColor": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "colorChanged",
+                "name": "colorChanged",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event whenever the color changes."
+                },
+                "complexType": {
+                    "original": "Color",
+                    "resolved": "Color",
+                    "references": {
+                        "Color": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-color-picker/interfaces.ts::Color"
+                        }
+                    }
+                }
+            }, {
+                "method": "invalidInput",
+                "name": "invalidInput",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitted when the input is invalid."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }, {
+                "method": "submitted",
+                "name": "submitted",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitter when the user clicks \"Ok\"."
+                },
+                "complexType": {
+                    "original": "Color",
+                    "resolved": "Color",
+                    "references": {
+                        "Color": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-color-picker/interfaces.ts::Color"
+                        }
+                    }
+                }
+            }, {
+                "method": "popupOpened",
+                "name": "popupOpened",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitter when the popup opens."
+                },
+                "complexType": {
+                    "original": "Color",
+                    "resolved": "Color",
+                    "references": {
+                        "Color": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-color-picker/interfaces.ts::Color"
+                        }
+                    }
+                }
+            }, {
+                "method": "popupClosed",
+                "name": "popupClosed",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Event emitter when the popup closes."
+                },
+                "complexType": {
+                    "original": "Color",
+                    "resolved": "Color",
+                    "references": {
+                        "Color": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-color-picker/interfaces.ts::Color"
+                        }
+                    }
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "setPickerOption": {
+                "complexType": {
+                    "signature": "(options: Options) => Promise<void>",
+                    "parameters": [{
+                            "name": "options",
+                            "type": "Options",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "Options": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-color-picker/interfaces.ts::Options"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Set the picker options.\n\n(Usually a new .parent and .color).",
+                    "tags": [{
+                            "name": "param",
+                            "text": "options"
+                        }]
+                }
+            },
+            "movePopUp": {
+                "complexType": {
+                    "signature": "(options: Options, openImmediately: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "options",
+                            "type": "Options",
+                            "docs": ""
+                        }, {
+                            "name": "openImmediately",
+                            "type": "boolean",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "Options": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-color-picker/interfaces.ts::Options"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Move the popup to a different parent, optionally opening it at the same time.\n\n(Usually a new .parent and .color).",
+                    "tags": [{
+                            "name": "param",
+                            "text": "option Whether to open the popup immediately."
+                        }, {
+                            "name": "param",
+                            "text": "openImmediately"
+                        }]
+                }
+            },
+            "setColorValue": {
+                "complexType": {
+                    "signature": "(color: string, triggerEvent: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "color",
+                            "type": "string",
+                            "docs": "If true, won't trigger onChange."
+                        }, {
+                            "name": "triggerEvent",
+                            "type": "boolean",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Set/initialize the picker's color.\n\nColor name, RGBA/HSLA/HEX string, or RGBA array.",
+                    "tags": [{
+                            "name": "param",
+                            "text": "color If true, won't trigger onChange."
+                        }, {
+                            "name": "param",
+                            "text": "triggerEvent"
+                        }]
+                }
+            },
+            "openPicker": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Show/open the picker.",
+                    "tags": []
+                }
+            },
+            "closePicker": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Close/Hide the picker.",
+                    "tags": []
+                }
+            },
+            "destroyPicker": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Release all resources used by this picker instance.",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

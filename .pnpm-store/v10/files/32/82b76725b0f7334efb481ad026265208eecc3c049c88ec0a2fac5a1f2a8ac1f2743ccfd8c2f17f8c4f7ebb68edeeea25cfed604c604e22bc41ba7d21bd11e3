@@ -1,0 +1,135 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+'use strict';
+
+var index = require('./index-CXC9Tj5-.js');
+var interfaces = require('./interfaces-CX9-6aLf.js');
+
+const sallaCustomFieldsCss = ":host{display:block}";
+
+const SallaCustomFields = class {
+    constructor(hostRef) {
+        index.registerInstance(this, hostRef);
+        this.fieldChanged = index.createEvent(this, "fieldChanged");
+        this.fileUploaded = index.createEvent(this, "fileUploaded");
+        this.isEditable = true;
+        this.fieldErrors = {};
+        this.isSubmitting = false;
+    }
+    get dragAndDropText() {
+        return salla.lang.get("common.uploader.drag_and_drop");
+    }
+    get browseText() {
+        return salla.lang.get("common.uploader.browse");
+    }
+    get saveButtonText() {
+        return salla.lang.get("common.elements.save");
+    }
+    async setFields(fields) {
+        this.parsedFields = fields;
+    }
+    async getFieldValues() {
+        return this.parsedFields?.reduce((values, field) => {
+            values[`custom_fields[${field.id}]`] = field.value;
+            return values;
+        }, {}) || {};
+    }
+    async validateFields() {
+        if (!this.parsedFields)
+            return true;
+        const errors = this.parsedFields.reduce((acc, field) => {
+            if (field.required && (!field.value || field.value === "")) {
+                acc[field.id.toString()] = `${field.label} is required`;
+            }
+            return acc;
+        }, {});
+        this.fieldErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+    handleFieldChange(field, event) {
+        const value = event.target.value;
+        field.value = value;
+        this.clearFieldError(field.id);
+        const isValid = !(field.required && !value);
+        if (!isValid) {
+            this.setFieldError(field.id, `${field.label} is required`);
+        }
+        this.fieldChanged.emit({ fieldId: field.id, value, isValid });
+    }
+    handleFileUpload(field, event) {
+        const { error, file } = event.detail;
+        const isValid = !error;
+        this.clearFieldError(field.id);
+        if (isValid) {
+            field.value = file;
+        }
+        else {
+            this.setFieldError(field.id, "File upload failed");
+        }
+        this.fileUploaded.emit({ fieldId: field.id, file, isValid });
+    }
+    clearFieldError(fieldId) {
+        this.fieldErrors = { ...this.fieldErrors };
+        delete this.fieldErrors[fieldId];
+    }
+    setFieldError(fieldId, message) {
+        this.fieldErrors = { ...this.fieldErrors, [fieldId]: message };
+    }
+    renderTextField(field) {
+        return (index.h("input", { disabled: !this.isEditable, type: field.type, id: `custom-field-${field.id}`, value: field.value?.toString() || "", onChange: (e) => this.handleFieldChange(field, e), name: `${field.id}`, class: "form-input", required: field.required }));
+    }
+    renderFileField(field) {
+        return (index.h("salla-file-upload", { url: salla.url.api('upload'), id: `custom-field-${field.id}`, name: `${field.id}`, type: "registration", value: field.value, height: "120px", onAdded: (e) => this.handleFileUpload(field, e), required: field.required, disabled: !this.isEditable, onUploaded: e => { e.target.value = e.target.value?.url; }, allowRemove: true, onRemoved: (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                field.value = "";
+                e.target.value = "";
+            }, payloadName: "files[]", payloadParams: { type: 'registration' }, "instant-upload": true }, index.h("div", { class: "s-custom-fields-filepond-placeholder" }, index.h("span", { class: "s-custom-fields-filepond-placeholder-icon" }, index.h("i", { innerHTML: interfaces.CameraIcon })), index.h("p", { class: "s-custom-fields-filepond-placeholder-text" }, this.dragAndDropText), index.h("span", { class: "filepond--label-action" }, this.browseText))));
+    }
+    renderField(field) {
+        return (index.h("div", { class: "s-custom-fields-field", key: field.id }, index.h("label", { class: "s-custom-fields-field-label", htmlFor: `custom-field-${field.id}` }, field.label, field.required && index.h("span", { class: "s-custom-fields-required" }, "*")), index.h("div", null, field.type === interfaces.FormFieldTypes.Photo
+            ? this.renderFileField(field)
+            : this.renderTextField(field), this.fieldErrors[field.id] && (index.h("p", { class: "s-custom-fields-error" }, this.fieldErrors[field.id])))));
+    }
+    componentWillLoad() {
+        this.parsedFields = this.parseFields(this.fields);
+    }
+    parseFields(fields) {
+        if (!fields)
+            return [];
+        return typeof fields === "string"
+            ? JSON.parse(fields)
+            : Array.isArray(fields) ? fields : [];
+    }
+    async handleSubmit(e) {
+        e.preventDefault();
+        this.isSubmitting = true;
+        try {
+            const payload = {};
+            const form = e.target;
+            const elements = form.elements;
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                if (element.name && !element.name.startsWith("hidden") && element.value) {
+                    payload[element.name] = element.value;
+                }
+            }
+            await salla.api.profile.updateCustomFields({
+                id: salla.config.get("store.id"),
+                fields: payload,
+            });
+        }
+        finally {
+            this.isSubmitting = false;
+        }
+    }
+    render() {
+        if (!this.parsedFields?.length)
+            return null;
+        return (index.h("form", { class: "s-custom-fields-wrapper", onSubmit: this.handleSubmit }, this.parsedFields.map(field => this.renderField(field)), index.h("salla-button", { type: "submit", loading: this.isSubmitting, disabled: this.isSubmitting || !this.isEditable, "loader-position": "end", class: "s-custom-fields-submit-btn" }, this.saveButtonText)));
+    }
+};
+SallaCustomFields.style = sallaCustomFieldsCss;
+
+exports.salla_custom_fields = SallaCustomFields;

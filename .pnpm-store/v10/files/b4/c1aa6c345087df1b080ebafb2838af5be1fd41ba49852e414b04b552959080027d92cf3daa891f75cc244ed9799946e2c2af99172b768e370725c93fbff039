@@ -1,0 +1,298 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+import StoreAlt from "../../assets/svg/store-alt.svg";
+import Search from "../../assets/svg/search.svg";
+import { ModeType } from "./interfaces";
+/**
+ * @slot footer - The bottom section of the component, used for form action. Utilizes the `handleSubmit` method to submit the form.
+ */
+export class SallaScopees {
+    constructor() {
+        //to avoid over loading scopes in each open call
+        this.loadedScopes = {
+            [ModeType.DEFAULT]: null,
+            [ModeType.AVAILABILITY]: null,
+        };
+        this.translationLoaded = false;
+        this.mode = ModeType.DEFAULT;
+        this.scopes = [];
+        this.originalScopesList = [];
+        this.isOpenedBefore = salla.storage.get("branch-choosed-before");
+        this.hasError = false;
+        this.loading = false;
+        /**
+         * Optionally open the modal or enforce the pop-up to the viewer
+         */
+        this.selection = 'optional';
+        /**
+         * Dictates when to show the search field
+         */
+        this.searchDisplayLimit = 6;
+        this.getFormTitle = () => {
+            if (this.originalScopesList?.length < 2)
+                return "";
+            const isMultiCountries = salla.config.get('store.features')?.includes('multi-countries');
+            if (this.mode === ModeType.DEFAULT) {
+                return salla.lang.get(isMultiCountries
+                    ? "blocks.scope.shopping_from_another_market"
+                    : "blocks.scope.shopping_from_another_branch");
+            }
+            return salla.lang.get('blocks.scope.search_for_availability_in_other_branches');
+        };
+        salla.event.on('scopes::open', ({ mode = null, product_id = null }) => {
+            this.open(mode, product_id);
+        });
+        salla.lang.onLoaded(() => {
+            this.translationLoaded = true;
+        });
+    }
+    /**
+     * Closes the scope modal.
+     */
+    async close() {
+        return await this.modal?.close();
+    }
+    /**
+     * Opens the scope modal.
+     */
+    async open(mode = ModeType.DEFAULT, product_id = null) {
+        this.hasError = false;
+        this.mode = [ModeType.AVAILABILITY, ModeType.DEFAULT].includes(mode) ? mode : ModeType.DEFAULT;
+        this.loading = !this.loadedScopes[this.mode];
+        this.setScopeValues([]);
+        salla.log('SallaScope:: opened');
+        this.modal.open();
+        if (!this.loading) {
+            this.setScopeValues(this.loadedScopes[this.mode]);
+            return this.modal.stopLoading();
+        }
+        let callback = () => mode == ModeType.AVAILABILITY ? salla.scope.getProductAvailability(product_id) : salla.scope.get();
+        return await salla.api.withoutNotifier(callback)
+            .then((resp) => {
+            if (mode == ModeType.AVAILABILITY) {
+                return this.setScopeValues(this.loadedScopes[ModeType.AVAILABILITY] = resp.data);
+            }
+            this.setScopeValues(this.loadedScopes[this.mode] = resp.data.scopes);
+        }).catch(e => {
+            console.log(e);
+            this.hasError = true;
+        })
+            .finally(() => {
+            this.modal.stopLoading();
+            this.loading = false;
+        });
+    }
+    /**
+     * Submit form to change exsiting scope.
+     */
+    async handleSubmit() {
+        let payload = { 'id': this.current_scope.id };
+        this.changeBtn.load();
+        return await salla.scope.change(payload)
+            .then(() => {
+            salla.storage.set("branch-choosed-before", true);
+            salla.storage.set("scope", {
+                'type': this.current_scope.type,
+                'id': this.current_scope.id
+            });
+            salla.cart.reset();
+            window.location.replace(salla.helpers.addParamToUrl('scope', this.current_scope.id));
+        }).catch(e => console.log(e))
+            .finally(() => {
+            this.changeBtn.stop();
+        });
+    }
+    setScopeValues(value) {
+        this.scopes = value;
+        this.originalScopesList = value;
+        if (value?.length == 1) {
+            this.current_scope = value[0];
+            this.selected_scope = value[0];
+            this.scopes = [value[0]]; // Just to make sure it's consistent, might not have that much effect though.
+        }
+        else {
+            this.current_scope = value?.find(scope => scope.selected);
+            this.selected_scope = value?.find(scope => scope.selected);
+        }
+    }
+    handleSearchFieldTyping(e) {
+        let value = e.target.value.toLocaleLowerCase();
+        if (!!value) {
+            this.scopes = this.originalScopesList.filter(scope => scope.name.toLowerCase().includes(value));
+        }
+        else {
+            this.scopes = this.originalScopesList;
+        }
+    }
+    handleScopeSelection(event) {
+        this.current_scope = this.scopes?.find(scope => scope.id == event.target.value);
+    }
+    placeholderContent() {
+        return h("salla-placeholder", { alignment: "center", class: "s-scopes-placeholder" }, h("span", { slot: "title" }, salla.lang.get("blocks.scope.branch_looking_for_not_found")), h("span", { slot: "description" }, salla.lang.get("blocks.scope.our_services_not_available_in_this_branch")));
+    }
+    defaultContent() {
+        return [h("div", { class: "s-scopes-container s-scrollbar" }, this.scopes?.map((scope) => h("div", { class: "s-scopes-input-wrap", "data-selection": this.selection }, h("input", { id: `${this.selection} + '_scope_' + ${scope.id}`, name: "lang", type: "radio", value: scope.id, onChange: (event) => this.handleScopeSelection(event), class: "s-scopes-input", checked: !!this.current_scope && this.current_scope.id == scope.id }), h("label", { htmlFor: `${this.selection} + '_scope_' + ${scope.id}`, class: "s-scopes-label s-scopes-clickable" }, h("span", null, scope.name))))), this.footerContent()];
+    }
+    availabilityContent() {
+        return h("div", { class: "s-scopes-container" }, this.scopes?.map((scope) => h("div", { class: "s-scopes-input-wrap", "data-selection": this.selection }, h("h2", { class: { "s-scopes-label": true, "s-scopes-clickable": this.mode === ModeType.DEFAULT } }, h("span", null, scope.name)), h("h2", { style: { 'color': scope?.availability?.color }, class: `s-scopes-${scope?.availability?.key}` }, scope?.availability?.label))));
+    }
+    footerContent() {
+        return h("div", { class: "s-scopes-footer" }, h("slot", { name: "footer" }, h("salla-button", { ref: btn => this.changeBtn = btn, disabled: !this.current_scope, onClick: () => this.handleSubmit(), class: "s-scopes-submit", "loader-position": "center", width: "wide" }, salla.lang.get('common.elements.confirm'))));
+    }
+    //let's wait to salla to be ready then render it.
+    componentWillLoad() {
+        return salla.onReady();
+    }
+    render() {
+        return (h(Host, { key: 'eb070775cb835b58f2ca5d38d1b47c0e4c1efa8b' }, h("salla-modal", { key: 'a9ef86c5a4bc3db4353047163ce1cb794ca84345', ref: modal => this.modal = modal, isClosable: !!(this.isOpenedBefore || (this.selection == 'optional')), class: "s-scopes-modal", isLoading: this.loading, "has-skeleton": true }, this.loading ?
+            h("div", { slot: "loading" }, h("div", { class: "s-scopes-skeleton" }, h("salla-list-tile", { class: "s-scopes-header" }, h("div", { slot: "icon", class: "s-scopes-header-icon" }, h("salla-skeleton", { type: "circle" })), h("div", { slot: "title", class: "s-scopes-header-title mb-5" }, h("salla-skeleton", { height: '15px', width: '50%' })), h("div", { slot: "subtitle", class: "s-scopes-header-subtitle" }, h("salla-skeleton", { height: '10px' }), h("salla-skeleton", { height: '10px', width: '75%' }))), h("div", { class: "s-scopes-skeleton-search" }, h("salla-skeleton", { height: '10px', width: '50%' }), h("salla-skeleton", { height: '30px', width: '100%' })), h("div", { class: "s-scopes-skeleton-scopes" }, h("salla-skeleton", { height: '10px', width: '30%' }), h("salla-skeleton", { height: '10px', width: '25%' }), h("salla-skeleton", { height: '10px', width: '30%' }), h("salla-skeleton", { height: '10px', width: '25%' }), h("salla-skeleton", { height: '10px', width: '30%' }), h("salla-skeleton", { height: '10px', width: '25%' }), h("salla-skeleton", { height: '10px', width: '30%' }), h("salla-skeleton", { height: '10px', width: '25%' })), h("div", { class: "s-scopes-skeleton-btn" }, h("salla-skeleton", { height: '40px', width: '100%' }))))
+            :
+                [h("salla-list-tile", { class: this.originalScopesList?.length ? "s-scopes-header block" : "s-hidden" }, h("div", { slot: "icon", class: "s-scopes-header-icon", innerHTML: StoreAlt }), h("div", { slot: "title", class: "s-scopes-header-title" }, salla.lang.get('blocks.scope.you_are_browse_store_from')), h("div", { slot: "subtitle", class: "s-scopes-header-subtitle" }, !!this.selected_scope ? this.selected_scope.name : "")), h("div", { class: "s-scopes-wrap" }, !!this.originalScopesList?.length && h("h4", { class: "s-scopes-title" }, this.getFormTitle()), this.originalScopesList?.length > this.searchDisplayLimit ?
+                        h("div", { class: "s-scopes-search-wrapper" }, h("div", { class: "s-scopes-search-icon", innerHTML: Search }), h("input", { type: "text", class: "s-scopes-search-input", onInput: e => this.handleSearchFieldTyping(e), enterkeyhint: "search", placeholder: salla.lang.get('blocks.scope.searching_for_a_branch') }))
+                        : "", this.hasError || (!this.originalScopesList?.length && this.mode !== ModeType.AVAILABILITY) ?
+                        this.placeholderContent()
+                        : this.mode === ModeType.DEFAULT ? this.defaultContent() : this.availabilityContent())])));
+    }
+    componentDidLoad() {
+        if (!this.isOpenedBefore && this.selection == 'mandatory') {
+            this.open();
+        }
+    }
+    static get is() { return "salla-scopes"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-scopes.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-scopes.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "selection": {
+                "type": "string",
+                "attribute": "selection",
+                "mutable": false,
+                "complexType": {
+                    "original": "'optional' | 'mandatory'",
+                    "resolved": "\"mandatory\" | \"optional\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Optionally open the modal or enforce the pop-up to the viewer"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'optional'"
+            },
+            "searchDisplayLimit": {
+                "type": "number",
+                "attribute": "search-display-limit",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Dictates when to show the search field"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "6"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "translationLoaded": {},
+            "mode": {},
+            "current_scope": {},
+            "scopes": {},
+            "originalScopesList": {},
+            "selected_scope": {},
+            "isOpenedBefore": {},
+            "hasError": {},
+            "loading": {}
+        };
+    }
+    static get methods() {
+        return {
+            "close": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Closes the scope modal.",
+                    "tags": []
+                }
+            },
+            "open": {
+                "complexType": {
+                    "signature": "(mode?: any, product_id?: number) => Promise<any>",
+                    "parameters": [{
+                            "name": "mode",
+                            "type": "any",
+                            "docs": ""
+                        }, {
+                            "name": "product_id",
+                            "type": "number",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Opens the scope modal.",
+                    "tags": []
+                }
+            },
+            "handleSubmit": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Submit form to change exsiting scope.",
+                    "tags": []
+                }
+            }
+        };
+    }
+}

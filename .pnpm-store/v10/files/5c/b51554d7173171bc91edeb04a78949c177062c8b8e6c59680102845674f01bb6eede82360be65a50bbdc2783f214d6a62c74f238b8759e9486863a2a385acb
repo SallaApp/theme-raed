@@ -1,0 +1,26 @@
+export declare class SallaCartSummary {
+    constructor();
+    host: HTMLElement;
+    cartSummaryCount: number;
+    cartSummaryTotal: number;
+    cartLabel: string;
+    /**
+     * Show cart label
+     * */
+    showCartLabel: boolean;
+    /**
+     * Animate product Image to cart summary
+     * @param image the image element to animate
+     */
+    animateToCart(image: any): Promise<void>;
+    /**
+     * Some times it renderes with main domain, something like `https://salla.sa/cart`, because salla is not loaded,
+     * here, we are sure it will not be rendred unless salla is ready
+     */
+    componentWillLoad(): Promise<unknown>;
+    /**
+     * Compute cart href with scope parameter if available
+     */
+    private getCartLink;
+    render(): any;
+}

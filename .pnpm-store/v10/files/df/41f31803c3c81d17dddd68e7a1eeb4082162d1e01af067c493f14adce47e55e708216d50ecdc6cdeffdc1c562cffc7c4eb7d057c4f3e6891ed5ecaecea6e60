@@ -1,0 +1,2 @@
+import{hasSupport as s,wrap as e,get as o,set as t,remove as r}from"@analytics/global-storage-utils";const a="sessionStorage",i=s.bind(null,"sessionStorage"),n=e("sessionStorage","getItem",o),g=e("sessionStorage","setItem",t),l=e("sessionStorage","removeItem",r);export{a as SESSION_STORAGE,n as getSessionItem,i as hasSessionStorage,l as removeSessionItem,g as setSessionItem};
+//# sourceMappingURL=analytics-util-session-storage.modern.js.map

@@ -1,0 +1,45 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import Cancel from "../../assets/svg/cancel.svg";
+export class SallaMaintenanceAlert {
+    componentWillLoad() {
+        this.title = salla.config.get('maintenance_details.title');
+        this.message = salla.config.get('maintenance_details.message');
+        this.buttonTitle = window.innerWidth <= 768 ? salla.config.get('maintenance_details.button_title') : salla.config.get('maintenance_details.button_full_title');
+    }
+    closeAlert() {
+        salla.storage.set('hide_salla-maintenance-alert_at', Date.now());
+        this.host.style.display = 'none';
+    }
+    render() {
+        return (h(Host, { key: 'ec1f4c39f02624943122e444dce1a19bbea34a07', class: "s-maintenance-alert-wrapper" }, h("button", { key: 'db2892331f6addedc5b916e9c4c666023d6765b0', class: "s-maintenance-alert-close", innerHTML: Cancel, onClick: () => this.closeAlert() }), h("div", { key: '2cc604e98eccd343eb0fbe07d6a030aeca28d142', class: "s-maintenance-alert-content" }, h("div", { key: '563c647d3e73b40f8db1c51dc6b74f4333c8964e', class: "s-maintenance-alert-container" }, h("div", { key: '662cb7f23d6fba70fa6f2025188e73fd7fad965d', class: "s-maintenance-alert-icon" }, h("img", { key: 'd5ce8780910ebefa6e16a720170d799974813816', src: salla.url.cdn('images/alert.png'), alt: "Alert" })), h("div", { key: '35f7d4d0a3af396e0ec2bd2f7362f4f1aa620523', class: "s-maintenance-alert-text" }, h("h2", { key: '14edaba08f2a7f48c673c5d9e714b7e6507543a2' }, this.title), h("p", { key: '5fd4831d78deebfc7c7b999c9a71225ab038ec14' }, this.message))), h("div", { key: 'f76912d23fe45cd1bd83a89faf646b3038402476' }, h("a", { key: '39f2609417b1ff80ea6376a0346fa1a227828c99', class: "s-maintenance-alert-btn", href: salla.config.get('maintenance_details.button_url') }, this.buttonTitle)))));
+    }
+    componentDidLoad() {
+        //auto-hide the alert if close button is clicked before one hour
+        let hidden_at = salla.storage.get('hide_salla-maintenance-alert_at');
+        if (hidden_at && ((Date.now() - hidden_at) / 1000 / 60) < 60) {
+            this.closeAlert();
+        }
+    }
+    static get is() { return "salla-maintenance-alert"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-maintenance-alert.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-maintenance-alert.css"]
+        };
+    }
+    static get states() {
+        return {
+            "title": {},
+            "message": {},
+            "buttonTitle": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

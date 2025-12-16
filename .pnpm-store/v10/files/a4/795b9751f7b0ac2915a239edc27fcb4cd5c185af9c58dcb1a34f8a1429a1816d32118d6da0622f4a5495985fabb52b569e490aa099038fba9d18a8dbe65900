@@ -1,0 +1,125 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Fragment, Host } from '@stencil/core/internal/client';
+import { d as defineCustomElement$a } from './salla-accordion2.js';
+import { d as defineCustomElement$9 } from './salla-accordion-body2.js';
+import { d as defineCustomElement$8 } from './salla-accordion-head2.js';
+import { d as defineCustomElement$7 } from './salla-button2.js';
+import { d as defineCustomElement$6 } from './salla-loading2.js';
+import { d as defineCustomElement$5 } from './salla-map2.js';
+import { d as defineCustomElement$4 } from './salla-modal2.js';
+import { d as defineCustomElement$3 } from './salla-order-details-multiple-bundle-product2.js';
+import { d as defineCustomElement$2 } from './salla-order-details-options2.js';
+
+const sallaOrderDetailsCss = "";
+
+const SallaOrderDetails$1 = /*@__PURE__*/ proxyCustomElement(class SallaOrderDetails extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+    }
+    parseOrderDetailsData(newValue) {
+        this.parsedOrderDetailsData = newValue;
+        if (typeof this.orderDetails === 'string') {
+            this.parsedOrderDetailsData = JSON.parse(newValue);
+        }
+        else {
+            this.parsedOrderDetailsData = newValue;
+        }
+    }
+    componentWillLoad() {
+        this.parseOrderDetailsData(this.orderDetails);
+        console.log('Parent componentWillLoad - parsedOrderDetailsData:', this.parsedOrderDetailsData);
+    }
+    renderOrderDetailsContent() {
+        // Check if we have parsed data
+        if (!this.parsedOrderDetailsData) {
+            console.warn('No parsedOrderDetailsData available');
+            return null;
+        }
+        return [
+            /* Product Options */
+            this.parsedOrderDetailsData.options && this.parsedOrderDetailsData.options.length > 0 && (h("salla-order-details-options", { options: this.parsedOrderDetailsData.options })),
+            /* Bundle Subproducts */
+            this.parsedOrderDetailsData.sub_products &&
+                this.parsedOrderDetailsData.sub_products.length > 0 && (h(Fragment, null, h("h2", { class: "s-order-details-bundle-title" }, salla.lang.get('pages.orders.sub_products')), h("div", { class: "s-order-details-bundle-content" }, this.parsedOrderDetailsData.sub_products.map(product => (h("salla-order-details-multiple-bundle-product", { key: product?.id, productDetails: product })))))),
+        ];
+    }
+    render() {
+        return h(Host, { key: 'ca263aa861d52fdf36b6a842f6e58d07f27a6d1f', class: "s-order-details-wrapper" }, this.renderOrderDetailsContent());
+    }
+    static get watchers() { return {
+        "orderDetails": ["parseOrderDetailsData"]
+    }; }
+    static get style() { return sallaOrderDetailsCss; }
+}, [0, "salla-order-details", {
+        "orderDetails": [1, "order-details"],
+        "parsedOrderDetailsData": [32]
+    }, undefined, {
+        "orderDetails": ["parseOrderDetailsData"]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-order-details", "salla-accordion", "salla-accordion-body", "salla-accordion-head", "salla-button", "salla-loading", "salla-map", "salla-modal", "salla-order-details-multiple-bundle-product", "salla-order-details-options"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-order-details":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaOrderDetails$1);
+            }
+            break;
+        case "salla-accordion":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$a();
+            }
+            break;
+        case "salla-accordion-body":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$9();
+            }
+            break;
+        case "salla-accordion-head":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$8();
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$7();
+            }
+            break;
+        case "salla-loading":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$6();
+            }
+            break;
+        case "salla-map":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$5();
+            }
+            break;
+        case "salla-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$4();
+            }
+            break;
+        case "salla-order-details-multiple-bundle-product":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-order-details-options":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaOrderDetails = SallaOrderDetails$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaOrderDetails, defineCustomElement };

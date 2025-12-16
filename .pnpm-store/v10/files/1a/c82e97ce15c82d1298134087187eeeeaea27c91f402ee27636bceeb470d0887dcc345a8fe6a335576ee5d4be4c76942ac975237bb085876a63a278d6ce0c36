@@ -1,0 +1,110 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import iconFileArchive from "../../assets/svg/file-archive.svg";
+import iconDownload from "../../assets/svg/download.svg";
+import iconCopy from "../../assets/svg/swap-stroke.svg";
+import iconCheck from "../../assets/svg/check.svg";
+import iconCreditCard from "../../assets/svg/debit-card-back.svg";
+export class SallaOrderSummary {
+    constructor() {
+        this.codeCopied = null;
+        this.noItemFound = true;
+        this.order_items = [];
+        this.isDigitalCard = (item) => item.product.type === 'codes';
+        this.isDigitalProduct = (item) => item.product.type === 'digital';
+    }
+    async componentWillLoad() {
+        salla.lang.onLoaded(() => {
+            this.codes_text = salla.lang.get('pages.thank_you.codes');
+            this.copy_text = salla.lang.get('common.elements.copy');
+            this.files_text = salla.lang.get('pages.thank_you.files');
+            this.download_text = salla.lang.get('pages.thank_you.download');
+        });
+        return await this.getOrderItems();
+    }
+    copyToClipboardHandler(code) {
+        if (navigator && 'clipboard' in navigator) {
+            try {
+                navigator.clipboard.writeText(code).then(() => {
+                    this.codeCopied = code;
+                    this.copyCodeButtonTimeout = setTimeout(() => {
+                        this.codeCopied = null;
+                    }, 3000);
+                });
+            }
+            catch (error) {
+                salla.loggers.error('copy functionality is not supported by the browser');
+            }
+        }
+    }
+    async getOrderItems() {
+        const orderId = this.orderId || salla.config.get('page.id');
+        const errorMessage = "Failed to fetch order items";
+        if (!orderId) {
+            salla.logger.error(errorMessage);
+            throw new Error(errorMessage);
+        }
+        try {
+            const { data: { items = [] } } = await salla.api.request(`orders/${orderId}`);
+            const validItems = items.some((item) => (this.isDigitalCard(item) || this.isDigitalProduct(item)));
+            if (validItems) {
+                this.order_items = items;
+                this.noItemFound = false;
+            }
+        }
+        catch (error) {
+            salla.logger.error(errorMessage);
+        }
+    }
+    disconnectedCallback() {
+        this.copyCodeButtonTimeout && clearTimeout(this.copyCodeButtonTimeout);
+    }
+    render() {
+        return (h("ul", { key: '75e332734c187402dcf43b73ae3d464559893203', class: "s-order-summary-wrapper" }, this.noItemFound ? h("salla-placeholder", { alignment: "center" }, h("span", { slot: "title" })) :
+            this.order_items.map((item) => (this.isDigitalCard(item) ? (h("li", { key: item.product.id, class: "s-order-summary-item" }, h("h2", { class: "s-order-summary-item-title" }, this.codes_text, " (", item.name, ")"), item.codes.map((code) => (h("div", { key: code.code, class: "s-order-summary-code-item-wrapper" }, h("p", null, h("span", { innerHTML: iconCreditCard }), h("span", null, code.code)), h("salla-button", { class: `s-order-summary-item-copy-button ${this.codeCopied === code.code ? 'copied' : ''}`, onClick: () => this.copyToClipboardHandler(code.code), shape: "link" }, h("span", { innerHTML: this.codeCopied === code.code ? iconCheck : iconCopy }), h("span", null, this.copy_text))))))) :
+                this.isDigitalProduct(item) ? (h("li", { key: item.product.id, class: "s-order-summary-item" }, h("h2", { class: "s-order-summary-item-title" }, this.files_text, " (", item.name, ")"), h("ul", null, item.files.map((file) => (h("li", { class: "s-order-summary-digital-item-wrapper" }, h("div", null, h("span", { innerHTML: iconFileArchive }), h("span", null, file.name)), h("a", { href: file.url, target: "_blank", class: "s-order-summary-item-download" }, h("span", { innerHTML: iconDownload }), h("span", null, this.download_text)))))))) : null))));
+    }
+    static get is() { return "salla-order-summary"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-order-summary.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-order-summary.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "orderId": {
+                "type": "number",
+                "attribute": "order-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "The order ID to fetch items from"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            }
+        };
+    }
+    static get states() {
+        return {
+            "codeCopied": {},
+            "noItemFound": {},
+            "order_items": {}
+        };
+    }
+}

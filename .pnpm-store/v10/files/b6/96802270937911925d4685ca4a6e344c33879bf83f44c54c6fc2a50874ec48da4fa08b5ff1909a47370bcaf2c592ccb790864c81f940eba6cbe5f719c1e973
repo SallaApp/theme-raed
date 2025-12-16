@@ -1,0 +1,274 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h } from '@stencil/core/internal/client';
+import { H as Helper } from './Helper.js';
+import { d as defineCustomElement$2 } from './salla-button2.js';
+
+const sallaOrdersCss = ":host{display:block}";
+
+const SallaOrder = /*@__PURE__*/ proxyCustomElement(class SallaOrder extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.orderNumberText = salla.lang.get('pages.thank_you.order_id');
+        this.totalOrderText = salla.lang.get('pages.orders.total');
+        this.orderDateText = salla.lang.get('pages.orders.date');
+        this.orderStatusText = salla.lang.get('pages.orders.status');
+        this.noOrderText = salla.lang.get('pages.orders.non_orders');
+        this.load_more_text_trans = salla.lang.get('common.elements.load_more');
+        this.languageCode = salla.lang.locale;
+        this.orders = [];
+        salla.lang.onLoaded(() => {
+            this.languageCode = salla.lang.locale;
+            this.orderNumberText = salla.lang.get('pages.thank_you.order_id');
+            this.totalOrderText = salla.lang.get('pages.orders.total');
+            this.orderDateText = salla.lang.get('pages.orders.date');
+            this.orderStatusText = salla.lang.get('pages.orders.status');
+            this.noOrderText = salla.lang.get('pages.orders.non_orders');
+            this.load_more_text_trans = salla.lang.get('common.elements.load_more');
+        });
+    }
+    // Show/hide loading
+    loading(isLoading = true) {
+        let btnText = this.status?.querySelector('.s-button-text');
+        if (btnText) {
+            Helper.toggleElementClassIf(btnText, 's-button-hide', 's-button-show', () => isLoading);
+            this.btnLoader.style.display = isLoading ? 'inherit' : 'none';
+        }
+    }
+    initiateInfiniteScroll() {
+        if (!this.hasInfiniteScroll) {
+            return;
+        }
+        if (!this.wrapper) {
+            salla.logger.error('Wrapper is undefined. Cannot initiate infinite scroll.');
+            return;
+        }
+        this.infiniteScroll = salla.infiniteScroll.initiate(this.wrapper, this.wrapper, {
+            path: () => this.nextPage,
+            history: false,
+            nextPage: this.nextPage,
+            scrollThreshold: false,
+        }, true);
+        this.infiniteScroll?.on('request', _response => {
+            this.loading();
+        });
+        this.infiniteScroll?.on('load', response => {
+            this.loading(false);
+            this.pagination = response.pagination;
+            this.nextPage = response.pagination?.links?.next || null;
+            this.handleResponse(response.data).forEach(data => {
+                this.wrapper.append(data);
+            });
+            let items = this.host.querySelectorAll('.s-orders-table-tbody-tr:not(.animated)');
+            Helper.animateItems(items);
+        });
+        this.infiniteScroll?.on('error', (e) => {
+            salla.logger.error('Error loading more comments:', e);
+        });
+    }
+    // Get next page
+    async loadMore() {
+        this.infiniteScroll.loadNextPage();
+    }
+    handleResponse(orderList) {
+        return orderList.map(order => this.getSingleOrderItem(order));
+    }
+    async loadInitialData() {
+        const url = new URL(window.location.href);
+        await salla.order.api.fetch({ ...this.params, types: [""], feedback_status: url.searchParams.get('feedback_status') }).then((resp) => {
+            this.orders = resp.data;
+            this.hasInfiniteScroll = !!resp.pagination?.links.next;
+            this.pagination = resp.pagination;
+            this.total = resp.pagination?.total;
+            this.nextPage = resp.pagination?.links?.next || null;
+            if (!this.orders.length) {
+                this.showPlaceholder = true;
+                return this.loading(false);
+            }
+            setTimeout(() => {
+                this.handleResponse(resp.data).forEach(data => {
+                    this.wrapper.append(data);
+                });
+                this.initiateInfiniteScroll();
+                let items = this.wrapper.querySelectorAll('.s-orders-table-tbody-tr:not(.animated)');
+                Helper.animateItems(items);
+            }, 100);
+        }).catch(error => {
+            this.showPlaceholder = true;
+            this.loading(false);
+            salla.logger.error(error);
+        });
+    }
+    getSingleOrderItem(order) {
+        const tr = document.createElement('tr');
+        tr.classList.add('s-orders-table-tbody-tr', 's-orders-table-tbody-tr-shadow');
+        const td1 = document.createElement('td');
+        td1.classList.add('s-orders-table-tbody-tr-td');
+        const div1 = document.createElement('div');
+        div1.classList.add('s-orders-table-tbody-tr-td-content');
+        const span1 = document.createElement('span');
+        span1.classList.add('s-orders-mobile-title');
+        span1.textContent = this.orderNumberText + ':';
+        const span2 = document.createElement('span');
+        span2.classList.add('s-orders-reference-id');
+        span2.textContent = '#' + order.reference_id;
+        div1.appendChild(span1);
+        div1.appendChild(span2);
+        if (order.source == 'buy_as_gift') {
+            const giftIcon = document.createElement('i');
+            giftIcon.classList.add('sicon-gift-sharing', 's-orders-buy-as-gift-icon');
+            div1.appendChild(giftIcon);
+        }
+        const anchor1 = document.createElement('a');
+        anchor1.href = order.url;
+        div1.appendChild(anchor1);
+        const div2 = document.createElement('div');
+        div2.classList.add('s-orders-copy-to-clipboard-button');
+        const sallaButton = document.createElement('salla-button');
+        sallaButton.classList.add('relative');
+        sallaButton.setAttribute('color', 'dark');
+        sallaButton.setAttribute('shape', 'link');
+        sallaButton.dataset.content = order.reference_id.toString();
+        sallaButton.addEventListener('click', (event) => {
+            Helper.copyToClipboard(event);
+            Helper.toggleElementClassIf(sallaButton, 'copied', 'code-to-copy', () => true);
+            setTimeout(() => {
+                Helper.toggleElementClassIf(sallaButton, 'code-to-copy', 'copied', () => true);
+            }, 1000);
+        });
+        const span3 = document.createElement('span');
+        span3.textContent = '#' + order.reference_id;
+        const copyIcon = document.createElement('i');
+        copyIcon.classList.add('sicon-swap-stroke', 's-orders-copy-to-clipboard-button-icon');
+        // Check the text direction
+        let isRTL = salla.config.get('theme.is_rtl', true);
+        if (isRTL) {
+            // Append the icon and then the span
+            sallaButton.appendChild(copyIcon);
+            sallaButton.appendChild(span3);
+        }
+        else {
+            // Append the span and then the icon
+            sallaButton.appendChild(span3);
+            sallaButton.appendChild(copyIcon);
+        }
+        div2.appendChild(sallaButton);
+        div1.appendChild(div2);
+        td1.appendChild(div1);
+        tr.appendChild(td1);
+        const td2 = document.createElement('td');
+        td2.classList.add('s-orders-table-tbody-tr-td');
+        const div3 = document.createElement('div');
+        div3.classList.add('s-orders-table-tbody-tr-td-content');
+        const span4 = document.createElement('span');
+        span4.classList.add('s-orders-mobile-title');
+        span4.textContent = this.totalOrderText + ':';
+        const div4 = document.createElement('div');
+        div4.innerHTML = salla.money(order.total);
+        const anchor2 = document.createElement('a');
+        anchor2.href = order.url;
+        div3.appendChild(span4);
+        div3.appendChild(div4);
+        div3.appendChild(anchor2);
+        td2.appendChild(div3);
+        tr.appendChild(td2);
+        const td3 = document.createElement('td');
+        td3.classList.add('s-orders-table-tbody-tr-td');
+        const div5 = document.createElement('div');
+        div5.classList.add('s-orders-table-tbody-tr-td-content');
+        const span5 = document.createElement('span');
+        span5.classList.add('s-orders-mobile-title');
+        span5.textContent = this.orderDateText + ':';
+        const div6 = document.createElement('div');
+        div6.textContent = Helper.formatDateFromString(order.created_at.date, salla.helpers.number, this.languageCode);
+        const anchor3 = document.createElement('a');
+        anchor3.href = order.url;
+        div5.appendChild(span5);
+        div5.appendChild(div6);
+        div5.appendChild(anchor3);
+        td3.appendChild(div5);
+        tr.appendChild(td3);
+        const td4 = document.createElement('td');
+        td4.classList.add('s-orders-table-tbody-tr-td');
+        const div7 = document.createElement('div');
+        div7.classList.add('s-orders-table-tbody-tr-td-content');
+        const span6 = document.createElement('span');
+        span6.classList.add('s-orders-mobile-title');
+        span6.textContent = this.orderStatusText + ':';
+        const statusSpan = document.createElement('span');
+        statusSpan.classList.add('s-orders-status-container');
+        statusSpan.style.color = order.status.color;
+        const statusIcon = document.createElement('i');
+        statusIcon.classList.add(order.status.icon);
+        const statusName = document.createElement('span');
+        statusName.textContent = order.status.name;
+        statusSpan.appendChild(statusIcon);
+        statusSpan.appendChild(statusName);
+        div7.appendChild(span6);
+        div7.appendChild(statusSpan);
+        const starIcon = document.createElement('i');
+        starIcon.classList.add('sicon-star2', 's-orders-status-rated', order.is_rated ? 's-orders-rated-text' : 's-orders-unrated-text');
+        div7.appendChild(starIcon);
+        const anchor4 = document.createElement('a');
+        anchor4.href = order.url;
+        div7.appendChild(anchor4);
+        td4.appendChild(div7);
+        tr.appendChild(td4);
+        return tr;
+    }
+    render() {
+        if (this.showPlaceholder) {
+            return h("div", { class: "s-orders-no-content" }, h("i", { class: "sicon-packed-box icon" }), h("p", null, this.noOrderText));
+        }
+        return h("div", { class: "s-orders-wrapper" }, h("table", { class: "s-orders-table" }, h("thead", { class: "s-orders-table-head" }, h("tr", { class: "s-orders-table-head-tr" }, h("th", { class: "s-orders-table-head-tr-th", scope: "col" }, this.orderNumberText), h("th", { class: "s-orders-table-head-tr-th", scope: "col" }, this.totalOrderText), h("th", { class: "s-orders-table-head-tr-th", scope: "col" }, this.orderDateText), h("th", { class: "s-orders-table-head-tr-th", scope: "col" }, this.orderStatusText))), h("tbody", { class: "s-orders-table-tbody", ref: (el) => (this.wrapper = el) })), this.nextPage && (h("div", { class: "s-infinite-scroll-wrapper", ref: status => this.status = status }, h("button", { onClick: () => this.loadMore(), class: "s-infinite-scroll-btn s-button-btn s-button-primary" }, h("span", { class: "s-button-text s-infinite-scroll-btn-text" }, this.loadMoreText ?? this.load_more_text_trans), h("span", { class: "s-button-loader s-button-loader-center s-infinite-scroll-btn-loader", ref: btnLoader => this.btnLoader = btnLoader, style: { "display": "none" } })))));
+    }
+    componentWillLoad() {
+        return salla.onReady()
+            .then(() => this.loadInitialData())
+            .then(() => this.initiateInfiniteScroll());
+    }
+    get host() { return this; }
+    static get style() { return sallaOrdersCss; }
+}, [0, "salla-orders", {
+        "params": [16],
+        "loadMoreText": [1, "load-more-text"],
+        "orderNumberText": [32],
+        "totalOrderText": [32],
+        "orderDateText": [32],
+        "orderStatusText": [32],
+        "noOrderText": [32],
+        "load_more_text_trans": [32],
+        "languageCode": [32],
+        "orders": [32],
+        "pagination": [32],
+        "hasInfiniteScroll": [32],
+        "total": [32],
+        "nextPage": [32],
+        "showPlaceholder": [32]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-orders", "salla-button"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-orders":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaOrder);
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaOrders = SallaOrder;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaOrders, defineCustomElement };

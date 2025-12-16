@@ -1,0 +1,138 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { K as KeyBoardArrowLeftIcon, a as KeyBoardArrowRightIcon } from './keyboard_arrow_right.js';
+import { d as defineCustomElement$1 } from './salla-slider2.js';
+
+const sallaMultipleBundleProductSliderCss = "";
+
+const SallaMultipleBundleProductSlider = /*@__PURE__*/ proxyCustomElement(class SallaMultipleBundleProductSlider extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.productSelected = createEvent(this, "productSelected", 7);
+        this.productOptionsSelected = createEvent(this, "productOptionsSelected", 7);
+        this.selectedProducts = {};
+        this.savedOptionsByInstance = {};
+        this.handleProductClick = (product, productIndex) => {
+            // Find the checkbox input for this product
+            const checkboxId = this.generateEventName(this.section.id, productIndex);
+            const checkbox = document.getElementById(checkboxId);
+            if (!checkbox)
+                return;
+            if (checkbox) {
+                const willBeChecked = !checkbox.checked;
+                if (!willBeChecked) {
+                    this.dispatchClearOptionsEvent(product, productIndex);
+                    this.clearSavedOptionsState(this.section.id, productIndex);
+                }
+                // Toggle the checkbox state
+                checkbox.checked = willBeChecked;
+                // Dispatch a change event to trigger form validation/submission
+                requestAnimationFrame(() => {
+                    const changeEvent = new window.Event('change', { bubbles: true });
+                    checkbox.dispatchEvent(changeEvent);
+                });
+            }
+            this.productSelected.emit({
+                product,
+                sectionId: this.section.id,
+            });
+        };
+        this.handleOptionsClick = (product) => {
+            this.productOptionsSelected.emit({
+                product,
+                sectionId: this.section.id,
+            });
+        };
+    }
+    getProductInstanceKey(sectionId, productIndex) {
+        return `${sectionId}::${productIndex}`;
+    }
+    dispatchClearOptionsEvent(product, productIndex) {
+        salla.event.dispatch('multiple-bundle-product-modal::clear-options', {
+            productId: product.id,
+            sectionId: this.section.id,
+            sectionIndex: this.sectionIndex,
+            productIndex,
+        });
+    }
+    handleOptionsSaved(event) {
+        const detail = event.detail;
+        if (!detail)
+            return;
+        const { sectionId, productIndex, selectedOptions } = detail;
+        if (sectionId == null || sectionId !== this.section?.id)
+            return;
+        if (productIndex == null || Number.isNaN(productIndex))
+            return;
+        const key = this.getProductInstanceKey(sectionId, productIndex);
+        const hasOptions = !!selectedOptions?.length;
+        if (hasOptions) {
+            this.savedOptionsByInstance = {
+                ...this.savedOptionsByInstance,
+                [key]: true,
+            };
+        }
+        else if (this.savedOptionsByInstance[key]) {
+            const updatedState = { ...this.savedOptionsByInstance };
+            delete updatedState[key];
+            this.savedOptionsByInstance = updatedState;
+        }
+    }
+    clearSavedOptionsState(sectionId, productIndex) {
+        const key = this.getProductInstanceKey(sectionId, productIndex);
+        if (!this.savedOptionsByInstance[key])
+            return;
+        const updatedState = { ...this.savedOptionsByInstance };
+        delete updatedState[key];
+        this.savedOptionsByInstance = updatedState;
+    }
+    generateEventName(sectionId, productIndex) {
+        return `bundle[${sectionId}][${productIndex}][id]`;
+    }
+    render() {
+        return (h(Host, { key: '0aeceebde05ad98ab11016dda3bd65f118b656dc' }, h("salla-slider", { key: '0834a28aa149f5ab1c62c173477e0db8936ee32f', type: "carousel", controlsOuter: false, showControls: false, id: `accordion-multiple-bundle-product-${this.section.id}`, pagination: true, class: "s-multiple-bundle-product-wrapper-slider", sliderConfig: { spaceBetween: 0 } }, h("div", { key: '635d79f8bfb386c60e93536197ad68e937842831', slot: "items" }, this?.section?.products?.map((product, productIndex) => {
+            const isChecked = this.selectedProducts[this.section.id]?.has(product.id) || false;
+            const hasSavedOptions = this.savedOptionsByInstance[this.getProductInstanceKey(this.section.id, productIndex)];
+            const optionsButtonLabel = hasSavedOptions
+                ? salla.lang.getWithDefault('pages.products.edit_selected_options', 'تعديل الخيارات')
+                : salla.lang.get('pages.products.choose_from_options');
+            let optionsArrowIcon = salla.config.get('theme.is_rtl', true)
+                ? KeyBoardArrowLeftIcon
+                : KeyBoardArrowRightIcon;
+            return (h("div", { class: `s-multiple-bundle-product-slide-one-third ${product.quantity == 0
+                    ? 's-multiple-bundle-product-slide-one-third-disabled'
+                    : ''}`, key: product.id }, h("div", { class: "s-multiple-bundle-product-card" }, h("div", { class: "s-multiple-bundle-product-image-wrapper", onClick: () => this.handleProductClick(product, productIndex) }, h("input", { id: this.generateEventName(this.section.id, productIndex), type: "checkbox", class: "s-multiple-bundle-product-checkbox", checked: isChecked, name: this.generateEventName(this.section.id, productIndex), value: product.id }), h("img", { src: product.image.url || salla.url.cdn('images/s-empty.png'), loading: "lazy", alt: product.image.alt || product.name, class: "s-multiple-bundle-product-image" })), h("div", { class: "s-multiple-bundle-product-content-wrapper" }, h("div", { class: "s-multiple-bundle-product-content" }, h("div", { class: "s-multiple-bundle-product-details" }, h("div", { class: "s-multiple-bundle-product-title-wrapper" }, h("h2", { class: "s-multiple-bundle-product-title" }, product.name)), h("div", { class: "s-multiple-bundle-product-price-wrapper" }, h("span", { class: "s-multiple-bundle-product-price" }, h("span", { innerHTML: salla.money(product.price) })), product.sale_price > 0 && (h("span", { class: "s-multiple-bundle-product-price-discount" }, h("span", { innerHTML: salla.money(product.sale_price) }))))), product.quantity_in_group > 0 && product.quantity !== 0 && (h("span", { class: "s-multiple-bundle-product-badge" }, salla.lang.get('pages.products.pieces'), h("span", null, product.quantity_in_group))), product.quantity === 0 && (h("span", { class: "s-multiple-bundle-product-badge" }, salla.lang.get('pages.products.quantity_in_group_finished')))), product.options?.length > 0 && (h("button", { class: "s-multiple-bundle-product-button", onClick: () => this.handleOptionsClick(product), type: "button" }, optionsButtonLabel, h("span", { class: "s-multiple-bundle-product-button-icon", innerHTML: optionsArrowIcon })))))));
+        })))));
+    }
+    get host() { return this; }
+    static get style() { return sallaMultipleBundleProductSliderCss; }
+}, [0, "salla-multiple-bundle-product-slider", {
+        "section": [16],
+        "sectionIndex": [2, "section-index"],
+        "selectedProducts": [16, "selected-products"],
+        "savedOptionsByInstance": [32]
+    }, [[4, "optionsSaved", "handleOptionsSaved"]]]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-multiple-bundle-product-slider", "salla-slider"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-multiple-bundle-product-slider":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaMultipleBundleProductSlider);
+            }
+            break;
+        case "salla-slider":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$1();
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaMultipleBundleProductSlider as S, defineCustomElement as d };

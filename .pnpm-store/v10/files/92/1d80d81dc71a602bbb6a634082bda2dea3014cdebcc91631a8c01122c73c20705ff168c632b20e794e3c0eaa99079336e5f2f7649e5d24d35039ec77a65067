@@ -1,0 +1,2 @@
+var e=require("@analytics/global-storage-utils"),s=e.hasSupport.bind(null,"sessionStorage"),t=e.wrap("sessionStorage","getItem",e.get),o=e.wrap("sessionStorage","setItem",e.set),r=e.wrap("sessionStorage","removeItem",e.remove);exports.SESSION_STORAGE="sessionStorage",exports.getSessionItem=t,exports.hasSessionStorage=s,exports.removeSessionItem=r,exports.setSessionItem=o;
+//# sourceMappingURL=analytics-util-session-storage.js.map

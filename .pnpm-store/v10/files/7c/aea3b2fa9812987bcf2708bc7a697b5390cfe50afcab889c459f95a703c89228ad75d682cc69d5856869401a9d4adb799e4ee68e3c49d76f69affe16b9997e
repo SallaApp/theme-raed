@@ -1,0 +1,210 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { d as defineCustomElement$l } from './salla-accordion2.js';
+import { d as defineCustomElement$k } from './salla-accordion-body2.js';
+import { d as defineCustomElement$j } from './salla-accordion-head2.js';
+import { d as defineCustomElement$i } from './salla-booking-field2.js';
+import { d as defineCustomElement$h } from './salla-button2.js';
+import { d as defineCustomElement$g } from './salla-color-picker2.js';
+import { d as defineCustomElement$f } from './salla-conditional-fields2.js';
+import { d as defineCustomElement$e } from './salla-datetime-picker2.js';
+import { d as defineCustomElement$d } from './salla-file-upload2.js';
+import { d as defineCustomElement$c } from './salla-loading2.js';
+import { d as defineCustomElement$b } from './salla-map2.js';
+import { d as defineCustomElement$a } from './salla-modal2.js';
+import { d as defineCustomElement$9 } from './salla-multiple-bundle-product-cart2.js';
+import { d as defineCustomElement$8 } from './salla-multiple-bundle-product-details2.js';
+import { d as defineCustomElement$7 } from './salla-multiple-bundle-product-options-modal2.js';
+import { d as defineCustomElement$6 } from './salla-multiple-bundle-product-slider2.js';
+import { d as defineCustomElement$5 } from './salla-product-options2.js';
+import { d as defineCustomElement$4 } from './salla-progress-bar2.js';
+import { d as defineCustomElement$3 } from './salla-skeleton2.js';
+import { d as defineCustomElement$2 } from './salla-slider2.js';
+
+const sallaMultipleBundleProductCss = ":host{display:block}";
+
+const SallaMultipleBundleProduct$1 = /*@__PURE__*/ proxyCustomElement(class SallaMultipleBundleProduct extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.parsedSections = [];
+    }
+    parseProducts(newValue) {
+        let sections = [];
+        if (typeof newValue === 'string') {
+            try {
+                const parsed = JSON.parse(newValue);
+                sections = this.extractSections(parsed);
+            }
+            catch (e) {
+                console.error('Invalid JSON passed to bundleSections prop:', newValue);
+                sections = [];
+            }
+        }
+        else if (newValue) {
+            sections = this.extractSections(newValue);
+        }
+        this.parsedSections = sections;
+    }
+    extractSections(data) {
+        // Handle new nested structure: data.bundle.sections
+        if (data.bundle && data.bundle.sections && Array.isArray(data.bundle.sections)) {
+            return data.bundle.sections;
+        }
+        // Handle old flat structure: data is directly an array of sections
+        if (Array.isArray(data)) {
+            return data;
+        }
+        // Handle case where data.sections exists at root level
+        if (data.sections && Array.isArray(data.sections)) {
+            return data.sections;
+        }
+        console.warn('No valid sections found in data:', data);
+        return [];
+    }
+    isCartPage() {
+        return salla.url.is_page('cart');
+    }
+    renderCartPage() {
+        return h("salla-multiple-bundle-product-cart", { sections: this.parsedSections });
+    }
+    renderDetailsPage() {
+        return h("salla-multiple-bundle-product-details", { sections: this.parsedSections });
+    }
+    componentWillLoad() {
+        this.parseProducts(this.bundleSections);
+    }
+    render() {
+        return (h(Host, { key: 'e9b525af3c011566cd15247b5f1eaf274036cd98', class: "s-multiple-bundle-product-wrapper" }, this.isCartPage() ? this.renderCartPage() : this.renderDetailsPage()));
+    }
+    static get watchers() { return {
+        "bundleSections": ["parseProducts"]
+    }; }
+    static get style() { return sallaMultipleBundleProductCss; }
+}, [0, "salla-multiple-bundle-product", {
+        "bundleSections": [1, "bundle-sections"],
+        "parsedSections": [32]
+    }, undefined, {
+        "bundleSections": ["parseProducts"]
+    }]);
+function defineCustomElement$1() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-multiple-bundle-product", "salla-accordion", "salla-accordion-body", "salla-accordion-head", "salla-booking-field", "salla-button", "salla-color-picker", "salla-conditional-fields", "salla-datetime-picker", "salla-file-upload", "salla-loading", "salla-map", "salla-modal", "salla-multiple-bundle-product-cart", "salla-multiple-bundle-product-details", "salla-multiple-bundle-product-options-modal", "salla-multiple-bundle-product-slider", "salla-product-options", "salla-progress-bar", "salla-skeleton", "salla-slider"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-multiple-bundle-product":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaMultipleBundleProduct$1);
+            }
+            break;
+        case "salla-accordion":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$l();
+            }
+            break;
+        case "salla-accordion-body":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$k();
+            }
+            break;
+        case "salla-accordion-head":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$j();
+            }
+            break;
+        case "salla-booking-field":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$i();
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$h();
+            }
+            break;
+        case "salla-color-picker":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$g();
+            }
+            break;
+        case "salla-conditional-fields":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$f();
+            }
+            break;
+        case "salla-datetime-picker":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$e();
+            }
+            break;
+        case "salla-file-upload":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$d();
+            }
+            break;
+        case "salla-loading":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$c();
+            }
+            break;
+        case "salla-map":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$b();
+            }
+            break;
+        case "salla-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$a();
+            }
+            break;
+        case "salla-multiple-bundle-product-cart":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$9();
+            }
+            break;
+        case "salla-multiple-bundle-product-details":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$8();
+            }
+            break;
+        case "salla-multiple-bundle-product-options-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$7();
+            }
+            break;
+        case "salla-multiple-bundle-product-slider":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$6();
+            }
+            break;
+        case "salla-product-options":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$5();
+            }
+            break;
+        case "salla-progress-bar":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$4();
+            }
+            break;
+        case "salla-skeleton":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-slider":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+    } });
+}
+defineCustomElement$1();
+
+const SallaMultipleBundleProduct = SallaMultipleBundleProduct$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { SallaMultipleBundleProduct, defineCustomElement };

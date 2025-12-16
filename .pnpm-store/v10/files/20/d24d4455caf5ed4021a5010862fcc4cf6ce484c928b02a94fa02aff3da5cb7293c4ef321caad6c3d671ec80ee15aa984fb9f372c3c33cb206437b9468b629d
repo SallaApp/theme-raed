@@ -1,0 +1,176 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import copyIcon from "../../assets/svg/swap-fill.svg";
+/**
+ * @salla/ui-components
+ * The `salla-order-details-options` component renders product options for order details.
+ * It displays various types of options including colors, images, files, maps, and text values.
+ */
+export class SallaOrderDetailsOptions {
+    constructor() {
+        /** Whether to show the options in a bordered container */
+        this.bordered = true;
+        /** Placeholder image URL when option image is not available */
+        this.placeholderImage = 'images/placeholder.png';
+        /** Parsed options data */
+        this.optionsData = [];
+    }
+    componentWillLoad() {
+        this.parseOptionsData();
+    }
+    componentWillUpdate() {
+        this.parseOptionsData();
+    }
+    parseOptionsData() {
+        if (!this.options) {
+            this.optionsData = [];
+            return;
+        }
+        if (typeof this.options === 'string') {
+            try {
+                this.optionsData = JSON.parse(this.options);
+            }
+            catch (e) {
+                // Invalid options JSON, fallback to empty array
+                this.optionsData = [];
+            }
+        }
+        else {
+            this.optionsData = Array.isArray(this.options) ? this.options : [];
+        }
+    }
+    renderOptionValue(option) {
+        // Handle image options
+        if (option.is_image) {
+            return (h("div", { class: "s-order-details-option-image-container" }, h("a", { href: option.value, target: "_blank" }, h("img", { class: "s-order-details-option-image", src: option.value || this.placeholderImage, alt: option.name }))));
+        }
+        // Handle color options
+        if (option.color) {
+            return (h("span", { title: option.value, class: "s-order-details-option-color-swatch", style: { backgroundColor: option.color } }));
+        }
+        // Handle file options
+        if (option.is_file) {
+            return (h("a", { href: option.value, target: "_blank", class: "s-order-details-option-file-link" }, "Attachments"));
+        }
+        // Handle color picker options
+        if (option.is_color_picker) {
+            return (h("div", { class: "s-order-details-option-color-picker" }, h("div", { class: "s-order-details-option-color-picker-content" }, h("span", { class: "s-order-details-option-color-picker-text" }, option.value), h("span", { class: "s-order-details-option-color-picker-swatch", style: { backgroundColor: option.value, width: '1rem' } })), h("salla-button", { onClick: e => this.copyToClipboard(e, option.value), shape: "link", class: "s-order-details-option-color-picker-button" }, h("span", { class: "s-order-details-option-color-copy-icon", innerHTML: copyIcon }))));
+        }
+        // Handle map options
+        if (option.is_map && option.latitude && option.longitude) {
+            return (h("salla-map", { id: `location_map_${option.id}`, class: `map_${option.id}`, zoom: 15, readonly: true, lat: option.latitude, lng: option.longitude }, h("div", { slot: "button" }, h("button", { type: "button", class: "s-order-details-option-map-button", onClick: () => this.openMap(option.id) }, "Show Location"))));
+        }
+        // Default text value
+        return (h("span", { class: "s-order-details-option-default-text" }, option.display_value || option.value));
+    }
+    copyToClipboard(event, content) {
+        event.preventDefault();
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(content);
+        }
+    }
+    openMap(optionId) {
+        const mapElement = document.querySelector(`salla-map.map_${optionId}`);
+        if (mapElement && mapElement.open) {
+            mapElement.open();
+        }
+    }
+    render() {
+        if (!this.optionsData.length) {
+            return null;
+        }
+        const containerClasses = this.bordered
+            ? 's-order-details-options-container'
+            : 's-order-details-options-container-borderless';
+        return (h(Host, { class: "s-order-details-options-wrapper" }, h("h2", { class: "s-order-details-options-title" }, salla.lang.get('pages.cart.item_options')), h("div", { class: containerClasses }, h("dl", { class: "s-order-details-options-list" }, this.optionsData.map(option => (h("div", { key: option.id, class: "s-order-details-options-item" }, h("dt", { class: "s-order-details-options-item-name" }, option.name, ":"), h("dd", { class: option.is_image
+                ? 's-order-details-options-item-value-image'
+                : 's-order-details-options-item-value-text' }, this.renderOptionValue(option)))))))));
+    }
+    static get is() { return "salla-order-details-options"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-order-details-options.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-order-details-options.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "options": {
+                "type": "string",
+                "attribute": "options",
+                "mutable": false,
+                "complexType": {
+                    "original": "ProductOption[] | string",
+                    "resolved": "ProductOption[] | string",
+                    "references": {
+                        "ProductOption": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-order-details/interfaces.ts::ProductOption"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Product options to display"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "bordered": {
+                "type": "boolean",
+                "attribute": "bordered",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Whether to show the options in a bordered container"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "true"
+            },
+            "placeholderImage": {
+                "type": "string",
+                "attribute": "placeholder-image",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Placeholder image URL when option image is not available"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'images/placeholder.png'"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "optionsData": {}
+        };
+    }
+}

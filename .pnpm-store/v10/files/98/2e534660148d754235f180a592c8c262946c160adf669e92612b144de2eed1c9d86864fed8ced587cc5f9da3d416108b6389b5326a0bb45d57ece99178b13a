@@ -1,0 +1,99 @@
+export declare class SallaProductsSlider {
+    /**
+     * Title of the block - works only if slider is true
+     * @type {string}
+     * @default ''
+     * */
+    blockTitle: string;
+    /**
+     * Sub title of the block - works only if slider is true
+     * @type {string}
+     * @default ''
+     * */
+    subTitle: string;
+    /**
+     * Slider Id, if not provided will be generated automatically
+     * @type {string}
+     * @default ''
+     * */
+    sliderId: string;
+    /**
+     * Display 'ALL' URL
+     * @type {string}
+     * @default ''
+     * */
+    displayAllUrl: string;
+    /**
+    * autoplay option for products slider
+    */
+    autoplay: boolean;
+    /**
+     * Source of the products, if api will get the products from the API, if json will get the products from the products prop
+     * @type {string}
+     * @default ''
+     * */
+    source: 'categories' | 'latest' | 'related' | 'brands' | 'json' | 'tags' | 'selected' | 'offers' | 'landing-page' | 'wishlist' | 'top-rated';
+    /**
+     * The source value, cloud be different values as following:
+     * - array of ids when `source` in ['categories', 'brands', 'tags', 'selected']
+     * - products payload when `source` = 'json'
+     * - product_id when `source` = 'related'
+     *
+     * @type {string}
+     * */
+    sourceValue: string;
+    /**
+     * Limit for number of products in the list.
+     */
+    limit: number;
+    /**
+     * Slider Configs refer to https://swiperjs.com/swiper-api#parameters and pass the entire config object
+     * @example
+     * let productsSlider = document.querySelector('salla-products-slider');
+     *  productsSlider.sliderConfig = {
+     *  slidesPerView: 1,
+     *  spaceBetween : 30,
+     *  lazy: true,
+     * }
+     *
+     */
+    sliderConfig: any;
+    /**
+     * Custom Card Component for the Salla Products Slider.
+     *
+     * This component allows you to customize the appearance of individual product cards within a Salla Products Slider.
+     *
+     * @example
+     * <salla-products-slider product-card-component="my-custom-card-style1" ...
+     * <salla-products-slider product-card-component="my-custom-card-style2" ...
+     */
+    productCardComponent: string;
+    /**
+     * Specifies additional data to be included in the product fetch response.
+     * The value can be an array of strings or a JSON string.
+     *
+     * Example:
+     * - As an array: includes=["options"]
+     * - As a JSON string: includes='["options"]'
+     *
+     * The array or JSON string can include:
+     * - "options": Include product options in the response.
+     * - "images": Include product images in the response.
+     */
+    includes: string[];
+    host: HTMLElement;
+    productsData: any;
+    isReady: boolean;
+    sourceValueIsValid: boolean;
+    hasCustomComponent: boolean;
+    apiUrl: string;
+    parsedSourceValue: any;
+    componentWillLoad(): any;
+    componentDidRender(): void;
+    private isSourceWithoutValue;
+    private getItemHTML;
+    private canRender;
+    private getSource;
+    private getSourceValue;
+    render(): any;
+}

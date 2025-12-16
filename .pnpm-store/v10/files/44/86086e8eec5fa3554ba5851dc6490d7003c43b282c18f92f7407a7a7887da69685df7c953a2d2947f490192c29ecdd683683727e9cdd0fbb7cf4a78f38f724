@@ -1,0 +1,45 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+'use strict';
+
+var index = require('./index-CXC9Tj5-.js');
+
+const sallaAppsIconsCss = ":host{display:block}";
+
+const SallaAppsIcons = class {
+    constructor(hostRef) {
+        index.registerInstance(this, hostRef);
+        this.apps = salla.config.get('store.apps');
+        this.appSlot = this.host.querySelector('[slot="app"]')?.innerHTML || `<img alt={name} src={icon} />`;
+        salla.onReady(() => {
+            this.apps = salla.config.get('store.apps');
+        });
+        salla.lang.onLoaded(() => {
+            this.appsTitle = salla.lang.get('blocks.footer.download_apps');
+        });
+    }
+    getAppsArray() {
+        return Object.entries(this.apps)
+            .map(([name, value]) => ({ name, value }));
+    }
+    componentWillLoad() {
+        return new Promise(resolve => salla.onReady(resolve));
+    }
+    render() {
+        const appsArray = this.getAppsArray();
+        if (Array.isArray(appsArray) && !appsArray.length) {
+            return;
+        }
+        return (index.h(index.Host, { class: "s-apps-icons" }, !this.hideTitle && index.h("h3", null, this.appsTitle), index.h("div", { class: { "s-apps-icons-list": true, "vertical": this.vertical } }, appsArray.map((app, index$1) => (index.h("a", { key: index$1, href: app.value, rel: "noreferrer", target: "_blank", class: "s-apps-icons-item", id: "app-slot", innerHTML: this.appSlot
+                .replace(/\{icon\}/g, salla.url.cdn(`images/${app.name}.png`))
+                .replace(/\{name\}/g, app.name) }))))));
+    }
+    componentDidRender() {
+        this.host.querySelector('[slot="app"]')?.remove();
+    }
+    get host() { return index.getElement(this); }
+};
+SallaAppsIcons.style = sallaAppsIconsCss;
+
+exports.salla_apps_icons = SallaAppsIcons;

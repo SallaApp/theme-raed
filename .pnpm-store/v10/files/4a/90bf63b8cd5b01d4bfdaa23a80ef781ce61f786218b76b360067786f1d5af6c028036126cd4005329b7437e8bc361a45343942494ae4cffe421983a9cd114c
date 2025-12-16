@@ -1,0 +1,345 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, createEvent, h } from '@stencil/core/internal/client';
+
+const sallaDatetimePickerCss = ".flatpickr-calendar{background:transparent;opacity:0;display:none;text-align:center;visibility:hidden;padding:0;-webkit-animation:none;animation:none;direction:ltr;border:0;font-size:14px;line-height:24px;border-radius:5px;position:absolute;width:307.875px;-webkit-box-sizing:border-box;box-sizing:border-box;-ms-touch-action:manipulation;touch-action:manipulation;background:#fff;-webkit-box-shadow:1px 0 0 #e6e6e6,-1px 0 0 #e6e6e6,0 1px 0 #e6e6e6,0 -1px 0 #e6e6e6,0 3px 13px rgba(0,0,0,0.08);box-shadow:1px 0 0 #e6e6e6,-1px 0 0 #e6e6e6,0 1px 0 #e6e6e6,0 -1px 0 #e6e6e6,0 3px 13px rgba(0,0,0,0.08)}.flatpickr-calendar.open,.flatpickr-calendar.inline{opacity:1;max-height:640px;visibility:visible}.flatpickr-calendar.open{display:inline-block;z-index:99999}.flatpickr-calendar.animate.open{-webkit-animation:fpFadeInDown 300ms cubic-bezier(.23,1,.32,1);animation:fpFadeInDown 300ms cubic-bezier(.23,1,.32,1)}.flatpickr-calendar.inline{display:block;position:relative;top:2px}.flatpickr-calendar.static{position:absolute;top:calc(100% + 2px)}.flatpickr-calendar.static.open{z-index:999;display:block}.flatpickr-calendar.multiMonth .flatpickr-days .dayContainer:nth-child(n+1) .flatpickr-day.inRange:nth-child(7n+7){-webkit-box-shadow:none !important;box-shadow:none !important}.flatpickr-calendar.multiMonth .flatpickr-days .dayContainer:nth-child(n+2) .flatpickr-day.inRange:nth-child(7n+1){-webkit-box-shadow:-2px 0 0 #e6e6e6,5px 0 0 #e6e6e6;box-shadow:-2px 0 0 #e6e6e6,5px 0 0 #e6e6e6}.flatpickr-calendar .hasWeeks .dayContainer,.flatpickr-calendar .hasTime .dayContainer{border-bottom:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.flatpickr-calendar .hasWeeks .dayContainer{border-left:0}.flatpickr-calendar.hasTime .flatpickr-time{height:40px;border-top:1px solid #e6e6e6}.flatpickr-calendar.noCalendar.hasTime .flatpickr-time{height:auto}.flatpickr-calendar:before,.flatpickr-calendar:after{position:absolute;display:block;pointer-events:none;border:solid transparent;content:'';height:0;width:0;left:22px}.flatpickr-calendar.rightMost:before,.flatpickr-calendar.arrowRight:before,.flatpickr-calendar.rightMost:after,.flatpickr-calendar.arrowRight:after{left:auto;right:22px}.flatpickr-calendar.arrowCenter:before,.flatpickr-calendar.arrowCenter:after{left:50%;right:50%}.flatpickr-calendar:before{border-width:5px;margin:0 -5px}.flatpickr-calendar:after{border-width:4px;margin:0 -4px}.flatpickr-calendar.arrowTop:before,.flatpickr-calendar.arrowTop:after{bottom:100%}.flatpickr-calendar.arrowTop:before{border-bottom-color:#e6e6e6}.flatpickr-calendar.arrowTop:after{border-bottom-color:#fff}.flatpickr-calendar.arrowBottom:before,.flatpickr-calendar.arrowBottom:after{top:100%}.flatpickr-calendar.arrowBottom:before{border-top-color:#e6e6e6}.flatpickr-calendar.arrowBottom:after{border-top-color:#fff}.flatpickr-calendar:focus{outline:0}.flatpickr-wrapper{position:relative;display:inline-block}.flatpickr-months{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}.flatpickr-months .flatpickr-month{background:transparent;color:rgba(0,0,0,0.9);fill:rgba(0,0,0,0.9);height:34px;line-height:1;text-align:center;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;overflow:hidden;-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1}.flatpickr-months .flatpickr-prev-month,.flatpickr-months .flatpickr-next-month{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;text-decoration:none;cursor:pointer;position:absolute;top:0;height:34px;padding:10px;z-index:3;color:rgba(0,0,0,0.9);fill:rgba(0,0,0,0.9)}.flatpickr-months .flatpickr-prev-month.flatpickr-disabled,.flatpickr-months .flatpickr-next-month.flatpickr-disabled{display:none}.flatpickr-months .flatpickr-prev-month i,.flatpickr-months .flatpickr-next-month i{position:relative}.flatpickr-months .flatpickr-prev-month.flatpickr-prev-month,.flatpickr-months .flatpickr-next-month.flatpickr-prev-month{left:0}.flatpickr-months .flatpickr-prev-month.flatpickr-next-month,.flatpickr-months .flatpickr-next-month.flatpickr-next-month{right:0}.flatpickr-months .flatpickr-prev-month:hover,.flatpickr-months .flatpickr-next-month:hover{color:#959ea9}.flatpickr-months .flatpickr-prev-month:hover svg,.flatpickr-months .flatpickr-next-month:hover svg{fill:#f64747}.flatpickr-months .flatpickr-prev-month svg,.flatpickr-months .flatpickr-next-month svg{width:14px;height:14px}.flatpickr-months .flatpickr-prev-month svg path,.flatpickr-months .flatpickr-next-month svg path{-webkit-transition:fill .1s;transition:fill .1s;fill:inherit}.numInputWrapper{position:relative;height:auto}.numInputWrapper input,.numInputWrapper span{display:inline-block}.numInputWrapper input{width:100%}.numInputWrapper input::-ms-clear{display:none}.numInputWrapper input::-webkit-outer-spin-button,.numInputWrapper input::-webkit-inner-spin-button{margin:0;-webkit-appearance:none}.numInputWrapper span{position:absolute;right:0;width:14px;padding:0 4px 0 2px;height:50%;line-height:50%;opacity:0;cursor:pointer;border:1px solid rgba(57,57,57,0.15);-webkit-box-sizing:border-box;box-sizing:border-box}.numInputWrapper span:hover{background:rgba(0,0,0,0.1)}.numInputWrapper span:active{background:rgba(0,0,0,0.2)}.numInputWrapper span:after{display:block;content:\"\";position:absolute}.numInputWrapper span.arrowUp{top:0;border-bottom:0}.numInputWrapper span.arrowUp:after{border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid rgba(57,57,57,0.6);top:26%}.numInputWrapper span.arrowDown{top:50%}.numInputWrapper span.arrowDown:after{border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid rgba(57,57,57,0.6);top:40%}.numInputWrapper span svg{width:inherit;height:auto}.numInputWrapper span svg path{fill:rgba(0,0,0,0.5)}.numInputWrapper:hover{background:rgba(0,0,0,0.05)}.numInputWrapper:hover span{opacity:1}.flatpickr-current-month{font-size:135%;line-height:inherit;font-weight:300;color:inherit;position:absolute;width:75%;left:12.5%;padding:7.48px 0 0 0;line-height:1;height:34px;display:inline-block;text-align:center;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}.flatpickr-current-month span.cur-month{font-family:inherit;font-weight:700;color:inherit;display:inline-block;margin-left:.5ch;padding:0}.flatpickr-current-month span.cur-month:hover{background:rgba(0,0,0,0.05)}.flatpickr-current-month .numInputWrapper{width:6ch;width:7ch\\0;display:inline-block}.flatpickr-current-month .numInputWrapper span.arrowUp:after{border-bottom-color:rgba(0,0,0,0.9)}.flatpickr-current-month .numInputWrapper span.arrowDown:after{border-top-color:rgba(0,0,0,0.9)}.flatpickr-current-month input.cur-year{background:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;cursor:text;padding:0 0 0 .5ch;margin:0;display:inline-block;font-size:inherit;font-family:inherit;font-weight:300;line-height:inherit;height:auto;border:0;border-radius:0;vertical-align:initial;-webkit-appearance:textfield;-moz-appearance:textfield;appearance:textfield}.flatpickr-current-month input.cur-year:focus{outline:0}.flatpickr-current-month input.cur-year[disabled],.flatpickr-current-month input.cur-year[disabled]:hover{font-size:100%;color:rgba(0,0,0,0.5);background:transparent;pointer-events:none}.flatpickr-current-month .flatpickr-monthDropdown-months{appearance:menulist;background:transparent;border:none;border-radius:0;box-sizing:border-box;color:inherit;cursor:pointer;font-size:inherit;font-family:inherit;font-weight:300;height:auto;line-height:inherit;margin:-1px 0 0 0;outline:none;padding:0 0 0 .5ch;position:relative;vertical-align:initial;-webkit-box-sizing:border-box;-webkit-appearance:menulist;-moz-appearance:menulist;width:auto}.flatpickr-current-month .flatpickr-monthDropdown-months:focus,.flatpickr-current-month .flatpickr-monthDropdown-months:active{outline:none}.flatpickr-current-month .flatpickr-monthDropdown-months:hover{background:rgba(0,0,0,0.05)}.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month{background-color:transparent;outline:none;padding:0}.flatpickr-weekdays{background:transparent;text-align:center;overflow:hidden;width:100%;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;height:28px}.flatpickr-weekdays .flatpickr-weekdaycontainer{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1}span.flatpickr-weekday{cursor:default;font-size:90%;background:transparent;color:rgba(0,0,0,0.54);line-height:1;margin:0;text-align:center;display:block;-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;font-weight:bolder}.dayContainer,.flatpickr-weeks{padding:1px 0 0 0}.flatpickr-days{position:relative;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:start;-webkit-align-items:flex-start;-ms-flex-align:start;align-items:flex-start;width:307.875px}.flatpickr-days:focus{outline:0}.dayContainer{padding:0;outline:0;text-align:left;width:307.875px;min-width:307.875px;max-width:307.875px;-webkit-box-sizing:border-box;box-sizing:border-box;display:inline-block;display:-ms-flexbox;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-wrap:wrap;-ms-flex-pack:justify;-webkit-justify-content:space-around;justify-content:space-around;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);opacity:1}.dayContainer+.dayContainer{-webkit-box-shadow:-1px 0 0 #e6e6e6;box-shadow:-1px 0 0 #e6e6e6}.flatpickr-day{background:none;border:1px solid transparent;border-radius:150px;-webkit-box-sizing:border-box;box-sizing:border-box;color:#393939;cursor:pointer;font-weight:400;width:14.2857143%;-webkit-flex-basis:14.2857143%;-ms-flex-preferred-size:14.2857143%;flex-basis:14.2857143%;max-width:39px;height:39px;line-height:39px;margin:0;display:inline-block;position:relative;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;text-align:center}.flatpickr-day.inRange,.flatpickr-day.prevMonthDay.inRange,.flatpickr-day.nextMonthDay.inRange,.flatpickr-day.today.inRange,.flatpickr-day.prevMonthDay.today.inRange,.flatpickr-day.nextMonthDay.today.inRange,.flatpickr-day:hover,.flatpickr-day.prevMonthDay:hover,.flatpickr-day.nextMonthDay:hover,.flatpickr-day:focus,.flatpickr-day.prevMonthDay:focus,.flatpickr-day.nextMonthDay:focus{cursor:pointer;outline:0;background:#e6e6e6;border-color:#e6e6e6}.flatpickr-day.today{border-color:#959ea9}.flatpickr-day.today:hover,.flatpickr-day.today:focus{border-color:#959ea9;background:#959ea9;color:#fff}.flatpickr-day.selected,.flatpickr-day.startRange,.flatpickr-day.endRange,.flatpickr-day.selected.inRange,.flatpickr-day.startRange.inRange,.flatpickr-day.endRange.inRange,.flatpickr-day.selected:focus,.flatpickr-day.startRange:focus,.flatpickr-day.endRange:focus,.flatpickr-day.selected:hover,.flatpickr-day.startRange:hover,.flatpickr-day.endRange:hover,.flatpickr-day.selected.prevMonthDay,.flatpickr-day.startRange.prevMonthDay,.flatpickr-day.endRange.prevMonthDay,.flatpickr-day.selected.nextMonthDay,.flatpickr-day.startRange.nextMonthDay,.flatpickr-day.endRange.nextMonthDay{background:#569ff7;-webkit-box-shadow:none;box-shadow:none;color:#fff;border-color:#569ff7}.flatpickr-day.selected.startRange,.flatpickr-day.startRange.startRange,.flatpickr-day.endRange.startRange{border-radius:50px 0 0 50px}.flatpickr-day.selected.endRange,.flatpickr-day.startRange.endRange,.flatpickr-day.endRange.endRange{border-radius:0 50px 50px 0}.flatpickr-day.selected.startRange+.endRange:not(:nth-child(7n+1)),.flatpickr-day.startRange.startRange+.endRange:not(:nth-child(7n+1)),.flatpickr-day.endRange.startRange+.endRange:not(:nth-child(7n+1)){-webkit-box-shadow:-10px 0 0 #569ff7;box-shadow:-10px 0 0 #569ff7}.flatpickr-day.selected.startRange.endRange,.flatpickr-day.startRange.startRange.endRange,.flatpickr-day.endRange.startRange.endRange{border-radius:50px}.flatpickr-day.inRange{border-radius:0;-webkit-box-shadow:-5px 0 0 #e6e6e6,5px 0 0 #e6e6e6;box-shadow:-5px 0 0 #e6e6e6,5px 0 0 #e6e6e6}.flatpickr-day.flatpickr-disabled,.flatpickr-day.flatpickr-disabled:hover,.flatpickr-day.prevMonthDay,.flatpickr-day.nextMonthDay,.flatpickr-day.notAllowed,.flatpickr-day.notAllowed.prevMonthDay,.flatpickr-day.notAllowed.nextMonthDay{color:rgba(57,57,57,0.3);background:transparent;border-color:transparent;cursor:default}.flatpickr-day.flatpickr-disabled,.flatpickr-day.flatpickr-disabled:hover{cursor:not-allowed;color:rgba(57,57,57,0.1)}.flatpickr-day.week.selected{border-radius:0;-webkit-box-shadow:-5px 0 0 #569ff7,5px 0 0 #569ff7;box-shadow:-5px 0 0 #569ff7,5px 0 0 #569ff7}.flatpickr-day.hidden{visibility:hidden}.rangeMode .flatpickr-day{margin-top:1px}.flatpickr-weekwrapper{float:left}.flatpickr-weekwrapper .flatpickr-weeks{padding:0 12px;-webkit-box-shadow:1px 0 0 #e6e6e6;box-shadow:1px 0 0 #e6e6e6}.flatpickr-weekwrapper .flatpickr-weekday{float:none;width:100%;line-height:28px}.flatpickr-weekwrapper span.flatpickr-day,.flatpickr-weekwrapper span.flatpickr-day:hover{display:block;width:100%;max-width:none;color:rgba(57,57,57,0.3);background:transparent;cursor:default;border:none}.flatpickr-innerContainer{display:block;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden}.flatpickr-rContainer{display:inline-block;padding:0;-webkit-box-sizing:border-box;box-sizing:border-box}.flatpickr-time{text-align:center;outline:0;display:block;height:0;line-height:40px;max-height:40px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}.flatpickr-time:after{content:\"\";display:table;clear:both}.flatpickr-time .numInputWrapper{-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;width:40%;height:40px;float:left}.flatpickr-time .numInputWrapper span.arrowUp:after{border-bottom-color:#393939}.flatpickr-time .numInputWrapper span.arrowDown:after{border-top-color:#393939}.flatpickr-time.hasSeconds .numInputWrapper{width:26%}.flatpickr-time.time24hr .numInputWrapper{width:49%}.flatpickr-time input{background:transparent;-webkit-box-shadow:none;box-shadow:none;border:0;border-radius:0;text-align:center;margin:0;padding:0;height:inherit;line-height:inherit;color:#393939;font-size:14px;position:relative;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-appearance:textfield;-moz-appearance:textfield;appearance:textfield}.flatpickr-time input.flatpickr-hour{font-weight:bold}.flatpickr-time input.flatpickr-minute,.flatpickr-time input.flatpickr-second{font-weight:400}.flatpickr-time input:focus{outline:0;border:0}.flatpickr-time .flatpickr-time-separator,.flatpickr-time .flatpickr-am-pm{height:inherit;float:left;line-height:inherit;color:#393939;font-weight:bold;width:2%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-align-self:center;-ms-flex-item-align:center;align-self:center}.flatpickr-time .flatpickr-am-pm{outline:0;width:18%;cursor:pointer;text-align:center;font-weight:400}.flatpickr-time input:hover,.flatpickr-time .flatpickr-am-pm:hover,.flatpickr-time input:focus,.flatpickr-time .flatpickr-am-pm:focus{background:#eee}.flatpickr-input[readonly]{cursor:pointer}@-webkit-keyframes fpFadeInDown{from{opacity:0;-webkit-transform:translate3d(0,-20px,0);transform:translate3d(0,-20px,0)}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}}@keyframes fpFadeInDown{from{opacity:0;-webkit-transform:translate3d(0,-20px,0);transform:translate3d(0,-20px,0)}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}}";
+
+const SallaDatetimePicker = /*@__PURE__*/ proxyCustomElement(class SallaDatetimePicker extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.picked = createEvent(this, "picked", 7);
+        this.invalidInput = createEvent(this, "invalidInput", 7);
+        /**
+         * Two way data binding to retrieve the selected date[time] value
+         */
+        this.value = null;
+        /**
+         * Placeholder text to show on the input element
+         */
+        this.placeholder = salla.lang.get('blocks.buy_as_gift.select_send_date_and_time');
+        /**
+         * Allows the user to enter a date directly into the input field. By default, direct entry is disabled.
+         */
+        this.allowInput = true;
+        /**
+         * Allows the preloading of an invalid date. When disabled, the field will be cleared if the provided date is invalid
+         */
+        this.allowInvalidPreload = false;
+        /**
+         * Exactly the same as date format, but for the altInput field.
+         */
+        this.altFormat = "F j, Y";
+        /**
+         * Show the user a readable date (as per altFormat), but return something totally different to the server.
+         */
+        this.altInput = false;
+        /**
+         * Instead of body, appends the calendar to the specified node instead.
+         */
+        this.appendTo = undefined;
+        /**
+         * Defines how the date will be formatted in the aria-label for calendar days,
+         * using the same tokens as dateFormat. If you change this, you should choose a
+         * value that will make sense if a screen reader reads it out loud.
+         */
+        this.ariaDateFormat = "F j, Y";
+        /**
+         * Whether the default time should be auto-filled when the input is empty and gains or loses focus.
+         */
+        this.autoFillDefaultTime = true;
+        /**
+         * Whether clicking on the input should open the picker.
+         * Set it to false if you only want to open the calendar programmatically with [open()]
+         */
+        this.clickOpens = true;
+        /**
+         * Whether calendar should close after date selection or not
+         */
+        this.closeOnSelect = true;
+        /**
+         * A string of characters which are used to define how the date will be displayed in the input box.
+         * The supported characters are defined in the table below.
+         */
+        this.dateFormat = "Y-m-d";
+        /**
+         * Initial value of the hour element, when no date is selected
+         */
+        this.defaultHour = 12;
+        /**
+         * Initial value of the minute element, when no date is selected
+         */
+        this.defaultMinute = 0;
+        /**
+         * Initial value of the seconds element, when no date is selected
+         */
+        this.defaultSeconds = 0;
+        /**
+         * Disables certain dates, preventing them from being selected.
+         * See https://chmln.github.io/flatpickr/examples/#disabling-specific-dates
+         */
+        this.disable = [];
+        /**
+         * Set this to true to always use the non-native picker on mobile devices.
+         * By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used.
+         */
+        this.disableMobile = false;
+        /**
+         * Disables all dates except these specified. See https://chmln.github.io/flatpickr/examples/#disabling-all-dates-except-select-few
+         */
+        this.enable = [(_) => true];
+        /**
+         * Enables seconds selection in the time picker.
+         */
+        this.enableSeconds = false;
+        /**
+         * Enables the time picker
+         */
+        this.enableTime = false;
+        /**
+         * Adjusts the step for the hour input (incl. scrolling)
+         */
+        this.hourIncrement = 1;
+        /**
+         * Displays the calendar inline
+         */
+        this.inline = false;
+        /**
+         * The locale, either as a string (e.g. "ar", "en") or as an object.
+         * See https://chmln.github.io/flatpickr/localization/
+         */
+        this.locale = "en";
+        /**
+         * The maximum date that a user can pick to (inclusive).
+         */
+        this.maxDate = null;
+        /**
+         * The minimum date that a user can start picking from (inclusive).
+         */
+        this.maxTime = null;
+        /**
+         * The minimum date that a user can start picking from (inclusive).
+         */
+        this.minDate = null;
+        /**
+         * The minimum time that a user can start picking from (inclusive).
+         */
+        this.minTime = null;
+        /**
+         * Adjusts the step for the minute input (incl. scrolling) Defaults to 5
+         */
+        this.minuteIncrement = 5;
+        /**
+         * Date selection mode, defaults to "single"
+         */
+        this.mode = "single";
+        /**
+         * How the month should be displayed in the header of the calendar.
+         * If showMonths has a value greater than 1, the month is always shown as static.
+         */
+        this.monthSelectorType = "dropdown";
+        /**
+         * HTML for the arrow icon, used to switch months.
+         */
+        this.nextArrow = '<span class="sicon-keyboard_arrow_right"></span>';
+        /**
+         * Hides the day selection in calendar. Use it along with enableTime to create a time picker.
+         */
+        this.noCalendar = false;
+        /**
+         * How the calendar should be positioned with regards to the input. Defaults to "auto"
+         */
+        this.position = "auto";
+        /**
+         * HTML for the left arrow icon, used to switch months.
+         */
+        this.prevArrow = '<span class="sicon-keyboard_arrow_left"></span>';
+        /**
+         * Whether to display the current month name in shorthand mode, e.g. "Sep" instead "September"
+         */
+        this.shorthandCurrentMonth = false;
+        /**
+         * Position the calendar inside the wrapper and next to the input element*.
+         */
+        this.static = false;
+        /**
+         * The number of months to be shown at the same time when displaying the calendar.
+         */
+        this.showMonths = 1;
+        /**
+         * Displays time picker in 24 hour mode without AM/PM selection when enabled.
+         */
+        this.time_24hr = false;
+        /**
+         * Enables display of week numbers in calendar.
+         */
+        this.weekNumbers = false;
+        /**
+         * See https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
+         */
+        this.wrap = false;
+        /**
+         * Whether the input is disabled
+         */
+        this.disabled = false;
+    }
+    /**
+     * Lazy load flatpickr library
+     * This reduces initial bundle size by ~35-40KB
+     */
+    async loadFlatpickr() {
+        if (this.flatpickr)
+            return;
+        try {
+            const flatpickrModule = await import('./index3.js');
+            this.flatpickr = flatpickrModule.default;
+            // Load locale if not English
+            if (this.locale && this.locale !== 'en') {
+                try {
+                    await import(`flatpickr/dist/l10n/${this.locale}.js`);
+                }
+                catch (e) {
+                    console.warn(`Flatpickr locale ${this.locale} not found, using default`);
+                }
+            }
+        }
+        catch (error) {
+            console.error('Failed to load Flatpickr:', error);
+            salla.notify?.error?.('Failed to load date picker. Please refresh the page.');
+            throw error;
+        }
+    }
+    render() {
+        return h("div", { key: 'f619b5fa5fdb68b3cc8562be43496dabb1d78f37', class: "s-datetime-picker" }, h("input", { key: 'dc9b5d0680cd31109a2b82fcf435b8b68d5fbb8d', type: "datetime", name: this.name, value: this.value, required: this.required, disabled: this.disabled, placeholder: this.placeholder, class: "s-datetime-picker-input", ref: (el) => this.dateInput = el }));
+    }
+    async componentDidLoad() {
+        // Load flatpickr before initializing
+        await this.loadFlatpickr();
+        let options = {
+            allowInput: this.allowInput,
+            allowInvalidPreload: this.allowInvalidPreload,
+            altFormat: this.altFormat,
+            altInput: this.altInput,
+            altInputClass: this.altInputClass,
+            appendTo: this.appendTo,
+            ariaDateFormat: this.ariaDateFormat,
+            autoFillDefaultTime: this.autoFillDefaultTime,
+            clickOpens: this.clickOpens,
+            closeOnSelect: this.closeOnSelect,
+            conjunction: this.conjunction,
+            dateFormat: this.dateFormat,
+            defaultDate: !!this.value ? Date.parse(this.value) : this.defaultDate,
+            defaultHour: this.defaultHour,
+            defaultMinute: this.defaultMinute,
+            defaultSeconds: this.defaultSeconds,
+            disable: this.disable,
+            disableMobile: this.disableMobile,
+            enable: this.enable,
+            enableSeconds: this.enableSeconds,
+            enableTime: this.enableTime,
+            formatDate: this.formatDate,
+            hourIncrement: this.hourIncrement,
+            inline: this.inline,
+            locale: this.locale,
+            maxDate: this.maxDate,
+            maxTime: this.maxTime,
+            minDate: this.minDate,
+            minTime: this.minTime,
+            minuteIncrement: this.minuteIncrement,
+            mode: this.mode,
+            monthSelectorType: this.monthSelectorType,
+            nextArrow: this.nextArrow,
+            noCalendar: this.noCalendar,
+            parseDate: this.dateParser,
+            position: this.position,
+            positionElement: this.positionElement,
+            prevArrow: this.prevArrow,
+            shorthandCurrentMonth: this.shorthandCurrentMonth,
+            static: this.static,
+            showMonths: this.showMonths,
+            time_24hr: this.time_24hr,
+            weekNumbers: this.weekNumbers,
+            wrap: this.wrap,
+            // @ts-ignore
+            onChange: (selectedDates, dateStr) => this.picked.emit(this.value = dateStr)
+            // onOpen: this.handleOnOpen(selectedDates, dateStr, instance)
+            // onClose: this.handleOnClose(selectedDates, dateStr, instance)
+        };
+        this.flatpickr(this.dateInput, options);
+        this.dateInput.addEventListener('invalid', e => {
+            this.invalidInput.emit(e);
+        });
+        this.dateInput.addEventListener('input', () => {
+            this.dateInput.setCustomValidity('');
+            this.dateInput.reportValidity();
+        });
+    }
+    static get style() { return sallaDatetimePickerCss; }
+}, [0, "salla-datetime-picker", {
+        "value": [1537],
+        "required": [4],
+        "name": [513],
+        "placeholder": [1],
+        "allowInput": [4, "allow-input"],
+        "allowInvalidPreload": [4, "allow-invalid-preload"],
+        "altFormat": [1, "alt-format"],
+        "altInput": [4, "alt-input"],
+        "altInputClass": [1, "alt-input-class"],
+        "appendTo": [16, "append-to"],
+        "ariaDateFormat": [1, "aria-date-format"],
+        "autoFillDefaultTime": [4, "auto-fill-default-time"],
+        "clickOpens": [4, "click-opens"],
+        "closeOnSelect": [4, "close-on-select"],
+        "conjunction": [1],
+        "dateFormat": [1, "date-format"],
+        "defaultDate": [8, "default-date"],
+        "defaultHour": [2, "default-hour"],
+        "defaultMinute": [2, "default-minute"],
+        "defaultSeconds": [2, "default-seconds"],
+        "disable": [16],
+        "disableMobile": [4, "disable-mobile"],
+        "enable": [16],
+        "enableSeconds": [4, "enable-seconds"],
+        "enableTime": [4, "enable-time"],
+        "formatDate": [16, "format-date"],
+        "hourIncrement": [2, "hour-increment"],
+        "inline": [4],
+        "locale": [1],
+        "maxDate": [8, "max-date"],
+        "maxTime": [8, "max-time"],
+        "minDate": [8, "min-date"],
+        "minTime": [8, "min-time"],
+        "minuteIncrement": [2, "minute-increment"],
+        "mode": [1],
+        "monthSelectorType": [1, "month-selector-type"],
+        "nextArrow": [1, "next-arrow"],
+        "noCalendar": [4, "no-calendar"],
+        "dateParser": [16, "date-parser"],
+        "position": [1],
+        "positionElement": [16, "position-element"],
+        "prevArrow": [1, "prev-arrow"],
+        "shorthandCurrentMonth": [4, "shorthand-current-month"],
+        "static": [4],
+        "showMonths": [2, "show-months"],
+        "time_24hr": [4, "time_-2-4hr"],
+        "weekNumbers": [4, "week-numbers"],
+        "wrap": [4],
+        "disabled": [4]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-datetime-picker"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-datetime-picker":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaDatetimePicker);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaDatetimePicker as S, defineCustomElement as d };

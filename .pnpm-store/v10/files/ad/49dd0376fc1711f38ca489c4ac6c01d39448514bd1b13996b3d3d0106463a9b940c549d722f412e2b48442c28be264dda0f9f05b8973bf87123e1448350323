@@ -1,0 +1,53 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+
+const sallaSkeletonCss = ":host{display:block}";
+
+const SallaSkeleton = /*@__PURE__*/ proxyCustomElement(class SallaSkeleton extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        /**
+       *  Set the shape type of the skeleton is it circle or normal
+       */
+        this.type = 'normal';
+        /**
+       *  Set the skeleton width
+       */
+        this.width = '100%';
+        /**
+       *  Set the skeleton height
+       */
+        this.height = '100%';
+    }
+    render() {
+        const classes = {
+            's-skeleton-item': true,
+            's-skeleton-item-circular': this.type == 'circle',
+        };
+        return (h(Host, { key: '64e0a58754b26fcca6cbc93d636c1c4d4f895a53', class: "s-skeleton-wrapper", style: { width: this.width, height: this.height } }, h("div", { key: '1e19620023d4dfc07d343e47bd2a0126db3f034a', class: classes }, "\u00A0")));
+    }
+    static get style() { return sallaSkeletonCss; }
+}, [0, "salla-skeleton", {
+        "type": [1],
+        "width": [1],
+        "height": [1]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-skeleton"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-skeleton":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaSkeleton);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaSkeleton as S, defineCustomElement as d };

@@ -1,0 +1,19 @@
+import { type Offer } from "./interfaces";
+import type { Product } from "@salla.sa/twilight/types/common";
+export declare class SallaConditionalOffer {
+    offer: Offer;
+    products: Record<string, Pick<Product, 'image' | 'url'>>;
+    isLoading: boolean;
+    canRender: boolean;
+    componentWillLoad(): void;
+    private getProducts;
+    private updateInitialOfferValue;
+    private updateOfferValues;
+    private getCheckpointContent;
+    private getOfferType;
+    private clamp;
+    private mapValueRanges;
+    private getCheckPointView;
+    private getLoadingSkeletonView;
+    render(): any;
+}

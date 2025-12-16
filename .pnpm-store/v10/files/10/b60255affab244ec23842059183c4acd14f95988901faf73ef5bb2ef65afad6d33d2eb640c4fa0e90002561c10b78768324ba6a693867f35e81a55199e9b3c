@@ -1,0 +1,322 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+import { FilterOptionTypes } from "./interfaces";
+import Helper from "../../Helpers/Helper";
+export class SallaFilters {
+    constructor() {
+        this.isReady = false; //to avoid triggering the changed event
+        this.filtersData = {};
+        salla.event.on('filters::hidden', () => this.host.style.display = 'none');
+        salla.lang.onLoaded(() => {
+            this.apply = salla.lang.get('pages.checkout.apply');
+            this.reset = salla.lang.get('pages.categories.filters_reset');
+        });
+        salla.event.on('filters::fetched', ({ filters }) => {
+            this.host.style.display = '';
+            let freshFilterData = {};
+            this.filters = filters
+                .map((filter) => {
+                filter.label = {
+                    category_id: salla.lang.get('common.titles.categories'),
+                    brand_id: salla.lang.get('common.titles.brands'),
+                    rating: salla.lang.get('pages.categories.filter_rating'),
+                    price: salla.lang.get('pages.categories.filter_price'),
+                }[filter.key] || filter.label;
+                // filter.type = FilterOptionTypes.VALUES;
+                if (filter.key == 'rating') {
+                    filter.type = FilterOptionTypes.VALUES;
+                    //@ts-ignore
+                    let { max, min } = filter.values;
+                    //@ts-ignore
+                    filter.values = [5, 4, 3, 2, 1].filter(stars => stars >= min || stars <= max);
+                }
+                if (this.filtersData.variants && filter.type == FilterOptionTypes.VARIANTS) {
+                    freshFilterData.variants = this.filtersData.variants;
+                }
+                if (this.filtersData[filter.key] && filter.type !== FilterOptionTypes.VARIANTS) {
+                    freshFilterData[filter.key] = this.filtersData[filter.key];
+                }
+                let searchParams = new URLSearchParams(window.location.search);
+                let hasFilters = false;
+                for (let key of searchParams.keys()) {
+                    if (key.includes('filters')) {
+                        hasFilters = true;
+                        break; // No need to continue checking once a match is found
+                    }
+                }
+                if (salla.config.get('page.slug') == "product.index" && Object.keys(freshFilterData).length == 0 && !hasFilters) {
+                    // Append the current category to the url if there are no pre-selected filters
+                    let currentUrl = window.location.href;
+                    let filterValue = salla.config.get('page.id');
+                    let separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
+                    let newUrl = currentUrl + separator + 'filters[category_id]=' + filterValue;
+                    freshFilterData.category_id = filterValue;
+                    window.history.pushState({ path: newUrl }, '', newUrl);
+                }
+                return filter;
+            });
+            this.filtersData = freshFilterData;
+            this.host.childNodes.forEach(async (widget) => widget.setWidgetHeight && await widget.setWidgetHeight());
+        });
+    }
+    async componentWillLoad() {
+        try {
+            const searchParams = new URLSearchParams(window.location.search);
+            this.filtersData = await Helper.extractFiltersFromUrl(searchParams);
+        }
+        catch (e) {
+            console.warn('failed to get filters from URL', e.message);
+        }
+    }
+    /**
+     * Method to get filter data.
+     */
+    async getFilters() {
+        return this.filtersData;
+    }
+    /**
+     * Apply filter action.
+     */
+    async applyFilters() {
+        if (!this.isReady) {
+            return;
+        }
+        let hasFilters = Object.keys(this.filtersData).length > 0;
+        setTimeout(() => {
+            if (hasFilters) {
+                let url = new URL(window.location.href);
+                for (const [key] of url.searchParams.entries()) {
+                    if (key.startsWith("filters")) {
+                        url.searchParams.delete(key);
+                    }
+                }
+                let encodedFilterValues = this.encodeFilters(this.filtersData);
+                let sanitizedFilterValues = url.search.split("&").filter(item => !item.includes('filters')).join("&");
+                if (sanitizedFilterValues) {
+                    url.search = url.search.split("&filters")[0] + "&" + encodedFilterValues;
+                }
+                else {
+                    url.search = `?${encodedFilterValues}`;
+                }
+                window.history.pushState({}, '', url.href);
+            }
+            else {
+                let url = new URL(window.location.href);
+                url.searchParams?.delete('filters');
+                window.history.pushState({}, '', url.toString());
+            }
+            salla.event.emit('salla-filters::changed', this.filtersData);
+            this.changed.emit(this.filtersData);
+        }, 300);
+    }
+    encodeFilters(filters, parentKey = 'filters') {
+        const encodedFilters = [];
+        for (const key in filters) {
+            if (Object.prototype.hasOwnProperty.call(filters, key)) {
+                const value = filters[key];
+                const fullKey = parentKey ? `${parentKey}[${key}]` : key;
+                if (Array.isArray(value)) {
+                    for (let i = 0; i < value.length; i++) {
+                        encodedFilters.push(`${fullKey}[${i}]=${value[i]}`);
+                    }
+                }
+                else if (typeof value === 'object' && value !== null) {
+                    encodedFilters.push(this.encodeFilters(value, fullKey));
+                }
+                else {
+                    // const encodedKey = encodeURIComponent(fullKey);
+                    // const encodedValue = encodeURIComponent(value);
+                    let result = `${fullKey}=${value}`;
+                    encodedFilters.push(result);
+                }
+            }
+        }
+        return encodedFilters.join('&');
+    }
+    ;
+    /**
+     * Reset selected filters.
+     */
+    async resetFilters() {
+        this.removeFiltersQueryParams();
+        this.filtersData = {};
+        this.host.childNodes.forEach((widget) => widget.reset && widget.reset());
+        salla.event.emit('salla-filters::reset');
+        return this.applyFilters();
+    }
+    removeFiltersQueryParams() {
+        const searchParams = new URLSearchParams(window.location.search);
+        const newUrl = Array.from(searchParams.keys())
+            .filter(key => !key.startsWith('filters['))
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(searchParams.get(key))}`)
+            .join('&');
+        const finalUrl = newUrl ? `${window.location.pathname}?${newUrl}` : window.location.pathname;
+        window.history.pushState({}, '', finalUrl);
+    }
+    /**
+     * @param {{target:HTMLInputElement}} event
+     * @param option
+     * @param value
+     * @private
+     */
+    handleOptionChange(event, option, value) {
+        if (option.type === FilterOptionTypes.RANGE) {
+            this.filtersData[option.key] = value;
+        }
+        let isChecked = event.target.checked;
+        if (option.type === FilterOptionTypes.VARIANTS) {
+            this.filtersData.variants = this.filtersData.variants || {};
+            isChecked && (this.filtersData.variants[option.key] = value);
+            isChecked || (delete this.filtersData.variants[option.key]);
+        }
+        else if (event.target.type == "radio") {
+            isChecked && (this.filtersData[option.key] = value);
+            isChecked || (delete this.filtersData[option.key]);
+        }
+        //it's checkbox
+        // add if condition to avoid error when the filter is not existed in the filtersData
+        else if (event.target.type == "checkbox") {
+            this.filtersData[option.key] = this.filtersData[option.key] || [];
+            if (isChecked) {
+                this.filtersData[option.key].push(value);
+            }
+            this.filtersData[option.key] = this.filtersData[option.key].filter(val => val != value);
+        }
+        this.applyFilters();
+    }
+    render() {
+        return h(Host, { key: 'cee91d1495df18bbdbd71625ff85f582fe93f90a' }, this.filters?.map(option => h("salla-filters-widget", { option: option, filtersData: this.filtersData, onChanged: ({ detail: { event, option, value } }) => {
+                this.handleOptionChange(event, option, value);
+            } })), this.filters?.length ? h("div", { class: "s-filters-footer" }, h("salla-button", { color: 'gray', fill: 'outline', onClick: () => this.resetFilters() }, this.reset)) : '');
+    }
+    componentDidLoad() {
+        this.isReady = true;
+    }
+    static get is() { return "salla-filters"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-filters.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-filters.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "filters": {
+                "type": "unknown",
+                "attribute": "filters",
+                "mutable": true,
+                "complexType": {
+                    "original": "Filter[]",
+                    "resolved": "Filter[]",
+                    "references": {
+                        "Filter": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-filters/interfaces.ts::Filter"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Array of filter options"
+                },
+                "getter": false,
+                "setter": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "isSidebarOpen": {},
+            "filtersData": {},
+            "apply": {},
+            "reset": {}
+        };
+    }
+    static get events() {
+        return [{
+                "method": "changed",
+                "name": "changed",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Custom event fired when the selected filters are changed."
+                },
+                "complexType": {
+                    "original": "any",
+                    "resolved": "any",
+                    "references": {}
+                }
+            }];
+    }
+    static get methods() {
+        return {
+            "getFilters": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Method to get filter data.",
+                    "tags": []
+                }
+            },
+            "applyFilters": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Apply filter action.",
+                    "tags": []
+                }
+            },
+            "resetFilters": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLSallaFiltersWidgetElement": {
+                            "location": "global",
+                            "id": "global::HTMLSallaFiltersWidgetElement"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Reset selected filters.",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

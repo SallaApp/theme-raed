@@ -1,0 +1,298 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Fragment, Host } from '@stencil/core/internal/client';
+import { d as defineCustomElement$i } from './salla-accordion2.js';
+import { d as defineCustomElement$h } from './salla-accordion-body2.js';
+import { d as defineCustomElement$g } from './salla-accordion-head2.js';
+import { d as defineCustomElement$f } from './salla-booking-field2.js';
+import { d as defineCustomElement$e } from './salla-button2.js';
+import { d as defineCustomElement$d } from './salla-color-picker2.js';
+import { d as defineCustomElement$c } from './salla-conditional-fields2.js';
+import { d as defineCustomElement$b } from './salla-datetime-picker2.js';
+import { d as defineCustomElement$a } from './salla-file-upload2.js';
+import { d as defineCustomElement$9 } from './salla-loading2.js';
+import { d as defineCustomElement$8 } from './salla-map2.js';
+import { d as defineCustomElement$7 } from './salla-modal2.js';
+import { d as defineCustomElement$6 } from './salla-multiple-bundle-product-options-modal2.js';
+import { d as defineCustomElement$5 } from './salla-multiple-bundle-product-slider2.js';
+import { d as defineCustomElement$4 } from './salla-product-options2.js';
+import { d as defineCustomElement$3 } from './salla-progress-bar2.js';
+import { d as defineCustomElement$2 } from './salla-skeleton2.js';
+import { d as defineCustomElement$1 } from './salla-slider2.js';
+
+const sallaMultipleBundleProductDetailsCss = "";
+
+const SallaMultipleBundleProductDetails = /*@__PURE__*/ proxyCustomElement(class SallaMultipleBundleProductDetails extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.sections = [];
+        // store selected product IDs per section (can be string or number)
+        this.selectedProducts = {};
+        // Event handler reference for cleanup
+        this.productSelectedHandler = null;
+        // handle selecting a product (toggle)
+        this.onSelectProduct = (sectionId, product) => {
+            this.selectedProducts = {
+                ...this.selectedProducts,
+                [sectionId]: new Set(this.selectedProducts[sectionId] || []),
+            };
+            const productId = product.id;
+            const wasSelected = this.selectedProducts[sectionId].has(productId);
+            if (wasSelected) {
+                // Product is being deselected
+                this.selectedProducts[sectionId].delete(productId);
+                // Clear form data and modal options for this product in this specific section
+                this.clearProductFormData(productId, sectionId);
+                this.clearProductModalOptions(productId, sectionId);
+            }
+            else {
+                // Product is being selected
+                this.selectedProducts[sectionId].add(productId);
+            }
+            // force re-render
+            this.selectedProducts = { ...this.selectedProducts };
+            // still dispatch event
+            salla.event.dispatch('on-bundle-product-selected', {
+                id: product.id,
+                name: product.name,
+                options: product.options,
+                wasSelected: wasSelected,
+                isSelected: !wasSelected,
+            });
+        };
+        // ensure product is selected (only add if not already selected)
+        this.ensureProductSelected = (sectionId, product) => {
+            this.selectedProducts = {
+                ...this.selectedProducts,
+                [sectionId]: new Set(this.selectedProducts[sectionId] || []),
+            };
+            const productId = product.id;
+            // Only add if not already selected
+            if (!this.selectedProducts[sectionId].has(productId)) {
+                this.selectedProducts[sectionId].add(productId);
+                // force re-render
+                this.selectedProducts = { ...this.selectedProducts };
+                // dispatch event
+                salla.event.dispatch('on-bundle-product-selected', {
+                    id: product.id,
+                    name: product.name,
+                    options: product.options,
+                });
+            }
+        };
+        // open product options modal
+        this.onSelectProductOptions = (product, sectionId) => {
+            // Find the section index from the sectionId
+            const sectionIndex = this.sections.findIndex(section => section.id == sectionId);
+            // Find the product index within the section
+            const section = this.sections.find(section => section.id == sectionId);
+            const productIndex = section?.products?.findIndex(p => p.id == product.id) ?? 0;
+            salla.event.dispatch('multiple-bundle-product-modal::open', {
+                product,
+                sectionId,
+                sectionIndex,
+                productIndex,
+            });
+        };
+        // Event handlers for bundle slider component
+        this.handleBundleSliderProductSelected = (event) => {
+            const { product, sectionId } = event.detail;
+            this.onSelectProduct(sectionId, product);
+        };
+        this.handleBundleSliderProductOptionsSelected = (event) => {
+            const { product, sectionId } = event.detail;
+            this.onSelectProductOptions(product, sectionId);
+        };
+    }
+    // Clear form data for a specific product in specific section
+    clearProductFormData(productId, sectionId) {
+        const form = this.host.closest('form');
+        if (sectionId) {
+            // Remove inputs for specific section/productIndex combination
+            const productInputPattern = `bundle[${sectionId}][`;
+            const inputsToRemove = Array.from(form.querySelectorAll('input')).filter((input) => input.getAttribute('data-product-id') === String(productId) &&
+                input.name &&
+                input.name.startsWith(productInputPattern));
+            inputsToRemove.forEach(input => input.remove());
+        }
+        else {
+            // Fallback: Remove all hidden inputs related to this product (legacy behavior)
+            const inputsToRemove = form.querySelectorAll(`[data-product-id="${productId}"]`);
+            inputsToRemove.forEach(input => input.remove());
+        }
+    }
+    // Clear modal options state for a specific product
+    clearProductModalOptions(productId, sectionId) {
+        let sectionIndex = null;
+        let productIndex = null;
+        if (sectionId != null) {
+            sectionIndex = this.sections.findIndex(section => section.id == sectionId);
+            if (sectionIndex > -1) {
+                const section = this.sections[sectionIndex];
+                if (section) {
+                    const foundIndex = section.products?.findIndex(product => product.id == productId);
+                    productIndex = typeof foundIndex === 'number' && foundIndex > -1 ? foundIndex : null;
+                }
+            }
+        }
+        // Emit event to notify modal to reset its state for this product
+        salla.event.dispatch('multiple-bundle-product-modal::clear-options', {
+            productId,
+            sectionId,
+            sectionIndex,
+            productIndex,
+        });
+    }
+    renderAccordionHeader(section, selectedCount) {
+        return (h(Fragment, null, h("h2", { slot: "title" }, section?.name), section?.obligatory_products ? (h("span", { slot: "note" }, salla.lang.get('pages.products.obligatory_products', {
+            count: section?.obligatory_products || 0,
+        }))) : '', h("span", { slot: "progress" }, selectedCount, "/", section?.products?.length || 0)));
+    }
+    componentDidLoad() {
+        // Listen for product selected event from modal
+        const modal = this.host.querySelector('salla-multiple-bundle-product-options-modal');
+        if (modal) {
+            this.productSelectedHandler = (e) => {
+                const { productId, sectionId, product, fromModal } = e.detail;
+                if (fromModal) {
+                    // When called from modal, only add to selection if not already selected
+                    this.ensureProductSelected(sectionId, product || { id: productId });
+                }
+                else {
+                    // Normal toggle behavior
+                    this.onSelectProduct(sectionId, product || { id: productId });
+                }
+            };
+            modal.addEventListener('productSelected', this.productSelectedHandler);
+        }
+    }
+    disconnectedCallback() {
+        // Clean up event listener to prevent memory leaks
+        if (this.productSelectedHandler) {
+            const modal = this.host.querySelector('salla-multiple-bundle-product-options-modal');
+            if (modal) {
+                modal.removeEventListener('productSelected', this.productSelectedHandler);
+            }
+            this.productSelectedHandler = null;
+        }
+    }
+    render() {
+        return (h(Host, { key: 'faef370736cdde4ad6b8d1bfce7a5ae80a807f3c', class: "s-multiple-bundle-product-wrapper" }, h("div", { key: '66bfb5f5f5736cd7ea37b9e620079c0ec3399685', class: "s-multiple-bundle-product-wrapper-sections" }, this.sections.map((section, index) => {
+            const selectedCount = this.selectedProducts[section.id]?.size || 0;
+            return (h("salla-accordion", { key: section.id, collapsed: index === 0 ? false : true }, h("salla-accordion-head", null, this.renderAccordionHeader(section, selectedCount)), h("salla-accordion-body", null, h("salla-multiple-bundle-product-slider", { section: section, sectionIndex: index, selectedProducts: this.selectedProducts, onProductSelected: this.handleBundleSliderProductSelected, onProductOptionsSelected: this.handleBundleSliderProductOptionsSelected }))));
+        })), h("salla-multiple-bundle-product-options-modal", { key: 'ea258265b6cf53de022afcaeddf5f7c407706156' })));
+    }
+    get host() { return this; }
+    static get style() { return sallaMultipleBundleProductDetailsCss; }
+}, [0, "salla-multiple-bundle-product-details", {
+        "sections": [16],
+        "selectedProducts": [32]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-multiple-bundle-product-details", "salla-accordion", "salla-accordion-body", "salla-accordion-head", "salla-booking-field", "salla-button", "salla-color-picker", "salla-conditional-fields", "salla-datetime-picker", "salla-file-upload", "salla-loading", "salla-map", "salla-modal", "salla-multiple-bundle-product-options-modal", "salla-multiple-bundle-product-slider", "salla-product-options", "salla-progress-bar", "salla-skeleton", "salla-slider"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-multiple-bundle-product-details":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaMultipleBundleProductDetails);
+            }
+            break;
+        case "salla-accordion":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$i();
+            }
+            break;
+        case "salla-accordion-body":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$h();
+            }
+            break;
+        case "salla-accordion-head":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$g();
+            }
+            break;
+        case "salla-booking-field":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$f();
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$e();
+            }
+            break;
+        case "salla-color-picker":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$d();
+            }
+            break;
+        case "salla-conditional-fields":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$c();
+            }
+            break;
+        case "salla-datetime-picker":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$b();
+            }
+            break;
+        case "salla-file-upload":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$a();
+            }
+            break;
+        case "salla-loading":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$9();
+            }
+            break;
+        case "salla-map":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$8();
+            }
+            break;
+        case "salla-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$7();
+            }
+            break;
+        case "salla-multiple-bundle-product-options-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$6();
+            }
+            break;
+        case "salla-multiple-bundle-product-slider":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$5();
+            }
+            break;
+        case "salla-product-options":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$4();
+            }
+            break;
+        case "salla-progress-bar":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-skeleton":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+        case "salla-slider":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$1();
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaMultipleBundleProductDetails as S, defineCustomElement as d };

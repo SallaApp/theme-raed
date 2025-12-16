@@ -1,0 +1,140 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+
+const SallaConditionalFields = /*@__PURE__*/ proxyCustomElement(class SallaConditionalFields extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+    }
+    hideAllOptions(optionId) {
+        this.host.querySelectorAll(`[data-show-when^="options[${optionId}"]`).forEach((field) => {
+            field.classList.add('hidden');
+            this.hideAllOptions(field.dataset.optionId);
+            this.disableInputs(field);
+        });
+    }
+    disableInputs(field) {
+        field.querySelectorAll('[name]').forEach((input) => {
+            input.setAttribute('disabled', '');
+            input.removeAttribute('required');
+            if (input?.tagName?.toLowerCase() === 'select') {
+                input.value = '';
+            }
+            if (['checkbox'].includes(input.getAttribute('type')) && input.hasOwnProperty('checked')) {
+                // @ts-ignore
+                input.checked = false;
+            }
+        });
+    }
+    changeHandler(event) {
+        salla.event.emit('salla-onditional-fields::change', event);
+        salla.log('Received the change/input event: ', event);
+        if (!event.target ||
+            (!['SELECT', 'INPUT', 'TEXTAREA'].includes(event.target.tagName) &&
+                !['checkbox', 'radio', 'text'].includes(event.target.getAttribute('type')))) {
+            salla.log('Ignore the event because is not a supported input: ' + (event?.target?.tagName || 'N/A'));
+            return;
+        }
+        // For text inputs, debounce the handling to improve performance on mobile
+        const isTextInput = ['INPUT', 'TEXTAREA'].includes(event.target.tagName) &&
+            (!event.target.getAttribute('type') || event.target.getAttribute('type') === 'text');
+        if (isTextInput && event.type === 'input') {
+            clearTimeout(this.debounceTimeout);
+            this.debounceTimeout = setTimeout(() => {
+                this.processConditionalFields(event);
+            }, 300); // 300ms debounce for text inputs
+            return;
+        }
+        // Process immediately for change events and non-text inputs
+        this.processConditionalFields(event);
+    }
+    processConditionalFields(event) {
+        let optionId = event.target.name.replace('[]', '');
+        let isMultiple = event.target.getAttribute('type') === 'checkbox';
+        let isRadio = event.target.getAttribute('type') === 'radio';
+        let isTextInput = ['INPUT', 'TEXTAREA'].includes(event.target.tagName) &&
+            (!event.target.getAttribute('type') || event.target.getAttribute('type') === 'text');
+        salla.log('Trying to find all elements with condition:', `[data-show-when^="${optionId}"]`);
+        this.host.querySelectorAll(`[data-show-when^="${optionId}"]`)
+            .forEach((field) => {
+            let isEqual = !field?.dataset.showWhen.includes('!=');
+            let value = field?.dataset.showWhen.replace(/(.*)(=|!=)(.*)/gm, '$3').trim();
+            let isSelected;
+            if (isMultiple) {
+                let selectedValues = Array.from(this.host.querySelectorAll(`input[name="${event.target.name}"]:checked`), e => e?.value);
+                isSelected = selectedValues.includes(value.toString());
+            }
+            else if (isRadio) {
+                // Handle radio inputs.
+                isSelected = event.target.checked && event.target.value === value;
+            }
+            else if (isTextInput) {
+                // Handle text inputs and textareas - check if value matches or is not empty for boolean conditions
+                isSelected = value === event.target.value || (value.toLowerCase() === 'true' && event.target.value.trim() !== '');
+            }
+            else {
+                isSelected = value === event.target.value;
+            }
+            salla.log('The input is ', isMultiple ? 'Multiple' : isRadio ? 'Radio' : isTextInput ? 'Text' : 'Single', ' value:', isSelected);
+            let showTheInput = (isEqual && isSelected) || (!isEqual && !isSelected);
+            if (showTheInput) {
+                field.classList.remove('hidden');
+                field.querySelectorAll('[name]').forEach((input) => {
+                    input.removeAttribute('disabled');
+                    const closestProductOption = input.closest('.s-product-options-option');
+                    if (closestProductOption.dataset.optionRequired === 'true') {
+                        input.setAttribute('required', '');
+                    }
+                    if (input.getAttribute('type') === 'checkbox') {
+                        const checkboxes = Array.from(document.querySelectorAll(`input[type="checkbox"][name="${input.getAttribute('name')}"]`));
+                        const isAnyChecked = checkboxes.some((checkbox) => checkbox.checked);
+                        if (isAnyChecked) {
+                            checkboxes.forEach((checkbox) => {
+                                checkbox.removeAttribute('required');
+                            });
+                        }
+                    }
+                });
+            }
+            else {
+                this.hideAllOptions(field.dataset.optionId);
+                field.classList.add('hidden');
+                this.disableInputs(field);
+            }
+        });
+    }
+    componentDidRender() {
+        this.host.querySelectorAll(`[data-show-when]`).forEach((field) => {
+            // @ts-ignore
+            let optionName = field?.dataset?.showWhen.replace(/(.*)(=|!=)(.*)/gm, '$1').trim();
+            if (!optionName) {
+                return;
+            }
+            this.changeHandler({
+                target: this.host.querySelector('[name^="' + optionName + '"]')
+            });
+        });
+    }
+    render() {
+        return (h(Host, { key: 'af75ffed0725edefeb9e6fcd2f95bf9209f63dd0' }, h("slot", { key: 'b28f91555071a31d967d85ba7d693e16266bcc6c' })));
+    }
+    get host() { return this; }
+}, [4, "salla-conditional-fields", undefined, [[0, "change", "changeHandler"], [0, "input", "changeHandler"]]]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-conditional-fields"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-conditional-fields":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaConditionalFields);
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaConditionalFields as S, defineCustomElement as d };

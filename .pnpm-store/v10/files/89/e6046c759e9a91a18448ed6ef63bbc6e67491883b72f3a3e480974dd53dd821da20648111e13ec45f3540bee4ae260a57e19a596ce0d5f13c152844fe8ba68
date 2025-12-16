@@ -1,0 +1,542 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+import Star from "../../assets/svg/star.svg";
+import ShippingFast from "../../assets/svg/shipping-fast.svg";
+import CheckCircle2 from "../../assets/svg/check-circle2.svg";
+import Helper from "../../Helpers/Helper";
+import ImageIcon from "../../assets/svg/image.svg";
+import WhatsappIcon from "../../assets/svg/whatsapp2.svg";
+import MailIcon from "../../assets/svg/mail.svg";
+import anime from "animejs";
+export class SallaRatingModal {
+    constructor() {
+        this.hasError = false;
+        this.showContactWidget = true;
+        this.images = [];
+        this.productImages = {};
+        this.editItemImages = [];
+        this.contact_body = (store, id, customer) => salla.lang.get('pages.rating.contact_subject', { store, id, customer });
+        this.editMode = false;
+        this.defaultMode = false;
+        this.deleteMode = false;
+        this.shouldOpenDeleteModal = false;
+        this.editItem = null;
+        this.dragAndDropFilesLabel = salla.lang.get('common.uploader.drag_and_drop_files');
+        this.contactSubjectLabel = salla.lang.get('pages.rating.contact_subject');
+        this.editReviewLabel = salla.lang.get('pages.rating.edit_review');
+        this.allowedImagesTypesLabel = salla.lang.get('common.uploader.allowed_images_types');
+        this.addImagesLabel = salla.lang.get('pages.rating.add_images');
+        this.editImagesLabel = salla.lang.get('pages.rating.edit_images');
+        this.threeImagesMax = salla.lang.get('common.uploader.max_three_images');
+        this.areYouSureLabel = salla.lang.get('pages.rating.are_you_sure_you_want_to_delete_review');
+        this.confirmDeletionLabel = salla.lang.get('pages.rating.confirm_deletion');
+        this.cancelLabel = salla.lang.get('common.elements.cancel');
+        this.confirmDeleteBtn = salla.lang.get('common.elements.confirm_delete');
+        this.updatedSuccessfullyLabel = salla.lang.get("pages.rating.review_updated_successfully");
+        this.deletedSuccessfullyLabel = salla.lang.get("pages.rating.review_deleted_successfully");
+        this.contactUsLabel = salla.lang.get('blocks.footer.social');
+        this.allowAttachImages = salla.config.get('store.settings.rating.allow_attach_images');
+        this.allowContactSupport = salla.config.get('store.settings.rating.allow_contact_support');
+        this.contentRefs = [];
+        this.hiddenInputs = [];
+        this.isOpen = [];
+        this.stepsCount = 0;
+        this.currentIndex = 0;
+        this.submitted = [];
+        this.MAX_UPLOAD_LIMIT = 3;
+        this.onOpen = (index) => {
+            return new Promise((resolve) => {
+                anime({
+                    targets: this.contentRefs[index],
+                    duration: 100,
+                    height: this.contentRefs[index].scrollHeight,
+                    opacity: [0, 1],
+                    easing: 'easeOutQuart',
+                    complete: () => resolve(),
+                });
+            });
+        };
+        this.onClose = (index) => {
+            return new Promise((resolve) => {
+                anime({
+                    targets: this.contentRefs[index],
+                    duration: 100,
+                    height: 0,
+                    opacity: [1, 0],
+                    easing: 'easeOutQuart',
+                    complete: () => resolve(),
+                });
+            });
+        };
+        this.toggleUploader = async (index) => {
+            this.isOpen[index] = !this.isOpen[index];
+            Helper.toggleElementClassIf(this.contentRefs[index], 'is-closed', 'is-opened', () => !this.isOpen[index]);
+            await (this.isOpen[index] ? this.onOpen(index) : this.onClose(index));
+            await new Promise((resolve) => setTimeout(resolve, 101));
+            if (this.body && this.currentTab) {
+                setTimeout(() => this.body.setAttribute('style', `height:${this.currentTab.offsetHeight + (this.editMode ? 60 : 0)}px`));
+            }
+        };
+        salla.onReady(() => {
+            this.orderId = salla.config.get('page.id');
+        });
+        salla.lang.onLoaded(() => {
+            this.contactUsLabel = salla.lang.get('blocks.footer.social');
+            const setNestedAsync = (lang, key, value) => {
+                return new Promise((resolve) => {
+                    salla.helpers.setNested(salla.lang.messages[lang], key, value);
+                    resolve(true);
+                });
+            };
+            const setTranslations = async () => {
+                await setNestedAsync('ar.trans', 'common.uploader.drag_and_drop_files', 'اسحب الملفات وأفلتها هنا');
+                await setNestedAsync('en.trans', 'common.uploader.drag_and_drop_files', 'Drag and drop files here');
+                await setNestedAsync('ar.trans', 'common.uploader.allowed_images_types', ' .jpg أو jpeg أو png يُسمح بإضافة صور بصيغة');
+                await setNestedAsync('en.trans', 'common.uploader.allowed_images_types', 'Images in jpg, jpeg, or png format are allowed.');
+                await setNestedAsync('ar.trans', 'pages.rating.add_images', 'اضافة صور');
+                await setNestedAsync('en.trans', 'pages.rating.add_images', 'Add Images');
+                await setNestedAsync('ar.trans', 'pages.rating.edit_images', 'تعديل الصور');
+                await setNestedAsync('en.trans', 'pages.rating.edit_images', 'Edit Images');
+                await setNestedAsync('ar.trans', 'pages.rating.edit_review', 'تعديل التقييم');
+                await setNestedAsync('en.trans', 'pages.rating.edit_review', 'Edit review');
+                await setNestedAsync('ar.trans', 'pages.rating.confirm_deletion', 'تأكيد حذف التقييم');
+                await setNestedAsync('en.trans', 'pages.rating.confirm_deletion', 'Confirm review deletion');
+                await setNestedAsync('ar.trans', 'pages.rating.are_you_sure_you_want_to_delete_review', 'هل أنت متأكد من حذف تقييمك؟');
+                await setNestedAsync('en.trans', 'pages.rating.are_you_sure_you_want_to_delete_review', 'Are you sure you want to delete your review?');
+                await setNestedAsync('ar.trans', 'pages.rating.review_updated_successfully', 'تم تعديل التقييم بنجاح');
+                await setNestedAsync('en.trans', 'pages.rating.review_updated_successfully', 'The review has been successfully updated.');
+                await setNestedAsync('ar.trans', 'pages.rating.review_deleted_successfully', 'تم حذف التقييم بنجاح');
+                await setNestedAsync('en.trans', 'pages.rating.review_deleted_successfully', 'The review has been successfully deleted.');
+                await setNestedAsync('ar.trans', 'pages.rating.images_count', 'الصور ( :current من أصل :total )');
+                await setNestedAsync('en.trans', 'pages.rating.images_count', 'Images ( :current of :total )');
+                await setNestedAsync('ar.trans', 'common.uploader.max_three_images', `.أضف ${this.MAX_UPLOAD_LIMIT} صور كحد أقصى`);
+                await setNestedAsync('en.trans', 'common.uploader.max_three_images', `Add up to ${this.MAX_UPLOAD_LIMIT} images maximum.`);
+                await setNestedAsync('ar.trans', 'common.elements.confirm_delete', 'تأكيد الحذف');
+                await setNestedAsync('en.trans', 'common.elements.confirm_delete', 'Confirm deletion');
+                this.dragAndDropFilesLabel = salla.lang.get('common.uploader.drag_and_drop_files');
+                this.allowedImagesTypesLabel = salla.lang.get('common.uploader.allowed_images_types');
+                this.addImagesLabel = salla.lang.get('pages.rating.add_images');
+                this.threeImagesMax = salla.lang.get('common.uploader.max_three_images');
+                this.contactSubjectLabel = salla.lang.get('pages.rating.contact_subject');
+                this.editReviewLabel = salla.lang.get('pages.rating.edit_review');
+                this.editImagesLabel = salla.lang.get('pages.rating.edit_images');
+                this.areYouSureLabel = salla.lang.get('pages.rating.are_you_sure_you_want_to_delete_review');
+                this.confirmDeletionLabel = salla.lang.get('pages.rating.confirm_deletion');
+                this.cancelLabel = salla.lang.get("common.elements.cancel");
+                this.updatedSuccessfullyLabel = salla.lang.get("pages.rating.review_updated_successfully");
+                this.deletedSuccessfullyLabel = salla.lang.get("pages.rating.review_deleted_successfully");
+                this.confirmDeleteBtn = salla.lang.get("common.elements.confirm_delete");
+                this.contact_body = (store, id, customer) => salla.lang.get('pages.rating.contact_body', { store, id, customer });
+            };
+            setTranslations();
+        });
+    }
+    /**
+     * Show the rating modal
+     */
+    async open() {
+        this.defaultMode = true;
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                this.modal.open().then(() => this.order || salla.api.withoutNotifier(() => salla.rating.api.order(this.orderId ? this.orderId : salla.config.get('page.id'))).then(res => this.order = res.data))
+                    .then(() => this.modal.setTitle(`${salla.lang.get('pages.rating.rate_order')} <span class="unicode">(#${this.order.id})</span>`))
+                    .then(() => {
+                    // Initialize productImages for all products
+                    const initialImages = {};
+                    if (this.order?.products) {
+                        for (const item of this.order.products) {
+                            initialImages[item.product.id] = [];
+                        }
+                    }
+                    this.productImages = initialImages;
+                })
+                    .then(() => this.modal.stopLoading())
+                    .then(() => this.stepsCount = [this.order.testimonials_enabled, this.order.products_enabled, this.order.shipping_enabled].filter(enabled => enabled).length)
+                    .then(() => setTimeout(() => this.handleWizard(), 100))
+                    .catch(e => {
+                    resolve(false);
+                    this.hasError = true;
+                    this.errorMessage = e.response?.data?.error?.message || e.response?.data;
+                    this.modal.stopLoading();
+                });
+                resolve(true);
+            }, 50);
+        });
+    }
+    async openEditModal(params) {
+        this.defaultMode = false;
+        this.editMode = true;
+        this.editType = params.type;
+        this.editFeedbackId = params.feedback_id;
+        try {
+            await this.fetchEditItem(params.feedback_id);
+            this.editModal.open();
+        }
+        catch (e) {
+            this.hasError = true;
+            this.errorMessage = e.response?.data?.error?.message || e.response?.data;
+        }
+    }
+    async fetchEditItem(feedbackId) {
+        const endpoint = `rating/${feedbackId}/show`;
+        const response = await salla.api.request(endpoint);
+        this.editItem = response.data;
+        if (this.allowAttachImages && this.editType == "product" && this.editItem.images.length) {
+            this.editItemImages = this.editItem.images.map(img => {
+                return { id: `${Math.floor(100 + Math.random() * 900)}`, url: img };
+            });
+        }
+    }
+    async editReview() {
+        const data = {};
+        this.editModal.querySelectorAll('[name]').forEach((input) => {
+            const inputData = salla.helpers.inputData(input.name, input.value, data);
+            data[inputData.name] = inputData.value;
+        });
+        data.images && (data.images = data.images.split(','));
+        const endpoint = `rating/${this.editFeedbackId}`;
+        await salla.api.request(endpoint, data, 'put').then((res) => {
+            this.editModal.close();
+            salla.notify.success(res.message || this.updatedSuccessfullyLabel);
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        });
+    }
+    async openDeleteModal(params) {
+        this.defaultMode = false;
+        this.deleteMode = true;
+        this.deleteFeedbackId = params.feedback_id;
+        this.shouldOpenDeleteModal = true;
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                this.deleteModal.open().then(() => resolve(true));
+            }, 50);
+        });
+    }
+    async deleteReview() {
+        const endpoint = `rating/${this.deleteFeedbackId}`;
+        await salla.api.request(endpoint, null, 'delete').then(() => {
+            this.deleteModal.close();
+            salla.notify.success(this.deletedSuccessfullyLabel);
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        });
+    }
+    /**
+     * Show the rating modal
+     */
+    async close() {
+        return this.modal.close();
+    }
+    // handle wizard
+    handleWizard() {
+        this.steps = this.modal.querySelectorAll(".s-rating-modal-step");
+        this.dots = this.modal.querySelectorAll(".s-rating-modal-step-dot");
+        this.showActiveStep();
+    }
+    showActiveStep(current = null) {
+        this.currentTab = current || this.steps[this.currentIndex];
+        Helper.toggleClassIf('.s-rating-modal-step-dot', 's-rating-modal-bg-gray', 's-rating-modal-bg-primary', dot => dot != this.dots[this.currentIndex])
+            .toggleClassIf('.s-rating-modal-step', 's-rating-modal-active', 's-rating-modal-hidden', tab => tab == this.currentTab);
+        if (this.currentIndex !== 0) {
+            // the animation
+            Helper.toggleElementClassIf(this.currentTab, 's-rating-modal-unactive', 's-rating-modal-hidden', () => true);
+            setTimeout(() => Helper.toggleElementClassIf(this.currentTab, 's-rating-modal-active', 's-rating-modal-unactive', () => true), 300);
+        }
+        // Btn text
+        const nextType = this.steps[this.currentIndex + 1]?.dataset.type;
+        this.nextBtn?.setText(nextType ? `${salla.lang.get('pages.rating.rate')} ${salla.lang.get(`pages.rating.${nextType}`)}`
+            : salla.lang.get('pages.rating.send_ratings'));
+        setTimeout(() => this.body?.setAttribute('style', `height:${this.currentTab?.offsetHeight}px`));
+    }
+    previousTab() {
+        this.currentIndex > 0 && this.currentIndex--;
+        Helper.toggleElementClassIf(this.backBtn, 's-rating-modal-unvisiable', 'block', () => this.currentIndex == 0);
+        this.showActiveStep();
+    }
+    submit() {
+        this.submittedBefore() || this.validate();
+        salla.config.canLeave = false;
+        this.nextBtn.load()
+            .then(() => this.submittedBefore() || this.sendFeedback())
+            .then(() => this.currentTab.querySelectorAll('[name],.s-rating-modal-btn-star').forEach(el => el.setAttribute('disabled', '')))
+            .then(() => this.currentIndex < this.stepsCount && this.currentIndex++)
+            .then(() => this.showActiveStep())
+            .then(() => Helper.toggleClassIf('#prev-btn', 'block', 's-rating-modal-unvisiable', () => true))
+            .finally(() => {
+            this.nextBtn.stop();
+            salla.config.canLeave = true;
+            if (this.currentIndex == this.stepsCount) {
+                this.showThankYou();
+                this.showContactWidget = false;
+            }
+            // this.modal.isClosable = false;
+        });
+    }
+    submittedBefore() {
+        return this.submitted.includes(this.currentIndex);
+    }
+    validate(rating = null, type = null) {
+        if (!rating && this.currentTab.dataset.type === 'products') {
+            const ratingForms = this.currentTab.querySelectorAll('.rating-outer-form');
+            ratingForms.forEach(ratingForm => this.validate(ratingForm, 'product'));
+            return;
+        }
+        rating = rating || this.currentTab;
+        const stars = rating.querySelector('.rating_hidden_input').value;
+        const validationMessage = rating.querySelector('.s-rating-modal-validation-msg');
+        type = type || rating.dataset.type;
+        if (!stars) {
+            validationMessage.innerHTML = salla.lang.get(`pages.rating.rate_${type}_stars`).replace(' (:item)', '');
+            throw new Error(validationMessage.innerHTML);
+        }
+        validationMessage.innerHTML = '';
+    }
+    sendFeedback() {
+        const data = {};
+        this.currentTab.querySelectorAll('[name]').forEach((input) => {
+            //decode names like `<input name="jamal[inner]" value="hi">` to be {name:jamal, value: {inner:"hi"}}
+            const inputData = salla.helpers.inputData(input.name, input.value, data);
+            data[inputData.name] = inputData.value;
+        });
+        if (this.allowAttachImages && data.products) {
+            for (let productIndex in data.products) {
+                if (data.products[productIndex].images) {
+                    data.products[productIndex].images = data.products[productIndex].images.split(',');
+                }
+            }
+        }
+        if (Object.keys(data).length == 0) {
+            return;
+        }
+        data.order_id = this.orderId;
+        data.type = this.currentTab.dataset.type;
+        this.submitted.push(this.currentIndex);
+        return salla.rating.api[this.currentTab.dataset.type](data);
+    }
+    showThankYou() {
+        let seconds = 10;
+        let timeToClose = setInterval(() => {
+            this.thanksTime.innerHTML = `00:0${seconds--}`;
+            if (seconds > 0) {
+                return;
+            }
+            clearInterval(timeToClose);
+            this.thanksTime.remove();
+            this.close().then(() => window.location.reload());
+        }, 1000);
+        this.modal.querySelector('.s-rating-modal-footer').classList.add('s-rating-modal-unvisiable');
+        this.showActiveStep(this.thanksTab);
+    }
+    getFilepondPlaceholder() {
+        return `<div class="s-rating-modal-filepond-placeholder"><span class="s-rating-modal-filepond-placeholder-icon">${ImageIcon}</span><p class="s-rating-modal-filepond-placeholder-text">${this.dragAndDropFilesLabel}<br>
+    <span> ${this.allowedImagesTypesLabel} <br> ${this.threeImagesMax} </span></p></div>`;
+    }
+    getCustomerName() {
+        let firstName = salla.config.get('user.first_name') || salla.storage.get('user.first_name') || '';
+        let lasName = salla.config.get('user.last_name') || salla.storage.get('user.last_name') || '';
+        return `${firstName} ${lasName}`;
+    }
+    handleSendEmail() {
+        const subject = `${this.contactSubjectLabel} #${this.order.id}`;
+        const body = this.contact_body(salla.config.get('store.name'), this.order.id, this.getCustomerName());
+        const mailtoLink = `mailto:${salla.config.get('store.contacts.email')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.open(mailtoLink, '_blank');
+    }
+    handleSendWhatsApp() {
+        const body = this.contact_body(salla.config.get('store.name'), this.order.id, this.getCustomerName());
+        const whatsappLink = `https://wa.me/${salla.config.get('store.contacts.whatsapp')}?text=${encodeURIComponent(body)}`;
+        window.open(whatsappLink, '_blank');
+    }
+    resetData(isOpen) {
+        if (isOpen.detail) {
+            return;
+        }
+        this.modal?.close();
+        this.editItem = null;
+        this.editItemImages = [];
+        this.hiddenInputs[1] && (this.hiddenInputs[1].value = '');
+        this.deleteFeedbackId = null;
+        this.editFeedbackId = null;
+        this.shouldOpenDeleteModal = false;
+        this.editMode = false;
+        this.deleteMode = false;
+        this.defaultMode = false;
+    }
+    getDeleteModal() {
+        return (h("salla-modal", { ref: modal => this.deleteModal = modal, width: "xs", onModalVisibilityChanged: (isOpen) => this.resetData(isOpen) }, h("div", { class: "s-rating-modal-delete-wrapper", ref: el => this.body = el }, h("h3", null, this.confirmDeletionLabel), h("p", null, this.areYouSureLabel), h("div", { class: "s-rating-modal-delete-actions" }, h("salla-button", { loaderPosition: 'center', onClick: () => this.deleteReview() }, this.confirmDeleteBtn), h("salla-button", { color: 'danger', fill: 'outline', onClick: () => this.deleteModal.close() }, this.cancelLabel)))));
+    }
+    renderUploadedImagesCount(productId) {
+        // In edit mode, use editItemImages; in default mode, use productImages
+        const imageCount = this.editMode ? this.editItemImages.length : (this.productImages[productId] || []).length;
+        return (h("span", { class: "s-rating-modal-upload-count" }, salla.lang.choice("pages.rating.images_count", imageCount, { current: imageCount, total: this.MAX_UPLOAD_LIMIT })));
+    }
+    getEditModal() {
+        return (h("salla-modal", { ref: modal => this.editModal = modal, width: "md", onModalVisibilityChanged: (isOpen) => this.resetData(isOpen) }, h("div", { class: "s-rating-modal-edit-wrapper", ref: el => this.body = el }, this.editType === "store" && this.editItem ? (h("div", { class: "rating-outer-form s-rating-modal-step-wrap s-rating-modal-step", "data-type": "store", ref: currentTab => this.currentTab = currentTab }, h("div", { class: "s-rating-modal-rounded-icon" }, h("img", { src: salla.config.get('store.logo', 'https://assets.salla.sa/cp/assets/images/logo-new.png'), alt: "store name", class: "s-rating-modal-store-logo" })), h("h2", { class: "s-rating-modal-title" }, salla.lang.get('pages.rating.rate_the_store')), h("div", { class: "s-rating-modal-stars-company" }, h("salla-rating-stars", { withLabel: true, size: "large", editable: true, value: this.editItem.stars })), h("textarea", { name: "content", value: this.editItem.content, class: "s-rating-modal-comment", placeholder: salla.lang.get('pages.rating.write_store_rate') }), h("small", { class: "s-rating-modal-validation-msg" }))) : null, this.editType === "shipping" && this.editItem ? (h("div", { class: "rating-outer-form s-rating-modal-step-wrap s-rating-modal-step", "data-type": "shipping", ref: currentTab => this.currentTab = currentTab }, this.editItem.shipping.logo
+            ? h("div", { class: "s-rating-modal-rounded-icon" }, h("img", { src: this.editItem.shipping.logo, class: "s-rating-modal-shipping-logo", alt: this.editItem.shipping.name }))
+            : h("span", { class: "s-rating-modal-icon", innerHTML: ShippingFast }), h("div", { class: "s-rating-modal-title" }, " ", `${salla.lang.get('pages.rating.rate_shipping')} ${this.editItem.shipping.name}`), h("div", { class: "s-rating-modal-stars-company" }, h("salla-rating-stars", { withLabel: true, size: "large", editable: true, value: this.editItem.stars })), h("textarea", { name: "content", class: "s-rating-modal-comment", value: this.editItem.content, placeholder: salla.lang.get('pages.rating.write_shipping_rate') }), h("small", { class: "s-rating-modal-validation-msg" }))) : null, this.editType == "product" && this.editItem ? h("section", { class: "s-rating-modal-step", "data-type": "products", ref: currentTab => this.currentTab = currentTab }, h("div", { class: "s-rating-modal-product" }, h("div", { class: "rating-outer-form", "data-stars-error": salla.lang.get('pages.rating.rate_product_stars') }, h("div", { class: "s-rating-modal-product-img-wrap" }, h("img", { src: this.editItem.product.image.url, alt: this.editItem.product.name, class: "s-rating-modal-product-img" })), h("div", { class: "s-rating-modal-product-details" }, h("div", { class: "s-rating-modal-product-details-main" }, h("div", null, h("h3", { class: "s-rating-modal-product-title" }, " ", this.editItem.product.name), h("div", { class: "s-rating-modal-stars-product" }, h("salla-rating-stars", { withLabel: true, size: "small", editable: true, value: this.editItem.stars }))), this.allowAttachImages && h("salla-button", { class: "s-comments-item-like-btn mt-0", loaderPosition: 'center', fill: 'outline', size: 'small', onClick: () => this.toggleUploader(1) }, h("span", null, this.editItemImages.length ? this.editImagesLabel : this.addImagesLabel), h("span", { innerHTML: ImageIcon }))), h("textarea", { value: this.editItem.content, placeholder: salla.lang.get('pages.rating.write_product_rate'), name: "content", class: "s-rating-modal-comment" }), h("small", { class: "s-rating-modal-validation-msg" }))), this.allowAttachImages && (h("div", { class: "s-rating-modal-uploader is-closed", ref: (el) => (this.contentRefs[1] = el) }, h("salla-file-upload", { name: "images", allowMultiple: true, maxFilesCount: this.MAX_UPLOAD_LIMIT, imagePreviewHeight: 117, filePosterHeight: 117, "instant-upload": true, type: "feedback", files: JSON.stringify(this.editItemImages), payloadName: "files[]", id: `file-${this.editItem.product.id}`, title: this.editItem.product.name, instantUpload: true, accept: "image/png, image/jpeg, image/jpg", url: salla.url.api('upload'), onUploaded: (e) => {
+                this.editItemImages = [...this.editItemImages, e.detail];
+                this.hiddenInputs[1].value = this.editItemImages.map(img => img.url).join();
+            }, onRemoved: (e) => {
+                const removedId = e.detail;
+                if (!removedId)
+                    return;
+                this.editItemImages = this.editItemImages.filter(img => img.id !== removedId);
+                this.hiddenInputs[1].value = this.editItemImages.map(img => img.url).join();
+            }, labelIdle: this.getFilepondPlaceholder() }), h("input", { type: "hidden", name: "images", value: this.editItem.images.join(','), ref: (el) => (this.hiddenInputs[1] = el) }), this.renderUploadedImagesCount(this.editItem.product.id)))))
+            : null, h("div", { class: "s-rating-modal-footer s-rating-modal-footer-end" }, h("salla-button", { "loader-position": 'center', onClick: () => this.editReview() }, this.editReviewLabel)))));
+    }
+    render() {
+        if (this.deleteMode) {
+            return h(Host, { class: "s-rating-modal" }, this.getDeleteModal());
+        }
+        if (this.editMode) {
+            return h(Host, { class: "s-rating-modal" }, this.getEditModal());
+        }
+        if (this.defaultMode) {
+            return (h(Host, { class: "s-rating-modal" }, h("salla-modal", { class: "s-rating-modal-wrap", onModalVisibilityChanged: (isOpen) => this.resetData(isOpen), isLoading: true, width: "md", ref: modal => this.modal = modal }, h("div", { slot: 'loading' }, h("div", { class: "s-rating-modal-skeleton" }, h("salla-skeleton", { type: 'circle', height: '80px', width: '80px' }), h("salla-skeleton", { height: '15px', width: '60%' }), h("salla-skeleton", { height: '10px', width: '30%' }), h("div", { class: "s-rating-modal-skeleton-stars" }, [...Array(5)].map((v) => h("div", { key: v, innerHTML: Star }))), h("salla-skeleton", { height: '100px', width: '100%' }), h("div", { class: "s-rating-modal-skeleton-footer" }, h("salla-skeleton", { height: '40px', width: '30%' })))), !this.hasError && this.order
+                ? [h("div", { class: "s-rating-modal-wrapper", ref: el => this.body = el }, this.order?.testimonials_enabled ?
+                        h("div", { class: "rating-outer-form s-rating-modal-step-wrap s-rating-modal-step s-rating-modal-hidden", "data-type": "store" }, h("div", { class: "s-rating-modal-rounded-icon" }, h("img", { src: salla.config.get('store.logo', 'https://assets.salla.sa/cp/assets/images/logo-new.png'), alt: "store name", class: "s-rating-modal-store-logo" })), h("h2", { class: "s-rating-modal-title" }, salla.lang.get('pages.rating.rate_the_store')), h("div", { class: "s-rating-modal-stars-company" }, h("salla-rating-stars", { withLabel: true, size: "large" })), h("textarea", { name: "comment", class: "s-rating-modal-comment", placeholder: salla.lang.get('pages.rating.write_store_rate') }), h("small", { class: "s-rating-modal-validation-msg" }))
+                        : '', this.order.products_enabled
+                        ? h("section", { class: "s-rating-modal-step s-rating-modal-hidden", "data-type": "products" }, this.order.products.map((item, index) => h("div", { class: "s-rating-modal-product", key: index }, h("div", { class: "rating-outer-form", "data-stars-error": salla.lang.get('pages.rating.rate_product_stars') }, h("div", { class: "s-rating-modal-product-img-wrap" }, h("img", { src: item.product.thumbnail, alt: item.product.name, class: "s-rating-modal-product-img" })), h("div", { class: "s-rating-modal-product-details" }, h("div", { class: "s-rating-modal-product-details-main" }, h("div", null, h("h3", { class: "s-rating-modal-product-title" }, " ", item.product.name), h("div", { class: "s-rating-modal-stars-product" }, h("salla-rating-stars", { withLabel: true, size: "small", name: `products[${index}][rating]` }))), this.allowAttachImages && h("salla-button", { class: "s-comments-item-like-btn mt-0", loaderPosition: 'center', fill: 'outline', size: 'small', onClick: () => this.toggleUploader(index) }, h("span", null, this.addImagesLabel), h("span", { innerHTML: ImageIcon }))), h("input", { type: "hidden", name: `products[${index}][product_id]`, value: item.product.id }), h("textarea", { placeholder: salla.lang.get('pages.rating.write_product_rate'), name: `products[${index}][comment]`, class: "s-rating-modal-comment" }), h("small", { class: "s-rating-modal-validation-msg" }))), this.allowAttachImages && (h("div", { class: "s-rating-modal-uploader is-closed", ref: (el) => (this.contentRefs[index] = el) }, h("salla-file-upload", { name: "image", maxFilesCount: this.MAX_UPLOAD_LIMIT, imagePreviewHeight: 117, "instant-upload": true, type: "feedback", payloadName: "files[]", id: `file-${item.product.id}`, title: item.product.name, allowMultiple: true, instantUpload: true, accept: "image/png, image/jpeg, image/jpg", url: salla.url.api('upload'), onUploaded: (e) => {
+                                this.productImages = {
+                                    ...this.productImages,
+                                    [item.product.id]: [...(this.productImages[item.product.id] || []), e.detail]
+                                };
+                                this.hiddenInputs[index].value = this.productImages[item.product.id].map(img => img.url).join(',');
+                            }, onRemoved: (e) => {
+                                const removedId = e.detail;
+                                if (!removedId || !this.productImages[item.product.id])
+                                    return;
+                                this.productImages = {
+                                    ...this.productImages,
+                                    [item.product.id]: this.productImages[item.product.id].filter(img => img.id !== removedId)
+                                };
+                                this.hiddenInputs[index].value = this.productImages[item.product.id].map(img => img.url).join(',');
+                            }, labelIdle: this.getFilepondPlaceholder() }), h("input", { type: "hidden", name: `products[${index}][images]`, value: (this.productImages[item.product.id] || []).map(img => img.url).join(','), ref: (el) => (this.hiddenInputs[index] = el) }), this.renderUploadedImagesCount(item.product.id))))))
+                        : '', this.order.shipping_enabled && this.order.shipping?.company
+                        ? h("div", { class: "rating-outer-form s-rating-modal-step-wrap s-rating-modal-step s-rating-modal-hidden", "data-type": "shipping" }, h("input", { type: "hidden", name: "shipping_company_id", value: this.order.shipping.company.id }), this.order.shipping.company.logo
+                            ? h("div", { class: "s-rating-modal-rounded-icon" }, h("img", { src: this.order.shipping.company.logo, class: "s-rating-modal-shipping-logo", alt: this.order.shipping.company.name }))
+                            : h("span", { class: "s-rating-modal-icon", innerHTML: ShippingFast }), h("div", { class: "s-rating-modal-title" }, " ", `${salla.lang.get('pages.rating.rate_shipping')} ${this.order.shipping.company.name}`), h("div", { class: "s-rating-modal-stars-company" }, h("salla-rating-stars", { withLabel: true, size: "large" })), h("textarea", { name: "comment", class: "s-rating-modal-comment", placeholder: salla.lang.get('pages.rating.write_shipping_rate') }), h("small", { class: "s-rating-modal-validation-msg" }))
+                        : '', h("div", { class: "s-rating-modal-thanks s-rating-modal-hidden", ref: el => this.thanksTab = el }, h("span", { class: "s-rating-modal-icon", innerHTML: CheckCircle2 }), h("h3", { class: "s-rating-modal-thanks-title" }, salla.lang.get('pages.rating.thanks')), h("div", { class: "s-rating-modal-thanks-msg", innerHTML: this.order.thanks_message }), h("time", { class: "s-rating-modal-thanks-time", ref: el => this.thanksTime = el }))), this.allowContactSupport && this.showContactWidget && (salla.config.get('store.contacts.whatsapp') || salla.config.get('store.contacts.email')) ? h("div", { class: "s-rating-modal-contact" }, h("p", null, this.contactUsLabel), h("div", { class: "s-rating-modal-contact-icons" }, salla.config.get('store.contacts.whatsapp') && h("span", { onClick: () => this.handleSendWhatsApp(), innerHTML: WhatsappIcon }), salla.config.get('store.contacts.email') && h("span", { onClick: () => this.handleSendEmail(), innerHTML: MailIcon }))) : '', h("div", { class: "s-rating-modal-footer" }, h("button", { ref: el => this.backBtn = el, onClick: () => this.previousTab(), class: "s-rating-modal-btn s-rating-modal-unvisiable" }, salla.lang.get('common.elements.back')), this.stepsCount > 1 ? h("ul", { class: "s-rating-modal-dots" }, [0, 1, 2].slice(0, this.stepsCount).map((v) => h("li", { key: v, class: 's-rating-modal-bg-gray s-rating-modal-step-dot' }))) : '', h("salla-button", { "loader-position": 'center', ref: el => this.nextBtn = el, onClick: () => this.submit() }, salla.lang.get('common.elements.next')))]
+                : h("salla-placeholder", { alignment: "center" }))));
+        }
+    }
+    componentWillLoad() {
+        salla.event.on('rating::open', () => this.open());
+        salla.event.on('rating::edit', (params) => this.openEditModal(params));
+        salla.event.on('rating::delete', (params) => this.openDeleteModal(params));
+    }
+    componentDidLoad() {
+        salla.event.dispatch('rating::ready', this);
+    }
+    static get is() { return "salla-rating-modal"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-rating-modal.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-rating-modal.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "orderId": {
+                "type": "number",
+                "attribute": "order-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The order id, to rate on its products & shipping"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "order": {},
+            "hasError": {},
+            "showContactWidget": {},
+            "errorMessage": {},
+            "images": {},
+            "productImages": {},
+            "editItemImages": {},
+            "contact_body": {},
+            "editMode": {},
+            "defaultMode": {},
+            "deleteMode": {},
+            "shouldOpenDeleteModal": {},
+            "editType": {},
+            "editFeedbackId": {},
+            "deleteFeedbackId": {},
+            "editItem": {}
+        };
+    }
+    static get methods() {
+        return {
+            "open": {
+                "complexType": {
+                    "signature": "() => Promise<unknown>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "Record": {
+                            "location": "global",
+                            "id": "global::Record"
+                        },
+                        "Array": {
+                            "location": "global",
+                            "id": "global::Array"
+                        }
+                    },
+                    "return": "Promise<unknown>"
+                },
+                "docs": {
+                    "text": "Show the rating modal",
+                    "tags": []
+                }
+            },
+            "close": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "Show the rating modal",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

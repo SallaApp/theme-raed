@@ -1,0 +1,403 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+import "@salla.sa/applepay/src/index";
+export class SallaQuickBuy {
+    constructor() {
+        /**
+         * Button type.
+         *
+         * @type {string}
+         * @default buy
+         **/
+        this.type = 'buy';
+        /**
+         * Product options, if is empty will get the data from the document.querySelector('salla-product-options[product-id="X"]')
+         *
+         * @type {object}
+         * @default {}
+         */
+        this.options = {};
+        this.quickBuy = salla.lang.get('pages.products.buy_now');
+        salla.lang.onLoaded(() => {
+            this.quickBuy = salla.lang.get('pages.products.buy_now');
+        });
+    }
+    async quickBuyHandler() {
+        if (salla.config.isGuest()) {
+            // todo (low) :: find a way to re-fire the method after success
+            let afterLoginEvent = "salla-quick-buy::user.logged-in";
+            salla.event.on(afterLoginEvent, () => this.settlePayment());
+            salla.api.auth.setAfterLoginEvent(afterLoginEvent);
+            return salla.auth.event.dispatch('login::open', { withoutReload: true });
+        }
+        await this.settlePayment();
+    }
+    async settlePayment() {
+        let optionsElement = document.querySelector(`salla-product-options[product-id="${this.productId}"]`);
+        //make sure all the required options are selected
+        if (optionsElement && !await optionsElement.reportValidity()) {
+            return salla.error(salla.lang.get('common.messages.required_fields'));
+        }
+        //use this way to get quantity too
+        let data = this.host.getElementSallaData();
+        // if the store doesn't have Apple Pay , just create a cart and then redirect to check out page
+        if (!this.isApplePayActive) {
+            // return salla.product.buyNow(this.productId, data);
+            return salla.api.request('checkout/quick-purchase/' + this.productId, data, 'post')
+                .then(resp => {
+                if (resp.data.redirect) {
+                    window.location.href = resp.data.redirect;
+                }
+                return resp;
+            });
+        }
+        data.is_applepay = true;
+        if ('append' in data) {
+            data.append('is_applepay', true);
+        }
+        // noinspection TypeScriptValidateJSTypes
+        salla.event.dispatch('payments::apple-pay.start-transaction', {
+            amount: this.amount, // 1000
+            currency: this.currency || 'SAR', // SAR
+            requiredShippingContactFields: this.isRequireShipping ? ['postalAddress'] : undefined,
+            shippingMethods: this.isRequireShipping ? [] : undefined,
+            supportedNetworks: salla.config.get('store.settings.buy_now.networks'),
+            supportedCountries: salla.config.get('store.settings.buy_now.countries'),
+            countryCode: salla.config.get('store.store_country') || 'SA',
+            validateMerchant: {
+                url: salla.url.get('checkout/applepay/validate'),
+                onSuccess: (response) => {
+                    if (this.applePayOnly && !this.productId) { // the cart is not passes
+                        if (!this.cartId) {
+                            salla.logger.warn('🍏 Pay: trying to create applePay transaction without cartId/ProductId !');
+                            return Promise.resolve(response);
+                        }
+                        window.SallaApplePay.id = this.cartId;
+                        salla.log('🍏 Pay: create checkout success: with id #' + this.cartId);
+                        return Promise.resolve(response);
+                    }
+                    return salla.api.request('checkout/quick-purchase/' + this.productId, typeof data == 'object' ? data : undefined, 'post', {}).then(response => {
+                        // if is redirect url returned for any reason, lets redirect the user to check out
+                        if (response?.data?.redirect) {
+                            salla.log('🍏 Pay: create checkout success: redirect exits, go to checkout page');
+                            window.location.href = response.data.redirect.url;
+                            return response;
+                        }
+                        // the cart is not ready to complete apply pay session
+                        if (!response?.data?.id) {
+                            salla.logger.warn('🍏 Pay: create checkout success: No id, or redirect');
+                            return response;
+                        }
+                        window.SallaApplePay.id = response.data.id;
+                        salla.log('🍏 Pay: create checkout success: with id #' + window.SallaApplePay.id);
+                    });
+                }
+            },
+            authorized: {
+                // submit checkout route
+                url: salla.url.get('checkout/{id}/payments/submit'),
+                onFailed: (response) => {
+                    window.SallaApplePay.onCancel({}, response?.data?.error?.message || response?.data?.error?.code || salla.lang.get('pages.checkout.payment_failed'));
+                },
+                onSuccess: (response) => {
+                    window.location.href = response.redirect.url;
+                    salla.log('🍏 Pay: authorized Success:: redirect to thank you page, order placed');
+                }
+            },
+            shippingMethodSelected: this.isRequireShipping ? {
+                url: salla.url.get('checkout/{id}/shipping/details'),
+            } : undefined,
+            shippingContactSelected: this.isRequireShipping ? {
+                url: salla.url.get('checkout/{id}/address/add'),
+            } : undefined,
+            oncouponcodechanged: {
+                url: salla.url.get('checkout/{id}/coupons')
+            },
+            recalculateTotal: {
+                url: salla.url.get('checkout/{id}/payments/recalculate?payment_method=apple_pay')
+            },
+            onError: function (message) {
+                salla.log(message);
+                salla.notify.error(message);
+            }
+        });
+    }
+    componentWillLoad() {
+        console.log('🍏 Pay: Quick Buy Component Loaded');
+        return new Promise((resolve, reject) => {
+            salla.onReady(async () => {
+                if (!this.currency) {
+                    this.currency = salla.config.get('user.currency_code');
+                }
+                if (!this.productId && salla.config.get('page.id')) {
+                    this.productId = salla.config.get('page.id');
+                }
+                if (!this.applePayOnly && !this.productId) {
+                    salla.logger.warn('🍏 Pay: Failed load the quick buy, the product id is missing');
+                    return reject();
+                }
+                /**
+                 * We should check the product if it's required shipping
+                 * in order for apple pay sdk to show the required Shipping Contact Fields
+                 * components..
+                 */
+                if ((!this.amount || !this.isRequireShipping) && this.productId) {
+                    await salla.product.getDetails(this.productId, []).then((response) => {
+                        this.amount = response.data.price;
+                        this.isRequireShipping = response?.data?.is_require_shipping || false;
+                    }).catch((error) => {
+                        salla.logger.warn('🍏 Pay: Failed load the quick buy, get the product details failed: ', error);
+                        return reject();
+                    });
+                }
+                if (this.type == 'donate') {
+                    salla.event.on('product-options::donation-changed', (data) => {
+                        if (String(data.id) !== String(this.productId)) {
+                            return;
+                        }
+                        this.amount = data.price;
+                    });
+                }
+                else if (salla.url.is_page('product.single')) {
+                    salla.product.event?.onPriceUpdated(response => {
+                        this.amount = response.data.price;
+                    });
+                }
+                this.isApplePayActive = salla.helpers.hasApplePay()
+                    && salla.config.get('store.settings.payments')?.includes('apple_pay')
+                    && salla.config.get('store.settings.is_salla_gateway', false);
+                let applePaySdk = document.getElementById('apple-pay-sdk');
+                if (applePaySdk || !this.isApplePayActive) {
+                    salla.logger.warn('🍏 Pay: Skipped load apple pay because ' + (applePaySdk ? 'already loaded' : 'is not available in the browser'));
+                    resolve(true);
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js';
+                script.setAttribute('id', 'apple-pay-sdk');
+                script.async = true;
+                document.body.appendChild(script);
+                resolve(true);
+            });
+        });
+    }
+    render() {
+        return h(Host, { key: 'e6440de17b7c8185dbd0636d0c009a04014ae215' }, this.quickBuyButton());
+    }
+    quickBuyButton() {
+        return h("apple-pay-button", { locale: salla.config.get('user.language_code'), onClick: () => this.quickBuyHandler(), "data-quick-purchase": "applepay", class: "s-quick-buy-apple-pay", "data-is-applepay": "1", buttonstyle: "black", type: this.type });
+    }
+    static get is() { return "salla-quick-buy"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-quick-buy.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-quick-buy.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "type": {
+                "type": "string",
+                "attribute": "type",
+                "mutable": true,
+                "complexType": {
+                    "original": "'plain' | 'buy' | 'donate' | 'book' | 'pay' | 'order'",
+                    "resolved": "\"book\" | \"buy\" | \"donate\" | \"order\" | \"pay\" | \"plain\"",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }, {
+                            "name": "default",
+                            "text": "buy"
+                        }],
+                    "text": "Button type."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'buy'"
+            },
+            "productId": {
+                "type": "string",
+                "attribute": "product-id",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }],
+                    "text": "Product ID."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "cartId": {
+                "type": "string",
+                "attribute": "cart-id",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }],
+                    "text": "Cart ID, when you need to applePay for existed cart"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "amount": {
+                "type": "number",
+                "attribute": "amount",
+                "mutable": true,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{number}"
+                        }, {
+                            "name": "default",
+                            "text": "0"
+                        }],
+                    "text": "Product amount in base currency (SAR)."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true
+            },
+            "currency": {
+                "type": "string",
+                "attribute": "currency",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{string}"
+                        }, {
+                            "name": "default",
+                            "text": "SAR"
+                        }],
+                    "text": "base currency"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "options": {
+                "type": "unknown",
+                "attribute": "options",
+                "mutable": false,
+                "complexType": {
+                    "original": "{}",
+                    "resolved": "{}",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{object}"
+                        }, {
+                            "name": "default",
+                            "text": "{}"
+                        }],
+                    "text": "Product options, if is empty will get the data from the document.querySelector('salla-product-options[product-id=\"X\"]')"
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "{}"
+            },
+            "isRequireShipping": {
+                "type": "boolean",
+                "attribute": "is-require-shipping",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{boolean}"
+                        }],
+                    "text": "To be passed to purchaseNow request"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "applePayOnly": {
+                "type": "boolean",
+                "attribute": "apple-pay-only",
+                "mutable": true,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [{
+                            "name": "type",
+                            "text": "{boolean}"
+                        }],
+                    "text": "Show Apple Pay only"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "isApplePayActive": {},
+            "quickBuy": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

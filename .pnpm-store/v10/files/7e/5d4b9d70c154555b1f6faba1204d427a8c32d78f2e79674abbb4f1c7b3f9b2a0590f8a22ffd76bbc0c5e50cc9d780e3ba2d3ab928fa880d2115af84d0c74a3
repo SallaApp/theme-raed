@@ -1,0 +1,69 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+'use strict';
+
+var index = require('./index-CXC9Tj5-.js');
+
+const sallaOrderTotalsCardCss = ":host{display:block}";
+
+const SallaOrderTotalsCard = class {
+    constructor(hostRef) {
+        index.registerInstance(this, hostRef);
+    }
+    handleOrderChange(newValue) {
+        if (newValue) {
+            this.setSummaryFromProp(newValue);
+        }
+        else {
+            this.summary = undefined;
+        }
+    }
+    async componentWillLoad() {
+        await Salla.onReady();
+        if (this.order) {
+            this.setSummaryFromProp(this.order);
+        }
+    }
+    setSummaryFromProp(value) {
+        try {
+            const parsedValue = typeof value === 'string' ? JSON.parse(value) : value;
+            this.summary = parsedValue;
+        }
+        catch (error) {
+            salla.logger.error('Failed to parse order summary data', error);
+            this.summary = undefined;
+        }
+    }
+    renderTotalRow(label, amount, labelClass, valueClass, isBold) {
+        return (index.h("div", { class: "s-order-totals-card-row" }, index.h("div", { class: "s-order-totals-card-row-inner" }, index.h("dt", { class: labelClass || 's-order-totals-card-label' }, label), index.h("dd", { class: valueClass || 's-order-totals-card-value' }, isBold ? (index.h("b", { innerHTML: salla.money(amount) })) : (index.h("span", { innerHTML: salla.money(amount) }))))));
+    }
+    renderDiscountRow() {
+        return this.summary?.discounts?.map(discount => (index.h("div", { class: "s-order-totals-card-row", key: discount.name }, index.h("div", { class: "s-order-totals-card-row-inner" }, index.h("dt", { class: "s-order-totals-card-discount" }, discount.name), index.h("dd", { class: "s-order-totals-card-value" }, discount.discount)))));
+    }
+    renderRefundRow(amount) {
+        return (index.h("div", { class: "s-order-totals-card-row" }, index.h("div", { class: "s-order-totals-card-row-inner" }, index.h("dt", { class: "s-order-totals-card-refund-label" }, index.h("span", { class: "s-order-totals-card-refund-icon" }, index.h("i", { class: "sicon-info" })), index.h("span", null, " ", salla.lang.get('pages.orders.refund_amount'))), index.h("dd", { class: "s-order-totals-card-refund-value" }, index.h("b", { innerHTML: salla.money(amount) })))));
+    }
+    render() {
+        if (!this.summary) {
+            return index.h(index.Host, { class: "s-order-totals-card-wrapper" });
+        }
+        const { summary } = this;
+        const hasOptions = Array.isArray(summary.options) ? summary.options.length > 0 : false;
+        return (index.h(index.Host, { class: "s-order-totals-card-wrapper" }, index.h("div", { class: "s-order-totals-card-panel" }, index.h("h2", { id: "summary-heading", class: "s-order-totals-card-heading" }, salla.lang.get('pages.orders.summary')), index.h("div", { class: "s-order-totals-card-flow" }, index.h("dl", { class: "s-order-totals-card-list" }, this.renderTotalRow(salla.lang.get('pages.cart.items_total'), summary.sub_total), hasOptions &&
+            this.renderTotalRow(salla.lang.get('pages.cart.order_options_total'), summary.options_total), summary.discounts && this.renderDiscountRow(), summary.cod_cost &&
+            this.renderTotalRow(salla.lang.get('pages.orders.cod_cost'), summary.cod_cost, ''), summary.shipping_cost &&
+            this.renderTotalRow(salla.lang.get('pages.orders.shipping_cost'), summary.shipping_cost, 's-order-totals-card-shipping'), summary.tax &&
+            this.renderTotalRow(`${salla.lang.get('pages.cart.tax')} ${summary.tax.percent}%`, summary.tax.amount, ''), summary.paid_amount
+            ? this.renderTotalRow(salla.lang.get('pages.orders.partially_paid'), summary.paid_amount, '')
+            : null, summary.remaining_amount
+            ? this.renderTotalRow(salla.lang.get('pages.orders.remaining_amount'), summary.remaining_amount, '')
+            : null, index.h("div", { class: "s-order-totals-card-total" }, this.renderTotalRow(salla.lang.get('pages.orders.final_total'), summary.total, 's-order-totals-card-total-label', 's-order-totals-card-total-value', true)), summary.refund_amount ? (index.h("div", { class: "s-order-totals-card-refund" }, this.renderRefundRow(summary.refund_amount))) : null)))));
+    }
+    static get watchers() { return {
+        "order": ["handleOrderChange"]
+    }; }
+};
+SallaOrderTotalsCard.style = sallaOrderTotalsCardCss;
+
+exports.salla_order_totals_card = SallaOrderTotalsCard;

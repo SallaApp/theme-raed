@@ -1,0 +1,599 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { d as defineCustomElement$d } from './salla-booking-field2.js';
+import { d as defineCustomElement$c } from './salla-button2.js';
+import { d as defineCustomElement$b } from './salla-color-picker2.js';
+import { d as defineCustomElement$a } from './salla-conditional-fields2.js';
+import { d as defineCustomElement$9 } from './salla-datetime-picker2.js';
+import { d as defineCustomElement$8 } from './salla-file-upload2.js';
+import { d as defineCustomElement$7 } from './salla-loading2.js';
+import { d as defineCustomElement$6 } from './salla-map2.js';
+import { d as defineCustomElement$5 } from './salla-modal2.js';
+import { d as defineCustomElement$4 } from './salla-product-options2.js';
+import { d as defineCustomElement$3 } from './salla-progress-bar2.js';
+import { d as defineCustomElement$2 } from './salla-skeleton2.js';
+import { d as defineCustomElement$1 } from './salla-slider2.js';
+
+const sallaMultipleBundleProductOptionsModalCss = ":host{display:block}";
+
+const SallaMultipleBundleProductOptionsModal = /*@__PURE__*/ proxyCustomElement(class SallaMultipleBundleProductOptionsModal extends HTMLElement {
+    constructor() {
+        super();
+        this.__registerHost();
+        this.__attachShadow();
+        this.optionsSaved = createEvent(this, "optionsSaved", 7);
+        this.productSelected = createEvent(this, "productSelected", 7);
+        this.product = null;
+        this.sectionId = null;
+        this.sectionIndex = 0;
+        this.productIndex = 0;
+        this.selectedOptions = {};
+        this.optionsResetTokens = {};
+        this.isLoading = false;
+        this.hasUnsavedChanges = false;
+        this.validationErrors = [];
+    }
+    /**
+     * Generate a unique cache key for selected options using section ID, product index, and product ID
+     */
+    generateCacheKey(sectionId, productIndex, productId) {
+        return `${sectionId || 'unknown'}-${productIndex || 0}-${productId || 'unknown'}`;
+    }
+    handleProductChange(newValue) {
+        // Use setTimeout to ensure modal is ready
+        setTimeout(() => {
+            if (this.modal && newValue) {
+                const title = newValue.name || '';
+                this.modal.setTitle(title);
+            }
+        }, 100);
+        // Reset validation errors when product changes
+        this.validationErrors = [];
+        this.hasUnsavedChanges = false;
+    }
+    async open() {
+        if (!this.modal) {
+            requestAnimationFrame(() => this.open());
+            return;
+        }
+        this.isLoading = true;
+        // Set the title before opening
+        if (this.product?.name) {
+            this.modal.setTitle(this.product.name);
+        }
+        this.modal.open();
+        // Initialize selectedOptions with current selections from the component
+        setTimeout(async () => {
+            if (this.product?.id) {
+                await this.initializeSelectedOptions();
+            }
+            // Set title again after modal is fully loaded
+            if (this.product?.name) {
+                this.modal.setTitle(this.product.name);
+            }
+            this.modal.stopLoading();
+            this.isLoading = false;
+        }, 300);
+    }
+    async close() {
+        if (this.modal) {
+            this.modal.close();
+        }
+    }
+    async refreshOptionsState() {
+        // Force re-render by updating the component state
+        this.selectedOptions = { ...this.selectedOptions };
+    }
+    componentDidLoad() {
+        this.modalOpenListener = (data) => {
+            this.product = data.product;
+            this.sectionId = data.sectionId || null;
+            this.sectionIndex = data.sectionIndex || 0;
+            this.productIndex = data.productIndex || 0;
+            this.open();
+        };
+        salla.event.on('multiple-bundle-product-modal::open', this.modalOpenListener);
+        // Listen for clear-options event when a product is deselected
+        this.clearOptionsListener = (data) => {
+            if (!data || !data.productId)
+                return;
+            this.clearProductOptions(data.productId, data.sectionId, data.productIndex);
+        };
+        salla.event.on('multiple-bundle-product-modal::clear-options', this.clearOptionsListener);
+        // Create and store the option change listener for proper cleanup
+        this.optionChangeListener = (e) => {
+            const data = e.detail || e;
+            const { option, detail } = data;
+            // If data is a detail object (has option_id), find the option from product
+            const actualOption = option || (data.option_id && this.product?.options?.find(opt => opt.id === data.option_id || String(opt.id) === String(data.option_id)));
+            const actualDetail = detail || (data.id ? data : null);
+            if (this.product?.id && actualOption) {
+                this.handleOptionChange(Number(this.product.id), actualOption, actualDetail);
+            }
+        };
+        salla.event.on('product-options::change', this.optionChangeListener);
+        // Create and store the checkbox change listener for proper cleanup
+        this.checkboxChangeListener = (e) => {
+            const target = e.target;
+            // Check if this is a product selection checkbox
+            if (target && target.type === 'checkbox' && target.name && target.name.includes('bundle[') && target.name.includes('][id]')) {
+                // Extract section info from the checkbox name: bundle[sectionId][productIndex][id]
+                const nameMatch = target.name.match(/^bundle\[([^\]]+)\]\[([^\]]+)\]\[id\]$/);
+                if (nameMatch && !target.checked) {
+                    const [, sectionId, productIndex] = nameMatch;
+                    const productId = target.value;
+                    const form = this.host.closest('form');
+                    this.cleanupProductDeselection({
+                        sectionId,
+                        productIndex: parseInt(productIndex, 10),
+                        productId,
+                        form,
+                        uncheckedInput: target,
+                    });
+                }
+            }
+        };
+        // Listen for product checkbox changes to reset options when product is deselected
+        document.addEventListener('change', this.checkboxChangeListener);
+    }
+    disconnectedCallback() {
+        // Clean up event listeners to prevent memory leaks
+        if (this.checkboxChangeListener) {
+            document.removeEventListener('change', this.checkboxChangeListener);
+        }
+        if (this.optionChangeListener) {
+            salla.event.off('product-options::change', this.optionChangeListener);
+        }
+        if (this.modalOpenListener) {
+            salla.event.off('multiple-bundle-product-modal::open', this.modalOpenListener);
+        }
+        if (this.clearOptionsListener) {
+            salla.event.off('multiple-bundle-product-modal::clear-options', this.clearOptionsListener);
+        }
+    }
+    cleanupProductDeselection(params) {
+        const { sectionId, productIndex, productId, form, uncheckedInput } = params;
+        this.clearProductOptions(productId, sectionId, productIndex);
+        if (form) {
+            const productInputPattern = `bundle[${sectionId}][${productIndex}]`;
+            Array.from(form.querySelectorAll(`input[name^="${productInputPattern}"]`)).forEach(input => {
+                if (input === uncheckedInput) {
+                    return;
+                }
+                const shouldRemoveHidden = input.type === 'hidden';
+                const shouldRemoveByDataset = input.getAttribute('data-product-id') === String(productId) &&
+                    input.name?.startsWith(productInputPattern);
+                if (shouldRemoveHidden || shouldRemoveByDataset) {
+                    input.remove();
+                }
+            });
+            requestAnimationFrame(() => {
+                const changeEvent = new window.Event('change', { bubbles: true });
+                form.dispatchEvent(changeEvent);
+            });
+        }
+    }
+    generateFormInputName(sectionId, productIndex, optionParentId) {
+        return `bundle[${sectionId}][${productIndex}][options][${optionParentId}]`;
+    }
+    async initializeSelectedOptions() {
+        if (!this.product?.id)
+            return;
+        const productId = this.product.id;
+        const cacheKey = this.generateCacheKey(this.sectionId, this.productIndex, productId);
+        const optionsEl = document.querySelector(`salla-product-options[product-id="${productId}"]`);
+        if (optionsEl) {
+            try {
+                const selectedOptions = await optionsEl.getSelectedOptions();
+                if (selectedOptions && selectedOptions.length > 0) {
+                    this.selectedOptions = {
+                        ...this.selectedOptions,
+                        [cacheKey]: selectedOptions,
+                    };
+                }
+            }
+            catch (e) {
+                console.warn('Could not initialize selected options:', e);
+            }
+        }
+    }
+    // Clear options state for a specific product
+    clearProductOptions(productId, sectionId, productIndex) {
+        const updatedSelectedOptions = { ...this.selectedOptions };
+        if (sectionId != null && productIndex != null && !Number.isNaN(productIndex)) {
+            const cacheKey = this.generateCacheKey(sectionId, productIndex, productId);
+            delete updatedSelectedOptions[cacheKey];
+            this.bumpOptionsResetToken(cacheKey);
+        }
+        else {
+            const productSuffix = `-${String(productId)}`;
+            const affectedKeys = [];
+            Object.keys(updatedSelectedOptions).forEach(key => {
+                if (key.endsWith(productSuffix)) {
+                    delete updatedSelectedOptions[key];
+                    affectedKeys.push(key);
+                }
+            });
+            affectedKeys.forEach(key => this.bumpOptionsResetToken(key));
+        }
+        this.selectedOptions = updatedSelectedOptions;
+        // Reset validation errors and unsaved changes
+        this.validationErrors = [];
+        this.hasUnsavedChanges = false;
+    }
+    bumpOptionsResetToken(cacheKey) {
+        if (!cacheKey)
+            return;
+        this.optionsResetTokens = {
+            ...this.optionsResetTokens,
+            [cacheKey]: (this.optionsResetTokens[cacheKey] || 0) + 1,
+        };
+    }
+    async handleOptionChange(productId, option, detail) {
+        const cacheKey = this.generateCacheKey(this.sectionId, this.productIndex, productId);
+        // Get the current state from the component to ensure we have the latest selections
+        const optionsEl = document.querySelector(`salla-product-options[product-id="${productId}"]`);
+        let currentComponentSelections = [];
+        if (optionsEl) {
+            try {
+                currentComponentSelections = (await optionsEl.getSelectedOptions()) || [];
+            }
+            catch (e) {
+                console.warn('Could not get current selections from component:', e);
+            }
+        }
+        // If component returns data, use it; otherwise, fall back to manual tracking
+        if (currentComponentSelections.length > 0) {
+            // Component returned data, use it
+            this.selectedOptions = {
+                ...this.selectedOptions,
+                [cacheKey]: currentComponentSelections,
+            };
+        }
+        else {
+            // If we have existing selections in internal state and component returns empty,
+            // it might be a deselection, so we should use manual tracking
+            if (this.selectedOptions[cacheKey] && this.selectedOptions[cacheKey].length > 0) {
+                // Component didn't return data, use manual tracking
+                const currentSelected = this.selectedOptions[cacheKey] || [];
+                const updatedSelected = [...currentSelected];
+                // Find existing selection for this specific option (by option_id)
+                const existingIndex = updatedSelected.findIndex(opt => opt.option_id === option.id);
+                if (existingIndex > -1) {
+                    // Check if this is a deselection (detail might be null or undefined)
+                    if (!detail || detail.id === null || detail.id === undefined) {
+                        // Remove the option (deselection)
+                        updatedSelected.splice(existingIndex, 1);
+                    }
+                    else {
+                        // Replace existing selection for this option
+                        updatedSelected[existingIndex] = { ...detail, option_id: option.id };
+                    }
+                }
+                else {
+                    // Only add if detail exists (not a deselection)
+                    if (detail && detail.id !== null && detail.id !== undefined) {
+                        updatedSelected.push({ ...detail, option_id: option.id });
+                    }
+                }
+                this.selectedOptions = {
+                    ...this.selectedOptions,
+                    [cacheKey]: updatedSelected,
+                };
+            }
+            else {
+                // No existing selections, component returned empty, and we're trying to add
+                // This might be the first selection, so add it manually
+                if (detail && detail.id !== null && detail.id !== undefined) {
+                    this.selectedOptions = {
+                        ...this.selectedOptions,
+                        [cacheKey]: [{ ...detail, option_id: option.id }],
+                    };
+                }
+            }
+        }
+        this.hasUnsavedChanges = true;
+        this.validationErrors = []; // Clear validation errors when user makes changes
+    }
+    async validateOptions() {
+        if (!this.product?.options)
+            return true;
+        const errors = [];
+        const productId = this.product.id;
+        const cacheKey = this.generateCacheKey(this.sectionId, this.productIndex, productId);
+        // Get the actual selected options from the component
+        const optionsEl = document.querySelector(`salla-product-options[product-id="${productId}"]`);
+        let currentSelected = [];
+        if (optionsEl) {
+            try {
+                currentSelected = (await optionsEl.getSelectedOptions()) || [];
+                // Also check our internal state as fallback
+                const internalSelected = this.selectedOptions[cacheKey] || [];
+                // Use whichever has more selections, or if component returns empty but internal has data, use internal
+                if (internalSelected.length > currentSelected.length ||
+                    (currentSelected.length === 0 && internalSelected.length > 0)) {
+                    currentSelected = internalSelected;
+                }
+            }
+            catch (e) {
+                // Fallback to internal state
+                currentSelected = this.selectedOptions[cacheKey] || [];
+            }
+        }
+        else {
+            // Fallback to internal state
+            currentSelected = this.selectedOptions[cacheKey] || [];
+        }
+        // Check if any options are selected at all
+        if (currentSelected.length === 0) {
+            errors.push(salla.lang.get('pages.products.no_options_selected'));
+        }
+        // Check required options
+        this.product.options.forEach(option => {
+            if (option.required) {
+                const hasSelection = currentSelected.some(selected => {
+                    return selected.option_id == option.id; // Use == instead of === for type flexibility
+                });
+                if (!hasSelection) {
+                    errors.push(salla.lang.get('pages.products.required_option_missing', {
+                        option: option.name,
+                    }));
+                }
+            }
+        });
+        this.validationErrors = errors;
+        return errors.length === 0;
+    }
+    async onSave(e) {
+        e.preventDefault();
+        const productId = this.product?.id;
+        if (!productId)
+            return;
+        const cacheKey = this.generateCacheKey(this.sectionId, this.productIndex, productId);
+        // Small delay to ensure component state is updated
+        await new Promise(resolve => setTimeout(resolve, 100));
+        // Validate options before saving
+        const isValid = await this.validateOptions();
+        if (!isValid) {
+            salla.notify.error(this.validationErrors.join(', '));
+            return;
+        }
+        this.isLoading = true;
+        try {
+            // please don't change this with this.host.querySelector it will return null
+            const optionsEl = document.querySelector(`salla-product-options[product-id="${productId}"]`);
+            let selectedOptions = await optionsEl?.getSelectedOptions();
+            // If component returns empty but we have internal state, use internal state
+            if ((!selectedOptions || selectedOptions.length === 0) &&
+                this.selectedOptions[cacheKey]?.length > 0) {
+                selectedOptions = this.selectedOptions[cacheKey];
+            }
+            if (!selectedOptions || selectedOptions.length === 0) {
+                this.isLoading = false;
+                return;
+            }
+            // Store the selected options for this product using cache key
+            this.selectedOptions = {
+                ...this.selectedOptions,
+                [cacheKey]: selectedOptions,
+            };
+            const form = this.host.closest('form');
+            if (!form) {
+                this.isLoading = false;
+                return;
+            }
+            // remove old inputs for this specific product in this specific section/index only
+            const productInputPattern = `bundle[${this.sectionId}][${this.productIndex}]`;
+            // Remove only hidden inputs and inputs with data-product-id, but preserve visible checkboxes
+            Array.from(form.querySelectorAll(`input[name^="${productInputPattern}"][type="hidden"]`)).forEach(el => el.remove());
+            // Also remove any inputs with data-product-id that match this specific pattern
+            Array.from(form.querySelectorAll(`[data-product-id="${productId}"][name^="${productInputPattern}"]`)).forEach(el => el.remove());
+            // Ensure the actual checkbox in the UI is checked to reflect the selection visually
+            const checkboxId = `bundle[${this.sectionId}][${this.productIndex}][id]`;
+            const checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                checkbox.checked = true;
+                // Don't dispatch change event here to avoid double API calls
+            }
+            else {
+                // If checkbox doesn't exist, create a hidden input as fallback
+                const productSelectionInput = document.createElement('input');
+                productSelectionInput.type = 'hidden';
+                productSelectionInput.name = `bundle[${this.sectionId}][${this.productIndex}][id]`;
+                productSelectionInput.value = String(productId);
+                productSelectionInput.dataset.productId = String(productId);
+                form.appendChild(productSelectionInput);
+            }
+            // append new hidden inputs for options
+            selectedOptions.forEach((option) => {
+                // how to get option parent id?
+                const optionParentId = option.option_id;
+                const hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                // Use productIndex for the form input name
+                hidden.name = this.generateFormInputName(this.sectionId, this.productIndex ?? 0, optionParentId);
+                hidden.value = String(option.id);
+                hidden.dataset.productId = String(productId);
+                form.appendChild(hidden);
+            });
+            // Trigger single form change event with all updates (product selection + options)
+            const changeEvent = new window.Event('change', { bubbles: true });
+            form.dispatchEvent(changeEvent);
+            // Emit custom event
+            this.optionsSaved.emit({
+                productId: Number(productId),
+                selectedOptions,
+                sectionId: this.sectionId,
+                productIndex: this.productIndex,
+            });
+            // Emit product selected event to check the card
+            if (this.sectionId) {
+                this.productSelected.emit({
+                    productId: Number(productId),
+                    sectionId: this.sectionId,
+                    product: this.product,
+                    fromModal: true,
+                });
+            }
+            // Show success message
+            salla.notify.success(salla.lang.get('pages.products.options_saved'));
+            this.hasUnsavedChanges = false;
+            this.validationErrors = [];
+            // close modal
+            this.modal.close();
+        }
+        catch (error) {
+            salla.notify.error(salla.lang.get('pages.products.options_save_error'));
+        }
+        finally {
+            this.isLoading = false;
+        }
+    }
+    // Method to get options with selected state preserved
+    getOptionsWithSelectedState() {
+        if (!this.product?.options)
+            return [];
+        const cacheKey = this.generateCacheKey(this.sectionId, this.productIndex, this.product.id);
+        const savedOptions = this.selectedOptions[cacheKey] || [];
+        return this.product.options.map(option => ({
+            ...option,
+            details: option.details.map(detail => {
+                const isSelected = savedOptions.some(saved => {
+                    return saved.id === detail.id;
+                });
+                return {
+                    ...detail,
+                    is_selected: isSelected,
+                };
+            }),
+        }));
+    }
+    render() {
+        const productId = this.product?.id;
+        const optionsWithSelectedState = this.getOptionsWithSelectedState();
+        const cacheKey = this.generateCacheKey(this.sectionId, this.productIndex, productId);
+        const resetToken = this.optionsResetTokens[cacheKey] || 0;
+        const isDisabled = this.isLoading || optionsWithSelectedState.some(opt => opt.details.some(d => d.is_selected && d.is_out === true));
+        return (h(Host, { key: '27c9b7b2698aede358cb8d1a01d774c625b7ead4' }, h("salla-modal", { key: 'c9ae157c9ee8f3b13a19cbfc601b4c8f717d8024', isLoading: this.isLoading, ref: el => (this.modal = el), width: "md", centered: false, id: `s-multiple-bundle-product-options-modal-options-${productId}`, class: "s-multiple-bundle-product-options-modal-wrapper" }, h("div", { key: 'a2bf7d4eed854e89d314454294c84eaf43fef844', slot: "loading" }, h("salla-skeleton", { key: '06bf42347a2c9f6ff5472a856ead808609bd6792', height: "100%", width: "100%" })), this.product?.images && this.product?.images.length > 0 && (h("salla-slider", { key: '2c70545009d063b72b7ac0a20cdc7cc94ab4c43b', id: `details-slider-${this.product?.id}`, type: "thumbs", loop: false, "auto-height": true, "listen-to-thumbnails-option": true, showThumbsControls: false, controlsOuter: false, showControls: false, class: "s-multiple-bundle-product-options-modal-slider", verticalThumbs: true, thumbsConfig: {
+                centeredSlides: true,
+                centeredSlidesBounds: true,
+                slidesPerView: Math.min(5, Math.max(1, this.product?.images.length)),
+                watchOverflow: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                direction: 'vertical',
+                spaceBetween: 10,
+            } }, h("div", { key: '8747d7510657f714da731f49e8b1e174be95bc66', slot: "items" }, this.product?.images &&
+            this.product?.images.map((image, index) => (h("div", { key: index, class: "swiper-slide" }, h("img", { src: image.url, alt: image.alt || `${this.product?.name} - Image ${index + 1}`, loading: "lazy", onError: e => {
+                    e.target.style.display = 'none';
+                } }))))), this.product?.images && this.product?.images.length > 1 && (h("div", { key: '61ca305d33f2b0f40e17c6ce3dc4fd571db7308c', slot: "thumbs" }, this.product?.images &&
+            this.product?.images.map((image, index) => (h("div", { key: index, "data-caption": `${this.product?.name} - Image ${index + 1}` }, h("img", { src: image.url, loading: "eager", class: "s-multiple-bundle-product-options-modal-slider-thumb", title: `${this.product?.name} - ${index + 1}`, alt: image.alt || `${this.product?.name} - ${index + 1}`, onError: e => {
+                    e.target.style.display = 'none';
+                } })))))))), h("salla-product-options", { options: JSON.stringify(optionsWithSelectedState), key: `${cacheKey}-reset-${resetToken}`, "product-id": productId, "unique-key": `${cacheKey}-reset-${resetToken}` }), h("div", { key: 'd79f6e9a2f753de6c9097bb3a8f095ed9bdde081', slot: "footer" }, h("div", { key: '22f78a4c9b8ad8891cbcd9b5318c5a406258cea1', class: "s-multiple-bundle-product-options-modal-footer" }, h("salla-button", { key: 'f17424c72c6e9d1b9cd0ef2602ac8b52002bc39a', onClick: e => this.onSave(e), loading: this.isLoading, disabled: isDisabled }, this.isLoading
+            ? salla.lang.get('common.elements.saving')
+            : salla.lang.get('common.elements.save')))))));
+    }
+    get host() { return this; }
+    static get watchers() { return {
+        "product": ["handleProductChange"]
+    }; }
+    static get style() { return sallaMultipleBundleProductOptionsModalCss; }
+}, [1, "salla-multiple-bundle-product-options-modal", {
+        "product": [32],
+        "sectionId": [32],
+        "sectionIndex": [32],
+        "productIndex": [32],
+        "selectedOptions": [32],
+        "optionsResetTokens": [32],
+        "isLoading": [32],
+        "hasUnsavedChanges": [32],
+        "validationErrors": [32],
+        "open": [64],
+        "close": [64],
+        "refreshOptionsState": [64]
+    }, undefined, {
+        "product": ["handleProductChange"]
+    }]);
+function defineCustomElement() {
+    if (typeof customElements === "undefined") {
+        return;
+    }
+    const components = ["salla-multiple-bundle-product-options-modal", "salla-booking-field", "salla-button", "salla-color-picker", "salla-conditional-fields", "salla-datetime-picker", "salla-file-upload", "salla-loading", "salla-map", "salla-modal", "salla-product-options", "salla-progress-bar", "salla-skeleton", "salla-slider"];
+    components.forEach(tagName => { switch (tagName) {
+        case "salla-multiple-bundle-product-options-modal":
+            if (!customElements.get(tagName)) {
+                customElements.define(tagName, SallaMultipleBundleProductOptionsModal);
+            }
+            break;
+        case "salla-booking-field":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$d();
+            }
+            break;
+        case "salla-button":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$c();
+            }
+            break;
+        case "salla-color-picker":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$b();
+            }
+            break;
+        case "salla-conditional-fields":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$a();
+            }
+            break;
+        case "salla-datetime-picker":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$9();
+            }
+            break;
+        case "salla-file-upload":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$8();
+            }
+            break;
+        case "salla-loading":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$7();
+            }
+            break;
+        case "salla-map":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$6();
+            }
+            break;
+        case "salla-modal":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$5();
+            }
+            break;
+        case "salla-product-options":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$4();
+            }
+            break;
+        case "salla-progress-bar":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$3();
+            }
+            break;
+        case "salla-skeleton":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$2();
+            }
+            break;
+        case "salla-slider":
+            if (!customElements.get(tagName)) {
+                defineCustomElement$1();
+            }
+            break;
+    } });
+}
+defineCustomElement();
+
+export { SallaMultipleBundleProductOptionsModal as S, defineCustomElement as d };

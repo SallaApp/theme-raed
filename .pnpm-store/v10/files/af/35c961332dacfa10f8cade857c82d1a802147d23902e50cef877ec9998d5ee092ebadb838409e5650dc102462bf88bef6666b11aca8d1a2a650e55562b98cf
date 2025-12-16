@@ -1,0 +1,345 @@
+import { EventEmitter } from '../../stencil-public-runtime';
+import { Swiper as SwiperType } from 'swiper/types';
+/**
+ * @slot items - Slider items.
+ * @slot thumbs - Thumbs slider items.
+ */
+export declare class SallaSlider {
+    host: HTMLElement;
+    constructor();
+    /**
+     * Show/hide slider block title
+     */
+    blockTitle: string;
+    /**
+     * Enable call a specific slide by index from thumbnails option in `salla-slider-options` component, works only if `data-img-id` and `data-slid-index` attributes are set on each slide
+     */
+    listenToThumbnailsOption: boolean;
+    /**
+     * Show/hide slider block sub title
+     */
+    blockSubtitle: string;
+    /**
+     * Show/hide display all button beside arrows
+     */
+    displayAllUrl: string;
+    /**
+     * Show/hide display all button beside arrows
+     */
+    arrowsCentered: boolean;
+    /**
+     * Vertical or Horizontal thumbs slider
+     */
+    verticalThumbs: boolean;
+    /**
+     * Disable thumbs slider and show it as a grid
+     */
+    gridThumbs: boolean;
+    /**
+     * Vertical or Horizontal main slider
+     */
+    vertical: boolean;
+    /**
+     * Auto Height slider
+     */
+    autoHeight: boolean;
+    /**
+     * Show/hide arrows
+     */
+    showControls: boolean;
+    /**
+     * Show/hide arrows
+     */
+    controlsOuter: boolean;
+    /**
+     * Show/hide thumbs slider arrows
+     */
+    showThumbsControls: boolean;
+    /**
+     * Enable autoplay  - working with `type="carousel" only`
+     */
+    autoPlay: boolean;
+    /**
+     * slidesPerView
+     */
+    slidesPerView: string;
+    /**
+     * Enable pagination
+     */
+    pagination: boolean;
+    /**
+     * Enable center mode  - working with `type="carousel" only`
+     */
+    centered: boolean;
+    /**
+     * Run slider in loop, Don't use it for slides with custom components inside it, because it may cause re-render issue
+     */
+    loop: boolean;
+    /**
+     * Slider direction. Default: document.documentElement.dir
+     */
+    direction: string;
+    /**
+     * Set the type of the slider
+     * Default: ''
+     */
+    type: 'carousel' | 'fullscreen' | 'thumbs' | 'default' | 'hero' | 'testimonials' | 'blog' | 'fullwidth' | '';
+    /**
+     * Slider Configs refer to https://swiperjs.com/swiper-api#parameters and pass the entire config object
+     * @example
+     * let slider = document.querySelector('salla-slider');
+     *  slider.sliderConfig = {
+     *  slidesPerView: 1,
+     *  spaceBetween : 30,
+     *  lazy: true,
+     * }
+     *
+     */
+    sliderConfig: any;
+    /**
+     * Thumbs Slider Configs refer to https://swiperjs.com/swiper-api#parameters and pass the entire config object
+     * @example
+     * let slider = document.querySelector('salla-slider');
+     *  slider.thumbsConfig = {
+     *  slidesPerView: 1,
+     *  spaceBetween : 30,
+     *  lazy: true,
+     * }
+     *
+     */
+    thumbsConfig: any;
+    /**
+     * Event will fired right after initialization.
+     */
+    afterInit: EventEmitter<any>;
+    /**
+     * Event will be fired when currently active slide is changed
+     */
+    slideChange: EventEmitter<any>;
+    /**
+     * Event will be fired when Swiper reach its beginning (initial position)
+     */
+    reachBeginning: EventEmitter<any>;
+    /**
+     * Event will be fired when Swiper reach last slide
+     */
+    reachEnd: EventEmitter<any>;
+    /**
+     * Event will be fired after animation to other slide (next or previous).
+     */
+    slideChangeTransitionEnd: EventEmitter<any>;
+    /**
+     * Event will be fired in the beginning of animation to other slide (next or previous).
+     */
+    slideChangeTransitionStart: EventEmitter<any>;
+    /**
+     * Same as "slideChangeTransitionEnd" but for "forward" direction only
+     */
+    slideNextTransitionEnd: EventEmitter<any>;
+    /**
+     * Same as "slideChangeTransitionStart" but for "forward" direction only
+     */
+    slideNextTransitionStart: EventEmitter<any>;
+    /**
+     * Same as "slideChangeTransitionEnd" but for "backward" direction only
+     */
+    slidePrevTransitionEnd: EventEmitter<any>;
+    /**
+     * Same as "slideChangeTransitionStart" but for "backward" direction only
+     */
+    slidePrevTransitionStart: EventEmitter<any>;
+    /**
+     * Event will be fired when user touch and move finger over Swiper and move it.
+     * Receives touchmove event as an arguments.
+     */
+    sliderMove: EventEmitter<any>;
+    /**
+     * Event will be fired when user release Swiper. Receives touchend event as an arguments.
+     */
+    touchSliderEnd: EventEmitter<any>;
+    /**
+     * Event will be fired when user touch and move finger over Swiper.
+     * Receives touchmove event as an arguments.
+     */
+    touchSliderMove: EventEmitter<any>;
+    /**
+     * Event will be fired when user touch Swiper. Receives touchstart event as an arguments.
+     */
+    touchSliderStart: EventEmitter<any>;
+    /**
+     * Event will be fired after transition.
+     */
+    sliderTransitionEnd: EventEmitter<any>;
+    /**
+     * Event will be fired in the beginning of transition.
+     */
+    sliderTransitionStart: EventEmitter<any>;
+    /**
+     * Returns the Swiper instance to allow direct manipulation
+     * @returns The Swiper slider instance
+     */
+    sliderInstance(): Promise<any>;
+    /**
+     * Run transition to the slide with index number equal to 'index' parameter for the duration equal to 'speed' parameter.
+     *
+     * @param {number} index - Index number of slide.
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slideTo(index: number, speed?: number, runCallbacks?: boolean): Promise<any>;
+    /**
+     * Run transition to the next slide.
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slideNext(speed?: number, runCallbacks?: boolean): Promise<void>;
+    /**
+     * Run transition to the previous slide.
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slidePrev(speed?: number, runCallbacks?: boolean): Promise<void>;
+    /**
+     * Does the same as .slideTo but for the case when used with enabled loop. So this method will slide to slides with realIndex matching to passed index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slideToLoop(index: number, speed?: number, runCallbacks?: boolean): Promise<void>;
+    /**
+     * Does the same as .slideNext but for the case when used with enabled loop. So this method will slide to next slide with realIndex matching to next index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slideNextLoop(speed?: number, runCallbacks?: boolean): Promise<void>;
+    /**
+     * Does the same as .slidePrev but for the case when used with enabled loop. So this method will slide to previous slide with realIndex matching to previous index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slidePrevLoop(speed?: number, runCallbacks?: boolean): Promise<void>;
+    /**
+     * Reset slider position to currently active slide for the duration equal to 'speed' parameter.
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slideReset(speed?: number, runCallbacks?: boolean): Promise<void>;
+    /**
+     * Reset slider position to closest slide/snap point for the duration equal to 'speed' parameter.
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    slideToClosest(speed?: number, runCallbacks?: boolean): Promise<void>;
+    /**
+     *  You should call it after you add/remove slides manually, or after you hide/show it, or do any custom DOM modifications with Swiper This method also includes subcall of the following methods which you can use separately:
+     * **/
+    update(): Promise<void>;
+    /**
+     * Force slider to update its height (when autoHeight enabled) for the duration equal to 'speed' parameter
+     * @param {number} speed - Transition duration (in ms).
+     * **/
+    updateAutoHeight(speed?: number): Promise<void>;
+    /**
+     * recalculate number of slides and their offsets. Useful after you add/remove slides with JavaScript
+     * **/
+    updateSlides(): Promise<void>;
+    /**
+     * recalculate slider progress
+     * **/
+    updateProgress(): Promise<void>;
+    /**
+     * update active/prev/next classes on slides and bullets
+     * **/
+    updateSlidesClasses(): Promise<void>;
+    /**
+     * Get slider slides
+     * **/
+    getSlides(): Promise<any>;
+    /**
+     * Get slider slides
+     * **/
+    updateSize(): Promise<any>;
+    /**
+     * Get thumbs slider update
+     * **/
+    sliderInit(): Promise<any>;
+    /**
+     * Get thumbs slider slides
+     * **/
+    thumbsSliderInstance(): Promise<any>;
+    /**
+     * Get thumbs slider update
+     * **/
+    thumbsSliderInit(): Promise<any>;
+    /**
+     * Get thumbs slider update
+     * **/
+    thumbsSliderUpdate(): Promise<any>;
+    /**
+     * Get thumbs slider updateSlides
+     * **/
+    thumbsSliderUpdateSlides(): Promise<any>;
+    /**
+   * Get thumbs slider updateSize
+   * **/
+    getThumbsUpdateSize(): Promise<any>;
+    /**
+     * Does the same as .slideTo but for the case when used with enabled loop. So this method will slide to slides with realIndex matching to passed index
+     *
+     * @param {number} speed - Transition duration (in ms).
+     * @param {boolean} runCallbacks - Set it to false (by default it is true) and transition will not produce transition events.
+     * **/
+    thumbsSlideTo(index: number, speed?: number, runCallbacks?: boolean): Promise<any>;
+    /**
+   * Get thumbs slider slides
+   * **/
+    getThumbsSlides(): Promise<any>;
+    currentIndex: number | undefined;
+    isEnd: boolean;
+    isBeginning: boolean;
+    swiperScript: any;
+    displayAllTitle: string;
+    windowWidth: number;
+    private sliderContainer?;
+    private sliderWrapper?;
+    private thumbsSliderContainer?;
+    private thumbsSliderWrapper?;
+    private slider;
+    private thumbsSlider;
+    private hasThumbSlot;
+    private pre_defined_config;
+    componentWillLoad(): Promise<unknown>;
+    getSwiperConfig(): {
+        loop: boolean;
+        autoplay: boolean | Object;
+        centeredSlides: boolean;
+        slidesPerView: string;
+        autoHeight: boolean;
+        lazy: boolean;
+        on: {
+            afterInit: (slider: SwiperType) => void;
+        };
+        pagination: boolean | {
+            el: string;
+            clickable: boolean;
+        };
+        navigation: boolean | {
+            nextEl: string;
+            prevEl: string;
+        };
+        breakpoints: {
+            768: {
+                direction: string;
+            };
+        };
+    };
+    getThumbsDirection(): string;
+    initSlider(): void;
+    render(): any;
+    componentDidLoad(): void;
+}

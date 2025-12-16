@@ -1,0 +1,87 @@
+import { Offer, Category, Currency } from './interfaces';
+/**
+ * `salla-offer` is a StencilJS component that displays offers, categories, products, banks, and discount information.
+ * It uses the `salla-slider` component for carousel functionality.
+ *
+ * @slot category - The slot for customizing the category entry layout.
+ *
+ * @csspart custom - Custom CSS part to target specific elements in the component.
+ *
+ * @example
+ * <salla-offer product-id="123"></salla-offer>
+ */
+export declare class SallaOffer {
+    constructor();
+    /**
+     * Custom Card Component for the Salla Products List.
+     *
+     * This component allows you to customize the appearance of individual product cards within a Salla Products List.
+     *
+     * @example
+     * <salla-products-list product-card-component="my-custom-card-style1" ...
+     * <salla-products-list product-card-component="my-custom-card-style2" ...
+     */
+    productCardComponent: string;
+    offersList: Offer[];
+    userCurrency: Currency;
+    isMultipleBank: boolean;
+    title?: string;
+    currentPage: string;
+    hasCustomComponent: boolean;
+    isBankOffer: boolean;
+    canRender: boolean;
+    showOffer: boolean;
+    offer_with_price_text: string;
+    with_discount_text: string;
+    product_discount_text: string;
+    special_offer_text: string;
+    multipleBankOfferTitleText: string;
+    multipleBankOfferTitleDescription: string;
+    buy_quantity_text: (quantity: number) => string;
+    host: HTMLElement;
+    private categorySlot;
+    private getEndpointByPageName;
+    /**
+  * Emits a promotion viewed event for analytics tracking
+  */
+    private emitPromotionViewed;
+    /**
+     * Emits a promotion clicked event
+     */
+    private emitPromotionClicked;
+    componentWillLoad(): Promise<void>;
+    componentDidLoad(): void;
+    findCategories(categories: Category[], ids: any[]): Category[];
+    getStorageKey(): string;
+    getOffersFromStorage(): null | Promise<Offer[]>;
+    render(): any;
+    private renderSectionForOfferType;
+    /**
+     * Generates content for the categories section.
+     *
+     * @param offeredCategories - An array of Category objects.
+     * @returns An array of HTML elements representing categories.
+     */
+    private getCategoriesSection;
+    private renderBuyXGetYSection;
+    /**
+     * Generates content for the bank section.
+     *
+     * @param offeredBank - An array of Bank objects.
+     * @param name - The title of the current offer.
+     * @param description - The description of the current offer.
+     * @returns An array of HTML elements representing banks.
+     *
+     * TODO: loop over the list and filter bank types and pass it to this function
+     */
+    private renderBankSection;
+    private generateBankDescription;
+    /**
+     * Generates content for the discount table section.
+     *
+     * @param discountTable - An array of Discount objects.
+     * @returns An array of HTML elements representing discounts_table.
+     */
+    private renderDiscountTableSection;
+    private renderSpecialPriceSection;
+}

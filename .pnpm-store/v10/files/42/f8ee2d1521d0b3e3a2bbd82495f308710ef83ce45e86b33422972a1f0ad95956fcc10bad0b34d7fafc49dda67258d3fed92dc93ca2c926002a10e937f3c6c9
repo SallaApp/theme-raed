@@ -1,0 +1,62 @@
+import "@salla.sa/applepay/src/index";
+export declare class SallaQuickBuy {
+    constructor();
+    host: HTMLElement;
+    /**
+     * Button type.
+     *
+     * @type {string}
+     * @default buy
+     **/
+    type: 'plain' | 'buy' | 'donate' | 'book' | 'pay' | 'order';
+    /**
+     * Product ID.
+     *
+     * @type {string}
+     **/
+    productId: string;
+    /**
+     * Cart ID, when you need to applePay for existed cart
+     *
+     * @type {string}
+     **/
+    cartId: string;
+    /**
+     * Product amount in base currency (SAR).
+     *
+     * @type {number}
+     * @default 0
+     **/
+    amount: number;
+    /**
+     * base currency
+     *
+     * @type {string}
+     * @default SAR
+     */
+    currency: string;
+    /**
+     * Product options, if is empty will get the data from the document.querySelector('salla-product-options[product-id="X"]')
+     *
+     * @type {object}
+     * @default {}
+     */
+    options: {};
+    /**
+     * To be passed to purchaseNow request
+     * @type {boolean}
+     **/
+    isRequireShipping: boolean;
+    /**
+     * Show Apple Pay only
+     * @type {boolean}
+     **/
+    applePayOnly: boolean;
+    isApplePayActive: boolean;
+    quickBuy: string;
+    private quickBuyHandler;
+    private settlePayment;
+    componentWillLoad(): Promise<unknown>;
+    render(): any;
+    private quickBuyButton;
+}

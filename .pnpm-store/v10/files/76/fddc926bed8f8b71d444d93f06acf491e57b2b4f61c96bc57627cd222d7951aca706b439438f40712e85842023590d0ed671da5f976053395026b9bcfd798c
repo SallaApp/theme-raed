@@ -1,0 +1,209 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h, Host } from "@stencil/core";
+import CheckIcon from "../../assets/svg/check.svg";
+import Reply from "../../assets/svg/reply.svg";
+import ThumbsUp from "../../assets/svg/thumbs-up.svg";
+export class SallaCommentItem {
+    constructor() {
+        // Translations
+        this.has_bought_trans = salla.lang.get('blocks.comments.has_bought');
+        this.rated_trans = salla.lang.get('pages.rating.rated');
+        this.waiting_approval_trans = salla.lang.get('blocks.comments.waiting_approval');
+        this.has_order_trans = salla.lang.get('blocks.comments.has_order');
+        this.allowLikes = salla.config.get('store.settings.rating.allow_likes');
+        this.allowAttachImages = salla.config.get('store.settings.rating.allow_attach_images');
+        this.helpfulLabel = salla.lang.getWithDefault('blocks.comments.helpful', 'مفيد');
+        this.likesCount = 0;
+        this.likedComments = [];
+        salla.lang.onLoaded(() => {
+            const setNestedAsync = (lang, key, value) => {
+                return new Promise((resolve) => {
+                    salla.helpers.setNested(salla.lang.messages[lang], key, value);
+                    resolve(true);
+                });
+            };
+            const setTranslations = async () => {
+                await setNestedAsync('ar.trans', 'blocks.comments.helpful', 'مفيد');
+                await setNestedAsync('en.trans', 'blocks.comments.helpful', 'Helpful');
+                this.helpfulLabel = salla.lang.getWithDefault('blocks.comments.helpful', 'مفيد');
+            };
+            this.has_bought_trans = salla.lang.get('blocks.comments.has_bought');
+            this.rated_trans = salla.lang.get('pages.rating.rated');
+            this.waiting_approval_trans = salla.lang.get('blocks.comments.waiting_approval');
+            this.has_order_trans = salla.lang.get('blocks.comments.has_order');
+            setTranslations();
+        });
+    }
+    componentDidLoad() {
+        this.likesCount = this.comment.likes_count;
+        try {
+            this.likedComments = JSON.parse(localStorage.getItem('liked_comments') || '[]');
+            if (this.likedComments.includes(this.comment.id)) {
+                this.likeBtn.classList.add('liked');
+                this.likeBtn.fill = "solid";
+            }
+        }
+        catch {
+            salla.log('Bad json for liked_comments');
+        }
+    }
+    getReplies() {
+        return Array.isArray(this.comment.replies) ? this.comment.replies : [this.comment.replies];
+    }
+    getDate(dateString) {
+        const [datePart] = dateString.split(' ');
+        const [year, month, day] = datePart.split('-');
+        const formattedDate = `${parseInt(day, 10)}/${parseInt(month, 10)}/${parseInt(year, 10)}`;
+        return formattedDate;
+    }
+    getTime(dateString) {
+        const [, timePart] = dateString.split(' ');
+        const [hours, minutes] = timePart.split(':');
+        const formattedTime = `${parseInt(hours, 10)}:${parseInt(minutes, 10)}`;
+        return formattedTime;
+    }
+    async toggleLike() {
+        if (salla.config.isGuest()) {
+            return salla.notify.error(salla.lang.get('common.messages.must_login'));
+        }
+        this.likedComments = JSON.parse(localStorage.getItem('liked_comments') || '[]');
+        const isLiked = this.likedComments.includes(this.comment.id);
+        try {
+            const endpoint = isLiked ? `rating/${this.comment.id}/unlike` : `rating/${this.comment.id}/like`;
+            const res = await salla.api.request(endpoint, '', 'put');
+            salla.log(res.message);
+            if (isLiked) {
+                this.likeBtn.classList.remove('liked');
+                this.likeBtn.fill = 'outline';
+                this.updateLikedComments(this.comment.id, false);
+                this.likesCount--;
+            }
+            else {
+                this.likeBtn.classList.add('liked');
+                this.likeBtn.fill = 'solid';
+                this.updateLikedComments(this.comment.id, true);
+                this.likesCount++;
+            }
+        }
+        catch (e) {
+            if (e.response.status == 409) {
+                if (this.likeBtn.classList.contains('liked')) {
+                    this.likeBtn.fill = 'outline';
+                    this.likeBtn.classList.remove('liked');
+                    this.updateLikedComments(this.comment.id, false);
+                    this.likesCount--;
+                }
+                else {
+                    this.likeBtn.fill = 'solid';
+                    this.likeBtn.classList.add('liked');
+                    salla.logger.warn('Like already exists');
+                    this.updateLikedComments(this.comment.id, true);
+                }
+            }
+        }
+    }
+    updateLikedComments(commentId, add) {
+        this.likedComments = JSON.parse(localStorage.getItem('liked_comments') || '[]');
+        if (add) {
+            if (!this.likedComments.includes(commentId)) {
+                this.likedComments.push(commentId);
+            }
+        }
+        else {
+            this.likedComments = this.likedComments.filter(id => id !== commentId);
+        }
+        localStorage.setItem('liked_comments', JSON.stringify(this.likedComments));
+    }
+    render() {
+        let isAdmin = this.comment.type == 'admin';
+        return (h(Host, { key: '23f7ca8136164177f5cf8f96b91193ff511e4fbb', class: isAdmin ? 's-comments-item-admin' : 's-comments-item' }, h("div", { key: 'dfbc3e5b58ddbcce247e1de767b477bab1eab2e3', class: { "s-comments-item-wrapper": !isAdmin, "s-comments-item-admin-wrapper": isAdmin }, id: `s-comments-item-${this.comment.id}` }, h("div", { key: 'b6c77afa13d1ede6145bd85942dca414414e4e9c', class: "s-comments-item-inner s-comments-flex-1" }, isAdmin && h("span", { key: 'cd8515e5bbe6b71ae23857cb7c3dca069b685475', class: "s-comments-item-reply-icon", innerHTML: Reply }), h("div", { key: 'b12ce64b8afc4f1c77d20ac4e76c25e02ecd2f4b', class: "s-comments-item-avatar" }, h("img", { key: 'fd554e59e550c22618249ef76ef784bc380bba22', "data-src": this.comment?.avatar, alt: this.comment?.name, src: this.comment?.avatar, class: "s-comments-item-avatar-img lazy" })), h("div", { key: '2e6c9beb412773bd117372768f67c28ac024a9c4', class: "s-comments-flex-1" }, h("div", { key: 'a4ea92bb3416fc603fcbe98a163ed506b1c43a49', class: "s-comments-item-user-wrapper" }, h("div", { key: '22c882510812ba6f0ac51818015e7863c27c16d3', class: "s-comments-item-user-info" }, h("h3", { key: 'b69e6dec2c1000b91fa112cbdefe0d173d975a45', class: "s-comments-item-user-info-name" }, this.comment?.name), (this.comment.has_order || !!this.comment.rating) && !this.comment.is_pending && !this.hideBought ?
+            h("div", { class: "s-comments-flex" }, this.comment.has_order ?
+                [h("span", { class: "s-comments-item-has-order-check-icon", innerHTML: CheckIcon }), h("span", { class: "s-comments-item-has-order-check-text" }, this.has_bought_trans, " ", this.comment.rating ? ', ' : '')] : null, !!this.comment.rating ?
+                h("span", { class: "s-comments-item-rated-widget" }, this.rated_trans) : null)
+            : null), h("p", { key: 'cc89bf414f7cd2f512fac82312f412abc38a022a', class: "s-comments-item-timestamp s-ltr" }, " ", this.getDate(this.comment.created_at?.date), " ", h("span", { key: 'ccc1a1c62a1584a25f165db0366d9c30dca54e4b', class: "s-comments-item-time" }, " - ", this.getTime(this.comment.created_at?.date), " ")), !!this.comment.rating || !!this.comment.stars ?
+            h("salla-rating-stars", { size: "mini", class: "s-comments-item-stars", value: this.comment.rating || this.comment.stars })
+            : null), h("div", { key: 'c8de0a5afdb23c5c3cf78f0e0bee2f90e4222424', class: "s-comments-item-content" }, h("p", { key: 'a56d8cd320200f11b546f85729aac9c8e36a28e1', innerHTML: this.comment.content }), this.allowAttachImages && h("div", { key: 'b693e349105bb69a3f411f1ffcf84b700ac6aef5', class: "s-comments-item-images" }, this.comment.images.map((image, index) => (h("img", { key: index, src: image, alt: "", onClick: () => this.modal.open() }))), h("salla-modal", { key: 'cd57384d102f513beb82a8004663af1067a5b119', ref: modal => this.modal = modal, width: "sm" }, h("salla-slider", { key: '07e998f014edf222aab402ba8a0a7e0d05d19f53', id: `s-comments-item-${this.comment.id}-images`, class: "s-comments-item-images-slider", type: "thumbs", "auto-height": true, showControls: this.comment.images.length > 1 ? true : false, "show-thumbs-controls": "false" }, h("div", { key: '95edb3475172c8262eb98d32d5750b2dbdc866fc', slot: 'items' }, this.comment.images.map((image, index) => (h("img", { key: index, src: image, alt: "" })))), h("div", { key: '1c8b6d610fe47c20bd2f41fae5df1c069c0f8894', slot: "thumbs" }, this.comment.images.map((image, index) => (h("div", { class: "s-comments-item-images-slider-thumb" }, h("img", { key: index, src: image, alt: "" })))))))), this.allowLikes && !isAdmin && salla.url.is_page('product.single') ? h("salla-button", { ref: el => this.likeBtn = el, class: `s-comments-item-like-btn ${this.likedComments.includes(this.comment.id) ? 'liked' : ''}`, loaderPosition: 'center', fill: 'outline', size: 'small', onClick: () => this.toggleLike() }, h("span", null, this.helpfulLabel, " ", this.likesCount > 0 ? `(${this.likesCount})` : ''), h("span", { innerHTML: ThumbsUp })) : '', this.comment.is_pending ?
+            h("span", { class: "s-comments-item-pending-text" }, this.waiting_approval_trans) : null))), !!this.getReplies().length && !isAdmin ?
+            this.getReplies().map((reply) => {
+                return h("div", null, h("salla-comment-item", { comment: reply }));
+            }) : null)));
+    }
+    static get is() { return "salla-comment-item"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-comments.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-comments.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "comment": {
+                "type": "unknown",
+                "attribute": "comment",
+                "mutable": false,
+                "complexType": {
+                    "original": "Comment",
+                    "resolved": "Comment",
+                    "references": {
+                        "Comment": {
+                            "location": "import",
+                            "path": "./interfaces",
+                            "id": "src/components/salla-comments/interfaces.ts::Comment"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Single Comment Instance"
+                },
+                "getter": false,
+                "setter": false
+            },
+            "hideBought": {
+                "type": "unknown",
+                "attribute": "hide-bought",
+                "mutable": false,
+                "complexType": {
+                    "original": "Boolean",
+                    "resolved": "Boolean",
+                    "references": {
+                        "Boolean": {
+                            "location": "global",
+                            "id": "global::Boolean"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Hide Bought"
+                },
+                "getter": false,
+                "setter": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "has_bought_trans": {},
+            "rated_trans": {},
+            "waiting_approval_trans": {},
+            "has_order_trans": {},
+            "allowLikes": {},
+            "allowAttachImages": {},
+            "helpfulLabel": {},
+            "likesCount": {},
+            "likedComments": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

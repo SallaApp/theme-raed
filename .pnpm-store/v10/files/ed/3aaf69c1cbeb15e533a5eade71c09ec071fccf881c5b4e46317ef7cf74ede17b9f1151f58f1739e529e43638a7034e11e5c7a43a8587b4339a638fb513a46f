@@ -1,0 +1,326 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { r as registerInstance, h, a as getElement } from './index-DPwa4NOx.js';
+
+var PageType;
+(function (PageType) {
+    PageType["ProductDetail"] = "product.single";
+    PageType["Cart"] = "cart";
+})(PageType || (PageType = {}));
+var OfferType;
+(function (OfferType) {
+    OfferType["Conditional"] = "conditional";
+    OfferType["PercentageOrFixed"] = "fixed";
+    OfferType["DiscountsTable"] = "discounts_table";
+    OfferType["Bank"] = "bank";
+    OfferType["BuyXGetY"] = "buy_x_get_y";
+    OfferType["SpecialPrice"] = "special_price";
+})(OfferType || (OfferType = {}));
+
+const sallaOfferCss = ".s-offer-wrapper .s-slider-block__title h2{font-size:1.125rem;line-height:1.75rem;color:#f87171}.s-offer-wrapper .s-slider-block__title h2::before{font-family:\"sallaicons\";content:\"\\ee30\" !important;position:absolute;top:1rem;font-size:3rem;font-weight:400;line-height:1;color:#fef2f2}.s-offer-bank-wrapper-sinlge-item{display:flex;align-items:center !important;gap:14px}.s-offer-bank-wrapper{display:flex !important;width:100% !important}";
+
+const SallaOffer = class {
+    constructor(hostRef) {
+        registerInstance(this, hostRef);
+        /**
+         * Custom Card Component for the Salla Products List.
+         *
+         * This component allows you to customize the appearance of individual product cards within a Salla Products List.
+         *
+         * @example
+         * <salla-products-list product-card-component="my-custom-card-style1" ...
+         * <salla-products-list product-card-component="my-custom-card-style2" ...
+         */
+        this.productCardComponent = 'custom-salla-product-card';
+        // Declare component state variables
+        this.offersList = [];
+        this.isMultipleBank = false;
+        this.isBankOffer = false;
+        this.canRender = false;
+        this.showOffer = salla.config.get('store.settings.product.show_special_offers');
+        // Default translated texts
+        this.offer_with_price_text = salla.lang.get('pages.offer.with_price', { price: '' });
+        this.with_discount_text = salla.lang.get('pages.products.with_a_discount');
+        this.product_discount_text = salla.lang.get('pages.products.discount');
+        this.special_offer_text = salla.lang.get('pages.products.special_offer');
+        this.multipleBankOfferTitleText = salla.lang.get('pages.offer.multiple_bank_offers_title');
+        this.multipleBankOfferTitleDescription = salla.lang.get('pages.offer.multiple_bank_offers_message');
+        this.buy_quantity_text = (quantity) => salla.lang.get('pages.offer.buy_quantity', { quantity });
+        // Language
+        salla.lang.onLoaded(() => {
+            this.offer_with_price_text = salla.lang.get('pages.offer.with_price');
+            this.with_discount_text = salla.lang.get('pages.products.with_a_discount');
+            this.product_discount_text = salla.lang.get('pages.products.discount');
+            this.special_offer_text = salla.lang.get('pages.products.special_offer');
+            this.multipleBankOfferTitleText = salla.lang.get('pages.offer.multiple_bank_offers_title');
+            this.multipleBankOfferTitleDescription = salla.lang.get('pages.offer.multiple_bank_offers_message');
+            this.buy_quantity_text(0);
+        });
+        salla.onReady(() => {
+            this.currentPage = salla.config.get('page.slug');
+            this.userCurrency = salla.config.get('currencies')[salla.config.get('user.currency_code')].symbol;
+        });
+        this.categorySlot = this.host.querySelector('[slot="category"]')?.innerHTML || '<a href={url} class="s-offer-slide-cat-entry"><i class={icon}></i><h4>{name}</h4></a>';
+    }
+    async getEndpointByPageName() {
+        if (this.currentPage == PageType.Cart) {
+            const cartId = await Salla.cart.getCurrentCartId();
+            return `offers/cart/${cartId}`;
+        }
+        if (this.currentPage == PageType.ProductDetail) {
+            return `offers/product/${salla.config.get('page.id')}`;
+        }
+        return "offers";
+    }
+    /**
+  * Emits a promotion viewed event for analytics tracking
+  */
+    emitPromotionViewed() {
+        if (!(this.offersList.length && this.canRender && this.showOffer))
+            return;
+        // Transform offer data to match analytics expectations
+        const promotionData = {
+            id: this.offersList[0].id,
+            name: this.offersList[0].title,
+            creative: this.offersList[0].description || '',
+            position: 1
+        };
+        salla.event.emit('promotion::viewed', [promotionData]);
+    }
+    /**
+     * Emits a promotion clicked event
+     */
+    emitPromotionClicked(position = 1) {
+        if (!(this.offersList.length && this.canRender && this.showOffer))
+            return;
+        // Transform offer data to match analytics expectations
+        const promotionData = {
+            id: this.offersList[0].id,
+            name: this.offersList[0].title,
+            creative: this.offersList[0].description || '',
+            position: position
+        };
+        salla.event.emit('promotion::clicked', [promotionData]);
+    }
+    componentWillLoad() {
+        this.hasCustomComponent = !!customElements.get(this.productCardComponent);
+        // let offers = this.getOffersFromStorage();
+        // if (offers) {
+        //   return offers.then(offersFromStorage => this.offersList = offersFromStorage);
+        // }
+        return (new Promise(resolve => salla.onReady(resolve)))
+            .then(() => {
+            this.showOffer = !salla.url.is_page('product.single') || salla.config.get('store.settings.product.show_special_offers');
+            if (this.showOffer) {
+                return;
+            }
+            throw new Error("Merchant disabled showing the offers on product page");
+        })
+            .then(async () => salla.api.request(await this.getEndpointByPageName()))
+            .then((res) => {
+            if (!(this.offersList = res.data).length) {
+                throw new Error('salla-offers:: There is no offers!');
+            }
+            //we support these offers only
+            const offer = this.offersList.find(offer => [OfferType.SpecialPrice, OfferType.Bank, OfferType.BuyXGetY, OfferType.DiscountsTable].includes(offer.type));
+            if (!offer) {
+                throw new Error('salla-offers:: Offer type not supported yet!');
+            }
+            //because there is no need for special handling for discounts table, just skip the other cases
+            if (offer.type === OfferType.DiscountsTable) {
+                return this.offersList = [offer];
+            }
+            //if it's banks offer, we need to include the other banks overs
+            if ((this.isBankOffer = offer.type === OfferType.Bank)) {
+                this.offersList = this.offersList.filter(offer => offer.type === OfferType.Bank);
+                this.isMultipleBank = this.offersList.length > 1;
+                return this.offersList;
+            }
+            //if it's special price offer
+            if (offer.type === OfferType.SpecialPrice) {
+                const details = offer.details;
+                return details.apply_to === 'product'
+                    // Avoid additional requests; use `salla-products-slider` and pass the custom card
+                    ? salla.product.api.fetch({ source: "selected", source_value: details.targets })
+                        .then((response) => {
+                        offer.details.products = response.data; // Set the fetched products
+                        return this.offersList = [offer];
+                    })
+                    : salla.product.api.categories() // Fetch all categories in one query
+                        .then((res) => {
+                        const categoriesToRender = this.findCategories(res.data, details.targets); // Extract only the selected categories
+                        offer.details.categories = categoriesToRender;
+                        return this.offersList = [offer];
+                    });
+            }
+            //BuyXGetY offers
+            const getY = offer.details.get;
+            return getY.source === 'products'
+                //todo:: avoid this request, and the handling for the products, just use `salla-products-slider` and don't forget to pass the customcard
+                ? salla.product.api.fetch({ source: "selected", source_value: getY.source_value })
+                    .then((response) => {
+                    getY.products = response.data;
+                    offer.details.get = getY;
+                    return this.offersList = [offer];
+                }) //set the products
+                : salla.product.api.categories() //get all categories in one query, then extract only the selected one, instead of sending multi requests
+                    .then((res) => {
+                    getY.categories = this.findCategories(res.data, getY.source_value);
+                    offer.details.get = getY;
+                    return this.offersList = [offer];
+                });
+        })
+            .then((offers) => {
+            salla.storage.set(this.getStorageKey(), { offers, stored_at: new Date().getTime() });
+            this.canRender = true;
+        })
+            .catch((error) => {
+            salla.logger.warn(error);
+        });
+    }
+    componentDidLoad() {
+        let nav = this.host.querySelector('.s-slider-block__title-nav');
+        nav?.classList.add("s-offer-bank-payment-nav");
+        this.emitPromotionViewed();
+    }
+    findCategories(categories, ids) {
+        let found = [];
+        for (const category of categories) {
+            if (ids.includes(category.id_ || category.id)) { //here we are using || because we are planning to drop `id_`
+                found.push(category);
+            }
+            if (category.sub_categories?.length > 0) {
+                found = found.concat(this.findCategories(category.sub_categories, ids));
+            }
+        }
+        return found;
+    }
+    //todo::add to the key params, to make sure it will support multi offers in the same page if it's wanted
+    getStorageKey() {
+        try {
+            const pageSlug = salla.config.get('page.slug').replace('.', '_');
+            const locale = salla.lang.getLocale();
+            const currencyCode = salla.config.currency().code;
+            if (!pageSlug || !locale || !currencyCode) {
+                throw new Error('Unable to get the storage key.');
+            }
+            return `s-offers-${pageSlug}-${salla.config.get('page.id')}-${locale}-${currencyCode}`;
+        }
+        catch (error) {
+            return '';
+        }
+    }
+    //@ts-ignore
+    getOffersFromStorage() {
+        let storageOffers = salla.storage.get(this.getStorageKey());
+        //if the offers not existed, or it has been stored before 10 minutes from now, ignore it;
+        if (!storageOffers || storageOffers.stored_at < (new Date().getTime() - 10 * 60 * 1000)) {
+            salla.storage.remove(this.getStorageKey());
+            return null;
+        }
+        this.canRender = true;
+        //return it as resolve to support .then
+        return Promise.resolve(storageOffers.offers);
+    }
+    render() {
+        // Check if the offers list is empty or if the component is not ready to render
+        if (!this.offersList.length || !this.canRender || !this.showOffer)
+            return null;
+        const offer = this.offersList[0];
+        const blockTitle = this.isBankOffer ? (this.isMultipleBank ? this.multipleBankOfferTitleText : null) : offer.title;
+        const blockSubTitle = this.isBankOffer ? (this.isMultipleBank ? this.multipleBankOfferTitleDescription : null) : offer.description;
+        const titles = {
+            'block-title': blockTitle,
+            'block-subTitle': blockSubTitle,
+            'show-controls': this.isMultipleBank
+        };
+        return (h("div", { class: "s-offer-wrapper", onClick: () => this.emitPromotionClicked() }, h("p", { class: "s-offer-corner-badge" }, this.special_offer_text), h("salla-slider", { type: "carousel", id: "offer-slider", ...titles }, h("div", { slot: 'items' }, this.renderSectionForOfferType(offer.type)))));
+    }
+    renderSectionForOfferType(offerType) {
+        if (this.isBankOffer) {
+            return this.renderBankSection();
+        }
+        if (offerType == OfferType.SpecialPrice) {
+            return this.renderSpecialPriceSection();
+        }
+        if (offerType == OfferType.BuyXGetY) {
+            return this.renderBuyXGetYSection();
+        }
+        return this.renderDiscountTableSection();
+    }
+    /**
+     * Generates content for the categories section.
+     *
+     * @param offeredCategories - An array of Category objects.
+     * @returns An array of HTML elements representing categories.
+     */
+    getCategoriesSection(category) {
+        return h("div", { class: "s-offer-slide-one-sixth swiper-slide", innerHTML: this.categorySlot
+                .replace(/\{url\}/g, category.url)
+                .replace(/\{icon\}/g, category.icon || "sicon-store")
+                .replace(/\{name\}/g, category.name) });
+    }
+    renderBuyXGetYSection() {
+        const details = this.offersList[0].details;
+        return [
+            details.get.products?.map((product) => (h("div", { class: "s-offer-slide-one-fourth" }, this.hasCustomComponent
+                ? h(this.productCardComponent, { product: product })
+                : h("salla-product-card", { "shadow-on-hover": true, product: product })))),
+            details.get.categories?.map((category) => this.getCategoriesSection(category))
+        ];
+    }
+    /**
+     * Generates content for the bank section.
+     *
+     * @param offeredBank - An array of Bank objects.
+     * @param name - The title of the current offer.
+     * @param description - The description of the current offer.
+     * @returns An array of HTML elements representing banks.
+     *
+     * TODO: loop over the list and filter bank types and pass it to this function
+     */
+    renderBankSection() {
+        return this.offersList.map((bankOffer) => {
+            return h("div", { class: { "s-offer-slide-one-sixth": this.isMultipleBank, "s-offer-bank-wrapper-sinlge-item": !this.isMultipleBank } }, h("div", { class: { "s-offer-bank-wrapper": true, "s-offer-slide-one-sixth": !this.isMultipleBank, "s-offer-bank-wrapper-multi-spacer": this.isMultipleBank } }, h("div", { class: "s-offer-bank-logo" }, h("img", { src: bankOffer.details.logo || salla.url.cdn('images/s-empty.png'), "data-src": bankOffer.details.logo, alt: bankOffer.title + " offer" })), h("ul", { class: "s-offer-bank-payment-wrapper" }, bankOffer.details.payments.map((payment) => {
+                return h("li", { class: "s-offer-bank-payment-single" }, h("img", { src: salla.url.cdn('images/payment/' + payment + '.png') || salla.url.cdn('images/s-empty.png'), "data-src": salla.url.cdn('images/payment/' + payment + '.png'), alt: "payment" }));
+            })), this.isMultipleBank ?
+                h("p", { class: "s-offer-bank-payment-discount-percent" }, `${this.product_discount_text} ${bankOffer.details.discount_value}${bankOffer.details.discount_type === "percentage" && '%'}`)
+                : ""), !this.isMultipleBank ?
+                h("div", { class: "s-offer-bank-message s-offer-slide-one-fourth" }, h("h2", null, this.offersList[0].title), h("p", { innerHTML: this.generateBankDescription(this.offersList[0].description, bankOffer.details.discount_value) }))
+                : "");
+        });
+    }
+    generateBankDescription(desc, value) {
+        return desc.replace(new RegExp(`${value} %`), `<span class="s-offer-bank-message-amount">${value} %</span>`);
+    }
+    /**
+     * Generates content for the discount table section.
+     *
+     * @param discountTable - An array of Discount objects.
+     * @returns An array of HTML elements representing discounts_table.
+     */
+    renderDiscountTableSection() {
+        const offer = this.offersList[0];
+        let show_discounted_price = offer.details.show_price_after_discount;
+        return this.offersList[0].details.discounts?.map((discount) => h("div", { class: "s-offer-slide-one-fourth" }, h("div", { class: "s-offer-slide-offer-entry" }, h("div", { class: "s-offer-slide-offer-entry-price-quantity-container" }, h("p", { class: "s-offer-slide-offer-entry-quantity" }, this.buy_quantity_text(discount.quantity)), show_discounted_price ?
+            h("div", { class: "s-offer-slide-offer-entry-price" }, h("span", null, this.offer_with_price_text), h("span", { class: "s-offer-slide-offer-entry-price-amount" }, discount.discounted_amount), " ", h("span", null, this.userCurrency)) : ""), h("p", { class: "s-offer-slide-offer-entry-price-amount-percent" }, this.with_discount_text, "(", h("span", null, discount.percentage, !!discount.percentage && '%'), ")"))));
+    }
+    renderSpecialPriceSection() {
+        const details = this.offersList[0].details;
+        return [
+            // Render products if `apply_to` is "product"
+            details.apply_to === "product" &&
+                details.products?.map((product) => (h("div", { class: "s-offer-slide-one-fourth" }, this.hasCustomComponent
+                    ? h(this.productCardComponent, { product: product })
+                    : h("salla-product-card", { "shadow-on-hover": true, product: product })))),
+            // Render categories if `apply_to` is "category"
+            details.apply_to === "category" &&
+                details.categories?.map((category) => this.getCategoriesSection(category)),
+        ];
+    }
+    get host() { return getElement(this); }
+};
+SallaOffer.style = sallaOfferCss;
+
+export { SallaOffer as salla_offer };

@@ -1,0 +1,122 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import PencilRuler from "../../assets/svg/pencil-ruler.svg";
+/**
+ * @slot header - The upper section of the component.Empty by default.
+ * @slot footer - The bottom section of the component.Empty by default.
+ */
+export class SallaProductSizeGuide {
+    constructor() {
+        this.hasError = false;
+        salla.event.on('size-guide::open', (product_id) => this.open(product_id));
+        salla.lang.onLoaded(() => {
+            this.placeholder_title = salla.lang.get('pages.products.size_guide_placeholder');
+            this.placeholder_description = salla.lang.get('pages.products.size_guide_placeholder_info');
+            this.modal_title = salla.lang.get('pages.products.size_guides');
+        });
+    }
+    /**
+     * Show the size-guide modal window
+     */
+    async open(product_id) {
+        this.modal.setTitle(this.modal_title);
+        this.modal.open();
+        return await salla.api.withoutNotifier(() => salla.product.getSizeGuides(product_id))
+            .then((response) => {
+            this.guides = response.data;
+        })
+            .catch(e => {
+            console.log(e);
+            this.hasError = true;
+            this.placeholder_description = e.response?.data?.error?.message || e.response?.data;
+        })
+            .finally(() => this.modal.stopLoading());
+    }
+    /**
+     *
+     * Hide the size-guide modal window
+     */
+    async close() {
+        return this.modal.close();
+    }
+    showPlaceholder() {
+        return h("salla-placeholder", { alignment: "center", iconSize: "xl" }, h("div", { slot: "title" }, this.placeholder_title), h("div", { slot: "description" }, this.placeholder_description));
+    }
+    render() {
+        return (h("salla-modal", { key: 'e1a4f46c6b2a3b9d06b2cd439a29dae3d3df1e2b', class: "s-product-size-guide-wrapper", id: 'salla-product-size-guide-modal', isLoading: true, "has-skeleton": true, width: "md", ref: modal => this.modal = modal }, h("span", { key: '921988dcf15f88a4382244a710117a30466e51ec', slot: 'icon', class: "s-product-size-guide-header-icon", innerHTML: PencilRuler }), h("div", { key: '7a74a5995882d1d597e3e3ca6594248e03225be9', slot: "loading" }, h("div", { key: 'c08eaeb646f503f14b1a6bc9e0132970b09c154c', class: "s-product-size-guide-skeleton" }, h("salla-skeleton", { key: 'b0319b0ac90388145e1db879571680eea3742722', height: '15px', width: '25%' }), h("div", { key: '4cb3620675a3f6ef49a33e35113fbac468578034', class: "s-product-size-guide-skeleton-header" }, h("salla-skeleton", { key: '7413b92d0b53d179876bf9938f546819d190b01f', height: '40px' }), h("salla-skeleton", { key: 'd4f211c5548045bb4faea5e1e832c784cc85d2d0', height: '40px' }), h("salla-skeleton", { key: '23cb9409fb9f4863e233fdbe86a7ddd89761e7ed', height: '40px' }), h("salla-skeleton", { key: '93f027dbf97b43bcffae29ebfdf5c15c7fa012bf', height: '40px' })), h("div", { key: '494ca32976d92c800c5be8e44f26cb972f8cf1e0', class: "s-product-size-guide-skeleton-content" }, h("salla-skeleton", { key: '9889791d8bba3e58c6315e5d76b6536ef14ac29d', height: '15px', width: '25%' }), h("salla-skeleton", { key: 'e607037bbcab29681ffe47424b9566fcf32e7a58', height: '10px', width: '75%' }), h("salla-skeleton", { key: '9eedac50c162985e5c49b6e5b56c4ad86e86c5a6', height: '10px', width: '50%' }), h("salla-skeleton", { key: '9b189d240da2d519a4b0586bb827fd79d9021e3e', height: '10px', width: '75%' }), h("salla-skeleton", { key: 'b9341d1249c837d8b8a71b1c9c8793521c49808d', height: '10px', width: '100%' }), h("salla-skeleton", { key: 'c57270b467abbdae57a1a1389b4df6853b2de586', height: '10px', width: '25%' }), h("salla-skeleton", { key: 'e0d9e3646ffbd28ccf5c93fa99bb294b93f597e7', height: '10px', width: '60%' }), h("salla-skeleton", { key: '20bed29a322cfe01caf9b2c1c49c0d6b2be7afc5', height: '10px', width: '45%' }), h("salla-skeleton", { key: '132d3aee12bad2b3b84b769742c758854498a5b1', height: '10px', width: '30%' })))), h("slot", { key: '008b024c1d8daea0b17f184eda43eaab3d72069a', name: "header" }), !this.hasError && !!this.guides ?
+            [
+                h("salla-tabs", null, this.guides.map((guide) => h("salla-tab-header", { slot: "header", name: guide.name }, h("span", null, guide.name))), this.guides.map((guide) => h("salla-tab-content", { slot: "content", name: guide.name }, h("div", { innerHTML: guide.description }))))
+            ]
+            : this.showPlaceholder(), h("slot", { key: '6aedc0d9ac633fe98c6475d2375d59ef761cc64e', name: "footer" })));
+    }
+    static get is() { return "salla-product-size-guide"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-product-size-guide.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-product-size-guide.css"]
+        };
+    }
+    static get states() {
+        return {
+            "guides": {},
+            "productId": {},
+            "placeholder_title": {},
+            "placeholder_description": {},
+            "modal_title": {},
+            "hasError": {}
+        };
+    }
+    static get methods() {
+        return {
+            "open": {
+                "complexType": {
+                    "signature": "(product_id: number) => Promise<any>",
+                    "parameters": [{
+                            "name": "product_id",
+                            "type": "number",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Show the size-guide modal window",
+                    "tags": []
+                }
+            },
+            "close": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "\nHide the size-guide modal window",
+                    "tags": []
+                }
+            }
+        };
+    }
+    static get elementRef() { return "host"; }
+}

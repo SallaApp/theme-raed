@@ -1,0 +1,69 @@
+// Global Variables and Theme Settings for Neoma Brand
+
+// 1. Colors
+$color-bg-primary: #FDFBF7; // Soft warm beige/cream - "primary background"
+$color-bg-secondary: #F5F2EC; // Slightly darker beige for variation
+
+$color-accent-primary: #1A4B8C; // Rich warm blue - "primary accent/logo"
+$color-accent-primary-hover: #153a6e; // Darker shade for hover states
+
+// Muted Warm Pastels - Secondary Accents
+$color-pastel-pink: #F4E1E1;
+$color-pastel-orange: #F9E8D9;
+$color-pastel-yellow: #FAF6DC;
+$color-pastel-olive: #E2E8D5;
+
+$color-text-body: #4A4A4A; // Warm grey for body text
+$color-text-heading: #333333; // Darker grey for headings
+
+// 2. Typography
+// Using standard web safe fonts for now as placeholders for the "Custom" fonts described
+// Ideally, these would be imports for the specific custom fonts.
+$font-logo: 'Cursive', sans-serif; // Placeholder for the wavy custom script
+$font-heading: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; // Clean elegant sans-serif
+$font-body: 'Georgia', 'Times New Roman', serif; // Comfortable serif or warm sans-serif
+
+// 3. Layout
+$container-width: 1280px;
+$border-radius-card: 12px;
+
+:root {
+  --color-primary: #{$color-accent-primary};
+  --color-primary-dark: #{$color-accent-primary-hover};
+  --bg-main: #{$color-bg-primary};
+  --bg-secondary: #{$color-bg-secondary};
+  --text-main: #{$color-text-body};
+  --text-header: #{$color-text-heading};
+}
+
+body {
+  background-color: $color-bg-primary;
+  color: $color-text-body;
+  font-family: $font-body;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $color-text-heading;
+  font-family: $font-heading;
+  font-weight: 400; // Elegant, not too bold
+}
+
+// Global button styles overrides
+.btn {
+  &--primary {
+    background-color: $color-accent-primary;
+    color: white;
+    &:hover {
+      background-color: $color-accent-primary-hover;
+    }
+  }
+}
+
+// Utility class for the hand-drawn pattern (placeholder using CSS radial gradient for now)
+.bg-pattern {
+  background-color: $color-bg-primary;
+  background-image: radial-gradient($color-pastel-orange 1px, transparent 1px), radial-gradient($color-pastel-olive 1px, transparent 1px);
+  background-position: 0 0, 25px 25px;
+  background-size: 50px 50px;
+}
+

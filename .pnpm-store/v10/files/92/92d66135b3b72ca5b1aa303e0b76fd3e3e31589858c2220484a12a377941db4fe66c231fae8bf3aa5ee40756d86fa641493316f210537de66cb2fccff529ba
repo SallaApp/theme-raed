@@ -1,0 +1,266 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+import anime from "animejs";
+import facebook from "../../assets/svg/facebook.svg";
+import twitter from "../../assets/svg/twitter.svg";
+import copy_link from "../../assets/svg/link.svg";
+import email from "../../assets/svg/mail.svg";
+import whatsapp from "../../assets/svg/whatsapp.svg";
+import { Socials } from "./interfaces";
+import Cancel from "../../assets/svg/cancel.svg";
+import ShareAlt from "../../assets/svg/share-alt.svg";
+/**
+ * @slot widget - An action that can be used to activete or open the component by calling the `open` method.
+ */
+export class SallaSocialShare {
+    constructor() {
+        this.opened = false;
+        this.allPlatforms = [Socials.WHATSAPP, Socials.FACEBOOK, Socials.TWITTER, Socials.EMAIL, Socials.COPY_LINK];
+        this.platformIcons = [{ icon: whatsapp, name: Socials.WHATSAPP }, {
+                icon: facebook,
+                name: Socials.FACEBOOK
+            }, { icon: twitter, name: Socials.TWITTER }, { icon: email, name: Socials.EMAIL }, {
+                icon: copy_link,
+                name: Socials.COPY_LINK
+            }];
+        this.convertedPlatforms = [];
+        /**
+         * page url that will be shared custom | current page url
+         */
+        this.url = "";
+        /**
+         * page url name that will be shared custom | current page url
+         */
+        this.urlName = "";
+        /**
+         * selected platforms to share | all platforms
+         */
+        this.platforms = 'facebook,twitter,whatsapp,email,copy_link';
+    }
+    componentWillLoad() {
+        if (document.getElementById('a2a-script')) {
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://static.addtoany.com/menu/page.js';
+        script.setAttribute('id', 'a2a-script');
+        script.async = true;
+        script.onload = function () {
+            window.a2a_config.locale = salla.config.get('user.language_code', salla.lang.getLocale());
+            window.a2a_config.callbacks = window.a2a_config.callbacks || [];
+            window.a2a_config.callbacks.push({
+                share: (data) => {
+                    // Handle share event
+                    const shareData = {
+                        share_via: data.service.toLowerCase(),
+                        url: data.url,
+                        title: data.title
+                    };
+                    // Dispatch the share event
+                    salla.event.emit('share-element', shareData);
+                }
+            });
+        };
+        document.body.appendChild(script);
+    }
+    /**
+     * Activate or open the share menu.
+     */
+    async open() {
+        const animateList = new anime.timeline().add({
+            targets: this.shareMenu,
+            translateY: [-50, 0],
+            opacity: [0, 1],
+            duration: 300,
+            podding: '0',
+            easing: 'easeInOutSine'
+        });
+        animateList.add({
+            targets: this.shareMenu.children,
+            translateZ: 0,
+            translateY: [-30, 0],
+            scaleY: [0, 1],
+            opacity: [0, 1],
+            duration: 1400,
+            delay: anime.stagger(100)
+        }, '-=200');
+        this.opened = !this.opened;
+        if (this.opened) {
+            this.shareMenu.classList.add('opened');
+        }
+        else {
+            animateList.pause();
+            animateList.seek(0);
+            this.shareMenu.classList.remove('opened');
+        }
+    }
+    /**
+     * Asynchronously initializes the "AddToAny" (a2a) social sharing tool on the current page.
+     * If the global object `window.a2a` is available, it initializes the tool with the 'page' mode.
+     * The 'page' mode is typically used to enable sharing of the current webpage.
+     *
+     * @remarks
+     * This function is designed to be used in scenarios where dynamic loading or refreshing of social sharing tools is needed.
+     * Ensure that the AddToAny script is properly included in the HTML document before calling this function.
+     *
+     * @example
+     * // Call the refresh function to initialize AddToAny on the page.
+     * await refresh();
+     *
+     * @throws {Error} Throws an error if the AddToAny script is not properly included or if there are issues during initialization.
+     *
+     * @async
+     * @returns {Promise<void>} A promise that resolves once the initialization is complete.
+     */
+    async refresh() {
+        // Attempt to initialize AddToAny with 'page' mode if the global object `window.a2a` is available.
+        window.a2a?.init('page');
+    }
+    render() {
+        return (h("div", { key: 'dcba2bc3344b69f395379ac57b849d02013cd778', class: "s-social-share-wrapper" }, h("slot", { key: 'ce23f2263042bd09d1233570739756d8aa133145', name: 'widget' }, h("salla-button", { key: 'f76f0c7af4c6f717634575efae944e11fc5403d7', "aria-label": "Share", onClick: () => this.open(), class: "s-social-share-btn", shape: "icon", fill: "outline", color: "light" }, h("span", { key: 'b6c190caf3f9ab6dbf930e62caed60f0c5cb6a39', innerHTML: this.opened ? Cancel : ShareAlt }))), h("ul", { key: '5eee0092e3596e384690b3ab3f2fb74a0fc22e66', ref: el => this.shareMenu = el, class: "s-social-share-list a2a_kit share", "data-a2a-url": this.url ? this.url : window.location.href, "data-a2a-title": this.urlName ? this.urlName : document.title }, this.platforms.split(',').map(platform => {
+            return (h("li", null, h("a", { class: `a2a_button_${platform}`, "aria-label": `Share Via ${platform}` }, this.platformIcons.map((icon) => {
+                if (icon.name === platform) {
+                    return h("span", { class: "s-social-share-icon", innerHTML: icon.icon });
+                }
+            }))));
+        }))));
+    }
+    static get is() { return "salla-social-share"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-social-share.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-social-share.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "url": {
+                "type": "string",
+                "attribute": "url",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "page url that will be shared custom | current page url"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "\"\""
+            },
+            "urlName": {
+                "type": "string",
+                "attribute": "url-name",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "page url name that will be shared custom | current page url"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "\"\""
+            },
+            "platforms": {
+                "type": "string",
+                "attribute": "platforms",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "selected platforms to share | all platforms"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": true,
+                "defaultValue": "'facebook,twitter,whatsapp,email,copy_link'"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "opened": {},
+            "allPlatforms": {},
+            "platformIcons": {},
+            "convertedPlatforms": {}
+        };
+    }
+    static get methods() {
+        return {
+            "open": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Activate or open the share menu.",
+                    "tags": []
+                }
+            },
+            "refresh": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Asynchronously initializes the \"AddToAny\" (a2a) social sharing tool on the current page.\nIf the global object `window.a2a` is available, it initializes the tool with the 'page' mode.\nThe 'page' mode is typically used to enable sharing of the current webpage.",
+                    "tags": [{
+                            "name": "remarks",
+                            "text": "This function is designed to be used in scenarios where dynamic loading or refreshing of social sharing tools is needed.\nEnsure that the AddToAny script is properly included in the HTML document before calling this function."
+                        }, {
+                            "name": "example",
+                            "text": "// Call the refresh function to initialize AddToAny on the page.\nawait refresh();"
+                        }, {
+                            "name": "throws",
+                            "text": "{Error} Throws an error if the AddToAny script is not properly included or if there are issues during initialization."
+                        }, {
+                            "name": "async",
+                            "text": undefined
+                        }, {
+                            "name": "returns",
+                            "text": "A promise that resolves once the initialization is complete."
+                        }]
+                }
+            }
+        };
+    }
+}

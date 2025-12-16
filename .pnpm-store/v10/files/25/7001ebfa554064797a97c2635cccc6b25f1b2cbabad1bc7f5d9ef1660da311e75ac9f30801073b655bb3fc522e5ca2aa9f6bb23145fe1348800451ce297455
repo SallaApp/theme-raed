@@ -1,0 +1,713 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import anime from "animejs";
+import { h } from "@stencil/core";
+import Images from "../../assets/svg/images.svg";
+import LeftArrow from "../../assets/svg/arrow-left.svg";
+import Cancel from "../../assets/svg/cancel.svg";
+import GiftSharing from "../../assets/svg/gift-sharing.svg";
+import Alert from "../../assets/svg/alert.svg";
+/**
+ * @slot widget-btn-content - Used to customize widget button content.
+ */
+export class SallaGifting {
+    constructor() {
+        this.defaultEvent = "gifting:open";
+        this.selectImageForYourGift = salla.lang.get('blocks.buy_as_gift.select_image_or_upload');
+        this.currentStep = 1;
+        this.showCalendar = false;
+        this.showGiftText = false;
+        this.currentLang = '';
+        this.parentClass = "is-current-step-1";
+        this.errors = {};
+        this.gift = undefined;
+        this.selectedGiftTextOption = undefined;
+        this.selectedCountryId = undefined;
+        this.selectedCountryCode = undefined;
+        this.loadingCities = false;
+        this.showTextArea = false;
+        /// Gift Form Data
+        this.selectedImage = undefined;
+        this.uploadedImage = undefined;
+        this.selectedText = undefined;
+        this.hasError = false;
+        this.timeZone = null;
+        this.hostId = `salla-gifting-${Math.random().toString(36).slice(2, 10)}`;
+        /**
+         * The form selector to be used to get the form data
+         */
+        this.formSelector = 'form.product-form, form.form--product-options';
+        salla.lang.onLoaded(() => {
+            this.selectImageOrUpload = salla.lang.get('blocks.buy_as_gift.select_image_or_upload');
+            this.selectImageForYourGift = salla.lang.get('blocks.buy_as_gift.select_image_for_your_gift');
+            this.sectionTitle = salla.lang.get('blocks.buy_as_gift.gift_the_one_you_love');
+            this.sectionSubtitle = salla.lang.get('blocks.buy_as_gift.gift_the_one_you_love_message');
+            this.sectionBtnText = salla.lang.get('blocks.buy_as_gift.send_as_a_gift');
+            this.giftDetails = salla.lang.get('blocks.buy_as_gift.gift_details');
+            this.selectGiftMessage = salla.lang.get('blocks.buy_as_gift.select_gift_message');
+            this.giftCustomText = salla.lang.get('blocks.buy_as_gift.gift_custom_text');
+            this.textId = salla.lang.get('blocks.buy_as_gift.text_id');
+            this.incorrectGiftText = salla.lang.get('blocks.buy_as_gift.incorrect_gift_text');
+            this.nextStep = salla.lang.get('blocks.buy_as_gift.next_step');
+            this.senderNameLabel = salla.lang.get('blocks.buy_as_gift.sender_name');
+            this.receiverNameFieldLabel = salla.lang.get('blocks.buy_as_gift.receiver_name');
+            this.receiverMobileFieldLabel = salla.lang.get('blocks.buy_as_gift.receiver_mobile');
+            this.receiverCountryFieldLabel = salla.lang.get('blocks.buy_as_gift.receiver_country');
+            this.ksa = salla.lang.get('pages.checkout.ksa');
+            this.selectCity = salla.lang.get('pages.checkout.select_city');
+            this.selectCountry = salla.lang.get('pages.checkout.select_country');
+            this.selectCityInfo = salla.lang.get('blocks.buy_as_gift.city_info');
+            this.receiverCityFieldLabel = salla.lang.get('blocks.buy_as_gift.receiver_city');
+            this.receiverEmailFieldLabel = salla.lang.get('blocks.buy_as_gift.receiver_email');
+            this.emailPlaceholder = salla.lang.get('common.elements.email_placeholder');
+            this.sendLater = salla.lang.get('blocks.buy_as_gift.send_later');
+            this.selectSendDateAndTime = salla.lang.get('blocks.buy_as_gift.select_send_date_and_time');
+            this.canNotEditOrderAfterSelectDate = salla.lang.get('blocks.buy_as_gift.can_not_edit_order_after_select_date');
+            this.sendGift = salla.lang.get('blocks.buy_as_gift.send_gift');
+            this.donationRequired = salla.lang.get('pages.products.donation_amount_required');
+            this.currentLang = salla.lang.locale;
+        });
+        salla.event.on(this.defaultEvent, () => {
+            this.open();
+        });
+    }
+    componentDidLoad() {
+        salla.event.product.onPriceUpdated(() => {
+            const quantityInput = document.querySelector(`.s-quantity-input-input`);
+            // @ts-ignore
+            this.quantity = quantityInput?.value;
+        });
+    }
+    getFormDataFromForm() {
+        if (!this.formSelector)
+            return null;
+        const form = document.querySelector(this.formSelector);
+        if (!form)
+            return null;
+        return new FormData(form);
+    }
+    mergeObjectToFormData(obj, formData, namespace) {
+        for (let property in obj) {
+            if (!obj.hasOwnProperty(property) || obj[property] === undefined || obj[property] === null)
+                continue;
+            const formKey = namespace ? `${namespace}[${property}]` : property;
+            if (typeof obj[property] === 'object' && obj[property] !== null && !(obj[property] instanceof File)) {
+                this.mergeObjectToFormData(obj[property], formData, formKey);
+            }
+            else {
+                formData.set(formKey, obj[property]);
+            }
+        }
+        return formData;
+    }
+    /**
+     * Show / Open the gifting modal window
+    */
+    async open() {
+        if (salla.config.isGuest()) {
+            salla.api.auth.setAfterLoginEvent(this.defaultEvent);
+            salla.event.dispatch('login::open', { withoutReload: true });
+            return;
+        }
+        await this.modal.open();
+        // Determine the appropriate method to call based on the `physicalProducts` flag
+        const giftDetailsMethod = this.productId ? () => salla.product.getGiftProductDetails(this.productId) : () => salla.cart.getGiftCartDetails();
+        return await salla.api.withoutNotifier(giftDetailsMethod)
+            .then((response) => {
+            this.gift = response.data;
+            this.senderName = this.gift.sender_name;
+        })
+            .catch(e => {
+            this.hasError = true;
+            this.errorMessage = e.response?.data?.error?.message || e.response?.data;
+        })
+            .finally(() => this.modal.stopLoading());
+    }
+    /**
+     *
+     * Hide / close the gifting modal window
+    */
+    async close() {
+        return this.modal.close();
+    }
+    /**
+     * Update the modal height based on the changes on the inner elements height for a specific step OR just a pass a new fixed height
+    */
+    async setWrapperHeight(asStep = 1, delay = 250, additionSpace = 0, newHeight = 0) {
+        let currentStep = document.querySelector(`#${this.hostId} .gift-step-${asStep}`);
+        setTimeout(() => {
+            let currentStepHeight = currentStep.offsetHeight;
+            if (newHeight) {
+                this.stepsWrapper.style.height = `${newHeight}px`;
+            }
+            else {
+                this.stepsWrapper.style.height = currentStepHeight + additionSpace + 'px';
+            }
+        }, delay);
+    }
+    toggleCalendar() {
+        this.showCalendar = !this.showCalendar;
+        this.setWrapperHeight(2, 150, 0);
+    }
+    toggleGiftText(event) {
+        this.textSelect?.classList.remove('s-form-has-error');
+        let dataID = event.target.children[event.target.selectedIndex].getAttribute('data-id');
+        let customID = dataID == "custom";
+        this.showGiftText = customID;
+        if (dataID) {
+            this.selectedGiftTextOption = dataID;
+            customID ? this.selectedText = undefined : this.selectedText = event.target.value;
+            this.setWrapperHeight(1, 150, 5);
+        }
+        else {
+            // empty textarea value
+            this.textArea.value = '';
+            this.selectedText = undefined;
+            this.selectedGiftTextOption = undefined;
+            this.setWrapperHeight(1, 150, -15);
+        }
+    }
+    /**
+     *
+     * Go to the step 2
+     */
+    async goToStep2() {
+        if (!this.selectedGiftTextOption) {
+            this.textSelect.classList.add('s-form-has-error');
+            this.customTextArea.classList.remove('s-form-has-error');
+            return;
+        }
+        else if (this.selectedGiftTextOption == 'custom' && !this.selectedText) {
+            this.textSelect.classList.remove('s-form-has-error');
+            this.customTextArea.classList.add('s-form-has-error');
+            return;
+        }
+        else {
+            this.textSelect.classList.remove('s-form-has-error');
+            this.customTextArea.classList.remove('s-form-has-error');
+        }
+        this.setWrapperHeight(2, 600, 0);
+        let stepNextAnime = new anime.timeline();
+        stepNextAnime.add({
+            targets: this.step1Elems.querySelectorAll(`#${this.hostId} .anime-item`),
+            opacity: [1, 0],
+            translateX: [0, 50],
+            delay: anime.stagger(70),
+            // easing: 'easeOutExpo',
+            duration: 1200,
+        })
+            .add({
+            targets: '.gift-step-2',
+            translateX: ['-110%', 0],
+            opacity: [0, 1],
+        }, '-=1800')
+            .add({
+            targets: this.step2Elems.querySelectorAll(`#${this.hostId} .anime-item`),
+            opacity: [0, 1],
+            translateX: [-50, 0],
+            delay: anime.stagger(70),
+            duration: 1200,
+            complete: () => {
+                this.step2Elems.querySelectorAll(`#${this.hostId} .anime-item`).forEach(item => {
+                    item.classList.remove('opacity-0');
+                    item.removeAttribute('style');
+                });
+            }
+        }, '-=1200');
+        this.currentStep = 2;
+        this.parentClass = `is-current-step-${this.currentStep}`;
+    }
+    /**
+     *
+     * Go to the step 1
+     */
+    goToStep1(e) {
+        e.preventDefault();
+        let stepBackAnime = new anime.timeline({
+            autoplay: false,
+        });
+        stepBackAnime.add({
+            targets: this.step2Elems.querySelectorAll(`#${this.hostId} .anime-item`),
+            opacity: [1, 0],
+            translateX: [0, -50],
+            delay: anime.stagger(70),
+            // easing: 'easeOutExpo',
+            duration: 1200,
+        })
+            .add({
+            targets: '.gift-step-1',
+            translateX: ['110%', 0],
+            opacity: [0, 1],
+        }, '-=1800')
+            .add({
+            targets: this.step1Elems.querySelectorAll(`#${this.hostId} .anime-item`),
+            opacity: [0, 1],
+            translateX: [50, 0],
+            delay: anime.stagger(70),
+            duration: 1200,
+            complete: () => {
+                this.step1Elems.querySelectorAll(`#${this.hostId} .anime-item`).forEach(item => {
+                    item.classList.remove('opacity-0');
+                    item.removeAttribute('style');
+                });
+            }
+        }, '-=1200');
+        stepBackAnime.play();
+        this.setWrapperHeight(1, 600, 0);
+        this.currentStep = 1;
+        this.parentClass = `is-current-step-${this.currentStep}`;
+    }
+    getFilepondPlaceholder() {
+        return `<div class="s-gifting-filepond-placeholder"><span class="s-gifting-filepond-placeholder-icon">${Images}</span><p class="s-gifting-filepond-placeholder-text">${this.selectImageOrUpload ? this.selectImageOrUpload : ''}</p></div>`;
+    }
+    setPreview(image) {
+        this.uploader?.classList.add('has-bg');
+        var bg = document.querySelector(`#${this.hostId}.filepond-bg`) ? document.querySelector(`#${this.hostId} .filepond-bg`) : document.createElement('div');
+        bg.classList.add('filepond-bg');
+        bg.classList.remove('s-hidden');
+        bg.style.backgroundImage = "url('" + image.url + "')";
+        this.uploader?.querySelector('.filepond--root')?.appendChild(bg);
+        this.uploadedImage = image.url;
+        if (!!this.gift && this.gift.gift_images.length) {
+            this.setWrapperHeight(1, 150, 0);
+        }
+    }
+    removePreview() {
+        this.uploader.classList.remove('has-bg');
+        let bg = document.querySelector(`#${this.hostId} .filepond-bg`);
+        bg.removeAttribute('style');
+        bg.classList.add('s-hidden');
+        this.handleRemoveImage();
+    }
+    handleTextAreaChange(event) {
+        this.selectedText = event.target.value;
+        this.customTextArea.classList.remove('s-form-has-error');
+    }
+    handleSenderName(event) {
+        this.senderName = event.target.value;
+    }
+    handleReceiverName(event) {
+        this.receiverName = event.target.value;
+    }
+    handleReceiverCity(event) {
+        this.receiverCity = event.target.value;
+    }
+    async handleCountryChange(event) {
+        const countryId = event.target.value;
+        this.selectedCountryId = countryId;
+        // Find the selected country and store its country_code
+        const selectedCountry = this.gift?.countries?.find(country => country.id == countryId);
+        this.selectedCountryCode = selectedCountry?.country_code;
+        if (!countryId || this.gift?.countries?.length === 0) {
+            this.gift = { ...this.gift, cities: [] };
+            this.receiverCity = undefined;
+            this.selectedCountryCode = undefined;
+            return;
+        }
+        this.loadingCities = true;
+        this.gift = { ...this.gift, cities: [] };
+        this.receiverCity = undefined;
+        try {
+            const response = await salla.api.request(`shipping/cities?for_branch=0&country_id=${countryId}`);
+            if (response && response.data) {
+                this.gift = { ...this.gift, cities: response.data };
+            }
+        }
+        catch (error) {
+            console.error('Error fetching cities:', error);
+        }
+        finally {
+            this.loadingCities = false;
+        }
+    }
+    handleUploadImage(img) {
+        this.uploadedImage = img;
+        if (!!this.gift && this.gift.gift_images.length) {
+            this.setWrapperHeight(1, 150, 0);
+        }
+    }
+    handleRemoveImage() {
+        this.uploadedImage = '';
+        if (!!this.gift && this.gift.gift_images.length) {
+            this.setWrapperHeight(1, 150, 0);
+        }
+    }
+    // private handleReceiverEmail(event) {
+    //   this.receiverEmail = event.target.value;
+    // }
+    handlePhoneInputChange(event) {
+        let phone = event.detail;
+        this.receiverMobile = phone.number;
+        this.receiverCountryCode = phone.country_code;
+    }
+    handleDateTimePicker(event) {
+        this.deliveryDate = event.detail;
+    }
+    getCalendarClasses() {
+        return {
+            "s-form-group": true,
+            "anime-item": true,
+            "s-gifting-calendar": true,
+            "shown": this.showCalendar,
+            "hide": !this.showCalendar,
+            "s-form-has-error": !!this.errors && this.errors['deliver_at']
+        };
+    }
+    async submitForm() {
+        // @ts-ignore
+        const donatingAmount = (document.querySelector(`#donating-amount`))?.value;
+        this.calendarFormGroup.classList.remove('s-form-has-error');
+        if (!!this.errors) {
+            this.errors = {};
+            this.setWrapperHeight(2, 150, 0);
+        }
+        if (this.showCalendar && !this.deliveryDate) {
+            this.calendarFormGroup.classList.add('s-form-has-error');
+            return;
+        }
+        // Validate country selection for physical products
+        if (this.physicalProducts && !this.selectedCountryId) {
+            if (!this.errors) {
+                this.errors = {};
+            }
+            this.errors['receiver.country'] = salla.lang.get('common.messages.required_field');
+            this.setWrapperHeight(2, 150, 0);
+            return;
+        }
+        const giftPayload = {
+            text: this.selectedText,
+            sender_name: this.senderName,
+            quantity: this.quantity,
+            deliver_at: this.showCalendar ? this.deliveryDate : null,
+            image_url: this.uploadedImage ?? this.selectedImage,
+            donation_amount: donatingAmount ? donatingAmount : null,
+            receiver: {
+                name: this.receiverName,
+                country_code: this.selectedCountryCode && this.physicalProducts ? this.selectedCountryCode : this.receiverCountryCode,
+                mobile: this.receiverMobile,
+                ...(this.receiverCity && this.physicalProducts ? { city_id: this.receiverCity } : {})
+            },
+            has_apple_pay: salla.helpers.hasApplePay(),
+        };
+        let formData;
+        if (this.productId && this.formSelector) {
+            formData = this.getFormDataFromForm() || new FormData();
+            formData = this.mergeObjectToFormData(giftPayload, formData);
+        }
+        const addGiftMethod = this.productId
+            ? () => salla.product.addProductGiftToCart(this.productId, formData, true)
+            : () => salla.cart.addCartGiftToCart(giftPayload, true);
+        return await addGiftMethod()
+            .then(() => this.modal.close())
+            .catch((e) => {
+            if (e.response && e.response.status == 422) {
+                this.errors = e.response.data.error.fields;
+            }
+            else {
+                console.log(e);
+            }
+            this.setWrapperHeight(2, 150, 0);
+        });
+    }
+    generateClass() {
+        return {
+            "s-gifting-widget": true,
+            "s-gifting-widget-vertical": !!this.vertical,
+            "s-gifting-widget-horizontal": !this.vertical
+        };
+    }
+    async handleGiftButtonClick() {
+        if (!!this.productId && this.formSelector) {
+            const form = document.querySelector(this.formSelector);
+            if (!form) {
+                console.error('SallaGifting:: Form not found in the document!');
+                return;
+            }
+            if (!(form instanceof HTMLFormElement)) {
+                console.error('SallaGifting:: The specified selector does not correspond to a form tag!');
+                return;
+            }
+            if (!form.reportValidity()) {
+                console.error('SallaGifting:: Form is not valid!');
+                salla.error(salla.lang.get('common.messages.required_fields'));
+                return;
+            }
+        }
+        const optionsElement = document.querySelector(`salla-product-options[product-id="${this.productId}"]`);
+        if (optionsElement && !(await optionsElement.reportValidity())) {
+            salla.error(salla.lang.get('common.messages.required_fields'));
+            return;
+        }
+        this.open();
+    }
+    render() {
+        return [
+            h("div", { key: '52ed7ef8e9908a42d1815aa021654557ac1eb77e' }, h("salla-list-tile", { key: 'd8732567c5d2fcf0a007679087af5bb4a6589649', class: this.generateClass() }, h("div", { key: '2d0b7cedaaa7b3248151dfa28683984accfbf57a', slot: "title" }, this.vertical ? h("span", { innerHTML: GiftSharing }) : '', h("h3", { key: '0089f484e18cb2da81c6c55e931298f80fd97348' }, !!this.widgetTitle ? this.widgetTitle : this.sectionTitle)), h("div", { key: 'a5b6e824a20b10ec8d0b1b2e64ecb672799a0035', slot: "subtitle" }, h("div", { key: 'fb15018d2a456bac146dc1b3ad9c93ffe23bb8f8' }, !!this.widgetSubtitle ? this.widgetSubtitle : this.sectionSubtitle)), h("div", { key: '7c10860a3881e933850ee7828d604c7a08b3700b', slot: "action" }, h("salla-button", { key: 'a9a4fc5c746c6e57851f9ea5bb6e026db92428e4', color: "primary", fill: "outline", width: "wide", class: "s-gifting-widget-action", onClick: () => this.handleGiftButtonClick() }, h("slot", { key: '2d94342daa320d9e374b7a9945860f1ba4b92abf', name: "widget-btn-content" }, h("div", { key: '74d29e05b046fa4d3cdd3dab35934f879e942be6', class: "s-gifting-widget-action-content" }, h("span", { key: '40818643fb4ca55a007cbecf1e94b26bbe3afbe3', innerHTML: GiftSharing }), " \u00A0", h("span", { key: '2bd1fbcb4c0bdedcf93f7c6f677fa177c088d8a4' }, this.sectionBtnText)))))), h("salla-modal", { key: '3bc1fe8bb1260983aae3750154025b6d5ce661bb', id: this.hostId, isLoading: true, class: "s-gifting-modal", width: "sm", ref: modal => this.modal = modal }, h("div", { key: '1fbd87115bde6dfcdf3c7c2753b051de51afda55', slot: "loading" }, h("div", { key: '47d7f1b00a4752192cfa42c2d725546194633e2f', class: "s-gifting-skeleton" }, h("div", { key: '189a65f204bd067e31ecdc7814b5cde81409f824', class: "s-gifting-modal-header" }, h("salla-skeleton", { key: 'bfe75d37f7933b1632c891eb1930e5a0f3efd4ac', type: 'circle', height: '5rem', width: '5rem' }), h("h2", { key: '2e5a16d86c0f0c79ec5d272f515ea64e52b07d83', class: "s-gifting-modal-title" }, h("div", { key: '931982ea16ad7b099ddc6c33929f96cf15c05307', class: "s-gifting-modal-badge-wrapper" }, h("salla-skeleton", { key: '724cb7f8e35c1319e974a53ac7de72090a71bf6a', height: '15px', width: '150px' })))), h("div", { key: '851f77aadad1f617129f03245bc8faa5eaf6f9f3', class: "s-gifting-skeleton-content" }, h("salla-skeleton", { key: 'd414c203fe82bc06c8fcaa596f3905e186757682', height: '10px', width: '150px' }), h("salla-skeleton", { key: 'a0bea49d6eae8d7a5c41f72f147ce7b702502f20', height: '230px' }), h("salla-skeleton", { key: '8d7af7c14a8adad6cfbf17a185148ce7b9324756', height: '10px', width: '150px' }), h("salla-skeleton", { key: '0e78d2bbe2035fd2fe3f3ad295e5901bf2a0e556', height: '30px' }), h("salla-skeleton", { key: '0a64e92db6ee425d22b332d3ada5c25ca5277076', height: '40px' })))), h("slot", { key: 'f79fa4c8d457619e77de8dc459f0a65c1078c8ef', name: "header" }), !!this.hasError ?
+                h("salla-placeholder", { alignment: "center" }, h("span", { slot: "title" }, this.errorMessage || salla.lang.get('common.errors.empty_results')), h("span", { slot: "description" }, " "))
+                :
+                    [
+                        h("div", { class: "s-gifting-modal-header" }, h("span", { class: "s-gifting-modal-icon" }, h("span", { innerHTML: GiftSharing })), h("h2", { class: "s-gifting-modal-title" }, h("div", { class: "s-gifting-modal-badge-wrapper" }, h("div", { class: "s-gifting-modal-badge" }, h("span", null, h("span", null, this.currentStep), "/2")), h("span", null, this.giftDetails)))),
+                        h("div", { class: "s-gifting-steps-wrapper " + this.parentClass, ref: el => this.stepsWrapper = el }, h("div", { class: "s-gifting-step-one gift-step-1", ref: el => this.step1Elems = el }, h("div", { class: "s-gifting-modal-uploader-title anime-item" }, this.selectImageForYourGift), h("div", { class: "s-gifting-modal-uploader anime-item", ref: el => this.uploader = el }, h("span", { class: "s-gifting-remove-preview", onClick: () => this.removePreview(), innerHTML: Cancel }), this.selectImageOrUpload && h("salla-file-upload", { "instant-upload": true, name: "image_url", url: salla.url.api(salla.product.api.getUrl('giftImage')), onUploaded: event => this.handleUploadImage(event.detail), labelIdle: this.getFilepondPlaceholder(), onRemoved: () => this.handleRemoveImage() })), h("div", { class: "anime-item" }, !this.uploadedImage && !!this.gift && !!this.gift.gift_images && this.gift.gift_images.length > 0 ?
+                            h("salla-slider", { id: "gifting-slider", loop: false, "controls-outer": true, class: "s-gifting-slider", type: "carousel" }, h("div", { slot: "items" }, this.gift && this.gift.gift_images ?
+                                this.gift?.gift_images.map((item) => h("a", { class: "s-gifting-clickable s-gifting-image", onClick: () => this.setPreview(item) }, h("img", { style: { "width": "120px" }, src: item.url, alt: `${item.id}` }))) : ''))
+                            : ""), h("div", { class: "anime-item" }, h("div", { class: "s-form-group s-gifting-selectText", ref: el => this.textSelect = el }, h("select", { id: "gift-text-selection", name: "gift-text-selection", class: "s-form-control s-gifting-select", onChange: e => this.toggleGiftText(e) }, h("option", { "data-id": null, selected: true }, this.selectGiftMessage), this.gift && this.gift.gift_texts ?
+                            this.gift?.gift_texts.map((txt) => h("option", { "data-id": txt.id, value: txt.text, key: txt.id }, txt.text)) : '', h("option", { "data-id": "custom" }, this.giftCustomText))), h("div", { class: this.showGiftText ? "s-form-group s-gifting-textarea shown" : "s-form-group s-gifting-textarea hide", ref: (el) => this.customTextArea = el }, h("label", { htmlFor: "gift-custom-text", class: "s-form-label" }, this.giftCustomText), h("div", { class: "mt-1" }, h("textarea", { onInput: (event) => this.handleTextAreaChange(event), rows: 4, ref: (el) => this.textArea = el, name: "gift-custom-text", id: "gift-custom-text", class: "s-form-control" })))), h("div", { class: "anime-item" }, h("salla-button", { color: "primary", width: "wide", onClick: () => this.goToStep2() }, h("span", null, this.nextStep)))), h("div", { class: "s-gifting-step-two gift-step-2", ref: el => this.step2Elems = el }, h("div", { class: this.errors && this.errors['sender_name'] ? "s-form-group s-form-has-error anime-item opacity-0" : "s-form-group anime-item opacity-0" }, h("label", { htmlFor: "sender_name", class: "s-form-label" }, this.senderNameLabel), h("input", { type: "text", class: "s-form-control", name: "sender_name", id: "sender_name", value: this.senderName, onInput: (event) => this.handleSenderName(event), placeholder: "" }), this.errors && this.errors['sender_name'] ?
+                            h("span", { class: "s-gifting-error" }, this.errors['sender_name']) : ''), h("div", { class: this.errors && this.errors['receiver.name'] ? "s-form-group s-form-has-error anime-item opacity-0" : "s-form-group anime-item opacity-0" }, h("label", { htmlFor: "receiver_name", class: "s-form-label" }, this.receiverNameFieldLabel), h("input", { type: "text", class: "s-form-control", name: "receiver_name", id: "receiver_name", value: "", onInput: (event) => this.handleReceiverName(event), placeholder: "" }), this.errors && this.errors['receiver.name'] ?
+                            h("span", { class: "s-gifting-error" }, this.errors['receiver.name']) : ''), h("div", { class: this.errors && this.errors['receiver.mobile'] ? "s-form-group s-form-has-error anime-item opacity-0" : "s-form-group anime-item opacity-0" }, h("label", { class: "s-form-label" }, this.receiverMobileFieldLabel), h("salla-tel-input", { class: "s-gifting-tel-input", phone: this.receiverMobile, countryCode: this.selectedCountryCode || this.receiverCountryCode, key: `tel-input-${this.selectedCountryCode || this.receiverCountryCode || 'default'}`, onPhoneEntered: (e) => this.handlePhoneInputChange(e) }), this.errors && this.errors['receiver.mobile'] ?
+                            h("span", { class: "s-gifting-error" }, this.errors['receiver.mobile']) : ''), this.physicalProducts &&
+                            h("div", null, h("div", { class: this.errors && this.errors['receiver.country'] ? "s-form-group s-form-has-error anime-item opacity-0" : "s-form-group anime-item opacity-0" }, h("label", { class: "s-form-label" }, this.receiverCountryFieldLabel), h("select", { name: "country", class: "s-form-control", onChange: (event) => this.handleCountryChange(event), required: true }, h("option", { value: "" }, this.selectCountry), this.gift?.countries?.map((country) => (h("option", { value: country.id }, country.name)))), this.errors && this.errors['receiver.country'] ?
+                                h("span", { class: "s-gifting-error" }, this.errors['receiver.country']) : ''), h("div", { class: this.errors && this.errors['receiver.city_id'] ? "s-form-group s-form-has-error anime-item opacity-0" : "s-form-group anime-item opacity-0" }, h("label", { class: "s-form-label" }, this.receiverCityFieldLabel), h("select", { name: "city", class: "s-form-control", onChange: (event) => this.handleReceiverCity(event), disabled: this.loadingCities }, h("option", { value: "", selected: true }, this.loadingCities ? salla.lang.get('common.elements.loading') : this.selectCity), this.gift?.cities?.map((city) => (h("option", { value: city.id }, city.name)))), this.errors && this.errors['receiver.city_id'] ?
+                                h("span", { class: "s-gifting-error" }, this.errors['receiver.city_id']) : ''), h("div", { class: "s-gifting-info anime-item opacity-0" }, h("span", { innerHTML: Alert }), h("span", null, this.selectCityInfo))), !this.physicalProducts && h("div", { class: "anime-item opacity-0" }, h("label", { class: "s-gifting-schedule s-gifting-clickable", htmlFor: `schedule-${this.hostId}` }, h("input", { type: "checkbox", name: 'schedule', id: `schedule-${this.hostId}`, onChange: () => this.toggleCalendar(), class: "s-checkbox" }), h("span", { class: "s-form-label" }, " ", this.sendLater, " "))), h("div", { class: this.getCalendarClasses(), ref: (el) => this.calendarFormGroup = el }, h("label", { class: "s-form-label" }, this.selectSendDateAndTime), h("salla-datetime-picker", { value: this.deliveryDate, placeholder: this.selectSendDateAndTime, "enable-time": true, "date-format": "Y-m-d h:i K", onPicked: (event) => this.handleDateTimePicker(event) }), h("span", { class: "s-gifting-calendar-hint" }, this.canNotEditOrderAfterSelectDate)), h("div", { class: "s-gifting-step-two-footer anime-item opacity-0" }, h("a", { href: "#!", innerHTML: LeftArrow, onClick: (e) => this.goToStep1(e) }), h("salla-button", { onClick: () => this.submitForm(), color: "primary", width: 'wide' }, h("span", null, this.sendGift)))))
+                    ], h("slot", { key: '3a0375eeb53c624d60601045e695d56ba6b92838', name: "footer" })))
+        ];
+    }
+    static get is() { return "salla-gifting"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-gifting.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-gifting.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "productId": {
+                "type": "number",
+                "attribute": "product-id",
+                "mutable": false,
+                "complexType": {
+                    "original": "number",
+                    "resolved": "number",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The product id for which the gifting system is required."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "widgetTitle": {
+                "type": "string",
+                "attribute": "widget-title",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Widget title"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "widgetSubtitle": {
+                "type": "string",
+                "attribute": "widget-subtitle",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Widget subtitle"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "physicalProducts": {
+                "type": "boolean",
+                "attribute": "physical-products",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Is Physcial products"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "vertical": {
+                "type": "boolean",
+                "attribute": "vertical",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Is Vertical widget"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            },
+            "formSelector": {
+                "type": "string",
+                "attribute": "form-selector",
+                "mutable": true,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "The form selector to be used to get the form data"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "defaultValue": "'form.product-form, form.form--product-options'"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "sectionTitle": {},
+            "sectionSubtitle": {},
+            "sectionBtnText": {},
+            "giftDetails": {},
+            "selectImageForYourGift": {},
+            "selectImageOrUpload": {},
+            "selectGiftMessage": {},
+            "giftCustomText": {},
+            "textId": {},
+            "incorrectGiftText": {},
+            "nextStep": {},
+            "senderNameLabel": {},
+            "receiverNameFieldLabel": {},
+            "receiverMobileFieldLabel": {},
+            "receiverCountryFieldLabel": {},
+            "ksa": {},
+            "selectCountry": {},
+            "selectCity": {},
+            "selectCityInfo": {},
+            "receiverCityFieldLabel": {},
+            "receiverEmailFieldLabel": {},
+            "emailPlaceholder": {},
+            "sendLater": {},
+            "selectSendDateAndTime": {},
+            "canNotEditOrderAfterSelectDate": {},
+            "sendGift": {},
+            "donationRequired": {},
+            "currentStep": {},
+            "showCalendar": {},
+            "showGiftText": {},
+            "currentLang": {},
+            "parentClass": {},
+            "errors": {},
+            "gift": {},
+            "selectedGiftTextOption": {},
+            "selectedCountryId": {},
+            "selectedCountryCode": {},
+            "loadingCities": {},
+            "parsedFormData": {},
+            "showTextArea": {},
+            "selectedImage": {},
+            "uploadedImage": {},
+            "selectedText": {},
+            "senderName": {},
+            "errorMessage": {},
+            "hasError": {},
+            "quantity": {},
+            "deliveryDate": {},
+            "timeZone": {},
+            "receiverName": {},
+            "receiverMobile": {},
+            "receiverCountryCode": {},
+            "receiverEmail": {},
+            "hostId": {},
+            "receiverCity": {}
+        };
+    }
+    static get methods() {
+        return {
+            "open": {
+                "complexType": {
+                    "signature": "() => Promise<any>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<any>"
+                },
+                "docs": {
+                    "text": "Show / Open the gifting modal window",
+                    "tags": []
+                }
+            },
+            "close": {
+                "complexType": {
+                    "signature": "() => Promise<HTMLElement>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        },
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    },
+                    "return": "Promise<HTMLElement>"
+                },
+                "docs": {
+                    "text": "\nHide / close the gifting modal window",
+                    "tags": []
+                }
+            },
+            "goToStep2": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "\nGo to the step 2",
+                    "tags": []
+                }
+            }
+        };
+    }
+}

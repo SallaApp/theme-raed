@@ -1,0 +1,130 @@
+export declare enum PageType {
+    ProductDetail = "product.single",
+    Cart = "cart"
+}
+export declare enum OfferType {
+    Conditional = "conditional",
+    PercentageOrFixed = "fixed",
+    DiscountsTable = "discounts_table",
+    Bank = "bank",
+    BuyXGetY = "buy_x_get_y",
+    SpecialPrice = "special_price"
+}
+export interface DiscountDetailFixed {
+    discount_type: "fixed";
+    min_spend: number;
+    discount_value: number;
+}
+export interface DiscountDetailFreeProduct {
+    discount_type: "free_product";
+    min_spend: number;
+    discount_value: number;
+}
+export interface DiscountDetailConditional extends Array<DiscountDetailFixed | DiscountDetailFreeProduct> {
+}
+export interface DiscountDetailPercentageFixed {
+    apply_to: "all" | "products" | "categories" | "payment_methods";
+    targets: Array<string | number>;
+    ends_at: number;
+    min_spend: number;
+    discount_value: number;
+}
+export interface Discount {
+    discounted_amount: any;
+    quantity: number;
+    percentage: number;
+}
+export interface DiscountDetailTable {
+    apply_to: "all" | "products" | "categories" | "payment_methods" | "order";
+    discount_value: number;
+    ends_at: string;
+    min_items: number;
+    min_spend: number;
+    show_price_after_discount: boolean;
+    discounts: Discount[];
+}
+export interface BankOffer {
+    logo: string;
+    discount_value: number;
+    discount_type: string;
+    minimum_spend: number;
+    payments: string[];
+}
+export interface SpecialPriceDetail {
+    apply_to: "product" | "category";
+    discount_value: number;
+    ends_at: number;
+    min_items: number;
+    min_spend: number;
+    targets: Array<string | number>;
+    products?: Product[];
+    categories?: Category[];
+}
+export interface BuyXGetYDetail {
+    ends_at: number;
+    buy: {
+        source: "product" | "category";
+        source_value: number[];
+        quantity: number;
+    };
+    get: {
+        source: "products" | "category";
+        source_value: number[];
+        type: "free_product" | "percentage" | "fixed";
+        value: number;
+        products?: Product[];
+        categories?: Category[];
+    };
+}
+export interface Offer {
+    id: number;
+    title: string;
+    description: string;
+    type: OfferType | "conditional" | "fixed" | "discounts_table" | "bank" | "buy_x_get_y";
+    details: DiscountDetailConditional | DiscountDetailPercentageFixed | DiscountDetailTable | BankOffer | BuyXGetYDetail | SpecialPriceDetail;
+}
+export interface Product {
+    id: number;
+    type: string;
+    status: string;
+    is_available: boolean;
+    sku: string;
+    name: string;
+    price: {
+        amount: number;
+        currency: string;
+    };
+    promotion: {
+        title: string;
+        sub_title: string;
+    };
+    sale_price: {
+        amount: number;
+        currency: string;
+    };
+    regular_price: {
+        amount: number;
+        currency: string;
+    };
+    currency: string;
+    url: string;
+    thumbnail: string;
+    has_special_price: boolean;
+    favorite?: any;
+}
+export interface Category {
+    id?: string;
+    id_?: number;
+    name?: string;
+    url?: string;
+    icon?: string;
+    sub_categories?: Category[];
+    items?: any[] | null;
+}
+export interface Currency {
+    code: string | 'SAR';
+    name: string;
+    symbol: string;
+    amount?: number;
+    country_code?: string;
+}

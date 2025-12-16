@@ -1,0 +1,89 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { Host, h } from "@stencil/core";
+export class SallaMultipleBundleProductCart {
+    constructor() {
+        this.sections = [];
+        this.itemNumber = '';
+    }
+    deleteItem(sectionId, product) {
+        const form = this.host.closest('form');
+        if (form) {
+            const formId = form.getAttribute('id');
+            if (formId && typeof formId === 'string') {
+                const itemNumber = formId.match(/item-(\d+)/)?.[1];
+                this.itemNumber = itemNumber || '';
+                const selectedAccordion = this.host.querySelector(`#accordion-${product.id}`);
+                salla.cart
+                    .deleteItem(`${this.itemNumber}?product_id=${product.id}&section_id=${sectionId}`)
+                    .then(() => selectedAccordion?.remove());
+            }
+        }
+    }
+    renderRemoveButton(sectionId, product, isText = false) {
+        return (h("salla-button", { type: "button", shape: isText ? 'btn' : 'icon', fill: isText ? 'outline' : 'solid', size: "small", color: "danger", "aria-label": "Remove from the cart", onClick: () => this.deleteItem(sectionId, product) }, isText ? salla.lang.get('common.elements.delete') : h("i", { class: "sicon-cancel" })));
+    }
+    renderAccordionHeader(sectionId, product) {
+        const hasOptions = product?.options && product?.options?.length > 0; // undefined or empty array
+        return (h("div", { slot: "html", class: "s-multiple-bundle-product-cart-header-wrapper" }, h("div", { class: `s-multiple-bundle-product-cart-header ${hasOptions ? '' : 's-multiple-bundle-product-cart-header-no-options'}` }, h("div", { class: "s-multiple-bundle-product-cart-header-content" }, h("a", { href: product?.url, class: "s-multiple-bundle-product-cart-header-image-wrapper" }, h("img", { src: product?.image?.url, alt: product?.image?.alt || product?.name, class: "s-multiple-bundle-product-cart-header-image" })), h("div", { class: "s-multiple-bundle-product-cart-header-content-details" }, h("h2", { class: "s-multiple-bundle-product-cart-header-content-details-title" }, h("a", { href: product?.url, class: "s-multiple-bundle-product-cart-header-content-details-title-link" }, product?.name)), h("div", { class: "s-multiple-bundle-product-cart-header-content-details-price" }, h("span", { class: "s-multiple-bundle-product-cart-header-content-details-price-regular" }, h("span", { innerHTML: product?.price ? salla.money(product?.price) : '' })), product?.sale_price > 0 && (h("span", { class: "s-multiple-bundle-product-cart-header-content-details-price-sale" }, h("span", { innerHTML: salla.money(product?.sale_price) })))), product?.quantity_in_group > 0 && product?.quantity !== 0 && (h("p", { class: "s-multiple-bundle-product-cart-header-content-details-quantity" }, h("span", null, salla.lang.get('pages.products.number_of_pieces')), h("span", null, product?.quantity_in_group))))), !hasOptions && (h("div", { class: "s-multiple-bundle-product-cart-header-remove-button" }, this.renderRemoveButton(sectionId, product, false))))));
+    }
+    render() {
+        return (h(Host, { key: '38c6c9885f273f77ddffa9141f2274941f8a2e50', class: "s-multiple-bundle-product-wrapper" }, h("div", { key: '8e26eb6d1c58d2d86ba7671b0cd0b7fbeccfa90f', class: "s-multiple-bundle-product-wrapper-sections" }, this.sections.map((section, sectionIndex) => {
+            return section.products.map(product => {
+                const bundleContext = {
+                    sectionId: section.id,
+                    sectionIndex: sectionIndex,
+                    productId: product.id,
+                };
+                return (h("salla-accordion", { key: product.id, collapsed: false, bordered: true, collapsible: product.options && product.options.length > 0 ? true : false, size: "sm", id: `accordion-${product.id}` }, h("salla-accordion-head", null, this.renderAccordionHeader(String(section.id), product)), product.options && product.options.length > 0 && (h("salla-accordion-body", null, h("salla-product-options", { options: JSON.stringify(product.options), key: `${product.id}-persistent`, "product-id": product.id, "bundle-context": JSON.stringify(bundleContext) }), h("div", { class: "s-multiple-bundle-product-cart-body-remove-button" }, this.renderRemoveButton(String(section.id), product, true))))));
+            });
+        }))));
+    }
+    static get is() { return "salla-multiple-bundle-product-cart"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-multiple-bundle-product-cart.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-multiple-bundle-product-cart.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "sections": {
+                "type": "unknown",
+                "attribute": "sections",
+                "mutable": false,
+                "complexType": {
+                    "original": "BundleSection[]",
+                    "resolved": "BundleSection[]",
+                    "references": {
+                        "BundleSection": {
+                            "location": "import",
+                            "path": "../interfaces",
+                            "id": "src/components/salla-multiple-bundle-product/interfaces.ts::BundleSection"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "[]"
+            }
+        };
+    }
+    static get states() {
+        return {
+            "itemNumber": {}
+        };
+    }
+    static get elementRef() { return "host"; }
+}

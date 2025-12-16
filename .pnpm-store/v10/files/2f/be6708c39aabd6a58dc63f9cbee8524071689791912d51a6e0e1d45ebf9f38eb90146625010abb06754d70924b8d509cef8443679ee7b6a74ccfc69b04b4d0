@@ -1,0 +1,95 @@
+/*!
+ * Crafted with ❤ by Salla
+ */
+import { h } from "@stencil/core";
+/**
+ * @slot The default slot.
+ */
+export class SallaTabContent {
+    constructor() {
+        this.isSelected = false;
+    }
+    /**
+     * Expose self for the parent.
+     */
+    async getChild() {
+        return {
+            selected: this.selected.bind(this),
+            unselect: this.unselect.bind(this),
+            name: this.name
+        };
+    }
+    unselect() {
+        this.isSelected = false;
+    }
+    selected() {
+        this.isSelected = true;
+    }
+    render() {
+        const classes = {
+            's-tabs-content': true,
+            's-tabs-content-selected': this.isSelected
+        };
+        return (h("div", { key: '9e1a20d0877a9c3ca6b376fe22bfb52e93c8f873', class: classes }, h("slot", { key: 'f5b0593c4c9b8d808901ca79e3c6fd28c2a64f36' })));
+    }
+    static get is() { return "salla-tab-content"; }
+    static get originalStyleUrls() {
+        return {
+            "$": ["salla-tab-content.scss"]
+        };
+    }
+    static get styleUrls() {
+        return {
+            "$": ["salla-tab-content.css"]
+        };
+    }
+    static get properties() {
+        return {
+            "name": {
+                "type": "string",
+                "attribute": "name",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Set name of the tab content. Mainly used as a key to s\nynchronize the content with it's respective header."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false
+            }
+        };
+    }
+    static get states() {
+        return {
+            "isSelected": {}
+        };
+    }
+    static get methods() {
+        return {
+            "getChild": {
+                "complexType": {
+                    "signature": "() => Promise<{ selected: any; unselect: any; name: string; }>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<{ selected: any; unselect: any; name: string; }>"
+                },
+                "docs": {
+                    "text": "Expose self for the parent.",
+                    "tags": []
+                }
+            }
+        };
+    }
+}
