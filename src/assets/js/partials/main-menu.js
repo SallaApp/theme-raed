@@ -5,7 +5,7 @@ class NavigationMenu extends HTMLElement {
             .then(() => {
                 this.menus = [];
                 this.displayAllText = salla.lang.get('blocks.home.display_all');
-                this.moreText = salla.lang.get('common.titles.more') || 'المزيد';
+                this.moreText = salla.lang.get('common.titles.more');
                 this.visibleMenus = [];
                 this.overflowMenus = [];
 
@@ -146,8 +146,8 @@ class NavigationMenu extends HTMLElement {
         const mainMenu = this.querySelector('.main-menu');
         if (!mainMenu) return;
 
-        // Check if more menu is enabled in theme settings
-        const isMoreMenuEnabled = theme.settings.get('enable_more_menu');
+        // Check if more menu is enabled from global window variable set in master.twig
+        const isMoreMenuEnabled = window.enable_more_menu;
         if (isMoreMenuEnabled) {
             this.checkMenuOverflow();
 
