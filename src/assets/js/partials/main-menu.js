@@ -137,7 +137,7 @@ class NavigationMenu extends HTMLElement {
         </li>`;
     }
 
-    /**
+    /*
     * Initialize responsive menu functionality
     */
     initializeResponsiveMenu() {
@@ -148,16 +148,19 @@ class NavigationMenu extends HTMLElement {
 
         // Check if more menu is enabled from global window variable set in master.twig
         const isMoreMenuEnabled = window.enable_more_menu;
-        if (isMoreMenuEnabled) {
-            this.checkMenuOverflow();
-
-            // Re-check on window resize
-            const resizeHandler = this.debounce(() => {
-                this.checkMenuOverflow();
-            }, 250);
-
-            window.addEventListener('resize', resizeHandler);
+        if (!isMoreMenuEnabled) {
+            // If disabled, keep the menu behavior as original (no More dropdown / overflow handling)
+            return;
         }
+
+        this.checkMenuOverflow();
+
+        // Re-check on window resize
+        const resizeHandler = this.debounce(() => {
+            this.checkMenuOverflow();
+        }, 250);
+
+        window.addEventListener('resize', resizeHandler);
     }
 
     /**
