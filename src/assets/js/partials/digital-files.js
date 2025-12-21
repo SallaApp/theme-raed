@@ -59,26 +59,31 @@ class DigitalFilesSettings extends HTMLElement {
                           this.settings.download_period || "-"
                         }</div>
                     </li>
-                    ${
-                      this.settings.access_new_files
-                        ? `
-                        <li class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <i class="sicon-rotate"></i>
-                                <div class="text-gray-600 text-sm">${trans(
-                                  "pages.products.free_access_to_new_files"
-                                )}</div>
-                            </div>
-                            <div class="text-gray-900 text-sm">
-                                <i class="sicon-check-circle text-lg"></i>
-                            </div>
-                        </li>
-                    `
-                        : ""
-                    }
+                    ${this.accessFileList()}
                 </ul>
             </section>
         `;
+  }
+
+  accessFileList() {
+    if (!this.settings.access_new_files) {
+      return "";
+    }
+
+    const trans = (key) => salla.lang.get(key);
+    return `
+        <li class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="sicon-rotate"></i>
+                <div class="text-gray-600 text-sm">${trans(
+                  "pages.products.free_access_to_new_files"
+                )}</div>
+            </div>
+            <div class="text-gray-900 text-sm">
+                <i class="sicon-check-circle text-lg"></i>
+            </div>
+        </li>
+    `;
   }
 }
 
