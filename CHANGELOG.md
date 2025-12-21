@@ -9,6 +9,12 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+
+
+# 🎇 [1.282.0]( https://github.com/SallaApp/theme-raed/compare/1.279.0...1.282.0) (21-12-2025)
+### Enhancements
+- Additional options now support digital files.
+
 # ✨  [1.279.0]( https://github.com/SallaApp/theme-raed/compare/1.278.0...1.279.0) (07-12-2025)
 ### Enhancements
 -  Scopes moved out from header.
