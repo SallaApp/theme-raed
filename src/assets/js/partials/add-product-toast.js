@@ -97,6 +97,7 @@ class AddToCartToast extends HTMLElement {
         isOnSale: cartItem.is_on_sale,
         quantity: cartItem.quantity,
         url: cartItem.url,
+        options: this.extractOptionsFromCart(cartItem.options),
         offer: cartItem.offer,
       };
 
@@ -106,6 +107,71 @@ class AddToCartToast extends HTMLElement {
     }
   }
 
+  extractOptionsFromCart(options) {
+    if (!options || !Array.isArray(options) || options.length === 0) {
+      return [];
+    }
+
+    const extractedOptions = [];
+
+    options.forEach((option) => {
+      // Skip splitter type as it's just a visual separator
+      if (option.type === "splitter") {
+        return;
+      }
+
+      // For options with details (color, thumbnail, single-option, multiple-options)
+      if (option.details && option.details.length > 0) {
+        if (option.type === "multiple-options") {
+          // Handle multiple selections
+          const selectedDetails = option.details.filter(
+            (detail) => detail.is_selected
+          );
+          if (selectedDetails.length > 0) {
+            const values = selectedDetails
+              .map((detail) => detail.name)
+              .join(", ");
+            extractedOptions.push({
+              name: option.name,
+              value: values,
+            });
+          }
+        } else {
+          // Handle single selection (color, thumbnail, single-option)
+          const selectedDetail = option.details.find(
+            (detail) => detail.is_selected
+          );
+          if (selectedDetail) {
+            extractedOptions.push({
+              name: option.name,
+              value: selectedDetail.name,
+            });
+          }
+        }
+      } else if (option.value !== null && option.value !== "") {
+        // For options without details (text, textarea, number, datetime, image, file, map)
+        // For image/file/map types, show only the field name without the value
+        if (
+          option.type === "image" ||
+          option.type === "file" ||
+          option.type === "map"
+        ) {
+          extractedOptions.push({
+            name: option.name,
+            value: "",
+            hideValue: true,
+          });
+        } else {
+          extractedOptions.push({
+            name: option.name,
+            value: option.value,
+          });
+        }
+      }
+    });
+
+    return extractedOptions;
+  }
 
   open(productData) {
     this.product = productData;
