@@ -1,0 +1,192 @@
+/*
+ * Add to Cart Toast Component
+ * A toast notification displayed when a product is added to cart
+ */
+salla-add-product-toast {
+  @apply fixed top-4 z-[9999];
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  
+  &.s-add-product-toast-rtl {
+    left: 1rem !important;
+    right: auto !important;
+    transform: translateX(-120%);
+    
+    &.s-add-product-toast-visible {
+      transform: translateX(0) !important;
+      opacity: 1 !important;
+    }
+  }
+  
+  &.s-add-product-toast-ltr {
+    right: 1rem !important;
+    left: auto !important;
+    transform: translateX(120%);
+    
+    &.s-add-product-toast-visible {
+      transform: translateX(0) !important;
+      opacity: 1 !important;
+    }
+  }
+}
+
+
+.s-add-product-toast {
+  &-wrapper {
+    @apply flex flex-col gap-4 bg-white shadow-xl w-[400px] max-w-[calc(100vw-32px)] p-5 overflow-hidden;
+    position: relative;
+  }
+
+  // Visible state - slide in from the side
+  &-visible {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+  }
+
+  &-progress {
+    @apply h-2 w-full bg-gray-100;
+  }
+
+  &-progress-bar {
+    @apply h-full bg-green-500;
+    transition: width 50ms linear;
+  }
+
+  &-header {
+    @apply flex items-center justify-between;
+  }
+
+  &-header-content {
+    @apply flex items-center gap-2.5;
+  }
+
+  &-icon {
+    i {
+      @apply text-base text-green-500;
+    }
+  }
+
+  &-title {
+    @apply text-base font-bold text-gray-800;
+  }
+
+  &-close {
+    @apply flex-shrink-0 w-6 h-6 flex items-center justify-center cursor-pointer border-0 bg-transparent p-0 fill-gray-400 hover:fill-gray-600;
+
+    i {
+      @apply text-xl text-gray-400;
+      transition: color 0.2s;
+    }
+
+    &:hover i {
+      @apply text-gray-600;
+    }
+  }
+
+  &-divider {
+    @apply h-px bg-gray-200;
+  }
+
+  &-body {
+
+  }
+
+  &-product {
+    @apply flex gap-4 items-start;
+  }
+
+  &-image-link {
+    @apply flex-shrink-0 w-[88px] h-[88px] rounded-lg overflow-hidden bg-gray-50 border border-gray-100;
+  }
+
+  &-image {
+    @apply w-full h-full object-contain;
+  }
+
+  &-details {
+    @apply flex-1 min-w-0 flex flex-col gap-0.5;
+  }
+
+  &-name {
+    @apply text-sm font-semibold text-gray-800 leading-snug hover:text-primary transition-colors no-underline block;
+  }
+
+  &-options {
+    @apply flex flex-col gap-0.5 mt-1;
+  }
+
+  &-option {
+    @apply text-sm text-gray-500 leading-relaxed;
+  }
+
+  &-show-more {
+    @apply text-sm text-primary hover:underline cursor-pointer bg-transparent border-0 p-0 inline-block mt-0.5 font-medium text-start underline;
+  }
+
+  &-price-wrapper {
+    @apply flex-shrink-0 flex items-start;
+  }
+
+  &-price-sale {
+    @apply flex flex-col items-end gap-1;
+  }
+
+  &-price {
+    @apply text-base font-bold text-gray-800;
+    &.sale{
+      @apply text-red-800;
+    }
+  }
+
+  &-price-original {
+    @apply text-sm text-gray-500 line-through;
+  }
+
+  &-actions {
+    @apply flex gap-3;
+    
+    salla-button {
+      @apply flex-1;
+      
+      svg {
+        @apply inline-block flex-shrink-0;
+        fill: none !important;
+        
+        path {
+          fill: none !important;
+        }
+      }
+      .s-button-btn{
+        @apply rounded-none;
+        &.s-button-gray-outline{
+          @apply border-gray-200 text-gray-800;
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsive adjustments
+@media screen and (max-width: 420px) {
+  .s-add-product-toast {
+    &-wrapper {
+      @apply w-[calc(100vw-32px)];
+    }
+
+    &-product {
+      @apply flex-col;
+    }
+
+    &-image-link {
+      @apply w-full h-[200px];
+    }
+
+    &-actions {
+      @apply flex-col;
+      
+      salla-button {
+        @apply w-full;
+      }
+    }
+  }
+}
