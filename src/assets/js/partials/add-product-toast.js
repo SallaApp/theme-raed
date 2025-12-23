@@ -434,6 +434,11 @@ class AddToCartToast extends HTMLElement {
       });
     }
 
+    const wrapper = this.querySelector(".s-add-product-toast-wrapper");
+    if (wrapper) {
+      wrapper.addEventListener("mouseenter", () => this.handleMouseEnter());
+      wrapper.addEventListener("mouseleave", () => this.handleMouseLeave());
+    }
   }
 
   render() {
