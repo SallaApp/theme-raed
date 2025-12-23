@@ -1,81 +1,76 @@
-/*
- * Add to Cart Toast Component
- * A toast notification displayed when a product is added to cart
- */
-salla-add-product-toast {
-  @apply fixed top-4 z-[9999];
-  opacity: 0;
-  transition: all 0.3s ease-out;
-  
-  &.s-add-product-toast-rtl {
-    left: 1rem !important;
-    right: auto !important;
-    transform: translateX(-120%);
-    
-    &.s-add-product-toast-visible {
-      transform: translateX(0) !important;
-      opacity: 1 !important;
-    }
-  }
-  
-  &.s-add-product-toast-ltr {
-    right: 1rem !important;
-    left: auto !important;
-    transform: translateX(120%);
-    
-    &.s-add-product-toast-visible {
-      transform: translateX(0) !important;
-      opacity: 1 !important;
-    }
-  }
-}
-
-
 .s-add-product-toast {
-  &-wrapper {
-    @apply flex flex-col gap-4 bg-white shadow-xl w-[400px] max-w-[calc(100vw-32px)] p-5 overflow-hidden;
-    position: relative;
+  @apply fixed z-[9999] flex flex-col bg-white shadow-xl overflow-hidden w-screen;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+  &.s-add-product-toast--visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  // Visible state - slide in from the side
-  &-visible {
-    transform: translateX(0) !important;
-    opacity: 1 !important;
+  @media (min-width: 768px) {
+    @apply w-[400px] rounded-lg;
+    top: 1rem;
+    left: auto;
+    right: auto;
+
+    [dir="rtl"] & {
+      left: 1rem;
+      transform: translateX(-100%);
+
+      &.s-add-product-toast--visible {
+        transform: translateX(0);
+      }
+    }
+
+    [dir="ltr"] & {
+      right: 1rem;
+      transform: translateX(100%);
+
+      &.s-add-product-toast--visible {
+        transform: translateX(0);
+      }
+    }
   }
 
-  &-progress {
-    @apply h-2 w-full bg-gray-100;
+  &__progress {
+    @apply h-1 w-full bg-gray-100;
   }
 
-  &-progress-bar {
+  &__progress-bar {
     @apply h-full bg-green-500;
     transition: width 50ms linear;
   }
 
-  &-header {
-    @apply flex items-center justify-between;
+  &__header {
+    @apply flex items-center justify-between gap-2 p-4;
   }
 
-  &-header-content {
+  &__header-content {
     @apply flex items-center gap-2.5;
   }
 
-  &-icon {
-    i {
-      @apply text-base text-green-500;
+  &__icon {
+    @apply flex-shrink-0;
+  }
+
+  &__title {
+    @apply text-sm font-bold text-gray-800;
+
+    @media (min-width: 768px) {
+      @apply text-base;
     }
   }
 
-  &-title {
-    @apply text-base font-bold text-gray-800;
-  }
-
-  &-close {
-    @apply flex-shrink-0 w-6 h-6 flex items-center justify-center cursor-pointer border-0 bg-transparent p-0 fill-gray-400 hover:fill-gray-600;
+  &__close {
+    @apply flex-shrink-0 w-6 h-6 flex items-center justify-center cursor-pointer border-0 bg-transparent p-0;
 
     i {
-      @apply text-xl text-gray-400;
-      transition: color 0.2s;
+      @apply text-lg text-gray-400 transition-colors;
     }
 
     &:hover i {
@@ -83,109 +78,100 @@ salla-add-product-toast {
     }
   }
 
-  &-divider {
-    @apply h-px bg-gray-200;
+  &__divider {
+    @apply h-px bg-gray-200 mx-4;
   }
 
-  &-body {
-
+  &__body {
+    @apply flex gap-3 p-4 items-start;
   }
 
-  &-product {
-    @apply flex gap-4 items-start;
-  }
+  &__image {
+    @apply flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-gray-50 border border-gray-100;
 
-  &-image-link {
-    @apply flex-shrink-0 w-[88px] h-[88px] rounded-lg overflow-hidden bg-gray-50 border border-gray-100;
-  }
+    img {
+      @apply w-full h-full object-contain;
+    }
 
-  &-image {
-    @apply w-full h-full object-contain;
-  }
-
-  &-details {
-    @apply flex-1 min-w-0 flex flex-col gap-0.5;
-  }
-
-  &-name {
-    @apply text-sm font-semibold text-gray-800 leading-snug hover:text-primary transition-colors no-underline block;
-  }
-
-  &-options {
-    @apply flex flex-col gap-0.5 mt-1;
-  }
-
-  &-option {
-    @apply text-sm text-gray-500 leading-relaxed;
-  }
-
-  &-show-more {
-    @apply text-sm text-primary hover:underline cursor-pointer bg-transparent border-0 p-0 inline-block mt-0.5 font-medium text-start underline;
-  }
-
-  &-price-wrapper {
-    @apply flex-shrink-0 flex items-start;
-  }
-
-  &-price-sale {
-    @apply flex flex-col items-end gap-1;
-  }
-
-  &-price {
-    @apply text-base font-bold text-gray-800;
-    &.sale{
-      @apply text-red-800;
+    @media (min-width: 768px) {
+      @apply w-[88px] h-[88px];
     }
   }
 
-  &-price-original {
-    @apply text-sm text-gray-500 line-through;
+  &__details {
+    @apply flex-1 min-w-0 flex flex-col gap-1;
   }
 
-  &-actions {
-    @apply flex gap-3;
-    
+  &__name {
+    @apply text-sm font-semibold text-gray-800 leading-snug no-underline block transition-colors;
+
+    &:hover {
+      @apply text-primary;
+    }
+  }
+
+  &__options {
+    @apply flex flex-col gap-0.5 mt-1;
+
+    span {
+      @apply text-xs text-gray-500 leading-relaxed;
+
+      @media (min-width: 768px) {
+        @apply text-sm;
+      }
+    }
+  }
+
+  &__show-more {
+    @apply text-xs text-primary font-medium underline mt-0.5;
+
+    &:hover {
+      @apply no-underline;
+    }
+
+    @media (min-width: 768px) {
+      @apply text-sm;
+    }
+  }
+
+  &__price {
+    @apply flex-shrink-0 flex flex-col items-end gap-1 text-sm font-bold text-gray-800;
+
+    @media (min-width: 768px) {
+      @apply text-base;
+    }
+  }
+
+  &__price-sale {
+    @apply text-red-800;
+  }
+
+  &__price-original {
+    @apply text-xs text-gray-500 line-through font-normal;
+
+    @media (min-width: 768px) {
+      @apply text-sm;
+    }
+  }
+
+  &__actions {
+    @apply flex gap-3 p-4 pt-0;
+
     salla-button {
       @apply flex-1;
-      
+
       svg {
-        @apply inline-block flex-shrink-0;
-        fill: none !important;
-        
+        @apply inline-flex flex-shrink-0;
+
         path {
-          fill: none !important;
+          fill: none;
         }
       }
-      .s-button-btn{
+      .s-button-btn {
         @apply rounded-none;
-        &.s-button-gray-outline{
+        &.s-button-gray-outline {
           @apply border-gray-200 text-gray-800;
         }
-      }
-    }
-  }
-}
-
-// Mobile responsive adjustments
-@media screen and (max-width: 420px) {
-  .s-add-product-toast {
-    &-wrapper {
-      @apply w-[calc(100vw-32px)];
-    }
-
-    &-product {
-      @apply flex-col;
-    }
-
-    &-image-link {
-      @apply w-full h-[200px];
-    }
-
-    &-actions {
-      @apply flex-col;
-      
-      salla-button {
-        @apply w-full;
       }
     }
   }
