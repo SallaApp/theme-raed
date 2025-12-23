@@ -1,12 +1,12 @@
 class AddToCartToast extends HTMLElement {
   constructor() {
     super();
+    this.classList.add("s-add-product-toast");
     this.isVisible = false;
     this.progressInterval = null;
     this.remainingTime = 0;
     this.isPaused = false;
-    this.duration = 500000000;
-    this.maxVisibleOptions = 3;
+    this.duration = 5000;
   }
 
   connectedCallback() {
@@ -149,13 +149,6 @@ class AddToCartToast extends HTMLElement {
     }
   }
 
-  getVisibleOptions() {
-    return this.product?.options?.slice(0, this.maxVisibleOptions) || [];
-  }
-
-  hasMoreOptions() {
-    return (this.product?.options?.length || 0) > this.maxVisibleOptions;
-  }
 
   escapeHTML(str = "") {
     return String(str)
@@ -172,12 +165,12 @@ class AddToCartToast extends HTMLElement {
       return;
     }
 
-    const visibleOptions = this.getVisibleOptions();
-    const hasMore = this.hasMoreOptions();
+    const options = this.product.options || [];
+    const visibleOptions = options.slice(0, 3);
+    const showMoreButton = options.length >= 3;
     const price = salla.money(this.product.price);
     const originalPrice = salla.money(this.product.originalPrice);
 
-    this.classList.add("s-add-product-toast");
     this.setAttribute("onmouseenter", "this.isPaused=true");
     this.setAttribute("onmouseleave", "this.isPaused=false");
 
@@ -204,7 +197,7 @@ class AddToCartToast extends HTMLElement {
               ${visibleOptions.map(opt => 
                 opt.hideValue ? `<span>${opt.name}</span>` : `<span>${opt.name}: ${opt.value}</span>`
               ).join("")}
-              ${hasMore ? `<a href="${this.cartUrl}" class="s-add-product-toast__show-more">${this.showMoreText}</a>` : ""}
+              ${showMoreButton ? `<a href="${this.cartUrl}" class="s-add-product-toast__show-more">${this.showMoreText}</a>` : ""}
             </div>
           ` : ""}
         </div>
