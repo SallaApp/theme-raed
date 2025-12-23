@@ -113,7 +113,9 @@
     {% component 'footer.footer' %}
 </div>
 {% hook 'body:end' %}
+{% if theme.settings.get('enable_add_product_toast', true) %}
     <salla-add-product-toast></salla-add-product-toast>
+{% endif %}
 <script defer src="{{ 'app.js' | asset }}"></script>
 
 {# Twilight Components #}
