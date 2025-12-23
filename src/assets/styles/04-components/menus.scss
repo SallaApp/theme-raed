@@ -110,8 +110,34 @@
 
       // Make the More dropdown scrollable if it becomes taller than the viewport
       > .sub-menu {
-        max-height: 80vh;
+        max-height: 70vh;
         overflow-y: auto;
+      }
+
+      // Keep deeper levels visible inside the same column (no fly-out)
+      > .sub-menu {
+        .sub-menu {
+          @apply static opacity-0 invisible transform-none shadow-none border-0 m-0 p-0 bg-transparent max-h-0 overflow-hidden transition-[max-height,opacity,visibility] duration-200 ease-in;
+          transition-duration: 250ms, 200ms, 200ms; 
+        }
+
+        li.has-children {
+          @apply relative;
+
+          > a {
+            @apply justify-between;
+          }
+
+          &:hover > .sub-menu,
+          &:focus-within > .sub-menu {
+            @apply opacity-100 visible max-h-[1000px];
+          }
+        }
+
+        // Indent nested lists for readability
+        .sub-menu > ul {
+          @apply rtl:pr-4 ltr:pl-4;
+        }
       }
     }
   }
