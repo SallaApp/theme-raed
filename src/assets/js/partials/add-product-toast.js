@@ -167,7 +167,7 @@ class AddToCartToast extends HTMLElement {
 
     const options = this.product.options || [];
     const visibleOptions = options.slice(0, 3);
-    const showMoreButton = options.length >= 3;
+    const showMoreButton = options.length > 3;
     const price = salla.money(this.product.price);
     const originalPrice = salla.money(this.product.originalPrice);
 
