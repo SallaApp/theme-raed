@@ -38,6 +38,7 @@
       <div class="tabs-wrapper">
         {% for section in items %}
             <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
+                {% if section.products is defined and section.products %}
                 {% if is_slider %}
                     <salla-products-slider 
                       slider-id="section-{{ section.id }}-slider" 
@@ -54,6 +55,7 @@
                       {{is_vertical ? '' : 'horizontal-cards'}}
                       >
                     </salla-products-list>
+                {% endif %}
                 {% endif %}
             </div>
         {% endfor %}
