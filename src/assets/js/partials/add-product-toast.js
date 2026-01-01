@@ -24,7 +24,7 @@ class AddToCartToast extends HTMLElement {
   init() {
     salla.lang.onLoaded(() => {
       salla.lang.addBulk({
-        "pages.cart.added_to_cart": { ar: "تمت الإضافة إلي سلة التسوق", en: "Added to Cart" },
+        "pages.cart.added_to_cart": { ar: "تمت الإضافة إلى سلة التسوق", en: "Added to Cart" },
         "pages.cart.view_cart": { ar: "عرض السلة", en: "View Cart" }
       });
       this.successMessage = salla.lang.get("pages.cart.added_to_cart");
