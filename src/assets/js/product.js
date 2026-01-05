@@ -22,7 +22,13 @@ class Product extends BasePage {
             window.addEventListener('resize', () => this.initImagesZooming());
         }
 
+        // Set alt for existing images immediately
         this.setDescriptionImagesAlt();
+        // Also handle images that load lazily or are added dynamically
+        this.observeDescriptionImages();
+        // Retry after a short delay to catch any late-loading images
+        setTimeout(() => this.setDescriptionImagesAlt(), 500);
+        setTimeout(() => this.setDescriptionImagesAlt(), 1500);
     }
 
     setDescriptionImagesAlt() {
@@ -30,14 +36,41 @@ class Product extends BasePage {
       if (!description) return;
 
       const fallbackAlt =
-        description.dataset.productName || document.title || '';
+        description.dataset.productName || document.title || 'Product image';
 
+      // Find all images in description, including nested ones (in article.article--main too)
       const images = description.querySelectorAll('img');
       images.forEach((img) => {
-        const currentAlt = (img.getAttribute('alt') || '').trim();
-        if (!currentAlt) {
-          img.setAttribute('alt', fallbackAlt || '');
+        // Check if alt is missing or empty
+        const currentAlt = img.getAttribute('alt');
+        if (!currentAlt || currentAlt.trim() === '') {
+          img.setAttribute('alt', fallbackAlt);
         }
+      });
+    }
+
+    observeDescriptionImages() {
+      const description = document.querySelector('.product__description');
+      if (!description) return;
+
+      const fallbackAlt =
+        description.dataset.productName || document.title || 'Product image';
+
+      // Helper function to set alt if missing
+      const setAltIfMissing = (img) => {
+        if (!img.getAttribute('alt')?.trim()) {
+          img.setAttribute('alt', fallbackAlt);
+        }
+      };
+
+      // Watch for new images added to the description
+      const observer = new MutationObserver(() => {
+        description.querySelectorAll('img').forEach(setAltIfMissing);
+      });
+
+      observer.observe(description, {
+        childList: true,
+        subtree: true
       });
     }
 
