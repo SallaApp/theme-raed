@@ -21,6 +21,24 @@ class Product extends BasePage {
             // listen to screen resizing
             window.addEventListener('resize', () => this.initImagesZooming());
         }
+
+        this.setDescriptionImagesAlt();
+    }
+
+    setDescriptionImagesAlt() {
+      const description = document.querySelector('.product__description');
+      if (!description) return;
+
+      const fallbackAlt =
+        description.dataset.productName || document.title || '';
+
+      const images = description.querySelectorAll('img');
+      images.forEach((img) => {
+        const currentAlt = (img.getAttribute('alt') || '').trim();
+        if (!currentAlt) {
+          img.setAttribute('alt', fallbackAlt || '');
+        }
+      });
     }
 
     initProductOptionValidations() {
