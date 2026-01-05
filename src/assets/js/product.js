@@ -24,11 +24,32 @@ class Product extends BasePage {
 
         // Set alt for existing images immediately
         this.setDescriptionImagesAlt();
-        // Also handle images that load lazily or are added dynamically
         this.observeDescriptionImages();
-        // Retry after a short delay to catch any late-loading images
-        setTimeout(() => this.setDescriptionImagesAlt(), 500);
-        setTimeout(() => this.setDescriptionImagesAlt(), 1500);
+        
+        // Use setInterval to check for description block and images
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds (50 * 100ms)
+        const intervalId = setInterval(() => {
+            attempts++;
+            
+            const description = document.querySelector('.product__description');
+            
+            // Stop if description block doesn't exist after 5 seconds
+            if (!description && attempts >= maxAttempts) {
+                clearInterval(intervalId);
+                return;
+            }
+            
+            // If description exists, check and update images
+            if (description) {
+                this.setDescriptionImagesAlt();
+                
+                // Stop if we've been running for 5 seconds (safety timeout)
+                if (attempts >= maxAttempts) {
+                    clearInterval(intervalId);
+                }
+            }
+        }, 100); // Check every 100ms
     }
 
     setDescriptionImagesAlt() {
@@ -38,13 +59,15 @@ class Product extends BasePage {
       const fallbackAlt =
         description.dataset.productName || document.title || 'Product image';
 
-      // Find all images in description, including nested ones (in article.article--main too)
+      // Find all images in description, including nested ones in article.article--main
       const images = description.querySelectorAll('img');
       images.forEach((img) => {
-        // Check if alt is missing or empty
+        // Check if alt is missing or empty (including whitespace-only)
         const currentAlt = img.getAttribute('alt');
         if (!currentAlt || currentAlt.trim() === '') {
           img.setAttribute('alt', fallbackAlt);
+          // Force attribute update
+          img.alt = fallbackAlt;
         }
       });
     }
