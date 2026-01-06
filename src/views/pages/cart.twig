@@ -80,7 +80,7 @@
 											{% endif %}
 
                                             <!-- free product ribbon -->
-                                            <div class="free-ribbon absolute top-[11px] right-[-38px] w-32 bg-red-600 text-white text-xs font-bold text-center py-1 rotate-45 shadow-md {{ item.price.getMoney().amount == 0 ? '' : 'hidden' }}">
+                                            <div class="free-ribbon absolute top-[11px] right-[-38px] w-32 bg-red-600 text-white text-xs font-bold text-center py-1 rotate-45 shadow-md {{ (item.price.getMoney().amount == 0 and item.has_discount) ? '' : 'hidden' }}">
                                                 {{ trans('pages.loyalty_program.free_product') }}
                                             </div>
                                             <!-- end free product ribbon -->
