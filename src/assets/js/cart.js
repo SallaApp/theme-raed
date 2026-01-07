@@ -49,7 +49,16 @@ class Cart extends BasePage {
             if (isValid) {
                 /** @type HTMLSallaButtonElement */
                 let btn = event.currentTarget;
-                salla.config.get('user.type') == 'guest' ? salla.cart.submit() : btn.load().then(() => salla.cart.submit())
+                if (salla.config.get('user.type') !== 'guest') {
+                    btn.load();
+                    // Keep loading state until page redirects
+                    new MutationObserver(() => {
+                        if (!btn.hasAttribute('loading')) {
+                            btn.setAttribute('loading', '');
+                        }
+                    }).observe(btn, { attributes: true, attributeFilter: ['loading'] });
+                }
+                salla.cart.submit();
             }
         });
     }
@@ -146,7 +155,7 @@ class Cart extends BasePage {
             .toggleElementClassIf([regularPriceElement, offerIconElement], 'offer-applied', 'hidden', () => hasSpecialPrice)
             .toggleElementClassIf([itemOriginalPrice], 'offer-applied', 'hidden', () => hasSalePrice)
             .toggleElementClassIf(priceElement, 'text-red-400', 'text-sm text-gray-400', () => hasSpecialPrice)
-            .toggleElementClassIf(freeRibbon, 'active', 'hidden', () => item.price == 0 && item.has_discount);
+            .toggleElementClassIf(freeRibbon, 'active', 'hidden', () => item.price == 0);
 
         priceElement.innerHTML = salla.money(item.price);
 
