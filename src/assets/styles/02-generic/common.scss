@@ -425,3 +425,44 @@ salla-modal {
     opacity: 1;
   }
 }
+
+// Slide in animation (from right)
+@keyframes slideInStart {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-start {
+  animation: slideInStart 500ms ease-out forwards;
+}
+
+// Scale pulse animation
+@keyframes scalePulse {
+  0% {
+    transform: scale(0.88);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.scale-pulse {
+  animation: scalePulse 400ms ease-out;
+}
+
+// Fade out and collapse animation
+.fade-out-collapse {
+  transition: height 300ms ease-in-out, opacity 300ms ease-in-out;
+  height: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+}
