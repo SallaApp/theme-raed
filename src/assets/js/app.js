@@ -254,34 +254,19 @@ isElementLoaded(selector){
     document.querySelectorAll('.btn--collapse')
       .forEach((trigger) => {
         const content = document.querySelector('#' + trigger.dataset.show);
+        if (!content) return;
+
         const state = { isOpen: false }
 
-        const onOpen = () => anime({
-          targets: content,
-          duration: 225,
-          height: content.scrollHeight,
-          opacity: [0, 1],
-          easing: 'easeOutQuart',
-        });
-
-        const onClose = () => anime({
-          targets: content,
-          duration: 225,
-          height: 0,
-          opacity: [1, 0],
-          easing: 'easeOutQuart',
-        })
-
         const toggleState = (isOpen) => {
-          state.isOpen = !isOpen
+          state.isOpen = !isOpen;
           this.toggleElementClassIf([content, trigger], 'is-closed', 'is-opened', () => isOpen);
         }
 
         trigger.addEventListener('click', () => {
-          const { isOpen } = state
-          toggleState(isOpen)
-          isOpen ? onClose() : onOpen();
-        })
+          const { isOpen } = state;
+          toggleState(isOpen);
+        });
       });
   }
 
