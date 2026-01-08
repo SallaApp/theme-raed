@@ -394,7 +394,7 @@ salla-modal {
   ol{
     @apply rtl:pr-4 ltr:pl-4;
   }
-  
+
   ul li {
     list-style: disc;
   }
@@ -405,5 +405,23 @@ salla-modal {
 
   a {
     @apply text-primary hover:text-primary-d;
+  }
+}
+
+// Collapse component using CSS Grid
+.collapse-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 225ms ease-out, opacity 225ms ease-out;
+
+  > * {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  &.is-opened {
+    grid-template-rows: 1fr;
+    opacity: 1;
   }
 }
