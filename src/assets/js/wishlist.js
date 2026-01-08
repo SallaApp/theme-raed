@@ -22,13 +22,19 @@ class Wishlist extends BasePage {
                 return;
             }
 
-            app.anime(item, false)
-                .height(0)// -> from 'height' to '0',
-                .opacity(0)
-                .easing('easeInOutQuad')
-                .duration(300)
-                .complete(() => item.remove() || (document.querySelector('#wishlist>*') || window.location.reload()))
-                .play();
+            item.style.height = item.offsetHeight + 'px';
+            void item.offsetWidth; // trigger reflow
+            item.classList.add('fade-out-collapse');
+
+            item.addEventListener('transitionend', function handler(e) {
+                if (e.propertyName === 'opacity') {
+                    item.removeEventListener('transitionend', handler);
+                    item.remove();
+                    if (!document.querySelector('#wishlist>*')) {
+                        window.location.reload();
+                    }
+                }
+            });
         });
     }
 
