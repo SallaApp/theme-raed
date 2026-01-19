@@ -116,9 +116,13 @@
                                     </div>
 
                                     <div class="border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex gap-8 justify-between items-center md:items-start">
+                                        {% set is_free_cart_offer = item.offer is defined and item.offer and (item.offer.is_free|default(false)) and (item.offer.offer_type|default('') == 'cart_offer') %}
                                         {% if item.type == 'donating' %}
                                             <span></span>
                                         {% elseif item.is_hidden_quantity %}
+                                            <input type="hidden" value="{{ item.quantity }}" name="quantity" aria-label="Quantity"/>
+                                            <span class="w-10 text-center">{{ item.quantity }}</span>
+                                        {% elseif is_free_cart_offer %}
                                             <input type="hidden" value="{{ item.quantity }}" name="quantity" aria-label="Quantity"/>
                                             <span class="w-10 text-center">{{ item.quantity }}</span>
                                         {% else %}
@@ -138,10 +142,12 @@
 
                                 {% include 'pages.partials.product.options' with {product:item} %}
                             <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
-                                <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
-                                        onclick="salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())">
-                                    <i class="sicon-cancel"></i>
-                                </salla-button>
+                                {% if not is_free_cart_offer %}
+                                    <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
+                                            onclick="salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())">
+                                        <i class="sicon-cancel"></i>
+                                    </salla-button>
+                                {% endif %}
                             </span>
                         </section>
                     </form>
