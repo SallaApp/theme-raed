@@ -373,7 +373,7 @@
 
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
-                        {% if product.is_hidden_quantity or product.type == 'booking' %}
+                        {% if product.is_hidden_quantity or product.type == 'booking' or not store.settings.product.manual_quantity %}
                             <input type="hidden" value="1" name="quantity" aria-label="Quantity"/>
                         {% else %}
                             <div class="sticky-product-bar__quantity center-between mb-5">
