@@ -9,6 +9,15 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🎇 [1.296.0]( https://github.com/SallaApp/theme-raed/compare/1.294.0...1.296.0) (20-01-2026)
+### Bug Fixes
+- Remove initial loader screen and add crossorigin to app and product-card scripts.
+
+# 🎇 [1.294.0]( https://github.com/SallaApp/theme-raed/compare/1.284.0...1.294.0) (07-01-2026)
+
+### Bug Fixes
+- Show free product ribbon only for discounted items with zero price.
+
 # 🎇 [1.284.0]( https://github.com/SallaApp/theme-raed/compare/1.282.0...1.284.0) (31-12-2025)
 ### Bug Fixes
 - Support Add product toast component
