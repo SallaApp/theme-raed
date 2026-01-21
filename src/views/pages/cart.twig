@@ -45,6 +45,7 @@
 | cart.items[].attachments[].product_id             | int                 |                                                                |
 | cart.items[].attachments[].item_id                | int                 |                                                                |
 | cart.items[].attachments[].name                   | int                 | image file name                                                |
+| store.settings.product.manual_quantity            | bool                | manual quantity is enabled or disabled                         |
 #}
 
 {% extends "layouts.master" %}
@@ -118,7 +119,7 @@
                                     <div class="border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex gap-8 justify-between items-center md:items-start">
                                         {% if item.type == 'donating' %}
                                             <span></span>
-                                        {% elseif item.is_hidden_quantity or store.settings.product.manual_quantity == false %}
+                                        {% elseif item.is_hidden_quantity or not store.settings.product.manual_quantity%}
                                             <input type="hidden" value="{{ item.quantity }}" name="quantity" aria-label="Quantity"/>
                                             <span class="w-10 text-center">{{ item.quantity }}</span>
                                         {% else %}
