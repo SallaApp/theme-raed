@@ -119,13 +119,14 @@
                                     <div class="border-t border-b border-gray-200 py-3 md:p-0 md:border-none mt-5 md:mt-0 flex gap-8 justify-between items-center md:items-start">
                                         {% if item.type == 'donating' %}
                                             <span></span>
-                                        {% elseif item.is_hidden_quantity or not store.settings.product.manual_quantity%}
+                                        {% elseif item.is_hidden_quantity %}
                                             <input type="hidden" value="{{ item.quantity }}" name="quantity" aria-label="Quantity"/>
                                             <span class="w-10 text-center">{{ item.quantity }}</span>
                                         {% else %}
                                             <salla-quantity-input cart-item-id="{{ item.id }}"  max="{{ item.max_quantity }}"
                                                 class="transtion transition-color duration-300"
-												aria-label="Quantity"
+                                                {{ store.settings.product.manual_quantity == false ? 'disable-input' : '' }}
+                                                aria-label="Quantity"
                                                 value="{{ item.quantity }}" name="quantity">
                                             </salla-quantity-input>
                                         {% endif %}

@@ -374,7 +374,7 @@
 
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
-                        {% if product.is_hidden_quantity or product.type == 'booking' or not store.settings.product.manual_quantity %}
+                        {% if product.is_hidden_quantity or product.type == 'booking' %}
                             <input type="hidden" value="1" name="quantity" aria-label="Quantity"/>
                         {% else %}
                             <div class="sticky-product-bar__quantity center-between mb-5">
@@ -382,6 +382,7 @@
                                     {{ trans('pages.products.quantity') }}
                                 </label>
                                 <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity" aria-label="Quantity"
+                                  {{ store.settings.product.manual_quantity == false ? 'disable-input' : '' }}
                                   class="border-gray-200 flex justify-end"></salla-quantity-input>
                             </div>
                         {% endif %}
