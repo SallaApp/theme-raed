@@ -39,6 +39,7 @@
                 </div>
                 {% if article.has_image %}
                     <img src="{{ article.image.url }}" alt="{{ article.image.alt }}" title="{{ article.image.alt }}"
+                         width="1200" height="320"
                          class="h-80 mb-10 w-full object-cover rounded-md"/>
                 {% endif %}
                 
@@ -89,9 +90,11 @@
 
                                     {% if article.has_image %}
                                         <img class="h-full w-full object-cover" src="{{ article.image.url }}"
+                                             width="96" height="96"
                                              alt="{{ article.image.alt }}">
                                     {% else %}
                                         <img class="sm:h-full w-10 object-contain opacity-60"
+                                             width="40" height="96"
                                              src="{{ 'images/placeholder.png' | asset }}" alt="post image"/>
                                     {% endif %}
                                 </a>

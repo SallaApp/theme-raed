@@ -184,7 +184,7 @@
                     <div class="flex flex-col md:flex-row justify-between md:items-center bg-white px-5 py-3 border-b border-gray-100 rounded-t-md text-sm space-y-4 md:space-y-0">
                         <div class="flex items-center space-x-2 rtl:space-x-reverse">
                             {% if package.shipping_company.logo %}
-                                <img src="{{ package.shipping_company.logo }}" class="max-w-16 max-h-8"
+                                <img src="{{ package.shipping_company.logo }}" width="64" height="32" class="max-w-16 max-h-8"
                                      alt="{{ package.shipping_company.name }}">
                             {% endif %}
                             <span>{{ package.shipping_company.name }}</span>
@@ -230,6 +230,7 @@
                                         <a href="{{ item.product.url }}" class="shrink-0">
                                             <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
                                                  alt="{{ item.name }}"
+                                                 width="72" height="56"
                                                  class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
                                         </a>
                                         <div>
@@ -316,6 +317,7 @@
                                                             <div class="flex rtl:space-x-reverse space-x-2.5">
                                                                 <a href="{{ attachment.url }}" target="_blank">
                                                                     <img class="h-7 w-7 object-cover rounded-md"
+                                                                         width="28" height="28"
                                                                          src="{{ attachment.url }}"
                                                                          alt="{{ item.name }}"/>
                                                                 </a>
@@ -342,7 +344,7 @@
                                         {% if item.rating.images|length %}
                                             <div class="flex items-center gap-2 mt-2">
                                                 {% for image in item.rating.images %}
-                                                    <img class="w-20 h-20 object-cover rounded-md" src="{{image}}"/>
+                                                    <img class="w-20 h-20 object-cover rounded-md" width="80" height="80" src="{{image}}" alt="{{ item.name }}"/>
                                                 {% endfor %}
                                             </div>
                                         {% endif %}
