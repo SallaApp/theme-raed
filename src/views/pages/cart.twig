@@ -156,6 +156,10 @@
 
                 {% if cart.options|length %}
                   <div class="cart-options">
+                    <!-- DEBUG: cart.options -->
+                    <pre style="background:#f0f0f0;padding:10px;overflow:auto;font-size:12px;">cart.options: {{ cart.options|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                    <!-- DEBUG: item.options (last item from loop) -->
+                    <pre style="background:#ffe0e0;padding:10px;overflow:auto;font-size:12px;">item.options: {{ item.options|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
                     {% for product_option in item.options %}
                       <form class="first:pt-5 relative" onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ product_option.id }}">
                         <input type="hidden" name="id" value="{{ product_option.id }}">
