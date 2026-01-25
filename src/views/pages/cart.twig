@@ -156,7 +156,7 @@
 
                 {% if cart.options|length %}
                   <div class="cart-options">
-                    {% for product_option in cart.options %}
+                    {% for product_option in item.options %}
                       <form class="first:pt-5 relative" onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ product_option.id }}">
                         <input type="hidden" name="id" value="{{ product_option.id }}">
                         <input type="hidden" name="quantity" value="{{ product_option.quantity }}">
