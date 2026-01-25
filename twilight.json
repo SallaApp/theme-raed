@@ -25,6 +25,58 @@
         "filters"
     ],
     "settings": [
+      {
+        "id": "page_for_product",
+        "type": "items",
+        "format": "radio-list",
+        "label": "نوع صفحة الهبوط",
+        "description": null,
+        "labelHTML": null,
+        "icon": "sicon-list",
+        "selected": [
+          {
+            "label": "صفحة هبوط منتج ",
+            "description": "تساعد على زيادة المبيعات عبر عرض المنتج بشكل مركز وجذاب يدفع الزوار لاتخاذ قرار الشراء بسرعة.",
+            "value": "product"
+          }
+        ],
+        "options": [
+            {
+                "label": "صفحة هبوط منتج ",
+                "description": "تساعد على زيادة المبيعات عبر عرض المنتج بشكل مركز وجذاب يدفع الزوار لاتخاذ قرار الشراء بسرعة.",
+                "value": "product"
+            },
+            {
+                "label": "صفحة هبوط دعائية",
+                "description": " تهدف إلى جذب الزوار للتفاعل مع حملتك أو علامتك التجارية بطريقة ترويجية دون الحاجة لزر الشراء المباشر.",
+                "value": "promotion"
+            }
+        ],
+        "source": "manual",
+        "required": true
+      },
+      {
+          "id": "product",
+          "icon": "sicon-keyboard_arrow_down",
+          "type": "items",
+          "label": "اختر المنتج",
+          "placeholder": "البحث في قائمة المنتجات...",
+          "format": "dropdown-list",
+          "source": "products",
+          "options": [],
+          "required": true,
+          "selected": [],
+          "maxLength": 1,
+          "searchable": true,
+          "multichoice": false,
+          "conditions": [
+              {
+                  "id": "page_for_product",
+                  "value": "product",
+                  "operation": "="
+              }
+          ]
+      },
         {
             "id": "squar_photo_bg_image_size",
             "type": "items",
