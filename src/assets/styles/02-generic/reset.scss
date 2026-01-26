@@ -41,6 +41,32 @@ a {
 
 img {
   max-width: 100%;
+  height: auto;
+}
+
+// Prevent layout shift for images without explicit dimensions
+// Product images - square aspect ratio
+.details-slider img:not([width]):not([height]),
+.s-product-card-image img:not([width]):not([height]) {
+  aspect-ratio: 1 / 1;
+}
+
+// Blog images - 16:9 aspect ratio
+.post-entry__image img:not([width]):not([height]),
+.blog-slider__slide img:not([width]):not([height]) {
+  aspect-ratio: 16 / 9;
+}
+
+// Avatar/profile images - square
+img[class*="avatar"]:not([width]):not([height]),
+img[class*="profile"]:not([width]):not([height]),
+.s-reviews-testimonial__avatar img:not([width]):not([height]) {
+  aspect-ratio: 1 / 1;
+}
+
+// Lazy loaded images default to 16:9
+img.lazy:not([width]):not([height]):not([class*="avatar"]):not([class*="profile"]) {
+  aspect-ratio: 16 / 9;
 }
 
 a:focus {

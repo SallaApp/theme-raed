@@ -1,0 +1,101 @@
+/*
+ * Accessibility & Contrast Fixes
+ * Ensures WCAG AA compliance for text contrast
+ */
+
+// Fix low contrast text-gray-400 (usually ~4.2:1) to meet 4.5:1 minimum
+.text-gray-400 {
+  color: #6b7280 !important; // Improved from default gray-400 to gray-500 for better contrast
+}
+
+// Ensure text-gray-500 meets contrast requirements on white backgrounds
+.text-gray-500 {
+  color: #4b5563 !important; // Improved contrast
+}
+
+// Fix opacity-based low contrast issues
+// Replace opacity with solid colors where possible
+.opacity-60 {
+  opacity: 1 !important;
+  color: #4b5563 !important; // Use solid color instead of opacity
+}
+
+.opacity-80 {
+  opacity: 1 !important;
+  color: #374151 !important; // Use solid color instead of opacity
+}
+
+// But preserve opacity for non-text elements (backgrounds, overlays)
+.bg-black.opacity-60,
+[class*="overlay"].opacity-60,
+[class*="bg-"].opacity-60 {
+  opacity: 0.6 !important; // Keep opacity for backgrounds
+}
+
+// Fix specific low-contrast combinations
+.s-block__title p {
+  color: #4b5563 !important; // Improved from opacity-60
+}
+
+.s-block__display-all {
+  color: #374151 !important; // Improved from opacity-80
+}
+
+// Ensure buttons meet contrast requirements
+.btn--rounded-gray {
+  color: #374151 !important;
+  
+  &:hover {
+    color: var(--color-primary) !important;
+  }
+}
+
+// Fix testimonial text contrast
+.s-reviews-testimonial__text {
+  color: #1f2937 !important; // Ensure dark text on light background
+}
+
+// Ensure form labels meet contrast
+.form-label,
+label {
+  color: #374151 !important; // Improved contrast
+}
+
+// Fix placeholder text contrast
+::placeholder {
+  color: #6b7280 !important; // Improved from default
+  opacity: 1 !important;
+}
+
+// Ensure disabled elements are clearly distinguishable
+[disabled],
+.disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+// Fix link contrast
+a {
+  color: var(--color-primary);
+  
+  &:hover {
+    color: var(--color-primary-d);
+  }
+}
+
+// Ensure text on colored backgrounds meets contrast
+.text-white {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); // Add shadow for better readability
+}
+
+// Fix icon contrast
+i.text-gray-400,
+.icon.text-gray-400 {
+  color: #6b7280 !important;
+}
+
+// Ensure focus states meet contrast
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
