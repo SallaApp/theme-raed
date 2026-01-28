@@ -8,16 +8,22 @@
 #}
 <section class="s-block s-block--fixed-banner wide-placeholder">
     <div class="container">
-        <a href="{{ url }}" class="banner banner--fixed overflow-hidden" aria-label="Banner {{ image.alt }}">
-			{% if position == 0 %}
-				<img width="1200" height="300" src="{{ image.url }}" alt="{{ image.alt|trim ? image.alt : 'fixed banner' }}" fetchpriority="high"/>
-			{% else %}
-				<img width="1200" height="300"
-					src="{{ 'images/s-empty-wide.png' | asset }}"
-					data-src="{{ image.url }}"
-					class="lazy"
-					alt="{{ image.alt|trim ? image.alt : 'fixed banner' }}"/>
-			{% endif %}
+        {% set is_first = position == 0 %}
+        {% set alt_text = image.alt|trim ? image.alt : 'fixed banner' %}
+        <a href="{{ url }}" class="banner banner--fixed overflow-hidden" aria-label="Banner {{ alt_text }}">
+            <img
+                width="1200"
+                height="300"
+                src="{{ is_first ? image.url : ('images/s-empty-wide.png' | asset) }}"
+                {% if not is_first %}
+                    data-src="{{ image.url }}"
+                    class="lazy"
+                {% else %}
+                    fetchpriority="high"
+                {% endif %}
+                alt="{{ alt_text }}"
+				style="height:auto;max-width:100%;object-fit: contain;"
+            />
         </a>
     </div>
 </section>
