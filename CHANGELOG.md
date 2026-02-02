@@ -9,9 +9,35 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+
+
+# ✨ [1.302.0]( https://github.com/SallaApp/theme-raed/compare/1.301.0...1.302.0) (28-01-2026)
+### Enhancements
+- Refactor fixed banner image logic and cleanup styles.
+# 🎇 [1.301.0]( https://github.com/SallaApp/theme-raed/compare/1.300.0...1.301.0) (27-01-2026)
+### Bug Fixes
+- Fix payment method logo in bank offer logo.
+# ✨ [1.300.0]( https://github.com/SallaApp/theme-raed/compare/1.299.0...1.300.0) (26-01-2026)
+### Enhancements
+- Add explicit dimensions to testimonial avatar images to improve Lighthouse performance score.
+# 🎇 [1.299.0]( https://github.com/SallaApp/theme-raed/compare/1.298.0...1.299.0) (26-01-2026)
+### Bug Fixes
+- Fix overflow product option content.
+# ✨ [1.298.0]( https://github.com/SallaApp/theme-raed/compare/1.296.0...1.298.0) (21-01-2026)
+### Enhancements
+- Remove hero slider controls on single slide to improve LCP.
+
+# 🎇 [1.296.0]( https://github.com/SallaApp/theme-raed/compare/1.294.0...1.296.0) (20-01-2026)
+### Bug Fixes
+- Remove initial loader screen && add crossorigin to app and product-card scripts.
+
+# 🎇 [1.294.0]( https://github.com/SallaApp/theme-raed/compare/1.284.0...1.294.0) (07-01-2026)
+### Bug Fixes
+- Show free product ribbon only for discounted items with zero prices.
+
 # 🎇 [1.284.0]( https://github.com/SallaApp/theme-raed/compare/1.282.0...1.284.0) (31-12-2025)
 ### Bug Fixes
-- Support Add product toast component
+- Support add product toast component.
 
 # 🎇 [1.282.0]( https://github.com/SallaApp/theme-raed/compare/1.279.0...1.282.0) (21-12-2025)
 ### Enhancements
