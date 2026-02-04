@@ -78,16 +78,6 @@
             <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
         {% endif %}
     </h1>
-    {% if order.links | length %}
-        <div class="flex space-x-2 rtl:space-x-reverse text-start flex-none px-2">
-            {% for link in order.links %}
-                <a href="{{link.url}}" class="text-primary" target="_blank">
-                    {{ link.label }}
-                     <i class="{{user.language.dir == 'rtl' ? 'sicon-arrow-up-left' : 'sicon-arrow-up-right' }}"></i>
-                </a>
-            {% endfor %}
-        </div>
-    {% endif %}
 </div>
 {% endblock %}
 {% block inner_content %}
@@ -115,11 +105,21 @@
                     </span>
                     {% endif %}
 
-                    <div class="flex items-center">
+                    <div class="flex items-center justify-between">
                         {% if order.is_price_quote %}
                             <span class="text-red-500 ml-4">{{ trans('pages.orders.your_order_is_under_review') }}</span>
                         {% endif %}
 
+                        {% if order.links | length %}
+                            <div class="flex space-x-2 rtl:space-x-reverse text-start flex-none px-2">
+                                {% for link in order.links %}
+                                    <a href="{{link.url}}" class="text-primary-reverse bg-primary px-4 py-2 rounded" target="_blank">
+                                        {{ link.label }}
+                                        <i class="{{user.language.dir == 'rtl' ? 'sicon-arrow-up-left' : 'sicon-arrow-up-right' }}"></i>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                         {% if (can_print_invoice) %}
                             <salla-button fill="outline" size="small"
                                         onclick="window.open('{{ order.print_url()}}', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, width=900, height=700');">
