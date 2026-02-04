@@ -71,9 +71,6 @@
 
 {% extends "layouts.customer" %}
 {% block inner_title %}
-<div class="flex justify-end items-center mb-2 w-full">
-    <salla-edit-order-counter end-date={{order.customer_editing.ends_at}} order-id={{order.id}}></salla-order-edit-timer>
-</div>
 <div class="flex justify-between items-center mb-2">
     <h1 class="font-bold text-lg text-center text-start flex-1">
         {{ page.title }}
@@ -81,6 +78,7 @@
             <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
         {% endif %}
     </h1>
+    <salla-edit-order-counter end-date={{order.customer_editing.ends_at}} order-id={{order.id}}></salla-order-edit-timer>
     {% if order.links | length %}
         <div class="flex space-x-2 rtl:space-x-reverse text-start flex-none px-2">
             {% for link in order.links %}
