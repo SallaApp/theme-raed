@@ -79,7 +79,7 @@
         {% endif %}
     </h1>
     {% if order.customer_editing.ends_at and date(order.customer_editing.ends_at) > date() %}
-        <salla-count-down prefix-text="{{ trans('pages.orders.edit_within') }}" button-href="/orders/{{ order.id }}/edit" button-text="{{ trans('pages.orders.edit_order') }}" button-icon="sicon-edit" date="{{ order.customer_editing.ends_at }}" horizontal with-button labeled="false" size="sm" color="primary"></salla-count-down>
+        <salla-count-down prefix-text="{{ trans('pages.orders.edit_within') }}" button-href="{{ order.customer_editing.edit_url }}" button-text="{{ trans('pages.orders.edit_order') }}" button-icon="sicon-edit" date="{{ order.customer_editing.ends_at }}" horizontal with-button labeled="false" size="sm" color="primary"></salla-count-down>
     {% endif %}
     {% if order.links | length %}
         <div class="flex space-x-2 rtl:space-x-reverse text-start flex-none px-2">
