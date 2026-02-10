@@ -10,14 +10,11 @@
     <div class="container">
         {% set alt_text = image.alt|trim ? image.alt : 'fixed banner' %}
         <a href="{{ url }}" class="banner banner--fixed overflow-hidden" aria-label="Banner {{ alt_text }}">
-            {% set image_mobile_url = image_mobile.url is defined ? image_mobile.url : image_mobile %}
             <picture>
-                {% if image_mobile_url %}
-                    <source
-                        media="(max-width: 767px)"
-                        srcset="{{ image_mobile_url }}"
-                    />
-                {% endif %}
+                <source
+                    media="(max-width: 767px)"
+                    srcset="{{ image_mobile }}"
+                />
                 <img
                     width="1200"
                     height="300"
