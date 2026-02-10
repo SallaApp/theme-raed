@@ -8,22 +8,25 @@
 #}
 <section class="s-block s-block--fixed-banner wide-placeholder">
     <div class="container">
-        {% set is_first = position == 0 %}
         {% set alt_text = image.alt|trim ? image.alt : 'fixed banner' %}
         <a href="{{ url }}" class="banner banner--fixed overflow-hidden" aria-label="Banner {{ alt_text }}">
-            <img
-                width="1200"
-                height="300"
-                src="{{ is_first ? image.url : ('images/s-empty-wide.png' | asset) }}"
-                {% if not is_first %}
-                    data-src="{{ image.url }}"
-                    class="lazy"
-                {% else %}
-                    fetchpriority="high"
+            {% set image_mobile_url = image_mobile.url is defined ? image_mobile.url : image_mobile %}
+            <picture>
+                {% if image_mobile_url %}
+                    <source
+                        media="(max-width: 767px)"
+                        srcset="{{ image_mobile_url }}"
+                    />
                 {% endif %}
-                alt="{{ alt_text }}"
-				style="height:auto;max-width:100%;object-fit: contain;"
-            />
+                <img
+                    width="1200"
+                    height="300"
+                    src="{{ image.url }}"
+                    loading="lazy"
+                    alt="{{ alt_text }}"
+                    style="height:auto;max-width:100%;object-fit: contain;"
+                />
+            </picture>
         </a>
     </div>
 </section>
