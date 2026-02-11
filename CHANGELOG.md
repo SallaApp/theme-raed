@@ -10,7 +10,12 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
-
+# ✨ [1.305.0]( https://github.com/SallaApp/theme-raed/compare/1.304.0...1.305.0) (11-01-2026)
+### Enhancements
+- Use native loading="lazy" instead of custom lazyload.
+# ✨ [1.304.0]( https://github.com/SallaApp/theme-raed/compare/1.302.0...1.304.0) (10-01-2026)
+### Enhancements
+- Support responsive mobile/desktop images for fixed banner.
 # ✨ [1.302.0]( https://github.com/SallaApp/theme-raed/compare/1.301.0...1.302.0) (28-01-2026)
 ### Enhancements
 - Refactor fixed banner image logic and cleanup styles.
