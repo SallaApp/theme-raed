@@ -131,7 +131,7 @@
                                     src="{{ image.three_d_image_url }}"
                                     shadow-intensity="1" alt="{{ image.alt }}">
                                 </model-viewer>
-                            {% else %}
+                                    {% else %}
                                 <a data-fslightbox="product_{{ product.id }}"
                                    data-img-id="{{ image.id }}"
                                    data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
@@ -146,9 +146,10 @@
                                              alt="{{ image.alt }}"
                                              class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% else %}
-                                        <img id="{{image.id}}" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{ image.url }}"
+                                        <img id="{{image.id}}" src="{{ image.url }}"
+                                             loading="lazy"
                                              alt="{{ image.alt }}"
-                                             class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% endif %}
                                 </a>
                             {% endif %}
@@ -166,8 +167,9 @@
                                              title="{{ image.alt }}"
                                              alt="{{ image.alt }}"/>
                                     {% else %}
-                                        <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | cdn }}"
-                                             class="object-cover w-full h-full lazy bg-gray-100 rounded-md overflow-hidden"
+                                        <img src="{{ image.url }}"
+                                             loading="lazy"
+                                             class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
                                              title="{{ image.alt }}"
                                              alt="{{ image.alt }}"/>
                                     {% endif %}

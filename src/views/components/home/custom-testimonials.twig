@@ -6,12 +6,11 @@
 		<salla-slider id="custom-testimonials-{{ position }}-slider" centered slides-per-view="1" type="testimonials" class="testimonials-slider s-slider-wrapper" centered controls-outer auto-play>
 			<div slot="items">
 				{% for index, item in component.items %}
-					<div class="s-reviews-swiper-slide swiper-slide" style="width: 830px;">
+				<div class="s-reviews-swiper-slide swiper-slide" style="width: 830px;">
 						<div class="s-reviews-testimonial">
 							<div class="s-reviews-testimonial__inner">
 								<div class="s-reviews-testimonial__avatar">
-					<img src="{{ 'images/s-empty.png' | asset }}" data-src="{{ item.avatar }}" alt="{{ item.name|trim ? item.name : 'testimonial-' ~ index }}" class="lazy loaded" width="68" height="68">
-								</div>
+									<img src="{{ item.avatar }}" loading="lazy" alt="{{ item.name|trim ? item.name : 'testimonial-' ~ index }}" class="loaded" width="68" height="68">
 								<div class="s-reviews-testimonial__text">
 									<p class="">{{ item.text }}</p>
 									<div class="s-reviews-testimonial__name_wrapper items-center">

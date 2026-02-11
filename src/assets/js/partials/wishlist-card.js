@@ -17,7 +17,7 @@ class WishlistCard extends HTMLElement {
         this.innerHTML = `
         <div class="flex items-center mb-4 sm:mb-0">
           <a href="${this.product.url}" class="product-entry__image">
-            <img class="object-cover w-full h-full lazy" data-src="${this.product.image.url}" alt="${this.product.image.alt}" />
+            <img class="object-cover w-full h-full" src="${this.product.image.url}" loading="lazy" alt="${this.product.image.alt}" />
           </a>
           <div class="flex-1 rtl:pr-5 ltr:pl-5">
             <h3 class="text-sm text-gray-800 leading-6 mb-1.5 rtl:pl-5 ltr:pr-5 rtl:md:pl-8 ltr:md:pr-8 line-clamp-1">
