@@ -43,7 +43,6 @@ class WishlistCard extends HTMLElement {
           </salla-button>
         </div>
   `
-        document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
 
     }
 }
