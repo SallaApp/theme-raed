@@ -327,7 +327,6 @@
 
 				{# Digital Files Settings #}
 				{% if product.digital_files_settings %}
-                    <script type="module" defer src="{{ 'digital-files.js'|asset }}"></script>
 					<digital-files-settings settings='{{ product.digital_files_settings|json_encode }}'></digital-files-settings>
 				{% endif %}
 				{# End Digital Files Settings #}
@@ -439,5 +438,8 @@
     <script defer src="{{ 'product.js' | asset }}"></script>
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    {% endif %}
+    {% if product.digital_files_settings %}
+        <script type="module" defer src="{{ 'digital-files.js'|asset }}"></script>
     {% endif %}
 {% endblock %}
