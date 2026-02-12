@@ -184,7 +184,7 @@ class ProductCard extends HTMLElement {
     this.shadowOnHover?  this.classList.add('s-product-card-shadow') : '';
     this.product?.is_out_of_stock?  this.classList.add('s-product-card-out-of-stock') : '';
     this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(Number(this.product.id));
-    this.innerHTML = `
+      this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
           <a href="${this.product?.url}" aria-label="${this.escapeHTML(this.product?.image?.alt || this.product.name)}">
            <img 
@@ -192,10 +192,10 @@ class ProductCard extends HTMLElement {
                 ? 'contain'
                 : this.fitImageHeight
                 ? this.fitImageHeight
-                : 'cover'} lazy"
-              src="${this.placeholder}"
+                : 'cover'}"
+              src="${this.product?.image?.url || this.product?.thumbnail || this.placeholder || ''}"
               alt="${this.escapeHTML(this.product?.image?.alt || this.product.name)}"
-              data-src="${this.product?.image?.url || this.product?.thumbnail || ''}"
+              loading="lazy"
             />
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
           </a>
@@ -309,8 +309,6 @@ class ProductCard extends HTMLElement {
             .setAttribute("donating-amount", e.target.value); 
         });
       })
-
-      document.lazyLoadInstance?.update(this.querySelectorAll('.lazy'));
 
       if (this.product?.quantity && this.isSpecial) {
         this.initCircleBar();
