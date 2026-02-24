@@ -9,6 +9,19 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+# 🎇 [1.308.0]( https://github.com/SallaApp/theme-raed/compare/1.307.0...1.308.0) (15-01-2026)
+### Bug Fixes
+- Optimize Enhanced Slider when there is only one slide
+- Support New Flag `slides.without_overlay`
+
+
+# 🎇 [1.307.0]( https://github.com/SallaApp/theme-raed/compare/1.306.0...1.307.0) (12-01-2026)
+### Bug Fixes
+- Enhance digital file calling place.
+
+# 🎇 [1.306.0]( https://github.com/SallaApp/theme-raed/compare/1.305.0...1.306.0) (12-01-2026)
+### Bug Fixes
+- Resolve product card images not displaying issue.
 
 # ✨ [1.305.0]( https://github.com/SallaApp/theme-raed/compare/1.304.0...1.305.0) (11-01-2026)
 ### Enhancements
