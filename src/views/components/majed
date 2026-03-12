@@ -1,0 +1,41 @@
+<!-- component: frame-size-search -->
+<div class="frame-search-box" style="background-color:#f0f8ff; padding:20px; border-radius:10px; text-align:center;">
+  <h2 style="color:#003366; margin-bottom:15px;">ابحث عن مقاسك</h2>
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:15px;">
+    <select id="width" style="padding:10px; border:1px solid #ccc; border-radius:5px;">
+      <option disabled selected>العرض</option>
+      <option value="20">20 سم</option>
+      <option value="30">30 سم</option>
+      <option value="40">40 سم</option>
+    </select>
+    <select id="height" style="padding:10px; border:1px solid #ccc; border-radius:5px;">
+      <option disabled selected>الارتفاع</option>
+      <option value="30">30 سم</option>
+      <option value="40">40 سم</option>
+      <option value="50">50 سم</option>
+    </select>
+    <select id="side" style="padding:10px; border:1px solid #ccc; border-radius:5px;">
+      <option disabled selected>الجنب</option>
+      <option value="2">2 سم</option>
+      <option value="3">3 سم</option>
+      <option value="4">4 سم</option>
+    </select>
+  </div>
+  <button onclick="searchFrames()" style="background-color:#007acc; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">بحث</button>
+</div>
+
+<script>
+  function searchFrames() {
+    const width = document.getElementById('width').value;
+    const height = document.getElementById('height').value;
+    const side = document.getElementById('side').value;
+
+    if (!width || !height || !side) {
+      alert("يرجى اختيار جميع المقاسات");
+      return;
+    }
+
+    const query = `/search?filter[frame_width]=${width}&filter[frame_height]=${height}&filter[frame_side]=${side}`;
+    window.location.href = query;
+  }
+</script>
