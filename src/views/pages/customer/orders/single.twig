@@ -78,8 +78,25 @@
             <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
         {% endif %}
     </h1>
+
+    {% if order.customer_editing.ends_at and date(order.customer_editing.ends_at) > date() %}    
+        <div class="flex items-center gap-3 flex-wrap">
+            <salla-button  fill="outline" class='flex items-center'>
+                <span class="text-sm">{{ trans('pages.orders.you_can_edit_within') }}</span>
+                <salla-timer
+                    date="{{ order.customer_editing.ends_at }}"
+                ></salla-timer>
+            </salla-button>
+
+            <salla-button  href="{{ order.url }}/edit">
+                <i class="sicon-format-border-color rtl:ml-2 ltr:mr-2"></i>
+                <span>{{ trans('pages.orders.edit') }}</span>
+            </salla-button>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
+
 {% block inner_content %}
     <div class="space-y-4">
 
