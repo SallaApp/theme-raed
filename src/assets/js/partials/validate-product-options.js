@@ -95,9 +95,15 @@ function updateCartItemState(cartItems, currentProduct) {
 function appendLoadingOverlay(itemId) {
     if (!itemId) return;
 
-    const loadingOverlay = createLoadingOverlay();
     const parentElement = document.querySelector(`#item-${itemId} .cart-item`);
     if (parentElement) {
+        // Remove any existing overlay first to prevent stacking
+        const existingOverlay = parentElement.querySelector('.loading-overlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+
+        const loadingOverlay = createLoadingOverlay();
         parentElement.appendChild(loadingOverlay);
     }
 }

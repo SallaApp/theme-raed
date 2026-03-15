@@ -57,7 +57,7 @@
                 </div>
                 {% endif %}
 
-                <article class="leading-7 text-sm mb-10">{{ article.body|raw }}</article>
+                <article class="leading-7 text-sm mb-10">{{ article.body|replace({'&nbsp;': ' '})|raw }}</article>
                 {% if article.tags|length %}
                     <div class="p-4 flex flex-wrap items-center border-t border-gray-200">
                         {% for tag in article.tags %}

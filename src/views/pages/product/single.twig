@@ -106,7 +106,7 @@
                     <salla-button
                             class="btn--wishlist animated sws"
                             data-id="{{ product.id }}"
-                            onclick="salla.wishlist.toggle({{ product.id }})"
+                            onclick="salla.wishlist.toggle('{{ product.id }}')"
                             shape="icon"
                             fill="outline"
                             color="light">
@@ -131,14 +131,14 @@
                                     src="{{ image.three_d_image_url }}"
                                     shadow-intensity="1" alt="{{ image.alt }}">
                                 </model-viewer>
-                            {% else %}
+                                    {% else %}
                                 <a data-fslightbox="product_{{ product.id }}"
                                    data-img-id="{{ image.id }}"
                                    data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
                                    data-caption="{{ image.alt }}"
                                    data-infinite="false"
                                    data-type="{{ image.video_url?'youtube':'image' }}"
-                                   href="{{ image.video_url?image.video_url:image.url }}"
+                                   href="{{ (image.video_url is iterable ? image.video_url|first : image.video_url)|default(image.url) }}"
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide magnify-wrapper homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
@@ -146,9 +146,10 @@
                                              alt="{{ image.alt }}"
                                              class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% else %}
-                                        <img id="{{image.id}}" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{ image.url }}"
+                                        <img id="{{image.id}}" src="{{ image.url }}"
+                                             loading="lazy"
                                              alt="{{ image.alt }}"
-                                             class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
                                     {% endif %}
                                 </a>
                             {% endif %}
@@ -158,7 +159,7 @@
                     {% if has_many_images %}
                         <div slot="thumbs">
                             {% for image in product.images %}
-                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}">
+                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}" data-caption="{{ image.alt }}">
                                     {% if loop.index < 5 %}
                                         <img src="{{ image.url }}"
                                              loading="eager"
@@ -166,8 +167,9 @@
                                              title="{{ image.alt }}"
                                              alt="{{ image.alt }}"/>
                                     {% else %}
-                                        <img data-src="{{ image.url }}" src="{{ 'images/s-empty.png' | cdn }}"
-                                             class="object-cover w-full h-full lazy bg-gray-100 rounded-md overflow-hidden"
+                                        <img src="{{ image.url }}"
+                                             loading="lazy"
+                                             class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
                                              title="{{ image.alt }}"
                                              alt="{{ image.alt }}"/>
                                     {% endif %}
@@ -212,14 +214,14 @@
                 {# Price #}
                 <div class="flex whitespace-nowrap gap-4 items-center">
                   <div class="{{ product.is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                      <h4 class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
+                      <p class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</p>
                       <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
                   </div>
                   <div class="gap-4 {{ product.is_on_sale ? 'hidden' : 'flex' }}">
                       {% if product.starting_price %} 
                           <span class="">{{ trans('pages.products.starting_price') }}</span>
                       {% endif %} 
-                          <h2 class=" font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
+                          <p class=" font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</p>
                   </div>
                 </div>
 
@@ -258,7 +260,7 @@
                     <salla-button
                             class="btn--wishlist animated hidden sm:inline-flex"
                             data-id="{{ product.id }}"
-                            onclick="salla.wishlist.toggle({{ product.id }})"
+                            onclick="salla.wishlist.toggle('{{ product.id }}')"
                             shape="icon"
                             fill="outline"
                             color="light"
@@ -313,7 +315,7 @@
                             <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
                                 <div class="flex rtl:space-x-reverse space-x-3">
                                     <a href="#!"
-                                       onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
+                                       onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: '{{ product.id }}' })"
                                        class="group text-primary flex items-center justify-center">
                                         <span>{{ trans('pages.products.select_branch') }}</span>
                                         <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
@@ -323,6 +325,13 @@
                         </div>
                     </section>
                 {% endif %}
+
+
+				{# Digital Files Settings #}
+				{% if product.digital_files_settings %}
+					<digital-files-settings settings='{{ product.digital_files_settings|json_encode }}'></digital-files-settings>
+				{% endif %}
+				{# End Digital Files Settings #}
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
@@ -359,6 +368,13 @@
                             <div class="out-of-stock min-h-7 leading-7 hidden text-base text-red-600 !opacity-50 font-bold">{{ trans('pages.products.out_of_stock')}}</div>
                         </div>
                     </section>
+                    {# Pre-order Campaign #}
+                    {% if product.has_preorder_campaign %}
+                        <section class="mt-5 p-5">
+                            <salla-count-down pre-order='{{ product.preorder|json_encode}}' boxed labeled></salla-count-down>
+                        </section>
+                    {% endif %}
+
                     <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
                         {# Quantity #}
                         {% if product.is_hidden_quantity or product.type == 'booking' %}
@@ -374,9 +390,10 @@
                         {% endif %}
                         {# Add to cart #}
                         <salla-add-product-button
-                                quick-buy
+                                {{product.can_quick_buy ? 'quick-buy' : ''}}
                                 {{theme.settings.get('sticky_add_to_cart') ? ' support-sticky-bar' : ''}}
                                 {{product.is_require_shipping ? 'required-shipping' : ''}}
+                                {{product.has_preorder_campaign ? 'has-pre-order' : ''}}
                                 amount="{{ product.base_currency_price }}"
                                 class="mt-5 w-full sticky-product-bar__btn"
                                 product-status="{{ product.status }}"
@@ -392,11 +409,12 @@
                                     subscribed-options="{{ product.notify_availability.subscribed_options|json_encode }}"
                                     {{ product.notify_availability.options ? 'notify-options-availability' : '' }}
                                 {% endif %}>
+
                             {{ product.add_to_cart_label }}
                         </salla-add-product-button>
                     </section>
                     {% if product.is_giftable %}
-                        <salla-gifting class="mt-5" widget-subtitle="{{ gifting_intro }}" product-id="{{ product.id }}"></salla-gifting>
+                        <salla-gifting class="mt-5" widget-subtitle="{{ gifting_intro }}" product-id="{{ product.id }}" {{ product.is_require_shipping ? 'physical-products' : ''  }}></salla-gifting>
                     {% endif %}
                 </form>
 
@@ -408,7 +426,9 @@
     </div>
 
     {# Comments Area #}
-    <salla-comments item-id="{{product.id}}" type="product"></salla-comments>
+    {% if store.settings.rating.show_on_product %}
+        <salla-comments item-id="{{product.id}}" type="product"></salla-comments>
+    {% endif %}
     
     {# Similar Products Area #}
     <div class="container">
@@ -421,5 +441,7 @@
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     {% endif %}
+    {% if product.digital_files_settings %}
+        <script type="module" defer src="{{ 'digital-files.js'|asset }}"></script>
+    {% endif %}
 {% endblock %}
-
