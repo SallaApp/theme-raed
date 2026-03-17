@@ -1,6 +1,9 @@
 {% extends "layouts.customer" %}
 
-
 {% block inner_content %}
-    <salla-order-edit order-id="{{ order.id }}"></salla-order-edit>
-{% endblock %}
+
+  <salla-order-edit
+    order-id="{{ order.id }}"                                                                                                             
+    order-data="{{ order | json_encode }}"                                                                                                
+  ></salla-order-edit>  
+  {% endblock %}
