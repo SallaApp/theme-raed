@@ -313,6 +313,15 @@ class ProductCard extends HTMLElement {
       if (this.product?.quantity && this.isSpecial) {
         this.initCircleBar();
       }
+
+      // Optimistic & Per-card wishlist toggle
+      this.querySelectorAll('.s-product-card-wishlist-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const willBeAdded = !btn.classList.contains('s-product-card-wishlist-added');
+          app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => willBeAdded);
+          app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => willBeAdded);
+        });
+      });
     }
 }
 
