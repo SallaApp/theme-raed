@@ -143,8 +143,13 @@ class Cart extends BasePage {
             offerIconElement = cartItem.querySelector('.offer-icon'),
             hasSpecialPrice = item.offer || item.special_price > 0,
             hasSalePrice = item.is_on_sale,
-            newOffersActive = item.detailed_offers?.length > 0 ;
-        let item_total = (newOffersActive || hasSpecialPrice) ? item.total_special_price : item.total;
+            newOffersActive = item.detailed_offers?.length > 0,
+            hasAnyLineDiscount =
+                !!item.has_discount || hasSpecialPrice || hasSalePrice || newOffersActive;
+
+        const item_total = hasAnyLineDiscount
+            ? (item.total_special_price ?? item.total)
+            : item.total;
         let total = salla.money(item_total);
         if (total !== totalElement.innerHTML) {
             totalElement.innerHTML = total;
