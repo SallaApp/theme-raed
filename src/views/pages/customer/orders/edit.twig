@@ -1,8 +1,138 @@
 {% extends "layouts.customer" %}
 
-{% block inner_content %}
+{% set edit_window_ends_at = order.customer_editing_session.ends_at ?? order.customer_editing.ends_at %}
 
-  <salla-order-edit
+{% block inner_content_wrapper_class %}main-content w-full flex-1 lg:pt-10 max-w-full{% endblock %}
+
+{% block inner_title %}
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-2">
+        <div>
+            <h1 class="font-bold text-lg text-center sm:rtl:text-right sm:ltr:text-left">{{ page.title }}</h1>
+            <p class="text-sm text-gray-500 mt-1">#{{ order.reference_id }}</p>
+        </div>
+
+     
+            <salla-button fill="outline" class="flex items-center">
+                <span class="text-sm">{{ trans('pages.orders.you_can_edit_within') }}</span>
+                <salla-timer date="{{ edit_window_ends_at }}"></salla-timer>
+            </salla-button>
+   
+    </div>
+{% endblock %}
+
+{% block inner_content %}
+{# <salla-order-edit
     order-id="{{ order.id }}"                                                                                                             
-  ></salla-order-edit>  
-  {% endblock %}
+  ></salla-order-edit>  #}
+  
+    <div class="pt-5 flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
+        <div class="main-content w-full lg:w-[calc(100%-384px)]">
+            <div class="bg-white p-5 xs:p-7 rounded-md mb-5">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between text-sm">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-500">{{ trans('pages.orders.date') }}</span>
+                            <b>{{ order.created_at|date|number }}</b>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-500">{{ trans('pages.orders.status') }}</span>
+                            <span class="inline-flex items-center gap-1" style="color: {{ order.status.color }}">
+                                <i class="{{ order.status.icon }}"></i>
+                                <span>{{ order.status.name }}</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <salla-button href="{{ order.url }}" fill="outline" size="small">
+                        {{ trans('common.elements.back') }}
+                    </salla-button>
+                </div>
+            </div>
+
+            {% for item in order.items %}
+                {% if item.editable_item %}
+                    <form id="order-item-{{ item.id }}">
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                        {% include 'pages.partials.product.editable-item' with {
+                            item: item.editable_item,
+                            mode: 'order',
+                            show_delete_button: false,
+                            show_item_offers: false,
+                            load_eager: loop.first
+                        } %}
+                    </form>
+                {% endif %}
+            {% else %}
+                <div class="no-content-placeholder">
+                    <i class="sicon-shopping-bag icon"></i>
+                    <p>{{ trans('pages.cart.empty_cart') }}</p>
+                    <a href="{{ order.url }}"
+                       class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back') }}</a>
+                </div>
+            {% endfor %}
+
+            {% if order.options|length %}
+                <div class="cart-options">
+                    <h2 class="font-bold text-sm mb-3">{{ trans('pages.cart.cart_options') }}</h2>
+                    {% for product_option in order.options %}
+                        {% if product_option.editable_item %}
+                            <form class="first:pt-5 relative" id="order-option-{{ product_option.id }}">
+                                <input type="hidden" name="id" value="{{ product_option.id }}">
+                                <input type="hidden" name="quantity" value="{{ product_option.quantity }}">
+                                {% include 'pages.partials.product.options' with { product: product_option.editable_item } %}
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="sticky top-24 w-full lg:w-96 rtl:lg:mr-8 ltr:lg:ml-8">
+            <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative">
+                <h2 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h2>
+
+                <div class="flex justify-between text-sm mb-5">
+                    <span class="text-gray-500">{{ trans(order.tax ? 'pages.cart.items_total_without_tax' : 'pages.cart.items_total') }}</span>
+                    <b>{{ order.sub_total|money }}</b>
+                </div>
+
+                {% if order.options|length %}
+                    <div class="flex justify-between text-sm mb-5">
+                        <span class="text-gray-500">{{ trans('pages.cart.order_options_total') }}</span>
+                        <b>{{ order.options_total|money }}</b>
+                    </div>
+                {% endif %}
+
+                {% if order.shipping and order.shipping.cost %}
+                    <div class="flex justify-between text-sm mb-5">
+                        <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
+                        <b>{{ order.shipping.cost|money }}</b>
+                    </div>
+                {% endif %}
+
+                {% for discount in order.discounts %}
+                    <div class="flex justify-between text-sm mb-5">
+                        <span class="text-gray-500">{{ discount.name }}</span>
+                        <b>{{ discount.discount }}</b>
+                    </div>
+                {% endfor %}
+
+                {% if order.tax %}
+                    <div class="flex justify-between text-sm mb-5">
+                        <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
+                        <b>{{ order.tax.amount|money }}</b>
+                    </div>
+                {% endif %}
+
+                <div class="flex justify-between text-lg mb-5">
+                    <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>
+                    <b>{{ order.total|money }}</b>
+                </div>
+
+                <salla-button href="{{ order.url }}" fill="outline" width="wide">
+                    {{ trans('pages.orders.order_details', {id: order.reference_id}) }}
+                </salla-button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
