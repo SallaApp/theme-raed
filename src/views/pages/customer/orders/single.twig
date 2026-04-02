@@ -78,19 +78,28 @@
             <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
         {% endif %}
     </h1>
-
-     {% if order.customer_editing.enabled and date(order.customer_editing.ends_at) > date() %}
-        <div class="flex items-center gap-3 flex-wrap">
-            {% if order.customer_editing.payment_url %}
-                <salla-button href="{{ order.customer_editing.payment_url }}" color="primary" size="sm">
-                    <i class="sicon-wallet"></i>
-                    {{ trans('pages.orders.pay_difference') }}
-                </salla-button>
-            {% else %}
-                <salla-count-down prefix-text="{{ trans('pages.orders.edit_within') }}" button-href="{{ order.customer_editing.edit_url }}" button-text="{{ trans('pages.orders.edit_order') }}" button-icon="sicon-edit" date="{{ order.customer_editing.ends_at }}" horizontal auto-segments with-button labeled="false" size="sm" color="primary"></salla-count-down>
-            {% endif %}
-        </div>
-     {% endif %}
+<div class="flex items-center gap-3 flex-wrap">
+    {% if order.customer_editing.enabled and date(order.customer_editing.ends_at) %}
+        <salla-count-down
+            prefix-text="{{ trans('pages.orders.edit_within') }}"
+            button-href="{{ order.customer_editing.edit_url }}"
+            button-text="{{ trans('pages.orders.edit_order') }}"
+            button-icon="sicon-edit"
+            date="{{ order.customer_editing.ends_at }}"
+            horizontal
+            auto-segments
+            with-button
+            labeled="false"
+            size="sm"
+            color="primary">
+        </salla-count-down>
+    {% elseif not order.customer_editing.enabled and order.customer_editing.payment_url %}
+        <salla-button href="{{ order.customer_editing.payment_url }}" color="primary" size="sm">
+            <i class="sicon-wallet"></i>
+            {{ trans('pages.orders.pay_difference') }}
+        </salla-button>
+    {% endif %}
+</div>
 </div>
 {% endblock %}
 
