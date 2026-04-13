@@ -200,8 +200,9 @@
                         </div>
                     </div>
 
-                    {% if loyalty %}
+                    {% if loyalty and user.loyalty_points %}
                         <salla-loyalty-panel
+                            customer-points='{{ user.loyalty_points }}'
                             prize-points='{{ loyalty.prize.points }}'
                             prize-title='{{ loyalty.prize.title }}'>
                         </salla-loyalty-panel>
