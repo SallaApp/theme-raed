@@ -79,26 +79,7 @@
         {% endif %}
     </h1>
 <div class="flex items-center gap-3 flex-wrap">
-    {% if order.is_editable %}
-        <salla-count-down
-            prefix-text="{{ trans('pages.orders.edit_within') }}"
-            button-href="{{ order.edit_url }}"
-            button-text="{{ trans('pages.orders.edit_order') }}"
-            button-icon="sicon-edit"
-            date="{{ order.editable_until }}"
-            horizontal
-            auto-segments
-            with-button
-            labeled="false"
-            size="sm"
-            color="primary">
-        </salla-count-down>
-    {% elseif order.customer_editing.payment_url %}
-        <salla-button href="{{ order.customer_editing.payment_url }}" color="primary" size="sm">
-            <i class="sicon-wallet"></i>
-            {{ trans('pages.orders.pay_difference') }}
-        </salla-button>
-    {% endif %}
+    <salla-edit-order-button />
 </div>
 </div>
 {% endblock %}
