@@ -452,12 +452,10 @@
                             {% if order.pending_payment_ends_in == 0 %}
                                 <span class="text-red-500">{{ trans('pages.orders.pending_payment_expired') }}</span>
                             {% else %}
-                                {% if not order.customer_editing.payment_url %}
                                 <salla-button width="wide" href="{{ order.payment_url }}">
                                     <i class="sicon sicon-wallet rtl:ml-2 ltr:mr-2"></i>
                                     <span>{{ trans('pages.orders.finish_payment') }}</span>
                                 </salla-button>
-                                {% endif %}
                             {% endif %}
                         {% elseif user.type == 'user' %}
                             <div class="text-sm">
