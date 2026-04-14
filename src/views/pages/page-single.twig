@@ -22,6 +22,39 @@
                 <div class="content-entry">
                     {{ page.content|raw }}
                 </div>
+                <script>
+                    (function () {
+                        var entry = document.currentScript.previousElementSibling;
+                        if (!entry) return;
+                        entry.querySelectorAll('a').forEach(function (a) {
+                            var href = a.getAttribute('href') || '';
+                            var videoId = null;
+
+                            // https://www.youtube.com/embed/VIDEO_ID
+                            var embedMatch = href.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
+                            // https://www.youtube.com/watch?v=VIDEO_ID
+                            var watchMatch = href.match(/youtube\.com\/watch\?(?:.*&)?v=([a-zA-Z0-9_-]+)/);
+                            // https://youtu.be/VIDEO_ID
+                            var shortMatch = href.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+
+                            if (embedMatch) videoId = embedMatch[1];
+                            else if (watchMatch) videoId = watchMatch[1];
+                            else if (shortMatch) videoId = shortMatch[1];
+
+                            if (!videoId) return;
+
+                            var wrapper = document.createElement('div');
+                            wrapper.style.cssText = 'position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:1rem 0;';
+                            var iframe = document.createElement('iframe');
+                            iframe.src = 'https://www.youtube.com/embed/' + videoId;
+                            iframe.setAttribute('allowfullscreen', '');
+                            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                            iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0;';
+                            wrapper.appendChild(iframe);
+                            a.parentNode.replaceChild(wrapper, a);
+                        });
+                    })();
+                </script>
                 <salla-comments item-id="{{page.id}}" type="page"></salla-comments>
             </div>
         </div>
