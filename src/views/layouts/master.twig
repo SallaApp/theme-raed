@@ -50,7 +50,7 @@
 | theme.settings.get(settingName, default=null)      | mixed    | get theme setting ex `theme.settings.get('my_var', 'fallback')`                                          |
 #}
 <!DOCTYPE html>
-<html lang="{{ user.language.code }}" dir="{{ user.language.dir }}">
+<html lang="{{ language.code }}" dir="{{ theme.is_rtl ? 'rtl' : 'ltr' }}">
 <!-- بسم الله الرحمن الرحيم -->
 <head>
     <meta charset="UTF-8">
@@ -121,10 +121,7 @@
 {# Twilight Components #}
 <salla-offer-modal></salla-offer-modal>
 <salla-search></salla-search>
-
-{% if user.type=='guest' %}
-    <salla-login-modal></salla-login-modal>
-{% endif %}
+<salla-login-modal></salla-login-modal>
 {% if store.scope %}
     <salla-scopes selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
 {% endif %}
