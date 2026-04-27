@@ -29,7 +29,7 @@ class Blog extends BasePage {
             const originalContent = likeBtn.innerHTML;
             likeBtn.querySelector('i').outerHTML = '<span class="loader loader--small"></span>';
 
-            const endpoint = this.isLiked ? `blogs/${blogId}/unlike` : `blogs/${blogId}/like`;
+            const endpoint = `blog/articles/${blogId}/like`;
             try {
                 await salla.api.request(endpoint, '', this.isLiked ? 'delete' : 'put');
                 likeBtn.innerHTML = originalContent;
