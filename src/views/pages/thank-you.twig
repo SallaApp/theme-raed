@@ -64,56 +64,6 @@
             {% hook 'thank-you:items.end' %}
         </div>
 
-        {% set next_coupon = coupon.first() %}
-        {% if next_coupon %}
-        <div class="bg-white rounded-md mb-6 md:mb-8 px-4 md:px-8 py-4">
-            <div class="flex items-center justify-between gap-4">
-
-                <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-12 h-12 rounded bg-primary flex items-center justify-center flex-shrink-0">
-                        <i class="sicon-tag-money text-white text-2xl"></i>
-                    </div>
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-1.5">
-                            <p class="font-bold text-lg leading-snug">
-                                {% if next_coupon.type == 'P' %}
-                                    {{ trans('pages.thank_you.next_order_coupon.title_percent')|replace({':amount': '<span class="text-primary">' ~ next_coupon.amount ~ '%</span>'})|raw }}
-                                {% else %}
-                                    {{ trans('pages.thank_you.next_order_coupon.title_fixed')|replace({':amount': '<span class="text-primary">' ~ (next_coupon.amount|money) ~ '</span>'})|raw }}
-                                {% endif %}
-                            </p>
-                            <span class="inline-flex items-center bg-gray-100 text-primary rounded-full text-sm h-6 px-3 mx-1.5">
-                                {{ trans('pages.thank_you.next_order_coupon.badge') }}
-                            </span>
-                        </div>
-                        <p class="text-gray-500 leading-snug flex flex-wrap gap-x-1">
-                            {% if next_coupon.minimum_amount %}
-                                <span>{{ trans('pages.thank_you.next_order_coupon.min_spend')|replace({':amount': next_coupon.minimum_amount|money}) }}</span>
-                            {% endif %}
-                            {% if next_coupon.expiry_date %}
-                                <span>{{ trans('pages.thank_you.next_order_coupon.expires')|replace({':date': next_coupon.expiry_date|date('d/m/Y')}) }}</span>
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-3 flex-shrink-0">
-                    <div class="flex items-center gap-4 border border-dashed border-primary rounded-md px-4 h-10">
-                        <salla-button shape="link" onclick="app.copyToClipboard(event)" data-content="{{ next_coupon.code }}"
-                                      class="!p-0 h-auto" title="{{ trans('common.elements.copy') }}">
-                            <i class="copy-icon sicon-swap-stroke text-primary pointer-events-none text-lg"></i>
-                        </salla-button>
-                        <span class="text-sm font-bold tracking-wide">{{ next_coupon.code }}</span>
-                    </div>
-                    <a href="{{ link('/') }}" class="btn btn--primary text-sm h-9 px-4 flex items-center rounded-md whitespace-nowrap">
-                        {{ trans('pages.thank_you.next_order_coupon.shop_now') }}
-                    </a>
-                </div>
-
-            </div>
-        </div>
-        {% endif %}
-
         <div class="lg:flex rtl:space-x-reverse lg:space-x-8">
             {% if order.email_sent %}
                 <div class="duration-500 hover:shadow-default flex-1 bg-white p-8 rounded-md mb-6 md:mb-10 flex flex-col items-center justify-center">
