@@ -1,0 +1,174 @@
+.s-add-product-toast {
+  @apply fixed z-[9999] flex flex-col gap-4 bg-white shadow-default overflow-hidden w-screen p-5;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+  &.s-add-product-toast--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (min-width: 768px) {
+    @apply w-[400px] rounded-lg;
+    top: 1rem;
+    left: auto;
+    right: auto;
+
+    [dir="rtl"] & {
+      left: 1rem;
+      transform: translateX(-100%);
+
+      &.s-add-product-toast--visible {
+        transform: translateX(0);
+      }
+    }
+
+    [dir="ltr"] & {
+      right: 1rem;
+      transform: translateX(100%);
+
+      &.s-add-product-toast--visible {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  &__progress {
+    @apply h-2 w-full bg-gray-100;
+  }
+
+  &__progress-bar {
+    @apply h-full bg-green-500;
+    transition: width 50ms linear;
+  }
+
+  &__header {
+    @apply flex items-center justify-between gap-2;
+  }
+
+  &__header-content {
+    @apply flex items-center gap-2.5;
+  }
+
+  &__icon {
+    @apply flex-shrink-0;
+  }
+
+  &__title {
+    @apply text-sm font-bold text-gray-800;
+  }
+
+  &__close {
+    @apply flex-shrink-0 w-6 h-6 flex items-center justify-center cursor-pointer border-0 bg-transparent p-0;
+
+    i {
+      @apply text-lg text-gray-400 transition-colors;
+    }
+
+    &:hover i {
+      @apply text-gray-600;
+    }
+  }
+
+  &__divider {
+    @apply h-px bg-gray-200;
+  }
+
+  &__body {
+    @apply flex gap-3 items-start;
+  }
+
+  &__image {
+    @apply flex-shrink-0 w-20 h-20 rounded-lg object-contain overflow-hidden bg-gray-50 border border-gray-100;
+
+    img {
+      @apply w-full h-full object-contain;
+    }
+
+    @media (min-width: 768px) {
+      @apply w-[88px] h-[88px];
+    }
+  }
+
+  &__details {
+    @apply flex-1 min-w-0 flex flex-col gap-1;
+  }
+
+  &__name {
+    @apply text-sm font-semibold text-gray-800 leading-snug no-underline block transition-colors;
+
+    &:hover {
+      @apply text-primary;
+    }
+  }
+
+  &__options {
+    @apply flex flex-col gap-0.5 mt-1;
+
+    span {
+      @apply text-xs text-gray-500 leading-relaxed;
+
+      @media (min-width: 768px) {
+        @apply text-sm;
+      }
+    }
+  }
+
+  &__show-more {
+    @apply text-xs text-primary font-medium underline mt-0.5;
+
+    &:hover {
+      @apply no-underline;
+    }
+
+    @media (min-width: 768px) {
+      @apply text-sm;
+    }
+  }
+
+  &__price {
+    @apply flex-shrink-0 flex flex-col items-end gap-1 text-sm font-bold text-gray-800;
+
+    @media (min-width: 768px) {
+      @apply text-base;
+    }
+  }
+
+  &__price-sale {
+    @apply text-red-800;
+  }
+
+  &__price-original {
+    @apply text-xs text-gray-500 line-through font-normal;
+
+    @media (min-width: 768px) {
+      @apply text-sm;
+    }
+  }
+
+  &__actions {
+    @apply flex gap-3;
+
+    salla-button {
+      @apply flex-1;
+
+      svg {
+        @apply inline-flex flex-shrink-0;
+
+        path {
+          fill: none;
+        }
+      }
+      .s-button-btn {
+        @apply rounded-none;
+        &.s-button-gray-outline {
+          @apply border-gray-200 text-gray-800;
+        }
+      }
+    }
+  }
+}
