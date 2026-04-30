@@ -8,27 +8,138 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
->
+
+# ✨ [1.322.0]( https://github.com/SallaApp/theme-raed/compare/1.310.0...1.322.0) (08-04-2026)
+### Enhancement
+- Upgraded twilight for Delivery Promise v2.
+
+# ✨ [1.310.0]( https://github.com/SallaApp/theme-raed/compare/1.308.0...1.310.0) (25-02-2026)
+### Enhancement
+- Support Free Product Conditional Offers.
+
+# 🎇 [1.308.0]( https://github.com/SallaApp/theme-raed/compare/1.307.0...1.308.0) (15-02-2026)
+### Bug Fixes
+- Optimize Enhanced Slider when there is only one slide
+- Support New Flag `slides.without_overlay`
+
+
+# 🎇 [1.307.0]( https://github.com/SallaApp/theme-raed/compare/1.306.0...1.307.0) (12-02-2026)
+### Bug Fixes
+- Enhance digital file calling place.
+
+# 🎇 [1.306.0]( https://github.com/SallaApp/theme-raed/compare/1.305.0...1.306.0) (12-02-2026)
+### Bug Fixes
+- Resolve product card images not displaying issue.
+
+# ✨ [1.305.0]( https://github.com/SallaApp/theme-raed/compare/1.304.0...1.305.0) (11-02-2026)
+### Enhancements
+- Use native loading="lazy" instead of custom lazyload.
+# ✨ [1.304.0]( https://github.com/SallaApp/theme-raed/compare/1.302.0...1.304.0) (10-02-2026)
+### Enhancements
+- Support responsive mobile/desktop images for fixed banner.
+# ✨ [1.302.0]( https://github.com/SallaApp/theme-raed/compare/1.301.0...1.302.0) (28-01-2026)
+### Enhancements
+- Refactor fixed banner image logic and cleanup styles.
+# 🎇 [1.301.0]( https://github.com/SallaApp/theme-raed/compare/1.300.0...1.301.0) (27-01-2026)
+### Bug Fixes
+- Fix payment method logo in bank offer logo.
+# ✨ [1.300.0]( https://github.com/SallaApp/theme-raed/compare/1.299.0...1.300.0) (26-01-2026)
+### Enhancements
+- Add explicit dimensions to testimonial avatar images to improve Lighthouse performance score.
+# 🎇 [1.299.0]( https://github.com/SallaApp/theme-raed/compare/1.298.0...1.299.0) (26-01-2026)
+### Bug Fixes
+- Fix overflow product option content.
+# ✨ [1.298.0]( https://github.com/SallaApp/theme-raed/compare/1.296.0...1.298.0) (21-01-2026)
+### Enhancements
+- Remove hero slider controls on single slide to improve LCP.
+
+# 🎇 [1.296.0]( https://github.com/SallaApp/theme-raed/compare/1.294.0...1.296.0) (20-01-2026)
+### Bug Fixes
+- Remove initial loader screen && add crossorigin to app and product-card scripts.
+
+# 🎇 [1.294.0]( https://github.com/SallaApp/theme-raed/compare/1.284.0...1.294.0) (07-01-2026)
+### Bug Fixes
+- Show free product ribbon only for discounted items with zero prices.
+
+# 🎇 [1.284.0]( https://github.com/SallaApp/theme-raed/compare/1.282.0...1.284.0) (31-12-2025)
+### Bug Fixes
+- Support add product toast component.
+
+# 🎇 [1.282.0]( https://github.com/SallaApp/theme-raed/compare/1.279.0...1.282.0) (21-12-2025)
+### Enhancements
+- Additional options now support digital files.
+
+# ✨  [1.279.0]( https://github.com/SallaApp/theme-raed/compare/1.278.0...1.279.0) (07-12-2025)
+### Enhancements
+-  Scopes moved out from header.
+
+# ✨  [1.278.0]( https://github.com/SallaApp/theme-raed/compare/1.276.0...1.278.0) (01-12-2025)
+### Enhancements
+-  Display donation-amount based on option custom_amount_enabled.
+
+# ✨  [1.276.0]( https://github.com/SallaApp/theme-raed/compare/1.271.0...1.276.0) (20-11-2025)
+### Enhancements
+-  Build theme assets.
+
+# 🎇 [1.271.0]( https://github.com/SallaApp/theme-raed/compare/1.267.0...1.271.0) (11-11-2025)
+### Bug Fixes
+-  Fix safari `on-paste` issue.
+
+# 🪁 [1.267.0]( https://github.com/SallaApp/theme-raed/compare/1.265.0...1.267.0) (06-11-2025)
+
+### Bug Fixes
+-  Fix updating `itemOriginalPrice` if `hasSalePrice`.
+-  Fix price icon direction.
+
+# 🪁 [1.265.0]( https://github.com/SallaApp/theme-raed/compare/1.264.0...1.265.0) (30-10-2025)
+
+### Bug Fixes
+-  Partial payment breakdown for the customer.
+
+# 🎇 [1.264.0]( https://github.com/SallaApp/theme-raed/compare/1.263.0...1.264.0) (27-10-2025)
+
+### Bug Fixes
+-  Prevent Accumulating Overlays On Data Changes.
+
+# 🗺️ [1.263.0]( https://github.com/SallaApp/theme-raed/compare/1.262.0...1.263.0) (23-10-2025)
+
+### Enhancements
+- Added support for multi-item bundle products.
+
+# 🎇 [1.262.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.262.0) (21-10-2025)
+
+### Bug Fixes
+- Update WhatsApp link to use wa.me format
+
+# 🪁 [1.257.0]( https://github.com/SallaApp/theme-raed/compare/1.256.0...1.257.0) (06-10-2025)
+## Fixes
+- Fix sticky label for mobile by add flag for preorder.
+
+
+# ✨ [1.256.0]( https://github.com/SallaApp/theme-raed/compare/1.252.0...1.256.0) (05-10-2025)
+### Enhancements
+- Profile page changed to twig.
+
 
 # 🌅 [1.253.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
 
-## Bug Fixes
+### Bug Fixes
 
 - Unify PreOrder and Promotion handling
 - Display square banners info in mobile screen
 
 # 🥊 [1.252.0]( https://github.com/SallaApp/theme-raed/compare/1.250.0...1.252.0) (14-09-2025)
 
-## Bug Fixes
+### Bug Fixes
 Handle PreOrder Label As Promotion label
 
 # 🏁 [1.250.0]( https://github.com/SallaApp/theme-raed/compare/1.249.0...1.250.0) (11-09-2025)
-## Enhancements
+### Enhancements
 
 - Set configs in webpack.config.js to minify css
 
 # ✨ [1.249.0]( https://github.com/SallaApp/theme-raed/compare/1.237.0...1.249.0) (11-09-2025)
-## Enhancements
+### Enhancements
 
 - Added Tiered offer component. This commit as a reference.
 
