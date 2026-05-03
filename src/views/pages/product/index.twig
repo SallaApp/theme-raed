@@ -24,7 +24,6 @@
             <salla-breadcrumb></salla-breadcrumb>
         </nav>
 
-
         {#
             Hook: product.index.before_products_group_with_filter
             Fires before the products grid and filter sidebar wrapper.
@@ -74,18 +73,20 @@
                 {% hook 'product:index.items.end' %}
             </div>
         </div>
-    </div>
 
-    {#
-        Hook: product.index.after_products_group_with_filter
-        Fires after the products grid and filter sidebar wrapper.
-        Use this hook to inject content below the products listing area.
-    #}
-    {% hook 'product.index.after_products_group_with_filter' %}
+        {#
+            Hook: product.index.after_products_group_with_filter
+            Fires after the products grid and filter sidebar wrapper.
+            Use this hook to inject content below the products listing area.
+        #}
+        {% hook 'product.index.after_products_group_with_filter' %}
+    </div>
 
     {% if store.settings.category.testimonial_enabled %}
         {% component 'home.testimonials' %}
     {% endif %}
+
+
 {% endblock %}
 
 {% block scripts %}
