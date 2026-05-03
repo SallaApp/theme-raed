@@ -88,6 +88,14 @@
         <nav class="breadcrumbs w-full py-5">
             <salla-breadcrumb></salla-breadcrumb>
         </nav>
+
+        {#
+            Hook: product.single.before_product_info
+            Fires before the main product information section (images, title, price, etc.).
+            Use this hook to inject custom content or components above the product details area.
+        #}
+        {% hook 'product.single.before_product_info' %}
+
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4 rtl:ml-8 ltr:mr-8 pb-8 md:pb-16 overflow-hidden shrink-0">
                 {% set has_many_images = product.images|length > 1 %}
@@ -423,15 +431,36 @@
         <salla-offer></salla-offer>
     </div>
 
+    {#
+        Hook: product.single.before_customer_reviews
+        Fires before the customer reviews/comments section.
+        Use this hook to inject content between the product info and the reviews block.
+    #}
+    {% hook 'product.single.before_customer_reviews' %}
+
     {# Comments Area #}
     {% if store.settings.rating.show_on_product %}
         <salla-comments item-id="{{product.id}}" type="product"></salla-comments>
     {% endif %}
-    
+
+    {#
+        Hook: product.single.before_product_recommendations
+        Fires before the similar/related products slider.
+        Use this hook to inject content between the reviews and the recommendations section.
+    #}
+    {% hook 'product.single.before_product_recommendations' %}
+
     {# Similar Products Area #}
     <div class="container">
         <salla-products-slider source="related" source-value="{{product.id}}" block-title="{{trans('pages.products.similar_products')}}" display-all-url></salla-products-slider>
     </div>
+    
+    {#
+        Hook: product.single.after_product_recommendations
+        Fires after the similar/related products slider, at the very end of the product page content.
+        Use this hook to append content below the recommendations section.
+    #}
+    {% hook 'product.single.after_product_recommendations' %}
 {% endblock %}
 
 {% block scripts %}

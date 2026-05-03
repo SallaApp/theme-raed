@@ -23,6 +23,15 @@
         <nav class="breadcrumbs w-full py-5">
             <salla-breadcrumb></salla-breadcrumb>
         </nav>
+
+
+        {#
+            Hook: product.index.before_products_group_with_filter
+            Fires before the products grid and filter sidebar wrapper.
+            Use this hook to inject content above the products listing area.
+        #}
+        {% hook 'product.index.before_products_group_with_filter' %}
+
         <div class="flex items-start flex-col md:flex-row">
             {% if filters %}
                 <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
@@ -67,6 +76,12 @@
         </div>
     </div>
 
+    {#
+        Hook: product.index.after_products_group_with_filter
+        Fires after the products grid and filter sidebar wrapper.
+        Use this hook to inject content below the products listing area.
+    #}
+    {% hook 'product.index.after_products_group_with_filter' %}
 
     {% if store.settings.category.testimonial_enabled %}
         {% component 'home.testimonials' %}
