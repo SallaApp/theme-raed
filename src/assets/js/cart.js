@@ -133,6 +133,7 @@ class Cart extends BasePage {
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             itemOriginalPrice = cartItem.querySelector('.item-original-price'),
+            weightRow = cartItem.querySelector('.item-weight-row'),
             weightElement = cartItem.querySelector('.item-weight'),
             offerElement = cartItem.querySelector('.offer-name'),
             oldOffers = cartItem.querySelector('.old-offers'),
