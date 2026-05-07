@@ -133,6 +133,7 @@ class Cart extends BasePage {
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             itemOriginalPrice = cartItem.querySelector('.item-original-price'),
+            weightElement = cartItem.querySelector('.item-weight'),
             offerElement = cartItem.querySelector('.offer-name'),
             oldOffers = cartItem.querySelector('.old-offers'),
             freeRibbon = cartItem.querySelector('.free-ribbon'),
@@ -154,6 +155,10 @@ class Cart extends BasePage {
             .toggleElementClassIf(freeRibbon, 'active', 'hidden', () => item.price == 0);
 
         priceElement.innerHTML = salla.money(item.price);
+
+        if (weightElement && item.weight_label) {
+            weightElement.innerHTML = item.weight_label;
+        }
 
         // Update original price when item is on sale
         if (hasSalePrice) {
