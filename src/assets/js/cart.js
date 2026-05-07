@@ -157,9 +157,10 @@ class Cart extends BasePage {
 
         priceElement.innerHTML = salla.money(item.price);
 
-        if (weightElement && item.weight_label) {
-            weightElement.innerHTML = item.weight_label;
+        if (weightElement) {
+            weightElement.innerHTML = item.weight_label || '';
         }
+        app.toggleElementClassIf(weightRow, 'has-weight', 'hidden', () => !!item.weight_label);
 
         // Update original price when item is on sale
         if (hasSalePrice) {
