@@ -9,15 +9,15 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 >
-# ✨ [1.336.0]( https://github.com/SallaApp/theme-raed/compare/1.322.0...1.336.0) (07-05-2026)
+# 🪮 [1.336.0]( https://github.com/SallaApp/theme-raed/compare/1.322.0...1.336.0) (07-05-2026)
 ### Enhancement
 - Upgraded Twilight to apply a new feature " Login Cycle IP-based Auto-fill for Country, Region, and City"
 
-# ✨ [1.322.0]( https://github.com/SallaApp/theme-raed/compare/1.310.0...1.322.0) (08-04-2026)
+# 💣 [1.322.0]( https://github.com/SallaApp/theme-raed/compare/1.310.0...1.322.0) (08-04-2026)
 ### Enhancement
 - Upgraded twilight for Delivery Promise v2.
 
-# ✨ [1.310.0]( https://github.com/SallaApp/theme-raed/compare/1.308.0...1.310.0) (25-02-2026)
+# 📩 [1.310.0]( https://github.com/SallaApp/theme-raed/compare/1.308.0...1.310.0) (25-02-2026)
 ### Enhancement
 - Support Free Product Conditional Offers.
 
