@@ -41,7 +41,7 @@
                         <i class="copy-icon sicon-swap-stroke pointer-events-none rtl:mr-1 ltr:ml-1"></i>
                     </salla-button>
                 </p>
-                <salla-button onclick="salla.order.show({order_id:{{ order.id }}, url:'{{ order.url }}'})">
+                <salla-button onclick="salla.order.show({order_id:'{{ order.id }}', url:'{{ order.url }}'})">
                   <i class="sicon-newspaper rtl:ml-1 ltr:mr-1"></i>
                   {{ trans('pages.thank_you.order_details') }}
                 </salla-button>
@@ -61,52 +61,9 @@
 
             {% hook 'thank-you:items.start' %}
 
-            {% for item in order.items %}
-                {% if item.codes|length %}
-                    <div class="bg-gray-50 p-5 rounded-md text-start mb-2.5 last:mb-0">
-                        <h2 class="font-bold mb-5 unicode">
-                            {{ trans('pages.thank_you.codes') }} ({{ item.name }})
-                        </h2>
-                        {% for code in item.codes %}
-                            <div class="md:flex justify-between items-center mb-2 pb-2 border-b border-b-gray-200 last:pb-0 last:border-0 last:mb-0">
-                                <p class="text-base flex items-center leading-none">
-                                    <i class="sicon-debit-card-back text-xl rtl:ml-2 ltr:mr-2 text-gray-500 inline-block -mt-1"></i>
-                                    <span>{{ code.code }}</span>
-                                </p>
-                                <salla-button onclick="app.copyToClipboard(event)" shape="link" data-content="{{ code.code }}">
-                                    <i class="copy-icon sicon-swap-stroke pointer-events-none"></i>
-                                    <span class="text-sm rtl:mr-2 ltr:ml-2 pointer-events-none">{{ trans('common.elements.copy') }}</span>
-                                </salla-button>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                {% if item.files|length %}
-                    <div class="bg-gray-50 p-5 rounded-md text-start">
-                        <h2 class="font-bold mb-5 unicode">
-                            {{ trans('pages.thank_you.files') }} ({{ item.name }})
-                        </h2>
-                        <div class="divide-y divide-gray-100">
-                            {% for file in item.files %}
-                                <div class="flex justify-between py-4 last:pb-0">
-                                    <div class="text-sm">
-                                        <i class="sicon-file-archive"></i>
-                                        <span class="fix-align mx-3">{{ file.name }}</span>
-                                    </div>
-                                    <a href="{{ file.url }}" target="_blank" class="text-primary text-sm font-bold">
-                                        <i class="sicon-download text-lg"></i>
-                                        <span class="fix-align">{{ trans('pages.thank_you.download') }}</span>
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-
             {% hook 'thank-you:items.end' %}
         </div>
+        <salla-next-order-coupon></salla-next-order-coupon>
 
         <div class="lg:flex rtl:space-x-reverse lg:space-x-8">
             {% if order.email_sent %}
@@ -145,15 +102,15 @@
                         <div class="text-sm unicode flex items-center">
                             <i class="sicon-phone"></i>
                             <a href="tel:{{ store.contacts.mobile }}" class="hover:text-primary transition"><b
-                                        class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
+                                       class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
                         </div>
                     {% endif %}
 
-                    {% if store.social.whatsapp %}
+                    {% if store.contacts.whatsapp %}
                         <div class="text-sm unicode flex items-center">
                             <i class="sicon-whatsapp"></i>
-                            <a href="{{ store.contacts.whatsapp }}" class="hover:text-primary transition"><b
-                                        class="unicode mx-1.5">{{ store.social.whatsapp }}</b></a>
+                            <a href="https://wa.me/{{ store.contacts.whatsapp|replace({' ': '', '+': '', '-': ''}) }}" class="hover:text-primary transition" target="_blank" rel="noopener"><b
+                                        class="unicode mx-1.5">{{ store.contacts.whatsapp }}</b></a>
                         </div>
                     {% endif %}
                 </div>

@@ -18,12 +18,18 @@ class App extends AppHelpers {
       this.initiateStickyMenu();
     }
     this.initAddToCart();
-    this.initiateAdAlert();
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
-    this.initAttachWishlistListeners();
-    this.changeMenuDirection()
+    
+    // Ensure #more-menu-dropdown exists before running changeMenuDirection
+    const menuDirInterval = setInterval(() => {
+      if (document.querySelector('#more-menu-dropdown')) {
+        this.changeMenuDirection();
+        clearInterval(menuDirInterval);
+      }
+    }, 100);
+
     initTootTip();
     this.loadModalImgOnclick();
 
@@ -39,18 +45,22 @@ class App extends AppHelpers {
     return this;
   }
 
-    // fix Menu Direction at the third level >> The menu at the third level was popping off the page
-    changeMenuDirection(){
-      app.all('.root-level.has-children',item=>{
-        if(item.classList.contains('change-menu-dir')) return;
-        app.on('mouseover',item,()=>{
-          let submenu = item.querySelector('.sub-menu .sub-menu');
-          if(submenu){
-            let rect = submenu.getBoundingClientRect();
-            (rect.left < 10 || rect.right > window.innerWidth - 10) && app.addClass(item,'change-menu-dir')
-          }      
-        })
-      })
+    changeMenuDirection() {
+      setTimeout(() => {
+        app.all('.root-level.has-children', item => {
+          if (item.classList.contains('change-menu-dir')) return;
+          app.on('mouseover', item, () => {
+            let allSubMenus = item.querySelectorAll('.sub-menu');
+            allSubMenus.forEach((submenu, idx) => {
+              if (idx === 0) return;
+              let rect = submenu.getBoundingClientRect();
+              if (rect.left < 10 || rect.right > window.innerWidth - 10) {
+                app.addClass(item, 'change-menu-dir');
+              }
+            });
+          });
+        });
+      }, 1000);
     }
 
   loadModalImgOnclick(){
@@ -114,6 +124,9 @@ isElementLoaded(selector){
 
   initiateNotifier() {
     salla.notify.setNotifier(function (message, type, data) {
+      if (window.enable_add_product_toast && data?.data?.googleTags?.event === "addToCart") {
+        return;
+      }
       if (typeof message == 'object') {
         return Swal.fire(message).then(type);
       }
@@ -122,7 +135,7 @@ isElementLoaded(selector){
         toast: true,
         position: salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
         showConfirmButton: false,
-        timer: 3500,
+        timer: 2000,
         didOpen: (toast) => {
           toast.addEventListener('mouseenter', Swal.stopTimer)
           toast.addEventListener('mouseleave', Swal.resumeTimer)
@@ -161,22 +174,6 @@ isElementLoaded(selector){
   });
 
   }
- initAttachWishlistListeners() {
-    let isListenerAttached = false;
-  
-    function toggleFavoriteIcon(id, isAdded = true) {
-      document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
-        app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
-        app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
-      });
-    }
-  
-    if (!isListenerAttached) {
-      salla.wishlist.event.onAdded((event, id) => toggleFavoriteIcon(id));
-      salla.wishlist.event.onRemoved((event, id) => toggleFavoriteIcon(id, false));
-      isListenerAttached = true; // Mark the listener as attached
-    }
-  }
 
   initiateStickyMenu() {
     let header = this.element('#mainnav'),
@@ -199,35 +196,6 @@ isElementLoaded(selector){
     let height = this.element('#mainnav .inner').clientHeight,
       header = this.element('#mainnav');
     header.style.height = height + 'px';
-  }
-
-  /**
-   * Because salla caches the response, it's important to keep the alert disabled if the visitor closed it.
-   * by store the status of the ad in local storage `salla.storage.set(...)`
-   */
-  initiateAdAlert() {
-    let ad = this.element(".salla-advertisement");
-
-    if (!ad) {
-      return;
-    }
-
-    if (!salla.storage.get('statusAd-' + ad.dataset.id)) {
-      ad.classList.remove('hidden');
-    }
-
-    this.onClick('.ad-close', function (event) {
-      event.preventDefault();
-      salla.storage.set('statusAd-' + ad.dataset.id, 'dismissed');
-
-      anime({
-        targets: '.salla-advertisement',
-        opacity: [1, 0],
-        duration: 300,
-        height: [ad.clientHeight, 0],
-        easing: 'easeInOutQuad',
-      });
-    });
   }
 
   initiateDropdowns() {
@@ -269,34 +237,19 @@ isElementLoaded(selector){
     document.querySelectorAll('.btn--collapse')
       .forEach((trigger) => {
         const content = document.querySelector('#' + trigger.dataset.show);
+        if (!content) return;
+
         const state = { isOpen: false }
 
-        const onOpen = () => anime({
-          targets: content,
-          duration: 225,
-          height: content.scrollHeight,
-          opacity: [0, 1],
-          easing: 'easeOutQuart',
-        });
-
-        const onClose = () => anime({
-          targets: content,
-          duration: 225,
-          height: 0,
-          opacity: [1, 0],
-          easing: 'easeOutQuart',
-        })
-
         const toggleState = (isOpen) => {
-          state.isOpen = !isOpen
-          this.toggleElementClassIf(content, 'is-closed', 'is-opened', () => isOpen);
+          state.isOpen = !isOpen;
+          this.toggleElementClassIf([content, trigger], 'is-closed', 'is-opened', () => isOpen);
         }
 
         trigger.addEventListener('click', () => {
-          const { isOpen } = state
-          toggleState(isOpen)
-          isOpen ? onClose() : onOpen();
-        })
+          const { isOpen } = state;
+          toggleState(isOpen);
+        });
       });
   }
 
@@ -321,7 +274,7 @@ isElementLoaded(selector){
    */
   initAddToCart() {
     salla.cart.event.onUpdated(summary => {
-      document.querySelectorAll('[data-cart-total]').forEach(el => el.innerText = salla.money(summary.total));
+      document.querySelectorAll('[data-cart-total]').forEach(el => el.innerHTML = salla.money(summary.total));
       document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
     });
 

@@ -8,6 +8,7 @@ class Product extends BasePage {
     onReady() {
         app.watchElements({
             totalPrice: '.total-price',
+            productWeight: '.product-weight',
             beforePrice: '.before-price',
             startingPriceTitle: '.starting-price-title',
         });
@@ -57,8 +58,11 @@ class Product extends BasePage {
     registerEvents() {
       salla.event.on('product::price.updated.failed',()=>{
         app.element('.price-wrapper').classList.add('hidden');
-        app.element('.out-of-stock').classList.remove('hidden')
-        app.anime('.out-of-stock', { scale: [0.88, 1] });
+        const outOfStock = app.element('.out-of-stock');
+        outOfStock.classList.remove('hidden');
+        outOfStock.classList.remove('scale-pulse');
+        void outOfStock.offsetWidth; // trigger reflow
+        outOfStock.classList.add('scale-pulse');
       })
       salla.product.event.onPriceUpdated((res) => {
 
@@ -70,13 +74,18 @@ class Product extends BasePage {
 
         app.startingPriceTitle?.classList.add('hidden');
 
-        app.totalPrice.forEach((el) => {el.innerText = salla.money(data.price)});
-        app.beforePrice.forEach((el) => {el.innerText = salla.money(data.regular_price)});
+        app.productWeight.forEach((el) => {el.innerHTML = data.weight || ''});
+        app.totalPrice.forEach((el) => {el.innerHTML = salla.money(data.price)});
+        app.beforePrice.forEach((el) => {el.innerHTML = salla.money(data.regular_price)});
 
         app.toggleClassIf('.price_is_on_sale','showed','hidden', ()=> is_on_sale)
         app.toggleClassIf('.starting-or-normal-price','hidden','showed', ()=> is_on_sale)
 
-        app.anime('.total-price', { scale: [0.88, 1] });
+        document.querySelectorAll('.total-price, .product-weight').forEach(el => {
+          el.classList.remove('scale-pulse');
+          void el.offsetWidth; // trigger reflow
+          el.classList.add('scale-pulse');
+        });
       });
 
       app.onClick('#btn-show-more', e => app.all('#more-content', div => {
