@@ -175,13 +175,6 @@
             <!-- sidebar -->
             {% if cart.items|length %}
                 <div class="sticky top-24 w-full lg:w-96 rtl:lg:mr-8 ltr:lg:ml-8">
-                    {% if store.settings.cart.apply_coupon_enabled %}
-                        <div class="shadow-default bg-white px-5 xs:px-7 rounded-md mt-5 mb-5 relative">
-                            {% hook 'cart:coupon.start' %}
-                            <salla-cart-coupons></salla-cart-coupons>
-                            {% hook 'cart:coupon.end' %}
-                        </div>
-                    {% endif %}
                     <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative {{ cart.free_shipping_bar ? '' : 'hidden' }}" id="free-shipping">
                         <div class="flex rtl:space-x-reverse space-x-3 items-center">
                             <i class="bg-primary text-white rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x':'' }}"></i>
@@ -214,6 +207,14 @@
                     <div id="cart-gifting" class="shadow-default bg-white xs:p-2 rounded-md mb-5 relative  {{gift.enabled ? '' : 'hidden' }}">
                         <salla-gifting id="salla-gifting" class="mt-5" widget-title="{{ trans("pages.cart.gift_widget_title") }}"  widget-subtitle="{{ gift.text }}" class="mt-5" {{gift.type}}-products  vertical></salla-gifting>
                     </div>
+
+                    {% if store.settings.cart.apply_coupon_enabled %}
+                        <div class="shadow-default bg-white px-5 xs:px-7 rounded-md mb-5 relative">
+                            {% hook 'cart:coupon.start' %}
+                            <salla-cart-coupons></salla-cart-coupons>
+                            {% hook 'cart:coupon.end' %}
+                        </div>
+                    {% endif %}
 
                     {% hook 'cart:summary-card.start' %}
                     <salla-cart-summary-card initial-cart="{{ {
