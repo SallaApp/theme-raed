@@ -85,7 +85,7 @@
                                                 {{ trans('pages.loyalty_program.free_product') }}
                                             </div>
                                             <!-- end free product ribbon -->
-                                            
+
                                         </a>
                                         <div class="space-y-1">
                                             <h1 class="text-gray-900 leading-6 text-lg">
@@ -95,7 +95,7 @@
                                             <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer ? '' : 'hidden' }}" >{{ item.product_price|money }}</span>
                                             <span class="inline-flex gap-1 leading-4 text-sm text-gray-500 line-through item-original-price {{ item.is_on_sale ? '' : 'hidden' }}" id="original_price">{{ item.original_price|money }}</span>
                                             <span class="inline-flex gap-1 leading-4 item-price {{ item.has_discount ?  'text-red-800' : 'text-sm text-gray-500' }}" id="has_discount">{{ item.price|money }}</span>
-                                            
+
                                             <p class="text-sm text-gray-500 item-weight-row {{ item.weight_label ? '' : 'hidden' }}"> {{ trans('pages.products.weight') }}
                                              <span class="item-weight">{{ item.weight_label }}</span>
                                             </p>
@@ -197,8 +197,10 @@
                             </div>
                         </div>
                     </div>
-                    {% if loyalty %}
+
+                    {% if loyalty and user.loyalty_points %}
                         <salla-loyalty-panel
+                            customer-points='{{ user.loyalty_points }}'
                             prize-points='{{ loyalty.prize.points }}'
                             prize-title='{{ loyalty.prize.title }}'>
                         </salla-loyalty-panel>
