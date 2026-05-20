@@ -16,6 +16,7 @@ class ProductCard extends HTMLElement {
   }
 
   onReady(){
+      this.installNotifySubscribedHook();
       this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
@@ -109,7 +110,7 @@ class ProductCard extends HTMLElement {
     }
 
     if (this.product.status === 'sale' && this.product.type === 'booking') {
-      return salla.lang.get('pages.cart.book_now'); 
+      return salla.lang.get('pages.cart.book_now');
     }
 
     if (this.product.status === 'sale') {
@@ -122,6 +123,41 @@ class ProductCard extends HTMLElement {
 
     // donating
     return salla.lang.get('pages.products.donation_exceed');
+  }
+
+  getSubscribedStorageKey(prodId) {
+    if (window.salla?.config?.isUser?.()) {
+      const uid = salla.config.get('user.id');
+      return uid ? `product-${prodId}-subscribed-u${uid}` : null;
+    }
+    return `product-${prodId}-subscribed`;
+  }
+
+  getNotifyChannels() {
+    if (!this.product?.is_out_of_stock || !window.notify_when_available_in_card) return '';
+    if (this.product?.type === 'donating') return '';
+    const cfg = salla.config.get('store.settings.product.availability_notify');
+    if (!cfg) return '';
+    return ['email', 'sms'].filter(c => cfg[c]).join(',');
+  }
+
+  isNotifySubscribed() {
+    if (!this.product?.is_out_of_stock || !window.notify_when_available_in_card) return false;
+    const key = this.getSubscribedStorageKey(this.product.id);
+    return !!(key && salla.storage.get(key));
+  }
+
+  installNotifySubscribedHook() {
+    if (window.__notifySubscribedHookInstalled) return;
+    if (!window.notify_when_available_in_card) return;
+    window.__notifySubscribedHookInstalled = true;
+    Salla.onReady(() => {
+      salla.event.on('product::availability.subscribed', (_resp, prodId) => {
+        if (prodId == null || !salla.config.isUser()) return;
+        const uid = salla.config.get('user.id');
+        if (uid) salla.storage.set(`product-${prodId}-subscribed-u${uid}`, true);
+      });
+    });
   }
 
   getProps(){
@@ -184,6 +220,11 @@ class ProductCard extends HTMLElement {
     this.shadowOnHover?  this.classList.add('s-product-card-shadow') : '';
     this.product?.is_out_of_stock?  this.classList.add('s-product-card-out-of-stock') : '';
     this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(Number(this.product.id));
+    this.notifyChannels = this.getNotifyChannels();
+    this.effectiveStatus = (this.product.is_out_of_stock && this.notifyChannels)
+      ? 'out-and-notify'
+      : this.product.status;
+    this.notifyIsSubscribed = this.notifyChannels && this.isNotifySubscribed();
       this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
           <a href="${this.product?.url}" aria-label="${this.escapeHTML(this.product?.image?.alt || this.product.name)}">
@@ -275,8 +316,10 @@ class ProductCard extends HTMLElement {
             `<div class="s-product-card-content-footer gap-2">
               <salla-add-product-button fill="outline" width="wide"
                 product-id="${this.product.id}"
-                product-status="${this.product.status}"
-                product-type="${this.product.type}">
+                product-status="${this.effectiveStatus}"
+                product-type="${this.product.type}"
+                ${this.notifyChannels ? `channels="${this.notifyChannels}"` : ''}
+                ${this.notifyIsSubscribed ? `is-subscribed="true"` : ''}>
                 ${this.product.status == 'sale' ? 
                     `<i class="text-base sicon-${ this.product.type == 'booking' ? 'calendar-time' : 'shopping-bag'}"></i>` : ``
                   }
