@@ -21,8 +21,15 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
-    this.initAttachWishlistListeners();
-    this.changeMenuDirection()
+    
+    // Ensure #more-menu-dropdown exists before running changeMenuDirection
+    const menuDirInterval = setInterval(() => {
+      if (document.querySelector('#more-menu-dropdown')) {
+        this.changeMenuDirection();
+        clearInterval(menuDirInterval);
+      }
+    }, 100);
+
     initTootTip();
     this.loadModalImgOnclick();
 
@@ -38,18 +45,22 @@ class App extends AppHelpers {
     return this;
   }
 
-    // fix Menu Direction at the third level >> The menu at the third level was popping off the page
-    changeMenuDirection(){
-      app.all('.root-level.has-children',item=>{
-        if(item.classList.contains('change-menu-dir')) return;
-        app.on('mouseover',item,()=>{
-          let submenu = item.querySelector('.sub-menu .sub-menu');
-          if(submenu){
-            let rect = submenu.getBoundingClientRect();
-            (rect.left < 10 || rect.right > window.innerWidth - 10) && app.addClass(item,'change-menu-dir')
-          }      
-        })
-      })
+    changeMenuDirection() {
+      setTimeout(() => {
+        app.all('.root-level.has-children', item => {
+          if (item.classList.contains('change-menu-dir')) return;
+          app.on('mouseover', item, () => {
+            let allSubMenus = item.querySelectorAll('.sub-menu');
+            allSubMenus.forEach((submenu, idx) => {
+              if (idx === 0) return;
+              let rect = submenu.getBoundingClientRect();
+              if (rect.left < 10 || rect.right > window.innerWidth - 10) {
+                app.addClass(item, 'change-menu-dir');
+              }
+            });
+          });
+        });
+      }, 1000);
     }
 
   loadModalImgOnclick(){
@@ -113,6 +124,9 @@ isElementLoaded(selector){
 
   initiateNotifier() {
     salla.notify.setNotifier(function (message, type, data) {
+      if (window.enable_add_product_toast && data?.data?.googleTags?.event === "addToCart") {
+        return;
+      }
       if (typeof message == 'object') {
         return Swal.fire(message).then(type);
       }
@@ -159,22 +173,6 @@ isElementLoaded(selector){
   });
   });
 
-  }
- initAttachWishlistListeners() {
-    let isListenerAttached = false;
-  
-    function toggleFavoriteIcon(id, isAdded = true) {
-      document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
-        app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
-        app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
-      });
-    }
-  
-    if (!isListenerAttached) {
-      salla.wishlist.event.onAdded((event, id) => toggleFavoriteIcon(id));
-      salla.wishlist.event.onRemoved((event, id) => toggleFavoriteIcon(id, false));
-      isListenerAttached = true; // Mark the listener as attached
-    }
   }
 
   initiateStickyMenu() {
@@ -239,34 +237,19 @@ isElementLoaded(selector){
     document.querySelectorAll('.btn--collapse')
       .forEach((trigger) => {
         const content = document.querySelector('#' + trigger.dataset.show);
+        if (!content) return;
+
         const state = { isOpen: false }
 
-        const onOpen = () => anime({
-          targets: content,
-          duration: 225,
-          height: content.scrollHeight,
-          opacity: [0, 1],
-          easing: 'easeOutQuart',
-        });
-
-        const onClose = () => anime({
-          targets: content,
-          duration: 225,
-          height: 0,
-          opacity: [1, 0],
-          easing: 'easeOutQuart',
-        })
-
         const toggleState = (isOpen) => {
-          state.isOpen = !isOpen
+          state.isOpen = !isOpen;
           this.toggleElementClassIf([content, trigger], 'is-closed', 'is-opened', () => isOpen);
         }
 
         trigger.addEventListener('click', () => {
-          const { isOpen } = state
-          toggleState(isOpen)
-          isOpen ? onClose() : onOpen();
-        })
+          const { isOpen } = state;
+          toggleState(isOpen);
+        });
       });
   }
 

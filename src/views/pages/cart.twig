@@ -57,7 +57,7 @@
         <h1 class="sr-only">{{ trans('blocks.header.cart') }}</h1>
         <salla-conditional-offer></salla-conditional-offer>
         <div class="pt-5 flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
-            <div class="main-content flex-1 w-full">
+            <div class="main-content w-full lg:w-[calc(100%-384px)]">
                 {% hook 'cart:items.start' %}
 
                 {% for item in cart.items %}
@@ -71,16 +71,17 @@
                                             {% if loop.first %}
 												<img src="{{ item.product_image }}"
 													alt="{{ item.product_name }}"
+                                                    loading="eager"
 													class="flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
 											{% else %}
-												<img src="{{ 'images/s-empty.png' | cdn }}"
-													data-src="{{ item.product_image }}"
+												<img src="{{ item.product_image }}"
 													alt="{{ item.product_name }}"
-													class="lazy flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
+                                                    loading="lazy"
+													class="flex-none w-24 h-20 border border-gray-200 bg-gray-100 rounded-md object-center object-cover">
 											{% endif %}
 
                                             <!-- free product ribbon -->
-                                            <div class="free-ribbon absolute top-[11px] right-[-38px] w-32 bg-red-600 text-white text-xs font-bold text-center py-1 rotate-45 shadow-md {{ item.price.getMoney().amount == 0 ? '' : 'hidden' }}">
+                                            <div class="free-ribbon absolute top-[11px] right-[-38px] w-32 bg-red-600 text-white text-xs font-bold text-center py-1 rotate-45 shadow-md {{ (item.price.getMoney().amount == 0 and item.has_discount) ? '' : 'hidden' }}">
                                                 {{ trans('pages.loyalty_program.free_product') }}
                                             </div>
                                             <!-- end free product ribbon -->
@@ -92,14 +93,12 @@
                                             </h1>
 
                                             <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer ? '' : 'hidden' }}" >{{ item.product_price|money }}</span>
-                                            <span class="text-sm text-gray-500 line-through item-original-price {{ item.is_on_sale ? '' : 'hidden' }}" id="original_price">{{ item.original_price|money }}</span>
-                                            <span class="item-price {{ item.has_discount ?  'text-red-800' : 'text-sm text-gray-500' }}" id="has_discount">{{ item.price|money }}</span>
+                                            <span class="inline-flex gap-1 leading-4 text-sm text-gray-500 line-through item-original-price {{ item.is_on_sale ? '' : 'hidden' }}" id="original_price">{{ item.original_price|money }}</span>
+                                            <span class="inline-flex gap-1 leading-4 item-price {{ item.has_discount ?  'text-red-800' : 'text-sm text-gray-500' }}" id="has_discount">{{ item.price|money }}</span>
                                             
-                                            {% if item.weight_label %}
-                                            <p class="text-sm text-gray-500 "> {{ trans('pages.products.weight') }}
-                                             <span>{{ item.weight_label }}</span>
+                                            <p class="text-sm text-gray-500 item-weight-row {{ item.weight_label ? '' : 'hidden' }}"> {{ trans('pages.products.weight') }}
+                                             <span class="item-weight">{{ item.weight_label }}</span>
                                             </p>
-                                            {% endif %}
                                             <span class="old-offers flex items-center gap-1 mx-1.5  {{ item.detailed_offers ? 'hidden' : '' }}">
                                                 <i class="sicon-discount-calculator text-gray-500 offer-icon {{ item.offer?'':'hidden' }}"></i>
                                                 <span class="text-sm text-gray-500 offer-name {{ item.offer ?  '' : 'hidden' }}">{{ item.offer.names }}</span>
@@ -139,7 +138,7 @@
                                 {% include 'pages.partials.product.options' with {product:item} %}
                             <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
                                 <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
-                                        onclick="salla.cart.deleteItem({{ item.id }}).then(() => document.querySelector('#item-{{ item.id }}').remove())">
+                                        onclick="salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())">
                                     <i class="sicon-cancel"></i>
                                 </salla-button>
                             </span>
@@ -198,13 +197,11 @@
                             </div>
                         </div>
                     </div>
-                    {% if loyalty and user.loyalty_points %}
-                        <div class="shadow-default mb-5 rounded-md p-3 xs:p-7 bg-white">
-                            <salla-loyalty customer-points='{{ user.loyalty_points }}'
-                                prize-points='{{ loyalty.prize.points }}'
-                                prize-title='{{ loyalty.prize.title }}'
-                            ></salla-loyalty>
-                        </div>
+                    {% if loyalty %}
+                        <salla-loyalty-panel
+                            prize-points='{{ loyalty.prize.points }}'
+                            prize-title='{{ loyalty.prize.title }}'>
+                        </salla-loyalty-panel>
                     {% endif %}
 
                     <div id="cart-gifting" class="shadow-default bg-white xs:p-2 rounded-md mb-5 relative  {{gift.enabled ? '' : 'hidden' }}">
@@ -232,27 +229,9 @@
                             <b>{{ cart.real_shipping_cost|money }}</b>
                         </div>
 
-                        {# todo :: use form #}
                         {% if store.settings.cart.apply_coupon_enabled %}
-                            <div class="border-t border-gray-200 border-b py-5 mb-5">
-                                <label for="coupon"
-                                       class="block text-sm ">{{ trans('pages.cart.have_coupon') }}</label>
-                                <div class="mt-2.5 relative">
-                                    <input placeholder="{{ trans('pages.cart.coupon_placeholder') }}"
-                                            {{ cart.coupon ? 'disabled':'' }}
-                                           class="rtl:pl-24 ltr:pr-24 form-input" value="{{ cart.coupon }}" id="coupon-input"
-                                           name="coupon"
-										   aria-label="Apply coupon"
-                                           type="text">
-
-                                    <salla-button
-                                            class="btn--coupon {{ cart.coupon?'has-coupon btn--danger':'has-not-coupon btn--default' }}"
-                                            loader-position="center" id="coupon-btn">
-                                        <span class="coupon-text">{{ trans('pages.cart.save_coupon') }}</span>
-                                        <i class="sicon-cancel icon text-xl w-8"></i>
-                                    </salla-button>
-                                </div>
-                                <span class="text-xs text-red-700" id="coupon-error"></span>
+                            <div class="py-5 mb-5">
+                                <salla-cart-coupons></salla-cart-coupons>
                             </div>
                         {% endif %}
 
@@ -283,6 +262,9 @@
                         </div>
                         {% hook 'cart:summary.end' %}
                     </div>
+
+                     <!-- Tiered Offer Component -->
+                    <salla-tiered-offer></salla-tiered-offer>
                 </div>
             {% endif %}
         </div>

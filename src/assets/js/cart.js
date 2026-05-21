@@ -6,9 +6,6 @@ class Cart extends BasePage {
         salla.event.cart.onUpdated(data => this.updateCartPageInfo(data));
 
         app.watchElements({
-            couponCodeInput: '#coupon-input',
-            couponBtn: '#coupon-btn',
-            couponError: '#coupon-error',
             subTotal: '#sub-total',
             orderOptionsTotal: '#cart-options-total',
             totalDiscount: '#total-discount',
@@ -22,20 +19,19 @@ class Cart extends BasePage {
             sallaGifting:'#salla-gifting'
         });
 
-        this.initiateCoupon();
         this.initSubmitCart();
         validateProductOptions();
     }
 
     initSubmitCart() {
         let submitBtn = document.querySelector('#cart-submit');
-        let cartForms = document.querySelectorAll('form[id^="item-"]');
         
         if (!submitBtn) {
             return;
         }
         
         app.onClick(submitBtn, event => {
+            let cartForms = document.querySelectorAll('form[id^="item-"]');
             let isValid = true;
             cartForms.forEach(form => {
                 isValid = isValid && form.reportValidity();
@@ -49,7 +45,16 @@ class Cart extends BasePage {
             if (isValid) {
                 /** @type HTMLSallaButtonElement */
                 let btn = event.currentTarget;
-                salla.config.get('user.type') == 'guest' ? salla.cart.submit() : btn.load().then(() => salla.cart.submit())
+                if (salla.config.get('user.type') !== 'guest') {
+                    btn.load();
+                    // Keep loading state until page redirects
+                    new MutationObserver(() => {
+                        if (!btn.hasAttribute('loading')) {
+                            btn.setAttribute('loading', '');
+                        }
+                    }).observe(btn, { attributes: true, attributeFilter: ['loading'] });
+                }
+                salla.cart.submit();
             }
         });
     }
@@ -60,7 +65,7 @@ class Cart extends BasePage {
       const arrayTwoId = options.map((item) => (item.id));
 
       document.querySelectorAll('.cart-options form')?.forEach((form) => {
-        if (!arrayTwoId.includes(parseInt(form.id.value))) {
+        if (!arrayTwoId.includes(form.id.value)) {
           form.remove();
         }
       })
@@ -93,7 +98,7 @@ class Cart extends BasePage {
         if (app.orderOptionsTotal) app.orderOptionsTotal.innerHTML = salla.money(cartData.options_total);
         
         app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.total_discount)
-            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost)
+            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost && !cartData.free_shipping_bar?.has_free_shipping) 
             .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
 
         app.totalDiscount.querySelector('b').innerHTML = '- ' + salla.money(cartData.total_discount);
@@ -128,6 +133,8 @@ class Cart extends BasePage {
             priceElement = cartItem.querySelector('.item-price'),
             regularPriceElement = cartItem.querySelector('.item-regular-price'),
             itemOriginalPrice = cartItem.querySelector('.item-original-price'),
+            weightRow = cartItem.querySelector('.item-weight-row'),
+            weightElement = cartItem.querySelector('.item-weight'),
             offerElement = cartItem.querySelector('.offer-name'),
             oldOffers = cartItem.querySelector('.old-offers'),
             freeRibbon = cartItem.querySelector('.free-ribbon'),
@@ -139,7 +146,7 @@ class Cart extends BasePage {
         let total = salla.money(item_total);
         if (total !== totalElement.innerHTML) {
             totalElement.innerHTML = total;
-            app.anime(totalElement, { scale: [.88, 1] });
+            // app.anime(totalElement, { scale: [.88, 1] });
         }
 
         app.toggleElementClassIf([offerElement, oldOffers], 'offer-applied', 'hidden', () => hasSpecialPrice && !newOffersActive)
@@ -150,59 +157,19 @@ class Cart extends BasePage {
 
         priceElement.innerHTML = salla.money(item.price);
 
-        if (!hasSpecialPrice){return;}
-        if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
-        itemOriginalPrice.innerHTML = salla.money(item.original_price);
-        regularPriceElement.innerHTML = salla.money(item.product_price);
-    }
-    //=================== Coupon Method ========================//
-    initiateCoupon() {
-        if (!app.couponCodeInput) {
-            return;
+        if (weightElement) {
+            weightElement.innerHTML = item.weight_label || '';
+        }
+        app.toggleElementClassIf(weightRow, 'has-weight', 'hidden', () => !!item.weight_label);
+
+        // Update original price when item is on sale
+        if (hasSalePrice) {
+            itemOriginalPrice.innerHTML = salla.money(item.original_price);
         }
 
-        app.onKeyUp(app.couponCodeInput, event => {
-            event.keyCode === 13 && app.couponBtn.click();
-            app.couponError.value = '';
-            app.removeClass(app.couponCodeInput, 'has-error');
-        });
-
-        app.onClick(app.couponBtn, event => {
-            //if it's remove coupon, will have `btn--danger` class
-            let hasCoupon = app.couponBtn.classList.contains('btn--danger');
-            /** @type HTMLSallaButtonElement */
-            let btn = event.currentTarget;
-            if (!hasCoupon && !app.couponCodeInput.value.length) {
-                this.showCouponError('* ' + salla.lang.get('pages.checkout.enter_coupon'));
-                return;
-            }
-            btn.load()
-                .then(() => hasCoupon ? salla.cart.deleteCoupon() : salla.cart.addCoupon(app.couponCodeInput.value))
-                .then(res => this.toggleCoupon(res, !hasCoupon))
-                .catch(err => this.showCouponError(err.response?.data?.error.message, !hasCoupon))
-                .finally(() => btn.stop());
-        });
-    }
-
-    /**
-     * @param {CartResponse.update} res
-     * @param {boolean} applied
-     */
-    toggleCoupon(_res, applied) {
-        app.couponError.innerText = '';
-        app.couponCodeInput.value = applied ? app.couponCodeInput.value : '';
-        app.couponCodeInput.toggleAttribute('disabled', applied);
-
-        app.toggleElementClassIf(app.couponBtn, ['btn--danger', 'has-coupon'], ['btn-default', 'has-not-coupon'], () => applied)
-            .toggleElementClassIf(app.couponBtn, ['btn-default', 'has-not-coupon'], ['btn--danger', 'has-coupon'], () => !applied)
-            .hideElement(app.couponBtn.querySelector(applied ? 'span' : 'i'))
-            .showElement(app.couponBtn.querySelector(applied ? 'i' : 'span'))
-            .removeClass(app.couponCodeInput, 'has-error');
-    }
-
-    showCouponError(message, isApplying = true) {
-        app.couponError.innerText = message || salla.lang.get('pages.checkout.error_occurred');
-        isApplying ? app.addClass(app.couponCodeInput, 'has-error') : null;
+        if (!hasSpecialPrice){return;}
+        if (!newOffersActive) {offerElement.innerHTML = item.offer.names;}
+        regularPriceElement.innerHTML = salla.money(item.product_price);
     }
 }
 
