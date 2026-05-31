@@ -11,6 +11,7 @@ class Product extends BasePage {
             productWeight: '.product-weight',
             beforePrice: '.before-price',
             startingPriceTitle: '.starting-price-title',
+            productSku: '.product-sku',
         });
 
         this.initProductOptionValidations();
@@ -77,6 +78,7 @@ class Product extends BasePage {
         app.productWeight.forEach((el) => {el.innerHTML = data.weight || ''});
         app.totalPrice.forEach((el) => {el.innerHTML = salla.money(data.price)});
         app.beforePrice.forEach((el) => {el.innerHTML = salla.money(data.regular_price)});
+        app.productSku.forEach((el) => {el.innerHTML = data.sku || ''});
 
         app.toggleClassIf('.price_is_on_sale','showed','hidden', ()=> is_on_sale)
         app.toggleClassIf('.starting-or-normal-price','hidden','showed', ()=> is_on_sale)

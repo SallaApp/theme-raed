@@ -213,3 +213,83 @@ salla-user-menu{
     @apply z-10;
   }
 }
+
+
+/* ============================
+   Menu Skeletons (loading state)
+
+   Only the two menus need a placeholder — they wait on an API request.
+   The other Salla components (search, lang/currency, contacts) render
+   their content synchronously and don't need a skeleton.
+
+   - Top-nav menu : CSS-only via salla-menu[topnav]:not(.hydrated) pseudos
+   - Main menu    : initial innerHTML seeded by NavigationMenu, replaced
+                    when render() runs (`.main-menu-skel` block)
+   ============================ */
+
+@keyframes header-skel-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+%header-skel-shimmer {
+  background-color: rgba(0, 0, 0, 0.06);
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: header-skel-shimmer 1.4s ease-in-out infinite;
+}
+
+// ── Top-nav menu — pure CSS via pseudo-elements ─────────────────
+// Stencil hides every <salla-*> with `visibility:hidden` until the
+// `.hydrated` class is added (which restores visibility: inherit).
+// Override that for our pre-hydration state so the pseudo-element
+// pills are actually visible.
+salla-menu[topnav]:not(.hydrated) {
+  @apply hidden lg:inline-flex items-center gap-2;
+  visibility: visible;
+
+  &::before,
+  &::after {
+    @extend %header-skel-shimmer;
+    content: '';
+    @apply inline-block rounded-full;
+    height: 12px;
+  }
+
+  &::before { width: 60px; }
+  &::after  { width: 50px; }
+}
+
+// ── Main menu — DOM seeded by NavigationMenu ────────────────────
+.main-menu-skel {
+  @apply hidden lg:inline-flex items-center gap-4 mx-6 py-8;
+}
+
+.header-skel-item {
+  @extend %header-skel-shimmer;
+  @apply inline-block rounded-full;
+  height: 14px;
+  width: 80px;
+}
+
+.header-skel-item--menu { height: 14px; width: 80px; }
+
+// ── Dark topnav variant — lift contrast on dark backgrounds ─────
+.topnav-is-dark {
+  .top-navbar salla-menu[topnav]:not(.hydrated)::before,
+  .top-navbar salla-menu[topnav]:not(.hydrated)::after {
+    background-color: rgba(255, 255, 255, 0.08);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.14) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+}
