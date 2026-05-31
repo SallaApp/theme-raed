@@ -157,6 +157,15 @@ class ProductCard extends HTMLElement {
         const uid = salla.config.get('user.id');
         if (uid) salla.storage.set(`product-${prodId}-subscribed-u${uid}`, true);
       });
+
+
+      salla.event.on('auth::logged.out', () => {
+        const keys = [];
+        salla.storage.store.each((_value, key) => {
+          if (/^product-\d+-subscribed-u\d+$/.test(key)) keys.push(key);
+        });
+        keys.forEach(key => salla.storage.remove(key));
+      });
     });
   }
 
