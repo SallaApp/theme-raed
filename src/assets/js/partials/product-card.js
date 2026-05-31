@@ -135,7 +135,7 @@ class ProductCard extends HTMLElement {
 
   getNotifyChannels() {
     if (!this.product?.is_out_of_stock || !window.notify_when_available_in_card) return '';
-    if (this.product?.type === 'donating') return '';
+    if (['donating', 'financial_support'].includes(this.product?.type)) return '';
     const cfg = salla.config.get('store.settings.product.availability_notify');
     if (!cfg) return '';
     return ['email', 'sms'].filter(c => cfg[c]).join(',');
@@ -145,6 +145,21 @@ class ProductCard extends HTMLElement {
     if (!this.product?.is_out_of_stock || !window.notify_when_available_in_card) return false;
     const key = this.getSubscribedStorageKey(this.product.id);
     return !!(key && salla.storage.get(key));
+  }
+
+  // Drop stale flag once product is back in stock (subscription already consumed).
+  purgeStaleSubscribedKey() {
+    if (!window.notify_when_available_in_card || this.product?.is_out_of_stock) return;
+    const key = this.getSubscribedStorageKey(this.product.id);
+    if (key && salla.storage.get(key)) salla.storage.remove(key);
+  }
+
+  clearSubscribedKeys(pattern) {
+    const keys = [];
+    salla.storage.store.each((_value, key) => {
+      if (pattern.test(key)) keys.push(key);
+    });
+    keys.forEach(key => salla.storage.remove(key));
   }
 
   installNotifySubscribedHook() {
@@ -158,13 +173,14 @@ class ProductCard extends HTMLElement {
         if (uid) salla.storage.set(`product-${prodId}-subscribed-u${uid}`, true);
       });
 
-
+      // logout: clearAll() spares these keys, so drop per-user keys here.
       salla.event.on('auth::logged.out', () => {
-        const keys = [];
-        salla.storage.store.each((_value, key) => {
-          if (/^product-\d+-subscribed-u\d+$/.test(key)) keys.push(key);
-        });
-        keys.forEach(key => salla.storage.remove(key));
+        this.clearSubscribedKeys(/^product-\d+-subscribed-u\d+$/);
+      });
+
+      // login: drop orphaned guest keys.
+      salla.event.on('auth::logged.in', () => {
+        this.clearSubscribedKeys(/^product-\d+-subscribed$/);
       });
     });
   }
@@ -229,6 +245,7 @@ class ProductCard extends HTMLElement {
     this.shadowOnHover?  this.classList.add('s-product-card-shadow') : '';
     this.product?.is_out_of_stock?  this.classList.add('s-product-card-out-of-stock') : '';
     this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(Number(this.product.id));
+    this.purgeStaleSubscribedKey();
     this.notifyChannels = this.getNotifyChannels();
     this.effectiveStatus = (this.product.is_out_of_stock && this.notifyChannels)
       ? 'out-and-notify'
