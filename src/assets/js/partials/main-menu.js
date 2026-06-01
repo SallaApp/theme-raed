@@ -1,5 +1,16 @@
 class NavigationMenu extends HTMLElement {
     connectedCallback() {
+        // Seed a skeleton placeholder shown until the menu data is fetched
+        // and render() replaces this innerHTML with the real menu.
+        this.innerHTML = `
+            <div class="main-menu-skel" aria-hidden="true">
+                <span class="header-skel-item header-skel-item--menu" style="width:80px"></span>
+                <span class="header-skel-item header-skel-item--menu" style="width:60px"></span>
+                <span class="header-skel-item header-skel-item--menu" style="width:90px"></span>
+                <span class="header-skel-item header-skel-item--menu" style="width:70px"></span>
+                <span class="header-skel-item header-skel-item--menu" style="width:80px"></span>
+            </div>`;
+
         salla.onReady()
             .then(() => salla.lang.onLoaded())
             .then(() => {

@@ -131,7 +131,7 @@ Theme Raed will be installed as the default theme when you install Twilight. We'
 ```
 
 ### Theme Preview  
-Usin [Salla CLI](https://github.com/SallaApp/Salla-CLI), the developer can preview the theme as they are being developed.  The `preview` command helps the developer to get a look at the theme in live mode.
+Using [Salla CLI](https://github.com/SallaApp/Salla-CLI), the developer can preview the theme as they are being developed.  The `preview` command helps the developer to get a look at the theme in live mode.
 
 <!-- theme: info -->
 > To run the preview command, the developer must be in the theme's root folder.
