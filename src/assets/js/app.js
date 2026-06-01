@@ -18,6 +18,7 @@ class App extends AppHelpers {
       this.initiateStickyMenu();
     }
     this.initAddToCart();
+    this.initNotifyAvailability();
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
@@ -281,6 +282,33 @@ isElementLoaded(selector){
     salla.cart.event.onItemAdded((response, prodId) => {
       app.element('salla-cart-summary').animateToCart(app.element(`#product-${prodId} img`));
     });
+  }
+
+  // Sync per-product "notify when available" subscribed state with auth changes.
+  initNotifyAvailability() {
+    if (!window.notify_when_available_in_card) {
+      return;
+    }
+
+    const clearSubscribedKeys = (pattern) => {
+      let keys = [];
+      salla.storage.store.each((value, key) => pattern.test(key) && keys.push(key));
+      keys.forEach(key => salla.storage.remove(key));
+    };
+
+    salla.event.on('product::availability.subscribed', (response, prodId) => {
+      if (prodId == null || !salla.config.isUser()) {
+        return;
+      }
+      let uid = salla.config.get('user.id');
+      uid && salla.storage.set(`product-${prodId}-subscribed-u${uid}`, true);
+    });
+
+    // logout: storage.clearAll() spares these keys, so drop per-user keys here
+    salla.event.on('auth::logged.out', () => clearSubscribedKeys(/^product-\d+-subscribed-u\d+$/));
+
+    // login: drop orphaned guest keys
+    salla.event.on('auth::logged.in', () => clearSubscribedKeys(/^product-\d+-subscribed$/));
   }
 }
 

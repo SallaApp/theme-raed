@@ -16,7 +16,6 @@ class ProductCard extends HTMLElement {
   }
 
   onReady(){
-      this.installNotifySubscribedHook();
       this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
       this.getProps()
@@ -152,37 +151,6 @@ class ProductCard extends HTMLElement {
     if (!window.notify_when_available_in_card || this.product?.is_out_of_stock) return;
     const key = this.getSubscribedStorageKey(this.product.id);
     if (key && salla.storage.get(key)) salla.storage.remove(key);
-  }
-
-  clearSubscribedKeys(pattern) {
-    const keys = [];
-    salla.storage.store.each((_value, key) => {
-      if (pattern.test(key)) keys.push(key);
-    });
-    keys.forEach(key => salla.storage.remove(key));
-  }
-
-  installNotifySubscribedHook() {
-    if (window.__notifySubscribedHookInstalled) return;
-    if (!window.notify_when_available_in_card) return;
-    window.__notifySubscribedHookInstalled = true;
-    Salla.onReady(() => {
-      salla.event.on('product::availability.subscribed', (_resp, prodId) => {
-        if (prodId == null || !salla.config.isUser()) return;
-        const uid = salla.config.get('user.id');
-        if (uid) salla.storage.set(`product-${prodId}-subscribed-u${uid}`, true);
-      });
-
-      // logout: clearAll() spares these keys, so drop per-user keys here.
-      salla.event.on('auth::logged.out', () => {
-        this.clearSubscribedKeys(/^product-\d+-subscribed-u\d+$/);
-      });
-
-      // login: drop orphaned guest keys.
-      salla.event.on('auth::logged.in', () => {
-        this.clearSubscribedKeys(/^product-\d+-subscribed$/);
-      });
-    });
   }
 
   getProps(){
