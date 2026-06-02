@@ -13,7 +13,11 @@
 {% block inner_content %}
 	<div class="space-y-5" id="wishlist">
 		{% hook 'customer:wishlist.items.start' %}
-		<salla-products-list source="wishlist" row-cards product-card-component="custom-wishlist-card"></salla-products-list>
+		{% if isSharedWishlist|default(false) %}
+			<salla-products-list source="selected" source-value="{{ sharedWishlistProductIds|default([])|json_encode }}" limit="10" sort-by="topRated" filters-results horizontal-cards></salla-products-list>
+		{% else %}
+			<salla-products-list source="wishlist" row-cards product-card-component="custom-wishlist-card"></salla-products-list>
+		{% endif %}
 		{% hook 'customer:wishlist.items.end' %}
 	</div>
 {% endblock %}
