@@ -124,35 +124,6 @@ class ProductCard extends HTMLElement {
     return salla.lang.get('pages.products.donation_exceed');
   }
 
-  getSubscribedStorageKey(prodId) {
-    if (window.salla?.config?.isUser?.()) {
-      const uid = salla.config.get('user.id');
-      return uid ? `product-${prodId}-subscribed-u${uid}` : null;
-    }
-    return `product-${prodId}-subscribed`;
-  }
-
-  getNotifyChannels() {
-    if (!this.product?.is_out_of_stock || !window.notify_when_available_in_card) return '';
-    if (['donating', 'financial_support'].includes(this.product?.type)) return '';
-    const cfg = salla.config.get('store.settings.product.availability_notify');
-    if (!cfg) return '';
-    return ['email', 'sms'].filter(c => cfg[c]).join(',');
-  }
-
-  isNotifySubscribed() {
-    if (!this.product?.is_out_of_stock || !window.notify_when_available_in_card) return false;
-    const key = this.getSubscribedStorageKey(this.product.id);
-    return !!(key && salla.storage.get(key));
-  }
-
-  // Drop stale flag once product is back in stock (subscription already consumed).
-  purgeStaleSubscribedKey() {
-    if (!window.notify_when_available_in_card || this.product?.is_out_of_stock) return;
-    const key = this.getSubscribedStorageKey(this.product.id);
-    if (key && salla.storage.get(key)) salla.storage.remove(key);
-  }
-
   getProps(){
 
     /**
@@ -213,12 +184,11 @@ class ProductCard extends HTMLElement {
     this.shadowOnHover?  this.classList.add('s-product-card-shadow') : '';
     this.product?.is_out_of_stock?  this.classList.add('s-product-card-out-of-stock') : '';
     this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(Number(this.product.id));
-    this.purgeStaleSubscribedKey();
-    this.notifyChannels = this.getNotifyChannels();
-    this.effectiveStatus = (this.product.is_out_of_stock && this.notifyChannels)
+    // Notify-when-available: out-of-stock products switch to the notify button. The SDK
+    // (salla-add-product-button) resolves channels + subscribed state from store config/storage.
+    this.effectiveStatus = (this.product.is_out_of_stock && window.notify_when_available_in_card && !['donating', 'financial_support'].includes(this.product?.type))
       ? 'out-and-notify'
       : this.product.status;
-    this.notifyIsSubscribed = this.notifyChannels && this.isNotifySubscribed();
       this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
           <a href="${this.product?.url}" aria-label="${this.escapeHTML(this.product?.image?.alt || this.product.name)}">
@@ -311,10 +281,8 @@ class ProductCard extends HTMLElement {
               <salla-add-product-button fill="outline" width="wide"
                 product-id="${this.product.id}"
                 product-status="${this.effectiveStatus}"
-                product-type="${this.product.type}"
-                ${this.notifyChannels ? `channels="${this.notifyChannels}"` : ''}
-                ${this.notifyIsSubscribed ? `is-subscribed="true"` : ''}>
-                ${this.product.status == 'sale' ? 
+                product-type="${this.product.type}">
+                ${this.product.status == 'sale' ?
                     `<i class="text-base sicon-${ this.product.type == 'booking' ? 'calendar-time' : 'shopping-bag'}"></i>` : ``
                   }
                 <span>${this.product.add_to_cart_label ? this.product.add_to_cart_label : this.getAddButtonLabel() }</span>
