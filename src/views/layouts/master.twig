@@ -74,27 +74,8 @@
         window.enable_more_menu = "{{ theme.settings.get('enable_more_menu', true) }}"
         window.enable_add_product_toast = "{{ theme.settings.get('enable_add_product_toast', true) }}"
     </script>
-
-    <script data-cfasync="false">
-  window.salla = window.Salla = window.Salla || {};
-  Salla.onReady =
-    Salla.onReady ||
-    function (callback) {
-      return new Promise(function (resolve) {
-        return Salla.status == "ready"
-          ? resolve(callback ? callback(salla.config.all()) : salla.config.all())
-          : window.addEventListener(
-              "twilight::initiated",
-              function (config) {
-                resolve(callback ? callback(config.detail) : config.detail);
-              },
-              { once: true }
-            );
-      });
-    };
-</script>
-<script type="module" src="https://localhost:3334/build/twilight.esm.js"></script>
-<script nomodule src="https://localhost:3334/build/twilight.js"></script>
+    
+    {% hook 'head:start' %}
     {% hook head %}
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
