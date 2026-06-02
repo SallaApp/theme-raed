@@ -16,12 +16,6 @@
 		{% if isSharedWishlist|default(false) %}
 			<salla-products-list source="selected" source-value="{{ sharedWishlistProductIds|default([])|json_encode }}" row-cards product-card-component="custom-wishlist-card"></salla-products-list>
 		{% else %}
-			<div class="flex justify-end">
-				<salla-button id="wishlist-share-button" type="button" fill="outline" color="primary" class="btn--rounded-full">
-					<i class="sicon-share-alt rtl:ml-2 ltr:mr-2"></i>
-					<span>مشاركة القائمة</span>
-				</salla-button>
-			</div>
 			<salla-products-list source="wishlist" row-cards product-card-component="custom-wishlist-card"></salla-products-list>
 		{% endif %}
 		{% hook 'customer:wishlist.items.end' %}
@@ -30,71 +24,4 @@
 
 {% block scripts %}
 	<script defer src="{{ 'customer.js' | asset }}"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const button = document.querySelector('#wishlist-share-button');
-
-			if (!button) {
-				return;
-			}
-
-			const getCookie = name => {
-				const value = document.cookie
-					.split('; ')
-					.find(row => row.startsWith(`${name}=`));
-
-				return value ? decodeURIComponent(value.split('=').slice(1).join('=')) : '';
-			};
-
-			const copyText = async text => {
-				if (navigator.clipboard && window.isSecureContext) {
-					await navigator.clipboard.writeText(text);
-					return;
-				}
-
-				const input = document.createElement('input');
-				input.value = text;
-				document.body.appendChild(input);
-				input.select();
-				document.execCommand('copy');
-				input.remove();
-			};
-
-			button.addEventListener('click', async () => {
-				const endpoint = window.location.pathname.replace(/\/wishlist\/?$/, '/wishlist/share');
-
-				if (endpoint === window.location.pathname) {
-					return salla.notify.error('تعذر إنشاء رابط المشاركة');
-				}
-
-				button.load?.();
-
-				try {
-					const response = await fetch(endpoint, {
-						method: 'POST',
-						credentials: 'include',
-						headers: {
-							'accept': 'application/json',
-							'x-requested-with': 'XMLHttpRequest',
-							'x-xsrf-token': getCookie('XSRF-TOKEN'),
-						},
-					});
-
-					const payload = await response.json();
-					const url = payload?.data?.url;
-
-					if (!response.ok || !url) {
-						throw new Error(payload?.error?.message || 'تعذر إنشاء رابط المشاركة');
-					}
-
-					await copyText(url);
-					salla.notify.success('تم نسخ رابط قائمة الأمنيات');
-				} catch (error) {
-					salla.notify.error(error.message || 'تعذر إنشاء رابط المشاركة');
-				} finally {
-					button.stop?.();
-				}
-			});
-		});
-	</script>
 {% endblock %}
