@@ -56,7 +56,7 @@
         </nav>
         <h1 class="sr-only">{{ trans('blocks.header.cart') }}</h1>
         <salla-conditional-offer></salla-conditional-offer>
-        <div class="pt-5 flex flex-col items-start lg:flex-row pb-6 lg:pb-20">
+        <div class="pt-5 flex flex-col items-start lg:flex-row pb-32 lg:pb-20">
             <div class="main-content w-full lg:w-[calc(100%-384px)]">
                 {% hook 'cart:items.start' %}
 
@@ -208,60 +208,18 @@
                         <salla-gifting id="salla-gifting" class="mt-5" widget-title="{{ trans("pages.cart.gift_widget_title") }}"  widget-subtitle="{{ gift.text }}" class="mt-5" {{gift.type}}-products  vertical></salla-gifting>
                     </div>
 
-                    <div class="shadow-default bg-white p-5 xs:p-7 rounded-md mb-5 relative transition-height duration-1000">
-                        <h2 class="font-bold text-sm mb-5">{{ trans('pages.cart.summary') }}</h2>
-
-                        <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500"> {{ trans(cart.tax_amount ? "pages.cart.items_total_without_tax" : "pages.cart.items_total") }} </span>
-                            <b id="sub-total">{{ cart.sub_total|money }}</b>
+                    {% if store.settings.cart.apply_coupon_enabled %}
+                        <div class="shadow-default bg-white px-5 xs:px-7 rounded-md mb-5 relative">
+                            {% hook 'cart:coupon.start' %}
+                            <salla-cart-coupons></salla-cart-coupons>
+                            {% hook 'cart:coupon.end' %}
                         </div>
+                    {% endif %}
 
-                        {% if cart.options|length %}
-                          <div class="flex justify-between text-sm mb-5">
-                            <span class="text-gray-500">{{ trans('pages.cart.order_options_total') }}</span>
-                            <b id="cart-options-total">{{ cart.options_total|money }}</b>
-                          </div>
-                        {% endif %}
-
-                        <div id="shipping-cost"
-                             class="flex justify-between text-sm mb-5 {{ cart.has_shipping ? '' : 'hidden' }}">
-                            <span class="text-gray-500">{{ trans('pages.cart.shipping_cost') }}</span>
-                            <b>{{ cart.real_shipping_cost|money }}</b>
-                        </div>
-
-                        {% if store.settings.cart.apply_coupon_enabled %}
-                            <div class="py-5 mb-5">
-                                <salla-cart-coupons></salla-cart-coupons>
-                            </div>
-                        {% endif %}
-
-                        <!-- coupon discount -->
-                        <div id="total-discount" class="flex justify-between text-sm {{ cart.total_discount ? '' : 'hidden' }}">
-                            <span class="text-gray-500 block  h-10">{{ trans('pages.cart.discount') }}</span>
-                            <b>- {{ cart.total_discount|money }}</b>
-                        </div>
-
-                        {% if cart.tax_amount %}
-                            <div class="flex justify-between text-sm mb-5">
-                                <span class="text-gray-500">{{ trans('pages.cart.VAT_tax_amount') }}</span>
-                                <b id="tax-amount">{{ cart.tax_amount|money }}</b>
-                            </div>
-                        {% endif %}
-
-                        <div class="flex justify-between text-lg mb-5">
-                            <span class="text-gray-500">{{ trans('pages.cart.final_total') }}</span>
-                            <b data-cart-total>{{ cart.total|money }}</b>
-                        </div>
-
-                        <div class="cart-submit-wrap">
-                            {% hook 'cart:submit.start' %}
-                            <salla-button id="cart-submit" loader-position="center" width="wide">
-                                {{ trans('pages.cart.complete_order') }}
-                            </salla-button>
-                            {% hook 'cart:submit.end' %}
-                        </div>
-                        {% hook 'cart:summary.end' %}
-                    </div>
+                    {% hook 'cart:summary-card.start' %}
+                    <salla-cart-summary-card></salla-cart-summary-card>
+                    {% hook 'cart:summary-card.end' %}
+                    {% hook 'cart:summary.end' %}
 
                      <!-- Tiered Offer Component -->
                     <salla-tiered-offer></salla-tiered-offer>
