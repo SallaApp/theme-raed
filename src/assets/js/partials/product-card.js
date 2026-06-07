@@ -109,7 +109,7 @@ class ProductCard extends HTMLElement {
     }
 
     if (this.product.status === 'sale' && this.product.type === 'booking') {
-      return salla.lang.get('pages.cart.book_now'); 
+      return salla.lang.get('pages.cart.book_now');
     }
 
     if (this.product.status === 'sale') {
@@ -184,6 +184,9 @@ class ProductCard extends HTMLElement {
     this.shadowOnHover?  this.classList.add('s-product-card-shadow') : '';
     this.product?.is_out_of_stock?  this.classList.add('s-product-card-out-of-stock') : '';
     this.isInWishlist = !salla.config.isGuest() && salla.storage.get('salla::wishlist', []).includes(Number(this.product.id));
+    this.effectiveStatus = (this.product.is_out_of_stock && window.notify_when_available_in_card && !['donating', 'financial_support'].includes(this.product?.type))
+      ? 'out-and-notify'
+      : this.product.status;
       this.innerHTML = `
         <div class="${!this.fullImage ? 's-product-card-image' : 's-product-card-image-full'}">
           <a href="${this.product?.url}" aria-label="${this.escapeHTML(this.product?.image?.alt || this.product.name)}">
@@ -275,9 +278,9 @@ class ProductCard extends HTMLElement {
             `<div class="s-product-card-content-footer gap-2">
               <salla-add-product-button fill="outline" width="wide"
                 product-id="${this.product.id}"
-                product-status="${this.product.status}"
+                product-status="${this.effectiveStatus}"
                 product-type="${this.product.type}">
-                ${this.product.status == 'sale' ? 
+                ${this.product.status == 'sale' ?
                     `<i class="text-base sicon-${ this.product.type == 'booking' ? 'calendar-time' : 'shopping-bag'}"></i>` : ``
                   }
                 <span>${this.product.add_to_cart_label ? this.product.add_to_cart_label : this.getAddButtonLabel() }</span>
