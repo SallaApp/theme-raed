@@ -83,6 +83,13 @@
 	{% if store.settings.category.testimonial_enabled %}
 		{% component 'home.testimonials' %}
 	{% endif %}
+
+	{#
+    Hook: product.index.after_store_reviews
+    Fires after the store reviews (testimonials) section.
+    Use this hook to inject content below the store reviews area.
+  #}
+	<div class="s-blocks-wrapper s-after-store-reviews">{% hook 'product.index.after_store_reviews' %}</div>
 {% endblock %}
 
 {% block scripts %}
