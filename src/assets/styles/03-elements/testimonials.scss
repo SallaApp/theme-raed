@@ -1,0 +1,100 @@
+/* Testimonials (reviews) rules the theme markup uses, copied from twilight utilities.json (theme owns its markup styling). */
+
+.s-reviews {
+  &-container {
+    @apply lg:overflow-hidden;
+    .swiper-slide {
+      @apply overflow-hidden px-[10px] lg:px-[15px] w-[20%] h-auto;
+    }
+    .swiper-slide:not(.swiper-slide-active) .s-reviews-testimonial__avatar {
+      @apply mb-8;
+    }
+    .swiper-slide:not(.swiper-slide-active) .s-reviews-testimonial__inner {
+      @apply flex-col items-center text-center relative;
+    }
+    .swiper-slide:not(.swiper-slide-active) .s-reviews-testimonial__icon svg {
+      @apply -top-8 left-1/2 -translate-x-1/2 translate-y-1 h-6 w-6;
+    }
+    .swiper-slide-prev .s-reviews-testimonial {
+      @apply items-center justify-end;
+    }
+    .swiper-slide-next .s-reviews-testimonial {
+      @apply items-center justify-start ltr:pr-[7%] rtl:pl-[7%];
+    }
+    .swiper-slide-active {
+      @apply w-[60%];
+    }
+    .swiper-slide-active .s-reviews-testimonial {
+      @apply opacity-100 rtl:lg:pl-24 ltr:lg:pr-24 shadow-[5px_0_0_0_var(--color-main)];
+    }
+    .swiper-slide-active .s-reviews-testimonial__inner {
+      @apply w-full;
+    }
+    .swiper-slide-active .s-reviews-testimonial__avatar {
+      @apply rtl:ml-6 ltr:mr-6;
+    }
+    .swiper-slide-active .s-reviews-testimonial__info {
+      @apply mb-2 lg:mb-0;
+    }
+    .swiper-slide-active .s-reviews-testimonial__rating {
+      @apply block;
+    }
+    .swiper-slide-active .s-reviews-testimonial__text p {
+      @apply block;
+    }
+    .s-slider--nav-arrow {
+      @apply hidden lg:flex translate-y-1/2 right-[17%] top-[35%];
+    }
+    .s-slider--nav-arrow.s-slider-next {
+      @apply rtl:right-auto ltr:left-auto left-[17%];
+    }
+  }
+
+  &-header-wrapper {
+    @apply flex justify-between;
+  }
+
+  &-header {
+    @apply mb-4 mr-2 text-lg font-bold leading-[1.2];
+  }
+
+  &-testimonial {
+    @apply h-full shadow lg:shadow-none flex relative p-6 lg:p-10 bg-white rounded-l-md transition-opacity opacity-60;
+  }
+
+  &-testimonial__inner {
+    @apply flex items-center;
+  }
+
+  &-testimonial__avatar {
+    @apply w-20 h-20 rounded-full overflow-hidden shrink-0;
+  }
+
+  &-testimonial__icon {
+    svg {
+      @apply absolute rtl:left-8 ltr:right-8 rtl:sm:left-12 ltr:sm:right-12 rtl:lg:left-8 ltr:lg:right-8 top-4 text-4xl sm:text-5xl fill-primary lg:w-12 lg:h-12 w-9 h-9;
+    }
+  }
+
+  &-testimonial__text {
+    @apply flex-1;
+    p {
+      @apply hidden leading-6 mb-2 mt-4 sm:mt-0;
+    }
+  }
+
+  &-testimonial__name_wrapper {
+    @apply flex flex-col lg:flex-row justify-center lg:justify-between items-center;
+  }
+
+  &-testimonial__rating {
+    @apply hidden ml-10 text-sm;
+  }
+
+  &-testimonial__info {
+    h2 {
+      @apply font-bold text-xs xs:text-sm;
+    }
+  }
+
+}
