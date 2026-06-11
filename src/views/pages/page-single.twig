@@ -10,27 +10,29 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    {#
-        Hook: information_page.information_page
-        Fires before the main informative page content section.
-        Use this hook to inject custom content or components above the page content area.
-    #}
-    <div class="s-blocks-wrapper s-information-page !mt-0">{% hook 'information_page.information_page' %}</div>
+    {% if page.type == 'customised' %}
+      {#
+          Hook: information_page.information_page
+          Fires before the main informative page content section.
+          Use this hook to inject custom content or components above the page content area.
+      #}
+      <div class="s-blocks-wrapper s-information-page !mt-0">{% hook 'information_page.information_page' %}</div>
+    {% else %}
+      <div class="container">
+          {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+          <nav class="breadcrumbs w-full py-5">
+              <salla-breadcrumb></salla-breadcrumb>
+          </nav>
 
-    <div class="container">
-        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
-        <nav class="breadcrumbs w-full py-5">
-            <salla-breadcrumb></salla-breadcrumb>
-        </nav>
-
-        <div class="flex justify-center">
-            <div class="content content--single-page w-full lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
-                <h1 class="font-bold text-2xl mb-6">{{ page.title }}</h1>
-                <div class="content-entry">
-                    {{ page.content|raw }}
-                </div>
-                <salla-comments item-id="{{page.id}}" type="page"></salla-comments>
-            </div>
-        </div>
-    </div>
+          <div class="flex justify-center">
+              <div class="content content--single-page w-full lg:w-10/12 bg-white rounded p-6 lg:p-8 mt-4 lg:mt-12">
+                  <h1 class="font-bold text-2xl mb-6">{{ page.title }}</h1>
+                  <div class="content-entry">
+                      {{ page.content|raw }}
+                  </div>
+                  <salla-comments item-id="{{page.id}}" type="page"></salla-comments>
+              </div>
+          </div>
+      </div>
+    {% endif %}
 {% endblock %}
