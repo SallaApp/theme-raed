@@ -166,11 +166,10 @@
                 {% endif %}
                     
                 <salla-offer></salla-offer>
-                
-                {% hook 'cart:items.end' %}
             </div>
 
             {% hook 'cart:summary.start' %}
+
 
             <!-- sidebar -->
             {% if cart.items|length %}
@@ -268,6 +267,7 @@
                 </div>
             {% endif %}
         </div>
+        {% hook 'cart:items.end' %}
     </div>
 {% endblock %}
 
