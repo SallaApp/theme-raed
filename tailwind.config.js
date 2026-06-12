@@ -17,11 +17,12 @@ module.exports = {
         },
         fontFamily: {
             sans: [
+                'Tajawal',
                 'var(--font-main)',
                 '-apple-system',
                 'BlinkMacSystemFont',
             ],
-            primary: "var(--font-main)"
+            primary: "Tajawal, var(--font-main)"
         },
         extend    : {
             transitionTimingFunction: {
