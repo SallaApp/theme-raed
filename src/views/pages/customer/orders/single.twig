@@ -63,6 +63,7 @@
 | order.rating                     | ?OrderRatings                     |                                                                                          |
 | order.rating.store               | ?Rating                           |                                                                                          |
 | order.rating.shipping            | ?Rating                           |                                                                                          |
+| order.rating.product             | ?object                           | Product ratings keyed by index (0, 1, ...) with factor_reviews                           |
 | order.links                      | array                             |                                                                                          |
 | order.links[].url                | string                            |                                                                                          |
 | order.links[].label              | string                            |                                                                                          |
@@ -342,7 +343,27 @@
                                         {% if item.rating.is_pending %}
                                             <span>{{ trans('pages.rating.pending') }}</span>
                                         {% endif %}
-                                        <salla-rating-stars with-label size="small" value="{{item.rating.stars}}"></salla-rating-stars>
+                                        <div class="flex flex-row gap-2">
+                                          <salla-rating-stars size="large" value="{{item.rating.stars}}"></salla-rating-stars>
+                                          {% set order_product_ratings = order.rating.product|default(order.rating.products|default({})) %}
+                                          {% for rating_key, product_rating in order_product_ratings %}
+                                              {% if product_rating.id == item.rating.id or (product_rating.product and item.product and product_rating.product.id == item.product.id) %}
+                                                  {% if product_rating.factor_reviews|default({})|length %}
+                                                      <div class="s-reviews-summary-factors">
+                                                          {% for factor_key, factor in product_rating.factor_reviews|default({}) %}
+                                                              <div class="s-reviews-summary-factor-tag">
+                                                                  <span class="s-reviews-summary-factor-name">{{ factor.name }}</span>
+                                                                  <span class="s-reviews-summary-factor-star">
+                                                                      <i class="sicon-star2" style="color: #ffaf44;"></i>
+                                                                  </span>
+                                                                  <span class="s-reviews-summary-factor-rating">{{ factor.rating }}</span>
+                                                              </div>
+                                                          {% endfor %}
+                                                      </div>
+                                                  {% endif %}
+                                              {% endif %}
+                                          {% endfor %}
+                                        </div>
                                         {% if item.rating.images|length %}
                                             <div class="flex items-center gap-2 mt-2">
                                                 {% for image in item.rating.images %}
