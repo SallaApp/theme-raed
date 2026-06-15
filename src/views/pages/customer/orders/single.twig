@@ -346,21 +346,59 @@
                                         <div class="flex flex-row gap-2">
                                           <salla-rating-stars size="large" value="{{item.rating.stars}}"></salla-rating-stars>
                                           {% set order_product_ratings = order.rating.product|default(order.rating.products|default([])) %}
+                                          {% set rating_debug = {
+                                              item_id: item.id,
+                                              item_rating: item.rating,
+                                              item_product: item.product|default(null),
+                                              order_product_ratings: order_product_ratings
+                                          } %}
+                                          <div class="hidden" data-rating-debug="{{ rating_debug|json_encode|e('html_attr') }}"></div>
+                                          <script>
+                                              (function () {
+                                                  var node = document.currentScript && document.currentScript.previousElementSibling;
+                                                  if (!node) return;
+
+                                                  try {
+                                                      var data = JSON.parse(node.getAttribute('data-rating-debug'));
+                                                      var ratings = data.order_product_ratings || [];
+
+                                                      if (!Array.isArray(ratings)) {
+                                                          ratings = Object.values(ratings);
+                                                      }
+
+                                                      console.log('[rating debug] item id', data.item_id, data);
+
+                                                      ratings.forEach(function (productRating, index) {
+                                                          var factors = productRating && productRating.factor_reviews;
+                                                          var factorLength = !factors
+                                                              ? 0
+                                                              : (Array.isArray(factors) ? factors.length : Object.keys(factors).length);
+
+                                                          console.log('[rating debug] product_rating[' + index + ']', productRating);
+                                                          console.log('[rating debug] factor_reviews[' + index + ']', factors, 'length:', factorLength);
+
+                                                          if (!factorLength) {
+                                                              console.log('[rating debug] skipped render - no factor_reviews on product_rating', productRating);
+                                                          }
+                                                      });
+                                                  } catch (error) {
+                                                      console.error('[rating debug] failed to parse rating data', error, node.getAttribute('data-rating-debug'));
+                                                  }
+                                              })();
+                                          </script>
                                           {% for product_rating in order_product_ratings %}
-                                              {% if product_rating.id == item.rating.id or (product_rating.product and item.product and product_rating.product.id == item.product.id) %}
-                                                  {% if product_rating.factor_reviews|default([])|length %}
-                                                      <div class="s-reviews-summary-factors">
-                                                          {% for factor in product_rating.factor_reviews|default([]) %}
-                                                              <div class="s-reviews-summary-factor-tag">
-                                                                  <span class="s-reviews-summary-factor-name">{{ factor.name }}</span>
-                                                                  <span class="s-reviews-summary-factor-star">
-                                                                      <i class="sicon-star2" style="color: #ffaf44;"></i>
-                                                                  </span>
-                                                                  <span class="s-reviews-summary-factor-rating">{{ factor.rating }}</span>
-                                                              </div>
-                                                          {% endfor %}
-                                                      </div>
-                                                  {% endif %}
+                                              {% if product_rating.factor_reviews|default([])|length %}
+                                                  <div class="s-reviews-summary-factors">
+                                                      {% for factor in product_rating.factor_reviews|default([]) %}
+                                                          <div class="s-reviews-summary-factor-tag">
+                                                              <span class="s-reviews-summary-factor-name">{{ factor.name }}</span>
+                                                              <span class="s-reviews-summary-factor-star">
+                                                                  <i class="sicon-star2" style="color: #ffaf44;"></i>
+                                                              </span>
+                                                              <span class="s-reviews-summary-factor-rating">{{ factor.rating }}</span>
+                                                          </div>
+                                                      {% endfor %}
+                                                  </div>
                                               {% endif %}
                                           {% endfor %}
                                         </div>
