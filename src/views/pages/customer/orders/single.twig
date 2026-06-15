@@ -345,22 +345,12 @@
                                         {% endif %}
                                         <div class="flex flex-row flex-wrap gap-2">
                                           <salla-rating-stars size="large" value="{{item.rating.stars}}"></salla-rating-stars>
-                                          {% set order_product_ratings = order.rating.product|default(order.rating.products|default([])) %}
-                                          {% for product_rating in order_product_ratings %}
-                                              {% if product_rating.factor_reviews|default([])|length %}
-                                                  <div class="s-reviews-summary-factors">
-                                                      {% for factor in product_rating.factor_reviews|default([]) %}
-                                                          <div class="s-reviews-summary-factor-tag">
-                                                              <span class="s-reviews-summary-factor-name">{{ factor.name }}</span>
-                                                              <span class="s-reviews-summary-factor-star">
-                                                                  <i class="sicon-star2" style="color: #ffaf44;"></i>
-                                                              </span>
-                                                              <span class="s-reviews-summary-factor-rating">{{ factor.rating }}</span>
-                                                          </div>
-                                                      {% endfor %}
-                                                  </div>
-                                              {% endif %}
-                                          {% endfor %}
+                                          <salla-review-factors-tags
+                                              order-id="{{ order.id }}"
+                                              rating-id="{{ item.rating.id }}"
+                                              item-id="{{ item.id }}"
+                                              {% if item.product %}product-id="{{ item.product.id }}"{% endif %}
+                                          ></salla-review-factors-tags>
                                         </div>
                                         {% if item.rating.images|length %}
                                             <div class="flex items-center gap-2 mt-2">
