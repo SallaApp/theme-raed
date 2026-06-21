@@ -255,6 +255,27 @@
   }
 }
 
+// Notify-me button — WCAG AA contrast fix (product card + product page)
+salla-add-product-button[product-status="out-and-notify"],
+.s-product-availability-wrap {
+  .s-button-solid.s-button-primary,
+  .s-button-primary {
+    @apply bg-gray-200 text-gray-800 border-gray-300 hover:bg-gray-300 hover:text-gray-900;
+
+    .s-button-text {
+      @apply text-gray-800;
+    }
+  }
+
+  .s-product-availability-subscribed {
+    @apply text-[0.7rem] px-[0.6rem];
+
+    svg {
+      @apply w-4 h-4;
+    }
+  }
+}
+
 .s-product{
     &-card{
       &-full-image salla-add-product-button {
@@ -266,19 +287,6 @@
       }
       &-fit-height.s-product-card-vertical .s-product-card-image {
         @apply flex-none sm:flex-1;
-      }
-      &-entry{
-        .s-product-availability-wrap {
-          .s-button-primary {
-            @apply bg-gray-200 text-gray-500 border-gray-200 hover:bg-gray-300;
-          }
-          .s-product-availability-subscribed {
-            @apply text-[0.7rem] px-[0.6rem];
-            svg {
-              @apply w-4 h-4;
-            }
-          }
-        }
       }
     }
 
