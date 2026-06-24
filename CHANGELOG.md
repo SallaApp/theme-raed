@@ -9,9 +9,24 @@ On this page, you will find all about Salla's Theme Raed updates, including freq
 > ℹ️ Info
 >The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 >
+
+
+
+# ⚡️ [1.352.0]( https://github.com/SallaApp/theme-raed/compare/1.351.0...1.352.0) (23-06-2026)
+### Enhancement
+- Hide branch pickup section for non-pickable orders.
+
+# 🎶 [1.351.0]( https://github.com/SallaApp/theme-raed/compare/1.342.0...1.351.0) (21-06-2026)
+### Enhancement
+- Support `is_default` for homepage components
+
+# 🌟 [1.342.0]( https://github.com/SallaApp/theme-raed/compare/1.336.0...1.342.0) (19-05-2026)
+### Enhancement
+- Reflect option SKU on storefront endpoint.
+
 # 🪮 [1.336.0]( https://github.com/SallaApp/theme-raed/compare/1.322.0...1.336.0) (07-05-2026)
 ### Enhancement
-- Upgraded Twilight to apply a new feature " Login Cycle IP-based Auto-fill for Country, Region, and City"
+- Upgraded Twilight to apply a new feature " Login Cycle IP-based Auto-fill for Country, Region, and City".
 
 # 💣 [1.322.0]( https://github.com/SallaApp/theme-raed/compare/1.310.0...1.322.0) (08-04-2026)
 ### Enhancement
