@@ -1,0 +1,107 @@
+/* =====================================================================
+   Tiraz — Bold-yet-elegant beige boutique skin for fashion stores (KSA)
+   Additive layer on top of theme-raed. Scoped under body.tiraz-theme so
+   it never leaks into unrelated contexts.
+   ===================================================================== */
+
+body.tiraz-theme {
+  background-color: var(--tiraz-bg-page, #f2eadd);
+  color: var(--tiraz-ink, #2a2520);
+
+  /* Tiraz signature font. Tajawal first, then the platform/merchant font
+     var, then a safe fallback. Loaded via Google Fonts in master.twig. */
+  font-family: "Tajawal", var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* ---- Typography: confident, modern Arabic-first ---- */
+  h1, h2, h3, h4, h5, h6,
+  .font-bold {
+    color: var(--tiraz-ink, #2a2520);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---- Header & top bar sit on a clean cream surface ---- */
+  .s-header,
+  header.s-header,
+  .store-header {
+    background-color: var(--tiraz-surface, #faf6ef);
+    border-bottom: 1px solid rgba(42, 37, 32, 0.06);
+  }
+
+  /* ---- Section rhythm: alternate cream cards on beige ---- */
+  .home-slider,
+  .home-blocks,
+  .s-block {
+    background-color: transparent;
+  }
+
+  /* ---- Product cards: cream surface, soft border, lift on hover ---- */
+  salla-product-card,
+  .product-entry,
+  .s-product-card-entry {
+    --s-product-card-bg-color: var(--tiraz-surface, #faf6ef);
+    background-color: var(--tiraz-surface, #faf6ef);
+    border: 1px solid rgba(42, 37, 32, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s var(--tiraz-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+                box-shadow 0.25s ease;
+  }
+  salla-product-card:hover,
+  .product-entry:hover,
+  .s-product-card-entry:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(42, 37, 32, 0.12);
+  }
+
+  /* ---- Buttons & CTAs: clay accent, bold, generous radius ---- */
+  .btn--primary,
+  .salla-button.primary,
+  button.btn--primary,
+  .s-button-element.s-button-primary {
+    background-color: var(--color-primary, #b07d56);
+    border-color: var(--color-primary, #b07d56);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 12px;
+  }
+  .btn--primary:hover,
+  .s-button-element.s-button-primary:hover {
+    background-color: var(--color-primary-d, #946642);
+    border-color: var(--color-primary-d, #946642);
+  }
+
+  /* ---- Price highlight uses the clay accent ---- */
+  .product-price,
+  .total-price,
+  h2.total-price {
+    color: var(--color-primary-d, #946642);
+  }
+
+  /* ---- Category quick-links: round clay-tinted chips ---- */
+  .main-links a,
+  .quick-links a {
+    background-color: var(--tiraz-surface, #faf6ef);
+    border: 1px solid rgba(176, 125, 86, 0.18);
+    border-radius: 18px;
+    transition: all 0.2s ease;
+  }
+  .main-links a:hover,
+  .quick-links a:hover {
+    border-color: var(--color-primary, #b07d56);
+    box-shadow: 0 8px 20px rgba(176, 125, 86, 0.18);
+  }
+
+  /* ---- Store-features (KSA trust bar) on deeper beige ---- */
+  .store-features,
+  .s-store-features {
+    background-color: var(--tiraz-bg-muted, #eae0d1);
+    border-radius: 18px;
+  }
+
+  /* ---- Footer light variant blends with the beige palette ---- */
+  &.footer-is-light footer {
+    background-color: var(--tiraz-surface, #faf6ef);
+    border-top: 1px solid rgba(42, 37, 32, 0.06);
+  }
+}
