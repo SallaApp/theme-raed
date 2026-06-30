@@ -152,6 +152,10 @@
             </tbody>
         </table>
 
+        {% if order.is_pickable %}
+            <salla-order-branch stack-cards></salla-order-branch>
+        {% endif %}
+
         {% if order.refund_message %}
           <div class="min-w-full rounded-md overflow-hidden">
             <div class="bg-white flex items-center gap-1 rounded-md px-3 py-5 md:px-5">
@@ -184,7 +188,7 @@
             {% for package in order.packages %}
                 <div class="shipping-orders">
                     {# Shipping Title #}
-                    {% if package.shipping_company %}
+                    {% if package.shipping_company and not order.is_pickable %}
                     <div class="flex flex-col md:flex-row justify-between md:items-center bg-white px-5 py-3 border-b border-gray-100 rounded-t-md text-sm space-y-4 md:space-y-0">
                         <div class="flex items-center space-x-2 rtl:space-x-reverse">
                             {% if package.shipping_company.logo %}
