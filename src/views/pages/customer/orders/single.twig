@@ -55,6 +55,7 @@
 | order.items[].rating.is_pending  | bool                              |                                                                                          |
 | order.items[].rating.stars       | int                               |                                                                                          |
 | order.items[].rating.images      | array                             |                                                                                          |
+| order.items[].rating.videos      | array                             |                                                                                          |
 | order.items[].rating.created_at  | date                              |                                                                                          |
 | order.discounts                  | array                             |                                                                                          |
 | order.discounts[].name           | string                            |                                                                                          |
@@ -347,11 +348,23 @@
                                             <span>{{ trans('pages.rating.pending') }}</span>
                                         {% endif %}
                                         <salla-rating-stars with-label size="small" value="{{item.rating.stars}}"></salla-rating-stars>
-                                        {% if item.rating.images|length %}
-                                            <div class="flex items-center gap-2 mt-2">
-                                                {% for image in item.rating.images %}
-                                                    <img class="w-20 h-20 object-cover rounded-md" src="{{image}}"/>
-                                                {% endfor %}
+                                        {% if item.rating.images|length or item.rating.videos|default([])|length %}
+                                            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                              {% for video in item.rating.videos|default([]) %}
+                                                  <div class="relative w-20 h-20 shrink-0 pointer-events-none">
+                                                      <video class="w-20 h-20 object-cover rounded-md" src="{{ video }}" alt=""/>
+                                                      <span class="absolute inset-0 flex items-center justify-center rounded-md bg-black/30">
+                                                          <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-dark">
+                                                              <svg class="h-3.5 w-3.5 ltr:ml-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                                  <path d="M8 5v14l11-7z"/>
+                                                              </svg>
+                                                          </span>
+                                                      </span>
+                                                  </div>
+                                              {% endfor %}
+                                              {% for image in item.rating.images %}
+                                                  <img class="w-20 h-20 object-cover rounded-md" src="{{ image }}" alt=""/>
+                                              {% endfor %}
                                             </div>
                                         {% endif %}
                                     </div>
