@@ -8,7 +8,7 @@ const asset = file => path.resolve('src/assets', file || '');
 const public = file => path.resolve("public", file || '');
 
 module.exports = (env, argv) => ({
-    devtool: argv.mode === 'production' ? 'hidden-source-map' : undefined,
+    devtool: argv?.mode === 'production' ? 'hidden-source-map' : 'eval-source-map',
     entry  : {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js'), asset('js/blog.js')],
         home    : asset('js/home.js'),
