@@ -63,6 +63,9 @@
 | order.rating                     | ?OrderRatings                     |                                                                                          |
 | order.rating.store               | ?Rating                           |                                                                                          |
 | order.rating.shipping            | ?Rating                           |                                                                                          |
+| order.rating.product             | Rating[]                          | Product ratings matched by `rating.product.id`                                           |
+| order.rating.product[].images    | array                             |                                                                                          |
+| order.rating.product[].videos    | array                             |                                                                                          |
 | order.links                      | array                             |                                                                                          |
 | order.links[].url                | string                            |                                                                                          |
 | order.links[].label              | string                            |                                                                                          |
@@ -339,18 +342,39 @@
                                 </div>
                             {% endif %}
                             
-                            {% if item.rating %}
+                            {% set order_product_ratings = order.rating.product|default(order.rating.products|default([])) %}
+                            {% set product_rating = null %}
+                            {% for rating in order_product_ratings %}
+                                {% if item.product and rating.product.id == item.product.id %}
+                                    {% set product_rating = rating %}
+                                {% endif %}
+                            {% endfor %}
+                            {% set item_rating = product_rating|default(item.rating|default(null)) %}
+
+                            {% if item_rating %}
                                 <section class="flex justify-between items-start border-t mt-10 pt-8">
                                     <div>
-                                        <p>{{ item.rating.content|raw }}</p>
-                                        {% if item.rating.is_pending %}
+                                        <p>{{ item_rating.content|raw }}</p>
+                                        {% if item_rating.is_pending %}
                                             <span>{{ trans('pages.rating.pending') }}</span>
                                         {% endif %}
-                                        <salla-rating-stars with-label size="small" value="{{item.rating.stars}}"></salla-rating-stars>
-                                        {% if item.rating.images|length %}
-                                            <div class="flex items-center gap-2 mt-2">
-                                                {% for image in item.rating.images %}
-                                                    <img class="w-20 h-20 object-cover rounded-md" src="{{image}}"/>
+                                        <salla-rating-stars with-label size="small" value="{{ item_rating.stars }}"></salla-rating-stars>
+                                        {% if item_rating.images|default([])|length or item_rating.videos|default([])|length %}
+                                            <div class="flex items-center gap-2 mt-2 overflow-scroll">
+                                                {% for image in item_rating.images|default([]) %}
+                                                    <img class="w-20 h-20 object-cover rounded-md" src="{{ image }}" alt=""/>
+                                                {% endfor %}
+                                                {% for video in item_rating.videos|default([]) %}
+                                                    <div class="relative w-20 h-20 shrink-0 pointer-events-none">
+                                                        <video class="w-20 h-20 object-cover rounded-md" src="{{ video }}" muted playsinline preload="metadata"></video>
+                                                        <span class="absolute inset-0 flex items-center justify-center rounded-md bg-black/30">
+                                                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-dark">
+                                                                <svg class="h-3.5 w-3.5 ltr:ml-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                                    <path d="M8 5v14l11-7z"/>
+                                                                </svg>
+                                                            </span>
+                                                        </span>
+                                                    </div>
                                                 {% endfor %}
                                             </div>
                                         {% endif %}
@@ -358,27 +382,27 @@
                                     <div class="rating-actions">
                                         {% if store.settings.rating.allow_update %}
                                             <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
-                                                {% if not item.rating.can_update %}
+                                                {% if not item_rating.can_update %}
                                                     <div class="tooltip-content shadow-md rounded">
                                                         <small> {{trans('pages.order.edit_period_ended')}}.</small>
                                                     </div>
                                                 {% endif %}
                                                 <salla-button 
                                                     loader-position="center" 
-                                                    {% if not item.rating.can_update %} disabled {% endif %} 
+                                                    {% if not item_rating.can_update %} disabled {% endif %} 
                                                     shape="icon" 
                                                     fill="outline" 
                                                     color="dark" 
                                                     size="medium" 
-                                                    {% if item.rating.can_update %} 
-                                                        onclick="salla.event.dispatch('rating::edit', {type: 'product', feedback_id: '{{item.rating.id}}' })"
+                                                    {% if item_rating.can_update %} 
+                                                        onclick="salla.event.dispatch('rating::edit', {type: 'product', feedback_id: '{{ item_rating.id }}' })"
                                                     {% endif %} 
                                                     >
                                                     <i class="sicon-format-border-color text-xl"></i>
                                                 </salla-button>
                                             </div>
                                             <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
-                                                {% if not item.rating.can_update %}
+                                                {% if not item_rating.can_update %}
                                                     <div class="tooltip-content shadow-md rounded">
                                                         <small> {{trans('pages.order.delete_period_ended')}}.</small>
                                                     </div>
@@ -386,12 +410,12 @@
                                                 <salla-button 
                                                     loader-position="center" 
                                                     shape="icon" 
-                                                    {% if not item.rating.can_update %} disabled {% endif %} 
+                                                    {% if not item_rating.can_update %} disabled {% endif %} 
                                                     color="danger" 
                                                     fill="outline" 
                                                     size="medium" 
-                                                    {% if item.rating.can_update %}
-                                                        onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{item.rating.id}}' })"
+                                                    {% if item_rating.can_update %}
+                                                        onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{ item_rating.id }}' })"
                                                     {% endif %} 
                                                     >
                                                     <i class="sicon-trash-2 text-xl"></i>
