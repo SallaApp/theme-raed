@@ -4,10 +4,12 @@ const ThemeWatcher = require('@salla.sa/twilight/watcher.js');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
+
 const asset = file => path.resolve('src/assets', file || '');
 const public = file => path.resolve("public", file || '');
 
-module.exports = {
+module.exports = (env, argv) => ({
+    devtool: argv?.mode === 'production' ? false : 'eval-source-map',
     entry  : {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js'), asset('js/blog.js')],
         home    : asset('js/home.js'),
@@ -61,8 +63,7 @@ module.exports = {
             },
         ],
     },
-    plugins: [
-        new ThemeWatcher(),
+    plugins: [        new ThemeWatcher(),
         new MiniCssExtractPlugin(),
         new CopyPlugin({patterns: [{from: asset('images'), to: public('images')}]}),
     ],
@@ -72,5 +73,5 @@ module.exports = {
             new CssMinimizerPlugin(),
         ],
     },
-}
+})
 ;
