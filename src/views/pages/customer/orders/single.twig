@@ -360,7 +360,7 @@
                                         {% endif %}
                                         <salla-rating-stars with-label size="small" value="{{ item_rating.stars }}"></salla-rating-stars>
                                         {% if item_rating.images|default([])|length or item_rating.videos|default([])|length %}
-                                            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                            <div class="flex items-center gap-2 mt-2 overflow-scroll">
                                                 {% for image in item_rating.images|default([]) %}
                                                     <img class="w-20 h-20 object-cover rounded-md" src="{{ image }}" alt=""/>
                                                 {% endfor %}
