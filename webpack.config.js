@@ -2,31 +2,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const ThemeWatcher = require('@salla.sa/twilight/watcher.js');
 const CopyPlugin = require('copy-webpack-plugin');
-const fs = require('fs');
 const path = require('path');
 
-
-class StripPublicSourceMapsPlugin {
-  apply(compiler) {
-    compiler.hooks.done.tap('StripPublicSourceMapsPlugin', () => {
-      if (compiler.options.mode !== 'production') return;
-
-      const publicDir = path.resolve('public');
-      if (!fs.existsSync(publicDir)) return;
-
-      for (const name of fs.readdirSync(publicDir)) {
-        if (!name.endsWith('.map')) continue;
-        fs.unlinkSync(path.join(publicDir, name));
-      }
-    });
-  }
-}
 
 const asset = file => path.resolve('src/assets', file || '');
 const public = file => path.resolve("public", file || '');
 
 module.exports = (env, argv) => ({
-    devtool: argv?.mode === 'production' ? 'hidden-source-map' : 'eval-source-map',
+    devtool: argv?.mode === 'production' ? false : 'eval-source-map',
     entry  : {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js'), asset('js/blog.js')],
         home    : asset('js/home.js'),
@@ -80,9 +63,7 @@ module.exports = (env, argv) => ({
             },
         ],
     },
-    plugins: [
-        new StripPublicSourceMapsPlugin(),
-        new ThemeWatcher(),
+    plugins: [        new ThemeWatcher(),
         new MiniCssExtractPlugin(),
         new CopyPlugin({patterns: [{from: asset('images'), to: public('images')}]}),
     ],
