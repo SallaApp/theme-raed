@@ -352,23 +352,10 @@
                                             <span>{{ trans('pages.rating.pending') }}</span>
                                         {% endif %}
                                         <salla-rating-stars with-label size="small" value="{{ item_rating.stars }}"></salla-rating-stars>
-                                        {% if item_rating.images|default([])|length or item_rating.videos|default([])|length %}
-                                            <div class="flex items-center gap-2 mt-2 overflow-scroll">
-                                                {% for image in item_rating.images|default([]) %}
-                                                    <img class="w-20 h-20 object-cover rounded-md" src="{{ image }}" alt=""/>
-                                                {% endfor %}
-                                                {% for video in item_rating.videos|default([]) %}
-                                                    <div class="relative w-20 h-20 shrink-0 pointer-events-none">
-                                                        <video class="w-20 h-20 object-cover rounded-md" src="{{ video }}" muted playsinline preload="metadata"></video>
-                                                        <span class="absolute inset-0 flex items-center justify-center rounded-md bg-black/30">
-                                                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-dark">
-                                                                <svg class="h-3.5 w-3.5 ltr:ml-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                                                    <path d="M8 5v14l11-7z"/>
-                                                                </svg>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                {% endfor %}
+                                        {% set rating_attachments = item_rating.images|default([])|map((image) => { type: 'image', url: image })|merge(item_rating.videos|default([])|map((video) => { type: 'video', url: video })) %}
+                                        {% if rating_attachments|length %}
+                                            <div class="mt-2">
+                                                <salla-attachments attachments="{{ rating_attachments|json_encode }}"></salla-attachments>
                                             </div>
                                         {% endif %}
                                     </div>
