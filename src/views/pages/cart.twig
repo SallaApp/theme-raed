@@ -60,6 +60,7 @@
             <div class="main-content w-full lg:w-[calc(100%-384px)]">
                 {% hook 'cart:items.start' %}
 
+                <div id="cart-items-list">
                 {% for item in cart.items %}
                     <form onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ item.id }}">
                         <section class="cart-item bg-white p-5 xs:p-7 rounded-md mb-5 relative">
@@ -152,6 +153,9 @@
                            class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back_home') }}</a>
                     </div>
                 {% endfor %}
+                </div>
+
+                {% hook 'cart:items.end' %}
 
                 {% if cart.options|length %}
                   <div class="cart-options">
@@ -166,8 +170,6 @@
                 {% endif %}
                     
                 <salla-offer></salla-offer>
-                
-                {% hook 'cart:items.end' %}
             </div>
 
             {% hook 'cart:summary.start' %}
