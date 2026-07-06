@@ -68,29 +68,6 @@ class Cart extends BasePage {
         });
     }
 
-    /**
-     * Re-render the cart items list with the freshly server-rendered markup so
-     * newly added products appear immediately (no full page reload).
-     */
-    refreshCartItemsList() {
-        if (this._isRefreshingItems) return;
-        const container = document.querySelector('#cart-items-list');
-        if (!container) return;
-
-        this._isRefreshingItems = true;
-        fetch(window.location.href, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
-            .then(response => response.text())
-            .then(html => {
-                const fresh = new DOMParser().parseFromString(html, 'text/html').querySelector('#cart-items-list');
-                if (fresh) {
-                    container.innerHTML = fresh.innerHTML;
-                    document.lazyLoadInstance?.update();
-                }
-            })
-            .catch(() => {})
-            .finally(() => { this._isRefreshingItems = false; });
-    }
-
     updateCartOptions(options) {
       if (!options || !options.length) return;
 
@@ -112,13 +89,6 @@ class Cart extends BasePage {
             // clear cart options from the dom before page reload
             document.querySelector('.cart-options')?.remove();
             return window.location.reload();
-        }
-
-        // A newly added product (e.g. from salla-basket-gap) has no row in the DOM yet;
-        // re-render the items list from the server so it reflects instantly without a full refresh.
-        const hasUnrenderedItem = (cartData.items || []).some(item => !document.querySelector('#item-' + item.id));
-        if (hasUnrenderedItem) {
-            this.refreshCartItemsList();
         }
         // toggle physical gifting depned on giftable flag
         app.toggleElementClassIf(app.cartGifting, 'active', 'hidden', () => cartData?.gift?.enabled);
