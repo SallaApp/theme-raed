@@ -45,15 +45,24 @@ class Cart extends BasePage {
             if (isValid) {
                 /** @type HTMLSallaButtonElement */
                 let btn = event.currentTarget;
-                if (salla.config.get('user.type') !== 'guest') {
-                    btn.load();
-                    // Keep loading state until page redirects
-                    new MutationObserver(() => {
-                        if (!btn.hasAttribute('loading')) {
-                            btn.setAttribute('loading', '');
-                        }
-                    }).observe(btn, { attributes: true, attributeFilter: ['loading'] });
-                }
+
+                // Keep loading state (also disables the button) until the page redirects.
+                const keepLoading = new MutationObserver(() => {
+                    if (!btn.hasAttribute('loading')) {
+                        btn.setAttribute('loading', '');
+                    }
+                });
+                // Release it if we won't redirect (guest gets a login modal, or submit fails),
+                // so the spinner never gets stuck.
+                const stopLoading = () => {
+                    keepLoading.disconnect();
+                    btn.stop();
+                };
+                salla.event.once('login::open', stopLoading);
+                salla.event.once('cart::submit.failed', stopLoading);
+
+                btn.load();
+                keepLoading.observe(btn, { attributes: true, attributeFilter: ['loading'] });
                 salla.cart.submit();
             }
         });
