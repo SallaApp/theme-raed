@@ -63,6 +63,7 @@
 | order.rating                     | ?OrderRatings                     |                                                                                          |
 | order.rating.store               | ?Rating                           |                                                                                          |
 | order.rating.shipping            | ?Rating                           |                                                                                          |
+| order.rating.product             | ?array                            | Product ratings array with factor_reviews                                                |
 | order.links                      | array                             |                                                                                          |
 | order.links[].url                | string                            |                                                                                          |
 | order.links[].label              | string                            |                                                                                          |
@@ -159,15 +160,15 @@
         {% if order.refund_message %}
           <div class="min-w-full rounded-md overflow-hidden">
             <div class="bg-white flex items-center gap-1 rounded-md px-3 py-5 md:px-5">
-               <i class="sicon-refund h-6 w-6"></i> 
+               <i class="sicon-refund h-6 w-6"></i>
                 <p class="font-medium text-base">{{order.refund_message|raw}}</p>
             </div>
           </div>
         {% endif %}
 
-        {% if store.settings.rating.allow_update and order.rating is not empty %}    
+        {% if store.settings.rating.allow_update and order.rating is not empty %}
             <div class="flex items-start gap-2 bg-blue-50 border border-blue-200 text-blue-500 px-2 py-3 rounded-md text-sm">
-                <i class="sicon-info"></i>   
+                <i class="sicon-info"></i>
                 <p>{{trans('pages.order.can_edit_or_delete_your_review_within')}} {{store.settings.rating.update_period}} {{trans('pages.order.days_since_added')}}.</p>
             </div>
         {% endif %}
@@ -181,7 +182,7 @@
                 <salla-button color="light" class="btn--rounded-full !text-primary" onclick="salla.event.dispatch('rating::open')">{{ trans('pages.rating.rate') }}</salla-button>
             </div>
         {% endif %}
-        
+
 
         {# Order Summary #}
         <div class="overflow-hidden space-y-5">
@@ -303,7 +304,7 @@
                             {# order details sub products and options #}
 							<salla-order-details order-details="{{ item | json_encode }}"></salla-order-details>
 							{# order details sub products and options #}
-                            
+
                             {% if item.note %}
                                 <p class="mt-3 text-sm text-gray-500">
                                     <span>{{ trans('common.elements.note') }} : </span>{{ item.note }}
@@ -338,7 +339,7 @@
                                     </dl>
                                 </div>
                             {% endif %}
-                            
+
                             {% if item.rating %}
                                 <section class="flex justify-between items-start border-t mt-10 pt-8">
                                     <div>
@@ -346,7 +347,15 @@
                                         {% if item.rating.is_pending %}
                                             <span>{{ trans('pages.rating.pending') }}</span>
                                         {% endif %}
-                                        <salla-rating-stars with-label size="small" value="{{item.rating.stars}}"></salla-rating-stars>
+                                        <div class="flex flex-row flex-wrap gap-2">
+                                          <salla-rating-stars size="large" value="{{item.rating.stars}}"></salla-rating-stars>
+                                          <salla-review-factors-tags
+                                              order-id="{{ order.id }}"
+                                              rating-id="{{ item.rating.id }}"
+                                              item-id="{{ item.id }}"
+                                              {% if item.product %}product-id="{{ item.product.id }}"{% endif %}
+                                          ></salla-review-factors-tags>
+                                        </div>
                                         {% if item.rating.images|length %}
                                             <div class="flex items-center gap-2 mt-2">
                                                 {% for image in item.rating.images %}
@@ -363,16 +372,16 @@
                                                         <small> {{trans('pages.order.edit_period_ended')}}.</small>
                                                     </div>
                                                 {% endif %}
-                                                <salla-button 
-                                                    loader-position="center" 
-                                                    {% if not item.rating.can_update %} disabled {% endif %} 
-                                                    shape="icon" 
-                                                    fill="outline" 
-                                                    color="dark" 
-                                                    size="medium" 
-                                                    {% if item.rating.can_update %} 
+                                                <salla-button
+                                                    loader-position="center"
+                                                    {% if not item.rating.can_update %} disabled {% endif %}
+                                                    shape="icon"
+                                                    fill="outline"
+                                                    color="dark"
+                                                    size="medium"
+                                                    {% if item.rating.can_update %}
                                                         onclick="salla.event.dispatch('rating::edit', {type: 'product', feedback_id: '{{item.rating.id}}' })"
-                                                    {% endif %} 
+                                                    {% endif %}
                                                     >
                                                     <i class="sicon-format-border-color text-xl"></i>
                                                 </salla-button>
@@ -383,16 +392,16 @@
                                                         <small> {{trans('pages.order.delete_period_ended')}}.</small>
                                                     </div>
                                                 {% endif %}
-                                                <salla-button 
-                                                    loader-position="center" 
-                                                    shape="icon" 
-                                                    {% if not item.rating.can_update %} disabled {% endif %} 
-                                                    color="danger" 
-                                                    fill="outline" 
-                                                    size="medium" 
+                                                <salla-button
+                                                    loader-position="center"
+                                                    shape="icon"
+                                                    {% if not item.rating.can_update %} disabled {% endif %}
+                                                    color="danger"
+                                                    fill="outline"
+                                                    size="medium"
                                                     {% if item.rating.can_update %}
                                                         onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{item.rating.id}}' })"
-                                                    {% endif %} 
+                                                    {% endif %}
                                                     >
                                                     <i class="sicon-trash-2 text-xl"></i>
                                                 </salla-button>
@@ -442,11 +451,11 @@
                   </tbody>
                 </table>
               </div>
-            {% endif %} 
+            {% endif %}
         </div>
 
         <salla-order-totals-card order="{{ order }}"> </salla-order-totals-card>
-     
+
         {# Reorder & Cancel #}
         {% if order.can_reorder or order.can_cancel or order.is_pending_payment %}
             <div class="bg-white rounded-md p-5 divide-y divide-border-color space-y-4">
@@ -510,7 +519,7 @@
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
                              icon="sicon-cancel" id="modal-order-cancel" icon-style="error"
                              modal-title="{{ trans('common.elements.warning') }}">
-                             
+
                     <div slot="footer" class="grid grid-cols-2 gap-3">
                         <salla-button id="confirm-cancel" color="danger" class="w-full cursor-pointer">
                             {{ trans('common.elements.ok') }}
@@ -539,16 +548,16 @@
                                     <small> {{trans('pages.order.edit_period_ended')}}.</small>
                                 </div>
                             {% endif %}
-                            <salla-button 
-                                loader-position="center" 
-                                {% if not order.rating.store.can_update %} disabled {% endif %} 
-                                shape="icon" 
-                                fill="outline" 
-                                color="dark" 
-                                size="medium" 
+                            <salla-button
+                                loader-position="center"
+                                {% if not order.rating.store.can_update %} disabled {% endif %}
+                                shape="icon"
+                                fill="outline"
+                                color="dark"
+                                size="medium"
                                 {% if order.rating.store.can_update %}
                                     onclick="salla.event.dispatch('rating::edit', {type: 'store', feedback_id: '{{order.rating.store.id}}' })"
-                                {% endif %} 
+                                {% endif %}
                                 >
                                 <i class="sicon-format-border-color text-xl"></i>
                             </salla-button>
@@ -559,16 +568,16 @@
                                     <small> {{trans('pages.order.delete_period_ended')}}.</small>
                                 </div>
                             {% endif %}
-                            <salla-button 
-                                loader-position="center" 
-                                shape="icon" 
-                                {% if not order.rating.store.can_update %} disabled {% endif %} 
-                                color="danger" 
-                                fill="outline" 
-                                size="medium" 
-                                {% if order.rating.store.can_update %} 
-                                    onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.store.id}}' })" 
-                                {% endif %} 
+                            <salla-button
+                                loader-position="center"
+                                shape="icon"
+                                {% if not order.rating.store.can_update %} disabled {% endif %}
+                                color="danger"
+                                fill="outline"
+                                size="medium"
+                                {% if order.rating.store.can_update %}
+                                    onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.store.id}}' })"
+                                {% endif %}
                                 >
                                 <i class="sicon-trash-2 text-xl"></i>
                             </salla-button>
@@ -594,15 +603,15 @@
                                 <small> {{trans('pages.order.edit_period_ended')}}.</small>
                             </div>
                         {% endif %}
-                        <salla-button 
-                            loader-position="center" 
-                            {% if not order.rating.shipping.can_update %} disabled {% endif %} 
-                            shape="icon" 
-                            fill="outline" 
-                            color="dark" 
-                            size="medium" 
-                            {% if order.rating.shipping.can_update %} 
-                                onclick="salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: '{{order.rating.shipping.id}}' })" 
+                        <salla-button
+                            loader-position="center"
+                            {% if not order.rating.shipping.can_update %} disabled {% endif %}
+                            shape="icon"
+                            fill="outline"
+                            color="dark"
+                            size="medium"
+                            {% if order.rating.shipping.can_update %}
+                                onclick="salla.event.dispatch('rating::edit', {type: 'shipping', feedback_id: '{{order.rating.shipping.id}}' })"
                             {% endif %}
                             >
                             <i class="sicon-format-border-color text-xl"></i>
@@ -611,20 +620,20 @@
                     <div class="tooltip-toggle tooltip-toggle--hover icon-trigger mobile-shifted">
                         {% if not order.rating.shipping.can_update %}
                             <div class="tooltip-content shadow-md rounded">
-                                <small> {{trans('pages.order.delete_period_ended')}}.</small>                            
+                                <small> {{trans('pages.order.delete_period_ended')}}.</small>
                             </div>
                         {% endif %}
-                        <salla-button 
-                            loader-position="center" 
-                            shape="icon" 
-                            {% if not order.rating.shipping.can_update %} disabled {% endif %} 
-                            color="danger" 
-                            fill="outline" 
-                            size="medium" 
-                            {% if order.rating.shipping.can_update %} 
-                                onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.shipping.id}}' })" 
-                            {% endif %} 
-                            > 
+                        <salla-button
+                            loader-position="center"
+                            shape="icon"
+                            {% if not order.rating.shipping.can_update %} disabled {% endif %}
+                            color="danger"
+                            fill="outline"
+                            size="medium"
+                            {% if order.rating.shipping.can_update %}
+                                onclick="salla.event.dispatch('rating::delete', {feedback_id: '{{order.rating.shipping.id}}' })"
+                            {% endif %}
+                            >
                             <i class="sicon-trash-2 text-xl"></i>
                         </salla-button>
                     </div>
@@ -635,7 +644,7 @@
 
         {% hook 'customer:orders.single.details.end' %}
 
-        {% if order.can_rate or store.settings.rating.allow_update %} 
+        {% if order.can_rate or store.settings.rating.allow_update %}
             <salla-rating-modal></salla-rating-modal>
         {% endif %}
     </div>
