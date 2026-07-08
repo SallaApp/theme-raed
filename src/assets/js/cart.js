@@ -6,11 +6,6 @@ class Cart extends BasePage {
         salla.event.cart.onUpdated(data => this.updateCartPageInfo(data));
 
         app.watchElements({
-            subTotal: '#sub-total',
-            orderOptionsTotal: '#cart-options-total',
-            totalDiscount: '#total-discount',
-            taxAmount: '#tax-amount',
-            shippingCost: '#shipping-cost',
             freeShipping: '#free-shipping',
             freeShippingBar: '#free-shipping-bar',
             freeShippingMsg: '#free-shipping-msg',
@@ -45,15 +40,24 @@ class Cart extends BasePage {
             if (isValid) {
                 /** @type HTMLSallaButtonElement */
                 let btn = event.currentTarget;
-                if (salla.config.get('user.type') !== 'guest') {
-                    btn.load();
-                    // Keep loading state until page redirects
-                    new MutationObserver(() => {
-                        if (!btn.hasAttribute('loading')) {
-                            btn.setAttribute('loading', '');
-                        }
-                    }).observe(btn, { attributes: true, attributeFilter: ['loading'] });
-                }
+
+                // Keep loading state (also disables the button) until the page redirects.
+                const keepLoading = new MutationObserver(() => {
+                    if (!btn.hasAttribute('loading')) {
+                        btn.setAttribute('loading', '');
+                    }
+                });
+                // Release it if we won't redirect (guest gets a login modal, or submit fails),
+                // so the spinner never gets stuck.
+                const stopLoading = () => {
+                    keepLoading.disconnect();
+                    btn.stop();
+                };
+                salla.event.once('login::open', stopLoading);
+                salla.event.once('cart::submit.failed', stopLoading);
+
+                btn.load();
+                keepLoading.observe(btn, { attributes: true, attributeFilter: ['loading'] });
                 salla.cart.submit();
             }
         });
@@ -92,17 +96,9 @@ class Cart extends BasePage {
         // update each item data
         cartData.items?.forEach(item => this.updateItemInfo(item));
 
-        app.subTotal.innerHTML = salla.money(cartData.sub_total);
-        if(app.taxAmount) 
-          app.taxAmount.innerHTML = salla.money(cartData.tax_amount);
-        if (app.orderOptionsTotal) app.orderOptionsTotal.innerHTML = salla.money(cartData.options_total);
-        
-        app.toggleElementClassIf(app.totalDiscount, 'discounted', 'hidden', () => !!cartData.total_discount)
-            .toggleElementClassIf(app.shippingCost, 'has_shipping', 'hidden', () => !!cartData.real_shipping_cost && !cartData.free_shipping_bar?.has_free_shipping) 
-            .toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
-
-        app.totalDiscount.querySelector('b').innerHTML = '- ' + salla.money(cartData.total_discount);
-        app.shippingCost.querySelector('b').innerHTML = salla.money(cartData.real_shipping_cost);
+        // Summary totals (subtotal, discount, shipping, tax, options) are owned by
+        // <salla-cart-summary-card> now; the theme only manages the free-shipping bar.
+        app.toggleElementClassIf(app.freeShipping, 'has_free', 'hidden', () => !!cartData.free_shipping_bar);
 
         if (!cartData.free_shipping_bar) {
             return;
