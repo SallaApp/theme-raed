@@ -343,13 +343,13 @@
                                               {% if item.product %}product-id="{{ item.product.id }}"{% endif %}
                                           ></salla-review-factors-tags>
                                         </div>
-                                        {% set rating_source = order.rating.product|default([])|filter(r => item.product and r.product.id == item.product.id)|first|default(item.rating) %}
-                                        {% set rating_attachments = rating_source.images|default([])|map((image) => { type: 'image', url: image })|merge(rating_source.videos|default([])|map((video) => { type: 'video', url: video })) %}
-                                        {% if rating_attachments|length %}
-                                            <div class="mt-2">
-                                                <salla-attachments attachments="{{ rating_attachments|json_encode }}"></salla-attachments>
-                                            </div>
-                                        {% endif %}
+                                        <div class="mt-2">
+                                            <salla-attachments
+                                                rating="{{ item.rating|json_encode }}"
+                                                product-ratings="{{ order.rating.product|default([])|json_encode }}"
+                                                {% if item.product %}product-id="{{ item.product.id }}"{% endif %}
+                                            ></salla-attachments>
+                                        </div>
                                     </div>
                                     <div class="rating-actions">
                                         {% if store.settings.rating.allow_update %}
