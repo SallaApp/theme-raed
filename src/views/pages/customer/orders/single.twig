@@ -321,13 +321,6 @@
                                             </dt>
                                             <dd class="font-medium text-gray-900">
                                                 <salla-attachments attachments="{{ item.attachments|json_encode }}"></salla-attachments>
-                                                {% for attachment in item.attachments %}
-                                                    {% if attachment.type != 'image' and attachment.type != 'video' %}
-                                                        <a href="{{ attachment.url }}" class="text-xs">
-                                                            {{ trans('pages.orders.file_url') }}
-                                                        </a>
-                                                    {% endif %}
-                                                {% endfor %}
                                             </dd>
                                         </div>
                                     </dl>
@@ -351,7 +344,7 @@
                                             <span>{{ trans('pages.rating.pending') }}</span>
                                         {% endif %}
                                         <div class="flex flex-row flex-wrap gap-2">
-                                          <salla-rating-stars with-label size="small" value="{{ item_rating.stars }}"></salla-rating-stars>
+                                          <salla-rating-stars size="large" value="{{ item_rating.stars }}"></salla-rating-stars>
                                           <salla-review-factors-tags
                                               order-id="{{ order.id }}"
                                               rating-id="{{ item_rating.id }}"
