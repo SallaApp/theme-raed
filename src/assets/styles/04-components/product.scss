@@ -347,6 +347,18 @@ salla-add-product-button[product-status="out-and-notify"],
   @apply opacity-100;
 }
 
+// Reserve vertical space for JS-rendered cards before hydration to prevent layout shift (CLS).
+// The reservation is removed once the card renders and gains the `s-product-card-entry` class.
+custom-salla-product-card,
+custom-wishlist-card {
+  @apply block;
+}
+
+custom-salla-product-card:not([horizontal]):not([fullimage]):not([minimal]):not(.s-product-card-entry),
+custom-wishlist-card:not(.s-product-card-entry) {
+  @apply min-h-[22rem];
+}
+
 
 // Horizontal card
 .s-product-card-horizontal{

@@ -160,6 +160,11 @@ class ProductCard extends HTMLElement {
      *  Show quantity.
      */
     this.showQuantity = this.hasAttribute('showQuantity');
+
+    /**
+     *  Preload the image (above-the-fold cards) to improve LCP and avoid lazy-loading the largest element.
+     */
+    this.preload = this.hasAttribute('preload');
   }
 
   escapeHTML(str = '') {
@@ -198,7 +203,11 @@ class ProductCard extends HTMLElement {
                 : 'cover'}"
               src="${this.product?.image?.url || this.product?.thumbnail || this.placeholder || ''}"
               alt="${this.escapeHTML(this.product?.image?.alt || this.product.name)}"
-              loading="lazy"
+              width="${this.product?.image?.width || 500}"
+              height="${this.product?.image?.height || 500}"
+              decoding="async"
+              loading="${this.preload ? 'eager' : 'lazy'}"
+              fetchpriority="${this.preload ? 'high' : 'auto'}"
             />
             ${!this.fullImage && !this.minimal ? this.getProductBadge() : ''}
           </a>

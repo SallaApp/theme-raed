@@ -81,7 +81,9 @@
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
-    <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
+    {# Icons font is not critical for first paint — load it non-render-blocking to speed up FCP/LCP #}
+    <link rel="preload" as="style" href="{{ 'fonts/sallaicons.css'|cdn }}" onload="this.onload=null;this.rel='stylesheet'"/>
+    <noscript><link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/></noscript>
     
     <style>
         :root {
