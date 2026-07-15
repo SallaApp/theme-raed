@@ -48,8 +48,8 @@
                 <i class="sicon-star2 star-anime text-amber-400 text-7xl"></i>
                 <div class="loyalty__banner-content">
                     <div class="info">
-                        <h1>{{ loyalty.name }}</h1>
-                        <p>{{ loyalty.description }}</p>
+                        <h1>{{ (loyalty.name is iterable ? loyalty.name[user.language.code]|default(loyalty.name|first) : loyalty.name) }}</h1>
+                        <p>{{ (loyalty.description is iterable ? loyalty.description[user.language.code]|default(loyalty.description|first) : loyalty.description) }}</p>
                         {% if user.loyalty_points %}
                             <div class="loyalty-points">
                                 {{ trans('pages.loyalty_program.you_have') }}
@@ -89,7 +89,7 @@
                                     {{ point.points }}
                                     {{ trans("pages.loyalty_program.point") }}
                                 </h3>
-                                <p>{{ point.description }}</p>
+                                <p>{{ (point.description is iterable ? point.description[user.language.code]|default(point.description|first) : point.description) }}</p>
                             </div>
                         </div>
 
@@ -121,7 +121,7 @@
                                             width="wide"
                                             href="{{ point.url }}"
                                             class="!rounded-3xl text-sm !py-1.5">
-                                        {{ point.name }}
+                                        {{ (point.name is iterable ? point.name[user.language.code]|default(point.name|first) : point.name) }}
                                     </salla-button>
                                 {% endif %}
                             </div>
@@ -137,7 +137,7 @@
               <salla-slider 
                 type="carousel"
                 loop="{{prize_group.items|length < 4  ? 'false' : 'true'}}"
-                block-title="{{ prize_group.title }}"
+                block-title="{{ (prize_group.title is iterable ? prize_group.title[user.language.code]|default(prize_group.title|first) : prize_group.title) }}"
                 id="loyalty-slider-{{ prize_group.type }}">
                   <div slot="items">
                       {% for prize in prize_group.items %} 
@@ -147,7 +147,7 @@
                                       <img class="sm:h-full w-full object-cover rounded-t-md"
                                           src="{{ prize.image }}"
                                           loading="lazy"
-                                          alt="{{ prize.name }}"/>
+                                          alt="{{ (prize.name is iterable ? prize.name[user.language.code]|default(prize.name|first) : prize.name) }}"/>
                                   {% endset %}
                                   {% if prize.url %}
                                       <a href="{{ prize.url }}" class='product-entry__image h-40'>
@@ -159,12 +159,12 @@
                                   <div class="flex-1 p-5">
                                       <h3 class="product-entry__title leading-6 mb-2.5">
                                           {% if prize.url %}
-                                              <a href="{{ prize.url }}">{{ prize.name }}</a>
+                                              <a href="{{ prize.url }}">{{ (prize.name is iterable ? prize.name[user.language.code]|default(prize.name|first) : prize.name) }}</a>
                                           {% else %}
-                                              {{ prize.name }}
+                                              {{ (prize.name is iterable ? prize.name[user.language.code]|default(prize.name|first) : prize.name) }}
                                           {% endif %}
                                       </h3>
-                                      <p class="text-sm leading-6 ">{{ prize.description }}</p>
+                                      <p class="text-sm leading-6 ">{{ (prize.description is iterable ? prize.description[user.language.code]|default(prize.description|first) : prize.description) }}</p>
                                   </div>
                                   {% if user.type == 'user' %}
                                       <div class="font-bold text-primary p-4 text-center border-t">

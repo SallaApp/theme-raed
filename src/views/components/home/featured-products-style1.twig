@@ -20,7 +20,7 @@
 <section class="s-block s-block-tabs s-block--special-products container" id="{{ component_id }}">
     <div class="s-block__title"> 
       <div class="right-side">
-        <h2>{{ main_product.title }}</h2>
+        <h2>{{ (main_product.title is iterable ? main_product.title[user.language.code]|default(main_product.title|first) : main_product.title) }}</h2>
       </div>
       {% if items|length > 1 %}
       <div class="tabs hide-scroll hidden lg:flex">
@@ -29,7 +29,7 @@
                       data-target="{{ component_id }}-{{ section.id }}"
                       data-component-id="{{ component_id }}"
                       class="tab-trigger {{ loop.first?'is-active' : '' }}">
-                  {{ section.title }}
+                  {{ (section.title is iterable ? section.title[user.language.code]|default(section.title|first) : section.title) }}
               </salla-button>
           {% endfor %}
       </div>
@@ -50,7 +50,7 @@
                             data-target="{{ component_id }}-{{ section.id }}"
                             data-component-id="{{ component_id }}"
                             class="tab-trigger {{ loop.first?'is-active':'' }}">
-                        {{ section.title }}
+                        {{ (section.title is iterable ? section.title[user.language.code]|default(section.title|first) : section.title) }}
                     </salla-button> 
                 {% endfor %}
             </div>

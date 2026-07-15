@@ -43,7 +43,7 @@
                 {% for category in categories %}
                     <li>
                         <a class="p-2.5 block text-sm hover:text-primary {{ category.is_current ? ' is-active' : '' }}" href="{{ category.url }}">
-                            <span class="rtl:ml-auto ltr:mr-auto">{{ category.name }}</span>
+                            <span class="rtl:ml-auto ltr:mr-auto">{{ (category.name is iterable ? category.name[user.language.code]|default(category.name|first) : category.name) }}</span>
                         </a>
                     </li>
                   {% endfor %}
@@ -60,7 +60,7 @@
                     {% for category in categories %}
                         <li {{ category.is_current ? ' class="text-primary"' : '' }}>
                             <a class="py-3 block text-sm hover:text-primary" href="{{ category.url }}">
-                                {{ category.name }}
+                                {{ (category.name is iterable ? category.name[user.language.code]|default(category.name|first) : category.name) }}
                             </a>
                         </li>
                     {% endfor %}
@@ -94,11 +94,11 @@
                                                         <a href="{{ article.author.url }}"
                                                            class=" flex items-center hover:underline">
                                                             <i class="sicon-user rtl:ml-1 ltr:mr-1"></i>
-                                                            <span class="whitespace-nowrap">{{ article.author.name }}</span>
+                                                            <span class="whitespace-nowrap">{{ (article.author.name is iterable ? article.author.name[user.language.code]|default(article.author.name|first) : article.author.name) }}</span>
                                                         </a>
                                                     </div>
                                                     <h3 class="text-sm font-bold leading-normal mb-4">
-                                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                                        <a href="{{ article.url }}">{{ (article.title is iterable ? article.title[user.language.code]|default(article.title|first) : article.title) }}</a>
                                                     </h3>
                                                 </div>
                                                 <p data-swiper-parallax="-300"  class="line-clamp-2 block-slide-anime description">{{ article.summary }}</p>
@@ -111,7 +111,7 @@
                     </salla-slider>
                 {% else %}
                     <div class="sr-only lg:not-sr-only ">
-                        <h1 class="blog-category__title font-bold text-lg mb-8">{{ page.title }}</h1>
+                        <h1 class="blog-category__title font-bold text-lg mb-8">{{ (page.title is iterable ? page.title[user.language.code]|default(page.title|first) : page.title) }}</h1>
                     </div>
                 {% endif %}
                 {% if articles|length %}
@@ -135,12 +135,12 @@
                                         </div>
                                         <a href="{{ article.author.url }}" class="flex items-center hover:text-dark">
                                             <i class="sicon-user rtl:ml-1 ltr:mr-1"></i>
-                                            <span class="">{{ article.author.name }}</span>
+                                            <span class="">{{ (article.author.name is iterable ? article.author.name[user.language.code]|default(article.author.name|first) : article.author.name) }}</span>
                                         </a>
                                     </div>
 
                                     <h3 class="post-entry__title  text-sm font-bold text-gray-800 leading-6 mb-2.5">
-                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                        <a href="{{ article.url }}">{{ (article.title is iterable ? article.title[user.language.code]|default(article.title|first) : article.title) }}</a>
                                     </h3>
                                     <p class="text-sm text-gray-500 leading-6 mb-2.5">
                                         {{ article.summary }}
@@ -170,7 +170,7 @@
                                             <a href="{{ tag.url }}"
                                                class="py-2 px-4 rounded-large inline-flex items-center text-gray-500 hover:text-dark justify-center text-sm">
                                                 <i class="font-medium sicon-tag rtl:ml-1.5 ltr:mr-1.5"></i>
-                                                <span class="fix-align whitespace-nowrap">{{ tag.name }}</span>
+                                                <span class="fix-align whitespace-nowrap">{{ (tag.name is iterable ? tag.name[user.language.code]|default(tag.name|first) : tag.name) }}</span>
                                             </a>
                                         {% endfor %}
                                     </div>
