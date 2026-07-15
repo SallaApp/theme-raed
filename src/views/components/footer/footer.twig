@@ -3,11 +3,11 @@
 		<div class="container grid grid-col-1 lg:grid-cols-6 gap-8 lg:gap-6">
 			<div class="lg:col-span-2 rtl:lg:pl-20 ltr:lg:pr-20">
 				<a href="{{ link('/') }}" class="flex items-center m-0">
-					<h3>{{store.name}}</h3>
+					<h3>{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }}</h3>
 				</a>
 				{% if store.description %}
 					<div class="max-w-sm leading-6 mb-6">
-						{{ store.description|raw }}
+						{{ (store.description is iterable ? store.description[user.language.code]|default(store.description|first) : store.description)|raw  }}
           </div>
 				{% endif %}
 
