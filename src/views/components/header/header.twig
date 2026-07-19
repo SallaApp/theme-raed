@@ -27,7 +27,7 @@
           {% if store.scope %}
               <button class="btn--rounded-gray"
                       onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
-                  <i class="sicon-location rtl:ml-1 ltr:mr-1"></i> {{ (store.scope.name is iterable ? store.scope.name[user.language.code]|default(store.scope.name|first) : store.scope.name) }}
+                  <i class="sicon-location rtl:ml-1 ltr:mr-1"></i> {{ (store.scope.name is iterable ? store.scope.name[language.code]|default(store.scope.name|first) : store.scope.name) }}
               </button>
           {% endif %}
 
@@ -51,11 +51,11 @@
                         <i class="sicon-menu text-primary text-2xl"></i>
                       </a>
                       <a class="navbar-brand" href="{{ store.url }}">
-                          <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo|cdn(175) }}" alt="{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }} logo">
+                          <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo|cdn(175) }}" alt="{{ (store.name is iterable ? store.name[language.code]|default(store.name|first) : store.name) }} logo">
                           {% if is_page('index') %}
-                            <h1 class="sr-only">{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }}</h1>
+                            <h1 class="sr-only">{{ (store.name is iterable ? store.name[language.code]|default(store.name|first) : store.name) }}</h1>
                           {% else %}
-                            <h2 class="sr-only">{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }}</h2>
+                            <h2 class="sr-only">{{ (store.name is iterable ? store.name[language.code]|default(store.name|first) : store.name) }}</h2>
                           {% endif %}
                       </a>
                       <custom-main-menu></custom-main-menu>
