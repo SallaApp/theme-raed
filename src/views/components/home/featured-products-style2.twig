@@ -29,7 +29,7 @@
                 data-target="{{ component_id }}-{{ section.id }}"
                 data-component-id="{{ component_id }}"
                 fill="outline">
-                  {{ (section.title is iterable ? section.title[user.language.code]|default(section.title|first) : section.title) }}
+                  {{ (section.title is iterable ? section.title[language.code]|default(section.title|first) : section.title) }}
               </salla-button>
           {% endfor %}
       </div>
@@ -42,14 +42,14 @@
                     <salla-products-slider 
                       slider-id="section-{{ section.id }}-slider" 
                       source="{{ section.products.source }}"
-                      limit="{{ (section.products.limit is iterable ? section.products.limit[user.language.code]|default(section.products.limit|first) : section.products.limit) }}"
+                      limit="{{ (section.products.limit is iterable ? section.products.limit[language.code]|default(section.products.limit|first) : section.products.limit) }}"
                       source-value="{{ section.products.source_value|json_encode }}"
                       >
                     </salla-products-slider>
                 {% else %}
                     <salla-products-list  
                       source="{{ section.products.source }}"
-                      limit="{{ (section.products.limit is iterable ? section.products.limit[user.language.code]|default(section.products.limit|first) : section.products.limit) }}"
+                      limit="{{ (section.products.limit is iterable ? section.products.limit[language.code]|default(section.products.limit|first) : section.products.limit) }}"
                       source-value="{{ section.products.source_value|json_encode }}"
                       {{is_vertical ? '' : 'horizontal-cards'}}
                       >

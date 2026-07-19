@@ -15,7 +15,7 @@
       <salla-slider  
         type="carousel"
         {% if(component.title) or (component.merge_with_top_component) %}
-            block-title="{{ (component.title is iterable ? component.title[user.language.code]|default(component.title|first) : component.title) }}"
+            block-title="{{ (component.title is iterable ? component.title[language.code]|default(component.title|first) : component.title) }}"
         {% endif %}
         controls-outer
         show-controls="{{ component.show_controls ? 'true' : 'false'}}" 
@@ -26,11 +26,11 @@
                     <div class="swiper-slide slide--one-sixth">
                         <a href="{{ cat.url }}" class="slide--cat-entry">
                             {% if cat.image %}
-                              <img src="{{ cat.image ? cat.image : 'images/placeholder.png' | asset }}" class="w-16 h-16 object-cover rounded-full mb-2.5 {{ cat.image ? '' : 'has-placeholder'}}" width="64" height="64" alt="{{ (menu.title is iterable ? menu.title[user.language.code]|default(menu.title|first) : menu.title) }}"/>
+                              <img src="{{ cat.image ? cat.image : 'images/placeholder.png' | asset }}" class="w-16 h-16 object-cover rounded-full mb-2.5 {{ cat.image ? '' : 'has-placeholder'}}" width="64" height="64" alt="{{ (menu.title is iterable ? menu.title[language.code]|default(menu.title|first) : menu.title) }}"/>
                             {% else %}
                               <i class="{{ cat.icon }}"></i>
                             {% endif %}
-                            <h2>{{ (cat.name is iterable ? cat.name[user.language.code]|default(cat.name|first) : cat.name) }}</h2>
+                            <h2>{{ (cat.name is iterable ? cat.name[language.code]|default(cat.name|first) : cat.name) }}</h2>
                         </a>
                     </div>
                 {% endfor %}
@@ -40,7 +40,7 @@
                     <div class="swiper-slide slide--one-sixth">
                         <a href="{{ link.url }}" class="slide--cat-entry">
                             <i class="{{ link.icon }}"></i>
-                            <h2>{{ (link.title is iterable ? link.title[user.language.code]|default(link.title|first) : link.title) }}</h2>
+                            <h2>{{ (link.title is iterable ? link.title[language.code]|default(link.title|first) : link.title) }}</h2>
                         </a>
                     </div>
                   {% endif %}

@@ -15,8 +15,8 @@
         {% for index, banner in component.banners %}
             <a  href="{{banner.url}}" aria-label="{{ (banner.title ? banner.title : 'square-banner-' ~ index) | e('html_attr') }}" class="banner-entry lazy {{banner.title ? 'has-overlay' : ''}} {{ component.banners|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-bg="{{ banner.image }}">
                 <article class="banner-entry__text text-with-border">
-                    <h3 class="banner__title font-bold mb-1 leading-6">{{ (banner.title is iterable ? banner.title[user.language.code]|default(banner.title|first) : banner.title) }}</h3>
-                    <p class="banner__description">{{ (banner.description is iterable ? banner.description[user.language.code]|default(banner.description|first) : banner.description) }}</p>
+                    <h3 class="banner__title font-bold mb-1 leading-6">{{ (banner.title is iterable ? banner.title[language.code]|default(banner.title|first) : banner.title) }}</h3>
+                    <p class="banner__description">{{ (banner.description is iterable ? banner.description[language.code]|default(banner.description|first) : banner.description) }}</p>
                 </article>
             </a>
         {% endfor %}
