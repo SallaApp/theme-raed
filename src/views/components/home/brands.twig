@@ -13,7 +13,7 @@
           <div class="s-block__title">
             {% if component.title %}
               <div class="right-side">
-                <h2>{{ (component.title is iterable ? component.title[language.code]|default(component.title|first) : component.title) }}</h2>
+                <h2>{{ component.title }}</h2>
                 {# <p>عنوان فرعي توصيفي صغير</p> #}
               </div>
             {% endif %}
@@ -28,12 +28,12 @@
                 {% if loop.first or loop.index0%3==0 %}
                     <a href="{{ brand.url }}"
                        class="brand-item {{ component.brands|length > 5  ? 'sm:row-span-2 sm:h-auto': '' }}">
-                        <img class="max-h-full" width="400" height="300" src="{{ brand.logo }}" alt="{{ (brand.name is iterable ? brand.name[language.code]|default(brand.name|first) : brand.name) }}"/>
+                        <img class="max-h-full" width="400" height="300" src="{{ brand.logo }}" alt="{{ brand.name }}"/>
                     </a>
                 {% else %}
                     <a href="{{ brand.url }}"
                        class="brand-item">
-                        <img class="max-h-full" width="400" height="300" src="{{ brand.logo }}" alt="{{ (brand.name is iterable ? brand.name[language.code]|default(brand.name|first) : brand.name) }}"/>
+                        <img class="max-h-full" width="400" height="300" src="{{ brand.logo }}" alt="{{ brand.name }}"/>
                     </a>
                 {% endif %}
             {% endfor %}
