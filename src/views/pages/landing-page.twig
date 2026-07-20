@@ -23,7 +23,7 @@
         <div class="landing-page notfound">
             <header>
                 <div class="header-content container">
-                <a href="{{ store.url }}" class="header-content-logo" aria-label="{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }} logo">
+                <a href="{{ store.url }}" class="header-content-logo" aria-label="{{ (store.name is iterable ? store.name[language.code]|default(store.name|first) : store.name) }} logo">
 					<img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo"></a>
                     <div class="header-content-inner">
                         <h1> {{trans('common.errors.404')}}</h1>
@@ -40,7 +40,7 @@
         <div class="landing-page expired">
             <header>
                 <div class="header-content container">
-                <a href="{{ store.url }}" aria-label="{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }} logo" class="header-content-logo">
+                <a href="{{ store.url }}" aria-label="{{ (store.name is iterable ? store.name[language.code]|default(store.name|first) : store.name) }} logo" class="header-content-logo">
 					<img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo"></a>
                     <div class="header-content-inner">
                         <h1> {{trans('pages.offer.offer_finished')}}</h1>
@@ -58,10 +58,10 @@
         <div class="landing-page pb-10">
             <header>
                 <div class="header-content container">
-                <a href="{{ store.url }}" aria-label="{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }} logo" class="header-content-logo">
+                <a href="{{ store.url }}" aria-label="{{ (store.name is iterable ? store.name[language.code]|default(store.name|first) : store.name) }} logo" class="header-content-logo">
 					<img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo"></a>
                     <div class="header-content-inner">
-                        <h1>{{ (landing.title is iterable ? landing.title[user.language.code]|default(landing.title|first) : landing.title) }}</h1>
+                        <h1>{{ (landing.title is iterable ? landing.title[language.code]|default(landing.title|first) : landing.title) }}</h1>
                         <p>{{ landing.content|raw }}</p>
                     </div>
                     {% if landing.offer_ends_at %}
