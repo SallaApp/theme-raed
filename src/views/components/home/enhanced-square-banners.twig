@@ -10,7 +10,7 @@
 | position                        | int      | Sorting number start from zero                                               |
 #}
 
-<section class="s-block s-block--banners container">
+<section data-testid="store-home-square-banners" class="s-block s-block--banners container">
     <div class="grid {{ component.banners|length <= 3 ? 'md:grid-cols-' ~ component.banners|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
         {% for index, banner in component.banners %}
             <a  href="{{banner.url}}" aria-label="{{ (banner.title ? banner.title : 'square-banner-' ~ index) | e('html_attr') }}" class="banner-entry lazy {{banner.title ? 'has-overlay' : ''}} {{ component.banners|length <= 3 ? "h-lg-banner" : "h-banner" }}" data-bg="{{ banner.image }}">

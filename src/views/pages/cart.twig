@@ -55,14 +55,14 @@
             <salla-breadcrumb></salla-breadcrumb>
         </nav>
         <h1 class="sr-only">{{ trans('blocks.header.cart') }}</h1>
-        <salla-conditional-offer></salla-conditional-offer>
+        <salla-conditional-offer data-testid="store-cart-conditional-offer"></salla-conditional-offer>
         <div class="pt-5 flex flex-col items-start lg:flex-row pb-32 lg:pb-20">
             <div class="main-content w-full lg:w-[calc(100%-384px)]">
                 {% hook 'cart:items.start' %}
 
                 {% for item in cart.items %}
                     <form onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ item.id }}">
-                        <section class="cart-item bg-white p-5 xs:p-7 rounded-md mb-5 relative">
+                        <section data-testid="store-cart-item-{{ item.id }}" class="cart-item bg-white p-5 xs:p-7 rounded-md mb-5 relative">
                             <input type="hidden" name="id" value="{{ item.id }}">
                                 <!-- product -->
                                 <div class="md:flex rtl:space-x-reverse md:space-x-12 items-start justify-between mb-8 last:mb-0">
@@ -94,7 +94,7 @@
 
                                             <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer ? '' : 'hidden' }}" >{{ item.product_price|money }}</span>
                                             <span class="inline-flex gap-1 leading-4 text-sm text-gray-500 line-through item-original-price {{ item.is_on_sale ? '' : 'hidden' }}" id="original_price">{{ item.original_price|money }}</span>
-                                            <span class="inline-flex gap-1 leading-4 item-price {{ item.has_discount ?  'text-red-800' : 'text-sm text-gray-500' }}" id="has_discount">{{ item.price|money }}</span>
+                                            <span data-testid="store-cart-item-price" class="inline-flex gap-1 leading-4 item-price {{ item.has_discount ?  'text-red-800' : 'text-sm text-gray-500' }}" id="has_discount">{{ item.price|money }}</span>
                                             
                                             <p class="text-sm text-gray-500 item-weight-row {{ item.weight_label ? '' : 'hidden' }}"> {{ trans('pages.products.weight') }}
                                              <span class="item-weight">{{ item.weight_label }}</span>
@@ -130,14 +130,14 @@
                                         {% set item_total = item.detailed_offers|length > 0 ? item.total_special_price|money : item.total|money%}
                                         <p class="text-primary flex-none font-bold text-sm rtl:md:pl-12 ltr:md:pr-12">
                                             <span>{{ trans('pages.cart.total') }}:</span>
-                                            <span class="inline-block item-total">{{ item.is_available?item_total: trans('pages.cart.out_of_stock') }}</span>
+                                            <span data-testid="store-cart-item-total" class="inline-block item-total">{{ item.is_available?item_total: trans('pages.cart.out_of_stock') }}</span>
                                         </p>
                                     </div>
                                 </div>
 
                                 {% include 'pages.partials.product.options' with {product:item} %}
                             <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
-                                <salla-button type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
+                                <salla-button data-testid="store-cart-delete-item" type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
                                         onclick="salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())">
                                     <i class="sicon-cancel"></i>
                                 </salla-button>
@@ -145,10 +145,10 @@
                         </section>
                     </form>
                 {% else %}
-                    <div class="no-content-placeholder">
+                    <div data-testid="store-cart-empty" class="no-content-placeholder">
                         <i class="sicon-shopping-bag icon"></i>
                         <p>{{ trans('pages.cart.empty_cart') }}</p>
-                        <a href="{{ link('/') }}"
+                        <a data-testid="store-cart-back-home" href="{{ link('/') }}"
                            class="btn btn--outline-primary btn--rounded-full">{{ trans('common.elements.back_home') }}</a>
                     </div>
                 {% endfor %}
@@ -165,7 +165,7 @@
                   </div>
                 {% endif %}
                     
-                <salla-offer></salla-offer>
+                <salla-offer data-testid="store-cart-offer"></salla-offer>
                 
                 {% hook 'cart:items.end' %}
             </div>
@@ -199,30 +199,31 @@
                     </div>
                     {% if loyalty %}
                         <salla-loyalty-panel
+                            data-testid="store-cart-loyalty"
                             prize-points='{{ loyalty.prize.points }}'
                             prize-title='{{ (loyalty.prize.title is iterable ? loyalty.prize.title[user.language.code]|default(loyalty.prize.title|first) : loyalty.prize.title) }}'>
                         </salla-loyalty-panel>
                     {% endif %}
 
                     <div id="cart-gifting" class="shadow-default bg-white xs:p-2 rounded-md mb-5 relative  {{gift.enabled ? '' : 'hidden' }}">
-                        <salla-gifting id="salla-gifting" class="mt-5" widget-title="{{ trans("pages.cart.gift_widget_title") }}"  widget-subtitle="{{ (gift.text is iterable ? gift.text[user.language.code]|default(gift.text|first) : gift.text) }}" class="mt-5" {{gift.type}}-products  vertical></salla-gifting>
+                        <salla-gifting data-testid="store-cart-gifting" id="salla-gifting" class="mt-5" widget-title="{{ trans("pages.cart.gift_widget_title") }}"  widget-subtitle="{{ (gift.text is iterable ? gift.text[user.language.code]|default(gift.text|first) : gift.text) }}" class="mt-5" {{gift.type}}-products  vertical></salla-gifting>
                     </div>
 
                     {% if store.settings.cart.apply_coupon_enabled %}
                         <div class="shadow-default bg-white px-5 xs:px-7 rounded-md mt-5 lg:mt-0 mb-5 relative">
                             {% hook 'cart:coupon.start' %}
-                            <salla-cart-coupons></salla-cart-coupons>
+                            <salla-cart-coupons data-testid="store-cart-coupons"></salla-cart-coupons>
                             {% hook 'cart:coupon.end' %}
                         </div>
                     {% endif %}
 
                     {% hook 'cart:summary-card.start' %}
-                    <salla-cart-summary-card></salla-cart-summary-card>
+                    <salla-cart-summary-card data-testid="store-cart-summary"></salla-cart-summary-card>
                     {% hook 'cart:summary-card.end' %}
                     {% hook 'cart:summary.end' %}
 
                      <!-- Tiered Offer Component -->
-                    <salla-tiered-offer></salla-tiered-offer>
+                    <salla-tiered-offer data-testid="store-cart-tiered-offer"></salla-tiered-offer>
                 </div>
             {% endif %}
         </div>

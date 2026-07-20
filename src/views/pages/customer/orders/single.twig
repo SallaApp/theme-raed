@@ -80,7 +80,7 @@
         {% endif %}
     </h1>
 <div class="flex items-center gap-3 flex-wrap">
-    <salla-edit-order-button />
+    <salla-edit-order-button data-testid="store-order-edit-btn" />
 </div>
 </div>
 {% endblock %}
@@ -94,7 +94,7 @@
         <table class="min-w-full rounded-md overflow-hidden">
             <tbody>
             <tr class="bg-white overflow-hidden flex md:table-row flex-row md:flex-row flex-wrap md:flex-no-wrap py-1.5 md:py-0">
-                <td class="single-order-header-item w-full md:w-auto  px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
+                <td data-testid="store-order-status" class="single-order-header-item w-full md:w-auto  px-3 md:px-6 py-2 md:py-4 md:h-20 whitespace-nowrap text-sm ">
                     <div class="rtl:ml-2 ltr:mr-2 font-normal text-gray-400">{{ trans('pages.orders.date') }}</div>
                     <b>{{ order.created_at|date|number }}</b>
                 </td>
@@ -154,7 +154,7 @@
         </table>
 
         {% if order.is_pickable %}
-            <salla-order-branch stack-cards></salla-order-branch>
+            <salla-order-branch data-testid="store-order-branch" stack-cards></salla-order-branch>
         {% endif %}
 
         {% if order.refund_message %}
@@ -179,7 +179,7 @@
                     <h2 class="font-bold mb-1">{{ trans('pages.order.order_rating_title') }}</h2>
                     <p class="text-sm">{{ trans('pages.order.order_rating_message') }}</p>
                 </div>
-                <salla-button color="light" class="btn--rounded-full !text-primary" onclick="salla.event.dispatch('rating::open')">{{ trans('pages.rating.rate') }}</salla-button>
+                <salla-button data-testid="store-order-rate-btn" color="light" class="btn--rounded-full !text-primary" onclick="salla.event.dispatch('rating::open')">{{ trans('pages.rating.rate') }}</salla-button>
             </div>
         {% endif %}
 
@@ -231,7 +231,7 @@
                     {% endif %}
 
                     {% for item in package.items %}
-                        <div data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}" class="order-item bg-white p-5 border-b border-gray-100 first:rounded-t-md last:rounded-b-md last:border-none">
+                        <div data-testid="store-order-item-{{ item.id }}" data-order-item-id="{{ item.id }}" data-order-item-product-id="{{ item.product.id }}" class="order-item bg-white p-5 border-b border-gray-100 first:rounded-t-md last:rounded-b-md last:border-none">
 
                             <div class="mb-5 last:mb-0">
                                 {% if item.product %}
@@ -454,7 +454,7 @@
             {% endif %}
         </div>
 
-        <salla-order-totals-card order="{{ order }}"> </salla-order-totals-card>
+        <salla-order-totals-card data-testid="store-order-totals" order="{{ order }}"> </salla-order-totals-card>
 
         {# Reorder & Cancel #}
         {% if order.can_reorder or order.can_cancel or order.is_pending_payment %}
@@ -475,7 +475,7 @@
                                 <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.reorder') }}</h3>
                                 <p class="text-gray-500">{{ trans('pages.orders.reorder_description') }}</p>
                             </div>
-                            <salla-button shape="link" onclick="document.querySelector('#reorder-modal').open()">
+                            <salla-button data-testid="store-order-reorder-btn" shape="link" onclick="document.querySelector('#reorder-modal').open()">
                                 <i class="sicon sicon-rotate rtl:ml-2 ltr:mr-2"></i>
                                 <span>{{ trans('pages.orders.reorder') }}</span>
                             </salla-button>
@@ -489,7 +489,7 @@
                             <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
-                        <salla-button shape="link" color="danger" onclick="document.querySelector('#modal-order-cancel').open()">
+                        <salla-button data-testid="store-order-cancel-btn" shape="link" color="danger" onclick="document.querySelector('#modal-order-cancel').open()">
                             <i class="sicon sicon-cancel-circle rtl:ml-2 ltr:mr-2"></i>
                             <span>{{ trans('pages.orders.cancel') }}</span>
                         </salla-button>
@@ -645,7 +645,7 @@
         {% hook 'customer:orders.single.details.end' %}
 
         {% if order.can_rate or store.settings.rating.allow_update %}
-            <salla-rating-modal></salla-rating-modal>
+            <salla-rating-modal data-testid="store-order-rating-modal"></salla-rating-modal>
         {% endif %}
     </div>
 {% endblock %}

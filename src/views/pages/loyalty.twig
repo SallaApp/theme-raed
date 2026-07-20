@@ -43,7 +43,7 @@
         <nav class="breadcrumbs w-full py-5"><salla-breadcrumb></salla-breadcrumb></nav>
 
         {# loyalty banner #}
-        <div class="loyalty__banner">
+        <div data-testid="store-loyalty-banner" class="loyalty__banner">
             <div class="loyalty__banner-inner">
                 <i class="sicon-star2 star-anime text-amber-400 text-7xl"></i>
                 <div class="loyalty__banner-content">
@@ -53,14 +53,14 @@
                         {% if user.loyalty_points %}
                             <div class="loyalty-points">
                                 {{ trans('pages.loyalty_program.you_have') }}
-                                <span class="count-number count-anime" data-count="{{ user.loyalty_points }}">0</span>
+                                <span data-testid="store-loyalty-points-count" class="count-number count-anime" data-count="{{ user.loyalty_points }}">0</span>
                                 {{ trans("pages.loyalty_program.point") }}
                             </div>
                         {% endif %}
                     </div>
 
-                    <salla-loyalty customer-points="{{ user.loyalty_points }}">
-                        <salla-button onclick="document.querySelector('salla-loyalty').open();" slot="widget">
+                    <salla-loyalty data-testid="store-loyalty-exchange" customer-points="{{ user.loyalty_points }}">
+                        <salla-button data-testid="store-loyalty-exchange-btn" onclick="document.querySelector('salla-loyalty').open();" slot="widget">
                             {{ trans("pages.loyalty_program.exchange_points") }}
                         </salla-button>
                     </salla-loyalty>
@@ -72,13 +72,13 @@
         </div>
 
         {# ways to get points #}
-        <section class="points-ways pt-6">
+        <section data-testid="store-loyalty-points-ways" class="points-ways pt-6">
             <div class="s-block__title">
               <h2>{{ trans("pages.loyalty_program.ways_to_get_points") }}</h2>
             </div>
             <div class="points-ways__list">
                 {% for point in loyalty.points %}
-                    <div class="way-item">
+                    <div data-testid="store-loyalty-way-item" class="way-item">
                         <div class="flex rtl:space-x-reverse space-x-4">
                             <span class="way-item__icon {{ point.icon ?:'sicon-star' }}"
                                   style="color: {{ point.color }}">

@@ -104,6 +104,7 @@
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4 rtl:ml-8 ltr:mr-8 mb-5 md:mb-0 overflow-hidden shrink-0">
                 {% set has_many_images = product.images|length > 1 %}
                 <salla-slider
+                        data-testid="store-product-image-slider"
                         id="details-slider-{{ product.id }}"
                         class="details-slider rounded-md image-slider"
                         type="thumbs"
@@ -169,7 +170,7 @@
                     </div>
 
                     {% if has_many_images %}
-                        <div slot="thumbs">
+                        <div data-testid="store-product-thumbnails" slot="thumbs">
                             {% for image in product.images %}
                                 <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}" data-caption="{{ image.alt }}">
                                     {% if loop.index < 5 %}
@@ -206,7 +207,7 @@
                     </div>
                 {% endif %}
 
-                <h1 class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ (product.name is iterable ? product.name[user.language.code]|default(product.name|first) : product.name) }}</h1>
+                <h1 data-testid="store-product-title" class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ (product.name is iterable ? product.name[user.language.code]|default(product.name|first) : product.name) }}</h1>
 
                 {% if product.subtitle %}
                     <h2 class="product-entry__sub-title text-sm text-gray-500 leading-6 mb-2.5">
@@ -215,7 +216,7 @@
                 {% endif %}
 
                 {% if product.rating %}
-                    <salla-rating-stars value="{{ product.rating.stars }}"
+                    <salla-rating-stars data-testid="store-product-rating" value="{{ product.rating.stars }}"
                                         reviews="{{ product.rating.count }}"></salla-rating-stars>
                 {% endif %}
 
@@ -223,7 +224,7 @@
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
                 {# Price #}
-                <div class="flex whitespace-nowrap gap-4 items-center">
+                <div data-testid="store-product-price" class="flex whitespace-nowrap gap-4 items-center">
                   <div class="{{ product.is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
                       <p class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</p>
                       <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
@@ -236,7 +237,7 @@
                   </div>
                 </div>
 
-                <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
+                <div data-testid="store-product-description" class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
                     {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
                     {% if product.has_read_more %}
                         <article class="article article--main relative leading-8 overflow-hidden transition-all max-h-0 duration-300 py-4"
@@ -266,9 +267,10 @@
                 {% endif %}
 
                 <div class="flex rtl:space-x-reverse space-x-3">
-                    <salla-social-share class="inline-flex mb-5" aria-label="social share"></salla-social-share>
+                    <salla-social-share data-testid="store-product-social-share" class="inline-flex mb-5" aria-label="social share"></salla-social-share>
 
                     <salla-button
+                            data-testid="store-product-wishlist-btn"
                             class="btn--wishlist animated hidden sm:inline-flex"
                             data-id="{{ product.id }}"
                             onclick="salla.wishlist.toggle('{{ product.id }}')"
@@ -309,9 +311,9 @@
                 {% hook 'product:single.description' %}
 
                 {# Installment Methods #}
-                <salla-installment price="{{ product.price }}"></salla-installment>
+                <salla-installment data-testid="store-product-installment" price="{{ product.price }}"></salla-installment>
                 {% if product.has_metadata %}
-                <salla-metadata></salla-metadata>
+                <salla-metadata data-testid="store-product-metadata"></salla-metadata>
                 {% endif %}
 
                 {% if product.show_availability %}
@@ -342,7 +344,7 @@
               {% endif %}
               {# End Digital Files Settings #}
 
-                <form class="form product-form" enctype="multipart/form-data" method="post"
+                <form data-testid="store-product-form" class="form product-form" enctype="multipart/form-data" method="post"
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
                     <input type="hidden" name="id" value="{{ product.id }}">
 
@@ -374,13 +376,13 @@
                               </div>
                             </div>
 
-                            <div class="out-of-stock min-h-7 leading-7 hidden text-base text-red-600 !opacity-50 font-bold">{{ trans('pages.products.out_of_stock')}}</div>
+                            <div data-testid="store-product-out-of-stock" class="out-of-stock min-h-7 leading-7 hidden text-base text-red-600 !opacity-50 font-bold">{{ trans('pages.products.out_of_stock')}}</div>
                         </div>
                     </section>
                     {# Pre-order Campaign #}
                     {% if product.has_preorder_campaign %}
                         <section class="mt-5 p-5">
-                            <salla-count-down pre-order='{{ product.preorder|json_encode}}' boxed labeled></salla-count-down>
+                            <salla-count-down data-testid="store-product-preorder-countdown" pre-order='{{ product.preorder|json_encode}}' boxed labeled></salla-count-down>
                         </section>
                     {% endif %}
 
@@ -393,12 +395,13 @@
                                 <label class="form-label font-bold">
                                     {{ trans('pages.products.quantity') }}
                                 </label>
-                                <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity" aria-label="Quantity"
+                                <salla-quantity-input data-testid="store-product-quantity" max="{{ product.max_quantity }}" value="1" name="quantity" aria-label="Quantity"
                                   class="border-gray-200 flex justify-end"></salla-quantity-input>
                             </div>
                         {% endif %}
                         {# Add to cart #}
                         <salla-add-product-button
+                                data-testid="store-product-add-to-cart"
                                 {{product.can_quick_buy ? 'quick-buy' : ''}}
                                 {{theme.settings.get('sticky_add_to_cart') ? ' support-sticky-bar' : ''}}
                                 {{product.is_require_shipping ? 'required-shipping' : ''}}
@@ -423,15 +426,15 @@
                         </salla-add-product-button>
                     </section>
                     {% if product.is_giftable %}
-                        <salla-gifting class="mt-5" widget-subtitle="{{ gifting_intro }}" product-id="{{ product.id }}" {{ product.is_require_shipping ? 'physical-products' : ''  }}></salla-gifting>
+                        <salla-gifting data-testid="store-product-gifting" class="mt-5" widget-subtitle="{{ gifting_intro }}" product-id="{{ product.id }}" {{ product.is_require_shipping ? 'physical-products' : ''  }}></salla-gifting>
                     {% endif %}
                 </form>
 
                 {% hook 'product:single.description.end' %}
-                <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
+                <salla-quick-order data-testid="store-product-quick-order" class="mt-5 md:-mb-2 block"></salla-quick-order>
             </div>
         </div>
-        <salla-offer></salla-offer>
+        <salla-offer data-testid="store-product-offer"></salla-offer>
     </div>
 
     {#
@@ -443,7 +446,7 @@
 
     {# Comments Area #}
     {% if store.settings.rating.show_on_product %}
-        <salla-comments item-id="{{product.id}}" type="product"></salla-comments>
+        <salla-comments data-testid="store-product-comments" item-id="{{product.id}}" type="product"></salla-comments>
     {% endif %}
 
     {#
@@ -455,7 +458,7 @@
 
     {# Similar Products Area #}
     <div class="container mb-5 sm:mb-8">
-        <salla-products-slider source="related" source-value="{{product.id}}" block-title="{{trans('pages.products.similar_products')}}" display-all-url></salla-products-slider>
+        <salla-products-slider data-testid="store-product-related" source="related" source-value="{{product.id}}" block-title="{{trans('pages.products.similar_products')}}" display-all-url></salla-products-slider>
     </div>
     
     {#

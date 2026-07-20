@@ -29,7 +29,7 @@
 | product.options[].details[].is_out              | bool                       | Does current option out of stock?                                                                           |
 #}
 {% if product.options|length %}
-    <salla-product-options options="{{ product.options }}" product-id="{{ product.id }}"></salla-product-options>
+    <salla-product-options data-testid="store-product-options" options="{{ product.options }}" product-id="{{ product.id }}"></salla-product-options>
 {% endif %}
 
 {% if product.has_bundle_products %}
@@ -58,7 +58,7 @@
                 </salla-button>
 
             </div>
-            <salla-product-size-guide></salla-product-size-guide>
+            <salla-product-size-guide data-testid="store-product-size-guide"></salla-product-size-guide>
         {% endif %}
     </section>
 {% endif %}
@@ -75,7 +75,7 @@
             <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
                 <div class="flex rtl:space-x-reverse space-x-3">
                     {% if product.can_add_note %}
-                        <button class="btn-tab btn--collapse"
+                        <button data-testid="store-product-add-note" class="btn-tab btn--collapse"
                                 type="button"
                                 data-show="note_{{ product.id }}">
                             <i class="font-medium sicon-chat-conversation-alt rtl:ml-1.5 ltr:mr-1.5"></i>
@@ -83,7 +83,7 @@
                         </button>
                     {% endif %}
                     {% if product.can_upload_file %}
-                        <button class="btn-tab btn--collapse"
+                        <button data-testid="store-product-attach-file" class="btn-tab btn--collapse"
                                 data-show="file_{{ product.id }}"
                                 type="button">
                             <i class="font-medium sicon-paperclip rtl:ml-1.5 ltr:mr-1.5"></i>

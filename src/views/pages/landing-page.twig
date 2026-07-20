@@ -37,7 +37,7 @@
             </header>
         </div>
     {% elseif landing.is_expired %}
-        <div class="landing-page expired">
+        <div data-testid="store-landing-expired" class="landing-page expired">
             <header>
                 <div class="header-content container">
                 <a href="{{ store.url }}" aria-label="{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }} logo" class="header-content-logo">
@@ -46,7 +46,7 @@
                         <h1> {{trans('pages.offer.offer_finished')}}</h1>
                         <p>{{ trans('pages.offer.offer_expired_message') }}</p>
                         <div class="text-center mt-6">
-                            <salla-button href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
+                            <salla-button data-testid="store-landing-back-home" href="{{ link('/') }}" color="primary" class="btn--rounded-full !text-white">
                                 {{trans('common.elements.back_home')}}
                             </salla-button>
                         </div>
@@ -55,20 +55,20 @@
             </header>
         </div>
     {% else %}
-        <div class="landing-page pb-10">
+        <div data-testid="store-landing-page" class="landing-page pb-10">
             <header>
                 <div class="header-content container">
                 <a href="{{ store.url }}" aria-label="{{ (store.name is iterable ? store.name[user.language.code]|default(store.name|first) : store.name) }} logo" class="header-content-logo">
 					<img src="{{ store.logo }}" width="75" height="75" alt="logo" class="logo"></a>
                     <div class="header-content-inner">
-                        <h1>{{ (landing.title is iterable ? landing.title[user.language.code]|default(landing.title|first) : landing.title) }}</h1>
+                        <h1 data-testid="store-landing-title">{{ (landing.title is iterable ? landing.title[user.language.code]|default(landing.title|first) : landing.title) }}</h1>
                         <p>{{ landing.content|raw }}</p>
                     </div>
                     {% if landing.offer_ends_at %}
                         <div class="header-content-offer">
                             {% if landing.offer_ends_at %}
                                 <h3>{{trans('pages.offer.offer_remaining_time')}}</h3>
-                                <salla-count-down date="{{ landing.offer_ends_at }}" labeled size="lg"></salla-count-down>
+                                <salla-count-down data-testid="store-landing-countdown" date="{{ landing.offer_ends_at }}" labeled size="lg"></salla-count-down>
                             {% endif %}
                         </div>
                     {% endif %}
@@ -78,7 +78,7 @@
             <section class="container overflow-hidden {{landing.products|length <= 3 and not landing.is_slider ? 'center-products' : ''}}">
                 {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
                 {% if landing.is_slider %}
-                    <salla-products-slider source="landing-page" block-title="{{trans('pages.offer.included_products')}}" display-all-url></salla-products-slider>
+                    <salla-products-slider data-testid="store-landing-products-slider" source="landing-page" block-title="{{trans('pages.offer.included_products')}}" display-all-url></salla-products-slider>
                 {% else %}
                     <section class="s-block">
                         <div class="s-block__title">
@@ -86,12 +86,13 @@
                             <h2>{{ trans('pages.offer.included_products') }}</h2>
                             </div>
                         </div>
-                        <salla-products-list source="landing-page" class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"></salla-products-list>
+                        <salla-products-list data-testid="store-landing-products-list" source="landing-page" class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"></salla-products-list>
                     </section>
                 {% endif %}
 
                 <div class="landing-page--quick-buy">
                     <salla-mini-checkout-widget
+                            data-testid="store-landing-quick-buy"
                             products="[{{ landing.products|map((product) => product.id)|join(',') }}]"
                             language="{{ user.language_code }}"
                             label="{{ trans('pages.orders.finish_payment') }}"

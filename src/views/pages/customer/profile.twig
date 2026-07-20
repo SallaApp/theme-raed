@@ -34,6 +34,7 @@
                     {{ trans('pages.profile.birthday') }}
                 </label>
                 <salla-datetime-picker
+                        data-testid="store-profile-birthday"
                         dateFormat="Y-m-d"
                         value="{{ user.birthday }}"
                         placeholder="{{ trans('pages.profile.birthday_placeholder') }}"
@@ -46,7 +47,7 @@
                 <label for="gender" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('pages.profile.gender') }}
                 </label>
-                <select class="form-input" name="gender" required>
+                <select data-testid="store-profile-gender" class="form-input" name="gender" required>
                     <option placeholder value="">{{ trans('pages.profile.gender_placeholder') }}</option>
                     <option value="male" {{ user.gender=='male'?'selected':'' }}>
                         {{ trans('pages.profile.male') }}
@@ -68,7 +69,7 @@
                 <label for="international-mobile" class="block text-sm font-bold mb-2 text-gray-700">
                     {{ trans('common.elements.mobile') }}
                 </label>
-                <salla-tel-input phone="{{ user.mobile }}"></salla-tel-input>
+                <salla-tel-input data-testid="store-profile-phone" phone="{{ user.mobile }}"></salla-tel-input>
             </div>
             {% for field in custom_fields %}
                 <div class="profile-field-item">
@@ -106,7 +107,7 @@
 
         {% hook 'customer:profile.form.submit.start' %}
 
-        <salla-button type="submit" loader-position="end" class="w-full mt-6">
+        <salla-button data-testid="store-profile-submit" type="submit" loader-position="end" class="w-full mt-6">
             {{ trans('common.elements.save') }}
         </salla-button>
 
@@ -114,7 +115,7 @@
     </form>
     {% hook 'customer:profile.form.end' %}
 
-    <salla-verify></salla-verify>
+    <salla-verify data-testid="store-profile-verify"></salla-verify>
 
-    <salla-user-settings {{ user.is_notifiable?'is-notifiable':0 }} class="mt-10 block"></salla-user-settings>
+    <salla-user-settings data-testid="store-profile-settings" {{ user.is_notifiable?'is-notifiable':0 }} class="mt-10 block"></salla-user-settings>
 {% endblock %}
