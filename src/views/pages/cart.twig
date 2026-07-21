@@ -201,12 +201,12 @@
                         <salla-loyalty-panel
                             data-testid="store-cart-loyalty"
                             prize-points='{{ loyalty.prize.points }}'
-                            prize-title='{{ (loyalty.prize.title is iterable ? loyalty.prize.title[user.language.code]|default(loyalty.prize.title|first) : loyalty.prize.title) }}'>
+                            prize-title='{{ loyalty.prize.title }}'>
                         </salla-loyalty-panel>
                     {% endif %}
 
                     <div id="cart-gifting" class="shadow-default bg-white xs:p-2 rounded-md mb-5 relative  {{gift.enabled ? '' : 'hidden' }}">
-                        <salla-gifting data-testid="store-cart-gifting" id="salla-gifting" class="mt-5" widget-title="{{ trans("pages.cart.gift_widget_title") }}"  widget-subtitle="{{ (gift.text is iterable ? gift.text[user.language.code]|default(gift.text|first) : gift.text) }}" class="mt-5" {{gift.type}}-products  vertical></salla-gifting>
+                        <salla-gifting data-testid="store-cart-gifting" id="salla-gifting" class="mt-5" widget-title="{{ trans("pages.cart.gift_widget_title") }}"  widget-subtitle="{{ gift.text }}" class="mt-5" {{gift.type}}-products  vertical></salla-gifting>
                     </div>
 
                     {% if store.settings.cart.apply_coupon_enabled %}

@@ -74,7 +74,7 @@
 {% block inner_title %}
 <div class="flex justify-between items-center mb-2">
     <h1 class="font-bold text-lg text-center text-start flex-1">
-        {{ (page.title is iterable ? page.title[user.language.code]|default(page.title|first) : page.title) }}
+        {{ page.title }}
         {% if order.source is same as('buy_as_gift') %}
             <span class="inline-block text-primary mx-2"><i class="sicon-gift-sharing"></i>&nbsp;{{ trans('pages.orders.gift_tag') }}</span>
         {% endif %}
@@ -106,7 +106,7 @@
                         <span class="text-primary inline-flex items-center rtl:space-x-reverse space-x-1"
                               style="color: {{ order.status.color }}">
                         <i class="mt-1 {{ order.status.icon }}"></i>
-                        <span class=""> {{ (order.status.name is iterable ? order.status.name[user.language.code]|default(order.status.name|first) : order.status.name) }}</span>
+                        <span class=""> {{ order.status.name }}</span>
                     </span>
                     {% endif %}
 
@@ -194,15 +194,15 @@
                         <div class="flex items-center space-x-2 rtl:space-x-reverse">
                             {% if package.shipping_company.logo %}
                                 <img src="{{ package.shipping_company.logo }}" class="max-w-16 max-h-8"
-                                     alt="{{ (package.shipping_company.name is iterable ? package.shipping_company.name[user.language.code]|default(package.shipping_company.name|first) : package.shipping_company.name) }}">
+                                     alt="{{ package.shipping_company.name }}">
                             {% endif %}
-                            <span>{{ (package.shipping_company.name is iterable ? package.shipping_company.name[user.language.code]|default(package.shipping_company.name|first) : package.shipping_company.name) }}</span>
+                            <span>{{ package.shipping_company.name }}</span>
                         </div>
                         <div class="flex space-x-5 rtl:space-x-reverse">
                             {% if package.branch %}
                                 <span>
                                     {{ trans('pages.orders.branch') }}:
-                                    <span class="font-bold">{{ (package.branch.name is iterable ? package.branch.name[user.language.code]|default(package.branch.name|first) : package.branch.name) }}</span>
+                                    <span class="font-bold">{{ package.branch.name }}</span>
                                 </span>
                             {% endif %}
                             {% if package.shipping_company.number %}
@@ -214,7 +214,7 @@
                                 <span>{{ trans('pages.orders.status') }}:
                                     <span style="color: {{ package.status.color }}">
                                         <i class="center-v mr-1 {{ package.status.icon }}"></i>
-                                        {{ (package.status.name is iterable ? package.status.name[user.language.code]|default(package.status.name|first) : package.status.name) }}
+                                        {{ package.status.name }}
                                     </span>
                                 </span>
                             {% elseif package.shipping_company.tracing_link %}
@@ -238,20 +238,20 @@
                                     <div class="flex rtl:space-x-reverse space-x-5 mb-4">
                                         <a href="{{ item.product.url }}" class="shrink-0">
                                             <img src="{{ item.image ?: 'images/placeholder.png' | asset }}"
-                                                 alt="{{ (item.name is iterable ? item.name[user.language.code]|default(item.name|first) : item.name) }}"
+                                                 alt="{{ item.name }}"
                                                  class="w-18 h-14 object-{{ item.image ? 'cover':'contain' }} rounded-md">
                                         </a>
                                         <div>
                                             <a href="{{ item.product.url }}"
                                                class="block leading-5 mb-1.5 md:text-base font-semibold transition-colors text-gray-500 hover:text-primary">
-                                                {{ (item.name is iterable ? item.name[user.language.code]|default(item.name|first) : item.name) }}
+                                                {{ item.name }}
                                             </a>
                                             <b>{{ item.price|money }}</b>
                                         </div>
                                     </div>
                                 {% else %}
                                     <div class="w-full  flex  justify-between text-sm py-2.5">
-                                        <span class="w-40 inline-block font-normal">{{ (item.name is iterable ? item.name[user.language.code]|default(item.name|first) : item.name) }}</span>
+                                        <span class="w-40 inline-block font-normal">{{ item.name }}</span>
                                         <b>{{ item.price|money }}</b>
                                     </div>
                                 {% endif %}
@@ -326,7 +326,7 @@
                                                                 <a href="{{ attachment.url }}" target="_blank">
                                                                     <img class="h-7 w-7 object-cover rounded-md"
                                                                          src="{{ attachment.url }}"
-                                                                         alt="{{ (item.name is iterable ? item.name[user.language.code]|default(item.name|first) : item.name) }}"/>
+                                                                         alt="{{ item.name }}"/>
                                                                 </a>
                                                             </div>
                                                         {% else %}
@@ -436,7 +436,7 @@
                     {% for item in order.options %}
                       {% for option in item.options %}
                         <tr class="border-b last:border-b-0 border-gray-200">
-                          <td class="text-sm p-3">{{ (option.name is iterable ? option.name[user.language.code]|default(option.name|first) : option.name) }} :</td>
+                          <td class="text-sm p-3">{{ option.name }} :</td>
                           <td class="text-center p-3 font-medium text-xs">
                           {% if option.reservations %}
                             {% include 'pages.partials.product.reservations' with { reservations: option.reservations } %}
