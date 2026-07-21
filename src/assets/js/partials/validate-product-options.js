@@ -1,6 +1,12 @@
 /**
  * Validates product options for items in the cart.
+ *
+ * Shows a loading overlay while cart.updateItem runs. Overlay must always be
+ * cleared — including when IDs exceed Number.MAX_SAFE_INTEGER (snowflake cart
+ * item ids) and when FilePond restores existing attachments on page load.
  */
+const OVERLAY_TIMEOUT_MS = 15000;
+
 export function validateProductOptions() {
     const cartItems = document.querySelectorAll('.main-content form:not(.cart-options form)');
     if (!cartItems.length) return;
@@ -17,10 +23,13 @@ export function validateProductOptions() {
         if (productOptions) {
             productOptions.addEventListener('changed', (e) => {
                 setTimeout(() => {
-                    if (!item.reportValidity() || e.detail?.event?.type == 'added') return;
-                    if ((Number(itemId) === Number(e.detail?.productId))) {
-                        appendLoadingOverlay(e.detail?.productId);
-                    }
+                    if (!item.reportValidity() || isNonUserOptionEvent(e)) return;
+                    // Compare as strings — Number() corrupts snowflake cart item ids.
+                    if (!idsEqual(itemId, e.detail?.productId)) return;
+                    // Form onchange uses checkValidity(); if it would skip the API
+                    // call, never pin the overlay (otherwise it sticks forever).
+                    if (!item.checkValidity()) return;
+                    appendLoadingOverlay(itemId);
                 }, 100);
             });
         }
@@ -34,6 +43,22 @@ export function validateProductOptions() {
     salla.cart.event.onItemUpdatedFailed((_data, itemId) => {
         handleCartUpdateFailure(itemId, cartItems);
     });
+
+    // Fallback: any cart summary refresh should clear stray overlays (SP-21412).
+    salla.event.cart.onUpdated(() => removeLoadingOverlay());
+}
+
+/**
+ * FilePond / picker events that are not a user-driven cart-item edit.
+ */
+function isNonUserOptionEvent(e) {
+    const type = e.detail?.event?.type;
+    return type === 'added' || type === 'selected' || type === 'picked';
+}
+
+function idsEqual(a, b) {
+    if (a == null || b == null) return false;
+    return String(a) === String(b);
 }
 
 /**
@@ -44,11 +69,9 @@ function observeQuantityChanges(quantityComponent, itemId, item) {
         const quantityInput = quantityComponent.querySelector('input[name="quantity"]');
         if (quantityInput) {
             observer.disconnect(); // Stop observing once input is found
-            quantityInput.addEventListener('change', (e) => {
-                if (!item.reportValidity()) return;
-                if (Number(itemId) === Number(e.detail?.productId)) {
-                    appendLoadingOverlay(e.detail?.productId);
-                }
+            quantityInput.addEventListener('change', () => {
+                if (!item.reportValidity() || !item.checkValidity()) return;
+                appendLoadingOverlay(itemId);
             });
         }
     });
@@ -63,7 +86,7 @@ function handleCartUpdateFailure(itemId, cartItems) {
         .getCurrentCartId(false, "salla-product-options")
         .then((cartId) => salla.cart.details(cartId, ['options']))
         .then(({ data: { cart: cartDetails } }) => {
-            const currentProduct = cartDetails.items.find(item => Number(item.id) === Number(itemId));
+            const currentProduct = cartDetails.items.find(item => idsEqual(item.id, itemId));
             if (!currentProduct) throw new Error(`Product with ID ${itemId} not found in cart details.`);
             updateCartItemState(cartItems, currentProduct);
         })
@@ -80,7 +103,7 @@ function handleCartUpdateFailure(itemId, cartItems) {
 function updateCartItemState(cartItems, currentProduct) {
     cartItems.forEach((item) => {
         const ID = getItemId(item);
-        if (Number(currentProduct.id) === Number(ID)) {
+        if (idsEqual(currentProduct.id, ID)) {
             const productOptions = item.querySelector('salla-product-options');
             const quantityInput = item.querySelector('salla-quantity-input');
             if (productOptions) productOptions.setOptionsData(currentProduct.options, false);
@@ -93,9 +116,10 @@ function updateCartItemState(cartItems, currentProduct) {
  * Appends a loading overlay to the cart item with the given ID.
  */
 function appendLoadingOverlay(itemId) {
-    if (!itemId) return;
+    if (itemId == null || itemId === '') return;
 
-    const parentElement = document.querySelector(`#item-${itemId} .cart-item`);
+    const id = String(itemId);
+    const parentElement = document.querySelector(`#item-${CSS.escape(id)} .cart-item`);
     if (parentElement) {
         // Remove any existing overlay first to prevent stacking
         const existingOverlay = parentElement.querySelector('.loading-overlay');
@@ -105,6 +129,15 @@ function appendLoadingOverlay(itemId) {
 
         const loadingOverlay = createLoadingOverlay();
         parentElement.appendChild(loadingOverlay);
+
+        // Safety net: never leave the veil forever if update events are missed.
+        if (parentElement._sallaOverlayTimeout) {
+            clearTimeout(parentElement._sallaOverlayTimeout);
+        }
+        parentElement._sallaOverlayTimeout = setTimeout(() => {
+            parentElement.querySelector('.loading-overlay')?.remove();
+            parentElement._sallaOverlayTimeout = undefined;
+        }, OVERLAY_TIMEOUT_MS);
     }
 }
 
@@ -112,12 +145,17 @@ function appendLoadingOverlay(itemId) {
  * Removes the loading overlay from a specific cart item or all items if no ID is provided.
  */
 function removeLoadingOverlay(itemId) {
-    const targetItems = itemId
-        ? [document.querySelector(`.main-content form:not(.cart-options form)#item-${itemId} .cart-item`)]
+    const targetItems = itemId != null && itemId !== ''
+        ? [document.querySelector(`.main-content form:not(.cart-options form)#item-${CSS.escape(String(itemId))} .cart-item`)]
         : document.querySelectorAll('.main-content form:not(.cart-options form) .cart-item');
 
     targetItems.forEach((item) => {
-        const loadingOverlay = item?.querySelector('.loading-overlay');
+        if (!item) return;
+        if (item._sallaOverlayTimeout) {
+            clearTimeout(item._sallaOverlayTimeout);
+            item._sallaOverlayTimeout = undefined;
+        }
+        const loadingOverlay = item.querySelector('.loading-overlay');
         if (loadingOverlay) {
             setTimeout(() => loadingOverlay.remove(), 0);
         }
