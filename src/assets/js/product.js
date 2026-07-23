@@ -26,7 +26,9 @@ class Product extends BasePage {
 
     initProductOptionValidations() {
       document.querySelector('.product-form')?.addEventListener('change', function(){
-        this.reportValidity() && salla.product.getPrice(new FormData(this));
+        // reportValidity() natively focuses/scrolls to the first empty required option mid-edit; read validity instead
+        const isComplete = Array.from(this.elements).every(el => el.validity.valid);
+        isComplete && salla.product.getPrice(new FormData(this));
       });
     }
 
