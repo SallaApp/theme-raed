@@ -16,6 +16,7 @@
 | product.weight                         | ?string                     |                                                                        |
 | product.calories                       | ?float                      |                                                                        |
 | product.sku                            | ?string                     |                                                                        |
+| product.barcode                        | ?string                     |                                                                        |
 | product.rating                         | ?Rating                     |                                                                        |
 | product.rating.count                   | int                         |                                                                        |
 | product.rating.stars                   | int                         |                                                                        |
@@ -307,6 +308,15 @@
                             {{ trans('pages.products.sku') }}
                         </div>
                         <div class="text-unicode product-sku">{{ product.sku }}</div>
+                    </div>
+                {% endif %}
+                {% if product.barcode %}
+                    <div class="mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2">
+                        <div class="flex items-center">
+                            <i class="sicon-barcode mx-1"></i>
+                            {{ trans('pages.products.barcode') }}
+                        </div>
+                        <div class="text-unicode product-barcode">{{ product.barcode }}</div>
                     </div>
                 {% endif %}
                 {% hook 'product:single.description' %}
