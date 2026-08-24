@@ -7,6 +7,14 @@
 #}
 {% set important_links = theme.settings.get('important_links') %}
 <header data-testid="store-header" class="store-header">
+  {# Bullet Delivery tag — mobile: own full-width row above the top nav
+     (Figma "Mobile version"). Desktop keeps the inline pill below, next to
+     scopes. Both instances self-gate on the same backend flag; `lg:hidden`
+     matches the mobile/desktop split already used for the menu toggle below. #}
+  <div class="lg:hidden">
+    <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
+  </div>
+
   {# Top Nav #}
   <div class="top-navbar">
     <div class="container flex justify-between">
@@ -21,6 +29,11 @@
               {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
                   <salla-localization-modal data-testid="store-header-localization" show-trigger></salla-localization-modal>
               {% endif %}
+          </div>
+
+          {# Bullet Delivery tag — desktop only; mobile instance is above the top nav #}
+          <div class="hidden lg:block">
+            <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
           </div>
 
           {# Scopes | Branches #}
