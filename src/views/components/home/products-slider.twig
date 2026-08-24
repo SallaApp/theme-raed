@@ -10,8 +10,7 @@
 | limit                 | int       | Number of products to be shown                                   |
 #}
 
-{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
-<section data-testid="store-home-products-slider" id="best-offers-{{ position }}-slider" class="s-block s-block--best-offers container overflow-hidden {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}">
+<section component-id="{{ componentId }}" data-testid="store-home-products-slider" id="best-offers-{{ position }}-slider" class="s-block s-block--best-offers container overflow-hidden">
   {% if products|length %}
     <salla-products-slider
             data-testid="store-home-products-slider-widget"

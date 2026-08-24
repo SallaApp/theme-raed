@@ -9,8 +9,7 @@
 | limit                 | int       | Number of products to be shown                                   |
 #}
 {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
-{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
-<section data-testid="store-home-fixed-products" class="s-block container {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}">
+<section component-id="{{ componentId }}" data-testid="store-home-fixed-products" class="s-block container">
     {% if title %}
       <div class="s-block__title">
         <div class="right-side">

@@ -8,8 +8,7 @@
 | component.products    | Product[] *Collection | @see views/pages/product.twig                                                |
 | position              | int                   | Sorting number start from zero                                               |
 #}
-{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
-<section data-testid="store-home-slider-products-header" class="s-block s-block--slider-with-bg s-block--full-bg {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}">
+<section component-id="{{ componentId }}" data-testid="store-home-slider-products-header" class="s-block s-block--slider-with-bg s-block--full-bg">
     <div class="slider-bg" style="background-image: url('{{ component.background }}');">
         <div class="container pt-8 sm:pt-20 relative">
             <div>

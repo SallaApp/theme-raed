@@ -13,8 +13,7 @@
 | items[].id                    | string    | Section id                                                          |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
-{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
-<section data-testid="store-home-featured-products-grid" class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}">
+<section component-id="{{ componentId }}" data-testid="store-home-featured-products-grid" class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container">
     <div class="inner">
         {% for section in items %}
             <div>

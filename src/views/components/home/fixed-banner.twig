@@ -8,8 +8,7 @@
 | position        | Int     | Sorting number start from zero                                   |
 
 #}
-{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
-<section data-testid="store-home-fixed-banner" class="s-block s-block--fixed-banner wide-placeholder {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}">
+<section component-id="{{ componentId }}" data-testid="store-home-fixed-banner" class="s-block s-block--fixed-banner wide-placeholder">
     <div class="container">
         {% set alt_text = image.alt|trim ? image.alt : 'fixed banner' %}
         <a href="{{ url }}" class="banner banner--fixed overflow-hidden" aria-label="Banner {{ alt_text }}">

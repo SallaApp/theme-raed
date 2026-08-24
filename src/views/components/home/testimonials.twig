@@ -6,7 +6,6 @@
 | sort               | string                    |                                     |
 | hide_customer_info | bool                      | show/hide info customers            |
 #}
-{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
-<section data-testid="store-home-testimonials" class="s-block s-block--testimonials container overflow-hidden {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}">
+<section component-id="{{ componentId }}" data-testid="store-home-testimonials" class="s-block s-block--testimonials container overflow-hidden">
     <salla-reviews {{ display_all_url ? "display-all-link" : "" }} limit="{{ limit }}" sort="{{ sort }}" {{ hide_customer_info ? 'hide-customer-info' : '' }} type="{{type}}"></salla-reviews>
 </section> 

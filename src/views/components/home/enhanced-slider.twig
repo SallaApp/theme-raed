@@ -8,8 +8,7 @@
 | component.slides               | object[] | list of slides                                                               |
 | position                       | int      | Sorting number start from zero                                               |
 #}
-{% set channel_vis = channel_visibility|default(component.channel_visibility|default(null)) %}
-<section data-testid="store-home-slider" class="s-block s-block--hero-slider s-block--full-bg wide-placeholder {{ channel_vis and not channel_vis.mobile ? 's-hide-on-mobile' : '' }} {{ channel_vis and not channel_vis.desktop ? 's-hide-on-desktop' : '' }}"> 
+<section component-id="{{ componentId }}" data-testid="store-home-slider" class="s-block s-block--hero-slider s-block--full-bg wide-placeholder"> 
     <salla-slider 
       id="main-slider-{{ position }}"
       auto-play
