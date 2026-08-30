@@ -80,6 +80,24 @@
 /*
 * thank you page
 */
+
+/* The breadcrumb sits on the primary-coloured hero band, so it needs the same
+   treatment `s-breadcrumb-primary-reverse` gives the customer pages. The component
+   only applies that class for `customer.*` slugs, hence the theme-side override. */
+.thankyou-breadcrumbs {
+  a {
+    @apply text-primary-reverse hover:opacity-80;
+  }
+
+  li {
+    @apply text-primary-reverse opacity-80;
+  }
+
+  svg {
+    @apply fill-primary-reverse opacity-70;
+  }
+}
+
 .thankyou-block{
   @apply duration-500 hover:shadow-default flex-1 bg-white p-8 rounded-md mb-6 md:mb-8 flex flex-col items-center justify-center;
 
