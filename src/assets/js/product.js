@@ -40,7 +40,9 @@ class Product extends BasePage {
         // capture phase: fslightbox binds via anchor.onclick, stopPropagation keeps it from firing
         slider.addEventListener('click', (event) => {
             const link = event.target.closest('a[data-fslightbox]');
-            if (!link || !salla.mobile?.openGallery?.(images, images[+link.dataset.slidIndex])) return;
+            // swiper sets allowClick=false for the click that ends a swipe-drag
+            if (!link || slider.querySelector('.swiper')?.swiper?.allowClick === false) return;
+            if (!salla.mobile?.openGallery?.(images, images[+link.dataset.slidIndex])) return;
             event.preventDefault();
             event.stopPropagation();
         }, { capture: true });
