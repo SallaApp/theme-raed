@@ -130,11 +130,18 @@
   }
 }
 
-/* Square photos — odd = mosaic, even = equal tiles */
+/* Square photos - 3 and 5 render a featured tile plus the rest, every other count is equal tiles */
 .square-photos-grid {
-  &--odd {
+  &--equal-2 {
     @apply md:grid-cols-2;
+  }
 
+  &--equal-3 {
+    @apply md:grid-cols-3;
+  }
+
+  &--mosaic-3,
+  &--mosaic-5 {
     @screen md {
       grid-auto-rows: 200px;
     }
@@ -148,20 +155,16 @@
     }
   }
 
-  &--odd-wide {
+  &--mosaic-3 {
+    @apply md:grid-cols-2;
+  }
+
+  &--mosaic-5 {
     @apply md:grid-cols-4;
 
     > .banner-entry:first-child {
       @apply md:col-span-2;
     }
-  }
-
-  &--even {
-    @apply md:grid-cols-3;
-  }
-
-  &--even-pair {
-    @apply md:grid-cols-2;
   }
 }
 

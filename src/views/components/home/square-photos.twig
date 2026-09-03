@@ -11,22 +11,11 @@
 | position          | Int    | Sorting number start from zero                                   |
 #}
 {% set photos_count = items|length %}
-{% set equal_size = theme.settings.get('square_photos_equal_size') %}
-{% set photos_grid = 'square-photos-grid grid grid-flow-row gap-3 sm:gap-8' %}
-{% set use_mosaic = not equal_size and photos_count is odd and photos_count > 1 %}
-{% if use_mosaic %}
-    {% set photos_grid = photos_grid ~ ' square-photos-grid--odd' %}
-    {% if photos_count > 3 %}
-        {% set photos_grid = photos_grid ~ ' square-photos-grid--odd-wide' %}
-    {% endif %}
-{% elseif photos_count is even %}
-    {% set photos_grid = photos_grid ~ ' square-photos-grid--even' %}
-    {% if photos_count <= 4 %}
-        {% set photos_grid = photos_grid ~ ' square-photos-grid--even-pair' %}
-    {% endif %}
-{% elseif photos_count >= 3 %}
-    {% set photos_grid = photos_grid ~ ' square-photos-grid--even' %}
-{% endif %}
+{% set equal_size = theme.settings.get('square_photos_equal_size', false) %}
+{% set use_mosaic = not equal_size and photos_count in [3, 5] %}
+{% set equal_cols = photos_count in [2, 4] ? 2 : (photos_count > 1 ? 3 : 1) %}
+{% set photos_variant = use_mosaic ? 'mosaic-' ~ photos_count : 'equal-' ~ equal_cols %}
+{% set photos_grid = 'square-photos-grid square-photos-grid--' ~ photos_variant ~ ' grid grid-flow-row gap-3 sm:gap-8' %}
 <section component-id="{{ componentId }}" data-testid="store-home-square-photos" class="s-block s-block--banners container">
     {% if title %}
         <div class="s-block__title">
