@@ -13,12 +13,11 @@
 {% set photos_count = items|length %}
 {% set equal_size = theme.settings.get('square_photos_equal_size') %}
 {% set photos_grid = 'square-photos-grid grid grid-flow-row gap-3 sm:gap-8' %}
-{% if not equal_size and photos_count == 3 %}
-    {% set photos_grid = photos_grid ~ ' square-photos-grid--mosaic-3' %}
-{% elseif not equal_size and photos_count == 5 %}
-    {% set photos_grid = photos_grid ~ ' square-photos-grid--mosaic-5' %}
-{% elseif photos_count == 2 or photos_count == 4 %}
-    {% set photos_grid = photos_grid ~ ' md:grid-cols-2' %}
+{% set use_mosaic = not equal_size and photos_count is odd and photos_count > 1 %}
+{% if use_mosaic %}
+    {% set photos_grid = photos_grid ~ (photos_count <= 3 ? ' square-photos-grid--mosaic-3' : ' square-photos-grid--mosaic-5') %}
+{% elseif photos_count is even %}
+    {% set photos_grid = photos_grid ~ (photos_count <= 4 ? ' md:grid-cols-2' : ' md:grid-cols-3') %}
 {% elseif photos_count >= 3 %}
     {% set photos_grid = photos_grid ~ ' md:grid-cols-3' %}
 {% endif %}
