@@ -130,6 +130,44 @@
   }
 }
 
+/* Square photos — mosaic vs equal-size wrapping (max 3 per row) */
+.square-photos-grid {
+  &--mosaic-3 {
+    @apply md:grid-cols-2;
+  }
+
+  &--mosaic-4 {
+    @apply md:grid-cols-2;
+  }
+
+  &--mosaic-5 {
+    @apply md:grid-cols-4;
+  }
+
+  &--mosaic-3,
+  &--mosaic-5 {
+    @screen md {
+      grid-auto-rows: 200px;
+    }
+
+    > .banner-entry:first-child {
+      @apply md:h-full md:p-5;
+
+      h3 {
+        @apply md:text-2xl md:leading-12;
+      }
+    }
+  }
+
+  &--mosaic-3 > .banner-entry:first-child {
+    @apply md:row-span-2;
+  }
+
+  &--mosaic-5 > .banner-entry:first-child {
+    @apply md:col-span-2 md:row-span-2;
+  }
+}
+
 .has-overlay{ 
   &:after{
     @apply content-[''] h-full w-full bg-black/60 absolute top-0 left-0 transition-colors duration-300;

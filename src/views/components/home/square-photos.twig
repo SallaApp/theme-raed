@@ -10,6 +10,20 @@
 | items[].text      | string | Visible title for the photo                                      |
 | position          | Int    | Sorting number start from zero                                   |
 #}
+{% set photos_count = items|length %}
+{% set equal_size = theme.settings.get('square_photos_equal_size') %}
+{% set photos_grid = 'square-photos-grid grid grid-flow-row gap-3 sm:gap-8' %}
+{% if not equal_size and photos_count == 3 %}
+    {% set photos_grid = photos_grid ~ ' square-photos-grid--mosaic-3' %}
+{% elseif not equal_size and photos_count == 4 %}
+    {% set photos_grid = photos_grid ~ ' square-photos-grid--mosaic-4' %}
+{% elseif not equal_size and photos_count == 5 %}
+    {% set photos_grid = photos_grid ~ ' square-photos-grid--mosaic-5' %}
+{% elseif photos_count == 2 %}
+    {% set photos_grid = photos_grid ~ ' md:grid-cols-2' %}
+{% elseif photos_count >= 3 %}
+    {% set photos_grid = photos_grid ~ ' md:grid-cols-3' %}
+{% endif %}
 <section component-id="{{ componentId }}" data-testid="store-home-square-photos" class="s-block s-block--banners container">
     {% if title %}
         <div class="s-block__title">
@@ -19,7 +33,7 @@
         </div>
     {% endif %}
 
-    <div class="grid {{ items|length <= 3 ? 'one-row md:grid-cols-' ~ items|length : 'md:grid-cols-3 two-row' }} grid-flow-row gap-3 sm:gap-8">
+    <div class="{{ photos_grid }}">
         {% for item in items %}
             <a class="banner-entry square-photos {{ item.text ? 'has-overlay with-hover' : '' }}" href="{{ item.url }}" {% if item.link_type == 'external_link' %}target="_blank"{% endif %}>
                 <div class="lazy__bg lazy bg-no-repeat" data-bg="{{ item.image.url }}"
