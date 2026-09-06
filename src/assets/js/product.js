@@ -15,6 +15,7 @@ class Product extends BasePage {
         });
 
         this.initProductOptionValidations();
+        this.initNativeGallery();
 
         if(imageZoom){
             // call the function when the page is ready
@@ -30,6 +31,21 @@ class Product extends BasePage {
         const isComplete = Array.from(this.elements).every(el => !el.willValidate || el.validity.valid);
         isComplete && salla.product.getPrice(new FormData(this));
       });
+    }
+
+    initNativeGallery() {
+        const slider = document.querySelector('salla-slider.details-slider');
+        const images = JSON.parse(slider?.dataset.images || '[]');
+        if (!images.length) return;
+        // capture phase: fslightbox binds via anchor.onclick, stopPropagation keeps it from firing
+        slider.addEventListener('click', (event) => {
+            const link = event.target.closest('a[data-fslightbox]');
+            // swiper sets allowClick=false for the click that ends a swipe-drag
+            if (!link || slider.querySelector('.swiper')?.swiper?.allowClick === false) return;
+            if (!salla.mobile?.openGallery?.(images, images[+link.dataset.slidIndex])) return;
+            event.preventDefault();
+            event.stopPropagation();
+        }, { capture: true });
     }
 
     initImagesZooming() {
