@@ -17,6 +17,8 @@
 | product.calories                       | ?float                      |                                                                        |
 | product.sku                            | ?string                     |                                                                        |
 | product.barcode                        | ?string                     |                                                                        |
+| product.shows_sku                      | bool                        | Merchant selected the SKU identifier for display                       |
+| product.shows_barcode                  | bool                        | Merchant selected the barcode identifier for display                   |
 | product.rating                         | ?Rating                     |                                                                        |
 | product.rating.count                   | int                         |                                                                        |
 | product.rating.stars                   | int                         |                                                                        |
@@ -302,22 +304,27 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {% if product.sku %}
-                    <div class="mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2">
+                {#
+                    Identifier rows exist whenever the merchant selected them, and start hidden when
+                    the parent product has no value - selecting a variant that carries one reveals the
+                    row from product.js. Nothing is painted while a row is empty.
+                #}
+                {% if product.shows_sku %}
+                    <div class="product-sku-wrapper mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2 {% if not product.sku %}hidden{% endif %}">
                         <div class="flex items-center">
                             <i class="sicon-barcode mx-1"></i>
                             {{ trans('pages.products.sku') }}
                         </div>
-                        <div class="text-unicode product-sku">{{ product.sku }}</div>
+                        <div class="text-unicode break-all product-sku">{{ product.sku }}</div>
                     </div>
                 {% endif %}
-                {% if product.barcode %}
-                    <div class="mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2">
+                {% if product.shows_barcode %}
+                    <div class="product-barcode-wrapper mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2 {% if not product.barcode %}hidden{% endif %}">
                         <div class="flex items-center">
                             <i class="sicon-barcode mx-1"></i>
                             {{ trans('pages.products.barcode') }}
                         </div>
-                        <div class="text-unicode product-barcode">{{ product.barcode }}</div>
+                        <div class="text-unicode break-all product-barcode">{{ product.barcode }}</div>
                     </div>
                 {% endif %}
                 {% hook 'product:single.description' %}

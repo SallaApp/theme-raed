@@ -12,6 +12,7 @@ class Product extends BasePage {
             beforePrice: '.before-price',
             startingPriceTitle: '.starting-price-title',
             productSku: '.product-sku',
+            productBarcode: '.product-barcode',
         });
 
         this.initProductOptionValidations();
@@ -74,6 +75,19 @@ class Product extends BasePage {
       })
     }
 
+    /**
+     * Identifier rows (SKU / barcode) follow the selected variant. An empty value hides the whole
+     * row instead of leaving a labelled empty one, and a value shows it again - the parent product
+     * may have none while a variant does. `undefined` means the endpoint didn't send the field at
+     * all, so the row keeps whatever it is already showing.
+     */
+    updateIdentifier(elements, wrapperSelector, value) {
+        if (value === undefined) return;
+
+        elements?.forEach((el) => {el.innerHTML = value || ''});
+        document.querySelectorAll(wrapperSelector).forEach((el) => el.classList.toggle('hidden', !value));
+    }
+
     registerEvents() {
       salla.event.on('product::price.updated.failed',()=>{
         app.element('.price-wrapper').classList.add('hidden');
@@ -96,7 +110,8 @@ class Product extends BasePage {
         app.productWeight.forEach((el) => {el.innerHTML = data.weight || ''});
         app.totalPrice.forEach((el) => {el.innerHTML = salla.money(data.price)});
         app.beforePrice.forEach((el) => {el.innerHTML = salla.money(data.regular_price)});
-        app.productSku.forEach((el) => {el.innerHTML = data.sku || ''});
+        this.updateIdentifier(app.productSku, '.product-sku-wrapper', data.sku);
+        this.updateIdentifier(app.productBarcode, '.product-barcode-wrapper', data.barcode);
 
         app.toggleClassIf('.price_is_on_sale','showed','hidden', ()=> is_on_sale)
         app.toggleClassIf('.starting-or-normal-price','hidden','showed', ()=> is_on_sale)
