@@ -80,11 +80,14 @@ class Product extends BasePage {
      * row instead of leaving a labelled empty one, and a value shows it again - the parent product
      * may have none while a variant does. `undefined` means the endpoint didn't send the field at
      * all, so the row keeps whatever it is already showing.
+     *
+     * textContent, not innerHTML: identifiers are merchant-supplied and render as plain text
+     * exactly as recorded, so there is nothing to parse as markup.
      */
     updateIdentifier(elements, wrapperSelector, value) {
         if (value === undefined) return;
 
-        elements?.forEach((el) => {el.innerHTML = value || ''});
+        elements?.forEach((el) => {el.textContent = value || ''});
         document.querySelectorAll(wrapperSelector).forEach((el) => el.classList.toggle('hidden', !value));
     }
 
