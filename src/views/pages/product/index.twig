@@ -65,8 +65,13 @@
 
 			{% hook 'product:index.items.start' %}
 
+			{# nothing is marked selected when the store default sort is disabled, so send the shown option with the first request #}
+			{% set first_sort = sort_options|first %}
+			{% set has_selected_sort = sort_options|filter(sort => sort.is_selected)|length %}
+			{% set fallback_sort = (sort_options|length and not has_selected_sort and first_sort.id != 'ourSuggest') ? first_sort.id : '' %}
+
 			<div class="flex">
-				<salla-products-list data-testid="store-products-list" class="flex-1 min-w-0" source="{{ page.slug }}" source-value="{{ page.id }}" {{ filters ?'filters-Results':'' }}></salla-products-list>
+				<salla-products-list data-testid="store-products-list" class="flex-1 min-w-0" source="{{ page.slug }}" source-value="{{ page.id }}" sort-by="{{ fallback_sort }}" {{ filters ?'filters-Results':'' }}></salla-products-list>
 			</div>
 
 			{% hook 'product:index.items.end' %}
