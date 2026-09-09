@@ -17,8 +17,8 @@
 | product.calories                       | ?float                      |                                                                        |
 | product.sku                            | ?string                     |                                                                        |
 | product.barcode                        | ?string                     |                                                                        |
-| product.shows_sku                      | bool                        | Merchant selected the SKU identifier for display                       |
-| product.shows_barcode                  | bool                        | Merchant selected the barcode identifier for display                   |
+| product.shows_sku                      | bool                        | SKU row belongs on the page (selected, and a value exists somewhere)   |
+| product.shows_barcode                  | bool                        | Barcode row belongs on the page (selected, and a value exists)         |
 | product.rating                         | ?Rating                     |                                                                        |
 | product.rating.count                   | int                         |                                                                        |
 | product.rating.stars                   | int                         |                                                                        |
@@ -305,26 +305,36 @@
                     </div>
                 {% endif %}
                 {#
-                    Identifier rows exist whenever the merchant selected them, and start hidden when
-                    the parent product has no value - selecting a variant that carries one reveals the
-                    row from product.js. Nothing is painted while a row is empty.
+                    An identifier row is rendered only when a value could ever fill it - the parent
+                    product has one, or a variant does. It starts hidden when only a variant carries
+                    the value, and product.js reveals it once that variant is selected.
+
+                    The toggled wrapper deliberately carries no display utility of its own: `hidden`
+                    and `sm:grid` are both display rules of equal specificity, and `sm:grid` sits in
+                    a media query far later in the stylesheet, so it would win above 640px and paint
+                    an empty row. Keeping the card's layout classes on the inner element leaves
+                    `hidden` unopposed.
                 #}
                 {% if product.shows_sku %}
-                    <div class="product-sku-wrapper mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2 {% if not product.sku %}hidden{% endif %}">
-                        <div class="flex items-center">
-                            <i class="sicon-barcode mx-1"></i>
-                            {{ trans('pages.products.sku') }}
+                    <div class="product-sku-wrapper mb-4 {% if not product.sku %}hidden{% endif %}">
+                        <div class="flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2">
+                            <div class="flex items-center">
+                                <i class="sicon-barcode mx-1"></i>
+                                {{ trans('pages.products.sku') }}
+                            </div>
+                            <div class="text-unicode break-all product-sku">{{ product.sku }}</div>
                         </div>
-                        <div class="text-unicode break-all product-sku">{{ product.sku }}</div>
                     </div>
                 {% endif %}
                 {% if product.shows_barcode %}
-                    <div class="product-barcode-wrapper mb-4 flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2 {% if not product.barcode %}hidden{% endif %}">
-                        <div class="flex items-center">
-                            <i class="sicon-barcode mx-1"></i>
-                            {{ trans('pages.products.barcode') }}
+                    <div class="product-barcode-wrapper mb-4 {% if not product.barcode %}hidden{% endif %}">
+                        <div class="flex justify-between sm:grid sm:grid-cols-3 bg-white rounded-md px-4 py-2">
+                            <div class="flex items-center">
+                                <i class="sicon-barcode mx-1"></i>
+                                {{ trans('pages.products.barcode') }}
+                            </div>
+                            <div class="text-unicode break-all product-barcode">{{ product.barcode }}</div>
                         </div>
-                        <div class="text-unicode break-all product-barcode">{{ product.barcode }}</div>
                     </div>
                 {% endif %}
                 {% hook 'product:single.description' %}
