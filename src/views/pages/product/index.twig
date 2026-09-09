@@ -65,8 +65,13 @@
 
 			{% hook 'product:index.items.start' %}
 
+			{# nothing is marked selected when the store default sort is disabled, so fall back to the first enabled option #}
+			{% set selected_sorts = sort_options|filter(sort => sort.is_selected) %}
+			{% set first_sort = sort_options|first %}
+			{% set fallback_sort = (sort_options|length and not selected_sorts|length) ? first_sort.id : '' %}
+
 			<div class="flex">
-				<salla-products-list data-testid="store-products-list" class="flex-1 min-w-0" source="{{ page.slug }}" source-value="{{ page.id }}" {{ filters ?'filters-Results':'' }}></salla-products-list>
+				<salla-products-list data-testid="store-products-list" class="flex-1 min-w-0" source="{{ page.slug }}" source-value="{{ page.id }}" sort-by="{{ fallback_sort }}" {{ filters ?'filters-Results':'' }}></salla-products-list>
 			</div>
 
 			{% hook 'product:index.items.end' %}
