@@ -4,8 +4,19 @@
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
+
+# Salla's private npm packages (@salla.sa/*) are published to the npm registry
+# as private packages and require an auth token. The token lives in the
+# org-level Dependabot secret NPM_TOKEN (see SAL-1382).
+registries:
+  private-npm:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: ${{ secrets.NPM_TOKEN }}
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
+    registries:
+      - private-npm
     schedule:
       interval: "weekly"
