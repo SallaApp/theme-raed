@@ -10,7 +10,7 @@
 | short_share_message | string |                                        |
 
 Fulfilment section is picked from order state:
- - pickup (order.is_pickable)  -> <salla-order-items> + <salla-order-branch sticky-cta>
+ - pickup (order.is_pickable)  -> <salla-order-branch items sticky-cta> (items card + branch details footer)
  - delivery (single or split)  -> <salla-order-shipments sticky-cta> (one card per shipment, bottom sheet for split)
 Digital orders are out of scope here (they are redirected to the order summary page by the backend).
 #}
@@ -18,11 +18,13 @@ Digital orders are out of scope here (they are redirected to the order summary p
 
 {% block content %}
     {% hook 'thank-you:start' %}
-    <div class="container max-w-3xl mb-24 md:mb-12 space-y-4">
+    <div class="w-full bg-gradient-to-b from-primary/10 to-transparent h-48 -mb-48"></div>
+    <div class="container max-w-xl mb-24 md:mb-12 space-y-4">
         {# Header: merchant main/subtext (Header Customization story), order number, date & time #}
         <header class="flex flex-col items-center text-center pt-10 pb-4 gap-2">
-            <span class="thanks-item opacity-0 flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-reverse mb-4">
+            <span class="thanks-item opacity-0 relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-reverse mb-4">
                 <i class="sicon-check text-3xl"></i>
+                <span class="absolute -bottom-1 -left-1 flex items-center justify-center w-6 h-6 rounded-full bg-white text-primary shadow-sm"><i class="sicon-receipt text-xs"></i></span>
             </span>
             <h1 data-testid="store-thankyou-title" class="thanks-item opacity-0 font-bold text-xl">{{ thank_you_title }}</h1>
             <p class="thanks-item opacity-0 text-gray-500 text-sm">{{ thank_you_subtitle ?? trans('pages.thank_you.order_received') }}</p>
@@ -49,10 +51,7 @@ Digital orders are out of scope here (they are redirected to the order summary p
         {# Items list + tracking / pickup info #}
         {% hook 'thank-you:items.start' %}
         {% if order.is_pickable %}
-            <salla-order-items data-testid="store-thankyou-items"
-                               items="{{ order.items|json_encode }}"
-                               card-title="{{ trans('pages.checkout.pickup_option') }}"></salla-order-items>
-            <salla-order-branch data-testid="store-thankyou-branch" stack-cards sticky-cta></salla-order-branch>
+            <salla-order-branch data-testid="store-thankyou-branch" items="{{ order.items|json_encode }}" sticky-cta></salla-order-branch>
         {% else %}
             <salla-order-shipments data-testid="store-thankyou-shipments" class="block empty:hidden" sticky-cta></salla-order-shipments>
         {% endif %}
