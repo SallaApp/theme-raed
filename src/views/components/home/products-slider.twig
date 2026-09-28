@@ -12,16 +12,19 @@
 
 <section component-id="{{ componentId }}" data-testid="store-home-products-slider" id="best-offers-{{ position }}-slider" class="s-block s-block--best-offers container overflow-hidden">
   {% if products|length %}
-    <salla-products-slider
-            data-testid="store-home-products-slider-widget"
-            source="{{ products.source }}"
-            limit="{{ limit }}"
-            autoplay
-            source-value="{{ products.source_value|json_encode }}"
-            display-all-url="{{display_all_url}}"
-            block-title="{{ title }}"
-            block-subTitle="{{ sub_title|raw }}"
-            slider-id="slider-with-bg-{{ position }}"
-    ></salla-products-slider>
+    <div class="products-reserve">
+      {% include 'pages.partials.product.skeleton' with { type: 'slider', title: title, source: products.source, source_value: products.source_value } %}
+      <salla-products-slider
+        data-testid="store-home-products-slider-widget"
+        source="{{ products.source }}"
+        limit="{{ limit }}"
+        autoplay
+        source-value="{{ products.source_value|json_encode }}"
+        display-all-url="{{display_all_url}}"
+        block-title="{{ title }}"
+        block-subTitle="{{ sub_title|raw }}"
+        slider-id="slider-with-bg-{{ position }}"
+      ></salla-products-slider>
+    </div>
   {% endif %}
 </section>

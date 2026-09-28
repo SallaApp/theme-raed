@@ -1,0 +1,96 @@
+// Server-rendered placeholder for product sliders and lists (views/pages/partials/product/skeleton.twig).
+// app.js removes it once the products are laid out; the sizes restate twilight's so the swap moves nothing.
+.products-reserve {
+  position: relative;
+}
+
+// the products lay out on top of the skeleton, out of flow, until it is removed
+.products-reserve:has(> .products-skeleton) > :is(salla-products-slider, salla-products-list) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.products-skeleton {
+  @apply w-full mb-8 animate-pulse;
+
+  &__title {
+    @apply flex items-center h-14 mb-4 md:mb-8;
+
+    span {
+      @apply block w-32 h-5 rounded bg-gray-200;
+    }
+  }
+
+  &__cards {
+    display: grid;
+    @apply grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6;
+  }
+
+  &__card {
+    @apply flex flex-col overflow-hidden rounded bg-white;
+  }
+
+  &__image {
+    @apply w-full aspect-square bg-gray-100;
+  }
+
+  &__content {
+    @apply p-3 sm:p-5;
+  }
+
+  &__line {
+    @apply block w-3/4 h-4 mb-[1.125rem] rounded bg-gray-200;
+
+    &--short {
+      @apply w-1/3 mb-6;
+    }
+  }
+
+  &__button {
+    @apply block h-10 rounded bg-gray-100;
+  }
+
+  // equal product card size setting
+  &--fit &__image {
+    @apply aspect-auto h-44 sm:h-60;
+  }
+
+  &--filters &__cards {
+    @apply md:grid-cols-3 lg:grid-cols-3;
+  }
+
+  &--horizontal {
+    .products-skeleton__cards {
+      @apply grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8;
+    }
+
+    .products-skeleton__card {
+      @apply flex-row;
+    }
+
+    .products-skeleton__image {
+      @apply aspect-auto h-auto w-32 sm:w-56 shrink-0;
+    }
+
+    .products-skeleton__content {
+      @apply flex-1;
+    }
+  }
+
+  // twilight's slide: fixed widths in a single row, the gutter is the slide padding
+  &--slider {
+    @apply mb-8 md:mb-20;
+
+    .products-skeleton__cards {
+      @apply flex gap-0;
+    }
+
+    .products-skeleton__card {
+      @apply flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[250px] sm:max-w-[320px] px-[5px] sm:px-2.5 bg-clip-content;
+    }
+  }
+}

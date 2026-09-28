@@ -22,15 +22,18 @@
       </div>
     {% endif %}
 
-    <salla-products-list
-      data-testid="store-home-fixed-products-list"
-      source="{{ products.source }}"
-      limit="{{ limit }}"
-      source-value="{{ products.source_value|json_encode }}"
-      class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"
-      {{is_vertical ? '' : 'horizontal-cards'}}
-      >
-    </salla-products-list>
+    <div class="products-reserve">
+      {% include 'pages.partials.product.skeleton' with { type: is_vertical ? 'grid' : 'horizontal', count: min(limit|default(8), 8), source: products.source, source_value: products.source_value } %}
+      <salla-products-list
+        data-testid="store-home-fixed-products-list"
+        source="{{ products.source }}"
+        limit="{{ limit }}"
+        source-value="{{ products.source_value|json_encode }}"
+        class="{{is_vertical ? 'vertical-products' : 'horizontal-products'}}"
+        {{is_vertical ? '' : 'horizontal-cards'}}
+        >
+      </salla-products-list>
+    </div>
 </section>
 
 
