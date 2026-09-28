@@ -164,6 +164,12 @@ class ProductCard extends HTMLElement {
     .replace(/>/g, "&gt;");
   }
 
+  // salla image urls carry their size, e.g. -500x400-, so the card can hold its height before the image loads
+  getImageSize(url) {
+    const size = url?.match(/-(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)-/);
+    return size ? `width="${Math.round(size[1])}" height="${Math.round(size[2])}"` : '';
+  }
+
   render(){
     this.classList.add('s-product-card-entry'); 
     this.setAttribute('id', this.product.id);
@@ -190,6 +196,7 @@ class ProductCard extends HTMLElement {
                 ? this.fitImageHeight
                 : 'cover'}"
               src="${this.product?.image?.url || this.product?.thumbnail || this.placeholder || ''}"
+              ${this.getImageSize(this.product?.image?.url || this.product?.thumbnail)}
               alt="${this.escapeHTML(this.product?.image?.alt || this.product.name)}"
               loading="lazy"
             />
