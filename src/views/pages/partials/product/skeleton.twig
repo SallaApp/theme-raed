@@ -1,0 +1,30 @@
+{#
+| Variable     | Type    | Description                                                  |
+|--------------|---------|--------------------------------------------------------------|
+| type         | string  | slider, grid, filters (grid beside the filters) or horizontal |
+| count        | ?int    | Number of placeholder cards, default 4                       |
+| title        | ?bool   | Reserve the slider title row                                 |
+| source       | ?string | Products source, to skip sources that can never load         |
+| source_value | ?array  | Products source value                                        |
+#}
+{# these sources fetch nothing without a value, so there is nothing to wait for #}
+{% set never_loads = source|default and source not in ['offers', 'latest', 'sales', 'top-rated'] and source_value is empty %}
+{% if not never_loads %}
+  <div class="products-skeleton products-skeleton--{{ type }}{{ store.settings.product.fit_type ? ' products-skeleton--fit' : '' }}" aria-hidden="true">
+    {% if title %}
+      <div class="products-skeleton__title"><span></span></div>
+    {% endif %}
+    <div class="products-skeleton__cards">
+      {% for i in 1..count|default(4) %}
+        <div class="products-skeleton__card">
+          <div class="products-skeleton__image"></div>
+          <div class="products-skeleton__content">
+            <span class="products-skeleton__line"></span>
+            <span class="products-skeleton__line products-skeleton__line--short"></span>
+            <span class="products-skeleton__button"></span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

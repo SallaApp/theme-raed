@@ -21,6 +21,7 @@ class App extends AppHelpers {
     this.initiateDropdowns();
     this.initiateModals();
     this.initiateCollapse();
+    this.initProductsSkeletons();
     
     // Ensure #more-menu-dropdown exists before running changeMenuDirection
     const menuDirInterval = setInterval(() => {
@@ -62,6 +63,36 @@ class App extends AppHelpers {
         });
       }, 1000);
     }
+
+  initProductsSkeletons() {
+    app.all('.products-reserve', reserve => {
+      const skeleton = reserve.querySelector(':scope > .products-skeleton');
+      const products = reserve.querySelector(':scope > salla-products-slider, :scope > salla-products-list');
+      if (!skeleton || !products) return;
+
+      const isSlider = products.matches('salla-products-slider');
+      // cards are inserted empty and drawn by product-card.js, so wait for a drawn one
+      const isReady = () => {
+        const hasCard = products.querySelector('custom-salla-product-card > *');
+        if (isSlider) {
+          const isEmpty = products.querySelector('salla-slider') && !products.querySelector('custom-salla-product-card');
+          return isEmpty || (hasCard && products.querySelector('.swiper-initialized'));
+        }
+        return hasCard || products.querySelector('.s-products-list-placeholder');
+      };
+
+      const observer = new MutationObserver(() => isReady() && release());
+      const timeout = setTimeout(() => release(), 30000);
+      const release = () => {
+        observer.disconnect();
+        clearTimeout(timeout);
+        skeleton.remove();
+      };
+
+      if (isReady()) return release();
+      observer.observe(products, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    });
+  }
 
   loadModalImgOnclick(){
     document.querySelectorAll('.load-img-onclick').forEach(link => {

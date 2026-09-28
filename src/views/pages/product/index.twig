@@ -71,7 +71,8 @@
 			{% set has_selected_sort = sort_list|filter(sort => sort.is_selected)|length %}
 			{% set fallback_sort = (sort_list|length and not has_selected_sort and first_sort.id != 'ourSuggest') ? first_sort.id : '' %}
 
-			<div class="flex">
+			<div class="products-reserve flex">
+				{% include 'pages.partials.product.skeleton' with { type: filters ? 'filters' : 'grid', count: 8 } %}
 				<salla-products-list data-testid="store-products-list" class="flex-1 min-w-0" source="{{ page.slug }}" source-value="{{ page.id }}" sort-by="{{ fallback_sort }}" {{ filters ?'filters-Results':'' }}></salla-products-list>
 			</div>
 
