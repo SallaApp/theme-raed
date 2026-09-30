@@ -5,13 +5,13 @@ class Order extends BasePage {
         app.onClick('salla-button#btn-reorder', ({currentTarget: btn}) => btn.load()
             .then(() => salla.order.createCartFromOrder())
             .then(() => btn.stop())
-            .then(() => app.element('#reorder-modal').hide()));
+            .then(() => app.element('#reorder-modal').close()));
 
         app.onClick('salla-button#confirm-cancel', ({currentTarget: btn}) => btn.load()
             .then(() => salla.order.cancel())
-            .then(() => btn.stop() && app.element('#modal-order-cancel').hide())
+            .then(() => btn.stop() && app.element('#modal-order-cancel').close())
             .then(() => window.location.reload())
-            .catch(() => btn.stop() && app.element('#modal-order-cancel').hide())
+            .catch(() => btn.stop() && app.element('#modal-order-cancel').close())
         );
     }
 }
