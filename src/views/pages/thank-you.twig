@@ -5,121 +5,163 @@
 | page.title          | string |                                        |
 | page.slug           | string |                                        |
 | order               | Order  | @see pages/customer/orders/single.twig |
-| thank_you           | string |                                        |
+| thank_you_title     | string | merchant customized main text          |
 | share_message       | string |                                        |
 | short_share_message | string |                                        |
+
+Fulfilment section is picked from order state:
+ - pickup (order.is_pickable)  -> <salla-order-branch items sticky-cta> (items card + branch details footer)
+ - delivery (single or split)  -> <salla-order-shipments sticky-cta> (one card per shipment, bottom sheet for split)
+Digital orders are out of scope here (they are redirected to the order summary page by the backend).
+
+The fulfilment CTA lives inside those components: on desktop it renders in-flow above the cards
+(as in the design), on mobile it is the sticky bottom bar.
 #}
 {% extends "layouts.master" %}
 
 {% block content %}
     {% hook 'thank-you:start' %}
-    <div class="h-52 -mb-52 w-full bg-primary rtl:right-0 ltr:left-0 relative -z-1">
-        <svg class="text-primary absolute top-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-            <path class="fill-current" fill-opacity="1"
-                  d="M0,96L120,112C240,128,480,160,720,165.3C960,171,1200,149,1320,138.7L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path>
-        </svg>
-    </div>
-    <div class="container mb-20">
-        <nav class="breadcrumbs thankyou-breadcrumbs w-full py-5">
-            <salla-breadcrumb></salla-breadcrumb>
-        </nav>
-        <div class="bg-white p-4 md:p-8 rounded-md mb-6 md:mb-8">
-            <div class="flex flex-col items-center pt-16 pb-10">
-                <div class="rtl:-scale-x-100">
-                  <img src="{{ 'images/delivery-bro.svg' | asset }}" alt="{{ thank_you_title }}"
-                     class="thanks-item opacity-0 w-40 mb-8">
+    <div class="w-full bg-gradient-to-b from-primary/10 to-transparent h-48 -mb-48"></div>
+    <div class="container max-w-xl mb-24 md:mb-12 space-y-6">
+        {# Header + fulfilment + payment share the design's 12px rhythm #}
+        <div class="space-y-3">
+            {# Header: merchant main/subtext (Header Customization story), order number, date & time #}
+            <header class="flex flex-col items-center gap-3 pt-10 text-center">
+                <div class="flex flex-col items-center gap-1">
+                    <span class="thanks-item opacity-0 relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-reverse mb-3">
+                        <i class="sicon-check text-3xl"></i>
+                        <span class="absolute -bottom-1 rtl:-right-1 ltr:-left-1 flex items-center justify-center w-6 h-6 overflow-hidden rounded-full bg-white text-primary shadow-sm">
+                            {% if store.logo %}
+                                <img src="{{ store.logo|cdn(48, 48) }}" alt="{{ store.name }}" class="w-full h-full object-contain" loading="lazy">
+                            {% else %}
+                                <i class="sicon-store text-xs"></i>
+                            {% endif %}
+                        </span>
+                    </span>
+                    <h1 data-testid="store-thankyou-title" class="thanks-item opacity-0 font-bold text-xl text-gray-800">{{ thank_you_title }}</h1>
+                    <p class="thanks-item opacity-0 text-gray-500 text-sm">{{ thank_you_subtitle ?? trans('pages.thank_you.order_received') }}</p>
                 </div>
-                <h1 data-testid="store-thankyou-title" class="font-bold text-lg mb-2.5 thanks-item opacity-0">{{ thank_you_title }}</h1>
-                <p class="thanks-item opacity-0 text-gray-500 max-w-xs text-center text-sm leading-6 mb-6">
-                    {{ trans('pages.thank_you.order_id') }}
-                    <salla-button data-testid="store-thankyou-order-id" class="relative" onclick="app.copyToClipboard(event)" color="dark" shape="link" data-content="{{ order.reference_id }}">
-                        <span>#{{ order.reference_id }}</span>
-                        <i class="copy-icon sicon-swap-stroke pointer-events-none rtl:mr-1 ltr:ml-1"></i>
-                    </salla-button>
-                </p>
-                <salla-button data-testid="store-thankyou-order-details-btn" onclick="salla.order.show({order_id:'{{ order.id }}', url:'{{ order.url }}'})">
-                  <i class="sicon-newspaper rtl:ml-1 ltr:mr-1"></i>
-                  {{ trans('pages.thank_you.order_details') }}
-                </salla-button>
-            </div>
 
-            {% if order.instructions %}
-                <article class="article article--main article--small text-center">
-                    {{ order.instructions|raw }}
-                </article>
-            {% endif %}
+                <hr class="thanks-item opacity-0 w-full border-0 border-t border-gray-100">
 
-            {% for message in messages %}
-                <div class="flex flex-col items-center pt-1 pb-10 justify-start rtl:space-x-reverse space-x-2">
+                <div class="thanks-item opacity-0 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-xs text-gray-500">
+                    <button type="button" data-testid="store-thankyou-order-id" class="inline-flex items-center gap-1"
+                            onclick="app.copyToClipboard(event)" data-content="{{ order.reference_id }}">
+                        <i class="sicon-page-check pointer-events-none"></i>
+                        <span class="pointer-events-none" dir="ltr">#{{ order.reference_id }}</span>
+                        <i class="sicon-pages pointer-events-none"></i>
+                    </button>
+                    <span class="inline-flex items-center gap-1">
+                        <i class="sicon-clock"></i>
+                        <span>{{ order.created_at|date('Y/m/d - h:i A')|number }}</span>
+                    </span>
+                </div>
+
+                {% if order.instructions %}
+                    <article class="article article--main article--small text-center">{{ order.instructions|raw }}</article>
+                {% endif %}
+                {% for message in messages %}
                     <span class="font-bold">{{ message }}</span>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </header>
 
+            {# Items list + tracking / pickup info #}
             {% hook 'thank-you:items.start' %}
-
+            {% if order.is_pickable %}
+                <salla-order-branch data-testid="store-thankyou-branch" items="{{ order.items|json_encode }}" sticky-cta></salla-order-branch>
+            {% else %}
+                <salla-order-shipments data-testid="store-thankyou-shipments" class="empty:hidden" sticky-cta></salla-order-shipments>
+            {% endif %}
             {% hook 'thank-you:items.end' %}
+
+            {# Payment #}
+            <section data-testid="store-thankyou-payment" class="bg-white rounded-lg border border-gray-100 p-3 space-y-3 text-xs">
+                <dl class="space-y-2 text-gray-500">
+                    <div class="flex items-center justify-between gap-4">
+                        <dt>{{ trans('pages.cart.payment_way') }}</dt>
+                        <dd class="flex items-center">
+                            <img src="{{ ('images/payment/' ~ order.payment_method ~ '_mini.png')|cdn(58, 58) }}" alt="{{ order.payment_method }}" class="h-4 w-auto" loading="lazy" onerror="this.remove()">
+                        </dd>
+                    </div>
+                    <div class="flex items-center justify-between gap-4">
+                        <dt>{{ trans('pages.cart.items_total') }}</dt>
+                        <dd>{{ order.sub_total|money }}</dd>
+                    </div>
+                    {% if order.tax %}
+                        <div class="flex items-center justify-between gap-4">
+                            <dt>{{ trans('pages.cart.tax') }}</dt>
+                            <dd>{{ order.tax.amount|money }}</dd>
+                        </div>
+                    {% endif %}
+                    {% if order.shipping_cost %}
+                        <div class="flex items-center justify-between gap-4">
+                            <dt>{{ trans('pages.orders.shipping_cost') }}</dt>
+                            <dd>{{ order.shipping_cost|money }}</dd>
+                        </div>
+                    {% endif %}
+                    <div class="flex items-center justify-between gap-4 text-sm font-bold text-gray-800">
+                        <dt>{{ trans('pages.orders.final_total') }}</dt>
+                        <dd>{{ order.total|money }}</dd>
+                    </div>
+                </dl>
+                <button type="button" data-testid="store-thankyou-order-details-btn"
+                        class="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-gray-100 text-sm font-bold text-primary"
+                        onclick="salla.order.show({order_id:'{{ order.id }}', url:'{{ order.url }}'})">
+                    <i class="sicon-receipt"></i>
+                    {{ trans('pages.thank_you.view_invoice') }}
+                </button>
+            </section>
         </div>
 
-        {# Split shipment tracking — self-hides for single-shipment orders #}
-        <salla-order-shipments class="block mb-6 md:mb-8 empty:hidden"></salla-order-shipments>
+        {# Merchant custom component after the payment section (Custom Component story) #}
+        {% hook 'thank-you:payment.end' %}
 
-        <salla-next-order-coupon data-testid="store-thankyou-coupon"></salla-next-order-coupon>
+        {#
+          Rewards earned on this order (cashback + loyalty points).
+          NOTE: the thank-you contract does not expose these yet, so the markup below assumes
+            order.cashback       -> { amount: Money, url: string }
+            order.loyalty_points -> int (links to the loyalty page)
+          Each tile stays hidden until the backend sends it; rename the guards once the
+          Loyalty & Cashback Settings story lands.
+        #}
+        {% if order.cashback or order.loyalty_points %}
+            <div data-testid="store-thankyou-rewards" class="flex flex-wrap items-stretch gap-2">
+                {% if order.cashback %}
+                    <a href="{{ order.cashback.url }}"
+                       class="flex flex-1 min-w-[220px] items-center gap-2 rounded-lg bg-[#effbf6] px-4 py-3 no-underline">
+                        <i class="sicon-gift text-2xl text-primary shrink-0"></i>
+                        <span class="flex flex-1 min-w-0 flex-col text-end">
+                            <b class="text-sm text-primary">{{ order.cashback.amount|money }}</b>
+                            <span class="text-xs text-gray-500">{{ trans('pages.thank_you.cashback') }}</span>
+                        </span>
+                        <i class="sicon-keyboard_arrow_left text-base text-gray-500 shrink-0 ltr:rotate-180"></i>
+                    </a>
+                {% endif %}
+                {% if order.loyalty_points %}
+                    <a href="{{ link('loyalty') }}"
+                       class="flex flex-1 min-w-[220px] items-center gap-2 rounded-lg bg-[#effbf6] px-4 py-3 no-underline">
+                        <i class="sicon-star2 text-2xl text-primary shrink-0"></i>
+                        <span class="flex flex-1 min-w-0 flex-col text-end">
+                            <b class="text-sm text-primary">+{{ order.loyalty_points|number }}</b>
+                            <span class="text-xs text-gray-500">{{ trans('pages.thank_you.loyalty_points') }}</span>
+                        </span>
+                        <i class="sicon-keyboard_arrow_left text-base text-gray-500 shrink-0 ltr:rotate-180"></i>
+                    </a>
+                {% endif %}
+            </div>
 
-        {% if order.is_pickable %}
-            <salla-order-branch data-testid="store-thankyou-branch"></salla-order-branch>
+            <hr class="border-0 border-t border-gray-100">
         {% endif %}
 
-        <div class="lg:flex rtl:space-x-reverse lg:space-x-8">
-            {% if order.email_sent %}
-                <div class="duration-500 hover:shadow-default flex-1 bg-white p-8 rounded-md mb-6 md:mb-10 flex flex-col items-center justify-center">
-                    <div class="bg-gray-100 rounded-icon w-12 h-12 mb-2.5">
-                        <i class="sicon-newspaper-alt text-xl"></i>
-                    </div>
-                    <p class="text-sm mb-2.5">{{ trans('pages.thank_you.email_sent') }}</p>
-                    <b class="text-sm">{{ order.customer.email }}</b>
-                </div>
-            {% else %}
-                <div id="invoice-form" class="thankyou-block">
-                    <div class="bg-gray-100 rounded-icon w-12 h-12 mb-2.5">
-                        <i class="sicon-newspaper-alt text-xl"></i>
-                    </div>
-                    <p class="text-sm mb-2.5">{{ trans('pages.thank_you.resend_email') }}</p>
-                    <form onsubmit="return salla.form.onSubmit('order.sendInvoice', event)">
-                        <div class="flex max-w-3xl w-full">
-                            <input data-testid="store-thankyou-email-input" type="email" class="form-input rtl:rounded-l-none ltr:rounded-r-none rtl:border-l-0 ltr:border-r-0 !w-[160px] sm:!w-[220px]" placeholder="your@email.com" required name="email">
-                            <salla-button data-testid="store-thankyou-email-submit" type="submit" loader-position="center" class="rtl:rounded-r-none ltr:rounded-l-none lg:w-24 h-10">
-                              <span class="btn__text">{{ trans('blocks.comments.submit') }}</span>
-                            </salla-button>
-                        </div>
-                    </form>
-                </div>
-            {% endif %}
+        {# Gifts: tinted container + one card per thank-you coupon #}
+        <salla-next-order-coupon data-testid="store-thankyou-coupon"></salla-next-order-coupon>
 
-            <div class="thankyou-block">
-                <div class="bg-gray-100 rounded-icon w-12 h-12 mb-2.5">
-                    <i class="sicon-mail-letter text-xl"></i>
-                </div>
-                <p class="text-sm mb-2.5">{{ trans('common.titles.support') }}</p>
+        {# Contact channels (Contact Channels Customization story decides which ones) #}
+        <section class="text-center space-y-3">
+            <p class="text-sm text-gray-500">{{ trans('pages.thank_you.contact_us') }}</p>
+            <salla-contacts data-testid="store-thankyou-contacts" class="flex justify-center" hide-title horizontal icons-only></salla-contacts>
+        </section>
 
-                <div class="flex rtl:space-x-reverse space-x-6">
-                    {% if store.contacts.mobile %}
-                        <div class="text-sm unicode flex items-center">
-                            <i class="sicon-phone"></i>
-                            <a href="tel:{{ store.contacts.mobile }}" class="hover:text-primary transition"><b
-                                       class="unicode mx-1.5">{{ store.contacts.mobile }}</b></a>
-                        </div>
-                    {% endif %}
-
-                    {% if store.contacts.whatsapp %}
-                        <div class="text-sm unicode flex items-center">
-                            <i class="sicon-whatsapp"></i>
-                            <a href="https://wa.me/{{ store.contacts.whatsapp|replace({' ': '', '+': '', '-': ''}) }}" class="hover:text-primary transition" target="_blank" rel="noopener"><b
-                                        class="unicode mx-1.5">{{ store.contacts.whatsapp }}</b></a>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
         {% hook 'thank-you:end' %}
     </div>
 {% endblock %}
