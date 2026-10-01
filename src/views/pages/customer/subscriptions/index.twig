@@ -1,0 +1,13 @@
+{#
+| Variable   | Type   | Description |
+|------------|--------|-------------|
+| page       | object |             |
+| page.title | string |             |
+| page.slug  | string |             |
+#}
+{% extends "layouts.customer" %}
+{% block inner_content %}
+    {% hook 'customer:subscriptions.index.items.start' %}
+    <salla-subscriptions-list></salla-subscriptions-list>
+    {% hook 'customer:subscriptions.index.items.end' %}
+{% endblock %}
