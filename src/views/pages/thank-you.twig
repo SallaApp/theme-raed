@@ -20,6 +20,21 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
 {% extends "layouts.master" %}
 
 {% block content %}
+
+    {# ---------------------------------------------------------------------
+       LINK TEST — temporary. The real page is disabled below with
+       {% if false %} rather than a Twig comment, because the page already
+       contains nine of them and Twig comments do not nest.
+       Revert this commit once the submodule + CDN wiring is confirmed.
+    #}
+    <div style="padding:80px 20px;text-align:center;font-family:system-ui,sans-serif">
+        <h1 style="font-size:28px;font-weight:700;margin:0 0 12px">theme-raed is linked ✅</h1>
+        <p style="font-size:16px;color:#666;margin:0">
+            thank-you.twig from <code>feature/OD-8789-thank-you-page</code> is being served.
+        </p>
+    </div>
+
+    {% if false %}
     {% hook 'thank-you:start' %}
     <div class="container">
         <div class="mx-auto flex w-full max-w-[800px] flex-col gap-6 py-8">
@@ -169,6 +184,7 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
         {% hook 'thank-you:end' %}
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
