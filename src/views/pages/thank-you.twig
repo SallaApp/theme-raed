@@ -22,9 +22,9 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
 {% block content %}
     {% hook 'thank-you:start' %}
     <div class="container">
-        <div class="thank-you-content mx-auto flex w-full max-w-[800px] flex-col gap-6 py-8">
+        <salla-thank-you-page class="thank-you-content">
         {# Header + fulfilment + payment share the design's 12px rhythm #}
-        <div class="flex flex-col gap-3">
+        <div slot="main">
             {# Header: merchant main/subtext (Header Customization story), order number, date & time #}
             <salla-thank-you-header heading="{{ thank_you_title }}"
                 subtitle="{{ thank_you_subtitle ?? trans('pages.thank_you.order_received') }}"
@@ -75,6 +75,6 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
             introduction="{{ trans('pages.thank_you.contact_us') }}" hide-title horizontal icons-only></salla-contacts>
 
         {% hook 'thank-you:end' %}
-        </div>
+        </salla-thank-you-page>
     </div>
 {% endblock %}
