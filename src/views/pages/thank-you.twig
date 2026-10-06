@@ -27,7 +27,7 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
         <div slot="main">
             {# Header: merchant main/subtext (Header Customization story), order number, date & time #}
             <salla-thank-you-header heading="{{ thank_you_title }}"
-                subtitle="{{ thank_you_subtitle ?? trans('pages.thank_you.order_received') }}"
+                subtitle="{{ thank_you_components.subtitle ?? thank_you_subtitle ?? trans('pages.thank_you.order_received') }}"
                 store-logo="{{ store.logo ? store.logo|cdn(48, 48) : '' }}" store-name="{{ store.name }}"
                 reference-id="{{ order.reference_id }}" created-at="{{ order.created_at|date('c') }}">
                 {% if order.instructions %}
@@ -60,19 +60,24 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
         {# Merchant custom component after the payment section (Custom Component story) #}
         {% hook 'thank-you:payment.end' %}
 
-        {# Only rewards already exposed by the order presenter. Cashback awaits backend support. #}
-        {% if order.loyalty_points %}
+        {% set show_loyalty = (thank_you_components.show_loyalty ?? true) and order.loyalty_points %}
+        {% set cashback = (thank_you_components.show_cashback ?? true) ? order.thank_you_cashback : null %}
+        {% if show_loyalty or cashback %}
             <salla-order-rewards data-testid="store-thankyou-rewards"
-                {% if order.loyalty_points %}loyalty-points="{{ order.loyalty_points }}" loyalty-url="{{ link('loyalty') }}"{% endif %}
+                {% if show_loyalty %}loyalty-points="{{ order.loyalty_points }}" loyalty-url="{{ link('loyalty') }}"{% endif %}
+                {% if cashback %}cashback-amount="{{ cashback.amount }}" currency="{{ cashback.currency }}" cashback-url="{{ link('wallet') }}"{% endif %}
             ></salla-order-rewards>
         {% endif %}
 
-        {# Gifts: tinted container + one card per thank-you coupon #}
-        <salla-next-order-coupon data-testid="store-thankyou-coupon"></salla-next-order-coupon>
+        {% if thank_you_components.show_coupons ?? true %}
+            <salla-next-order-coupon data-testid="store-thankyou-coupon"></salla-next-order-coupon>
+        {% endif %}
 
-        {# Contact channels (Contact Channels Customization story decides which ones) #}
-        <salla-contacts data-testid="store-thankyou-contacts"
-            introduction="{{ trans('pages.thank_you.contact_us') }}" hide-title horizontal icons-only></salla-contacts>
+        {% if thank_you_components.show_contacts ?? true %}
+            <salla-contacts data-testid="store-thankyou-contacts"
+                {% if thank_you_components.contact_channels is defined and thank_you_components.contact_channels is not null %}channels="{{ thank_you_components.contact_channels|join(',') }}"{% endif %}
+                introduction="{{ trans('pages.thank_you.contact_us') }}" hide-title horizontal icons-only></salla-contacts>
+        {% endif %}
 
         {% hook 'thank-you:end' %}
         </salla-thank-you-page>
