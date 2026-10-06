@@ -23,7 +23,7 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
     {% hook 'thank-you:start' %}
     <div class="container">
         <salla-thank-you-page class="thank-you-content">
-        {# Header + fulfilment + payment share the design's 12px rhythm #}
+        {# Header, fulfillment, and payment use responsive component spacing. #}
         <div slot="main">
             {# Header: merchant main/subtext (Header Customization story), order number, date & time #}
             <salla-thank-you-header heading="{{ thank_you_title }}"
@@ -49,7 +49,7 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
 
             {# Payment #}
             <salla-order-payment data-testid="store-thankyou-payment"
-                payment-method="{{ order.payment_method }}"
+                payment-method="{{ order.payment_method }}" currency="{{ order.payment_currency }}"
                 payment-logo="{{ ('images/payment/' ~ order.payment_method ~ '_mini.png')|cdn(58, 58) }}"
                 sub-total="{{ order.sub_total }}" total="{{ order.total }}"
                 {% if order.tax %}tax-amount="{{ order.tax.amount }}"{% endif %}
