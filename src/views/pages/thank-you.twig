@@ -19,6 +19,19 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
 #}
 {% extends "layouts.master" %}
 
+{% block styles %}
+    {{ parent() }}
+    <style>
+        /* Mobile confirmation is a standalone screen; desktop keeps the store chrome. */
+        @media (max-width: 767px) {
+            .store-header,
+            .store-footer {
+                display: none;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     {% hook 'thank-you:start' %}
     <div class="container">
