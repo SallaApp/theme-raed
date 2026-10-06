@@ -68,6 +68,7 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
                 {% if order.tax %}tax-amount="{{ order.tax.amount }}"{% endif %}
                 {% if order.shipping_cost %}shipping-cost="{{ order.shipping_cost }}"{% endif %}
                 {% if order.cod_cost %}cod-cost="{{ order.cod_cost }}"{% endif %}
+                {% if order.discounts is not empty %}discounts="{{ order.discounts|json_encode }}"{% endif %}
                 invoice-url="{{ order.print_url }}"></salla-order-payment>
         </div>
 
