@@ -53,10 +53,13 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
 
             {# Items list + tracking / pickup info #}
             {% hook 'thank-you:items.start' %}
+            {# Prices formatted server-side with |money (as on the order page) so they keep the order's currency;
+               the client only knows the currently selected market's currencies. #}
+            {% set thank_you_items = order.items|map(item => {id: item.id, name: item.name, image: item.image, quantity: item.quantity, price: item.price|money, url: item.product ? item.product.url : null}) %}
             {% if order.is_pickable %}
-                <salla-order-branch data-testid="store-thankyou-branch" items="{{ order.items|json_encode }}" currency="{{ order.payment_currency }}" sticky-cta></salla-order-branch>
+                <salla-order-branch data-testid="store-thankyou-branch" items="{{ thank_you_items|json_encode }}" currency="{{ order.payment_currency }}" sticky-cta></salla-order-branch>
             {% else %}
-                <salla-order-shipments data-testid="store-thankyou-shipments" items="{{ order.items|json_encode }}" currency="{{ order.payment_currency }}" initial-shipments="{{ order.thank_you_shipments|json_encode }}" sticky-cta></salla-order-shipments>
+                <salla-order-shipments data-testid="store-thankyou-shipments" items="{{ thank_you_items|json_encode }}" currency="{{ order.payment_currency }}" initial-shipments="{{ order.thank_you_shipments|json_encode }}" sticky-cta></salla-order-shipments>
             {% endif %}
             {% hook 'thank-you:items.end' %}
 
@@ -64,10 +67,10 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
             <salla-order-payment data-testid="store-thankyou-payment"
                 payment-method="{{ order.payment_method }}" currency="{{ order.payment_currency }}"
                 payment-logo="{{ ('images/payment/' ~ order.payment_method ~ '_mini.png')|cdn(58, 58) }}"
-                sub-total="{{ order.sub_total }}" total="{{ order.total }}"
-                {% if order.tax %}tax-amount="{{ order.tax.amount }}"{% endif %}
-                {% if order.shipping_cost %}shipping-cost="{{ order.shipping_cost }}"{% endif %}
-                {% if order.cod_cost %}cod-cost="{{ order.cod_cost }}"{% endif %}
+                sub-total="{{ order.sub_total|money }}" total="{{ order.total|money }}"
+                {% if order.tax %}tax-amount="{{ order.tax.amount|money }}"{% endif %}
+                {% if order.shipping_cost %}shipping-cost="{{ order.shipping_cost|money }}"{% endif %}
+                {% if order.cod_cost %}cod-cost="{{ order.cod_cost|money }}"{% endif %}
                 {% if order.discounts is not empty %}discounts="{{ order.discounts|json_encode }}"{% endif %}
                 invoice-url="{{ order.print_url }}"></salla-order-payment>
         </div>
