@@ -54,9 +54,9 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
             {# Items list + tracking / pickup info #}
             {% hook 'thank-you:items.start' %}
             {% if order.is_pickable %}
-                <salla-order-branch data-testid="store-thankyou-branch" items="{{ order.items|json_encode }}" sticky-cta></salla-order-branch>
+                <salla-order-branch data-testid="store-thankyou-branch" items="{{ order.items|json_encode }}" currency="{{ order.payment_currency }}" sticky-cta></salla-order-branch>
             {% else %}
-                <salla-order-shipments data-testid="store-thankyou-shipments" items="{{ order.items|json_encode }}" initial-shipments="{{ order.thank_you_shipments|json_encode }}" sticky-cta></salla-order-shipments>
+                <salla-order-shipments data-testid="store-thankyou-shipments" items="{{ order.items|json_encode }}" currency="{{ order.payment_currency }}" initial-shipments="{{ order.thank_you_shipments|json_encode }}" sticky-cta></salla-order-shipments>
             {% endif %}
             {% hook 'thank-you:items.end' %}
 
