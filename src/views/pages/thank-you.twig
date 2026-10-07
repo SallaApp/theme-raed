@@ -22,9 +22,8 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
 {% block styles %}
     {{ parent() }}
     <style>
-        /* Mobile confirmation is a standalone screen; desktop keeps the store chrome. */
+        /* Mobile keeps the store header but drops the footer; the sticky CTA owns the bottom of the screen. */
         @media (max-width: 767px) {
-            .store-header,
             .store-footer {
                 display: none;
             }
