@@ -9,8 +9,9 @@
 | items[].products[]       | Product[] |                                                                     |
 | items[].limit            | Int       | Number of products to be shown                                      |
 | items[].id               | string    | Section id                                                          |
-| items[].source           | ?string   | When set, fetch the tab client-side instead of items[].products     |
-| items[].source_value     | ?array    | Ids/values for items[].source                                       |
+| items[].products.source        | ?string   | When set, fetch the tab client-side (salla-products-list)           |
+| items[].products.source_value  | ?array    | Ids/values for products.source                                      |
+| items[].featured_product_id    | ?string   | Present only when products come as source + source_value            |
 | main_product             | array     |                                                                     |
 | main_product.id          | string    | string product id                                                   |
 | main_product.title       | string    | Offer title                                                         |
@@ -65,12 +66,13 @@
 
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
-                    {% if section.source is defined %}
+                    {# products.source cannot be the switch: on a CollectionPresenter Twig resolves any key through __call #}
+                    {% if section.featured_product_id is defined %}
                         <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
                             <salla-products-list
-                              source="{{ section.source }}"
+                              source="{{ section.products.source }}"
                               limit="{{ main_product?4:8 }}"
-                              source-value="{{ section.source_value|json_encode }}">
+                              source-value="{{ section.products.source_value|json_encode }}">
                             </salla-products-list>
                         </div>
                     {% else %}

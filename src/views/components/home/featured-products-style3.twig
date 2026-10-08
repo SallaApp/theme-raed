@@ -11,8 +11,8 @@
 | items[].products[]            | Product[] |                                                                     |
 | items[].limit                 | Int       | Number of products to be shown                                      |
 | items[].id                    | string    | Section id                                                          |
-| items[].source                | ?string   | When set, fetch the tab client-side instead of items[].products     |
-| items[].source_value          | ?array    | Ids/values for items[].source                                       |
+| items[].products.source        | ?string   | When set, fetch the tab client-side (salla-products-list)           |
+| items[].products.source_value  | ?array    | Ids/values for products.source                                      |
 | items[].featured_product_id   | ?string   | When set, the card fetches the featured product by id               |
 | position                      | int       | Sorting number starts from zero                                     |
 #}
@@ -25,16 +25,17 @@
                   {# <p>عنوان فرعي توصيفي صغير</p> #}
                 </div> 
                 <div class="flex-1 grid lg:grid-cols-2 gap-4 sm:gap-8">
-                    {% if section.source is defined %}
+                    {# products.source cannot be the switch: on a CollectionPresenter Twig resolves any key through __call #}
+                    {% if section.featured_product_id is defined %}
                         {% if section.featured_product_id %}
                             <custom-salla-product-card shadow-on-hover product-id="{{ section.featured_product_id }}" fullImage></custom-salla-product-card>
                         {% endif %}
                         <salla-products-list
                           data-product-card-minimal
                           class="{{ section.featured_product_id ? '' : 'lg:col-span-2' }}"
-                          source="{{ section.source }}"
-                          limit="{{ section.featured_product_id ? 3 : section.limit }}"
-                          source-value="{{ section.source_value|json_encode }}">
+                          source="{{ section.products.source }}"
+                          limit="{{ section.featured_product_id ? 3 : section.products.limit }}"
+                          source-value="{{ section.products.source_value|json_encode }}">
                         </salla-products-list>
                     {% elseif section.featured_product %}
                         <custom-salla-product-card shadow-on-hover product="{{section.featured_product}}" fullImage></custom-salla-product-card>
