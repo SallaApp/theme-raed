@@ -9,11 +9,14 @@
 | items[].products[]       | Product[] |                                                                     |
 | items[].limit            | Int       | Number of products to be shown                                      |
 | items[].id               | string    | Section id                                                          |
+| items[].source           | ?string   | When set, fetch the tab client-side instead of items[].products     |
+| items[].source_value     | ?array    | Ids/values for items[].source                                       |
 | main_product             | array     |                                                                     |
 | main_product.id          | string    | string product id                                                   |
 | main_product.title       | string    | Offer title                                                         |
 | main_product.value       | string    | Product Name                                                        |
 | main_product.product     | Product   |                                                                     |
+| main_product.product_id  | ?string   | When set, the card fetches the product by id                        |
 | position                 | int       | sorting block                                                       |
 #}
 {% set component_id='featured-products-style1-' ~ position %}
@@ -39,7 +42,11 @@
     <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
-                <custom-salla-product-card shadow-on-hover product="{{main_product.product}}" isSpecial></custom-salla-product-card>  
+                {% if main_product.product_id is defined %}
+                    <custom-salla-product-card shadow-on-hover product-id="{{ main_product.product_id }}" isSpecial></custom-salla-product-card>
+                {% else %}
+                    <custom-salla-product-card shadow-on-hover product="{{main_product.product}}" isSpecial></custom-salla-product-card>
+                {% endif %}
             </div>
         {% endif %}
         <div class="flex flex-col">
@@ -58,11 +65,21 @@
 
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
-                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
-                        {% for product in section.products|slice(0,main_product?4:8) %}
-                            <custom-salla-product-card product="{{product}}"></custom-salla-product-card>
-                        {% endfor %}
-                    </div>
+                    {% if section.source is defined %}
+                        <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
+                            <salla-products-list
+                              source="{{ section.source }}"
+                              limit="{{ main_product?4:8 }}"
+                              source-value="{{ section.source_value|json_encode }}">
+                            </salla-products-list>
+                        </div>
+                    {% else %}
+                        <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
+                            {% for product in section.products|slice(0,main_product?4:8) %}
+                                <custom-salla-product-card product="{{product}}"></custom-salla-product-card>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

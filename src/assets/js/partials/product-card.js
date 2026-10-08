@@ -6,13 +6,27 @@ class ProductCard extends HTMLElement {
   
   connectedCallback(){
     // Parse product data
-    this.product = this.product || JSON.parse(this.getAttribute('product')); 
+    this.product = this.product || JSON.parse(this.getAttribute('product'));
+
+    // The server can pass only the id (featured-products-by-source), the card loads the product itself
+    if (!this.product && this.hasAttribute('product-id')) {
+      return this.fetchProduct(this.getAttribute('product-id'));
+    }
 
     if (window.app?.status === 'ready') {
       this.onReady();
     } else {
       document.addEventListener('theme::ready', () => this.onReady() )
     }
+  }
+
+  fetchProduct(productId) {
+    salla.onReady(() => salla.product.fetch({ source: 'selected', source_value: [productId], limit: 1 })
+      .then(response => {
+        this.product = response?.data?.[0];
+        this.product ? this.connectedCallback() : this.remove();
+      })
+      .catch(() => this.remove()));
   }
 
   onReady(){
@@ -142,7 +156,8 @@ class ProductCard extends HTMLElement {
     /**
      *  Minimal card.
      */
-    this.minimal = this.hasAttribute('minimal');
+    // salla-products-list creates its cards without attributes, so a list can set the variant for all of them
+    this.minimal = this.hasAttribute('minimal') || !!this.closest('[data-product-card-minimal]');
   
     /**
      *  Special card.
