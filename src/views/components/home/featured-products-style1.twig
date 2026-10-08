@@ -66,22 +66,16 @@
 
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
-                    {# products.source cannot be the switch: on a CollectionPresenter Twig resolves any key through __call #}
-                    {% if section.featured_product_id is defined %}
-                        <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
-                            <salla-products-list
-                              source="{{ section.products.source }}"
-                              limit="{{ main_product?4:8 }}"
-                              source-value="{{ section.products.source_value|json_encode }}">
-                            </salla-products-list>
-                        </div>
-                    {% else %}
-                        <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
+                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
+                        {# products.source cannot be the switch: on a CollectionPresenter Twig resolves any key through __call #}
+                        {% if section.featured_product_id is defined %}
+                            <salla-products-list source="{{ section.products.source }}" limit="{{ main_product?4:8 }}" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
+                        {% else %}
                             {% for product in section.products|slice(0,main_product?4:8) %}
                                 <custom-salla-product-card product="{{product}}"></custom-salla-product-card>
                             {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 {% endfor %}
             </div>
         </div>
