@@ -6,18 +6,17 @@
 | items[].name             | string    | Alias for title                                                     |
 | items[].type             | string    | category,most_sales,latest_products,chosen_products                 |
 | items[].featured_product | Null      |                                                                     |
-| items[].products[]       | Product[] |                                                                     |
+| items[].products.source       | string | latest, sales, top-rated, categories, tags, selected            |
+| items[].products.source_value | ?array | ids for categories / tags / selected                             |
+| items[].products.limit        | int    |                                                                  |
 | items[].limit            | Int       | Number of products to be shown                                      |
 | items[].id               | string    | Section id                                                          |
-| items[].products.source        | ?string   | When set, fetch the tab client-side (salla-products-list)           |
-| items[].products.source_value  | ?array    | Ids/values for products.source                                      |
-| items[].featured_product_id    | ?string   | Present only when products come as source + source_value            |
 | main_product             | array     |                                                                     |
 | main_product.id          | string    | string product id                                                   |
 | main_product.title       | string    | Offer title                                                         |
 | main_product.value       | string    | Product Name                                                        |
-| main_product.product     | Product   |                                                                     |
-| main_product.product_id  | ?string   | When set, the card fetches the product by id                        |
+| main_product.product     | Product   | Loaded only while the theme is not listed as source-only           |
+| main_product.product_id  | string    | Encoded id, the card loads the product                              |
 | position                 | int       | sorting block                                                       |
 #}
 {% set component_id='featured-products-style1-' ~ position %}
@@ -43,11 +42,7 @@
     <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
         {% if main_product %}
             <div class="flex flex-col">
-                {% if main_product.product_id is defined %}
-                    <custom-salla-product-card shadow-on-hover product-id="{{ main_product.product_id }}" isSpecial></custom-salla-product-card>
-                {% else %}
-                    <custom-salla-product-card shadow-on-hover product="{{main_product.product}}" isSpecial></custom-salla-product-card>
-                {% endif %}
+                <custom-salla-product-card shadow-on-hover product-id="{{ main_product.product_id }}" isSpecial></custom-salla-product-card>
             </div>
         {% endif %}
         <div class="flex flex-col">
@@ -67,14 +62,7 @@
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
                     <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
-                        {# products.source cannot be the switch: on a CollectionPresenter Twig resolves any key through __call #}
-                        {% if section.featured_product_id is defined %}
-                            <salla-products-list source="{{ section.products.source }}" limit="{{ main_product?4:8 }}" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
-                        {% else %}
-                            {% for product in section.products|slice(0,main_product?4:8) %}
-                                <custom-salla-product-card product="{{product}}"></custom-salla-product-card>
-                            {% endfor %}
-                        {% endif %}
+                        <salla-products-list source="{{ section.products.source }}" limit="{{ main_product?4:8 }}" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
                     </div>
                 {% endfor %}
             </div>
