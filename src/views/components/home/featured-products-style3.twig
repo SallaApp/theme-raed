@@ -27,10 +27,10 @@
                     {% if section.featured_product_id %}
                         <custom-salla-product-card shadow-on-hover product-id="{{ section.featured_product_id }}" fullImage></custom-salla-product-card>
                         <div class="grid gap-4 sm:gap-8">
-                            <salla-products-list data-product-card-minimal source="{{ section.products.source }}" limit="3" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
+                            <salla-products-list horizontal-cards data-product-card-minimal source="{{ section.products.source }}" limit="3" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
                         </div>
                     {% else %}
-                        <salla-products-list data-product-card-minimal source="{{ section.products.source }}" limit="{{ section.products.limit }}" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
+                        <salla-products-list class="lg:col-span-2" data-product-card-minimal source="{{ section.products.source }}" limit="{{ section.products.limit }}" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
                     {% endif %}
                 </div>
             </div>

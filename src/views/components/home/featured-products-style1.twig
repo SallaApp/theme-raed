@@ -20,7 +20,7 @@
 | position                 | int       | sorting block                                                       |
 #}
 {% set component_id='featured-products-style1-' ~ position %}
-<section component-id="{{ componentId }}" data-testid="store-home-featured-products" class="s-block s-block-tabs s-block--special-products container" id="{{ component_id }}">
+<section component-id="{{ componentId }}" data-testid="store-home-featured-products" class="s-block s-block-tabs s-block--special-products container {{ main_product ? 'has-main-product' : '' }}" id="{{ component_id }}">
     <div class="s-block__title"> 
       <div class="right-side">
         <h2>{{ main_product.title }}</h2>
@@ -61,7 +61,7 @@
 
             <div class="tabs-wrapper flex flex-1">
                 {% for section in items %}
-                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
+                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first?'is-active':'' }}">
                         <salla-products-list source="{{ section.products.source }}" limit="{{ main_product?4:8 }}" source-value="{{ section.products.source_value|json_encode }}"></salla-products-list>
                     </div>
                 {% endfor %}
