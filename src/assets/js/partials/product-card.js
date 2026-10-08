@@ -8,7 +8,7 @@ class ProductCard extends HTMLElement {
     // Parse product data
     this.product = this.product || JSON.parse(this.getAttribute('product'));
 
-    // The server can pass only the id (featured-products-by-source), the card loads the product itself
+    // The server can pass only the id (featured products), the card loads the product itself
     if (!this.product && this.hasAttribute('product-id')) {
       return this.fetchProduct(this.getAttribute('product-id'));
     }
