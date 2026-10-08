@@ -27,6 +27,14 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
             .store-footer {
                 display: none;
             }
+
+            /* On narrow devices the header's top bar can be wider than the screen; without this the page
+               scrolls sideways, looks off-centre and the fixed CTA no longer lines up with the content.
+               `clip` (unlike `hidden`) creates no scroll container, so the sticky header keeps working. */
+            body {
+                overflow-x: hidden;
+                overflow-x: clip;
+            }
         }
     </style>
 {% endblock %}
