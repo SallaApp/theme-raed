@@ -21,9 +21,9 @@ class ProductCard extends HTMLElement {
   }
 
   fetchProduct(productId) {
-    salla.onReady(() => salla.product.fetch({ source: 'selected', source_value: [productId], limit: 1 })
+    salla.onReady(() => salla.product.getDetails(productId)
       .then(response => {
-        this.product = response?.data?.[0];
+        this.product = response?.data;
         this.product ? this.connectedCallback() : this.remove();
       })
       .catch(() => this.remove()));
