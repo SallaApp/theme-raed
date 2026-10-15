@@ -260,6 +260,7 @@ class ProductCard extends HTMLElement {
               </div>`
                : ``}
           </div>
+          ${this.product?.donation?.can_donate ? '' : `<salla-free-shipping-tag product-id="${this.product.id}"></salla-free-shipping-tag>`}
 
           ${this.isSpecial && this.product.discount_ends
             ? `<salla-count-down date="${this.formatDate(this.product.discount_ends)}" end-of-day=${true} boxed=${true}
