@@ -38,7 +38,7 @@ class WishlistCard extends HTMLElement {
         <div class="flex items-center space-x-4 rtl:space-x-reverse">
           <salla-add-product-button product-status="${this.product.status}" product-id="${this.product.id}" product-type="${this.product.type}" loader-position="center" fill="outline" class="flex-grow w-full sm:grow-0 md:w-40">
           </salla-add-product-button>
-          <salla-button loader-position="center" shape="icon" size="small" color="danger" class="btn--delete" onclick="salla.wishlist.remove(${this.product.id})">
+          <salla-button loader-position="center" shape="icon" size="small" color="danger" class="btn--delete" aria-label="${salla.lang.get('pages.products.remove_from_wishlist')}" onclick="salla.wishlist.remove(${this.product.id})">
             <i class="sicon-cancel"></i>
           </salla-button>
         </div>

@@ -88,9 +88,9 @@
                                             
                                         </a>
                                         <div class="space-y-1">
-                                            <h1 class="text-gray-900 leading-6 text-lg">
+                                            <h2 class="text-gray-900 leading-6 text-lg">
                                                 <a href="{{ item.url }}" class="text-base">{{ item.product_name }}</a>
-                                            </h1>
+                                            </h2>
 
                                             <span class="text-sm text-gray-500 line-through item-regular-price {{ item.offer ? '' : 'hidden' }}" >{{ item.product_price|money }}</span>
                                             <span class="inline-flex gap-1 leading-4 text-sm text-gray-500 line-through item-original-price {{ item.is_on_sale ? '' : 'hidden' }}" id="original_price">{{ item.original_price|money }}</span>
@@ -123,7 +123,7 @@
                                         {% else %}
                                             <salla-quantity-input cart-item-id="{{ item.id }}"  max="{{ item.max_quantity }}"
                                                 class="transtion transition-color duration-300"
-												aria-label="Quantity"
+												aria-label="{{ trans('pages.products.quantity') }}"
                                                 value="{{ item.quantity }}" name="quantity">
                                             </salla-quantity-input>
                                         {% endif %}
@@ -137,7 +137,7 @@
 
                                 {% include 'pages.partials.product.options' with {product:item} %}
                             <span class="absolute top-1.5 rtl:left-1.5 ltr:right-1.5 rtl:xs:left-5 ltr:xs:right-5 xs:top-5">
-                                <salla-button data-testid="store-cart-delete-item" type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="Remove from the cart"
+                                <salla-button data-testid="store-cart-delete-item" type="button" shape="icon" size="small" color="danger" class="btn--delete" aria-label="{{ trans('pages.products.delete_product') }}"
                                         onclick="salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())">
                                     <i class="sicon-cancel"></i>
                                 </salla-button>
