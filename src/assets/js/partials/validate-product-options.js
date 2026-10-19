@@ -4,27 +4,7 @@
 export function validateProductOptions() {
     const cartItems = document.querySelectorAll('.main-content form:not(.cart-options form)');
     if (!cartItems.length) return;
-    cartItems.forEach((item) => {
-        const itemId = getItemId(item);
-        const productOptions = item.querySelector('salla-product-options');
-        const quantityComponent = item.querySelector('salla-quantity-input');
-
-        if (quantityComponent) {
-            observeQuantityChanges(quantityComponent, itemId, item);
-        }
-
-        // Listen for product options changes
-        if (productOptions) {
-            productOptions.addEventListener('changed', (e) => {
-                setTimeout(() => {
-                    if (!item.reportValidity() || e.detail?.event?.type == 'added') return;
-                    if ((Number(itemId) === Number(e.detail?.productId))) {
-                        appendLoadingOverlay(e.detail?.productId);
-                    }
-                }, 100);
-            });
-        }
-    });
+    cartItems.forEach((item) => initCartItemOptions(item));
 
     // Event handlers for cart updates
     salla.cart.event.onItemUpdated((_data, id) => {
@@ -32,8 +12,35 @@ export function validateProductOptions() {
     });
 
     salla.cart.event.onItemUpdatedFailed((_data, itemId) => {
-        handleCartUpdateFailure(itemId, cartItems);
+        // Queried now, not at page load: a line added to the page later must be restored too.
+        handleCartUpdateFailure(itemId, document.querySelectorAll('.main-content form:not(.cart-options form)'));
     });
+}
+
+/**
+ * Wires one cart item form: the loading overlay on quantity and option changes.
+ * Also used for a line inserted after page load (see Cart::insertMissingItems).
+ */
+export function initCartItemOptions(item) {
+    const itemId = getItemId(item);
+    const productOptions = item.querySelector('salla-product-options');
+    const quantityComponent = item.querySelector('salla-quantity-input');
+
+    if (quantityComponent) {
+        observeQuantityChanges(quantityComponent, itemId, item);
+    }
+
+    // Listen for product options changes
+    if (productOptions) {
+        productOptions.addEventListener('changed', (e) => {
+            setTimeout(() => {
+                if (!item.reportValidity() || e.detail?.event?.type == 'added') return;
+                if ((Number(itemId) === Number(e.detail?.productId))) {
+                    appendLoadingOverlay(e.detail?.productId);
+                }
+            }, 100);
+        });
+    }
 }
 
 /**

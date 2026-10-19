@@ -1,5 +1,8 @@
 import BasePage from './base-page';
-import {validateProductOptions} from './partials/validate-product-options';
+import {validateProductOptions, initCartItemOptions} from './partials/validate-product-options';
+// The cart item forms; product options (`.cart-options`) are forms too, but not lines.
+const CART_ITEM_FORMS = '.main-content form[id^="item-"]:not(.cart-options form)';
+
 class Cart extends BasePage {
     onReady() {
         // keep update the dom base in the events
@@ -95,6 +98,8 @@ class Cart extends BasePage {
         this.updateCartOptions(cartData?.options);
         // update each item data
         cartData.items?.forEach(item => this.updateItemInfo(item));
+        // a line added while the page is open (e.g. a free product picked from the cart offer)
+        this.insertMissingItems(cartData.items);
 
         // Summary totals (subtotal, discount, shipping, tax, options) are owned by
         // <salla-cart-summary-card> now; the theme only manages the free-shipping bar.
@@ -113,6 +118,65 @@ class Cart extends BasePage {
             : salla.lang.get('pages.cart.free_shipping_alert', { amount: salla.money(cartData.free_shipping_bar.remaining) });
         app.freeShippingBar.children[0].style.width = cartData.free_shipping_bar.percent + '%';
 
+    }
+
+    /**
+     * Cart lines are rendered on the server, and updateItemInfo() only refreshes the lines
+     * already on the page. A line added while the cart page is open (e.g. a free product
+     * picked from the cart offer banner) has no form here, so it would show only after a
+     * manual reload. Fetch the cart page again and insert the missing lines' forms, in the
+     * server's order. The fetched markup is fresh, so it needs no updateItemInfo().
+     *
+     * One request at a time; an update that lands meanwhile is checked again after it.
+     *
+     * @param {Array<import("@salla.sa/twilight/types/api/cart").CartItem>} items
+     */
+    insertMissingItems(items) {
+        if (this.insertingItems) {
+            this.pendingItems = items;
+            return;
+        }
+
+        const missing = (items || []).filter(item => !document.querySelector('#item-' + item.id));
+        // No line on the page at all: the empty-cart markup is showing, not a list to insert into.
+        if (!missing.length || !document.querySelector(CART_ITEM_FORMS)) {
+            return;
+        }
+
+        this.insertingItems = true;
+
+        fetch(window.location.href, {credentials: 'same-origin', headers: {Accept: 'text/html'}})
+            .then(response => response.ok ? response.text() : Promise.reject(new Error(`cart page ${response.status}`)))
+            .then(html => {
+                const forms = [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll(CART_ITEM_FORMS)];
+
+                forms.forEach((form, index) => {
+                    if (document.getElementById(form.id)) {
+                        return;
+                    }
+
+                    const line = document.importNode(form, true);
+                    // Right before the next line the page already has, else after the last one.
+                    const next = forms.slice(index + 1).map(other => document.getElementById(other.id)).find(Boolean);
+                    if (next) {
+                        next.before(line);
+                    } else {
+                        [...document.querySelectorAll(CART_ITEM_FORMS)].pop().after(line);
+                    }
+
+                    initCartItemOptions(line);
+                });
+            })
+            .catch(error => salla.log('Could not render the new cart lines', error))
+            .finally(() => {
+                this.insertingItems = false;
+
+                const pending = this.pendingItems;
+                this.pendingItems = null;
+                if (pending) {
+                    this.insertMissingItems(pending);
+                }
+            });
     }
 
     /**
