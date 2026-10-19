@@ -7,6 +7,9 @@ class Cart extends BasePage {
     onReady() {
         // keep update the dom base in the events
         salla.event.cart.onUpdated(data => this.updateCartPageInfo(data));
+        // Tells twilight's cart offer picker that new lines show up here (see insertMissingItems),
+        // so it doesn't reload the page after adding a free product.
+        document.body.setAttribute('data-cart-renders-new-lines', '');
 
         app.watchElements({
             freeShipping: '#free-shipping',
@@ -167,7 +170,12 @@ class Cart extends BasePage {
                     initCartItemOptions(line);
                 });
             })
-            .catch(error => salla.log('Could not render the new cart lines', error))
+            .catch(error => {
+                salla.log('Could not render the new cart lines, reloading', error);
+                // Twilight leaves new lines to this page (data-cart-renders-new-lines), so show them
+                // the old way. No loop: after the reload every line comes rendered from the server.
+                window.location.reload();
+            })
             .finally(() => {
                 this.insertingItems = false;
 
