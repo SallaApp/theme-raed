@@ -152,15 +152,17 @@ class Cart extends BasePage {
             .then(response => response.ok ? response.text() : Promise.reject(new Error(`cart page ${response.status}`)))
             .then(html => {
                 const forms = [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll(CART_ITEM_FORMS)];
+                // Not `form.id`: each line form has an `<input name="id">`, and a named control shadows the property.
+                const onPage = form => document.getElementById(form.getAttribute('id'));
 
                 forms.forEach((form, index) => {
-                    if (document.getElementById(form.id)) {
+                    if (onPage(form)) {
                         return;
                     }
 
                     const line = document.importNode(form, true);
                     // Right before the next line the page already has, else after the last one.
-                    const next = forms.slice(index + 1).map(other => document.getElementById(other.id)).find(Boolean);
+                    const next = forms.slice(index + 1).map(onPage).find(Boolean);
                     if (next) {
                         next.before(line);
                     } else {
