@@ -94,6 +94,8 @@ The fulfilment CTA lives inside those components: on desktop it renders in-flow 
             <salla-order-rewards data-testid="store-thankyou-rewards"
                 {% if show_loyalty %}loyalty-points="{{ order.loyalty_points }}" loyalty-url="{{ link('loyalty') }}"{% endif %}
                 {% if cashback %}cashback-amount="{{ cashback.amount }}" currency="{{ cashback.currency }}" cashback-url="{{ link('wallet') }}"{% endif %}
+                {# Pending cashback (CP-4641): the presenter adds `status` only for the expected case #}
+                {% if cashback and cashback.status is defined %}cashback-expected order-id="{{ order.id }}" offer-id="{{ cashback.offer_id }}" coupon-mode="{{ cashback.coupon_mode }}"{% endif %}
             ></salla-order-rewards>
         {% endif %}
 
