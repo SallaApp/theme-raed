@@ -16,6 +16,7 @@
 | order.can_rate                   | bool                              |                                                                                          |
 | order.cancel_url                 | string                            |                                                                                          |
 | order.payment_url                | string                            |                                                                                          |
+| order.refund_receipt_url         | ?string                           | null unless the order is refunded or partially refunded                                  |
 | order.is_pending_payment         | bool                              |                                                                                          |
 | order.pending_payment_ends_in    | int                               | How much many seconds untile pending payment ends, zero if it's already expired          |
 | order.shipping                   | ?object                           |                                                                                          |
@@ -110,7 +111,7 @@
                     </span>
                     {% endif %}
 
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         {% if order.is_price_quote %}
                             <span class="text-red-500 ml-4">{{ trans('pages.orders.your_order_is_under_review') }}</span>
                         {% endif %}
@@ -146,6 +147,13 @@
                                     </salla-button>
                                 </div>
                             </div>
+                        {% endif %}
+                        {% if order.refund_receipt_url %}
+                            <salla-button fill="outline" size="small"
+                                        onclick="window.open('{{ order.refund_receipt_url }}', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, width=900, height=700');">
+                                <i class="sicon-printer2 v-align"></i>
+                                {{ trans('pages.orders.print_refund_receipt') }}
+                            </salla-button>
                         {% endif %}
                     </div>
                 </td>
