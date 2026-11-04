@@ -31,6 +31,7 @@ class AddToCartToast extends HTMLElement {
       this.viewCartText = salla.lang.get("pages.cart.view_cart");
       this.checkoutText = salla.lang.get("pages.cart.complete_order");
       this.showMoreText = salla.lang.get("pages.checkout.show_more");
+      this.closeText = salla.lang.get("pages.checkout.close");
     });
 
     this.cartUrl = salla.url.get("cart");
@@ -180,10 +181,10 @@ class AddToCartToast extends HTMLElement {
       </div>
       <div class="s-add-product-toast__header">
         <div class="s-add-product-toast__header-content">
-          <img src="${this.checkIconUrl}" alt="Success" width="16" height="16" class="s-add-product-toast__icon" />
+          <img src="${this.checkIconUrl}" alt="" width="16" height="16" class="s-add-product-toast__icon" />
           <span class="s-add-product-toast__title">${this.successMessage}</span>
         </div>
-        <button type="button" class="s-add-product-toast__close" aria-label="Close"><i class="sicon-cancel"></i></button>
+        <button type="button" class="s-add-product-toast__close" aria-label="${this.closeText}"><i class="sicon-cancel"></i></button>
       </div>
       <div class="s-add-product-toast__divider"></div>
       <div class="s-add-product-toast__body">
