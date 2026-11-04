@@ -71,6 +71,13 @@
                 </label>
                 <salla-tel-input data-testid="store-profile-phone" phone="{{ user.mobile }}"></salla-tel-input>
             </div>
+            {# The store URL without its language segment. `trim('/ar')` strips any of the
+               characters `/`, `a`, `r` from the end, so `mystore.sa` lost its `a`. #}
+            {% set lang_suffix = '/' ~ user.language_code %}
+            {% set upload_base = store.url|trim('/', 'right') %}
+            {% if upload_base ends with lang_suffix %}
+                {% set upload_base = upload_base|slice(0, upload_base|length - lang_suffix|length) %}
+            {% endif %}
             {% for field in custom_fields %}
                 <div class="profile-field-item">
                     <label for="{{ field.id }}" class="block text-sm font-bold mb-2 text-gray-700">
@@ -80,7 +87,7 @@
                         <salla-file-upload
                                 instant-upload
                                 value="{{ field.value }}"
-                                url="{{ store.url|trim('/'~user.language_code) }}/upload-image"
+                                url="{{ upload_base }}/upload-image"
                                 name="custom_fields[{{ field.id }}]"
                                 payload-name="image"
                                 height="120px"
