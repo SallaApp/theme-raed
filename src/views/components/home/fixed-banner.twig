@@ -23,10 +23,14 @@
                     width="1200"
                     height="300"
                     src="{{ image.url }}"
-                    loading="lazy"
+                    {% if position == 0 %}
+                        loading="eager"
+                        fetchpriority="high"
+                    {% else %}
+                        loading="lazy"
+                    {% endif %}
                     alt="{{ alt_text }}"
                     style="height:auto;max-width:100%;object-fit: contain;"
-                    fetchpriority="high"
                 />
             </picture>
         </a>

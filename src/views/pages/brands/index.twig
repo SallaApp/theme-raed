@@ -41,6 +41,7 @@
 
                 {% hook 'brands:index.items.start' %}
 
+                {% set brand_position = 0 %}
                 {% for char,brandGroup in brands %}
                     <section id="brand-section-{{ loop.index }}" class="pt-24 first:pt-16 md:first:pt-24">
                         <!-- separator -->
@@ -52,8 +53,9 @@
                         </div>
                         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-4 md:gap-8">
                             {% for brand in brandGroup %}
+                                {% set brand_position = brand_position + 1 %}
                                 <a data-testid="store-brand-item" href="{{ brand.url }}" class="brand-item">
-                                    <img class="max-h-full" width="400" height="300" src="{{ brand.logo }}" alt="{{ brand.name }}">
+                                    <img class="max-h-full" width="400" height="300" src="{{ brand.logo }}" alt="{{ brand.name }}"{% if brand_position > 24 %} loading="lazy"{% endif %}>
                                 </a>
                             {% endfor %}
                         </div>
