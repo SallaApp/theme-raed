@@ -195,7 +195,9 @@ class AddToCartToast extends HTMLElement {
           ${visibleOptions.length ? `
             <div class="s-add-product-toast__options">
               ${visibleOptions.map(opt => 
-                opt.hideValue ? `<span>${opt.name}</span>` : `<span>${opt.name}: ${opt.value}</span>`
+                opt.hideValue
+                  ? `<span>${this.escapeHTML(opt.name)}</span>`
+                  : `<span>${this.escapeHTML(opt.name)}: ${this.escapeHTML(opt.value)}</span>`
               ).join("")}
               ${showMoreButton ? `<a href="${this.cartUrl}" class="s-add-product-toast__show-more">${this.showMoreText}</a>` : ""}
             </div>
