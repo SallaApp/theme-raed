@@ -17,6 +17,7 @@ class NavigationMenu extends HTMLElement {
                 this.menus = [];
                 this.displayAllText = salla.lang.get('blocks.home.display_all');
                 this.moreText = salla.lang.get('common.titles.more');
+                this.closeText = salla.lang.get('pages.checkout.close');
                 this.visibleMenus = [];
                 this.overflowMenus = [];
 
@@ -266,9 +267,9 @@ class NavigationMenu extends HTMLElement {
         this.innerHTML =  `
         <nav id="mobile-menu" class="mobile-menu">
             <ul class="main-menu">${this.getMenus()}</ul>
-            <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
+            <button class="btn--close close-mobile-menu sicon-cancel lg:hidden" aria-label="${this.closeText}"></button>
         </nav>
-        <button class="btn--close-sm close-mobile-menu sicon-cancel hidden"></button>`;
+        <button class="btn--close-sm close-mobile-menu sicon-cancel hidden" aria-label="${this.closeText}"></button>`;
     }
 }
 
