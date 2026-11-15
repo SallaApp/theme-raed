@@ -4,9 +4,9 @@
   <a href="https://salla.dev"> 
     <img src="https://salla.dev/wp-content/uploads/2023/03/1-Light.png" alt="Logo"> 
   </a>
-  <h1 align="center">Theme Raed</h1>
+  <h1 align="center">Theme Raed (deprecated)</h1>
   <p align="center">
-    Theme Raed is the starting point for developing Themes for Salla Stores. 
+    This Twig version of Theme Raed is deprecated. New Salla themes start from <a href="https://github.com/SallaApp/theme-raed-react"><strong>Raed React</strong></a>.
     <br />
     <a href="https://salla.dev/"><strong>Explore our blogs »</strong></a>
     <br />
@@ -14,6 +14,14 @@
     <a href="https://github.com/SallaApp/theme-raed/discussions/new">Request Feature</a> . <a href="https://t.me/salladev">&lt;/Salla Developers&gt;</a> . <a href="https://docs.salla.dev/?nav=01HNFTD5Y5ESFQS3P9MJ0721VM">Official Documentation</a> 
   </p>
 </div>
+
+> [!WARNING]
+> **This repository is deprecated.** Theme Raed is now a React theme, built on Twilight for React.
+>
+> - Start new themes from **[SallaApp/theme-raed-react](https://github.com/SallaApp/theme-raed-react)**.
+> - Read the **[Twilight for React documentation](https://docs.salla.dev/twilight/react)**.
+>
+> The Twig theme below is kept for reference only.
 
 
 <!-- TABLE OF CONTENTS -->
