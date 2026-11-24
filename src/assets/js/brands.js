@@ -4,6 +4,12 @@ class Brands extends BasePage {
         // set initial height;
         const nav = document.querySelector('#brands-nav'),
               navWrap = document.querySelector('.brands-nav-wrap');
+
+        // the brands nav is only rendered when the store has brands
+        if (!nav || !navWrap) {
+            return;
+        }
+
         navWrap.style.height = nav.clientHeight + 'px';
 
         app.onClick('.brands-nav__item', ({target:btn}) => {
