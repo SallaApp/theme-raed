@@ -1,0 +1,12 @@
+{#
+| Variable   | Type   | Description                         |
+|------------|--------|-------------------------------------|
+| page       | object |                                     |
+| page.title | string |                                     |
+| page.slug  | string |                                     |
+| page.id    | string | Encoded subscription id (route key) |
+#}
+{% extends "layouts.customer" %}
+{% block inner_content %}
+    <salla-subscription-details subscription-id="{{ page.id }}"></salla-subscription-details>
+{% endblock %}
