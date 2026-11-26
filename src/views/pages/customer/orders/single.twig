@@ -428,7 +428,7 @@
                             <h3 class="font-bold text-lg leading-none mb-1">{{ trans('pages.orders.cancel') }}</h3>
                             <p class="text-gray-500">{{ trans('pages.order.order_cancelation_desc') }}</p>
                         </div>
-                        <salla-button data-testid="store-order-cancel-btn" shape="link" color="danger" onclick="document.querySelector('#modal-order-cancel').open()">
+                        <salla-button data-testid="store-order-cancel-btn" shape="link" color="danger" onclick="document.querySelector('#modal-order-cancel')?.open()">
                             <i class="sicon sicon-cancel-circle rtl:ml-2 ltr:mr-2"></i>
                             <span>{{ trans('pages.orders.cancel') }}</span>
                         </salla-button>
@@ -453,8 +453,9 @@
                 </salla-modal>
             {% endif %}
 
-            {# Cancel Modal #}
-            {% if order.can_cancel %}
+            {# Cancel Modal: with active reasons, salla-order-cancel renders #modal-order-cancel instead #}
+            {% set has_cancel_reasons = order.cancellation_reasons|default([])|filter(r => r.is_active is not same as(false))|length > 0 %}
+            {% if order.can_cancel and not has_cancel_reasons %}
                 <salla-modal width="sm" sub-title="{{ trans('pages.orders.cancel_confirmation') }}"
                              icon="sicon-cancel" id="modal-order-cancel" icon-style="error"
                              modal-title="{{ trans('common.elements.warning') }}">
