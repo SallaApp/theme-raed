@@ -31,12 +31,17 @@ class Product extends BasePage {
       if (!form) return;
 
       let requestVersion = 0;
-      form.addEventListener('change', async () => {
+      const invalidatePrice = () => {
         const version = ++requestVersion;
-        const price = app.element('.price-wrapper');
-        const outOfStock = app.element('.out-of-stock');
-        price.classList.add('hidden');
-        outOfStock.classList.add('hidden');
+        app.element('.price-wrapper').classList.add('hidden');
+        app.element('.out-of-stock').classList.add('hidden');
+        return version;
+      };
+
+      // Text edits happen before change. Clear stale results now and quote only on change.
+      form.addEventListener('input', invalidatePrice);
+      form.addEventListener('change', async () => {
+        const version = invalidatePrice();
 
         // Reading validity avoids moving focus to the first unanswered option.
         const isComplete = Array.from(form.elements).every(el => !el.willValidate || el.validity.valid);
