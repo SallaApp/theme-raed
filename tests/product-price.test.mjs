@@ -9,7 +9,10 @@ function storefront(path) {
   const domNode = () => {
     const classes = new Set();
     return {
-      classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c) },
+      classList: {
+        add: (...names) => names.forEach((name) => classes.add(name)),
+        remove: (...names) => names.forEach((name) => classes.delete(name)),
+      },
       classes,
       innerHTML: '',
     };
@@ -18,11 +21,20 @@ function storefront(path) {
   const unavailable = domNode();
   unavailable.classes.add('hidden');
   const displayed = [domNode(), domNode()];
+  const beforePrice = domNode();
+  const startingPriceTitle = domNode();
+  const priceModes = {
+    '.price_is_on_sale': domNode(),
+    '.starting-or-normal-price': domNode(),
+  };
+  priceModes['.price_is_on_sale'].classList.add('hidden');
+  priceModes['.starting-or-normal-price'].classList.add('showed');
   const requests = [];
   const events = new Map();
+  const listeners = new Map();
   const form = {
-    elements: [{ willValidate: true, validity: { valid: true } }],
-    addEventListener(_, listener) { this.change = listener; },
+    elements: [{ type: 'text', willValidate: true, validity: { valid: true } }],
+    addEventListener(event, listener) { listeners.set(event, listener); },
     selection: '',
   };
   const globals = {
@@ -32,10 +44,16 @@ function storefront(path) {
     app: {
       element: (name) => name === '.price-wrapper' ? price : unavailable,
       onClick() {},
-      toggleClassIf() {},
+      toggleClassIf(selector, activeClass, inactiveClass, predicate) {
+        const { classList } = priceModes[selector];
+        const matches = predicate();
+        classList.add(matches ? activeClass : inactiveClass);
+        classList.remove(matches ? inactiveClass : activeClass);
+      },
       productWeight: [],
       totalPrice: displayed,
-      beforePrice: [],
+      beforePrice: [beforePrice],
+      startingPriceTitle,
     },
     salla: {
       money: String,
@@ -55,13 +73,22 @@ function storefront(path) {
     price,
     unavailable,
     displayed,
+    beforePrice,
+    startingPriceTitle,
+    saleMode: priceModes['.price_is_on_sale'],
+    regularMode: priceModes['.starting-or-normal-price'],
+    input(selection, valid = true) {
+      form.selection = selection;
+      form.elements[0].validity.valid = valid;
+      listeners.get('input')?.({ target: form.elements[0] });
+    },
     choose(selection, valid = true) {
       form.selection = selection;
       form.elements[0].validity.valid = valid;
-      return form.change();
+      return listeners.get('change')({ target: form.elements[0] });
     },
-    resolve(index, amount) {
-      const result = { data: { price: amount, regular_price: amount } };
+    resolve(index, amount, { regularPrice = amount, hasSalePrice = false } = {}) {
+      const result = { data: { price: amount, regular_price: regularPrice, has_sale_price: hasSalePrice } };
       events.get('success')?.(result);
       requests[index].resolve(result);
     },
@@ -118,4 +145,66 @@ test('latest failed response stays closed to an older successful quote', async (
   await old;
   assert.equal(page.price.classes.has('hidden'), true);
   assert.equal(page.unavailable.classes.has('hidden'), false);
+});
+
+test('typing before blur invalidates an outstanding quote and change requests the new price once', async () => {
+  const page = storefront(productFile);
+  const old = page.choose('Original engraving');
+  page.input('New engraving');
+  assert.equal(page.requests.length, 1);
+  page.resolve(0, 299);
+  await old;
+  assert.equal(page.price.classes.has('hidden'), true);
+  assert.deepEqual(page.displayed.map((node) => node.innerHTML), ['', '']);
+
+  const latest = page.choose('New engraving');
+  assert.deepEqual(page.requests.map((r) => r.snapshot.selection), ['Original engraving', 'New engraving']);
+  page.resolve(1, 349);
+  await latest;
+  assert.equal(page.price.classes.has('hidden'), false);
+  assert.deepEqual(page.displayed.map((node) => node.innerHTML), ['349', '349']);
+});
+
+test('clearing a required text option hides a settled price and ignores failures before blur', async () => {
+  const page = storefront(productFile);
+  const settled = page.choose('First engraving');
+  page.resolve(0, 299);
+  await settled;
+  assert.equal(page.price.classes.has('hidden'), false);
+  page.input('');
+  assert.equal(page.price.classes.has('hidden'), true);
+
+  const old = page.choose('Second engraving');
+  page.input('', false);
+  page.reject(1);
+  await old;
+  assert.equal(page.unavailable.classes.has('hidden'), true);
+  await page.choose('', false);
+  assert.equal(page.requests.length, 2);
+  assert.equal(page.price.classes.has('hidden'), true);
+});
+
+test('sale prices render the discount and original price, then switch back to regular pricing', async () => {
+  const page = storefront(productFile);
+  const sale = page.choose('Sale variant');
+  page.resolve(0, 249, { regularPrice: 299, hasSalePrice: true });
+  await sale;
+  assert.deepEqual(page.displayed.map((node) => node.innerHTML), ['249', '249']);
+  assert.equal(page.beforePrice.innerHTML, '299');
+  assert.equal(page.saleMode.classes.has('showed'), true);
+  assert.equal(page.saleMode.classes.has('hidden'), false);
+  assert.equal(page.regularMode.classes.has('hidden'), true);
+  assert.equal(page.startingPriceTitle.classes.has('hidden'), true);
+  assert.equal(page.price.classes.has('hidden'), false);
+
+  const regular = page.choose('Regular variant');
+  page.resolve(1, 399);
+  await regular;
+  assert.deepEqual(page.displayed.map((node) => node.innerHTML), ['399', '399']);
+  assert.equal(page.beforePrice.innerHTML, '399');
+  assert.equal(page.saleMode.classes.has('hidden'), true);
+  assert.equal(page.saleMode.classes.has('showed'), false);
+  assert.equal(page.regularMode.classes.has('showed'), true);
+  assert.equal(page.regularMode.classes.has('hidden'), false);
+  assert.equal(page.price.classes.has('hidden'), false);
 });
